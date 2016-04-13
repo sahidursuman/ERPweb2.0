@@ -66,7 +66,7 @@
 			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-send-group"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
 		</div>
 	</div>
-	<div class="row T-join-group">
+	<div class="row T-join-group hidden">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">接团</h3>
 		</div>
@@ -102,7 +102,6 @@
 						<th width="100">完团日期</th>
 						<th>线路应付</th>
 						<th class="T-is-hidden">返程住宿</th>
-						<th class="T-is-hidden">参团小计</th>
 						<th width="95">本段现收团款</th>
 						<th>状态</th>
 						<th>操作</th>
@@ -118,10 +117,15 @@
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>
-						<td><input type="text" class="w-110 T-action T-line-cope hct-cursor" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"></td>
-						<td class="T-is-hidden"><input type="text" class="w-110 F-float F-money T-action T-hotel hct-cursor" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"></td>
-						<td class="T-is-hidden"><input type="text" class="w-100 F-float F-money" readonly name="totalMoney"></td>
-						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney"></td>
+						<td>
+							<input type="text" class="w-110 T-action T-line-cope hct-cursor" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付">
+							<a class="cursor T-action T-clear" data-status="partLine">清空</a>
+						</td>
+						<td class="T-is-hidden">
+							<input type="text" class="w-110 F-float F-money T-action T-hotel hct-cursor" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿">
+							<a class="cursor T-action T-clear" data-status="partHotel">清空</a>
+						</td>
+						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>
 						<td>-</td>
 						<td>
 							<a class="cursor T-action T-delete">删除</a>
@@ -131,7 +135,7 @@
 			</table>
 		</div>
 	</div>
-	<div class="row T-send-group">
+	<div class="row T-send-group hidden">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">送团</h3>
 		</div>

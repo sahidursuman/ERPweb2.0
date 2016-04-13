@@ -43,7 +43,7 @@
 			</table>
 		</div>
 	</div>
-	{{if baseInfo.customerType == 0}}
+	{{if baseInfo.customerType == 0 && receiveTrip.length > 0}}
 	<div class="row T-join-group">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">接团</h3>
@@ -90,7 +90,6 @@
 						<th>线路应付</th>
 						{{if baseInfo.customerType == 0}}
 						<th class="T-is-hidden">返程住宿</th>
-						<th class="T-is-hidden">参团小计</th>
 						<th class="T-is-hidden" width="95">本段现收团款</th>
 						{{/if}}
 						<th>状态</th>
@@ -107,7 +106,6 @@
 						<td><a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a></td>
 						{{if baseInfo.customerType == 0}}
 						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelNeedPayAllMoney}}</a></td>
-						<td>{{(rs.hotelNeedPayAllMoney || 0)*1 + (rs.lineNeedPayAllMoney || 0)*1}}</td>
 						<td><span class="F-float F-money">{{rs.operateCurrentNeedPayMoney}}</span></td>
 						{{/if}}
 						<td>{{rs.status | getPartGroupStatusText}}</td>
@@ -117,7 +115,7 @@
 			</table>
 		</div>
 	</div>
-	{{if baseInfo.customerType == 0}}
+	{{if baseInfo.customerType == 0 && sendTrip.length > 0}}
 	<div class="row T-send-group">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">送团</h3>
