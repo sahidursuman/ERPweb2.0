@@ -3146,7 +3146,6 @@ define(function(require, exports){
 			guideHtml+
 			'<td><span style="color:#bbb;">查看</span></td>'+
 			'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
-			td+
 			'</tr>';
 		$obj.append(html);
 		//设置下拉框
