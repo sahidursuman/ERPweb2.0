@@ -212,7 +212,7 @@
                                         <td><span class="F-float F-money">{{item.price}}</span></td>
                                         <td><span class="F-float F-count">{{item.count}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
-                                        <td><span class="F-float F-money">{{item.guideGetMoney}}</span></td>
+                                        <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}} 
@@ -238,7 +238,7 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">司机</th>
-                                        <th class="th-border">车型</th>
+                                        <th class="th-border">品牌</th>
                                         <th class="th-border">车牌号</th>
                                         <th class="th-border">应付</th>
                                         <th class="th-border">导付</th>
@@ -248,7 +248,7 @@
                                     {{each guideArranges.busList as item}}
                                     <tr>
                                         <td>{{item.driverName}}</td>
-                                        <td>{{item.busType}}</td>
+                                        <td>{{item.brand}}</td>
                                         <td>{{item.licenseNumber}}</td>
                                         <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
