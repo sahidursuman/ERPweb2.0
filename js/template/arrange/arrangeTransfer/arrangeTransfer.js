@@ -8,9 +8,10 @@ define(function(require, exports) {
 	var rule = require("./rule"),
 	    menuKey = "arrange_transfer",
 	    listMainTemplate = require("./view/listMain"),
-	    outListTemplate=require("./view/listTransferOut"),
+	    outListTemplate=require("./view/listTransferOut"), 
 	    inListTemplate=require("./view/listTransferIn"),
 	    viewTrsferOutTemplate=require("./view/viewTransferOut"),
+	    viewTransferOutAccTemplate=require("./view/viewTransferOutAcc"),
 	    updateTransferOutTemplate=require("./view/updateTransferOut"),
 	    viewTransferInTemplate=require("./view/viewTransferIn"),
 	    editTransferInTemplate=require("./view/editTransferIn"),
@@ -466,9 +467,57 @@ define(function(require, exports) {
 						var html = viewTrsferOutTemplate(data);
 						Tools.addTab(menuKey+"-viewTransferOut","查看我社转出",html);
 					}
+					var $viewAccount = $("#tab-arrange_transfer-viewTransferOut-content");
+                    $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
+                    var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        transfer.viewAccountList(id);
+                });
 				}
 			});
 		};
+
+		/**
+		 * [viewAccountList description]
+		 * @param  {[type]} id [description]
+		 * @return {[type]}    [description]
+		 */
+		transfer.viewAccountList = function(id){ 
+		$.ajax({
+				url:KingServices.build_url("transfer","viewTransferSettlement"),
+				data: "id=" + id,
+				type: 'POST',
+				showLoading:false,
+				success:function(data){
+					var result = showDialog(data);
+						if(result){
+							var imgUrl = data.ERP_IMG_URL;
+							var html = viewTransferOutAccTemplate(data);
+							var viewAccountsLayer = layer.open({
+								type: 1,
+								title:"打印结算单",
+								skin: 'layui-layer-rim',
+								area: '750px', 
+								zIndex:1028,
+								content: html,
+								scrollbar: false
+							});
+						//打印单团核算页面
+						var $outAccountsTab = $("#T-touristGroupViewAccount");
+							$outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+							transfer.exportsOutAccounts($outAccountsTab);
+						});
+					}
+				}
+		});
+	};
+
+	//打印页面
+    transfer.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
+    };
 
 		/**
 		 * 我社转出撤销操作
