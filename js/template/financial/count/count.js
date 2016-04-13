@@ -941,7 +941,7 @@ define(function(require, exports){
 		var tmp = {};
 		if(touristGroups.length>1){
 			for(var i =0;i<touristGroups.length;i++){
-				if(id = touristGroups[i].id){
+				if(id == touristGroups[i].id){
 					tmp.touristGroupFeeList = touristGroups[i].feeList;
 				}
 			}
@@ -1981,6 +1981,7 @@ define(function(require, exports){
 		var guideHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
 			'<input name = "shopGuideName" class="w-80" type = "text" />'+
 			'<input name = "shopGuideId" type = "hidden" />'+
+			'<input name="guideArrangeId" type="hidden"/>'+
 			/*'<a href="#" class="pull-right T-delShopGuide">删除</a>'+*/
 			'<button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right">'+
 	            '<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
@@ -2009,6 +2010,7 @@ define(function(require, exports){
 		var currGuideHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
 			'<input name = "currGuideName" class="w-80" type = "text" />'+
 			'<input name = "currGuideId" type = "hidden" />'+
+			'<input name= "guideArrangeId" type="hidden"/>'+
 			'<button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right">'+
 	            '<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
 	        '</button>'+
@@ -2066,7 +2068,7 @@ define(function(require, exports){
 		};
 		if(!!guideId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(shopArrangeId,cateName,removeGuide);
+				Count.delArrangeData(guideId,cateName,removeGuide);
 			});
 		}else{
 			removeGuide();
@@ -3145,20 +3147,22 @@ define(function(require, exports){
 	//新增其他收入
 	Count.addOtherIn = function($obj,$parentObj){
 		var td = '<td>'+
-				'<input name="guideArrangeId" type="hidden" />'+
-	            '<input name="guideName"  type="text" class="w-80"/>'+
+				'<div class="div-h-30"></div>'+
+				'<div  class="div-h-30 mar-t-5">'+
+					'<input name="guideArrangeId" type="hidden" />'+
+	            	'<input name="guideName"  type="text" class="w-80"/>'+
+	            '</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td);
 		var html = '<tr>'+
 			'<td class="countWhichDaysContainer"></td>'+
-			'<td><input type="text" name="title" class="w-80"/></td>'+
-			'<td><input type="text" name="price" class="w-80"/></td>'+
-			'<td><input type="text" name="count" class="w-50"/></td>'+
-			'<td><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="title" class="w-80"/></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="count" class="w-50"/></td>'+
+			'<td><div class="div-h-30"></div><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
 			guideHtml+
-			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
-			td+
+			'<td><div class="div-h-30"></div><span style="color:#bbb;">查看</span></td>'+
+			'<td><div class="div-h-30"></div><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
 			'</tr>';
 		$obj.append(html);
 		//设置下拉框
@@ -5755,10 +5759,7 @@ define(function(require, exports){
 						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
 						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
 					};
-					
-					if(guideArrangeId != "" && !!guideArrangeId){
-						guideDetail.push(guide);
-					};
+					guideDetail.push(guide);
 				};
 			});
 		return guideDetail;
@@ -6276,7 +6277,7 @@ define(function(require, exports){
 				if(!!$that.attr('guideId')){
 					guideId = $that.attr('guideId');
 				};
-				if(!!guiddArrangeId){
+				if(!!index){
 					var guide = {
 						id:guideId,
 						guideArrangeId:guiddArrangeId,
@@ -6294,7 +6295,8 @@ define(function(require, exports){
 						billRemark:billRemark.eq(i).find('[name=billRemark]').val(),
 					}
 					guideDetails.push(guide);
-				};
+				}
+				
 			});
 		return guideDetails;
 	};
@@ -6320,7 +6322,7 @@ define(function(require, exports){
 			'</td>';
 		}else{
 			var guideName = Count.guide.listMap[0].guideName,
-				guideArrangeId = Count.guide.listMap[0].guideArrangeId;
+				guideArrangeId = Count.guide.listMap[0].id;
 			guideTd = '<td name="guideName">'+
 				'<div class="div-h-30">'+
 		        '</div>'+
