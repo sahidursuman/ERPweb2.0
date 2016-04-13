@@ -270,9 +270,24 @@
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
-                                                    <span class="guideName">{{rs.guideName}}</span>
-                                                    <input name="shopGuideId" value="{{rs.id}}" type="hidden" />
-                                                    <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                    {{if guideCount > 1}}
+                                                        {{if rs.guideName == '' || rs.guideName == null}}
+                                                            <input name="shopGuideName"  type="text" class="w-80" 
+                                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                                disabled="disabled"
+                                                            {{/if}} />
+                                                            <input name="shopGuideId" type="hidden" />
+                                                            <input name="guideArrangeId" type="hidden" />
+                                                        {{else}}
+                                                            <span class="guideName">{{rs.guideName}}</span>
+                                                            <input name="shopGuideId" value="{{rs.id}}" type="hidden" />
+                                                            <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                        {{/if}}
+                                                    {{else}}
+                                                        <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                        <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                    {{/if}}
+                                                    
                                                     {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
                                                         <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
                                                             <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
