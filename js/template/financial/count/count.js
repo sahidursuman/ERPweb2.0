@@ -2045,7 +2045,7 @@ define(function(require, exports){
 			$currGuideRemarkTd = $tr.find('td[name=currGuideRemark]'),
 			guideId = $thisDiv.attr('guideId'),
 			tdName = $thisTd.attr('name'),
-			index = $thisDiv.attr('index'),
+			index = $thisDiv.attr('index');
 		var cateName = '';
 		if(tdName == 'shopGuideName'){
 			cateName = 'shopGuideDetail'
@@ -3043,7 +3043,7 @@ define(function(require, exports){
 			Count.delDiv(guideRate,index,$parentObj);
 			Count.delDiv(guideRebateMoney,index,$parentObj);
 			Count.delDiv(billRemark,index,$parentObj);
-		}
+		};
 	};
 	//删除自费安排
 	Count.delSelfArrange = function($obj,$parentObj){
@@ -3655,31 +3655,33 @@ define(function(require, exports){
 	};
 	//修改金额数量响应事件
 	Count.changeCountAndMoney = function($obj,$parentObj){
-		var $tr = $obj.closest('tr');
-		var countTd = $tr.find('td[name=guideRealCount]'),
-			badStatus = $tr.attr('badStatus'),
-			isConfirmAccount = $tr.attr('isConfirmAccount'),
-			guideRealCount = countTd.find('input[name=guideRealCount]'),
-			price = Count.changeTwoDecimal($tr.find('[name=price]').val()),
-			reduceMoney = Count.changeTwoDecimal($tr.find('[name=realReduceMoney]').val()),
-			sumCount = 0,
-			arrangeType = $tr.attr('arrangeType'),
-			sumPay = 0,
-			realCount = 0;
-		guideRealCount.each(function(){
-			var sum = Count.changeTwoDecimal($(this).val());
-			sumCount += sum
-		});
-		if(sumCount != 0){
-			$tr.find('input[name=realCount]').val(sumCount);
-			$tr.find('.realCount').text(sumCount);
+		var $tr = $obj.closest('tr'),arrangeType = $tr.attr('arrangeType');
+		if(arrangeType != 'selfArrange'){
+			var countTd = $tr.find('td[name=guideRealCount]'),
+				badStatus = $tr.attr('badStatus'),
+				isConfirmAccount = $tr.attr('isConfirmAccount'),
+				guideRealCount = countTd.find('input[name=guideRealCount]'),
+				price = Count.changeTwoDecimal($tr.find('[name=price]').val()),
+				reduceMoney = Count.changeTwoDecimal($tr.find('[name=realReduceMoney]').val()),
+				sumCount = 0,
+				sumPay = 0,
+				realCount = 0;
+			guideRealCount.each(function(){
+				var sum = Count.changeTwoDecimal($(this).val());
+				sumCount += sum
+			});
+			if(sumCount != 0){
+				$tr.find('input[name=realCount]').val(sumCount);
+				$tr.find('.realCount').text(sumCount);
+			};
+			realCount = $tr.find('input[name=realCount]').val();
+			sumPay = parseFloat(realCount*price-reduceMoney);
+			if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
+				$tr.find('.realNeedPayMoney').text(sumPay);
+				$tr.find('[name=realNeedPayMoney]').val(sumPay);
+			};																
 		};
-		realCount = $tr.find('input[name=realCount]').val();
-		sumPay = parseFloat(realCount*price-reduceMoney);
-		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
-			$tr.find('.realNeedPayMoney').text(sumPay);
-			$tr.find('[name=realNeedPayMoney]').val(sumPay);
-		};
+		
 		switch(arrangeType){
 			case 'otherArrange' :
 					var $mainTr = $parentObj.find('.T-count-otherOut');
