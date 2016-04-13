@@ -5697,8 +5697,6 @@ define(function(require, exports){
             }
         }
         saveJson.remarkArrangeList = remarkList;
-        console.log(saveJson);
-        return
         return saveJson;
 	};
 	//获取导游数据
