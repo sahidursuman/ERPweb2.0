@@ -24,6 +24,8 @@ define(function(require, exports) {
 	    		creator : "",
 				startTime : "",
 				endTime	: "",
+				createStartTime : "",
+				createEndTime	: "",
 				lineProductId : "",			
 				lineProductName	: "",	
 				contactUserName : "",	
@@ -43,7 +45,6 @@ define(function(require, exports) {
 		var getFeeItemPayTypeOptions =  {
 	         payType : 1
 	    };
-
 	    /**
 	     * 初始化转客数据
 	     * @return {[type]} [description]
@@ -309,6 +310,8 @@ define(function(require, exports) {
 				userName:getValue("userName"),
 				startTime : getValue("startTime"),
 				endTime : getValue("endTime"),
+				createStartTime : 	getValue("createStartTime"),
+				createEndTime :  getValue("createEndTime"),
 				status : $("#"+divId).find(".btn-status button").attr('data-value')
 			}
 	    };

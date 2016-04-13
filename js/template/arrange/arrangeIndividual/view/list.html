@@ -9,7 +9,9 @@
         <col style="width:120px;">
         <col style="width:100px;">
         <col style="width:50px;">
-        <col>
+        <col style="width:100px;">
+        <col style="width:60px;">
+        <col style="width:60px;">
         <col style="width:50px;">
     </colgroup>
     <thead>
@@ -24,6 +26,8 @@
             <th>客源地</th>
             <th>年龄</th>
             <th>备注</th>
+            <th>接团班次</th>
+            <th>接团住宿</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -58,6 +62,8 @@
             <td style="vertical-align:middle">{{touristGroupL.areaData}}</td>
             <td style="vertical-align:middle">{{touristGroupL.ageData}}</td>
             <td class="T-ctrl-tip" title="{{touristGroupL.remark}}" style="vertical-align:middle"><span style="height: 35px">{{touristGroupL.remark}}</span></td>
+            <td></td>
+            <td></td>
             <td style="vertical-align:middle"><a class="cursor T-arrageVisitor-view T-action"> 查看 </a></td>
         </tr>
         {{/each}}

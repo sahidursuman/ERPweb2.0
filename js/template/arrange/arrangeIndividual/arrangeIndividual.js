@@ -169,6 +169,7 @@ define(function(require, exports) {
         var $visitorObj = arrangeIndividual.$tab.find('.T-touristVisitor-list');
         //重置计算
         arrangeIndividual.choosenAdultAndChildCount($visitorObj);
+        Tools.descToolTip($visitorObj.find('.T-ctrl-tip'),1);
 
         //查看游客小组
         arrangeIndividual.$tab.find('.T-arrageVisitor-list').on('click', '.T-action', function(event) {
