@@ -2010,6 +2010,7 @@ define(function(require, exports){
 		var currGuideHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
 			'<input name = "currGuideName" class="w-80" type = "text" />'+
 			'<input name = "currGuideId" type = "hidden" />'+
+			'<input name= "guideArrangeId" type="hidden"/>'+
 			'<button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right">'+
 	            '<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
 	        '</button>'+
