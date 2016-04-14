@@ -2597,13 +2597,3 @@ a.gray span{
     width: 90%;
     margin-left: 5%;
 }
-/*美化*/
-.bg-gray{
-    line-height: 36px;
-    font-weight: bold;
-    font-size: 12px;
-    color: #3a495d;
-    height: 36px;
-    background: #efefef;
-    text-indent: 0.5em;
-}
