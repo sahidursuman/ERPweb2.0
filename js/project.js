@@ -924,7 +924,7 @@ function getAjaxErrorInfo (XMLHttpRequest)  {
 	try {
 		var fixedResponse = XMLHttpRequest.responseText.replace(/\\'/g, "'");
 		var jsonObj = JSON.parse(fixedResponse);
-		return jsonObj.description;
+		return jsonObj.message;
 	} catch (e) {
 		if (status > 200) {
 			switch (status) {
