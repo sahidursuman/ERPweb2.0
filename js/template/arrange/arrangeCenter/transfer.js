@@ -367,7 +367,6 @@ define(function(require, exports) {
                     if (args.status == '0' && !!Transfer.hotelArrangeIdArray && Transfer.hotelArrangeIdArray.length) {
                         for (var i = 0, len = data.outHotelRemarkList.length, tmp; i < len; i++) {
                             tmp = data.outHotelRemarkList[i];
-
                             for (var j = 0, jLen = Transfer.hotelArrangeIdArray.length; j < jLen; j++) {
                                 if (tmp.id == Transfer.hotelArrangeIdArray[j].outRemarkId) {
                                     tmp.checked = true;
@@ -657,14 +656,13 @@ define(function(require, exports) {
                     // 缓存数据
                     if (this.checked) {
                         Transfer.addBusTransferArray.push(item);
-                        console.log(Transfer.addBusTransferArray)
+                        
                     } else {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addBusTransferArray[i].outRemarkId)  {
+                            if (item.id === Transfer.addBusTransferArray[i].id)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
-                                console.log(Transfer.addBusTransferArray);
                             }
                         }
                     }
@@ -769,7 +767,6 @@ define(function(require, exports) {
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
         var unifyId = $tab.find('[name=unifyId]').val();
-        console.log(unifyId)
         var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
         outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
@@ -1323,8 +1320,6 @@ define(function(require, exports) {
                     //缓存选中的数据
                     var checkData = Transfer.installCheckDatashotel($frame);
                     // 添加游客列表
-                    
-                    console.log(checkData);
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var hotelPlan = checkData[i];
@@ -1388,8 +1383,9 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addHotelTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.id === Transfer.addHotelTransferArray[i].id)  {
+                            if (item.id === Transfer.addHotelTransferArray[i].outRemarkId)  {
                                 Transfer.addHotelTransferArray.splice(i, 1);
+                                
                             }
                         }
                     }
