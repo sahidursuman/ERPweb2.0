@@ -457,7 +457,6 @@ define(function(require, exports){
 				id:$id
 			},
 			type:'POST',
-			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -543,7 +542,7 @@ define(function(require, exports){
 			Count.delShop($(this),$obj);
 		}).on('blur','input[name=shopGuideMoney]',function(){
 			//填写金额带出社佣、导佣 T-del
-			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyArrId]').val();
+			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
@@ -2086,13 +2085,10 @@ define(function(require, exports){
 				Count.delDiv($currGuideMoneyTd,index,$parentObj);
 				Count.delDiv($currGuideRemarkTd,index,$parentObj);
 			};
-			
 		}
 	};
 	//删除新增的商品
 	Count.delShop = function($obj,$parentObj){
-
-		
 		var $tr = $obj.closest('tr');
 		var $prev = $tr.prevAll(),
 			td_cnt = $tr.children('td').length;
@@ -3798,6 +3794,13 @@ define(function(require, exports){
 				break;
 			case 'shopArrange' :
 					Count.autoShopSumCost($obj,$parentObj);
+					var $tr = $obj.closest('tr'),$td = $obj.closest('td'),
+						shopPolicyId = $tr.find('input[name=shopPolicyId]').val(),
+						consumeMoney = $tr.find('input[name=sumConsumeMoney]').val(),
+						date = $parentObj.find('.tripPlanStartTime').val();
+					if($td.attr('name') == 'shopGuideMoney'){
+						Count.getShopRate($obj,shopPolicyId,consumeMoney,date,$parentObj);
+					};
 				break;
 		}
 	};
@@ -3841,14 +3844,14 @@ define(function(require, exports){
 								sumBus = Count.changeTwoDecimal(busNumber)*Count.changeTwoDecimal(ui.item.parkingRebateMoney);
 								$tr.find('input[name=shopId]').val(ui.item.id);
 								$tr.find('input[name=shopPolicy]').val('');
-								$tr.find('input[name=consumeMoney]').val(sumPerson);
-								$tr.next().find('input[name=consumeMoney]').val(sumBus);
+								$tr.find('input[name=shopGuideMoney]').val(sumPerson);
+								$tr.next().find('input[name=shopGuideMoney]').val(sumBus);
 								$tr.find().val();
 								Count.getShopPolicy($tr,$parentObj);
 								Count.calculateCost($(this));
 								//计算金额
 								Count.autoShopSum($(this),$parentObj);
-								Count.autoShopSum(nextTd.find('input[name=consumeMoney]'),$parentObj);
+								Count.autoShopSum(nextTd.find('input[name=shopGuideMoney]'),$parentObj);
 								Count.totalRebeatMoney($(this));
 							}
 						}
@@ -5029,7 +5032,7 @@ define(function(require, exports){
 	                		if(guideRate > 0) {
 	                			$guideRate.each(function(){
 	                				var $thatObj = $(this),
-	                				    index = thatObj.closest('div').attr('index');
+	                				    index = $thatObj.closest('div').attr('index');
 	                				if(thisIndex == index){
 	                					$thatObj.closest('div').find("input[name=guideRate]").val(guideRate);
 			                			guideMoney = Count.changeTwoDecimal(((guideRate*consumeMoney)/100));
@@ -5039,8 +5042,8 @@ define(function(require, exports){
 			                				if(thisIndex == thatIndex){
 			                					$thatObj.closest('div').find("input[name=guideRateMoney]").val(guideMoney);
 			                				};
-			                				Count.autoShopSum($obj,$bodyObj);
-			                				Count.totalRebeatMoney($obj,$bodyObj);
+			                				Count.autoShopSum($thatObj,$bodyObj);
+			                				Count.totalRebeatMoney($thatObj,$bodyObj);
 			                			});
 			                			
 	                				}
@@ -5457,7 +5460,7 @@ define(function(require, exports){
 					};
 					return itemList;
 				};
-				function installBusAndPerson ($tr){
+				function installBusAndPerson ($tr){							 
 					var shopPolicy = '',id='',shopPolicyId = $tr.find('[name=shopPolicyId]').val();
 					if(!!$tr.find('input[name=shopPolicy]').val()){
 						shopPolicy = $tr.find('[name=shopPolicy]').val();
@@ -5486,11 +5489,17 @@ define(function(require, exports){
 		$tr = $selfObj.find('tr');
 		$tr.each(function(){
 			var $that = $(this);
-			var id = $that.find('[name=selfItemArrangeId]').val();
-			if(!!selfItemArrangeId){
-				var shopId = $(this).attr('shopid');
+			var id = '',selfPayItemId = '';
+			if(!!$that.attr('selfPayId')){
+				id = $that.attr('selfPayId');
+			};
+			if(!!$that.find('[name=selfPayItemId]').val()){
+				selfPayItemId = $that.find('[name=selfPayItemId]').val();
+			};
+			if(!!id){
 				var selfPayArrange = {
 					id:id,
+					selfPayItemId:selfPayItemId,
 					realMarketPrice:Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
 					realPrice:Count.changeTwoDecimal($that.find('.realPrice').text()),
 					guideDetails:Count.getSelfGuideData($that)
@@ -5503,7 +5512,7 @@ define(function(require, exports){
 					selfPayName:$that.find('[name=selfPayName]').val(),
 					selfPayId:$that.find('[name=selfPayId]').val(),
 					selfPayItem:$that.find('[name=selfPayItem]').val(),
-					selfPayItemId:$that.find('[name=selfPayItemId]').val(),
+					selfPayItemId:selfPayItemId,
 					realMarketPrice:Count.changeTwoDecimal($that.find('[name=marketPrice]').val()),
 					realPrice:Count.changeTwoDecimal($that.find('[name=price]').val()),
 					customerRebateMoney:$that.find('[name=customerRebateMoney]').val(),
@@ -6353,7 +6362,7 @@ define(function(require, exports){
 						incomeCount:incomeCount.eq(i).find('[name=incomeCount]').val(),
 						realReduceMoney:realReduceMoney.eq(i).find('[name=realReduceMoney]').val(),
 						realNeedPayMoney:realNeedPayMoney.eq(i).find('[name=realNeedPayMoney]').val(),
-						guidePayedMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
+						realGeuidePayedMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
 						realPayType:payType.eq(i).find('[name=payType]').val(),
 						travelAgencyRate:parseFloat(travelAgencyRate.eq(i).find('[name=travelAgencyRate]').val()/100),
 						travelAgencyRebateMoney:travelAgencyRebateMoney.eq(i).find('[name=travelAgencyRebateMoney]').val(),
