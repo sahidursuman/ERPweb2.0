@@ -51,16 +51,10 @@
                     <td class="textaR-paL">{{transfer.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 </tr>
                 <tr>
-                    <td class="textaR-paR">团号</td>
-                    <td class="textaR-paL">{{transfer.tripNumber}}</td>
+                     <td class="textaR-paR">全陪</td>
+                    <td class="textaR-paL"><span>{{transfer.accompanyGuideName}}</span><span class="mar-l-5">{{transfer.accompanyGuideMobile}}</span></td>
                     <td class="textaR-paR">针对客源</td>
                     <td class="textaR-paL">{{if transfer.customerType == 0}}散客{{/if}}{{if transfer.customerType == 1}}团体{{/if}}</td>
-                </tr>
-                <tr>
-                    <td class="textaR-paR">导游</td>
-                    <td class="textaR-paL">{{transfer.guidName}}</td>
-                    <td class="textaR-paR">全陪</td>
-                    <td class="textaR-paL"><span>{{transfer.accompanyGuideName}}</span><span class="mar-l-5">{{transfer.accompanyGuideMobile}}</span></td>
                 </tr>
             </table>
 
