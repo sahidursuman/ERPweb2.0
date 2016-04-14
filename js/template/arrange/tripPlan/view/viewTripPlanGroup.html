@@ -144,7 +144,7 @@
 										</thead>
 										<tbody>
 											{{if guideArrange}}
-											{{each guideArrange as guideList}}
+											{{each guideArrange as guide}}
 											<tr>
 								                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.sTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
 								                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.eTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>

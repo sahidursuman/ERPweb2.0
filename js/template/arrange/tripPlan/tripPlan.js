@@ -1235,6 +1235,11 @@ define(function(require, exports) {
                 data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
                 data.guideArrange = JSON.parse(data.guideArrange);
                 data.insuranceArrange = JSON.parse(data.insuranceArrange);
+                if (data.guideArrange.length) {
+                    for (var i = data.guideArrange.length - 1; i >= 0; i--) {
+                        data.guideArrange[i].taskJson = JSON.parse(data.guideArrange[i].taskJson);
+                    }
+                }
                 if (planType == 1) {
                     data.touristGroup = JSON.parse(data.touristGroup);
                     data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
