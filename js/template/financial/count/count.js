@@ -5486,11 +5486,17 @@ define(function(require, exports){
 		$tr = $selfObj.find('tr');
 		$tr.each(function(){
 			var $that = $(this);
-			var id = $that.find('[name=selfItemArrangeId]').val();
-			if(!!selfItemArrangeId){
-				var shopId = $(this).attr('shopid');
+			var id = '',selfPayItemId = '';
+			if(!!$that.attr('selfPayId')){
+				id = $that.attr('selfPayId');
+			};
+			if(!!$that.find('[name=selfPayItemId]').val()){
+				selfPayItemId = $that.find('[name=selfPayItemId]').val();
+			};
+			if(!!id){
 				var selfPayArrange = {
 					id:id,
+					selfPayItemId:selfPayItemId,
 					realMarketPrice:Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
 					realPrice:Count.changeTwoDecimal($that.find('.realPrice').text()),
 					guideDetails:Count.getSelfGuideData($that)
@@ -5503,7 +5509,7 @@ define(function(require, exports){
 					selfPayName:$that.find('[name=selfPayName]').val(),
 					selfPayId:$that.find('[name=selfPayId]').val(),
 					selfPayItem:$that.find('[name=selfPayItem]').val(),
-					selfPayItemId:$that.find('[name=selfPayItemId]').val(),
+					selfPayItemId:,
 					realMarketPrice:Count.changeTwoDecimal($that.find('[name=marketPrice]').val()),
 					realPrice:Count.changeTwoDecimal($that.find('[name=price]').val()),
 					customerRebateMoney:$that.find('[name=customerRebateMoney]').val(),
