@@ -81,8 +81,13 @@
                         {{/if}}
                     </td>
 
-                    <td><input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000"/>
-                    {{if editStatus !=2}}&nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>{{/if}}
+                    <td>
+                        {{if editStatus != 2}}
+                            <input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000"/>
+                            &nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>
+                        {{else}}
+                            {{otherInCome.billRemark}}
+                        {{/if}}
                     </td>
                 </tr>
             {{/each}}

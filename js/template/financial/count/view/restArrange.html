@@ -52,26 +52,34 @@
                             <div class="div-h-30"></div>
                             {{if tripPlan.billStatus == -1}}
                                 {{if arrange.isChoose == 1}}
-                                    <select name="chooseRest">
-                                        <option value="-1">导游自选</option>
-                                        {{each arrange.restaurantItem as rs}}
-                                            <option value="{{rs.id}}">{{rs.restaurantName}}</option>
-                                        {{/each}}
-                                    </select>
-                                {{else}}
-                                    <span class="restaurantName">{{arrange.restaurantName}}</span>
-                                {{/if}}
-                            {{else}}
-                                {{if arrange.isChoose == 1}}
-                                    {{if arrange.restaurantItem.length > 0}}
+                                    {{if editStatus != 2}}
                                         <select name="chooseRest">
                                             <option value="-1">导游自选</option>
                                             {{each arrange.restaurantItem as rs}}
                                                 <option value="{{rs.id}}">{{rs.restaurantName}}</option>
                                             {{/each}}
                                         </select>
-                                    {{else if arrange.restaurantItem.length == 0}}
-                                        <span class="restaurantName">导游自选</span>
+                                    {{else}}
+                                        导游自选
+                                    {{/if}}
+                                {{else}}
+                                    <span class="restaurantName">{{arrange.restaurantName}}</span>
+                                {{/if}}
+                            {{else}}
+                                {{if arrange.isChoose == 1}}
+                                    {{if editStatus != 2}}
+                                        {{if arrange.restaurantItem.length > 0}}
+                                            <select name="chooseRest">
+                                                <option value="-1">导游自选</option>
+                                                {{each arrange.restaurantItem as rs}}
+                                                    <option value="{{rs.id}}">{{rs.restaurantName}}</option>
+                                                {{/each}}
+                                            </select>
+                                        {{else if arrange.restaurantItem.length == 0}}
+                                            <span class="restaurantName">导游自选</span>
+                                        {{/if}}
+                                    {{else}}
+                                        导游自选
                                     {{/if}}
                                     {{else}}
                                     <span class="restaurantName">{{arrange.restaurantName}}</span>

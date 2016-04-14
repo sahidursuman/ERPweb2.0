@@ -3703,7 +3703,7 @@ define(function(require, exports){
 	//修改金额数量响应事件
 	Count.changeCountAndMoney = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),arrangeType = $tr.attr('arrangeType');
-		if(arrangeType != 'selfArrange'){
+		if(arrangeType != 'selfArrange' && arrangeType != 'shopArrange'){
 			var countTd = $tr.find('td[name=guideRealCount]'),
 				badStatus = $tr.attr('badStatus'),
 				isConfirmAccount = $tr.attr('isConfirmAccount'),
