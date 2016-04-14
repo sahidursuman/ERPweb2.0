@@ -105,7 +105,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">付款方式：</label>
             <select class="form-control T-sumPayType" name="sumPayType">
-               {{if searchParam.isBalance==1}}{{#sumPayType | getPayTypeOptions:1}}{{else}}{{#sumPayType | getPayTypeOptions}}{{/if}}
+               {{#searchParam.sumPayType | getPayTypeOptions: searchParam.isBalance}}
             </select>
         </div>
 
