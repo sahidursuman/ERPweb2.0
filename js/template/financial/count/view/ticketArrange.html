@@ -145,56 +145,69 @@
         <td><div class="div-h-30"></div><span class="F-float F-money">{{arrange.payedMoney}}</span></td><!-- 已付 -->
         
         <td name="guideName">
-            <div class="div-h-30">
-                {{if editStatus != 2 && guideCount > 1}}
-                    <button class="btn btn-success btn-sm btn-white T-addGuide pull-right"> 
-                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                    </button>
-                    <!-- <a href="#" class="T-addGuide pull-right">增加</a> --><!-- 增加导游 -->
-                {{/if}}
-            </div>
-            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
-                {{each arrange.guideDetails as rs index}}
-                    <div class="div-h-30 mar-t-5" index="{{index+1}}" guideId = "{{rs.id}}">
-                        {{if editStatus == 2}}
-                            <span class="guideName">{{rs.guideName}}</span>
-                        {{else}}
-                            <span class="guideName">{{rs.guideName}}</span>
-                            <input name="guideId" value="{{rs.id}}" type="hidden" />
-                            <input name="guideName" value="{{rs.guideName}}" type="hidden" />
-                            <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
-                            {{if guideCount > 1}}
-                            <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
-                                <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                            </button>
-
+                            <div class="div-h-30">
+                                {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                                    <button class="btn btn-success btn-sm btn-white T-addGuide pull-right"> 
+                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                    </button>
+                                    <!-- <a href="#" class="T-addGuide pull-right">增加</a> --><!-- 增加导游 -->
+                                {{/if}}
+                            </div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}" guideId = "{{rs.id}}">
+                                        {{if editStatus == 2}}
+                                            <span class="guideName">{{rs.guideName}}</span>
+                                        {{else}}
+                                            {{if rs.guideName == '' || rs.guideName == null}}
+                                                {{if guideCount > 1}}
+                                                    <input name="guideArrangeId" type="hidden" />
+                                                    <input name="guideName"  type="text" class="w-80" 
+                                                    {{if arrange.isConfirmAccount==1 }}disabled="disabled" {{/if}}/>
+                                                {{else}}
+                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                {{/if}}
+                                            {{else}}
+                                                <span class="guideName">{{rs.guideName}}</span>
+                                                <input name="guideId" value="{{rs.id}}" type="hidden" />
+                                                <input name="guideName" value="{{rs.guideName}}" type="hidden" />
+                                                <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                            {{/if}}
+                                            {{if guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                                                <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
+                                                    <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                </button>
+                                            {{/if}}
+                                            <!-- 删除导游 -->
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
+                                {{else}}
+                                    <div class="div-h-30 mar-t-5" index="1">
+                                        {{if editStatus == 2}}
+                                            -
+                                        {{else}}
+                                            {{if guideCount > 1}}
+                                                {{if arrange.isConfirmAccount !=1}}
+                                                    <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
+                                                {{/if}}
+                                                <input name="guideArrangeId" type="hidden" />
+                                                <input name="guideName"  type="text" class="w-80" 
+                                                {{if arrange.isConfirmAccount==1 }}disabled="disabled" {{/if}}/>
+                                            {{else}}
+                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                            {{/if}}
+                                            <!-- <a href="#" class="T-delGuide pull-right">删除</a> -->
+                                            <!-- 删除导游 -->
+                                        {{/if}}
+                                    </div>
                             {{/if}}
-                            <!-- 删除导游 -->
-                        {{/if}}
-                    </div>
-                {{/each}}
-                {{else}}
-                    <div class="div-h-30 mar-t-5" index="1">
-                        {{if editStatus == 2}}
-                            -
-                        {{else}}
-                           {{if guideCount > 1}}
-                                <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
-                                    <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                </button>
                             
-                                <input name="guideArrangeId" type="hidden" />
-                                <input name="guideName"  type="text" class="w-80" 
-                                {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
-                            {{else}}
-                                <span>{{guideArrange.listMap[0].guideName}}</span>
-                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
-                            {{/if}}
-                        {{/if}}
-                    </div>
-            {{/if}}
-                
-            </td><!-- 导游 -->
+                        </td><!-- 导游 -->
 
             <td name="guideRealCount">
                 <div class="div-h-30"></div>
@@ -339,6 +352,7 @@
             </td><!-- 备注 -->
 
             <td>
+                <div class="div-h-30"></div>
                 {{if arrange.isConfirmAccount == 0}}
                     未对账
                 {{else}}
@@ -347,7 +361,7 @@
                 {{if editStatus != 2}}
                     &nbsp;&nbsp;
                     {{if arrange.payedMoney == 0 &&　arrange.isConfirmAccount == 0}}
-                        <a href="javascript:void(0)" class="T-otherOutArrDel">删除</a>
+                        <a href="javascript:void(0)" class="T-ticketArrDel">删除</a>
                     {{else}}
                         <span style="color:#bbb;">删除</span>
                     {{/if}}
