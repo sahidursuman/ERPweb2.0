@@ -3089,10 +3089,10 @@ define(function(require, exports){
 	};
 	//删除自费安排
 	Count.delSelfArrange = function($obj,$parentObj){
-		var selfArrangeId = $obj.closest('tr').find('[name=selfArrangeId]').val();
-		if(!!selfArrangeId){
+		var selfItemArrangeId = $obj.closest('tr').find('input[name=selfItemArrangeId]').val();
+		if(!!selfItemArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(selfArrangeId,'selfpay',removeItem);
+				Count.delArrangeData(selfItemArrangeId,'selfpay',removeItem);
 			});
 		}else{
 			var $tr = $obj.closest('tr');
@@ -5484,11 +5484,11 @@ define(function(require, exports){
 		$tr = $selfObj.find('tr');
 		$tr.each(function(){
 			var $that = $(this);
-			var selfPayArrangeId = $that.find('[name=selfArrangeId]').val();
-			if(!!selfPayArrangeId){
+			var id = $that.find('[name=selfItemArrangeId]').val();
+			if(!!selfItemArrangeId){
 				var shopId = $(this).attr('shopid');
 				var selfPayArrange = {
-					id:selfPayArrangeId,
+					id:id,
 					realMarketPrice:Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
 					realPrice:Count.changeTwoDecimal($that.find('.realPrice').text()),
 					guideDetails:Count.getSelfGuideData($that)

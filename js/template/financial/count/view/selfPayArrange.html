@@ -63,7 +63,11 @@
                                 {{if index == 0}}
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="itemName">{{itemSet.itemName}}<input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" /></span><!-- 自费项目 -->
+                                        <span class="itemName">
+                                            {{itemSet.itemName}}
+                                            <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                            <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                        </span><!-- 自费项目 -->
                                     </td>
 
                                     <td>
@@ -477,7 +481,11 @@
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="itemName">{{itemSet.itemName}}<input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" /></span><!-- 自费项目 -->
+                                         <span class="itemName">
+                                            {{itemSet.itemName}}
+                                            <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                            <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                        </span><!-- 自费项目 -->
                                     </td>
                                     <td>
                                         <div class="div-h-30"></div>
