@@ -2703,9 +2703,6 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 }
 /*打印时的样式*/
 @media print{
-    th { 
-        font-size: 12px;
-    }
     .T-noprint{
         display: none;
     }
@@ -2713,7 +2710,6 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         display: block!important;
         visibility: visible!important;
         opacity: 1;
-        font-size: 10px;
     }
     .T-printCenter{
         text-align: center;
@@ -2732,14 +2728,24 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         border: 0;
         padding: 0;
     }
+
     html, body, .main-container {
         height: auto !important;
         width: auto !important;
         overflow: auto;
     }
+
     #tab-financial_count-outDetail-content {
         width: auto !important;
         padding: 40px !important;
+    }
+
+    .view-TranAccountsPrint th,td{
+        font-family: '微软雅黑';
+        font-size: 12px !important;
+        font-weight: normal !important;
+        color: #707070 !important;
+        padding: 7px 4px 7px 4px !important;
     }
     .view-accountsPrint th,td{
         font-family: '微软雅黑';
@@ -2756,7 +2762,7 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         padding: 2px 2px 2px 2px !important;
     }
     .outDetailPrint-group{
-        margin-top:10px; 
+        margin-top: 10px;
     }
     .print-mar-t-F16{
         margin-top: -16px !important;
