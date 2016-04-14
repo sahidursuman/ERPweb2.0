@@ -23,10 +23,6 @@ define(function(require, exports) {
 	    	    {	// 联系人电话
 	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
 	    	    	rules: [
-							{
-								type: 'null', 
-								errMsg: '联系电话不能为空'
-							},
 	    	    	        {
 	    	    	        	type: 'mobile-phone',
 	    	    	        	errMsg: '联系电话格式不正确'
