@@ -26,7 +26,7 @@
                 </td>
                 <td>
                     <span>{{if item.shuttleType == 1}} 接团 {{else if item.shuttleType == 2}} 送团{{else if item.shuttleType == 3}}返程住宿{{/if}}</span>
-                    <input type="hidden" name="shuttleType" value="{{if item.shuttleType == 1}} 1 {{else if item.shuttleType == 2}} 2{{/if}}">
+                    <input type="hidden" name="shuttleType" value="{{if item.shuttleType == 1}} 1 {{else if item.shuttleType == 2}} 2 {{else if item.shuttleType == 3}}3{{/if}}">
                 </td>
                 <td>
                     <p><span class="contactMemberName">{{item.contactMemberName}}</span></p>
