@@ -144,7 +144,7 @@
                                 
                                 {{if arrange.cashList.length}}
                                     {{each arrange.cashList as cash index}}
-                                        <div class="mar-t-5 div-h-30" index="{{index+1}}">
+                                        <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{cash.id}}">
                                             <span class="cashGuideName">{{cash.guideName}}</span>
                                             {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
                                                 <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
