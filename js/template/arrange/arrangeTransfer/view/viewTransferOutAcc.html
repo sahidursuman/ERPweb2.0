@@ -17,8 +17,7 @@
             <p>
                 <span>致</span> 
                 <span style="margin-left: 4px;">{{partnerAgency.travelAgencyName}}</span> 
-                <span class="mar-l-5"></span> (<span>{{partnerAgency.partnerAgencyContact}}</span> 
-                <span class="mar-l-3">{{partnerAgency.partnerAgencyName}}</span>) <span class="mar-l-5">您好！</span>
+                <span class="mar-l-5">您好！</span>
             </p>
             <p>
                 <span>贵单位：</span> 
@@ -51,16 +50,10 @@
                     <td class="textaR-paL">{{transfer.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 </tr>
                 <tr>
-                    <td class="textaR-paR">团号</td>
-                    <td class="textaR-paL">{{transfer.tripNumber}}</td>
+                     <td class="textaR-paR">全陪</td>
+                    <td class="textaR-paL"><span>{{transfer.accompanyGuideName}}</span><span class="mar-l-5">{{transfer.accompanyGuideMobile}}</span></td>
                     <td class="textaR-paR">针对客源</td>
                     <td class="textaR-paL">{{if transfer.customerType == 0}}散客{{/if}}{{if transfer.customerType == 1}}团体{{/if}}</td>
-                </tr>
-                <tr>
-                    <td class="textaR-paR">导游</td>
-                    <td class="textaR-paL">{{transfer.guidName}}</td>
-                    <td class="textaR-paR">全陪</td>
-                    <td class="textaR-paL"><span>{{transfer.accompanyGuideName}}</span><span class="mar-l-5">{{transfer.accompanyGuideMobile}}</span></td>
                 </tr>
             </table>
 
@@ -100,13 +93,13 @@
             </table>
             <table class="whereQ" style="width: 100%;margin-top: -20px;">
                 <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">应收</td>
+                    <td style="text-align: right;padding-right:60px;width: 160px">应付</td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{transfer.needPayAllMoney}}</span>
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">已收</td>
+                    <td style="text-align: right;padding-right:60px;width: 160px">已付</td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{transfer.payedMoney}}</span>
                     </td>
@@ -118,7 +111,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">未收</td>
+                    <td style="text-align: right;padding-right:60px;width: 160px">未付</td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{transfer.UnIncomeMoney}}</span>
                     </td>
@@ -127,7 +120,7 @@
                     <td colspan="2"><span style="margin-left: 10px;">请仔细阅读并盖章确认之后回传！谢谢！</span></td>
                 </tr>
             </table>
-            <p style="text-align: right;margin-top: 10px;"><span>外联销售：</span> <span>{{transfer.outOPUserName}}</span> <span>{{transfer.outOPUserMobileNumberr}}</span></p>
+            <p style="text-align: right;margin-top: 10px;"><span>外联操作人：</span> <span>{{transfer.outOPUserName}}</span> <span>{{transfer.outOPUserMobileNumberr}}</span></p>
             <p style="text-align: right;margin-top: -8px;" class="{{if !!transfer.faxNumber}}{{else}}hidden{{/if}}">传真：{{transfer.faxNumber}}</p>
             <p style="text-align: right;margin-top: -8px;"><span>{{transfer.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
         </div>

@@ -2703,13 +2703,21 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 }
 /*打印时的样式*/
 @media print{
+    th { 
+        font-size: 12px;
+        height: 20px;
+
+    }
+
     .T-noprint{
         display: none;
+
     }
     .T-print{
         display: block!important;
         visibility: visible!important;
         opacity: 1;
+        font-size: 12px;
     }
     .P-tdFontSize{
         font-size: 4px!important;
@@ -2736,7 +2744,7 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 
     .view-accountsPrint th{
         font-family: '微软雅黑';
-        font-size: 13px !important;
+        font-size: 12px !important;
         font-weight: normal !important;
         color: #707070 !important;
     }
