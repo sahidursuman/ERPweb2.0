@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":72,"md5":"cf836c0773b37f2e4a5881e0008c8d7f"}*/
+/*TMODJS:{"debug":true,"version":73,"md5":"cf836c0773b37f2e4a5881e0008c8d7f"}*/
 define(function(require) {
     return require("../../../../../template")("resource/touristGroupN/view/tourists/update/updateHotel", function($data, $filename) {
         try {
