@@ -619,8 +619,8 @@ define(function(require, exports){
 		}).on('click','.T-selfArrDel',function(){
 			Count.delSelfArrange($(this),$obj);
 		});
-		if($selfObj.find('input[name=selfPayItemName]').length>0){
-			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
+		if($selfObj.find('input[name=selfPayItem]').length>0){
+			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItem]');
 			selfPayItemNameObj.each(function(){
 				Count.getSelfItemData($(this).closest('tr'),$obj);
 			});
@@ -657,7 +657,7 @@ define(function(require, exports){
 		//车费--计算、新增
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.find('input').off('change').on('change',function(){
+		$busObj.off('change').on('change','input',function(){
 			var nameFlag = $(this).attr('name');
 			if(busNoneAutoFields.indexOf(nameFlag)<0){
 				//校验输入的数据是否合法
@@ -1090,8 +1090,8 @@ define(function(require, exports){
 		$selfObj.find('td[name=selfGuideName]').find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
 		});
-		if($selfObj.find('input[name=selfPayItemName]').length>0){
-			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
+		if($selfObj.find('input[name=selfPayItem]').length>0){
+			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItem]');
 			selfPayItemNameObj.each(function(){
 				Count.getSelfItemData($(this).closest('tr'),$obj);
 			});
@@ -2690,7 +2690,7 @@ define(function(require, exports){
 		 */
 		var $tr = $obj.closest('tr');
 		var thisDiv = $obj.closest('div'),
-			thisIndex = thisDiv.attr('index'),
+			thisIndex = 0,
 			$incomeCount = $tr.find('td[name=incomeCount]'),
 			$needInReduceMoney = $tr.find('td[name=needInReduceMoney]'),
 			$needIncome = $tr.find('td[name=needIncome]'),
@@ -2702,7 +2702,11 @@ define(function(require, exports){
 			$travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
 			$guideRate = $tr.find('td[name=guideRate]'),
 			$guideRebateMoney = $tr.find('td[name=guideRebateMoney]');
-
+		if (!!thisDiv.attr('index')){
+			thisIndex = thisDiv.attr('index');
+		}else{
+			thisIndex = 1;
+		}
 		var marketPrice = $tr.find('input[name=marketPrice]').val();	//市场价
 		if(!!$tr.find('.realMarketPrice').text()){
 			marketPrice = Count.changeTwoDecimal($tr.find('.realMarketPrice').text());
@@ -2728,6 +2732,7 @@ define(function(require, exports){
 			var index = $(this).attr('index');
 			if(index == thisIndex){
 				$(this).find('input[name=needIncome]').val(cashMoney);
+				$(this).find('.needIncome').text(cashMoney);
 			};
 		});//应收
 
@@ -2743,6 +2748,7 @@ define(function(require, exports){
 			if(index == thisIndex){
 				inReduce =Count.changeTwoDecimal(((inCount*marketPrice)-cashMoney));
 				$(this).find('input[name=needInReduceMoney]').val(inReduce);
+				$(this).find('.needInReduceMoney').text(inReduce);
 			};
 		});//应收优惠
 
@@ -2765,6 +2771,7 @@ define(function(require, exports){
 			if(index == thisIndex){
 				outMoney =Count.changeTwoDecimal(((outCount*price)-outReduce));
 				$(this).find('input[name=realNeedPayMoney]').val(outMoney);
+				$(this).find('.realNeedPayMoney').text(outMoney);
 			};
 		});//应付
 	};
@@ -2801,13 +2808,15 @@ define(function(require, exports){
 			'<td name="needInReduceMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="needInReduceMoney" type="text" readonly="readonly" class="w-70" value="0"/>'+
+					'<span class="F-float F-money needInReduceMoney">0</span>'+
+					'<input name="needInReduceMoney" type="hidden"/>'+
 				'</div>'+
 			'</td>'+
 			'<td name="needIncome">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="needIncome" type="text" readonly="readonly" class="w-70" value="0"/>'+
+					'<span class="F-float F-money needIncome">0</span>'+
+					'<input name="needIncome" type="hidden"/>'+
 				'</div>'+
 			'</td>'+
 			'<td name="cashMoney">'+
@@ -2835,7 +2844,8 @@ define(function(require, exports){
 			'<td name="realNeedPayMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="realNeedPayMoney" class="w-70" type="text" readOnly="readOnly">'+
+					'<span class="F-float F-money realNeedPayMoney">0</span>'+
+					'<input name="realNeedPayMoney" type="hidden">'+
 				'</div>'+
 			'</td>'+
 			'<td name="payedMoney">'+
@@ -2930,7 +2940,25 @@ define(function(require, exports){
 			guideRate = $tr.find('td[name=guideRate]'),
 			guideRebateMoney = $tr.find('td[name=guideRebateMoney]'),
 			billRemark = $tr.find('td[name=billRemark]'),
-			index = thisTd.find('div').length;
+			index = thisTd.find('div').length,
+			selfPayId = $tr.attr('selfPayId'),
+			gRate = 0,tRate = 0,CRmoney = 0;
+		if(!!selfPayId){
+			var id = $tr.find('input[name=selfItemId]').val(),whichDay = $tr.attr('whichDay'),
+				startTime = $parentObj.find('.tripPlanStartTime').val();
+			Count.getRateAfAddGuide($obj,id,whichDay,startTime);
+		}else{
+			if(!!$tr.attr('guideRate')){
+				gRate = $tr.attr('guideRate');
+			};
+			if(!!$tr.attr('travelAgencyRate')){
+				tRate = $tr.attr('travelAgencyRate');
+			};
+			if(!!$tr.attr('customerRebateMoney')){
+				CRmoney = $tr.attr('customerRebateMoney');
+			};
+			
+		}
 		var guideHtml ='<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="guideName" class="w-70"/>'+
 			'<input type="hidden" name="guideArrangeId"/>'+
@@ -2942,10 +2970,12 @@ define(function(require, exports){
 			'<input type="text" name="incomeCount" class="w-50">'+
 			'</div>';
 		var inReduceHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input name="needInReduceMoney" type="text" readonly="readonly" class="w-70" value="0"/>'+
+			'<span class="F-money F-float needInReduceMoney">0</span>'+
+			'<input name="needInReduceMoney" type="hidden"/>'+
 			'</div>';
 		var needIncomeHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input name="needIncome" type="text" readonly="readonly" class="w-70" value="0"/>'+
+			'<span class="F-float F-money needIncome">0</span>'+
+			'<input name="needIncome" type="hidden" />'+
 			'</div>';
 		var cashMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="cashMoney" class="w-70">'+
@@ -2957,7 +2987,8 @@ define(function(require, exports){
 			'<input type="text" name="realReduceMoney" class="w-70">'+
 			'</div>';
 		var realNeedPayHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="realNeedPayMoney" class="w-70" readOnly="readOnly">'+
+			'<span class="F-float F-money realNeedPayMoney">0</span>'+
+			'<input type="hidden" name="realNeedPayMoney">'+
 			'</div>';
 		var guidePayedHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="guidePayedMoney" class="w-70">'+
@@ -2973,13 +3004,13 @@ define(function(require, exports){
 			'<span style="color:#bbb;">查看</span>'+
 			'</div>';
 		var travelAgencyRateHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="travelAgencyRate" class="w-50">'+
+			'<input type="text" name="travelAgencyRate" class="w-50" value="'+tRate+'">'+
 			'</div>';
 		var travelAgencyRebateMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="travelAgencyRebateMoney" class="w-70">'+
 			'</div>';
 		var guideRateHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="guideRate" class="w-50">'+
+			'<input type="text" name="guideRate" class="w-50" value="'+gRate+'">'+
 			'</div>';
 		var guideRebateMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="guideRebateMoney" class="w-70">'+
@@ -3009,6 +3040,7 @@ define(function(require, exports){
 		$selfObj.find('td[name="selfGuideName"]').find('[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
 		});
+
 
 	};
 	//删除导游
@@ -3061,10 +3093,10 @@ define(function(require, exports){
 	};
 	//删除自费安排
 	Count.delSelfArrange = function($obj,$parentObj){
-		var selfArrangeId = $obj.closest('tr').find('[name=selfArrangeId]').val();
-		if(!!selfArrangeId){
+		var selfItemArrangeId = $obj.closest('tr').find('input[name=selfItemArrangeId]').val();
+		if(!!selfItemArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(selfArrangeId,'selfpay',removeItem);
+				Count.delArrangeData(selfItemArrangeId,'selfpay',removeItem);
 			});
 		}else{
 			var $tr = $obj.closest('tr');
@@ -3131,6 +3163,7 @@ define(function(require, exports){
 			needPayMoney = Count.changeTwoDecimal(needPayMoney);
 			$parent.find('.needPayMoney').text(needPayMoney);
             $parent.find('input[name="realneedPayMoney"]').val(needPayMoney);
+            $parent.find('.realneedPayMoney').text(needPayMoney);
             //计算团收入--其他收入
 			var $bodyObj = $parentObj.find('.T-main-table');
 			var shopRebateMoney = 0;
@@ -3159,7 +3192,9 @@ define(function(require, exports){
 			'<td><div class="div-h-30"></div><input type="text" name="title" class="w-80"/></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="count" class="w-50"/></td>'+
-			'<td><div class="div-h-30"></div><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
+			'<td><div class="div-h-30"></div>'+
+			'<span class="F-float F-money realneedPayMoney">0</span>'+
+			'<input name="realneedPayMoney" type="hidden" /></td>'+
 			guideHtml+
 			'<td><div class="div-h-30"></div><span style="color:#bbb;">查看</span></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
@@ -3314,10 +3349,10 @@ define(function(require, exports){
 	//删除车费重新计算
 	Count.sumBusFeeAfDel = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),
-			busCompanyArrangeId = $tr.attr('busCompanyArrangeId');
-		if(!!busCompanyArrangeId){
+			busArrangeId = $tr.attr('busArrangeId');
+		if(!!busArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(busCompanyArrangeId,'busCompany',removeItems);
+				Count.delArrangeData(busArrangeId,'busCompany',removeItems);
 			});
 		}else{
 			removeItems();
@@ -3985,8 +4020,8 @@ define(function(require, exports){
 	//获取自费项目的数据
 	Count.getSelfItemData = function($obj,$parentObj){
 		var $selfPayItemObj = false;
-		if($obj.attr('selfpayarrangeid')){
-			$selfPayItemObj = $obj.find('input[name=selfPayItemName]');
+		if($obj.attr('selfPayId')){
+			$selfPayItemObj = $obj.find('input[name=selfPayItem]');
 		}else{
 			$selfPayItemObj = $obj.find('input[name=selfPayItem]');
 		}
@@ -4048,14 +4083,13 @@ define(function(require, exports){
 		var startTime = $parentObj.find('.startTime_Choose').text(),
 			whichDay = false,
 			id = false;
-			if($obj.attr('selfpayarrangeid')){
+			if($obj.attr('selfPayId')){
 				whichDay = $obj.attr('whichDay');
 				id = $obj.find('input[name=selfPayItemId]').val();
 			}else{
 				whichDay = $obj.find('select[name=whichDay]').val();
 				id = $obj.find('input[name=selfPayItemId]').val();
-			}
-			
+			};
 		$.ajax({
 			url:KingServices.build_url('selfpay','getSelfPayItemPrice'),
 			type:'POST',
@@ -4076,29 +4110,94 @@ define(function(require, exports){
 					if(travelAgencyRate<=1){
 						travelAgencyRate = travelAgencyRate*100;
 					};
-					if($obj.attr('selfpayarrangeid')){
-						$obj.find('.marketPrice').text(data.marketPrice);
-						$obj.find('.price').text(data.price);
+					if($obj.attr('selfPayId')){
+						$obj.find('.realMarketPrice').text(data.marketPrice);
+						$obj.find('.realPrice').text(data.price);
 						$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
+						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
+							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
+							$CRmoneyObj = $obj.find('input[name=customerRebateMoney]');
 						$obj.find('input[name=marketPrice]').val(data.marketPrice);
 						$obj.find('input[name=price]').val(data.price);
-						$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
-						$obj.find('input[name=travelAgencyRate]').val(travelAgencyRate);
-						$obj.find('input[name=guideRate]').val(guideRate);
+						$tRateObj.each(function(){
+							var $that = $(this);
+							$that.val(travelAgencyRate);
+						});
+
+						$gRateObj.each(function(){
+							var $that = $(this);
+							$that.val(guideRate);
+						});
+
+						$CRmoneyObj.val(data.customerRebateMoney);
+						$obj.attr('guideRate',guideRate);
+						$obj.attr('travelAgencyRate',travelAgencyRate);
 						Count.autoSelfSum($td,$parentObj);
 
 					}else{
+						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
+							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
+							$CRmoneyObj = $obj.find('input[name=customerRebateMoney]');
 						$obj.find('input[name=marketPrice]').val(data.marketPrice);
 						$obj.find('input[name=price]').val(data.price);
-						$obj.find('input[name=realCount]').val(0);
-						$obj.find('input[name=allPersonMoney]').val(data.customerRebateMoney);
-						$obj.find('input[name=travelAgencyRate]').val(travelAgencyRate);
-						$obj.find('input[name=guideRate]').val(guideRate);
+						$tRateObj.each(function(){
+							var $that = $(this);
+							$that.val(travelAgencyRate);
+						});
+
+						$gRateObj.each(function(){
+							var $that = $(this);
+							$that.val(guideRate);
+						});
+						$CRmoneyObj.val(data.customerRebateMoney);
+						$obj.attr('guideRate',guideRate);
+						$obj.attr('travelAgencyRate',travelAgencyRate);
 						Count.autoSelfSum($td,$parentObj);
 					};
-				}
-				
-				
+				};
+			}
+		});
+	};
+	//新增导游获取项目的比例
+	Count.getRateAfAddGuide = function($obj,id,whichDay,startTime){
+		$.ajax({
+			url:KingServices.build_url('selfpay','getSelfPayItemPrice'),
+			type:'POST',
+			showLoading:false,
+			data:{
+				id:id,
+				whichDay:whichDay,
+				startTime:startTime
+			},
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					var travelAgencyRate = parseFloat(data.travelAgencyRate);
+					var guideRate = parseFloat(data.guideRate);
+					if(guideRate<=1){
+						guideRate = guideRate*100;
+					};
+					if(travelAgencyRate<=1){
+						travelAgencyRate = travelAgencyRate*100;
+					};
+					var thisTr = $obj.closest('tr'),thisTd =  $obj.closest('td'),
+						thisDiv = $obj.closest('div'),tRateTd = thisTr.find('td[name=travelAgencyRate]'),
+						gRateTd = thisTr.find('td[name=guideRate]'),thisIndex = thisTd.find('div').length;
+
+					tRateTd.find('div').each(function(){
+						var index = $(this).attr('index'),$that = $(this);
+						if(thisIndex == index){
+							$that.find('input[name=travelAgencyRate]').val(travelAgencyRate);
+						}
+					});	
+
+					gRateTd.find('div').each(function(){
+						var index = $(this).attr('index'),$that = $(this);
+						if(thisIndex == index){
+							$that.find('input[name=guideRate]').val(guideRate);
+						}
+					});
+				};
 			}
 		});
 	};
@@ -5243,7 +5342,7 @@ define(function(require, exports){
 		$tr = $tripDetail.find('tr');
 		$tr.each(function(){
 			var guideArrangeId = $tr.find('input[name=guideArrangeId]').val(),
-				guideName = $tr.find('input[name=guideArrangeId]').val();
+				guideName = $tr.find('input[name=guideName]').val();
 			if(!!$tr.find('.guideName').text()){
 				guideName = $tr.find('.guideName').text();
 			};
@@ -5387,11 +5486,11 @@ define(function(require, exports){
 		$tr = $selfObj.find('tr');
 		$tr.each(function(){
 			var $that = $(this);
-			var selfPayArrangeId = $that.find('[name=selfArrangeId]').val();
-			if(!!selfPayArrangeId){
+			var id = $that.find('[name=selfItemArrangeId]').val();
+			if(!!selfItemArrangeId){
 				var shopId = $(this).attr('shopid');
 				var selfPayArrange = {
-					id:selfPayArrangeId,
+					id:id,
 					realMarketPrice:Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
 					realPrice:Count.changeTwoDecimal($that.find('.realPrice').text()),
 					guideDetails:Count.getSelfGuideData($that)
@@ -5674,7 +5773,7 @@ define(function(require, exports){
 					whichDay:whichDay,
 	                otherName:otherOutName,
 	                realPrice:$(this).find('input[name="price"]').val(),
-	                count:$(this).find('.realCount').text(),
+	                realCount:$(this).find('.realCount').text(),
 	                realReduceMoney:Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 	                guideDetails:Count.installGuide($(this))
                 }
@@ -5727,43 +5826,7 @@ define(function(require, exports){
         saveJson.remarkArrangeList = remarkList;
         return saveJson;
 	};
-	//获取导游数据
-	Count.installGuide = function($tr){
-		var $guideTd = $tr.find('td[name=guideName]'),
-			$countTd = $tr.find('td[name=guideRealCount]'),
-			$payTypeTd = $tr.find('td[name=payType]'),
-			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
-			$billImageTd = $tr.find('td[name=billImage]'),
-			$billRemarkTd = $tr.find('td[name=billRemark]'),
-			guideDetail = [];
-		var guideDiv = $guideTd.find('div'),
-			counteDiv = $countTd.find('div'),
-			payTypeDiv = $payTypeTd.find('div'),
-			moneyDiv = $guidePayedMoneyTd.find('div'),
-			remarkDiv = $billRemarkTd.find('div'),
-			divLen = counteDiv.length;
-			guideDiv.each(function(j){
-				var $that = $(this),
-					index = $that.attr('index'),
-					id = '',guideArrangeId = 0;
-				if($that.find('[name=guideId]').length){
-					id = $that.find('[name=guideId]').val();
-				};
-				guideArrangeId = $that.find('[name=guideArrangeId]').val();
-				if(!!index){
-					var guide = {
-						id:id,
-						guideArrangeId:guideArrangeId,
-						realCount:counteDiv.eq(j).find('[name=guideRealCount]').val(),
-						realPayType:payTypeDiv.eq(j).find('[name=payType]').val(),
-						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
-						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
-					};
-					guideDetail.push(guide);
-				};
-			});
-		return guideDetail;
-	};
+	
 	//单团审核 和 单团报账 添加明细
 	Count.addFee = function($tab, dataId) {
 		$tab.find('.T-addFee').on('click', function() {
@@ -6136,7 +6199,7 @@ define(function(require, exports){
 		};
 		
 	};
-	//获取导游数据
+	//获取导游下拉数据
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
 			dataList = Count.guide.listMap;
@@ -6196,13 +6259,17 @@ define(function(require, exports){
 			guideDiv.each(function(i){
 				var $that = $(this),
 					index = $that.attr('index'),
+					id = '',
 					guideName = $that.find('[name=shopGuideName]').val();
 					if(!!$that.find('.guideName').text()){
 						guideName = $that.find('.guideName').text();
 					};
+					if(!!$that.attr('guideId')){
+						id = $that.attr('guideId');
+					};
 				if(!!index){
 					var guide = {
-						id:$that.find('[name=shopGuideId]').val(),//实销导游id
+						id:id,//实销导游id
 						guideArrangeId:$that.find('[name=guideArrangeId]').val(),
 						guideName:guideName,
 						consumeMoney:moneyDiv.eq(i).find('[name=shopGuideMoney]').val(),
@@ -6299,6 +6366,44 @@ define(function(require, exports){
 				
 			});
 		return guideDetails;
+	};
+	//获取导游数据
+	Count.installGuide = function($tr){
+		var $guideTd = $tr.find('td[name=guideName]'),
+			$countTd = $tr.find('td[name=guideRealCount]'),
+			$payTypeTd = $tr.find('td[name=payType]'),
+			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
+			$billImageTd = $tr.find('td[name=billImage]'),
+			$billRemarkTd = $tr.find('td[name=billRemark]'),
+			guideDetail = [];
+		var guideDiv = $guideTd.find('div'),
+			counteDiv = $countTd.find('div'),
+			payTypeDiv = $payTypeTd.find('div'),
+			moneyDiv = $guidePayedMoneyTd.find('div'),
+			remarkDiv = $billRemarkTd.find('div'),
+			divLen = counteDiv.length;
+			guideDiv.each(function(j){
+				var $that = $(this),
+					index = $that.attr('index'),
+					id = $that.attr('guideId'),guideArrangeId = 0;
+					guideArrangeId = $that.find('[name=guideArrangeId]').val(),
+					guideId = '';
+				if(!!$that.attr('guideId')){
+					guideId = $that.attr('guideId');
+				};
+				if(!!index){
+					var guide = {
+						id:guideId,
+						guideArrangeId:guideArrangeId,
+						realCount:counteDiv.eq(j).find('[name=guideRealCount]').val(),
+						realPayType:payTypeDiv.eq(j).find('[name=payType]').val(),
+						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
+						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
+					};
+					guideDetail.push(guide);
+				};
+			});
+		return guideDetail;
 	};
 	//增加导游的html拼接
 	Count.addGuideHtml = function(){

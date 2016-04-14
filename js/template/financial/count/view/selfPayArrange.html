@@ -63,7 +63,16 @@
                                 {{if index == 0}}
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
+                                        <span class="itemName">
+                                           {{if itemSet.itemId == null || itemSet.itemId == ''}}
+                                                <input name="selfPayItem" class="w-70" type="text">
+                                                <input type="hidden" name="selfPayItemId">
+                                            {{else}}
+                                                {{itemSet.itemName}}
+                                                <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                            {{/if}}
+                                        </span><!-- 自费项目 -->
                                     </td>
 
                                     <td>
@@ -148,12 +157,14 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="needInReduceMoney" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                    <span class="F-float F-money needInReduceMoney">0</span>
+                                                    <input name="needInReduceMoney" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input name="needInReduceMoney" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                <span class="F-float F-money needInReduceMoney">0</span>
+                                                <input name="needInReduceMoney" type="hidden"/>
                                             </div>
                                         {{/if}}
                                     </td><!-- 应收优惠 -->
@@ -163,12 +174,14 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="needIncome" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                    <span class="F-float F-money needIncome">0</span>
+                                                    <input name="needIncome" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input name="needIncome" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                <span class="F-float F-money needIncome">0</span>
+                                                <input name="needIncome" type="hidden"/>
                                             </div>
                                         {{/if}}
                                     </td><!-- 应收 -->
@@ -250,16 +263,17 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                     {{if itemSet.badStatus == 1}}
-                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                     {{else}}
-                                                        <input type="text" class="F-float F-money w-70" name="realNeedPayMoney" 
-                                                        value="{{rs.realNeedPayMoney}}" readOnly="readOnly"/>
+                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                        <input name="realNeedPayMoney" type="hidden"/>
                                                     {{/if}}
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input type="text" class="F-float F-money w-70" name="realNeedPayMoney" readOnly="readOnly"/>
+                                                <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                <input name="realNeedPayMoney" type="hidden"/>
                                             </div>
                                         {{/if}}<!-- 应付 -->
                                     </td>
@@ -333,8 +347,8 @@
                                     
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <input type="text" readonly="readonly" class="w-70 F-float F-money customerRebateMoney" 
-                                        value="{{arrange.customerRebateMoney}}"><!-- 人数返佣 -->
+                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
+                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
                                     </td>
 
                                     <td name="travelAgencyRate">
@@ -472,7 +486,16 @@
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
+                                        <span class="itemName">
+                                            {{if itemSet.itemId == null || itemSet.itemId == ''}}
+                                                <input name="selfPayItem" class="w-70" type="text">
+                                                <input type="hidden" name="selfPayItemId">
+                                            {{else}}
+                                                {{itemSet.itemName}}
+                                                <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                            {{/if}}
+                                        </span><!-- 自费项目 -->
                                     </td>
                                     <td>
                                         <div class="div-h-30"></div>
@@ -559,12 +582,14 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="needInReduceMoney" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                    <span class="F-float F-money needInReduceMoney">0</span>
+                                                    <input name="needInReduceMoney" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input name="needInReduceMoney" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                <span class="F-float F-money needInReduceMoney">0</span>
+                                                <input name="needInReduceMoney" type="hidden"/>
                                             </div>
                                         {{/if}}
                                     </td><!-- 应收优惠 -->
@@ -574,12 +599,14 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="needIncome" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                    <span class="F-float F-money needIncome">0</span>
+                                                    <input name="needIncome" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input name="needIncome" type="text" readonly="readonly" class="w-70" value="0"/>
+                                                <span class="F-float F-money needIncome">0</span>
+                                                <input name="needIncome" type="hidden"/>
                                             </div>
                                         {{/if}}
                                     </td><!-- 应收 -->
@@ -661,17 +688,17 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                     {{if itemSet.badStatus == 1}}
-                                                        <span class="F-float F-money">{{rs.realNeedPayMoney}}</span>
+                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                     {{else}}
-                                                        <input type="text" class="F-float F-money w-70" name="realNeedPayMoney" 
-                                                        value="{{rs.realNeedPayMoney}}" readOnly="readOnly"/>
+                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                        <input name="realNeedPayMoney" type="hidden"/>
                                                     {{/if}}
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input type="text" class="F-float F-money w-70" name="realNeedPayMoney"  
-                                                readOnly="readOnly"/>
+                                                <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                <input name="realNeedPayMoney" type="hidden"/>
                                             </div>
                                         {{/if}}<!-- 应付 -->
                                     </td>
@@ -747,8 +774,8 @@
                                     
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <input type="text" readonly="readonly" class="w-70 F-float F-money customerRebateMoney" 
-                                        value="{{arrange.customerRebateMoney}}"><!-- 人数返佣 -->
+                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
+                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
                                     </td>
 
                                     <td name="travelAgencyRate">
