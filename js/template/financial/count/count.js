@@ -657,7 +657,7 @@ define(function(require, exports){
 		//车费--计算、新增
 		//车费--计算、新增
 		var $busObj = $listObj.find('.T-count-bus');
-		$busObj.find('input').off('change').on('change',function(){
+		$busObj.off('change').on('change','input',function(){
 			var nameFlag = $(this).attr('name');
 			if(busNoneAutoFields.indexOf(nameFlag)<0){
 				//校验输入的数据是否合法
