@@ -457,7 +457,6 @@ define(function(require, exports){
 				id:$id
 			},
 			type:'POST',
-			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -2086,13 +2085,10 @@ define(function(require, exports){
 				Count.delDiv($currGuideMoneyTd,index,$parentObj);
 				Count.delDiv($currGuideRemarkTd,index,$parentObj);
 			};
-			
 		}
 	};
 	//删除新增的商品
 	Count.delShop = function($obj,$parentObj){
-
-		
 		var $tr = $obj.closest('tr');
 		var $prev = $tr.prevAll(),
 			td_cnt = $tr.children('td').length;
@@ -3798,6 +3794,13 @@ define(function(require, exports){
 				break;
 			case 'shopArrange' :
 					Count.autoShopSumCost($obj,$parentObj);
+					var $tr = $obj.closest('tr'),$td = $obj.closest('td'),
+						shopPolicyId = $tr.find('input[name=shopPolicyId]').val(),
+						consumeMoney = $tr.find('input[name=sumConsumeMoney]').val(),
+						date = $parentObj.find('.tripPlanStartTime').val();
+					if($td.attr('name') == 'shopGuideMoney'){
+						Count.getShopRate($obj,shopPolicyId,consumeMoney,date,$parentObj);
+					};
 				break;
 		}
 	};
