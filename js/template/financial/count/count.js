@@ -5457,7 +5457,7 @@ define(function(require, exports){
 					};
 					return itemList;
 				};
-				function installBusAndPerson ($tr){
+				function installBusAndPerson ($tr){							 
 					var shopPolicy = '',id='',shopPolicyId = $tr.find('[name=shopPolicyId]').val();
 					if(!!$tr.find('input[name=shopPolicy]').val()){
 						shopPolicy = $tr.find('[name=shopPolicy]').val();
