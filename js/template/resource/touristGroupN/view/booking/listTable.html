@@ -1,0 +1,29 @@
+{{each bookingOrderList as rs}}
+<tr>
+    <td>{{rs.orderNumber}}</td>
+    <td>{{rs.partnerAgencyName}}</td>
+    <td><i class="ace-icon fa{{if rs.hotelOrderStatus == 1}} fa-check green bigger-130{{else}} fa-times red bigger-125{{/if}}"></i></td>
+    <td><i class="ace-icon fa{{if rs.ticketOrderStatus == 1}} fa-check green bigger-130{{else}} fa-times red bigger-125{{/if}}"></i></td>
+    <td><i class="ace-icon fa{{if rs.scenicOrderStatus == 1}} fa-check green bigger-130{{else}} fa-times red bigger-125{{/if}}"></i></td>
+    <td><i class="ace-icon fa{{if rs.busCompanyOrderStatus == 1}} fa-check green bigger-130{{else}} fa-times red bigger-125{{/if}}"></i></td>
+    <td><span class="F-float">{{rs.sumNeedGetMoney}}</span></td>
+    <td>{{rs.outOPUserName}}</td>
+    <td>{{rs.status | getPartGroupStatusText}} </td>
+    <td>
+        <div class="btn-group" style="width:120px;">
+            <a class="T-action T-view cursor">
+                查看
+            </a>
+            <a class="T-action T-update cursor">
+                <label class="padding-right20">|</label>
+                <span>编辑</span>
+            </a>
+            <a class="T-action T-delete cursor">
+                <label class="padding-right20">|</label>
+                删除
+            </a>
+        </div>
+    </td>
+</tr>
+{{/each}}
+

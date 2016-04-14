@@ -1,0 +1,50 @@
+<div class="container-fluid T-container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right" style="margin-top: -6px;">
+                <label class="pull-left control-label text-right mar-r-10">代订单号</label>
+                <input type="text" class="pull-left w-150" name="orderNumber">
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <table class="table table-striped table-bordered table-hover hct-table-update">
+                <thead>
+                    <tr>
+                        <th rowspan="2">客户</th>
+                        <th colspan="4">代订项目</th>
+                        <th rowspan="2">代订小计</th>
+                        <th rowspan="2">应收</th>
+                        <th rowspan="2">客人信息</th>
+                        <th rowspan="2">联系电话</th>
+                        <th rowspan="2">外联销售</th>
+                    </tr>
+                    <tr>
+                        <th width="110">酒店</th>
+                        <th width="110">票务</th>
+                        <th width="110">景区</th>
+                        <th width="110">旅游车</th>
+                    </tr>
+                </thead>
+                <tbody class="T-booking-info">
+                    <tr>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" placeholder="点击选择客户"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-hotel" readonly name="" placeholder="点击填写酒店"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-hotel" readonly name="" placeholder="点击填写票务"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-hotel" readonly name="" placeholder="点击填写景区"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-hotel" readonly name="" placeholder="点击填写旅游车"></td>
+                        <td><input type="text" class="col-xs-12" readonly name=""></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable" readonly name="" placeholder="点击填写应收"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" placeholder="点击填写客人信息"></td>
+                        <td><input type="text" class="col-xs-12" name="mobileNumber" readonly></td>
+                        <td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 mar-t-20 mar-b-10">
+            <button class="btn btn-block btn-primary T-btn-save"> <i class="ace-icon fa fa-check"></i> 提交信息 </button>
+        </div>
+    </div>
+</div>

@@ -2296,6 +2296,7 @@ define(function(require, exports) {
             buyInsurance : $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0,
             orderNumber : $tab.find('[name="orderNumber"]').val()
         };
+        var receiveDateArr = [];
         if(data.baseInfo.customerType === 0){
             //接团
             data.receiveTrip = [];
@@ -2313,6 +2314,7 @@ define(function(require, exports) {
                         receiveHotel : receiveHotel,
                         receiveOther : typeof receiveOther !== "object" ? JSON.parse(receiveOther || "{}") : receiveOther
                     };
+                receiveDateArr.push(receiveTripData.arriveTime);
                 if($.isEmptyObject(receiveTripData.receiveHotel.hotel)){
                     delete receiveTripData.receiveHotel.hotel;
                 }
@@ -2446,6 +2448,10 @@ define(function(require, exports) {
                 sendTripData.sendOtherDel = $that.find('[name="receiveOther"]').data('clear') == "1" ? $that.data('id') : "";
                 if(!!$that.data('id')){
                     sendTripData.id = $that.data('id');
+                }
+                if($.inArray(sendTripData.leaveTime, receiveDateArr) === -1){
+                    showMessageDialog($("#confirm-dialog-message"), '送团日期不能等于接团日期！');
+                    return false;
                 }
                 data.sendTrip.push(sendTripData);
             });
@@ -2688,5 +2694,7 @@ define(function(require, exports) {
     };
     exports.init = touristGroup.initModule;
     exports.viewTouristGroup = touristGroup.touristGroupView;
-    return touristGroup;
+    exports.touristGroup = touristGroup;
+    exports.F = F;
+    return exports;
 });
