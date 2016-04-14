@@ -5337,7 +5337,7 @@ define(function(require, exports){
 		$tr = $tripDetail.find('tr');
 		$tr.each(function(){
 			var guideArrangeId = $tr.find('input[name=guideArrangeId]').val(),
-				guideName = $tr.find('input[name=guideArrangeId]').val();
+				guideName = $tr.find('input[name=guideName]').val();
 			if(!!$tr.find('.guideName').text()){
 				guideName = $tr.find('.guideName').text();
 			};
@@ -5768,7 +5768,7 @@ define(function(require, exports){
 					whichDay:whichDay,
 	                otherName:otherOutName,
 	                realPrice:$(this).find('input[name="price"]').val(),
-	                count:$(this).find('.realCount').text(),
+	                realCount:$(this).find('.realCount').text(),
 	                realReduceMoney:Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
 	                guideDetails:Count.installGuide($(this))
                 }
