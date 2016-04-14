@@ -14,10 +14,7 @@ define(function(require, exports) {
 	    	    {	// 联系人
 	    	    	$ele: $obj.find('input[name="managerName"]'),
 	    	    	rules: [
-							{
-								type: 'null', 
-								errMsg: '联系人不能为空'
-							}
+							
 	    	        ]
 	    	    },
 	    	    {	// 联系人电话
