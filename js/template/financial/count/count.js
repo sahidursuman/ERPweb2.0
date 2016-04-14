@@ -3703,7 +3703,7 @@ define(function(require, exports){
 	//修改金额数量响应事件
 	Count.changeCountAndMoney = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),arrangeType = $tr.attr('arrangeType');
-		if(arrangeType != 'selfArrange'){
+		if(arrangeType != 'selfArrange' && arrangeType != 'shopArrange'){
 			var countTd = $tr.find('td[name=guideRealCount]'),
 				badStatus = $tr.attr('badStatus'),
 				isConfirmAccount = $tr.attr('isConfirmAccount'),
@@ -3721,7 +3721,7 @@ define(function(require, exports){
 				$tr.find('input[name=realCount]').val(sumCount);
 				$tr.find('.realCount').text(sumCount);
 			};
-			realCount = $tr.find('input[name=realCount]').val();
+			realCount = $tr.find('input[name=realCount]').val(); 
 			sumPay = parseFloat(realCount*price-reduceMoney);
 			if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
 				$tr.find('.realNeedPayMoney').text(sumPay);
