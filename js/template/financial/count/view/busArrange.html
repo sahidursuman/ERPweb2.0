@@ -87,16 +87,18 @@
                         <td>
                             <div class="div-h-30"></div>
                             {{if arrange.badStatus == 1}}
-                                <span class="F-float F-money">{{arrange.realPrice}}</span>
+                                <span class="F-float F-money realPrice">{{arrange.realPrice}}</span>
+                                <input type="hidden" name="price" value="{{arrange.realPrice}}" />
                             {{else}}
                                 {{if editStatus == 2}}
-                                    <span class="F-float F-money">{{arrange.realPrice}}</span>
+                                    <span class="F-float F-money realPrice">{{arrange.realPrice}}</span>
+                                    <input type="hidden" name="price" value="{{arrange.realPrice}}" />
                                 {{else}}
                                     <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80 F-float F-money" 
                                     {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                 {{/if}}
                             {{/if}}
-                            <input type="hidden" name="realCount" value="1" />
+                            
                         </td><!-- 车费 -->
 
                         <td>

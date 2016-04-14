@@ -3721,7 +3721,7 @@ define(function(require, exports){
 				$tr.find('input[name=realCount]').val(sumCount);
 				$tr.find('.realCount').text(sumCount);
 			};
-			realCount = $tr.find('input[name=realCount]').val();
+			realCount = $tr.find('input[name=realCount]').val(); 
 			sumPay = parseFloat(realCount*price-reduceMoney);
 			if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){
 				$tr.find('.realNeedPayMoney').text(sumPay);
