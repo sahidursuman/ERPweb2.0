@@ -115,7 +115,13 @@ define(function(require, exports) {
             }).on('change','select[name=shuttleType]',function(){
                 TransferFun.busArrangeIdArray = [];
                 TransferFun.hotelArrangeIdArray = [];
-            });
+            })
+        .on('change', 'select[name="status"]', function(event) {
+            event.preventDefault();
+            var $that = $(this);
+            $that.closest('form').find('.T-arrange-feild')
+            .toggleClass('hidden', $that.val() === '0').find('input').val('');
+        });
     };
 
     /**

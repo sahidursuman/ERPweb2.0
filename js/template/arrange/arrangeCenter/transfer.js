@@ -246,7 +246,6 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data.canMergeArrange = false;
-                    var flage = 0;
                     
                     // 设置选中效果
                     if (args.status == '0' && !!Transfer.busArrangeIdArray && Transfer.busArrangeIdArray.length) {
@@ -263,7 +262,7 @@ define(function(require, exports) {
                         }
                     }
 
-                    var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data,flage);
+                    var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
                     laypage({
