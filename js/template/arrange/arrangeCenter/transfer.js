@@ -228,7 +228,14 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     Transfer._getBusList = function($searchFrom, page) {
+
         var args = $searchFrom.serializeJson();
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
@@ -281,7 +288,12 @@ define(function(require, exports) {
      */
     Transfer._getHotelList = function($searchFrom, page) {
         var args = $searchFrom.serializeJson();
-
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutHotelArrangeList'),
@@ -292,7 +304,6 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data.canMergeArrange = false;
-                     // Transfer.hotelArrangeIdArray = [];  
                     // 设置选中效果
                     if (args.status == '0' && !!Transfer.hotelArrangeIdArray && Transfer.hotelArrangeIdArray.length) {
                         for (var i = 0, len = data.outHotelRemarkList.length, tmp; i < len; i++) {
@@ -331,9 +342,16 @@ define(function(require, exports) {
      * @param  {int} page        页面
      * @return {[type]}             [description]
      */
-    Transfer._getAddHotelList = function($searchFrom, page,selectedOutRemarkList) {
+    Transfer._getAddHotelList = function($searchFrom, page,selectedOutRemarkList,shuttleType) {
         var args = $searchFrom.serializeJson();
         args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList);
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
+        args.shuttleType = shuttleType;
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutHotelArrangeList'),
@@ -349,7 +367,6 @@ define(function(require, exports) {
                     if (args.status == '0' && !!Transfer.hotelArrangeIdArray && Transfer.hotelArrangeIdArray.length) {
                         for (var i = 0, len = data.outHotelRemarkList.length, tmp; i < len; i++) {
                             tmp = data.outHotelRemarkList[i];
-
                             for (var j = 0, jLen = Transfer.hotelArrangeIdArray.length; j < jLen; j++) {
                                 if (tmp.id == Transfer.hotelArrangeIdArray[j].outRemarkId) {
                                     tmp.checked = true;
@@ -385,7 +402,12 @@ define(function(require, exports) {
      */
     Transfer._getOtherList = function($searchFrom, page) {
         var args = $searchFrom.serializeJson();
-
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutOtherArrangeList'),
@@ -583,6 +605,15 @@ define(function(require, exports) {
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var busPlan = checkData[i];
+                        var span = '';
+                        var input = '';
+                        if(busPlan.shuttleType == 1){
+                            span = '<span>接团</span>';
+                            input = '<input name="shuttleType" value="1" type="hidden"/>';
+                        }else if(busPlan.shuttleType == 2){
+                            span = '<span>送团</span>';
+                            input = '<input name="shuttleType" value="2" type="hidden"/>';
+                        }
                         var htmlData ='<tr class="T-task-list">'+
                             '<td class="h-touristGroupInfo">'+
                             '<input type="hidden" name="outRemarkId" value="'+(busPlan.id||"")+'">'+
@@ -592,8 +623,9 @@ define(function(require, exports) {
                                     '<span class="partnerAgencyName">'+(busPlan.partnerAgencyName||"")+'</span>外联销售：'+
                                     '<span class="outOPUserName">'+(busPlan.outOPUserName||"")+'</span></p>'+
                                 '<p>收客单号：<span class="tgOrderNumber">'+(busPlan.tgOrderNumber||"")+'</span></p></td>'+
-                            '<td><span>{{if Busplan.shuttleType == 1}} 接团 {{else if Busplan.shuttleType == 2}} 送团{{/if}}</span>'+
-                                '<input type="hidden" name="shuttleType" value="{{if Busplan.shuttleType == 1}} 1 {{else if Busplan.shuttleType == 2}} 2{{/if}}">'+
+                            '<td>'+
+                                    span+
+                                    input+
                             '</td>'+
                             '<td>'+
                                 '<p><span cals="contactMemberName">'+(busPlan.contactMemberName||"")+'</span></p>'+
@@ -624,14 +656,13 @@ define(function(require, exports) {
                     // 缓存数据
                     if (this.checked) {
                         Transfer.addBusTransferArray.push(item);
-                        console.log(Transfer.addBusTransferArray)
+                        
                     } else {
                         // 删除数据
                         for (var i = 0, len = Transfer.addBusTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.outRemarkId === Transfer.addBusTransferArray[i].outRemarkId)  {
+                            if (item.id === Transfer.addBusTransferArray[i].id)  {
                                 Transfer.addBusTransferArray.splice(i, 1);
-                                console.log(Transfer.addBusTransferArray);
                             }
                         }
                     }
@@ -645,10 +676,9 @@ define(function(require, exports) {
         $tr.each(function(i){
             var $that = $(this),id = $that.attr('data-id');
             var selectFlag = $that.find('.T-cheked').is(':checked');//判断是否勾选
-            var shuttleType= $that.find("input[name=shuttleType]").val();
             if(selectFlag){
                 var checkData = {
-                    shuttleType : shuttleType,
+                    shuttleType : $that.find("input[name=shuttleType]").val(),
                     id : id,
                     orderNumber : $that.find('.orderNumber').text(),
                     lineProductName : $that.find('.lineProductName').text(),
@@ -660,7 +690,6 @@ define(function(require, exports) {
                     require : $that.find('.require').text(),
                     tgOrderNumber : $that.find('.tgOrderNumber').text(),
                     outOPUserName : $that.find('.outOPUserName').text(),
-                    shuttleType : $that.find('.shuttleType').text(),
                     contactMemberName : $that.find('.contactMemberName').text(),
                     adultCount : $that.find('.adultCount').text(),
                     childCount : $that.find('.childCount').text(),
@@ -680,10 +709,15 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     Transfer._getAddBusList = function($searchFrom, page,selectedOutRemarkList) {
-        var shuttleType = $searchFrom.find('name[shuttleType]').text()
+        var shuttleType = $searchFrom.find('name[shuttleType]').text();
         var args = $searchFrom.serializeJson();
-        console.log(shuttleType)
         args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList)
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
@@ -733,7 +767,6 @@ define(function(require, exports) {
     Transfer.submitbus = function($tab) {
         var shuttleType = $tab.find('[name=shuttleType]').val();
         var unifyId = $tab.find('[name=unifyId]').val();
-        console.log(unifyId)
         var outBusList = Tools.getTableVal($('#busplan_body'), 'id'), //车安排列表
         outBusList = JSON.stringify(outBusList),
         outRemarkList = [], //中转列表 Id
@@ -1217,7 +1250,8 @@ define(function(require, exports) {
             });
             // 新增游客
             $hotelplanId.find('.T-add-HotelTransfersId').on('click', function() {
-                Transfer.addHotelTransfer(0,$hotelplanId);
+                var shuttleType = $hotelplanId.find('input[name=shuttleType]').val();
+                Transfer.addHotelTransfer($hotelplanId,shuttleType);
             });
             
             //删除中转数据
@@ -1242,7 +1276,7 @@ define(function(require, exports) {
      * @param {int} shuttleType 接送团标志 0：接团；1：送团
      * @param {int} status      安排状态： 0：未安排，1：已安排
      */
-    Transfer.addHotelTransfer = function(shuttleType,$hotelplanId) {
+    Transfer.addHotelTransfer = function($hotelplanId,shuttleType) {
          var outRemarkId = $hotelplanId.find('[name=outRemarkId]');
         var selectedOutRemarkList = [];
         outRemarkId.each(function(){
@@ -1277,7 +1311,7 @@ define(function(require, exports) {
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
-                    Transfer._getAddHotelList($(this).closest('form'),0,selectedOutRemarkList);
+                    Transfer._getAddHotelList($(this).closest('form'),0,selectedOutRemarkList,shuttleType);
                 }).trigger('click');
                 
                 // 添加
@@ -1286,8 +1320,6 @@ define(function(require, exports) {
                     //缓存选中的数据
                     var checkData = Transfer.installCheckDatashotel($frame);
                     // 添加游客列表
-                    
-                    console.log(checkData);
                     var htmlData = '';
                     for (var i = 0;i<checkData.length; i++) {
                         var hotelPlan = checkData[i];
@@ -1300,8 +1332,8 @@ define(function(require, exports) {
                             span = '<span>送团</span>';
                             input = '<input name="shuttleType" value="2" type="hidden"/>';
                         }else if(hotelPlan.shuttleType == 3){
-                            span = '<span>送团</span>';
-                            input = '<input name="shuttleType" value="2" type="hidden"/>';
+                            span = '<span>返程住宿</span>';
+                            input = '<input name="shuttleType" value="3" type="hidden"/>';
                         };
                        var htmlData = ' <tr class="T-task-list">'+
                             '<td class="h-touristGroupInfo">'+
@@ -1351,8 +1383,9 @@ define(function(require, exports) {
                         // 删除数据
                         for (var i = 0, len = Transfer.addHotelTransferArray.length;
                                 i < len; i ++)  {
-                            if (item.id === Transfer.addHotelTransferArray[i].id)  {
+                            if (item.id === Transfer.addHotelTransferArray[i].outRemarkId)  {
                                 Transfer.addHotelTransferArray.splice(i, 1);
+                                
                             }
                         }
                     }
@@ -1370,6 +1403,7 @@ define(function(require, exports) {
             if(selectFlag){
                 var checkData = {
                     id : id,
+                    shuttleType : $that.find('input[name=shuttleType]').val(),
                     orderNumber : $that.find('.orderNumber').text(),
                     lineProductName : $that.find('.lineProductName').text(),
                     startTime : $that.find('.startTime').text(),
