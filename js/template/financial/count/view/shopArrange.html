@@ -118,6 +118,17 @@
                                         </td><!-- 社佣金额 -->
                                     {{/if}}
                                 {{/each}}
+                            {{else}}
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>     
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
+                               <td></td>
                             {{/if}}
                             
                             <td rowspan="{{arrange.itemList.length}}" name="currGuide">
@@ -133,7 +144,7 @@
                                 
                                 {{if arrange.cashList.length}}
                                     {{each arrange.cashList as cash index}}
-                                        <div class="mar-t-5 div-h-30" index="{{index+1}}">
+                                        <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{cash.id}}">
                                             <span class="cashGuideName">{{cash.guideName}}</span>
                                             {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
                                                 <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
