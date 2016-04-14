@@ -5821,43 +5821,7 @@ define(function(require, exports){
         saveJson.remarkArrangeList = remarkList;
         return saveJson;
 	};
-	//获取导游数据
-	Count.installGuide = function($tr){
-		var $guideTd = $tr.find('td[name=guideName]'),
-			$countTd = $tr.find('td[name=guideRealCount]'),
-			$payTypeTd = $tr.find('td[name=payType]'),
-			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
-			$billImageTd = $tr.find('td[name=billImage]'),
-			$billRemarkTd = $tr.find('td[name=billRemark]'),
-			guideDetail = [];
-		var guideDiv = $guideTd.find('div'),
-			counteDiv = $countTd.find('div'),
-			payTypeDiv = $payTypeTd.find('div'),
-			moneyDiv = $guidePayedMoneyTd.find('div'),
-			remarkDiv = $billRemarkTd.find('div'),
-			divLen = counteDiv.length;
-			guideDiv.each(function(j){
-				var $that = $(this),
-					index = $that.attr('index'),
-					id = '',guideArrangeId = 0;
-				if($that.find('[name=guideId]').length){
-					id = $that.find('[name=guideId]').val();
-				};
-				guideArrangeId = $that.find('[name=guideArrangeId]').val();
-				if(!!index){
-					var guide = {
-						id:id,
-						guideArrangeId:guideArrangeId,
-						realCount:counteDiv.eq(j).find('[name=guideRealCount]').val(),
-						realPayType:payTypeDiv.eq(j).find('[name=payType]').val(),
-						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
-						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
-					};
-					guideDetail.push(guide);
-				};
-			});
-		return guideDetail;
-	};
+	
 	//单团审核 和 单团报账 添加明细
 	Count.addFee = function($tab, dataId) {
 		$tab.find('.T-addFee').on('click', function() {
@@ -6230,7 +6194,7 @@ define(function(require, exports){
 		};
 		
 	};
-	//获取导游数据
+	//获取导游下拉数据
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
 			dataList = Count.guide.listMap;
@@ -6290,13 +6254,17 @@ define(function(require, exports){
 			guideDiv.each(function(i){
 				var $that = $(this),
 					index = $that.attr('index'),
+					id = '',
 					guideName = $that.find('[name=shopGuideName]').val();
 					if(!!$that.find('.guideName').text()){
 						guideName = $that.find('.guideName').text();
 					};
+					if(!!$that.attr('guideId')){
+						id = $that.attr('guideId');
+					};
 				if(!!index){
 					var guide = {
-						id:$that.find('[name=shopGuideId]').val(),//实销导游id
+						id:id,//实销导游id
 						guideArrangeId:$that.find('[name=guideArrangeId]').val(),
 						guideName:guideName,
 						consumeMoney:moneyDiv.eq(i).find('[name=shopGuideMoney]').val(),
@@ -6393,6 +6361,44 @@ define(function(require, exports){
 				
 			});
 		return guideDetails;
+	};
+	//获取导游数据
+	Count.installGuide = function($tr){
+		var $guideTd = $tr.find('td[name=guideName]'),
+			$countTd = $tr.find('td[name=guideRealCount]'),
+			$payTypeTd = $tr.find('td[name=payType]'),
+			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
+			$billImageTd = $tr.find('td[name=billImage]'),
+			$billRemarkTd = $tr.find('td[name=billRemark]'),
+			guideDetail = [];
+		var guideDiv = $guideTd.find('div'),
+			counteDiv = $countTd.find('div'),
+			payTypeDiv = $payTypeTd.find('div'),
+			moneyDiv = $guidePayedMoneyTd.find('div'),
+			remarkDiv = $billRemarkTd.find('div'),
+			divLen = counteDiv.length;
+			guideDiv.each(function(j){
+				var $that = $(this),
+					index = $that.attr('index'),
+					id = $that.attr('guideId'),guideArrangeId = 0;
+					guideArrangeId = $that.find('[name=guideArrangeId]').val(),
+					guideId = '';
+				if(!!$that.attr('guideId')){
+					guideId = $that.attr('guideId');
+				};
+				if(!!index){
+					var guide = {
+						id:guideId,
+						guideArrangeId:guideArrangeId,
+						realCount:counteDiv.eq(j).find('[name=guideRealCount]').val(),
+						realPayType:payTypeDiv.eq(j).find('[name=payType]').val(),
+						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
+						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
+					};
+					guideDetail.push(guide);
+				};
+			});
+		return guideDetail;
 	};
 	//增加导游的html拼接
 	Count.addGuideHtml = function(){
