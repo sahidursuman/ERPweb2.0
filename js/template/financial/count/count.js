@@ -619,8 +619,8 @@ define(function(require, exports){
 		}).on('click','.T-selfArrDel',function(){
 			Count.delSelfArrange($(this),$obj);
 		});
-		if($selfObj.find('input[name=selfPayItemName]').length>0){
-			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
+		if($selfObj.find('input[name=selfPayItem]').length>0){
+			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItem]');
 			selfPayItemNameObj.each(function(){
 				Count.getSelfItemData($(this).closest('tr'),$obj);
 			});
@@ -1090,8 +1090,8 @@ define(function(require, exports){
 		$selfObj.find('td[name=selfGuideName]').find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
 		});
-		if($selfObj.find('input[name=selfPayItemName]').length>0){
-			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItemName]');
+		if($selfObj.find('input[name=selfPayItem]').length>0){
+			var selfPayItemNameObj = $selfObj.find('input[name=selfPayItem]');
 			selfPayItemNameObj.each(function(){
 				Count.getSelfItemData($(this).closest('tr'),$obj);
 			});
@@ -2690,7 +2690,7 @@ define(function(require, exports){
 		 */
 		var $tr = $obj.closest('tr');
 		var thisDiv = $obj.closest('div'),
-			thisIndex = thisDiv.attr('index'),
+			thisIndex = 0,
 			$incomeCount = $tr.find('td[name=incomeCount]'),
 			$needInReduceMoney = $tr.find('td[name=needInReduceMoney]'),
 			$needIncome = $tr.find('td[name=needIncome]'),
@@ -2702,7 +2702,11 @@ define(function(require, exports){
 			$travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
 			$guideRate = $tr.find('td[name=guideRate]'),
 			$guideRebateMoney = $tr.find('td[name=guideRebateMoney]');
-
+		if (!!thisDiv.attr('index')){
+			thisIndex = thisDiv.attr('index');
+		}else{
+			thisIndex = 1;
+		}
 		var marketPrice = $tr.find('input[name=marketPrice]').val();	//市场价
 		if(!!$tr.find('.realMarketPrice').text()){
 			marketPrice = Count.changeTwoDecimal($tr.find('.realMarketPrice').text());
@@ -4017,7 +4021,7 @@ define(function(require, exports){
 	Count.getSelfItemData = function($obj,$parentObj){
 		var $selfPayItemObj = false;
 		if($obj.attr('selfPayId')){
-			$selfPayItemObj = $obj.find('input[name=selfPayItemName]');
+			$selfPayItemObj = $obj.find('input[name=selfPayItem]');
 		}else{
 			$selfPayItemObj = $obj.find('input[name=selfPayItem]');
 		}
@@ -4037,7 +4041,7 @@ define(function(require, exports){
 					var $tr = $(this).closest('tr');
 					$tr.find('input[name=selfPayItemId]').val(ui.item.id);
 					//获取单价底价
-					Count.getSelfPrice($tr,$parentObj);
+					Count.getSelfPrice($(this),$tr,$parentObj);
 
 				}
 			}
@@ -4075,13 +4079,13 @@ define(function(require, exports){
 		});
 	};
 	//获取单价底价
-	Count.getSelfPrice = function($obj,$parentObj){
+	Count.getSelfPrice = function($td,$obj,$parentObj){
 		var startTime = $parentObj.find('.startTime_Choose').text(),
 			whichDay = false,
 			id = false;
 			if($obj.attr('selfPayId')){
 				whichDay = $obj.attr('whichDay');
-				id = $obj.find('input[name=selfItemId]').val();
+				id = $obj.find('input[name=selfPayItemId]').val();
 			}else{
 				whichDay = $obj.find('select[name=whichDay]').val();
 				id = $obj.find('input[name=selfPayItemId]').val();
@@ -4107,11 +4111,9 @@ define(function(require, exports){
 						travelAgencyRate = travelAgencyRate*100;
 					};
 					if($obj.attr('selfPayId')){
-						$obj.find('.marketPrice').text(data.marketPrice);
-						$obj.find('.price').text(data.price);
+						$obj.find('.realMarketPrice').text(data.marketPrice);
+						$obj.find('.realPrice').text(data.price);
 						$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
-						$obj.find('input[name=marketPrice]').val(data.marketPrice);
-						$obj.find('input[name=price]').val(data.price);
 						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
 							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
 							$CRmoneyObj = $obj.find('input[name=customerRebateMoney]');

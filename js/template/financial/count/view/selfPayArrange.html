@@ -64,9 +64,14 @@
                                     <td>
                                         <div class="div-h-30"></div>
                                         <span class="itemName">
-                                            {{itemSet.itemName}}
-                                            <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
-                                            <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                           {{if itemSet.itemId == null || itemSet.itemId == ''}}
+                                                <input name="selfPayItem" class="w-70" type="text">
+                                                <input type="hidden" name="selfPayItemId">
+                                            {{else}}
+                                                {{itemSet.itemName}}
+                                                <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                            {{/if}}
                                         </span><!-- 自费项目 -->
                                     </td>
 
@@ -481,10 +486,15 @@
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                     <td>
                                         <div class="div-h-30"></div>
-                                         <span class="itemName">
-                                            {{itemSet.itemName}}
-                                            <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
-                                            <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                        <span class="itemName">
+                                            {{if itemSet.itemId == null || itemSet.itemId == ''}}
+                                                <input name="selfPayItem" class="w-70" type="text">
+                                                <input type="hidden" name="selfPayItemId">
+                                            {{else}}
+                                                {{itemSet.itemName}}
+                                                <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                            {{/if}}
                                         </span><!-- 自费项目 -->
                                     </td>
                                     <td>
