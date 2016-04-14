@@ -228,7 +228,14 @@ define(function(require, exports) {
      * @return {[type]}             [description]
      */
     Transfer._getBusList = function($searchFrom, page) {
+
         var args = $searchFrom.serializeJson();
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),
@@ -239,6 +246,7 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data.canMergeArrange = false;
+                    var flage = 0;
                     
                     // 设置选中效果
                     if (args.status == '0' && !!Transfer.busArrangeIdArray && Transfer.busArrangeIdArray.length) {
@@ -255,7 +263,7 @@ define(function(require, exports) {
                         }
                     }
 
-                    var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
+                    var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data,flage);
 
                     var $container = $searchFrom.next().html(html);
                     laypage({
@@ -281,7 +289,12 @@ define(function(require, exports) {
      */
     Transfer._getHotelList = function($searchFrom, page) {
         var args = $searchFrom.serializeJson();
-
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutHotelArrangeList'),
@@ -292,7 +305,6 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data.canMergeArrange = false;
-                     // Transfer.hotelArrangeIdArray = [];  
                     // 设置选中效果
                     if (args.status == '0' && !!Transfer.hotelArrangeIdArray && Transfer.hotelArrangeIdArray.length) {
                         for (var i = 0, len = data.outHotelRemarkList.length, tmp; i < len; i++) {
@@ -334,6 +346,12 @@ define(function(require, exports) {
     Transfer._getAddHotelList = function($searchFrom, page,selectedOutRemarkList,shuttleType) {
         var args = $searchFrom.serializeJson();
         args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList);
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.shuttleType = shuttleType;
         args.pageNo = page || 0;
         $.ajax({
@@ -386,7 +404,12 @@ define(function(require, exports) {
      */
     Transfer._getOtherList = function($searchFrom, page) {
         var args = $searchFrom.serializeJson();
-
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutOtherArrangeList'),
@@ -692,6 +715,12 @@ define(function(require, exports) {
         var shuttleType = $searchFrom.find('name[shuttleType]').text();
         var args = $searchFrom.serializeJson();
         args.selectedOutRemarkList = JSON.stringify(selectedOutRemarkList)
+        var assign = $searchFrom.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
         args.pageNo = page || 0;
         $.ajax({
                 url: KingServices.build_url(service_name, 'getOutBusArrangeList'),

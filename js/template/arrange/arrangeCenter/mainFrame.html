@@ -66,19 +66,26 @@
                                     <label>安排人 </label>
                                     <input type="text" name="arrangeUserName" value="" class="form-control T-orderNumber" placeholder="安排人" />
                                 </div>
-                                <div class="form-group T-hotelState r-20 mar-l-10">
+                                <div class="form-group T-hotelState mar-r-20 mar-l-10">
                                     <label>状态 </label>
                                     <select name="status" id="">
                                         <option value="0">未安排</option>
                                         <option value="1">已安排</option>
                                     </select>
                                 </div>
-                                <div class="form-group T-hotelState mar-l-10">
+                                <div class="form-group T-hotelState mar-r-20 mar-l-10">
                                     <label>类型 </label>
                                     <select name="shuttleType" id="">
                                         <option value="1">接团</option>
                                         <option value="2">送团</option>
                                     </select>
+                                </div>
+                                <div class="form-group  mar-l-10">
+                                    <label class="pos-rel">
+                                        <input type="checkbox" class="ace T-assign-check">
+                                         <span class="lbl"></span>
+                                    </label>
+                                    <label>指派给我</label>
                                 </div>
                             </div>
                         </form>
@@ -124,7 +131,16 @@
                                 </div>
                                 <div class="form-group mar-r-10 mar-l-5">
                                     <label>星级 </label>
-                                    <input class="form-control" name="hotelLevel" value="" placeholder="星级" type="text" />
+                                    <select class="hotelLevel" name="hotelLevel">
+                                        <option value="" >--全部--</option>
+                                        <option value="1">三星以下</option>
+                                        <option value="2">三星</option>
+                                        <option value="3">准四星</option>
+                                        <option value="4">四星</option>
+                                        <option value="5">准五星</option>
+                                        <option value="6">五星</option>
+                                        <option value="7">五星以上</option>
+                                    </select>
                                 </div>
                                 <div class="form-group mar-r-20">
                                     <label>安排人 </label>
@@ -144,6 +160,13 @@
                                         <option value="2">送团</option>
                                         <option value="3">返程住宿</option>
                                     </select>
+                                </div>
+                                <div class="form-group  mar-l-10">
+                                    <label class="pos-rel">
+                                        <input type="checkbox" class="ace T-assign-check">
+                                         <span class="lbl"></span>
+                                    </label>
+                                    <label>指派给我</label>
                                 </div>
                             </div>
                         </form>
@@ -201,6 +224,13 @@
                                         <option value="1">接团</option>
                                         <option value="2">送团</option>
                                     </select>
+                                </div>
+                                 <div class="form-group  mar-l-10">
+                                    <label class="pos-rel">
+                                        <input type="checkbox" class="ace T-assign-check">
+                                         <span class="lbl"></span>
+                                    </label>
+                                    <label>指派给我</label>
                                 </div>
                             </div>
                         </form>
