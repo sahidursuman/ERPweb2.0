@@ -3159,6 +3159,7 @@ define(function(require, exports){
 			needPayMoney = Count.changeTwoDecimal(needPayMoney);
 			$parent.find('.needPayMoney').text(needPayMoney);
             $parent.find('input[name="realneedPayMoney"]').val(needPayMoney);
+            $parent.find('.realneedPayMoney').text(needPayMoney);
             //计算团收入--其他收入
 			var $bodyObj = $parentObj.find('.T-main-table');
 			var shopRebateMoney = 0;
@@ -3187,7 +3188,9 @@ define(function(require, exports){
 			'<td><div class="div-h-30"></div><input type="text" name="title" class="w-80"/></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="count" class="w-50"/></td>'+
-			'<td><div class="div-h-30"></div><input name="realneedPayMoney" readonly="readonly" class="w-80 F-float F-money" /></td>'+
+			'<td><div class="div-h-30"></div>'+
+			'<span class="F-float F-money realneedPayMoney">0</span>'+
+			'<input name="realneedPayMoney" type="hidden" /></td>'+
 			guideHtml+
 			'<td><div class="div-h-30"></div><span style="color:#bbb;">查看</span></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
