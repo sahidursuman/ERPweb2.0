@@ -196,7 +196,7 @@ template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
             return '';
     }
 });
-template.helper("getPayTypeOptions", function(payType,isBalance) {
+template.helper("getPayTypeOptions", function(payType,isBalance, isNetPay) {
     var options = '', start = 0;
 
     options += '<option value="0" '+ (start++ == payType?'selected':'') +'>现金</option>';
@@ -205,7 +205,7 @@ template.helper("getPayTypeOptions", function(payType,isBalance) {
     // options += '<option value="1" '+ (start++ == payType?'selected':'') +'>网上支付</option>';
     options += '<option value="3" '+ (start++ == payType?'selected':'') +'>支票</option>';
     options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
-    if (isBalance==5) {
+    if (isNetPay) {
         options += '<option value="5" '+ (start++ == payType?'selected':'') +'>网付</option>';
     }
     if (isBalance==1) {
