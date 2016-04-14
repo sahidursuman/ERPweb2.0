@@ -3841,14 +3841,14 @@ define(function(require, exports){
 								sumBus = Count.changeTwoDecimal(busNumber)*Count.changeTwoDecimal(ui.item.parkingRebateMoney);
 								$tr.find('input[name=shopId]').val(ui.item.id);
 								$tr.find('input[name=shopPolicy]').val('');
-								$tr.find('input[name=consumeMoney]').val(sumPerson);
-								$tr.next().find('input[name=consumeMoney]').val(sumBus);
+								$tr.find('input[name=shopGuideMoney]').val(sumPerson);
+								$tr.next().find('input[name=shopGuideMoney]').val(sumBus);
 								$tr.find().val();
 								Count.getShopPolicy($tr,$parentObj);
 								Count.calculateCost($(this));
 								//计算金额
 								Count.autoShopSum($(this),$parentObj);
-								Count.autoShopSum(nextTd.find('input[name=consumeMoney]'),$parentObj);
+								Count.autoShopSum(nextTd.find('input[name=shopGuideMoney]'),$parentObj);
 								Count.totalRebeatMoney($(this));
 							}
 						}
@@ -5509,7 +5509,7 @@ define(function(require, exports){
 					selfPayName:$that.find('[name=selfPayName]').val(),
 					selfPayId:$that.find('[name=selfPayId]').val(),
 					selfPayItem:$that.find('[name=selfPayItem]').val(),
-					selfPayItemId:,
+					selfPayItemId:selfPayItemId,
 					realMarketPrice:Count.changeTwoDecimal($that.find('[name=marketPrice]').val()),
 					realPrice:Count.changeTwoDecimal($that.find('[name=price]').val()),
 					customerRebateMoney:$that.find('[name=customerRebateMoney]').val(),
