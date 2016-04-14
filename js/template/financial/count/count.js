@@ -3342,10 +3342,10 @@ define(function(require, exports){
 	//删除车费重新计算
 	Count.sumBusFeeAfDel = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),
-			busCompanyArrangeId = $tr.attr('busCompanyArrangeId');
-		if(!!busCompanyArrangeId){
+			busArrangeId = $tr.attr('busArrangeId');
+		if(!!busArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(busCompanyArrangeId,'busCompany',removeItems);
+				Count.delArrangeData(busArrangeId,'busCompany',removeItems);
 			});
 		}else{
 			removeItems();
