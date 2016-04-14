@@ -543,7 +543,7 @@ define(function(require, exports){
 			Count.delShop($(this),$obj);
 		}).on('blur','input[name=shopGuideMoney]',function(){
 			//填写金额带出社佣、导佣 T-del
-			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyArrId]').val();
+			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
@@ -5029,7 +5029,7 @@ define(function(require, exports){
 	                		if(guideRate > 0) {
 	                			$guideRate.each(function(){
 	                				var $thatObj = $(this),
-	                				    index = thatObj.closest('div').attr('index');
+	                				    index = $thatObj.closest('div').attr('index');
 	                				if(thisIndex == index){
 	                					$thatObj.closest('div').find("input[name=guideRate]").val(guideRate);
 			                			guideMoney = Count.changeTwoDecimal(((guideRate*consumeMoney)/100));
@@ -5039,8 +5039,8 @@ define(function(require, exports){
 			                				if(thisIndex == thatIndex){
 			                					$thatObj.closest('div').find("input[name=guideRateMoney]").val(guideMoney);
 			                				};
-			                				Count.autoShopSum($obj,$bodyObj);
-			                				Count.totalRebeatMoney($obj,$bodyObj);
+			                				Count.autoShopSum($thatObj,$bodyObj);
+			                				Count.totalRebeatMoney($thatObj,$bodyObj);
 			                			});
 			                			
 	                				}
@@ -6359,7 +6359,7 @@ define(function(require, exports){
 						incomeCount:incomeCount.eq(i).find('[name=incomeCount]').val(),
 						realReduceMoney:realReduceMoney.eq(i).find('[name=realReduceMoney]').val(),
 						realNeedPayMoney:realNeedPayMoney.eq(i).find('[name=realNeedPayMoney]').val(),
-						guidePayedMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
+						realGeuidePayedMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
 						realPayType:payType.eq(i).find('[name=payType]').val(),
 						travelAgencyRate:parseFloat(travelAgencyRate.eq(i).find('[name=travelAgencyRate]').val()/100),
 						travelAgencyRebateMoney:travelAgencyRebateMoney.eq(i).find('[name=travelAgencyRebateMoney]').val(),
