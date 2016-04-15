@@ -487,9 +487,9 @@ function showAutoLoginDialog(dialogObj,message){
 						dataType:"json",
 						success:function(data){
 							if(data.success == 1){
-								showMessageDialog($( "#confirm-dialog-message" ),'登陆成功，即将刷新页面',function() {
-									window.location.reload();
-								});
+								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+								//获取登陆后token
+								KingServices.token = $.cookie('token');
 							}
 							else{
 								showLogoutDialog($( "#confirm-dialog-message" ),data.message);
