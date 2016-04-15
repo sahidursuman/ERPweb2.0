@@ -105,14 +105,14 @@ define(function(require, exports) {
         formData.customerType = customerType;
         formData.pageNo = page;
         $.ajax({
-            url: KingServices.build_url("touristGroup", "getTouristGroupForTripPlan"),
+            url: KingServices.build_url("touristGroup", "getToursitSKPT"),
             type: "POST",
             data: formData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
                     data.searchParam = data.searchParam;
-                    data.touristGroupList = JSON.parse(data.touristGroupList);
+                    data.touristGroupList = data.touristGroupList;
                     if (customerType == 0) { //散拼
                         var html = listTemplate(data);
                         html = filterUnAuth(html);
@@ -498,7 +498,6 @@ define(function(require, exports) {
             arrangeIndividual.touristGroupId.push(touristGroupIds);
 
         } else {
-            console.log(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
             //若取消选中状态---用于生成计划查询数组
             arrangeIndividual.removeTouristGroupMergeData(lineProductId, startTime);
             //移除取消分页选中效果

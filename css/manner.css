@@ -2711,8 +2711,14 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         visibility: visible!important;
         opacity: 1;
     }
+    .T-printCenter{
+        text-align: center;
+    }
     .P-tdFontSize{
         font-size: 4px!important;
+    }
+    .countUpdate-print{
+        margin-top: -40px !important;
     }
     .P-trFontSize{
         font-size: 8px!important;
@@ -2734,21 +2740,54 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         padding: 40px !important;
     }
 
-    .view-accountsPrint th{
+    .view-TranAccountsPrint th,td{
         font-family: '微软雅黑';
-        font-size: 13px !important;
+        font-size: 12px !important;
         font-weight: normal !important;
         color: #707070 !important;
+        padding: 7px 4px 7px 4px !important;
+    }
+    .view-accountsPrint th,td{
+        font-family: '微软雅黑';
+        font-size: 12px !important;
+        font-weight: normal !important;
+        color: #707070 !important;
+        line-height: 12px !important;
+        padding: 2px 2px 2px 2px !important;
     }
     .AccountingTable-print td{
         font-size: 10px !important;
         font-weight:100 !important;
+        line-height: 12px !important;
+        padding: 2px 2px 2px 2px !important;
     }
     .outDetailPrint-group{
-        margin-top: -20px !important;
+        margin-top: 10px;
     }
-    .outDetailPrint-group h5{
+    .print-mar-t-F16{
+        margin-top: -16px !important;
+    }
+    .print-h5{
         margin-bottom: 0px !important;
+        width: 30px;
+        height: auto;
+        position: absolute;
+        margin-left: -25px !important;
+        margin-top: -5px !important;
+    }
+    .print-Mh5{
+        margin-bottom: 0px !important;
+        width: 40px !important;
+        height: auto;
+        position: absolute;
+        margin-top: -5px !important;
+        margin-left: -40px !important;
+    }
+    .print-mar-t-5{
+        margin-top: 10px;
+    }
+    .print-mar-l-10 label{
+        margin-left: 10px !important;
     }
     
 }

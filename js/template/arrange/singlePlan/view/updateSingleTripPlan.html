@@ -111,7 +111,12 @@
 				    <tbody>
 				        <tr>
 				            <td>计划现收：<span class="F-float F-money">{{tripPlan.guideAllNowMoney}}</span></td>
-				            <td>计划导付：<span class="F-float F-money">{{tripPlan.guideAllPayMoney}}</span></td>
+				            <td>计划导付：
+								{{if guideDetail.cashMoney}} 现金<span class="F-float F-money">{{guideDetail.cashMoney}}</span>{{/if}}
+								{{if guideDetail.cardMoney}} 刷卡<span class="F-float F-money">{{guideDetail.cardMoney}}</span>{{/if}}
+								{{if guideDetail.signMoney}} 签单<span class="F-float F-money">{{guideDetail.signMoney}}</span>{{/if}}
+								{{if !guideDetail.cashMoney && !guideDetail.cardMoney && !guideDetail.signMoney}}0{{/if}}
+				            </td>
 				            <td>计划预支款：<span class="F-float F-money">{{tripPlan.guidePlanAllPreMoney}}</span></td>
 				        </tr>
 				    </tbody>

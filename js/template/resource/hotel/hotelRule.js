@@ -11,12 +11,6 @@ define(function(require, exports) {
     	    	        }
 	    	        ]
 	    	    },
-	    	    {	// 联系人
-	    	    	$ele: $obj.find('input[name="managerName"]'),
-	    	    	rules: [
-							
-	    	        ]
-	    	    },
 	    	    {	// 联系人电话
 	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
 	    	    	rules: [
