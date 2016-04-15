@@ -3087,10 +3087,10 @@ define(function(require, exports){
 	};
 	//删除自费安排
 	Count.delSelfArrange = function($obj,$parentObj){
-		var selfPayItemId = $obj.closest('tr').find('input[name=selfPayItemId]').val();
-		if(!!selfPayItemId){
+		var selfPayArrangeId = $obj.closest('tr').find('input[name=selfPayArrangeId]').val();
+		if(!!selfPayArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(selfPayItemId,'selfpay',removeItem);
+				Count.delArrangeData(selfPayArrangeId,'selfpay',removeItem);
 			});
 		}else{
 			var $tr = $obj.closest('tr');
@@ -6054,8 +6054,9 @@ define(function(require, exports){
 					nameType = $tr.find('.nameType').text()
 					$nextTr = $tr.next();
 				rowSpan = rowSpan*1 - 1;
-				var html = '<td class="whichDay" rowspan = '+rowSpan+'>'+whichDay+'</td>'+
-					'<td class="nameType" rowspan = '+rowSpan+'>'+nameType+'</td>';
+				var html = 
+				'<td class="whichDay" rowspan = '+rowSpan+'>'+'<div class="div-h-30"></div>'+whichDay+'</td>'+
+					'<td class="nameType" rowspan = '+rowSpan+'>'+'<div class="div-h-30"></div>'+nameType+'</td>';
 				$nextTr.children('td').eq(0).before(html);
 				$tr.remove();				
 			};
@@ -6360,7 +6361,7 @@ define(function(require, exports){
 						incomeCount:incomeCount.eq(i).find('[name=incomeCount]').val(),
 						realReduceMoney:realReduceMoney.eq(i).find('[name=realReduceMoney]').val(),
 						realNeedPayMoney:realNeedPayMoney.eq(i).find('[name=realNeedPayMoney]').val(),
-						realGeuidePayedMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
+						realGuidePayMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
 						realPayType:payType.eq(i).find('[name=payType]').val(),
 						travelAgencyRate:parseFloat(travelAgencyRate.eq(i).find('[name=travelAgencyRate]').val()/100),
 						travelAgencyRebateMoney:travelAgencyRebateMoney.eq(i).find('[name=travelAgencyRebateMoney]').val(),
