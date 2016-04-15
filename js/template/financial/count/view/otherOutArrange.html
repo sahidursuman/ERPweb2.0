@@ -193,7 +193,7 @@
                                 {{each arrange.guideDetails as rs index}}
                                     <div class="div-h-30 mar-t-5" index="{{index+1}}">
                                         {{if editStatus == 2}}
-                                            <span class="F-float F-money">{{rs.realCount}}</span>
+                                            <span class="F-float F-money realCount">{{rs.realCount}}</span>
                                             <input type="hidden" name="guideRealCount" value="{{rs.realCount}}"/>
                                         {{else}}
                                             <input type="text" name="guideRealCount" value="{{rs.realCount}}" 

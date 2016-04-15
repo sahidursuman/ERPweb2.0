@@ -651,8 +651,10 @@
                                 {{each selfpayArrange.listMap as arrange index}}
                                     <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}" arrangeType="selfArrange">
                                         <td rowspan="{{arrange.selfPayItem.length}}">
+                                        <div class="div-h-30"></div>
                                         <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
                                         <td rowspan="{{arrange.selfPayItem.length}}">
+                                            <div class="div-h-30"></div>
                                             <span class="nameType">{{arrange.selfPayName}}</span>
                                         </td><!-- 自费点 -->
 
@@ -752,6 +754,7 @@
                                                     </td><!-- 现收 -->
 
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         <span class="realPrice">{{itemSet.realPrice}}</span><!-- 底价 -->
                                                     </td>
 
@@ -817,6 +820,7 @@
                                                     </td>
 
                                                     <td name="payedMoney">
+                                                        <div class="div-h-30"></div>
                                                         <span class="F-float F-money payedMoney">{{itemSet.payedMoney}}</span><!-- 已付 -->
                                                     </td>
 
@@ -978,6 +982,7 @@
                                                     </td>
 
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         {{if itemSet.isConfirmAccount == 0}}
                                                             未对账
                                                         {{else}}
@@ -994,9 +999,11 @@
                                                 <tr  badStatus = "{{itemSet.badStatus}}" whichDay = "{{arrange.whichDay}}"
                                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
                                                     </td>
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->
                                                     </td>
 
@@ -1083,6 +1090,7 @@
                                                     </td><!-- 现收 -->
 
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         <span class="realPrice">{{itemSet.realPrice}}</span><!-- 底价 -->
                                                     </td>
 
@@ -1140,6 +1148,7 @@
                                                     </td>
 
                                                     <td name="payedMoney">
+                                                        <div class="div-h-30"></div>
                                                         <span class="F-float F-money payedMoney">{{itemSet.payedMoney}}</span><!-- 已付 -->
                                                     </td>
 
@@ -1289,6 +1298,7 @@
                                                     </td>   
 
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         {{if itemSet.isConfirmAccount == 0}}
                                                             未对账
                                                         {{else}}

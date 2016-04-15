@@ -56,7 +56,7 @@
                     <td>
                         {{if editStatus == 2}}
                             <span>{{otherInCome.realCount}}</span>
-                            <input type="hidden" name="realCount" value="{{otherInCome.realCount}}"/>
+                            <input type="hidden" name="count" value="{{otherInCome.realCount}}"/>
                         {{else}}
                             <input type="text" class="F-float F-count w-50" name="count" value="{{otherInCome.realCount}}"
                         {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
@@ -81,8 +81,13 @@
                         {{/if}}
                     </td>
 
-                    <td><input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000"/>
-                    {{if editStatus !=2}}&nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>{{/if}}
+                    <td>
+                        {{if editStatus != 2}}
+                            <input name="billRemark" value="{{otherInCome.billRemark}}" maxlength="1000"/>
+                            &nbsp;&nbsp;<a href="javascript:void(0)" class="T-otherInArrDel">删除</a>
+                        {{else}}
+                            {{otherInCome.billRemark}}
+                        {{/if}}
                     </td>
                 </tr>
             {{/each}}
