@@ -6,7 +6,8 @@
  * @author ZhangJiangFeng          
  */
 define(function(require, exports) {
-    var menuKey = "arrange_groupTransfer",
+    var rule = require("./rule"),
+        menuKey = "arrange_groupTransfer",
         listMainTemplate = require("./view/listMain"),
         listTransferTemplate = require("./view/listTransfer"),
         viewTouristGroupTemplate = require("./view/viewTouristGroup"),
@@ -535,12 +536,13 @@ define(function(require, exports) {
      */
     arrangeGroupTransfer.innerEditFeeEvent = function(type) {
         var $editFeeObj = $("#T-innerEditFeeMain"),
+            validator = rule.transferCheckor($editFeeObj);
         //精度限制
         $count = $editFeeObj.find('.T-count');
         Tools.inputCtrolFloat($count);
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
-            arrangeGroupTransfer.newAddFee($editFeeObj, type);
+            arrangeGroupTransfer.newAddFee($editFeeObj, type, validator);
         });
         //计算应付款
         arrangeGroupTransfer.PayMoneyF($editFeeObj);
@@ -564,6 +566,10 @@ define(function(require, exports) {
         //提交编辑转客费用信息
         $editFeeObj.find('.T-updateFee').on('click', function(event) {
             event.preventDefault();
+            //表单验证
+            if (!validator.form()) {
+                return;
+            }
             /* Act on the event */
             arrangeGroupTransfer.saveInTransFee($editFeeObj);
         });
@@ -584,14 +590,12 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
     arrangeGroupTransfer.outEditFeeEvent = function(type) {
-        var $outFeeObj = $("#T-outEditFeeMain"),
-            //精度限制
-            $count = $outFeeObj.find('.T-count');
-        Tools.inputCtrolFloat($count);
+        var $outFeeObj = $("#T-outEditFeeMain");
+        var validator = rule.transferCheckor($outFeeObj);
 
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
-            arrangeGroupTransfer.newAddFee($outFeeObj, type);
+            arrangeGroupTransfer.newAddFee($outFeeObj, type, validator);
         });
 
         //绑定删除分团转客信息
@@ -623,8 +627,12 @@ define(function(require, exports) {
 
         //提交编辑转客费用信息
         $outFeeObj.find('.T-updateFee').on('click', function(event) {
-            event.preventDefault();
             /* Act on the event */
+            event.preventDefault();
+            //表单验证
+            if (!validator.form()) {
+                return;
+            }
             arrangeGroupTransfer.saveTransFee($outFeeObj, type);
         });
     };
@@ -667,7 +675,7 @@ define(function(require, exports) {
      * @param  {[type]} $tab      [description]
      * @return {[type]}           [description]
      */
-    arrangeGroupTransfer.newAddFee = function($tab, type) {
+    arrangeGroupTransfer.newAddFee = function($tab, type, validator) {
         var html='';
             html += "<tr><td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>";
             if (type==2) {
@@ -683,13 +691,8 @@ define(function(require, exports) {
             "<td><a class=\"cursor T-delete\">删除</a></td></tr>";
         var $tbody = $tab.find(".T-innerOutEditFeeTbody");
         $tbody.append(html);
-        //精度限制
-        var $price = $tbody.find('.T-price'),
-            $count = $tbody.find('.T-count');
-        if (!!type && type!=1) {
-           Tools.inputCtrolFloat($price);
-        };
-        Tools.inputCtrolFloat($count);
+        //表单验证
+        rule.update(validator);
         //绑定删除分团转客信息
         if (type == '1') {
             $tab.find(".T-delete").off().on("click", function() {
