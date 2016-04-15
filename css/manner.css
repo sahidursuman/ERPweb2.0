@@ -2703,6 +2703,10 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 }
 /*打印时的样式*/
 @media print{
+    .table tbody tr td,.table thead tr th{
+        border: 1px solid #000 !important;
+    }
+
     .T-noprint{
         display: none;
     }
