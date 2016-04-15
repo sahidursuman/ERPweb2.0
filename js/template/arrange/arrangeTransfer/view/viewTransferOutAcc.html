@@ -26,7 +26,7 @@
                 <span class="mar-l-8">(线路产品)</span> <span>{{lineProduct.name}},</span> 
                 <span>现将该团费用结算列表如下,请审阅并盖章、签字回执我社！</span>
             </p>
-            <table class="whereQ whereTwo" style="width: 100%;">
+            <table class="table whereQ whereTwo" style="width: 100%;">
                 <tr>
                     <td class="textaR-paR">人数</td>
                     <td class="textaR-paL">{{transfer.count}}</td>
@@ -91,7 +91,7 @@
                         {{/each}}      
                     </tbody>
             </table>
-            <table class="whereQ" style="width: 100%;margin-top: -20px;">
+            <table class="table whereQ" style="width: 100%;margin-top: -20px;">
                 <tr>
                     <td style="text-align: right;padding-right:60px;width: 160px">应付</td>
                     <td class="textaR-paL">
@@ -120,7 +120,7 @@
                     <td colspan="2"><span style="margin-left: 10px;">请仔细阅读并盖章确认之后回传！谢谢！</span></td>
                 </tr>
             </table>
-            <p style="text-align: right;margin-top: 10px;"><span>外转操作人：</span> <span>{{transfer.outOPUserName}}</span> <span>{{transfer.outOPUserMobileNumberr}}</span></p>
+            <p style="text-align: right;margin-top: 10px;"><spanclass="{{if !!transfer.outOPUserName || transfer.outOPUserMobileNumberr}}{{else}}hidden{{/if}}"></span><span>外转操作人：</span> <span>{{transfer.outOPUserName}}</span> <span>{{transfer.outOPUserMobileNumberr}}</span></p>
             <p style="text-align: right;margin-top: -8px;" class="{{if !!transfer.faxNumber}}{{else}}hidden{{/if}}">传真：{{transfer.faxNumber}}</p>
             <p style="text-align: right;margin-top: -8px;"><span>{{transfer.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
         </div>
