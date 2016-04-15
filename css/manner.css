@@ -2730,7 +2730,7 @@ a.gray span, .gray, .gray:hover, .gray:focus{
     }
     .tab-content {
         border: 0;
-        padding: 0;
+        padding: 0; 
     }
 
     html, body, .main-container {
@@ -2765,8 +2765,14 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         line-height: 12px !important;
         padding: 2px 2px 2px 2px !important;
     }
-    .outDetailPrint-group{
+    /*.outDetailPrint-group{
         margin-top: 10px;
+    }*/
+    .print-mar-t-F30{
+        margin-top: -30px;
+    }
+    .print-mar-t-F20{
+        margin-top: -20px;
     }
     .print-mar-t-F16{
         margin-top: -16px !important;
