@@ -1000,9 +1000,9 @@ define(function(require, exports){
 			Count.addShop($(this),$obj);
 		}).on('click','.T-shopArrDelItem',function(){
 			Count.delShop($(this),$obj);
-		}).on('blur','input[name=consumeMoney]',function(){
+		}).on('blur','input[name=shopGuideMoney]',function(){
 			//填写金额带出社佣、导佣 T-del
-			var shopPolicyId = $(this).attr('policyId') || $(this).closest('tr').find('input[name=shopPolicyId]').val();
+			var shopPolicyId = $(this).closest('tr').find('input[name=shopPolicyId]').val();
 			var consumeMoney = $(this).val();
 			var date =$obj.find('.tripPlanStartTime').val();
 			Count.getShopRate($(this),shopPolicyId,consumeMoney,date,$obj);
@@ -1024,8 +1024,6 @@ define(function(require, exports){
 				}
 				Count.formatDays($that,$obj);
 			}
-		}).on('click','.T-currGuide',function(){
-			Count.addCurrentGuide($(this),$obj);
 		}).on('click','.T-currGuide',function(){
 			Count.addShopGuide($(this),$obj);
 		}).on('click','.T-shopGuide',function(){
@@ -2092,15 +2090,15 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 		var $prev = $tr.prevAll(),
 			td_cnt = $tr.children('td').length;
-		var shopArrangeId = $tr.attr('itemsId');
+		var shopItemArrangeId = $tr.find('input[name=shopPolicyArrId]').val();
 
-		if(!!shopArrangeId){
+		if(!!shopItemArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(shopArrangeId,'shopItem',removeItem);
+				Count.delArrangeData(shopItemArrangeId,'shopItem',removeItem);
 			});
 		}else{
 			removeItem();
-		}
+		};
 		
 		Count.autoShopSum($obj,$parentObj);
 		function removeItem (){
@@ -3089,10 +3087,10 @@ define(function(require, exports){
 	};
 	//删除自费安排
 	Count.delSelfArrange = function($obj,$parentObj){
-		var selfItemArrangeId = $obj.closest('tr').find('input[name=selfItemArrangeId]').val();
-		if(!!selfItemArrangeId){
+		var selfPayItemId = $obj.closest('tr').find('input[name=selfPayItemId]').val();
+		if(!!selfPayItemId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
-				Count.delArrangeData(selfItemArrangeId,'selfpay',removeItem);
+				Count.delArrangeData(selfPayItemId,'selfpay',removeItem);
 			});
 		}else{
 			var $tr = $obj.closest('tr');
@@ -5104,7 +5102,7 @@ define(function(require, exports){
 		}
 		///导游自选餐厅
 		if(typeFlag == 3){
-			var restaurantList= saveJsonStr.restaurantArrangeList;
+			var restaurantList= saveJsonStr.addRestArrangeList;
 			for(var i = 0;i<restaurantList.length;i++){
 				if(restaurantList[i].isChoose == 1 && restaurantList[i].restaurantId==0){
 					message = "请选择导游自选餐厅";
@@ -5490,10 +5488,10 @@ define(function(require, exports){
 		$tr.each(function(){
 			var $that = $(this);
 			var id = '',selfPayItemId = '';
-			if(!!$that.attr('selfPayId')){
-				id = $that.attr('selfPayId');
+			if(!!$that.find('input[name=selfPayArrangeId]').val()){
+				id = $that.find('input[name=selfPayArrangeId]').val();
 			};
-			if(!!$that.find('[name=selfPayItemId]').val()){
+			if(!!$that.find('input[name=selfPayItemId]').val()){
 				selfPayItemId = $that.find('[name=selfPayItemId]').val();
 			};
 			if(!!id){
