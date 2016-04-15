@@ -71,6 +71,7 @@
                                             <span class="shopPolicy">
                                                 {{itemSet.itemName}}
                                             </span>
+                                            <input name="shopPolicyId" value="{{itemSet.itemId}}" type="hidden" />
                                             <input name="shopPolicyArrId" value="{{itemSet.id}}" type="hidden" />
                                         </td><!-- 商品 -->
 
@@ -240,6 +241,7 @@
                                     {{/if}}
                                     <span class="shopPolicy">
                                         {{itemSet.itemName}}
+                                        <input name="shopPolicyId" value="{{itemSet.itemId}}" type="hidden" />
                                         <input name="shopPolicyArrId" value="{{itemSet.id}}" type="hidden" />
                                     </span>
                                     {{if index == 1 &&  arrange.isConfirmAccount != 1}}
