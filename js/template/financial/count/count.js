@@ -6502,7 +6502,7 @@ define(function(require, exports){
 				'<div class="div-h-30">'+
 				'</div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<span>'+guideName+'</span>'+
+					'<span class="guideName">'+guideName+'</span>'+
 					'<input name="guideArrangeId" type="hidden" value="'+guideArrangeId+'"/>'+
 				'</div>'+
 			'</td>'
