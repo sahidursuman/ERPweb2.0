@@ -173,6 +173,7 @@
                                         <th class="th-border">项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
+                                        <th class="th-border">应收优惠</th>
                                         <th class="th-border">应收</th>
                                         <th class="th-border">导收</th>
                                         <th class="th-border">单据</th>
@@ -185,6 +186,7 @@
                                         <td>{{item.selfItemName}}</td>
                                         <td><span class="F-float F-money">{{item.realMarketPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.needIncomeCount}}</span></td>
+                                        <td><span class="F-float F-count">{{item.reduceMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.guideGetMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -280,7 +282,6 @@
                                         <th class="th-border">司机</th>
                                         <th class="th-border">品牌</th>
                                         <th class="th-border">车牌号</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -291,7 +292,6 @@
                                         <td>{{item.driverName}}</td>
                                         <td>{{item.brand}}</td>
                                         <td>{{item.licenseNumber}}</td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -321,7 +321,6 @@
                                         <th class="th-border">用餐类型</th>
                                         <th class="th-border">餐标</th>
                                         <th class="th-border">人数</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -334,7 +333,6 @@
                                         <td>{{item.type}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span>/人</td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -364,7 +362,6 @@
                                         <th class="th-border">房型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -376,7 +373,6 @@
                                         <td>{{item.roomType}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span>/间</td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -407,7 +403,6 @@
                                         <th class="th-border">收费项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -420,7 +415,6 @@
                                         <td>{{item.scenicItemName}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -450,7 +444,6 @@
                                         <th class="th-border">类型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -462,7 +455,6 @@
                                         <td>{{item.type | getTicketText}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -491,7 +483,6 @@
                                         <th class="th-border">日期</th>
                                         <th class="th-border">底价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -502,7 +493,6 @@
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -530,7 +520,6 @@
                                         <th class="th-border">日期</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -541,7 +530,6 @@
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
