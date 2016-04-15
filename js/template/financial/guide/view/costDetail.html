@@ -280,6 +280,7 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">司机</th>
+                                        <th class="th-border">车队</th>
                                         <th class="th-border">品牌</th>
                                         <th class="th-border">车牌号</th>
                                         <th class="th-border">支付类型</th>
@@ -290,6 +291,7 @@
                                     {{each guideArranges.busList as item}}
                                     <tr>
                                         <td>{{item.driverName}}</td>
+                                        <td>{{item.companyName}}</td>
                                         <td>{{item.brand}}</td>
                                         <td>{{item.licenseNumber}}</td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
@@ -318,6 +320,7 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">用餐日期</th>
+                                        <th class="th-border">餐厅</th>
                                         <th class="th-border">用餐类型</th>
                                         <th class="th-border">餐标</th>
                                         <th class="th-border">人数</th>
@@ -330,6 +333,13 @@
                                     {{each guideArranges.restaurantList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>
+                                            {{if item.restaurantName == '' || item.restaurantName == null}}
+                                                导游自选
+                                            {{else}}
+                                                {{item.restaurantName}}
+                                            {{/if}}
+                                        </td>
                                         <td>{{item.type}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span>/人</td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
@@ -359,6 +369,7 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">入住日期</th>
+                                        <th class="th-border">酒店</th>
                                         <th class="th-border">房型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
@@ -370,6 +381,7 @@
                                     {{each guideArranges.hotelList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.hotelName}}</td>
                                         <td>{{item.roomType}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span>/间</td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
@@ -441,6 +453,7 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">票务公司</th>
                                         <th class="th-border">类型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
@@ -452,6 +465,7 @@
                                     {{each guideArranges.ticketList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.ticketName}}</td>
                                         <td>{{item.type | getTicketText}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
@@ -481,6 +495,8 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">自费商家</th>
+                                        <th class="th-border">自费项目</th>
                                         <th class="th-border">底价</th>
                                         <th class="th-border">数量</th>
                                         <th class="th-border">支付类型</th>
@@ -491,6 +507,16 @@
                                     {{each guideArranges.selfpayList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td><span class="F-float F-money">{{item.selfName}}</span></td>
+                                        <td>
+                                            <span>
+                                                {{if item.selfItemName == '' || item.selfItemName == null}}
+                                                    -
+                                                {{else}}
+                                                    {{item.selfItemName}}
+                                                {{/if}}
+                                            </span>
+                                        </td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
