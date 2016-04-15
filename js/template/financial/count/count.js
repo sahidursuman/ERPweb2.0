@@ -1877,7 +1877,7 @@ define(function(require, exports){
 					'<input name="guideArrangeId" type="hidden"/>'+
 				'</div>'+
 			'</td>';
-		var	guideHtml = Count.addArrangeGuideHtml(td);
+		var	guideHtml = Count.addArrangeGuideHtml(td,'shopGuideName');
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><div class="div-h-30"></div>'+
 				'<input type="text" name="shopPolicy" style="width:90px;"/>'+
