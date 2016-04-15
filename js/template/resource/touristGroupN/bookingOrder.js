@@ -17,14 +17,17 @@ define(function(require, exports, module) {
             list : require('./view/booking/list'),//列表页
             listTable : require('./view/booking/listTable'),//列表页表格
             add : require('./view/booking/add'),//新增页面
-            updateHotel : require('./view/booking/update/updateHotel'),//编辑房
+            updateHotel : require('./view/booking/update/updateHotel'),//编辑酒店
+            updateTicket : require('./view/booking/update/updateTicket'),//编辑票务
+            updateScenic : require('./view/booking/update/updateScenic'),//编辑景区
+            updateBus : require('./view/booking/update/updateBus'),//编辑景区
         },
         bookingOrder = {
         },
         touristsOrderExports = require('./touristGroup'),//游客订单
         touristsOrder = touristsOrderExports.touristGroup,//游客订单
-        F = touristsOrder.F;
-
+        F = touristsOrderExports.F;
+        
     bookingOrder.showListPage = function(page, args, $tab){
         args = args || {};
         args.pageNo = page || 0;
@@ -90,6 +93,12 @@ define(function(require, exports, module) {
                 bookingOrder.updateGuestInfo($that, type);
             }else if($that.hasClass('T-hotel')){
                 bookingOrder.updateHotel($that, type);
+            }else if($that.hasClass('T-ticket')){
+                bookingOrder.updateTicket($that, type);
+            }else if($that.hasClass('T-scenic')){
+                bookingOrder.updateTicket($that, type);
+            }else if($that.hasClass('T-bus')){
+                bookingOrder.updateTicket($that, type);
             }
         });
     };
@@ -181,7 +190,74 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateTicket = function($that, optionType){
-
+        var data = $that.data('json'), html = "";
+        if(typeof data !== "object"){
+            data = JSON.parse(data || "{}");
+        }
+        data.ticketFeeDel = JSON.stringify(data.ticketFeeDel || []);
+        if(optionType === 1){
+            /*html = T.viewHotel(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
+            html = Tools.filterUnPoint(html)[0].outerHTML;*/
+        }else{
+            html = T.updateTicket(data);
+        }
+        layer.open({
+            type: 1,
+            title: "票务代订",
+            skin: 'layui-layer-rim', //加上边框
+            area: '890px', //宽高
+            zIndex:1028,
+            content: html,
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+                var validate = bookingOrder.bindLayerCommonFeeEvents($layer, index, optionType);
+                //保存
+                $layer.find('.T-btn-save').on('click', function(){
+                    if(!validate.form())return;
+                    var hotelJson = $layer.find('[name="hotel"]').data('json'),
+                        baseInfo = {
+                            intakeTime : $layer.find('[name="intakeTime"]').val(),
+                            level : $layer.find('[name="level"]').val(),
+                            roomCount : $layer.find('[name="roomCount"]').val(),
+                            require : {
+                                id : $layer.find('[name="requireContent"]').data("id"),
+                                requireContent : $layer.find('[name="requireContent"]').val()
+                            },
+                            hotel : typeof hotelJson === "object" ? JSON.stringify(hotelJson) : hotelJson,
+                            hotelName : $layer.find('[name="hotel"]').val()
+                        },
+                        moneyData = F.assemblyMoneyData($layer);
+                    if($layer.find('.T-abversion').val() == "2"){
+                        baseInfo.isTransfer = 2;
+                        baseInfo.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
+                        baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
+                    }else if($layer.find('.T-abversion').val() == "1"){
+                        baseInfo.isTransfer = 1;
+                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
+                        baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
+                    }else{
+                        baseInfo.isTransfer = 0;
+                    }
+                    var id = $layer.find('.container-fluid').data('id');
+                    if(!!id){
+                        baseInfo.id = id; 
+                    }
+                    moneyData.hotelFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.hotelFeeDel = moneyData.touristGroupFeeJsonDel;
+                    delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
+                    $.extend(baseInfo, moneyData);
+                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    layer.close(index);
+                    F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
+                });
+            }
+        });
     };
 
     /**
@@ -191,7 +267,74 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateScenic = function($that, optionType){
-
+        var data = $that.data('json'), html = "";
+        if(typeof data !== "object"){
+            data = JSON.parse(data || "{}");
+        }
+        data.scenicFeeDel = JSON.stringify(data.scenicFeeDel || []);
+        if(optionType === 1){
+            /*html = T.viewHotel(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
+            html = Tools.filterUnPoint(html)[0].outerHTML;*/
+        }else{
+            html = T.updateScenic(data);
+        }
+        layer.open({
+            type: 1,
+            title: "景区代订",
+            skin: 'layui-layer-rim', //加上边框
+            area: '890px', //宽高
+            zIndex:1028,
+            content: html,
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+                var validate = bookingOrder.bindLayerCommonFeeEvents($layer, index, optionType);
+                //保存
+                $layer.find('.T-btn-save').on('click', function(){
+                    if(!validate.form())return;
+                    var hotelJson = $layer.find('[name="hotel"]').data('json'),
+                        baseInfo = {
+                            intakeTime : $layer.find('[name="intakeTime"]').val(),
+                            level : $layer.find('[name="level"]').val(),
+                            roomCount : $layer.find('[name="roomCount"]').val(),
+                            require : {
+                                id : $layer.find('[name="requireContent"]').data("id"),
+                                requireContent : $layer.find('[name="requireContent"]').val()
+                            },
+                            hotel : typeof hotelJson === "object" ? JSON.stringify(hotelJson) : hotelJson,
+                            hotelName : $layer.find('[name="hotel"]').val()
+                        },
+                        moneyData = F.assemblyMoneyData($layer);
+                    if($layer.find('.T-abversion').val() == "2"){
+                        baseInfo.isTransfer = 2;
+                        baseInfo.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
+                        baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
+                    }else if($layer.find('.T-abversion').val() == "1"){
+                        baseInfo.isTransfer = 1;
+                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
+                        baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
+                    }else{
+                        baseInfo.isTransfer = 0;
+                    }
+                    var id = $layer.find('.container-fluid').data('id');
+                    if(!!id){
+                        baseInfo.id = id; 
+                    }
+                    moneyData.hotelFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.hotelFeeDel = moneyData.touristGroupFeeJsonDel;
+                    delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
+                    $.extend(baseInfo, moneyData);
+                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    layer.close(index);
+                    F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
+                });
+            }
+        });
     };
 
     /**
@@ -201,7 +344,54 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateBus = function($thta, optionType){
+        var data = $that.data('json'), html = "";
+        if(typeof data !== "object"){
+            data = JSON.parse(data || "{}");
+        }
+        data.scenicFeeDel = JSON.stringify(data.scenicFeeDel || []);
+        if(optionType === 1){
+            /*html = T.viewHotel(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
+            html = Tools.filterUnPoint(html)[0].outerHTML;*/
+        }else{
+            html = T.updateBus(data);
+        }
+        layer.open({
+            type: 1,
+            title: "旅游车代订",
+            skin: 'layui-layer-rim', //加上边框
+            area: '890px', //宽高
+            zIndex:1028,
+            content: html,
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+                var validate = bookingOrder.bindLayerCommonFeeEvents($layer, index, optionType);
+                //保存
+                $layer.find('.T-btn-save').on('click', function(){
+                    if(!validate.form())return;
+                    var baseInfo = {
+                            intakeTime : $layer.find('[name="intakeTime"]').val(),
+                            level : $layer.find('[name="level"]').val(),
+                            roomCount : $layer.find('[name="roomCount"]').val(),
+                            hotel : typeof hotelJson === "object" ? JSON.stringify(hotelJson) : hotelJson,
+                            hotelName : $layer.find('[name="hotel"]').val()
+                        },
+                        moneyData = F.assemblyMoneyData($layer),
+                        commonData = F.assemblyLayerData($layer);
 
+                    moneyData.hotelFee = moneyData.touristGroupFeeJsonAdd;
+                    moneyData.hotelFeeDel = moneyData.touristGroupFeeJsonDel;
+                    delete moneyData.touristGroupFeeJsonAdd;
+                    delete moneyData.touristGroupFeeJsonDel;
+                    $.extend(baseInfo, moneyData, commonData);
+                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    layer.close(index);
+                    F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
+                });
+            }
+        });
     };
 
     /**
@@ -239,15 +429,15 @@ define(function(require, exports, module) {
         var $tbody = $layer.find('.T-fee-list');
         //添加
         $layer.find('.T-add-fee').on('click', function(){
-            var  option = "";
-            if($tbody.data('type') == "1"){
-                option = '<option value="4">车辆费用</option>';
-            }else if($tbody.data('type') == "2"){
+            var  option = "", type = $tbody.data('type');
+            if(type == "1"){
                 option = '<option value="8">酒店费用</option>';
-            }else if($tbody.data('type') == "3"){
-                option = '<option value="5">餐厅费用</option>'+
-                         '<option value="11">票务费用</option>'+
-                         '<option value="12">其他费用</option>';
+            }else if(type == "2"){
+                option = '<option value="11">票务费用</option>';
+            }else if(type == "3"){
+                option = '<option value="9">景区费用</option>';
+            }else if(type == "4"){
+                option = '<option value="4">车辆费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
                          '<option value="2">小孩结算价</option>';
@@ -311,7 +501,6 @@ define(function(require, exports, module) {
                     if(typeof delJson !== "object"){
                         delJson = JSON.parse(delJson || "[]");
                     };
-                    console.log(delJson)
                     delJson.push({
                         id : id
                     });
@@ -328,6 +517,32 @@ define(function(require, exports, module) {
             F.calcMoney($(this), $layer);
         });
         return validate;
+    };
+    console.log(F);
+    F.assemblyLayerData = function($layer){
+        var data = {};
+        data.require = {
+            id : $layer.find('[name="requireContent"]').data("id"),
+            requireContent : $layer.find('[name="requireContent"]').val()
+        }
+        if($layer.find('.T-abversion').val() == "2"){
+            data.isTransfer = 2;
+            data.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
+            data.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
+        }else if($layer.find('.T-abversion').val() == "1"){
+            data.isTransfer = 1;
+            data.dutyDepartmentName = $layer.find('[name="groupName"]').val();
+            data.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+            data.dutyUserName = $layer.find('[name="dutyUserName"]').val();
+            data.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
+        }else{
+            data.isTransfer = 0;
+        }
+        var id = $layer.find('.container-fluid').data('id');
+        if(!!id){
+            data.id = id; 
+        }
+        return data;
     };
 
     return bookingOrder;
