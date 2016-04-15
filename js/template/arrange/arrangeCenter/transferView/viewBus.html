@@ -1,7 +1,7 @@
 <div class="T-planbus globalAdd ">
-    <table class="table table-striped table-bordered">
+{{each outRemarkList as viewlist}}
+    <table class="table table-striped table-bordered mar-b-20">
         <tbody class="T-task-list">
-            {{each outRemarkList as viewlist}}
             <tr>
                 <td style="text-align: left;">
                     <label class="control-label mar-r-20">中转单号：{{viewlist.orderNumber}}</label>
@@ -23,9 +23,9 @@
                     <label class="control-label">收客单号：{{viewlist.tgOrderNumber}}</label>
                 </td>
             </tr>
-            {{/each}}
         </tbody>
     </table>
+{{/each}}
     <table class="table table-striped table-bordered table-hover ">
         <thead>
             <tr>
