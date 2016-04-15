@@ -223,7 +223,7 @@
 												<td class="F-float F-money">{{busList.reduceMoney}}</td>
 												<td class="F-float F-money">{{busList.needPayMoney}}</td>
 												<td class="F-float F-money">{{busList.prePayMoney}}</td>
-												<td class="F-float F-money">{{busList.guidePayMoney}}</td>
+												<td>{{busList.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if busList.payType == 2}}{{busList.signMoney}}{{else}}{{busList.guidePayMoney}}{{/if}}</span></td>
 												<td>{{busList.remark}}</td>
 											</tr>
 											{{/each}}
@@ -319,7 +319,7 @@
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
 															<td class="F-float F-money">{{rs.needPayMoney}}</td>
 															<td class="F-float F-money">{{rs.prePayMoney}}</td>
-															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
+															<td>{{rs.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if rs.payType == 2}}{{rs.signMoney}}{{else}}{{rs.guidePayMoney}}{{/if}}</span></td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
@@ -371,7 +371,7 @@
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
 															<td class="F-float F-money">{{rs.needPayMoney}}</td>
 															<td class="F-float F-money">{{rs.prePayMoney}}</td>
-															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
+															<td>{{rs.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if rs.payType == 2}}{{rs.signMoney}}{{else}}{{rs.guidePayMoney}}{{/if}}</span></td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
@@ -425,7 +425,7 @@
 															<td>{{rs.orderNumber}}</td>
 															<td class="F-float F-money">{{rs.needPayMoney}}</td>
 															<td class="F-float F-money">{{rs.prePayMoney}}</td>
-															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
+															<td>{{rs.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if rs.payType == 2}}{{rs.signMoney}}{{else}}{{rs.guidePayMoney}}{{/if}}</span></td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
@@ -481,7 +481,7 @@
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
 															<td class="F-float F-money">{{rs.needPayMoney}}</td>
 															<td class="F-float F-money">{{rs.prePayMoney}}</td>
-															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
+															<td>{{rs.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if rs.payType == 2}}{{rs.signMoney}}{{else}}{{rs.guidePayMoney}}{{/if}}</span></td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
@@ -579,7 +579,7 @@
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
 															<td class="F-float F-money">{{rs.needPayMoney}}</td>
 															<td class="F-float F-money">{{rs.prePayMoney}}</td>
-															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
+															<td>{{rs.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if rs.payType == 2}}{{rs.signMoney}}{{else}}{{rs.guidePayMoney}}{{/if}}</span></td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
@@ -627,7 +627,7 @@
 															<td class="F-float F-money">{{rs.reduceMoney}}</td>
 															<td class="F-float F-money">{{rs.needPayMoney}}</td>
 															<td class="F-float F-money">{{rs.prePayMoney}}</td>
-															<td class="F-float F-money">{{rs.guidePayMoney}}</td>
+															<td>{{rs.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if rs.payType == 2}}{{rs.signMoney}}{{else}}{{rs.guidePayMoney}}{{/if}}</span></td>
 															<td>{{rs.remark}}</td>
 														</tr>
 														{{/each}}
