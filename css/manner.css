@@ -2703,6 +2703,9 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 }
 /*打印时的样式*/
 @media print{
+    h5{
+        font-size: 12px !important;
+    }
     .table tbody tr td,.table thead tr th{
         border: 1px solid #000 !important;
     }
