@@ -460,7 +460,6 @@ function checkLogin(fn){
 		url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
 		type:"POST",
 		success:function(data){
-			console.info(fn)
 			if(data.success == 1 && typeof fn === 'function'){
 				fn();
 			}
@@ -488,7 +487,9 @@ function showAutoLoginDialog(dialogObj,message){
 						dataType:"json",
 						success:function(data){
 							if(data.success == 1){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+								showMessageDialog($( "#confirm-dialog-message" ),'登陆成功，即将刷新页面',function() {
+									window.location.reload();
+								});
 							}
 							else{
 								showLogoutDialog($( "#confirm-dialog-message" ),data.message);
@@ -995,7 +996,7 @@ var _statusText = {
 		//判断当前token与登陆时token是否相同
 		var token = $.cookie('token');
 		if (KingServices.token != token && !!token && !!KingServices.token) {
-			showConfirmDialog($( "#confirm-dialog-message" ), '账号已更改，请刷新后操作。', function() {
+			showConfirmDialog($( "#confirm-dialog-message" ), '当前登陆状态已失效，请重新登录', function() {
 				window.location.reload();
 			},function() {
 				return;
