@@ -2100,7 +2100,7 @@ define(function(require, exports){
 			removeItem();
 		};
 		
-		Count.autoShopSum($obj,$parentObj);
+		
 		function removeItem (){
 			Count.totalRebeatMoney($obj,$parentObj);
 			for(var i = 0; i<$prev.length;i++){
@@ -2110,6 +2110,7 @@ define(function(require, exports){
 					rowSpan = rowSpan*1 - 1;
 					$prev.eq(i).children('td[rowspan]').prop('rowspan', rowSpan);
 					$tr.remove();
+					Count.autoShopSumCost($obj,$parentObj);
 					break;
 				}
 			};
