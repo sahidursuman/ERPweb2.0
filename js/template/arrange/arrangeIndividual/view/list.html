@@ -51,10 +51,11 @@
             </td>
             <td class="F-float F-count" style="vertical-align:middle">{{touristGroupL.lineProductDays}}</td>
             <td style="vertical-align:middle">{{touristGroupL.startTime | dateFormat: 'yyyy-MM-dd' }}</td>
-            <td  class="h-touristGroupInfo">
+            <td  style="vertical-align:middle">
+                <p class="h-orderNumber">({{touristGroupL.adultCount}} 大 {{touristGroupL.childCount}}小)</p>
                 <p class="h-orderNumber">{{touristGroupL.contactName}}</p>
                 <p class="h-orderNumber">{{touristGroupL.contactMobileNumber}}</p>
-                <p class="h-orderNumber">{{touristGroupL.adultCount}} 大 {{touristGroupL.childCount}}小</p>
+               
             </td>
             <td style="vertical-align:middle">{{touristGroupL.areaData}}</td>
             <td style="vertical-align:middle">{{touristGroupL.ageData}}</td>
