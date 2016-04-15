@@ -82,7 +82,7 @@
         <table class="whereQ whereTwo" style="width: 100%">
             <tr>
                 <td class="style-myself CheckPlan">线路产品</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px">{{if lineProduct.name!=null}} {{lineProduct.name}}{{/if}}</td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px">{{if !!lineProduct}} {{lineProduct.name}}{{/if}}</td>
                 <td class="style-myself CheckPlan">出游日期</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
             </tr>
