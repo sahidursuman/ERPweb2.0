@@ -2287,6 +2287,27 @@ define(function(require, exports){
 			td_cnt = $thisTr.children('td').length;
 		};
 		var thisTdLen = $thisTr.children('td').length;
+		
+		function totalMoney ($tr){
+			var	$moneyObj = $tr.find('input[name=sumConsumeMoney]'),
+				$travelObj = $tr.find('input[name=travelAgencyRateMoney]'),
+				$guideObj = $tr.find('input[name=guideRateMoney]'),
+				sum = {
+					sumMoney : 0,
+					sumTravelMoney : 0,
+					sumGuideMoney : 0
+				};
+			//计算金额合计
+			sum.sumMoney += Count.changeTwoDecimal($moneyObj.val());
+
+			$travelObj.each(function(){
+				sum.sumTravelMoney += Count.changeTwoDecimal($(this).val());
+			});
+			$guideObj.each(function(){
+				sum.sumGuideMoney += Count.changeTwoDecimal($(this).val());
+			});
+			return sum;
+		};
 		if(thisTdLen == td_cnt){
 			var $nextTr = $thisTr.nextAll(),
 				sumMoney = 0,//总金额
@@ -2303,11 +2324,7 @@ define(function(require, exports){
 					$that.find('.T-totalGuideMoney').text(sumGuideMoney);
 					break;
 				}else{
-					/*sum = {
-						sumMoney : 0,
-						sumTravelMoney : 0,
-						sumGuideMoney : 0
-					};*/
+					
 					var sum = totalMoney($that);
 					sumMoney += sum.sumMoney;
 					sumTravelMoney += sum.sumTravelMoney;
@@ -2359,26 +2376,7 @@ define(function(require, exports){
 					sumGuideMoney += sum.sumGuideMoney;
 				}
 			};
-			function totalMoney ($tr){
-				var	$moneyObj = $tr.find('input[name=sumConsumeMoney]'),
-					$travelObj = $tr.find('input[name=travelAgencyRateMoney]'),
-					$guideObj = $tr.find('input[name=guideRateMoney]'),
-					sum = {
-						sumMoney : 0,
-						sumTravelMoney : 0,
-						sumGuideMoney : 0
-					};
-				//计算金额合计
-				sum.sumMoney += Count.changeTwoDecimal($moneyObj.val());
-
-				$travelObj.each(function(){
-					sum.sumTravelMoney += Count.changeTwoDecimal($(this).val());
-				});
-				$guideObj.each(function(){
-					sum.sumGuideMoney += Count.changeTwoDecimal($(this).val());
-				});
-				return sum;
-			};
+			
 			Count.sumShopMoney($parentObj);
 		};
 	};
