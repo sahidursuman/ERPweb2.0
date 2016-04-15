@@ -42,12 +42,12 @@
                 {{if arrange != null}}
                     <tr otherArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}" whichDay="{{arrange.whichDay}}" 
                     isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="otherArrange">
-                        <td>
+                        <td rowspan="1">
                             <div class="div-h-30"></div>
                             <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
                         </td><!-- 日期 -->
 
-                        <td>
+                        <td rowspan="1">
                             <div class="div-h-30"></div>
                             <span class="otherName">{{arrange.otherName}}</span>
                         </td><!-- 其他安排 -->

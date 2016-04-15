@@ -45,12 +45,12 @@
     <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}"
     isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="ticketArrange">
 
-        <td>
+        <td rowspan="1">
         <div class="div-h-30"></div>
         <span class="ticketName">{{arrange.ticketName}}</span>
         </td><!-- 票务公司 -->
 
-        <td>
+        <td rowspan="1">
             <div class="div-h-30"></div>
             {{if arrange.type == 1}}
                 机票
@@ -63,7 +63,7 @@
             {{/if}}
         </td><!-- 类型 -->
 
-        <td >
+        <td>
             <div class="div-h-30"></div>
             {{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}
         </td><!-- 日期 -->
