@@ -290,7 +290,7 @@ define(function(require, exports) {
      */
     touristGroup.addTouristGroup = function(){
         if (Tools.addTab(K.add , '新增小组', T.add())) {
-            touristGroup.commonEvents($("#tab-" + K.add + "-content"));
+            touristGroup.commonEvents($("#tab-" + K.add + "-content")); 
         }
     };
 
@@ -327,14 +327,30 @@ define(function(require, exports) {
                     for(var i=0; i<receiveTrip.length; i++){
                         if(receiveTrip[i].receiveBus){
                             receiveTrip[i].busNeedPayAllMoney = receiveTrip[i].receiveBus.needPayAllMoney;
+                            receiveTrip[i].receiveBusId = receiveTrip[i].receiveBus.id;
                             receiveTrip[i].receiveBus = JSON.stringify(receiveTrip[i].receiveBus || {});
                         }
                         if(receiveTrip[i].receiveHotel){
                             receiveTrip[i].hotelNeedPayAllMoney = receiveTrip[i].receiveHotel.needPayAllMoney;
+                            receiveTrip[i].receiveHotelId = receiveTrip[i].receiveHotel.id;
+                            receiveTrip[i].receiveHotel.hotel = [];
+                            var hotelIds = receiveTrip[i].receiveHotel.hotelIds,
+                                hotelNames = receiveTrip[i].receiveHotel.hotelName;
+                            if(!!hotelIds){
+                                hotelIds = hotelIds.split(',');
+                                hotelNames = hotelNames.split(',');
+                                for(var j = 0; j < hotelIds.length; j++){
+                                    receiveTrip[i].receiveHotel.hotel[j] = {
+                                        id : hotelIds[j],
+                                        name : hotelNames[j]
+                                    }
+                                }
+                            }
                             receiveTrip[i].receiveHotel = JSON.stringify(receiveTrip[i].receiveHotel || {});
                         }
                         if(receiveTrip[i].receiveOther){
                             receiveTrip[i].otherNeedPayAllMoney = receiveTrip[i].receiveOther.needPayAllMoney;
+                            receiveTrip[i].receiveOtherId = receiveTrip[i].receiveOther.id;
                             receiveTrip[i].receiveOther = JSON.stringify(receiveTrip[i].receiveOther || {});
                         }
                     }
@@ -343,10 +359,31 @@ define(function(require, exports) {
                         if(joinTrip[i].lineInfo){
                             joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             joinTrip[i].lineNeedPayAllMoney = joinTrip[i].lineInfo.needPayAllMoney;
+                            joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
                             joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         }
                         if(joinTrip[i].hotelInfo){
                             joinTrip[i].hotelNeedPayAllMoney = joinTrip[i].hotelInfo.needPayAllMoney;
+                            joinTrip[i].hotelInfoId = joinTrip[i].hotelInfo.id;
+                            joinTrip[i].hotelOutRemarkId = joinTrip[i].hotelInfo.outRemarkId;
+                            joinTrip[i].hotelInfo.hotel = [];
+                            var hotelIds = joinTrip[i].hotelInfo.hotelIds,
+                                hotelNames = joinTrip[i].hotelInfo.hotelName;
+                            if(!!hotelIds){
+                                hotelIds = hotelIds.split(',');
+                                hotelNames = hotelNames.split(',');
+                                for(var j = 0; j < hotelIds.length; j++){
+                                    joinTrip[i].hotelInfo.hotel[j] = {
+                                        id : hotelIds[j],
+                                        name : hotelNames[j]
+                                    }
+                                }
+                            }
+
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
+                            str = str && str +" ";
+                            str = str.length > 10 ? str.substr(0, 10)  + "... " : str;
+                            joinTrip[i].hotelInputValue = str + joinTrip[i].hotelNeedPayAllMoney;
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
                         joinTrip[i].lineJson = {
@@ -359,14 +396,30 @@ define(function(require, exports) {
                     for(var i=0; i<sendTrip.length; i++){
                         if(sendTrip[i].sendBus){
                             sendTrip[i].busNeedPayAllMoney = sendTrip[i].sendBus.needPayAllMoney;
+                            sendTrip[i].sendBusId = sendTrip[i].sendBus.id;
                             sendTrip[i].sendBus = JSON.stringify(sendTrip[i].sendBus || {});
                         }
                         if(sendTrip[i].sendHotel){
                             sendTrip[i].hotelNeedPayAllMoney = sendTrip[i].sendHotel.needPayAllMoney;
+                            sendTrip[i].sendHotelId = sendTrip[i].sendHotel.id;
+                            sendTrip[i].sendHotel.hotel = [];
+                            var hotelIds = sendTrip[i].sendHotel.hotelIds,
+                                hotelNames = sendTrip[i].sendHotel.hotelName;
+                            if(!!hotelIds){
+                                hotelIds = hotelIds.split(',');
+                                hotelNames = hotelNames.split(',');
+                                for(var j = 0; j < hotelIds.length; j++){
+                                    sendTrip[i].sendHotel.hotel[j] = {
+                                        id : hotelIds[j],
+                                        name : hotelNames[j]
+                                    }
+                                }
+                            }
                             sendTrip[i].sendHotel = JSON.stringify(sendTrip[i].sendHotel || {});
                         }
                         if(sendTrip[i].sendOther){
                             sendTrip[i].otherNeedPayAllMoney = sendTrip[i].sendOther.needPayAllMoney;
+                            sendTrip[i].sendOtherId = sendTrip[i].sendOther.id;
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
                         }
                     }
@@ -609,9 +662,9 @@ define(function(require, exports) {
                 touristGroup.updateOuterTurn($that, type);
             }else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
-                /*if($tab.find('.T-part-group-list tr').length === 0){
+                if($tab.find('.T-part-group-list tr').length === 0){
                     $tab.find('.T-team-info').find('[name="lineProductName"]').attr('readonly', 'readonly');
-                }*/
+                }
             }else if($that.hasClass('datepicker')){
                 var start = $tab.find('.T-team-info [name="startTime"]').val();
                 $(this).datepicker('setStartDate', start);
@@ -840,7 +893,7 @@ define(function(require, exports) {
     	$tab.find('.T-part-group-list').append(html);
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
-        //$tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');
+        $tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');
     };
 
     /**
@@ -1077,7 +1130,7 @@ define(function(require, exports) {
                         $that.closest('tr').find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
                         var str = moneyData.needPayAllMoney;
                         if(moneyData.isTransfer === 1){
-                            str = "内转  " + moneyData.dutyDepartmentName + "  " + moneyData.needPayAllMoney;
+                            str = "他部  " + moneyData.dutyDepartmentName + "  " + moneyData.needPayAllMoney;
                         }else if(moneyData.isTransfer === 2){
                             str = "外转  " + moneyData.transferPartnerAgency + "  " + moneyData.needPayAllMoney;
                         }
@@ -1141,8 +1194,8 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="dutyDepartmentName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="dutyDepartmentName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -1173,6 +1226,9 @@ define(function(require, exports) {
             title = "送团住宿";
         }
         data.type = type;
+        if(typeof data.hotel === "object"){
+            data.hotel = JSON.stringify(data.hotel || []);
+        }
         data.hotelFeeDel = JSON.stringify(data.hotelFeeDel || []);
         if(optionType === 1){
             html = T.viewHotel(data);
@@ -1208,8 +1264,9 @@ define(function(require, exports) {
                                 id : $layer.find('[name="requireContent"]').data("id"),
                                 requireContent : $layer.find('[name="requireContent"]').val()
                             },
-                            hotel : typeof hotelJson === "object" ? JSON.stringify(hotelJson) : hotelJson,
-                            hotelName : $layer.find('[name="hotel"]').val()
+                            hotel : typeof hotelJson !== "object" ? JSON.parse(hotelJson || "[]") : hotelJson,
+                            hotelName : $layer.find('[name="hotel"]').val(),
+                            hotelIds : ""
                         },
                         moneyData = F.assemblyMoneyData($layer);
                     if($layer.find('.T-abversion').val() == "2"){
@@ -1218,13 +1275,21 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="dutyDepartmentName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="dutyDepartmentName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
                         baseInfo.isTransfer = 0;
                     }
+                    for(var i = 0; i < baseInfo.hotel.length; i++){
+                        if(i != baseInfo.hotel.length-1){
+                            baseInfo.hotelIds += baseInfo.hotel[i].id + ",";
+                        }else{
+                            baseInfo.hotelIds += baseInfo.hotel[i].id;
+                        }
+                    }
+                    baseInfo.hotel = JSON.stringify(baseInfo.hotel);
                     var id = $layer.find('.container-fluid').data('id');
                     if(!!id){
                         baseInfo.id = id;
@@ -1234,7 +1299,14 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonAdd;
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
-                    $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    if(type === 1){
+                        var str = baseInfo.hotelName || baseInfo.require;
+                        str = str && str +" ";
+                        str = str.length > 10 ? str.substr(0, 10)  + "... " : str;
+                        $that.val(str + moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    }else{
+                        $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    }
                     layer.close(index);
                     F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
                 });
@@ -1290,10 +1362,6 @@ define(function(require, exports) {
                     if(!validate.form())return;
                     var baseInfo = {
                             consumeTime : $layer.find('[name="consumeTime"]').val(),
-                            dutyDepartmentName : $layer.find('[name="dutyDepartmentName"]').val(),
-                            dutyDepartmentId : $layer.find('[name="dutyDepartmentName"]').data('id'),
-                            dutyUserName : $layer.find('[name="dutyUserName"]').val(),
-                            dutyUserId : $layer.find('[name="dutyUserName"]').data('id'),
                             isRestaurantRequired : 0,
                             isTicketRequired : 0,
                             isOtherRequired : 0
@@ -1310,6 +1378,19 @@ define(function(require, exports) {
                         if(!!id){
                             baseInfo.restaurantRequired.id = id;
                         }
+                    }
+                    if($layer.find('.T-abversion').val() == "2"){
+                        baseInfo.isTransfer = 2;
+                        baseInfo.transferPartnerAgency = $layer.find('[name="transferPartnerAgency"]').val();
+                        baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
+                    }else if($layer.find('.T-abversion').val() == "1"){
+                        baseInfo.isTransfer = 1;
+                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
+                        baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
+                    }else{
+                        baseInfo.isTransfer = 0;
                     }
                     if($layer.find('[name="isTicketRequired"]').is(":checked")){
                         var $ticket = $layer.find('[name="ticketRequired"]'), 
@@ -1671,7 +1752,7 @@ define(function(require, exports) {
                             });
                         }
                     }else{
-                        if(touristGroup.selectHotelCache[i].id === id){
+                        if(touristGroup.selectHotelCache[i].id == id){
                             touristGroup.selectHotelCache.splice(i, 1);
                             break;
                         }
@@ -1698,7 +1779,7 @@ define(function(require, exports) {
                 for(var j = 0; j < resultList.length; j++){
                     var id = resultList[j].id;
                     if(tempId == id){
-                        resultList[j].ischeck = tempJson[i].ischeck;
+                        resultList[j].ischeck = tempJson[i].ischeck || true;
                     }
                 }
             }
@@ -2093,20 +2174,20 @@ define(function(require, exports) {
             var businessGroupId = $dutyDepartment.data('id');
             if(!!businessGroupId){
                 $.ajax({
-                    url: KingServices.build_url('innerTransferOperation', 'getDutyOPUserList'),
+                    url: KingServices.build_url('group', 'selectDutyUser'),
                     type: 'post',
-                    data: "businessGroupId=" + businessGroupId,
+                    data: {"groupId" : businessGroupId},
                     showLoading: false,
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var opUserList = data.opUserList;
-                        if (!!opUserList) {
-                            for (var i = 0, len = opUserList.length;i < len; i++) {
-                                opUserList[i].value = opUserList[i].realName;
+                        var dutUserList = data.dutUserList;
+                        if (!!dutUserList) {
+                            for (var i = 0, len = dutUserList.length;i < len; i++) {
+                                dutUserList[i].value = dutUserList[i].realName;
                             }
 
-                            $target.autocomplete('option', 'source', opUserList);
+                            $target.autocomplete('option', 'source', dutUserList);
                             $target.autocomplete('search', '');
                         }
                     }
@@ -2302,11 +2383,21 @@ define(function(require, exports) {
             data.receiveTrip = [];
             $joinGroup.find('tr').each(function(index){
                 var $that = $(this),
-                    receiveHotel = $that.find('[name="receiveHotel"]').data('json');
+                    $bus = $that.find('[name="receiveBus"]'),
+                    $hotel = $that.find('[name="receiveHotel"]'),
+                    $other = $that.find('[name="receiveOther"]'),
+                    receiveHotel = $hotel.data('json');
                 receiveHotel = typeof receiveHotel !== "object" ? JSON.parse(receiveHotel || "{}") : receiveHotel;
-                receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
-                var receiveBus = $that.find('[name="receiveBus"]').data('json'),
-                    receiveOther = $that.find('[name="receiveOther"]').data('json'),
+                if($.isEmptyObject(receiveHotel)){
+                    receiveHotel = null;
+                }else{
+                    if(!!$hotel.data("id")){
+                        receiveHotel.id = $hotel.data("id");
+                    }
+                    receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
+                }
+                var receiveBus = $bus.data('json'),
+                    receiveOther = $other.data('json'),
                     receiveTripData = {
                         arriveTime : $that.find('[name="arriveTime"]').val() +":00",
                         arriveShift : $that.find('[name="arriveShift"]').val(),
@@ -2321,27 +2412,33 @@ define(function(require, exports) {
                 if($.isEmptyObject(receiveTripData.receiveBus)){
                     receiveTripData.receiveBus = null;
                 }else{
-                    if($.type(receiveTripData.receiveBus.hotelFeeDel) !== "object"){
-                        receiveTripData.receiveBus.hotelFeeDel = JSON.parse(receiveTripData.receiveBus.hotelFeeDel || null);
+                    if(!!$bus.data("id")){
+                        receiveTripData.receiveBus.id = $bus.data("id");
+                    }
+                    if(typeof receiveTripData.receiveBus.busFeeDel !== "object"){
+                        receiveTripData.receiveBus.busFeeDel = JSON.parse(receiveTripData.receiveBus.busFeeDel || null);
                     }
                 }
-                if($.isEmptyObject(receiveTripData.receiveHotel)){
+                if(!receiveTripData.receiveHotel || $.isEmptyObject(receiveTripData.receiveHotel)){
                     receiveTripData.receiveHotel = null;
                 }else{
-                    if($.type(receiveTripData.receiveHotel.busFeeDel) !== "object"){
-                        receiveTripData.receiveHotel.busFeeDel = JSON.parse(receiveTripData.receiveHotel.busFeeDel || null);
+                    if(typeof receiveTripData.receiveHotel.hotelFeeDel !== "object"){
+                        receiveTripData.receiveHotel.hotelFeeDel = JSON.parse(receiveTripData.receiveHotel.hotelFeeDel || null);
                     }
                 }
                 if($.isEmptyObject(receiveTripData.receiveOther)){
                     receiveTripData.receiveOther = null;
                 }else{
-                    if($.type(receiveTripData.receiveOther.otherFeeDel) !== "object"){
+                    if(!!$other.data("id")){
+                        receiveTripData.receiveOther.id = $other.data("id");
+                    }
+                    if(typeof receiveTripData.receiveOther.otherFeeDel !== "object"){
                         receiveTripData.receiveOther.otherFeeDel = JSON.parse(receiveTripData.receiveOther.otherFeeDel || null);
                     }
                 }
-                receiveTripData.receiveBusDel = $that.find('[name="receiveBus"]').data('clear') == "1" ? $that.data('id') : "";
-                receiveTripData.receiveHotelDel = $that.find('[name="receiveHotel"]').data('clear') == "1" ? $that.data('id') : "";
-                receiveTripData.receiveOtherDel = $that.find('[name="receiveOther"]').data('clear') == "1" ? $that.data('id') : "";
+                receiveTripData.receiveBusDel = $bus.data('clear') == "1" && !!$bus.data('id') ? [{id:$bus.data('id')}] : null;
+                receiveTripData.receiveHotelDel = $hotel.data('clear') == "1" && !! $hotel.data('id') ? [{id:$hotel.data('id')}] : null;
+                receiveTripData.receiveOtherDel = $other.data('clear') == "1" && !!$other.data('id') ? [{id:$other.data('id')}] : null;
 
                 if(!!$that.data('id')){
                     receiveTripData.id = $that.data('id');
@@ -2355,17 +2452,29 @@ define(function(require, exports) {
         }
 
         //参团
+        var isCheckDate = true;
         data.joinTrip = [];
         $partGroup.find('tr').each(function(index){
             var $that = $(this),
-                hotelNeedPayMoney = $that.find('[name="hotelNeedPayMoney"]').data('json');
+                $hotelPayMoney = $that.find('[name="hotelNeedPayMoney"]'),
+                hotelNeedPayMoney = $hotelPayMoney.data('json');
             hotelNeedPayMoney = typeof hotelNeedPayMoney !== "object" ? JSON.parse(hotelNeedPayMoney || "{}") : hotelNeedPayMoney;
             if($.isEmptyObject(hotelNeedPayMoney)){
                 hotelNeedPayMoney = null;
             }else{
+                if(!!$hotelPayMoney.data("id")){
+                    hotelNeedPayMoney.id = $hotelPayMoney.data("id");
+                }
+                if(!!$hotelPayMoney.data("out-id")){
+                    hotelNeedPayMoney.outRemarkId = $hotelPayMoney.data("out-id");
+                }
                 hotelNeedPayMoney.hotel = typeof hotelNeedPayMoney.hotel !== "object" ? JSON.parse(hotelNeedPayMoney.hotel || "[]") : hotelNeedPayMoney.hotel;
+                if(typeof hotelNeedPayMoney.hotelFeeDel !== "object"){
+                    hotelNeedPayMoney.hotelFeeDel = JSON.parse(hotelNeedPayMoney.hotelFeeDel || null);
+                }
             }
-            var lineInfo = $that.find('[name="lineNeedPayMoney"]').data('json');
+            var $linePayMoeny = $that.find('[name="lineNeedPayMoney"]'),
+                lineInfo = $linePayMoeny.data('json');
             var joinTripData = {
                 lineProductId : $that.find('[name="lineProductName"]').data('id'),
                 tripStartTime : $that.find('[name="tripStartTime"]').val(),
@@ -2374,10 +2483,11 @@ define(function(require, exports) {
             };
             //$innerTurn = $that.find('.T-inner-turn'),
             //$outerTurn = $that.find('.T-outer-turn');
+            joinTripData.lineNeedPayMoneyDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
+                joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
-                joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
-                joinTripData.hotelInfoDel = $that.find('[name="hotelNeedPayMoney"]').data('clear') == "1" ? $that.data('id') : "";
+                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id')}] : null;
             }
             if($.isEmptyObject(joinTripData.lineInfo)){
                 joinTripData.lineInfo = null;
@@ -2399,22 +2509,32 @@ define(function(require, exports) {
         if(typeof data.joinTripDel === "object"){
             data.joinTripDel = JSON.stringify(data.joinTripDel || "[]");
         }
-        if(data.joinTrip.length === 0){
+        /*if(data.joinTrip.length === 0){
             var tripMsg = data.baseInfo.customerType === 0 ? '至少填写一条参团信息！' : '至少填写一条转团信息！';
             showMessageDialog($("#confirm-dialog-message"), tripMsg);
             return false;
-        }
+        }*/
 
         if(data.baseInfo.customerType === 0){
             //送团
             data.sendTrip = [];
             $sendGroup.find('tr').each(function(index){
                 var $that = $(this),
-                    receiveHotel = $that.find('[name="receiveHotel"]').data('json');
+                    $bus = $that.find('[name="receiveBus"]'),
+                    $hotel = $that.find('[name="receiveHotel"]'),
+                    $other = $that.find('[name="receiveOther"]'),
+                    receiveHotel = $hotel.data('json');
                 receiveHotel = typeof receiveHotel !== "object" ? JSON.parse(receiveHotel || "{}") : receiveHotel;
-                receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
-                var sendBus = $that.find('[name="receiveBus"]').data('json'),
-                    sendOther = $that.find('[name="receiveOther"]').data('json'),
+                if($.isEmptyObject(receiveHotel)){
+                    receiveHotel = null;
+                }else{
+                    if(!!$hotel.data("id")){
+                        receiveHotel.id = $hotel.data("id");
+                    }
+                    receiveHotel.hotel = typeof receiveHotel.hotel !== "object" ? JSON.parse(receiveHotel.hotel || "[]") : receiveHotel.hotel;
+                }
+                var sendBus = $bus.data('json'),
+                    sendOther = $other.data('json'),
                     sendTripData = {
                         leaveTime : $that.find('[name="leaveTime"]').val() +":00",
                         leaveShift : $that.find('[name="leaveShift"]').val(),
@@ -2425,33 +2545,38 @@ define(function(require, exports) {
                 if($.isEmptyObject(sendTripData.sendBus)){
                     sendTripData.sendBus = null;
                 }else{
-                    if($.type(sendTripData.sendBus.busFeeDel) !== "object"){
+                    if(!!$bus.data("id")){
+                        sendTripData.sendBus.id = $bus.data("id");
+                    }
+                    if(typeof sendTripData.sendBus.busFeeDel !== "object"){
                         sendTripData.sendBus.busFeeDel = JSON.parse(sendTripData.sendBus.busFeeDel || null);
                     }
                 }
-                if($.isEmptyObject(sendTripData.sendHotel)){
+                if(!sendTripData.sendHotel || $.isEmptyObject(sendTripData.sendHotel)){
                     sendTripData.sendHotel = null;
                 }else{
-                    if($.type(sendTripData.sendHotel.hotelFeeDel) !== "object"){
+                    if(typeof sendTripData.sendHotel.hotelFeeDel !== "object"){
                         sendTripData.sendHotel.hotelFeeDel = JSON.parse(sendTripData.sendHotel.hotelFeeDel || null);
                     }
                 }
                 if($.isEmptyObject(sendTripData.sendOther)){
                     sendTripData.sendOther = null;
                 }else{
-                    if($.type(sendTripData.sendOther.otherFeeDel) !== "object"){
+                    if(!!$other.data("id")){
+                        sendTripData.sendOther.id = $other.data("id");
+                    }
+                    if(typeof sendTripData.sendOther.otherFeeDel !== "object"){
                         sendTripData.sendOther.otherFeeDel = JSON.parse(sendTripData.sendOther.otherFeeDel || null);
                     }
                 }
-                sendTripData.sendBusDel = $that.find('[name="receiveBus"]').data('clear') == "1" ? $that.data('id') : "";
-                sendTripData.sendHotelDel = $that.find('[name="receiveHotel"]').data('clear') == "1" ? $that.data('id') : "";
-                sendTripData.sendOtherDel = $that.find('[name="receiveOther"]').data('clear') == "1" ? $that.data('id') : "";
+                sendTripData.sendBusDel = $bus.data('clear') == "1" && $bus.data('id') ? [{id:$bus.data('id')}] : null;
+                sendTripData.sendHotelDel = $hotel.data('clear') == "1" && $hotel.data('id') ? [{id:$hotel.data('id')}] : null;
+                sendTripData.sendOtherDel = $other.data('clear') == "1" && $other.data('id') ? [{id:$other.data('id')}] : null;
                 if(!!$that.data('id')){
                     sendTripData.id = $that.data('id');
                 }
-                if($.inArray(sendTripData.leaveTime, receiveDateArr) === -1){
-                    showMessageDialog($("#confirm-dialog-message"), '送团日期不能等于接团日期！');
-                    return false;
+                if($.inArray(sendTripData.leaveTime, receiveDateArr) > -1){
+                    isCheckDate = false;
                 }
                 data.sendTrip.push(sendTripData);
             });
@@ -2481,11 +2606,15 @@ define(function(require, exports) {
             });
         }
 
-        /*if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId){
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId){
             var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
             showMessageDialog($("#confirm-dialog-message"), msg);
             return false;
-        }*/
+        }
+        if(!isCheckDate){
+            showMessageDialog($("#confirm-dialog-message"), '送团日期不能等于接团日期！');
+            return false;
+        }
 
         //其它信息
         data.otherInfo = {
@@ -2522,9 +2651,9 @@ define(function(require, exports) {
                             };
                         }else{
                             Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-                            var $listTab = $("#tab-" + K.menu + "-content");
+                            var $listTab = $("#tab-customer_order-content");
                             if($listTab.length > 0){
-                                $listTab.find('.T-search-area').find('.T-touristGroupList-search').trigger('click');
+                                $listTab.find('#customerOrderTouristsOrder').find('.T-touristGroupList-search').trigger('click');
                             }else{
                                 touristGroup.listTouristGroup(0);
                             }

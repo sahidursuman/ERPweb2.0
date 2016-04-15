@@ -671,8 +671,8 @@ var modalScripts = {
     'arrange_booking': 'js/template/arrange/booking/booking.js',
     'resource_subsection': 'js/template/resource/subsection/subsection.js',
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
-    //'resource_touristGroup': 'js/template/resource/touristGroupN/touristGroup.js', //游客管理
-    'resource_touristGroup' : 'js/template/resource/touristGroupN/main.js',//客户订单
+    'resource_touristGroup': 'js/template/resource/touristGroup/touristGroup.js', //游客管理
+    'resource_order_center' : 'js/template/resource/touristGroupN/main.js',//客户订单
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
     'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
