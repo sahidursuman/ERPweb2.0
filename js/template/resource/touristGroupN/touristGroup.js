@@ -1194,8 +1194,10 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="businessName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="businessName"]').data('id');
+                        baseInfo.dutySubDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutySubDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -1275,8 +1277,10 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="businessName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="businessName"]').data('id');
+                        baseInfo.dutySubDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutySubDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -1385,8 +1389,10 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="businessName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="businessName"]').data('id');
+                        baseInfo.dutySubDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutySubDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -2172,23 +2178,39 @@ define(function(require, exports) {
             var $dutyDepartment = $target.closest('.layui-layer-content').find('[name="dutyDepartmentName"]');
             $dutyDepartment = $dutyDepartment.length > 0 ? $dutyDepartment : $target.closest('.layui-layer-content').find('[name="groupName"]');
             var businessGroupId = $dutyDepartment.data('id');
+            var type = $dutyDepartment.data('type');
+            var url = !!type ? KingServices.build_url('group', 'selectDutyUser') : KingServices.build_url('innerTransferOperation', 'getDutyOPUserList');
+            var data = !!type ? {"groupId" : businessGroupId} : {businessGroupId : businessGroupId};
             if(!!businessGroupId){
                 $.ajax({
-                    url: KingServices.build_url('group', 'selectDutyUser'),
+                    url: url,
                     type: 'post',
-                    data: {"groupId" : businessGroupId},
+                    data: data,
                     showLoading: false,
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var dutUserList = data.dutUserList;
-                        if (!!dutUserList) {
-                            for (var i = 0, len = dutUserList.length;i < len; i++) {
-                                dutUserList[i].value = dutUserList[i].realName;
-                            }
+                        if(!!type){
+                            var dutyUserList = data.dutyUserList;
+                            if (!!dutyUserList) {
+                                for (var i = 0, len = dutyUserList.length;i < len; i++) {
+                                    dutyUserList[i].value = dutyUserList[i].dutyUserName;
+                                    dutyUserList[i].id = dutyUserList[i].dutyUserId;
+                                }
 
-                            $target.autocomplete('option', 'source', dutUserList);
-                            $target.autocomplete('search', '');
+                                $target.autocomplete('option', 'source', dutyUserList);
+                                $target.autocomplete('search', '');
+                            }
+                        }else{
+                            var opUserList = data.opUserList;
+                            if (!!opUserList) {
+                                for (var i = 0, len = opUserList.length;i < len; i++) {
+                                    opUserList[i].value = opUserList[i].realName;
+                                }
+
+                                $target.autocomplete('option', 'source', opUserList);
+                                $target.autocomplete('search', '');
+                            }
                         }
                     }
                 });
@@ -2377,6 +2399,9 @@ define(function(require, exports) {
             buyInsurance : $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0,
             orderNumber : $tab.find('[name="orderNumber"]').val()
         };
+        if(typeof data.baseInfo.touristGroupFee.touristGroupFeeJsonDel !== "object"){
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || null);
+        }
         var receiveDateArr = [];
         if(data.baseInfo.customerType === 0){
             //接团
@@ -2487,7 +2512,7 @@ define(function(require, exports) {
                 joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
-                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id')}] : null;
+                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : null;
             }
             if($.isEmptyObject(joinTripData.lineInfo)){
                 joinTripData.lineInfo = null;
