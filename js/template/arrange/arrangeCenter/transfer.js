@@ -1874,6 +1874,7 @@ define(function(require, exports) {
             '</tr>',
             $line = filterUnAuth(html);
         $tbody.append($line);
+        Transfer.addResource($line);
         Transfer.setDate($line);
     };
     Transfer.addTicket = function($tbody) {
@@ -1899,6 +1900,7 @@ define(function(require, exports) {
 
         $line = filterUnAuth(html);
         $tbody.append($line);
+        Transfer.addResource($line);
         Transfer.setDate($line);
     };
     Transfer.addOther = function($tbody) {
