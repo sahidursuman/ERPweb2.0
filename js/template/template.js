@@ -234,13 +234,13 @@
           default:
             return "";
         }
-    }), template.helper("getPayTypeOptions", function(payType, isBalance) {
+    }), template.helper("getPayTypeOptions", function(payType, isBalance, isNetPay) {
         var options = "", start = 0;
         return options += '<option value="0" ' + (start++ == payType ? "selected" : "") + ">现金</option>", 
         options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
         start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
         options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>", 
-        5 == isBalance && (options += '<option value="5" ' + (start++ == payType ? "selected" : "") + ">网付</option>"), 
+        isNetPay && (options += '<option value="5" ' + (start++ == payType ? "selected" : "") + ">网付</option>"), 
         1 == isBalance && (options += '<option value="6" ' + (6 == payType ? "selected" : "") + ">冲抵</option>"), 
         options;
     }), template.helper("getArrangeIcon", function(status) {
@@ -389,6 +389,9 @@
 
           case 7:
             return "导游提交报账";
+
+          case 8:
+            return "删除";
 
           default:
             return console.info("Other Type:type"), "其他类型";
