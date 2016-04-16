@@ -306,6 +306,7 @@ define(function(require, exports) {
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);
                     data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
+                    data.isNetPay=true;
                     var html = Clearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
