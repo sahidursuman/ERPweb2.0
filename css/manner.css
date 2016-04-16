@@ -2790,3 +2790,25 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 
 /* 财务已收样式 */
 .in-block{display: inline-block;white-space:nowrap;}
+.hct-tab .nav-tabs>li.active>a,.hct-tab .nav-tabs>li.active>a:hover, .hct-tab .nav-tabs>li.active>a:focus{
+    color:#fff;
+    border: none;
+    background: #51b0c2;
+    line-height: 25px;
+
+}
+.hct-max-model .box .tab-content{
+    border: none;
+    padding:14px 0px;
+}
+.T-hide{
+    display: none;
+}
+.hct-max-model .nav-tabs .hct-box{
+    width: 150px;
+    /*height: 30px;*/
+}
+.hct-view table{
+    width: 90%;
+    margin-left: 5%;
+}
