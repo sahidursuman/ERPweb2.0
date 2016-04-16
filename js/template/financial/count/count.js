@@ -2937,7 +2937,7 @@ define(function(require, exports){
 			selfPayId = $tr.attr('selfPayId'),
 			gRate = 0,tRate = 0,CRmoney = 0;
 		if(!!selfPayId){
-			var id = $tr.find('input[name=selfItemId]').val(),whichDay = $tr.attr('whichDay'),
+			var id = $tr.find('input[name=selfPayItemId]').val(),whichDay = $tr.attr('whichDay'),
 				startTime = $parentObj.find('.tripPlanStartTime').val();
 			Count.getRateAfAddGuide($obj,id,whichDay,startTime);
 		}else{
