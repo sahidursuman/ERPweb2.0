@@ -1621,6 +1621,12 @@ define(function(require, exports){
 					//校验每个明细tab是否应该显示
 					var showJson = Count.isShowTabByData(data);
 					data.showJson = showJson;
+					var guideManageFee = data.tripIncomeMap.guideIncomeMap.guideIncomeMapList;
+					for(var i = 0;i<guideManageFee.length;i++){
+						guideManageFee[i].taskJson = JSON.parse(guideManageFee[i].taskJson);
+					};
+					data.tripIncomeMap.guideIncomeMap.guideIncomeMapList = guideManageFee;
+					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -2286,7 +2292,7 @@ define(function(require, exports){
 			td_cnt = $thisTr.children('td').length;
 		};
 		var thisTdLen = $thisTr.children('td').length;
-		
+
 		function totalMoney ($tr){
 			var	$moneyObj = $tr.find('input[name=sumConsumeMoney]'),
 				$travelObj = $tr.find('input[name=travelAgencyRateMoney]'),
