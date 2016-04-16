@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":328,"md5":"b3b766bc816cbf889cd1ea3be184572b"}*/
+/*TMODJS:{"debug":true,"version":329,"md5":"b3b766bc816cbf889cd1ea3be184572b"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/busArrange", function($data, $filename) {
         try {

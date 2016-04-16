@@ -67,10 +67,11 @@
                                            {{if itemSet.itemId == null || itemSet.itemId == ''}}
                                                 <input name="selfPayItem" class="w-70" type="text">
                                                 <input type="hidden" name="selfPayItemId">
+                                                <input name="selfPayArrangeId" value="{{itemSet.id}}" type="hidden" />
                                             {{else}}
                                                 {{itemSet.itemName}}
-                                                <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
-                                                <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfPayItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfPayArrangeId" value="{{itemSet.id}}" type="hidden" />
                                             {{/if}}
                                         </span><!-- 自费项目 -->
                                     </td>
@@ -289,7 +290,7 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                     {{if itemSet.badStatus == 1}}
-                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                        <span class="F-float F-money guidePayedMoney">{{rs.guidePayedMoney}}</span>
                                                     {{else}}
                                                         <input type="text" class="F-float F-money w-70" name="guidePayedMoney" 
                                                         value="{{rs.guidePayedMoney}}" 
@@ -490,10 +491,11 @@
                                             {{if itemSet.itemId == null || itemSet.itemId == ''}}
                                                 <input name="selfPayItem" class="w-70" type="text">
                                                 <input type="hidden" name="selfPayItemId">
+                                                <input name="selfPayArrangeId" value="{{itemSet.id}}" type="hidden" />
                                             {{else}}
                                                 {{itemSet.itemName}}
-                                                <input name="selfItemId" value="{{itemSet.itemId}}" type="hidden" />
-                                                <input name="selfItemArrangeId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfPayItemId" value="{{itemSet.itemId}}" type="hidden" />
+                                                <input name="selfPayArrangeId" value="{{itemSet.id}}" type="hidden" />
                                             {{/if}}
                                         </span><!-- 自费项目 -->
                                     </td>
@@ -714,7 +716,7 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                     {{if itemSet.badStatus == 1}}
-                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                        <span class="F-float F-money guidePayedMoney">{{rs.guidePayedMoney}}</span>
                                                     {{else}}
                                                         <input type="text" class="F-float F-money w-70" name="guidePayedMoney" 
                                                         value="{{rs.guidePayedMoney}}" 
