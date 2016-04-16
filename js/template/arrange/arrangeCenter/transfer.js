@@ -1810,9 +1810,9 @@ define(function(require, exports) {
             '</tr>';
         var $tbody = $obj.find('.T-bus-plan');
         $tbody.append(html);
-        Transfer.addResource($busplanId); //车安排弹窗
-        Transfer.bindBusCompanyChoose($busplanId); //车安排autocomplete列表
-        Transfer.setDate($busplanId); //时间控件
+        Transfer.addResource($obj); //车安排弹窗
+        Transfer.bindBusCompanyChoose($obj); //车安排autocomplete列表
+        Transfer.setDate($obj); //时间控件
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
             Transfer.deleteArrange($(this));
