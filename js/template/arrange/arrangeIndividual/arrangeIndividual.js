@@ -105,14 +105,14 @@ define(function(require, exports) {
         formData.customerType = customerType;
         formData.pageNo = page;
         $.ajax({
-            url: KingServices.build_url("touristGroup", "getTouristGroupForTripPlan"),
+            url: KingServices.build_url("touristGroup", "getToursitSKPT"),
             type: "POST",
             data: formData,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
                     data.searchParam = data.searchParam;
-                    data.touristGroupList = JSON.parse(data.touristGroupList);
+                    data.touristGroupList = data.touristGroupList;
                     if (customerType == 0) { //散拼
                         var html = listTemplate(data);
                         html = filterUnAuth(html);
@@ -169,6 +169,8 @@ define(function(require, exports) {
         var $visitorObj = arrangeIndividual.$tab.find('.T-touristVisitor-list');
         //重置计算
         arrangeIndividual.choosenAdultAndChildCount($visitorObj);
+        console.log($visitorObj.find('.T-ctrl-tip'))
+        Tools.descToolTip($visitorObj.find('.T-ctrl-tip'),1);
 
         //查看游客小组
         arrangeIndividual.$tab.find('.T-arrageVisitor-list').on('click', '.T-action', function(event) {
@@ -178,8 +180,6 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('value');
             arrangeIndividual.viewTouristGroup(id);
         });
-
-        Tools.descToolTip($visitorObj.find(".T-ctrl-tip"), 1);
 
         //散拼checkbox绑定事件
         $visitorObj.find('.T-cheked').off('change').on('change', function(event) {
@@ -198,7 +198,6 @@ define(function(require, exports) {
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "你还没有勾选任何并团小组");
             };
-
         });
 
 
@@ -497,7 +496,6 @@ define(function(require, exports) {
             arrangeIndividual.touristGroupId.push(touristGroupIds);
 
         } else {
-            console.log(arrangeIndividual.touristGroupMergeData.touristGroupMergeList);
             //若取消选中状态---用于生成计划查询数组
             arrangeIndividual.removeTouristGroupMergeData(lineProductId, startTime);
             //移除取消分页选中效果

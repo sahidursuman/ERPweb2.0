@@ -899,6 +899,10 @@ define(function(require, exports) {
                 remark : $that.find('[name="feeRemark"]').val()
             });
         });
+        if ($tab.find('.T-fee-list tr').length == 0) {
+            showMessageDialog($( "#confirm-dialog-message" ), "至少添加一条费用项。");
+            return ;
+        }
         //购物&自费商家ID集
         arge.shopIds = tripPlan.jsonToString($tab.find('[name="shopNames"]').data("propover"));
         arge.selfPayItemIds = tripPlan.jsonToString($tab.find('[name="selfPayItemNames"]').data("propover"));
