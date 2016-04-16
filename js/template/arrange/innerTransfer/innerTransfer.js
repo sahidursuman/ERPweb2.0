@@ -25,6 +25,8 @@ define(function(require, exports) {
             creatorName: "",
             startTime: "",
             endTime: "",
+            createStartTime :  "",
+            createEndTime :  "",
             status: "",
             first: ""
         },
@@ -68,6 +70,8 @@ define(function(require, exports) {
             creatorName: getValue("creatorName"),
             startTime: getValue("startTime"),
             endTime: getValue("endTime"),
+            createStartTime :   getValue("createStartTime"),
+            createEndTime :  getValue("createEndTime"),
             status: $("#" + divId).find(".btn-status button").attr("data-value")
         }
     };
