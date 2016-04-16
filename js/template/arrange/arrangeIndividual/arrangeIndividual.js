@@ -169,6 +169,7 @@ define(function(require, exports) {
         var $visitorObj = arrangeIndividual.$tab.find('.T-touristVisitor-list');
         //重置计算
         arrangeIndividual.choosenAdultAndChildCount($visitorObj);
+        console.log($visitorObj.find('.T-ctrl-tip'))
         Tools.descToolTip($visitorObj.find('.T-ctrl-tip'),1);
 
         //查看游客小组
@@ -179,8 +180,6 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('value');
             arrangeIndividual.viewTouristGroup(id);
         });
-
-        Tools.descToolTip($visitorObj.find(".T-ctrl-tip"), 1);
 
         //散拼checkbox绑定事件
         $visitorObj.find('.T-cheked').off('change').on('change', function(event) {
@@ -199,7 +198,6 @@ define(function(require, exports) {
             } else {
                 showMessageDialog($("#confirm-dialog-message"), "你还没有勾选任何并团小组");
             };
-
         });
 
 
