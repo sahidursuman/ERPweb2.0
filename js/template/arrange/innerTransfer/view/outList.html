@@ -2,6 +2,7 @@
 	<thead>
 		<tr class="bg-blur">
 		    <th>接收部门</th>
+		    <th>出游日期</th>
 			<th>游客</th>
 			<th>联系电话</th>
 			<th>人数</th>
@@ -15,6 +16,7 @@
 	<tbody class="T-transferOut-list">{{each resultList as list}}
 		<tr data-value="{{list.id}}">
 			<td>{{list.toBusinessGroup.name}}</td>
+			<td>{{if !!list.touristGroup}}{{list.touristGroup.startTime | dateFormat: 'yyyy-MM-dd' }}{{/if}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.name}}{{/if}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.mobileNumber}}{{/if}}</td>
 			<td><span class=" F-float F-count">{{list.touristGroup.adultCount}}</span>大<span class=" F-float F-money">{{list.touristGroup.childCount}}</span>小</td>

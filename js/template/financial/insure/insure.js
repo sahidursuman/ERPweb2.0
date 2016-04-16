@@ -242,7 +242,8 @@ define(function(require, exports) {
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeInsuranceFinancial");
         });
@@ -331,18 +332,20 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,new FinRule(1));
-                                Insure.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
-                                Insure.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Insure.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Insure.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 Insure.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;

@@ -284,7 +284,8 @@ define(function(require, exports) {
                 startDate: $tab.find('.T-search-start-date').val(),
                 accountInfo: $tab.find('.T-search-type').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
             };
             FinancialService.exportReport(argsData,"exportArrangeTicketFinancial");
         });

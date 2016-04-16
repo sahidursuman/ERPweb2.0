@@ -1,0 +1,76 @@
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group input-daterange mar-r-10">
+            <label>记账日期</label>
+            <input type="text" class="form-control datepicker w100" name="startDate" value="{{searchParam.startDate}}">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" class="form-control datepicker w100" name="endDate" value="{{searchParam.endDate}}">
+        </div>
+        <div class="form-group mar-r-10">
+            <label>凭证编号</label>
+            <input type="text" class="form-control w100" name="voucher" value="{{searchParam.voucher}}">
+        </div>
+        <div class="form-group">
+            <button class="btn-sm search-btn T-detail-search" data-payStatus="3"><i class="ace-icon fa fa-search"></i> 搜索</button>
+        </div>
+        <input type="hidden" class="form-control w100" name="resourceId" value="{{resourceId}}">
+        <input type="hidden" class="form-control w100" name="resourceType" value="{{resourceType}}">
+        <input  type="hidden"  class="form-control w100" name="payStatus" value="{{payStatus}}">
+    </form>
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group mar-r-10">
+            <label>合计：</label>
+            <label class="T-total F-float F-money">0</label>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <thead>
+            <tr class="bg-blur T-tr-fixed">
+                <th>记账日期</th>
+                <th>业务类别</th>
+                <th>对方单位</th>
+                <th>主营业务收付类别</th>
+                <th>会计科目</th>
+                <th>凭证编号</th>
+                <th>支付方式</th>
+                <th>金额</th>
+                <th>备注</th>
+                <th>操作人</th>
+                <th>操作时间</th>
+            </tr>
+        </thead>
+        <tbody class="T-list">
+            {{each result as rs}}
+                <tr data-id="{{rs.id}}">
+                    <td>{{rs.accountTime}}</td>
+                    <td>{{if rs.moneyType == 0}}收入{{else if rs.moneyType == 1}}支出{{else if rs.moneyType == 2}}转账{{/if}}</td>
+                    <td>{{if rs.resourceName == null || rs.resourceName == ""}}-{{else}}{{rs.resourceName}}{{/if}}</td>
+                    <td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType.name}}{{/if}}</td>
+                    <td>{{if rs.subjectName == null || rs.subjectName == ""}}-{{else}}{{rs.subjectName}}{{/if}}</td>
+                    <td>{{if rs.voucher == null || rs.voucher == ""}}-{{else}}{{rs.voucher}}{{/if}}</td>
+                    <td>{{if rs.payType == 0}}现金{{else if rs.payType == 1}}银行转账{{else if rs.payType == 2}}网上支付{{else if rs.payType == 3}}支票{{else if rs.payType == 4}}其它{{else if rs.payType == 5}}网付{{else if rs.payType == 6}}冲抵{{/if}}</td>
+                    <td>
+                        <a class="cursor  T-view" style="color:#337ab7">
+                            {{if rs.incomeMoney==0}}{{rs.payMoney}}{{else}}{{rs.incomeMoney}}{{/if}}
+                        </a>
+                    </td>
+                    <td>{{rs.remark}}</td>
+                    <td>{{if !!rs.user}}{{rs.user.realName}}{{/if}}</td>
+                    <td>{{rs.createTime}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{searchParam.totalCount}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
+</div>

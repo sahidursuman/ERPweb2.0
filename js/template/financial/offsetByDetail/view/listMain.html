@@ -1,0 +1,58 @@
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group mar-r-10">
+            <label>资源类型</label> 
+            <select name="resourceType" style="width: 51px;" class="T-resourceType">
+                <option {{if searchParam.resourceType=="20"}}selected{{/if}} value="20">酒店</option>
+                <option {{if searchParam.resourceType=="21"}}selected{{/if}} value="21">购物</option> 
+                <option {{if searchParam.resourceType=="22"}}selected{{/if}} value="22">客户</option>
+                <option {{if searchParam.resourceType=="23"}}selected{{/if}} value="23">车队</option>
+            </select> 
+        </div>
+        <div class="form-group mar-r-10">
+            <label>对方单位</label>
+            <input type="text" class="form-control" name="resourceName" style="width: 120px;" value="{{searchParam.resourceName}}" maxlength="100"
+            placeholder="对方单位">
+        </div>
+        <div class="form-group input-daterange mar-r-10">
+            <label>记账日期</label>
+            <input type="text" class="form-control datepicker w100" name="startDate" value="{{searchParam.startDate}}">
+            <label>&nbsp;至&nbsp;</label>
+            <input type="text" class="form-control datepicker w100" name="endDate" value="{{searchParam.endDate}}">
+        </div>
+        <div class="form-group">
+            <button class="btn-sm search-btn T-btn-search"><i class="ace-icon fa fa-search"></i> 搜索</button>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <table class="table table-striped table-bordered table-hover T-showHighLight">
+        <thead>
+            <tr class="bg-blur T-tr-fixed">
+                <th>对方单位</th>
+                <th>账款合计</th>
+                <th>冲抵合计</th>
+                <th>余额</th>
+            </tr>
+        </thead>
+        <tbody class="T-list">
+            {{each result as rs}}
+              <tr data-resourceId="{{rs.resourceId}}" data-resourceType="{{rs.resourceType}}">
+                <td>{{rs.resourceName}}</td>
+                <td><a class="cursor T-action T-income">{{rs.income}}</a></td>
+                <td><a class="cursor T-action T-viewDetails">{{rs.pay}}</a></td>
+                <td>{{rs.balance}}</td>
+              </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{searchParam.totalCount}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
+</div>

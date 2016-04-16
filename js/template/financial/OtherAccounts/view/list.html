@@ -71,7 +71,7 @@
                     <td class="F-float F-money">{{other.sumNeedPayMoney}}</td>
                     <td class="F-float F-money">{{other.sumSettlementMoney }}</td>
                     <td class="F-float F-money">{{other.sumPayedMoney }}</td>
-                    <td class="F-float F-money">{{other.sumUnPayedMoney }}</td>
+                    <td class="F-float F-money" {{if other.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{other.sumUnPayedMoney }}</td>
                     <td>
                         {{if other.count == other.confirmedCount }}
                         <span style="color:green">{{other.confirmedCount}}{{"/"}}{{other.count}}</span> {{else}}

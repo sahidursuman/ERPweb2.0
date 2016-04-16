@@ -50,7 +50,7 @@ define(function(require, exports) {
 				success:function(data){
 							
 				   var html=listTemplate(data);
-			       addTab(menuKey,"客源分布",html);
+			       Tools.addTab(menuKey,"客源分布",html);
 
 			       //缓存autocompalet数据
 			       sourDstributionObj.autocompleteDate.lineProList=data.lineProductList;

@@ -14,6 +14,11 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event', DemoData = DemoData || false,
 	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
+
+var KingSettings = {
+	// 询价服务的开关
+	pusher: false,
+};
 /**
  * 图片地址
  */
@@ -455,7 +460,6 @@ function checkLogin(fn){
 		url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
 		type:"POST",
 		success:function(data){
-			console.info(fn)
 			if(data.success == 1 && typeof fn === 'function'){
 				fn();
 			}
@@ -484,6 +488,8 @@ function showAutoLoginDialog(dialogObj,message){
 						success:function(data){
 							if(data.success == 1){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+								//获取登陆后token
+								KingServices.token = $.cookie('token');
 							}
 							else{
 								showLogoutDialog($( "#confirm-dialog-message" ),data.message);
@@ -751,6 +757,9 @@ function listMenu(menuTemplate){
 				data.menuList = menuList;
 				var html = template("menu-template",data);
 				$("#sidebar .nav-list").html(html);
+
+				//获取登陆后token
+				KingServices.token = $.cookie('token');
 				//绑定系统旅行社
 				$("#sidebar .nav-list .system_travelAgency").click(function(){
 					$("#sidebar .nav-list li").removeClass("active");
@@ -922,7 +931,7 @@ function getAjaxErrorInfo (XMLHttpRequest)  {
 	try {
 		var fixedResponse = XMLHttpRequest.responseText.replace(/\\'/g, "'");
 		var jsonObj = JSON.parse(fixedResponse);
-		return jsonObj.description;
+		return jsonObj.message;
 	} catch (e) {
 		if (status > 200) {
 			switch (status) {
@@ -986,79 +995,89 @@ var _statusText = {
 		//     });
 		// }
 		//json提交要修改contentType和格式化json
-
-		if (opt.submitType == "json") {
-			opt.data = JSON.stringify(opt.data);
-			opt.contentType = "application/json";
-		}
-		//备份opt中error和success方法
-
-		var fn =
-		{
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-			},
-			success: function (data, textStatus) {
+		
+		//判断当前token与登陆时token是否相同
+		var token = $.cookie('token');
+		if (KingServices.token != token && !!token && !!KingServices.token) {
+			showConfirmDialog($( "#confirm-dialog-message" ), '当前登陆状态已失效，请重新登录', function() {
+				window.location.reload();
+			},function() {
+				return;
+			})
+		}else {
+			if (opt.submitType == "json") {
+				opt.data = JSON.stringify(opt.data);
+				opt.contentType = "application/json";
 			}
-		};
+			//备份opt中error和success方法
 
-		if (opt.error) {
-			fn.error = opt.error;
-		}
-		if (opt.success) {
-			fn.success = opt.success;
-		}
-
-		//扩展增强处理
-		opt = $.extend({}, {
-			timeout: 60000,
-			cache: false,
-			showLoading: true,
-			removeLoading: true,
-			showError: true,
-			dataType: 'json'
-		}, opt);
-		$.extend(opt, opt,
+			var fn =
 			{
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					//判断是否是当前页面的ajax请求错误
-
-					if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
-						if (opt.showError != false) {
-							var status;
-							try {
-								status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
-							} catch (e) {
-								// console.warn(e)
-								status = XMLHttpRequest.status;
-							}
-
-							showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
-
-						}
-						fn.error(XMLHttpRequest, textStatus, errorThrown);
-					}
-					else {
-						console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
-						showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
-					}
-				},
-				beforeSend:function(){
-					if (opt.showLoading)  {
-						globalLoadingLayer = openLoadingLayer();
-					}
 				},
 				success: function (data, textStatus) {
-					//若要移除loading,则移除
-
-					fn.success(data, textStatus);
-				},
-				complete: function()  {
-					if (opt.removeLoading) {
-						layer.close(globalLoadingLayer);
-					}
 				}
-			});
-		return _ajax(opt);
+			};
+
+			if (opt.error) {
+				fn.error = opt.error;
+			}
+			if (opt.success) {
+				fn.success = opt.success;
+			}
+
+			//扩展增强处理
+			opt = $.extend({}, {
+				timeout: (opt.url.indexOf('/financial/') >= 0) ? 3000000 : 60000,
+				cache: false,
+				showLoading: true,
+				removeLoading: true,
+				showError: true,
+				dataType: 'json'
+			}, opt);
+			$.extend(opt, opt,
+				{
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						//判断是否是当前页面的ajax请求错误
+
+						if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
+							if (opt.showError != false) {
+								var status;
+								try {
+									status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
+								} catch (e) {
+									// console.warn(e)
+									status = XMLHttpRequest.status;
+								}
+
+								showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
+
+							}
+							fn.error(XMLHttpRequest, textStatus, errorThrown);
+						}
+						else {
+							console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
+							showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
+						}
+					},
+					beforeSend:function(){
+						if (opt.showLoading)  {
+							globalLoadingLayer = openLoadingLayer();
+						}
+					},
+					success: function (data, textStatus) {
+						//若要移除loading,则移除
+
+						fn.success(data, textStatus);
+					},
+					complete: function()  {
+						if (opt.removeLoading) {
+							layer.close(globalLoadingLayer);
+						}
+					}
+				});
+			return _ajax(opt);
+		}
 	};
 
 	jQuery.fn.extend({
@@ -1074,7 +1093,7 @@ var _statusText = {
 				}else{
 					if($that.hasClass('F-float')){
 						// 精度控制
-						if ($that.hasClass('F-money')) {
+						if ($that.hasClass('F-money') && value != 0) {
 							value = Tools.toFixed(value, 2);
 						} else if ($that.hasClass('F-count')) {
 							value = Tools.toFixed(value, 1, false);
@@ -1760,13 +1779,13 @@ Tools.toFixed = function(data, length, fixed) {
  * @return {object}     返回转换后的html数据
  */
 Tools.filterMoney = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-money").each(function(){
 		var $taht = $(this);
 		if(!$taht.is(':not("input")')){
 			$taht.val(Tools.toFixed($taht.val(), 2))
-		}else{
+		}else if($taht.text() != 0){
 			$taht.text(Tools.toFixed($taht.text(), 2));
 		}
 	});
@@ -1778,7 +1797,7 @@ Tools.filterMoney = function(obj){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterCount = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-count").each(function(){
 		if(!$(this).is(':not("input")')){
@@ -1802,7 +1821,7 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		num = Tools.toFixed(num, length);
 	}
-	num = (num + '');
+	num = (num + '').replace(/ /g, '');
 	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
 		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
 	
@@ -1818,7 +1837,7 @@ Tools.thousandPoint = function(num, length){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterUnPoint = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-float").each(function(){
 		if(!$(this).is(':not("input")')){
@@ -2424,6 +2443,12 @@ KingServices.paymentDetail = function(orderId){
 	});
 }
 
+KingServices.viewDetails = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.viewDetails(id);
+	});
+}
+
 //添加资源函数
 KingServices.addResourceFunction = function(e){
 	var $this = $(this),
@@ -2673,18 +2698,13 @@ Tools.trFixed = function(obj){
 //根据需要加载插件js
 var modulePlugin = {
 	"plugin_print":'components/jquery-plugin/jQuery.print.js',//加载打印插件
-	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js'//加载导出插件
+	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js',//加载导出插件
+	'plugin_pusher': 'components/pusher/pusher.min.js',
 };
 Tools.loadPluginScript = function(pluginKey){
-	
-	switch(pluginKey){
-		case  'plugin_print' :
-			$.getScript(modulePlugin.plugin_print);	
-			break;
-		case  'plugin_export' :
-			$.getScript(modulePlugin.plugin_export);
-		break;	
-	};	
+	if (!!pluginKey && !!modulePlugin[pluginKey])  {
+		$.getScript(modulePlugin[pluginKey]);
+	}
 };
 
 window.onbeforeunload=function(e){

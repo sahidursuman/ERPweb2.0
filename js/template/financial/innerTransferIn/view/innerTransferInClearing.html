@@ -27,6 +27,10 @@
                     <label class="control-label">收客单号：</label>
                     <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
                 </div>
+                <div class="form-group mar-r-10">
+                    <label class="control-label">游客：</label>
+                    <input type="text" placeholder="联系人或联系电话" value="{{searchParam.contactInfo}}" name="contactInfo">
+                </div>
                 <label class="form-group control-label">对账状态：</label>
                 <div class="form-group btn-group T-check-status mar-r-10">
                     <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">

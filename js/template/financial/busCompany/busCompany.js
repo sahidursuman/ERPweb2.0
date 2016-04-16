@@ -47,7 +47,7 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: busCompany.$searchArea ? busCompany.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(busCompany.searchData);
@@ -148,6 +148,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = "startTime";
         $.ajax({
@@ -238,8 +240,12 @@ define(function(require, exports) {
                 startTime: $tab.find("input[name=startDate]").val(),
                 endTime: $tab.find("input[name=endDate]").val(),
                 accountStatus : args.accountStatus,
-                licenseNumber : $tab.find("input[name=licenseNumber]").val()
+                licenseNumber : $tab.find("input[name=licenseNumber]").val(),
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
+            console.log(argsData);
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
         });
 
@@ -263,6 +269,8 @@ define(function(require, exports) {
             args.endTime = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         args.sortType = "startTime";
         if(args.autoPay == 1){
@@ -298,6 +306,7 @@ define(function(require, exports) {
                     data.financialBusCompanyListData = FinancialService.isGuidePay(resultList);
                     data.financialBusCompanyListData = busCompany.isMemberCount(data.financialBusCompanyListData);
                     data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
+                    data.isNetPay=true;
                     var html = Clearing(data);
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "车队付款", html)) {
@@ -318,19 +327,21 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) {
                                 var tempJson = FinancialService.clearSaveJson(busCompany.$clearTab, busCompany.clearTempData, new FinRule(args.isAutoPay == 2 ? 3 : 1));
-                                busCompany.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = busCompany.$clearTab.find('input[name=remark]').val();
-                                busCompany.clearTempSumDate = {
-                                    id: args.busCompanyId,
-                                    sumPayMoney: sumPayMoney,
-                                    sumPayType: sumPayType,
-                                    sumPayRemark: sumPayRemark,
-                                    bankNo: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-number]').val() : busCompany.$clearTab.find('input[name=card-number]').val(),
-                                    bankId: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-id]').val() : busCompany.$clearTab.find('input[name=card-id]').val(),
-                                    voucher: busCompany.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime: busCompany.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    busCompany.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(busCompany.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(busCompany.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = busCompany.$clearTab.find('input[name=remark]').val();
+                                    busCompany.clearTempSumDate = {
+                                        id: args.busCompanyId,
+                                        sumPayMoney: sumPayMoney,
+                                        sumPayType: sumPayType,
+                                        sumPayRemark: sumPayRemark,
+                                        bankNo: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-number]').val() : busCompany.$clearTab.find('input[name=card-number]').val(),
+                                        bankId: (sumPayType == 0) ? busCompany.$clearTab.find('input[name=cash-id]').val() : busCompany.$clearTab.find('input[name=card-id]').val(),
+                                        voucher: busCompany.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime: busCompany.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 busCompany.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr - 1;
@@ -576,7 +587,8 @@ define(function(require, exports) {
     busCompany.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
             var validator = (new FinRule(0)).check($tab);
-            Tools.setDatePicker($tab.find(".date-picker"), true);
+            Tools.setDatePicker($tab.find(".T-time"), true);
+            Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change', "input", function(event) {

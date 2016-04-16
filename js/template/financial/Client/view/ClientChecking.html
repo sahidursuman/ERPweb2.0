@@ -6,9 +6,9 @@
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
+            <input type="text" class="form-control date-picker T-time T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+            <input type="text" class="form-control date-picker T-time T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">收客单号：</label>
@@ -17,11 +17,13 @@
         <div class="form-group mar-r-10">
             <label class="control-label">组团单号：</label>
             <input type="text" class="form-control T-search-number" placeholder="组团单号" value="{{searchParam.otaOrderNumber}}">
-        </div><br />
+        </div>
         <div class="form-group mar-r-10">
             <label class="control-label">线路名称：</label>
+            <!-- 为什么把lineProductId去掉 -->
             <input type="text" class="form-control T-search-line" data-id="" value="{{searchParam.lineProductName}}" placeholder="请输入线路名称或行程">
         </div>
+
         <div class="form-group mar-r-10">
             <label class="control-label">录入人：</label>
             <input type="text" class="form-control T-search-enter" data-id="{{searchParam.creatorId}}" value="{{searchParam.creatorName}}">
@@ -30,6 +32,10 @@
             <label class="control-label">客户联系人：</label>
             <input type="text" class="form-control T-search-contact" placeholder="客户联系人" data-id="{{searchParam.fromPartnerAgencyContactId}}" value="{{searchParam.contactRealname}}">
         </div>
+        <div class="form-group mar-r-10">
+            <label class="control-label">游客：</label>
+            <input type="text" class="form-control T-search-contactInfo" placeholder="联系人或联系电话" value="{{searchParam.contactInfo}}" name="contactInfo">
+        </div> 
         <label class="form-group">对账状态：</label>
         <div class="form-group btn-group T-check-status mar-r-10">
             <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
@@ -50,6 +56,13 @@
                 <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
             </ul>
         </div>
+        <div class="form-group mar-r-10">
+            <label>对账时间：</label>
+            <input class="date-picker T-checkTime T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+            <label>&nbsp;至&nbsp;</label>
+            <input class="date-picker T-checkTime T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+        </div>
+                
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索 
@@ -117,8 +130,8 @@
             </tr>
         </thead>
         <tbody class="T-checkList">
-            {{if customerAccountList != null}} 
-        	{{each customerAccountList as rs index}}
+            {{if customerAccountList != null}}
+        	{{each customerAccountList as rs listIndex}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" data-status="{{rs.status}}">
                 <td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
                 <td>{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
@@ -139,6 +152,7 @@
                     <!-- 若无中转结算价 -->
                         {{if rs.detailList.otherFee.length > 0}}
                         <!-- 中转，otherFee中多条数据 -->
+                            <a class="T-viewFeeDetails" data-index="{{listIndex}}">
                             {{each rs.detailList.otherFee as temp index}}
                                 {{if index == 0}}
                                     {{each temp.otherFeeList as of}}
@@ -149,6 +163,7 @@
                                     {{/each}}
                                 {{/if}}
                             {{/each}}
+                            </a>
                         {{else}}<!-- 若无费用明细 -->-
                         {{/if}}
                 </td>

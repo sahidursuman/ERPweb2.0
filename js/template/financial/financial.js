@@ -16,7 +16,8 @@ FinancialService.initPayEvent = function($container,rule)  {
     });
 
     var $cash = $container.find('input[name=cash-number]'),
-        $card = $container.find('input[name=card-number]');
+        $card = $container.find('input[name=card-number]'),
+        $balance =$container.find('.T-balance');
     getBankList($cash,0);
     getBankList($card,1);
     $select = $container.find('select[name=sumPayType]');
@@ -34,13 +35,19 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val == 5){
             $card.closest('div').removeClass('hidden');
         };
+        if(val == 6){
+            $balance.closest('div').removeClass('hidden');
+        }else {
+            $balance.closest('div').addClass('hidden');
+        }
         if(val !=0){
            $container.find('input[name=cash-id]').val('');
         };
-        if(val !=1){
+        if(val !=1 && val!=5){
             $container.find('input[name=card-id]').val('');
             $card.val('');
         };
+        $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
     }).trigger('change');
 };
 
@@ -109,6 +116,19 @@ function getBankList($obj,payType){
         }
     });
 }
+
+//时间控件--保留时分秒
+FinancialService.datetimepicker=function($tab){
+    if (!!$tab) {
+       $tab.find(".datepicker").datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'L',
+            language: 'zh-CN'
+        })
+    }
+};
+
 
 //对账-自动计算未付金额
 FinancialService.updateUnpayMoney = function($tab,rule){
@@ -533,6 +553,14 @@ FinancialService.getInitDate = function(){
     return { 
         startDate : Tools.addDay(new Date(), -30),
         endDate : Tools.addDay(new Date(), 30)
+    };
+};
+
+//获取当天日期的一个月
+FinancialService.getInitMothDate = function(){
+    return { 
+        startDate : Tools.addDay(new Date(),-30),
+        endDate : Tools.addDay(new Date(), 0)
     };
 };
 

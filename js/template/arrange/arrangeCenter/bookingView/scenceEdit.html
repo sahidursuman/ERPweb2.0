@@ -1,0 +1,93 @@
+<div class="base-info">
+    代订单号：<span class="mar-r-20">{{baseInfo.orderNumber}}</span> 客人信息：
+    <span class="mar-r-20">{{baseInfo.contactor}} {{baseInfo.AdultCount}}大{{baseInfo.childCount}}小</span> 外联销售：{{baseInfo.saleMan}}
+</div>
+<div class=" ui-sortable-handle">
+    <h5 class="">
+        <label class="middle title-size">景区</label>
+        <button class="btn btn-sm btn-success mar-l-20 T-action T-scenic-add">
+            <i class="ace-icon fa fa-plus"></i>
+            新增
+        </button>
+    </h5>
+    {{if !!arrangeInfo.oldRequire}}
+    <p class="panel">原景区代订计划要求：{{arrangeInfo.oldRequire}}</p>
+    {{/if}}
+
+    {{if !!arrangeInfo.require}}
+    <p class="panel">现景区代订计划要求：{{arrangeInfo.require}}</p>
+    {{/if}}
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                <thead>
+                    <tr>
+                        <th class="th-border" width="50"><span class="necessary">*</span>日期</th>
+                        <th class="th-border"><span class="necessary">*</span>景区</th>
+                        <th class="th-border"><span class="necessary">*</span>收费项</th>
+                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                        <th class="th-border">成本单价</th>
+                        <th class="th-border">销售单价</th>
+                        <th class="th-border">成本</th>
+                        <th class="th-border">应收</th>
+                        <th class="th-border">订单号</th>
+                        <th class="th-border">预付款</th>
+                        <th class="th-border" style="width: 100px">操作</th>
+                    </tr>
+                </thead>
+                <tbody class="T-scenicList">{{each bookingOrder.bookingScenicList as scenicList}}
+                    <tr data-entity-id="{{scenicList.id}}">
+                        <td>
+                            <div class="input-group">
+                                <input name="startTime" value="{{scenicList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
+                            </div>
+                        </td>
+                        <td>
+                            <input name="scenicName" value="{{if scenicList.scenic != null}}{{scenicList.scenic.name}}{{/if}}" type="text" class="col-sm-12 T-chooseScenic bind-change" />
+                            <input name="scenicId" value="{{if scenicList.scenic != null}}{{scenicList.scenic.id}}{{/if}}" type="hidden" />
+                        </td>
+                        <td>
+                            <input name="scenicItemName" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.name}}{{/if}}" type="text" class="col-sm-12 T-chooseScenicItem bind-change" />
+                            <input name="scenicItemId" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.id}}{{/if}}" type="hidden" />
+                        </td>
+                        <td>
+                            <input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="7" />
+                        </td>
+                        <td>
+                            <input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                        </td>
+                        <td>
+                            <input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                        </td>
+                        <td>
+                            <input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12 F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" />
+                        </td>
+                        <td>
+                            <input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                        </td>
+                        <td>
+                            <a class="cursor T-action T-scenic-delete">删除</a>
+                        </td>
+                    </tr>{{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mar-t-20">
+    <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
+    <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
+    <span class="checkbox checkbox-inline mar-0" data-target="#booking_receive_scence">
+        <label>
+            <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
+            <span class="lbl font-w"> 景区安排完成</span>
+        </label>
+    </span>
+</div>

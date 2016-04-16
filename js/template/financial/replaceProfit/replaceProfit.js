@@ -43,7 +43,7 @@ define(function(require, exports) {
         var data = {};
         data.searchParam = replace.searchData;
         var html = listMain(data);
-        addTab(menuKey,"代订利润",html);
+        Tools.addTab(menuKey,"代订利润",html);
 
         replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate, "", "","","");
     };
@@ -184,6 +184,10 @@ define(function(require, exports) {
                 if(result){
                     data.bookingOrderList = JSON.parse(data.bookingOrderList);
                     var html = listTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
+                    
                     replace.$tab.find('.T-list').html(html);
                     replace.$tab.find(".T-totalSize").text("共计 " + data.recordSize + " 条记录");
 

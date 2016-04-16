@@ -2,54 +2,61 @@
 	<div class="form-inline" style="text-align:center;margin: 15px 0px 25px 0px;">
 		<div class="form-group">
 			<h4 style="margin: auto;">
-			<img src="../images/logo_32x32.png" alt="火柴头地接社">火柴头地接社
+			<img src="{{imgUrl}}{{touristGroup.companyLogo}}" class="imgViewAccount" alt=" " style="width: 35px;height: 35px"><span class="mar-l-5">{{touristGroup.travelName}}</span>
 		</h4>
 		</div>
 		<div class="form-group pull-right mar-r-20 globalAdd">
-			<button class="btn btn-sm btn-success T-printAccountBtn T-noprint" style="height: 24px;"><i class="ace-icon fa fa-print"></i>打印</button>
+			<button class="btn btn-sm btn-success T-printAccountBtn T-noprint" style="height: 24px;">
+				<i class="ace-icon fa fa-print"></i>打印
+			</button>
 		</div>
 	</div>
 	
 	<form action="">
 		<div class="viewAccountsMain">
-			<p>致 <span style="margin-left: 4px;">{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</span> &nbsp; (<span>{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}</span> <span>传真：</span>) <span>您好！</span></p>
-			<p>贵单位： <span>(收客单号)</span> <span>{{touristGroupDetail.orderNumber}}</span> <span style="margin-left: 6px;">(线路产品)</span> <span>{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}},</span> <span>此团费用结算列表如下,请审阅并盖章、签字执回我社！</span></p>
-		
-		<table class="whereQ whereTwo" style="width: 100%;">
-					<tr>
-						<td class="textaR-paR">人数</td>
-						<td class="textaR-paL"><span class="F-float F-count">{{touristGroupDetail.adultCount}}</span>大 <span class="F-float F-count">{{touristGroupDetail.childCount}}</span>小</td>
-						<td class="textaR-paR">联系人</td>
-						{{each touristGroupDetail.touristGroupMemberList as touristGroup}}
-						<td class="textaR-paL">
-							<span>{{touristGroup.name}}</span>
-							<span>{{touristGroup.mobileNumber}}</span>
-						</td>
-						{{/each}}
-					</tr>
-					<tr>
-						<td class="textaR-paR">出团日期</td>
-						<td class="textaR-paL">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						<td class="textaR-paR">完团日期</td>
-						<td class="textaR-paL">{{touristGroupDetail.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					</tr>
-					<tr>
-						<td class="textaR-paR">团号</td>
-						<td class="textaR-paL">2556453234213</td>
-						<td class="textaR-paR">针对客源</td>
-						<td class="textaR-paL">{{if touristGroupDetail.customerType == 0}}散客{{/if}}{{if touristGroupDetail.customerType == 1}}团体{{/if}}</td>
-					</tr>
-					<tr>
-						<td class="textaR-paR">导游</td>
-						<td class="textaR-paL">张三麻子</td>
-						<td class="textaR-paR">全陪</td>
-						<td class="textaR-paL"> <span>{{touristGroupDetail.accompanyGuideName}}</span> <span class="mar-l-5">{{touristGroupDetail.accompanyGuideMobile}}</span></td>
-					</tr>
-				</table>
+			<p>
+				<span>致</span> 
+				<span style="margin-left: 4px;">{{partnerAgency.travelAgencyName}}</span> 
+				<span class="mar-l-5"></span> (<span>{{partnerAgency.partnerAgencyContact}}</span> 
+				<span class="mar-l-3">{{partnerAgency.partnerAgencyName}}</span>) <span class="mar-l-5">您好！</span>
+			</p>
+			<p>
+				<span>贵单位：</span> 
+				<span>(收客单号)</span>
+				<span>{{touristGroup.orderNumber}}</span> 
+				<span class="mar-l-8">(线路产品)</span> <span>{{lineProduct.name}},</span> 
+				<span>现将该团费用结算列表如下,请审阅并盖章、签字回执我社！</span>
+			</p>
+			<table class="table whereQ whereTwo" style="width: 100%;">
+				<tr>
+					<td class="textaR-paR">人数</td>
+					<td class="textaR-paL">{{touristGroup.count}}</td>
+					<td class="textaR-paR">联系人</td>
+					<td class="textaR-paL"><span>{{touristGroup.contactName}}</span><span class="mar-l-5">{{touristGroup.contactPhone}}</span></td>
+				</tr>
+				<tr>
+					<td class="textaR-paR">出团日期</td>
+					<td class="textaR-paL">{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+					<td class="textaR-paR">完团日期</td>
+					<td class="textaR-paL">{{touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				</tr>
+				<tr>
+					<td class="textaR-paR">团号</td>
+					<td class="textaR-paL">{{touristGroup.tripNumber}}</td>
+					<td class="textaR-paR">针对客源</td>
+					<td class="textaR-paL">{{if touristGroup.customerType == 0}}散客{{/if}}{{if touristGroup.customerType == 1}}团体{{/if}}</td>
+				</tr>
+				<tr>
+					<td class="textaR-paR">导游</td>
+					<td class="textaR-paL">{{touristGroup.guidName}}</td>
+					<td class="textaR-paR">全陪</td>
+					<td class="textaR-paL"><span>{{touristGroup.accompanyGuideName}}</span><span class="mar-l-5">{{touristGroup.accompanyGuideMobile}}</span></td>
+				</tr>
+			</table>
 
 				<table class="table table-bordered"> 
 					<thead>
-						<tr>
+						<tr class="view-TranAccountsPrint" style="border: 1px solid #E2E2E2">
 							<th class="th-border" width="160">费用项</th>
 							<th class="th-border">数量</th>
 							<th class="th-border">单价</th>
@@ -58,7 +65,7 @@
 						</tr>
 					</thead>
 					<tbody class="addCostTbody">
-						{{each touristGroupDetail.touristGroupFeeList as touristGroup}}
+						{{each touristGroup.touristGroupFeeList as touristGroup}}
 							<tr data-entity-id="{{touristGroup.id}}">
 								<td>
 									{{touristGroup.name}}
@@ -73,7 +80,7 @@
 								<td>
 									<span class="F-float F-money">{{touristGroup.price*touristGroup.count}}</span>
 								</td>
-								<td>
+								<td class="textaR-paL">
 									{{touristGroup.remark}}
 								</td>
 
@@ -81,31 +88,42 @@
 								{{/each}}
 					</tbody>
 			</table>
-
-			<table class="whereQ" style="width: 100%;margin-top: -20px;">
+			<table class="table whereQ" style="width: 100%;margin-top: -20px;">
 				<tr>
 					<td style="text-align: right;padding-right:60px;width: 160px">应收</td>
-					<td class="textaR-paL">{{touristGroupDetail.needPayAllMoney}}</td>
+					<td class="textaR-paL">
+						<span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
+					</td>
 				</tr>
 				<tr>
 					<td style="text-align: right;padding-right:60px;width: 160px">已收</td>
-					<td class="textaR-paL">234.00</td>
+					<td class="textaR-paL">
+						<span class="F-float F-money">{{touristGroup.payedMoney}}</span>
+					</td>
 				</tr>
 				<tr>
 					<td style="text-align: right;padding-right:60px;width: 160px">现收</td>
-					<td class="textaR-paL">2131.00</td>
+					<td class="textaR-paL">
+						<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
+					</td>
 				</tr>
 				<tr>
 					<td style="text-align: right;padding-right:60px;width: 160px">未收</td>
-					<td class="textaR-paL">987.00</td>
+					<td class="textaR-paL">
+						<span class="F-float F-money">{{touristGroup.UnIncomeMoney}}</span>
+					</td>
 				</tr>
 				<tr>
-					<td colspan="2">请仔细阅读并盖章确认之后回传！谢谢！</td>
+					<td colspan="2"><span style="margin-left: 10px;">请仔细阅读并盖章确认之后回传！谢谢！</span></td>
 				</tr>
 			</table>
-			<p style="text-align: right;margin-top: 10px;"><span>外联销售：</span> <span>{{if !!touristGroupDetail.outOPUser}}{{touristGroupDetail.outOPUser.realName}}{{/if}}</span> <span>{{if !!touristGroupDetail.outOPUser}}{{touristGroupDetail.outOPUser.mobileNumber}}{{/if}}</span></p>
-			<p style="text-align: right;margin-top: -8px;">传真：028-32435465</p>
-			<p style="text-align: right;margin-top: -8px;"><span>2016.02.23</span> <span>16:30:45</span></p>
+			<p style="text-align: right;margin-top: 10px;"><span class="{{if !!touristGroup.outOPUserName || !!touristGroup.outOPUserName}}{{else}}hidden{{/if}}"><span>外联销售：</span> <span>{{touristGroup.outOPUserName}}</span> <span>{{touristGroup.outOPUserMobileNumberr}}</span></span></p>
+			<p style="text-align: right;margin-top: -8px;" class="{{if !!touristGroup.faxNumber}}{{else}}hidden{{/if}}">传真：{{touristGroup.faxNumber}}</p>
+			<p style="text-align: right;margin-top: -8px;"><span>{{touristGroup.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
 		</div>
 	</form>
+	<div class="form-inline col-xs-12 hidden" style="text-align: center;margin-top: 30px;"> 
+		<button class="btn btn-sm btn-primary T-btn-cancel T-noprint" style="height:24px;width: 75px;font-size: 12px;line-height: 10px;"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+	</div>
+	
 </div>
