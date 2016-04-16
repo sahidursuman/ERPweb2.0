@@ -1924,7 +1924,9 @@ $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
  * @return {[type]}      [description]
  */
 Tools.formatQuantile = function(data){
-	return data.replace(/,/g, '');
+	var str = data;
+	data = data.replace(/,/g, '');
+	return isNaN(data) ? str : data;
 };
 
 /**
