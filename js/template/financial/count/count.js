@@ -50,7 +50,10 @@ define(function(require, exports){
 	};
 	//列表头部
 	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+
+		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
+			console.log(Count.$searchArea.find(".T-time-status").data("value"));
 			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
@@ -60,7 +63,9 @@ define(function(require, exports){
 			endTime = Count.$searchArea.find('input[name=endTime]').val();
 			startTime = Count.$searchArea.find('input[name=startTime]').val();
 			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-		};
+			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value")
+		} 
+		timeStatus = timeStatus || 0
 		//修正页码
 		pageNo = pageNo || 0;
 		$.ajax({
@@ -75,7 +80,8 @@ define(function(require, exports){
                 startTime:startTime,
                 billStatus:status,
                 lineProductName:lineProductName,
-                guideName:guideName
+                guideName:guideName,
+                timeStatus : timeStatus
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -97,12 +103,13 @@ define(function(require, exports){
 		                startTime:startTime,
 		                billStatus:status,
 		                lineProductName:lineProductName,
-		                guideName:guideName
+		                guideName:guideName,
+		                timeStatus : timeStatus
 					};
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
                 	//格式化日期
-                	Count.formatDate(Count.$searchArea);
+                	Count.setDatePicker(Count.$searchArea.find('.datepicker'));
                 	//获取搜索区域的列表数据
                 	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
                 	Count.getLineproductData($lineProductObj);
@@ -114,6 +121,7 @@ define(function(require, exports){
 			}
 		});
 	};
+
 	//搜索区域事件
 	Count.initListHeaderEvents = function(){
 		var $searchObj = Count.$searchArea;
@@ -130,6 +138,13 @@ define(function(require, exports){
 			$(this).closest('div').find("span").text($(this).text());
 			Count.listCountHeader(0);
 		});
+        $searchObj.find(".T-time-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Count.listCountHeader(0);
+        });
 	};
 	//获取主体列表数据
 	Count.listCountBody = function($data){
@@ -199,6 +214,31 @@ define(function(require, exports){
 				//单团明细
 				var tripId = $(this).attr('data-entity-id');
 				Count.viewTripDetail(tripId);
+			} else if($that.hasClass('T-showLineInfo')){
+				var $tr = $that.closest('tr');
+                    $nextTr = $tr.nextAll('tr'),
+                    $icon = $that.find('i.fa'),
+                    isHide = 1,
+                    count = 0;
+                if($icon.hasClass('fa-plus')){
+                    $icon.removeClass('fa-plus').addClass('fa-minus');
+                    isHide = 0;
+                }else{
+                    $icon.removeClass('fa-minus').addClass('fa-plus');
+                    isHide = 1;
+                }
+                for(var i=0; i<$nextTr.length; i++){
+                    if(!!$nextTr.eq(i).attr('id')){
+                        break;
+                    }else{
+                        if(isHide === 1){
+                            $nextTr.eq(i).addClass('hidden');
+                        }else{
+                            $nextTr.eq(i).removeClass('hidden');
+                        }
+                    }
+                    count++;
+                }
 			}
 
 		});
@@ -685,8 +725,18 @@ define(function(require, exports){
 		//报账完成事件
 		$obj.find('.T-fanishAccount').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-            var financialTripPlanId = $(this).attr('data-entity-financial-id');
-            Count.saveTripCount(id,financialTripPlanId,$obj,3);
+			var checkTripIsReceived = Count.checkTripIsReceived($obj);
+			var financialTripPlanId = $(this).attr('data-entity-financial-id');
+			if(checkTripIsReceived){
+				showConfirmDialog($( "#confirm-dialog-message" ), 
+					'提交报账，团款现收将默认为已收到', function() {
+					Count.saveTripCount(id,financialTripPlanId,$obj,3);
+				});
+			}else{
+				Count.saveTripCount(id,financialTripPlanId,$obj,3);
+			};
+            
+            
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
@@ -759,18 +809,28 @@ define(function(require, exports){
 	};
 	//查看团款明细说明 viewCostRemarkTemplate
 	Count.viewCostDetail = function($obj,data){
-		var tr = $obj.closest('tr'),id = tr.attr('id');
+		var tr = $obj.closest('tr'),id = tr.attr('id'),
+			subStatus = tr.attr('subStatus'),
+        	isInnerTransferConfirm =tr.attr('isInnerTransferConfirm');
 		var tmp = {};
 		if(data.length>1){
 			for(var i = 0;i<data.length;i++){
 				if(id == data[i].id){
-					tmp.touristGroupFeeList = data[i].touristGroupFeeList
+					if(subStatus== 1){
+						tmp.touristGroupFeeList = data[i].touristGroupSubFeeList
+					}else{
+						tmp.touristGroupFeeList = data[i].touristGroupFeeList
+					};
 					break;
 				}
 				
 			}
 		}else{
-			tmp.touristGroupFeeList = data[0].touristGroupFeeList
+			if(subStatus== 1){
+				tmp.touristGroupFeeList = data[0].touristGroupSubFeeList
+			}else{
+				tmp.touristGroupFeeList = data[0].touristGroupFeeList
+			};
 		}
 		
 		var html = viewCostRemarkTemplate(tmp);
@@ -1479,7 +1539,7 @@ define(function(require, exports){
 		var html = '<tr class="oldData noSumRate">'+
 		'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 		'<td rowspan="2"><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
-		'<td>人头返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
+		'<td>人数返佣<input type="hidden" value="人数返佣" name="shopPolicy"></td>'+
 		'<td><input type="text" name="consumeMoney" class="w-80"/></td>'+
 		'<td><span style="color:#bbb;">查看</span></td>'+
 		'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
@@ -1773,8 +1833,9 @@ define(function(require, exports){
 			var $nextTr = $thisTr.nextAll(),
 				sumMoney = 0,//总金额
 				sumTravelMoney = 0,//社佣合计
-				sumGuideMoney = 0;//导佣合计				
-			for(var i = 2;i<$nextTr.length;i++){
+				sumGuideMoney = 0;//导佣合计
+						
+			for(var i = 1;i<$nextTr.length;i++){
 				var thatTdLen = $nextTr.eq(i).children('td').length,
 					$that = $nextTr.eq(i);
 				if($that.hasClass('sumMoney')){
@@ -2988,6 +3049,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url("shop","findAll"),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3142,6 +3206,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('selfpay','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3334,7 +3401,8 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busId: parents.find('input[name="busId"]').val()
+					busId: parents.find('input[name="busId"]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getAllBusCompanyList'),
@@ -3386,7 +3454,8 @@ define(function(require, exports){
 			var searchJson = {
 					seatCount:parents.find('input[name=seatCount]').val(),
 					brand:"",
-					busCompanyId:parents.find('input[name=companyId]').val()
+					busCompanyId:parents.find('input[name=companyId]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('busCompany','getLicenseNumbers'),
@@ -3433,7 +3502,8 @@ define(function(require, exports){
 			var searchJson = {
 					brand:"",
 					busId:parents.find('input[name=busId]').val(),
-					busCompanyId:parents.find('input[name=companyId]').val()
+					busCompanyId:parents.find('input[name=companyId]').val(),
+					menuKey:menuKey
 				};
 			$.ajax({
 				url:KingServices.build_url('bookingOrder','getSeatCountList'),
@@ -3470,6 +3540,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('restaurant','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3481,7 +3554,7 @@ define(function(require, exports){
 						}
 					}
 					var newItem = {
-						id:"",
+						id:-1,
 						value:"导游自选"
 					};
 					restaurantList.unshift(newItem)
@@ -3592,6 +3665,9 @@ define(function(require, exports){
 			$.ajax({
 				url:KingServices.build_url('hotel','findHotelList'),
 				type:'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
@@ -3695,6 +3771,9 @@ define(function(require, exports){
 		$.ajax({
 			url:KingServices.build_url('scenic','findAll'),
 			type:'POST',
+			data:{
+				menuKey:menuKey
+			},
 			showLoading:false,
 			success:function(data){
 				var result = showDialog(data);
@@ -3823,6 +3902,9 @@ define(function(require, exports){
 			$.ajax({
 				url:KingServices.build_url('ticket','findAll'),
 				type:'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
@@ -4396,7 +4478,8 @@ define(function(require, exports){
 		$tr.each(function(){
 			var data = {
 				id:$(this).attr('id'),
-				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val()
+				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val(),
+				isReceived:$(this).find('[name=receiveStatus]').val()
 			}
 			saveJson.touristGroupList.push(data);
 		});
@@ -5067,6 +5150,48 @@ define(function(require, exports){
 			Count.autoShopSumCost($target.eq(0), $parentObj);
 		}
 	};
+
+	//主页时间控件绑定
+	Count.setDatePicker = function($obj) {
+	    options = $.extend({}, {
+	        autoclose: true,
+	        todayHighlight: true,
+	        format: 'yyyy-mm-dd',
+	        language: 'zh-CN'
+	    });
+	    
+	    $obj.datepicker(options);
+	    var $start = $obj.eq(0),
+	    	$end = $obj.eq(1);
+	    $start.on("change",function(event){
+	     	event.preventDefault();
+	        var startDate = $(this).val(),
+	           	endDate = $end.val();
+	        $end.datepicker('setStartDate', startDate);
+	        if(endDate == ""){
+	        	$end.val("");
+	        } else if($end.val() < startDate){
+	        	$end.val(startDate);
+	        }
+	    });
+	    if (!!$start.val()) {
+	    	$start.trigger('change');
+	    }
+	    return $obj;
+	};
+	//校验团款的接受状态
+	Count.checkTripIsReceived = function($obj){
+		var $tripDetail = $obj.find('.T-tripDetail');
+		var $trArr = $tripDetail.find('tr');
+		var isReceived = false;
+		$trArr.each(function(i){
+			var receiveStatus = $(this).find('[name=receiveStatus]').val();
+			if(receiveStatus == 0){
+				isReceived = true;
+			};
+		});
+		return isReceived;
+	}
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

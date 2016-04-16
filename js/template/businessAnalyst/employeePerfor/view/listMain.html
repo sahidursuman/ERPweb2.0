@@ -1,5 +1,5 @@
 <div class="T-employeePerfor-Container">
-    <form class="form-horizontal T-search-area mar-b-20" onsubmit="return false;">
+    <form class="form-horizontal T-search-area mar-b-10" onsubmit="return false;">
         <label for="startTime">开始日期 </label>
         <input type="text" name="startTime" id="startTime" class="datepicker mar-r-10" placeholder="开始日期" value="" />
         <label for="endTime">结束日期 </label>
@@ -8,7 +8,8 @@
         <label>业绩单位</label>
         <select name="object" id="" class="T-select-employeerDept">
             <option value="1">员工</option>
-            <option value="2">部门</option>
+            <option value="2">业务部门</option>
+            <option value="3">子部门</option>
         </select>
         <select name="type" id="" class="T-select-opUserList mar-r-10">
             <option value="3">外联销售</option>
@@ -36,10 +37,10 @@
             <label>审核状态</label>
             <select name="billStatus" id="" class="mar-r-10">
                 <option value="">全部</option>
-                <option value="0">待报账</option>
-                <option value="1">待审核</option>
-                <option value="2">计调已审</option>
-                <option value="3">财务已审</option>
+                <option value="-1">待报账</option>
+                <option value="0">待审核</option>
+                <option value="1">计调已审</option>
+                <option value="2">财务已审</option>
             </select>
         </label>
 

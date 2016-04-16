@@ -46,7 +46,7 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: restaurant.$searchArea ? restaurant.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(restaurant.searchData);
@@ -143,6 +143,8 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
 
         $.ajax({
@@ -205,7 +207,8 @@ define(function(require, exports) {
         var ruleCheck = new FinRule(0);
 
         restaurant.init_event(args,$tab,"check");
-        Tools.setDatePicker($tab.find(".date-picker"),true);
+        Tools.setDatePicker($tab.find(".T-time"), true);
+        Tools.setDatePicker($tab.find(".T-checkTime"), true);
         FinancialService.updateUnpayMoney($tab,ruleCheck);
         restaurant.getRestaurantList($tab,false);
 
@@ -233,7 +236,10 @@ define(function(require, exports) {
                 accountInfo : $tab.find("input[name=accountInfo]").val(),
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
-                accountStatus : args.accountStatus
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
             };
             FinancialService.exportReport(argsDate,"exportArrangeRestaurantFinancial");
         });
@@ -258,6 +264,8 @@ define(function(require, exports) {
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
         if(args.autoPay == 1){
             args.isAutoPay = 0;
@@ -315,19 +323,21 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(restaurant.$clearTab,restaurant.clearTempData, new FinRule(args.isAutoPay== 2?3: 1));
-                                restaurant.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
-                                restaurant.clearTempSumDate = {
-                                    id : args.restaurantId,
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    restaurant.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(restaurant.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(restaurant.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = restaurant.$clearTab.find('input[name=remark]').val();
+                                    restaurant.clearTempSumDate = {
+                                        id : args.restaurantId,
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-number]').val() : restaurant.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? restaurant.$clearTab.find('input[name=cash-id]').val() : restaurant.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : restaurant.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : restaurant.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 restaurant.$clearTab.data('isEdited',false);
                                 args.pageNo = obj.curr -1;
@@ -345,7 +355,8 @@ define(function(require, exports) {
     restaurant.initClear = function(args,$tab){
         FinancialService.initPayEvent($tab);
         restaurant.init_event(args,$tab,"clear");
-        Tools.setDatePicker($tab.find(".date-picker"),true);
+        Tools.setDatePicker($tab.find(".T-time"), true);
+        Tools.setDatePicker($tab.find(".T-checkTime"), true);
         restaurant.getRestaurantList($tab,true);
 
         //搜索下拉事件
@@ -393,7 +404,7 @@ define(function(require, exports) {
                     billTime : $tab.find('input[name=tally-date]').val()
                 };
                 args.isAutoPay = 1;
-                restaurant.restaurantClear(args);
+                restaurant.restaurantClear(args,$tab);
             });
         });
 

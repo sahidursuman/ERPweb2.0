@@ -34,6 +34,10 @@
                         </li>
                     </ul>
                 </div>
+                <select name="orderBy" class="mar-r-10">
+                    <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                    <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+                </select>
                 <button class=" btn-sm search-btn  T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button>
             </div>
         </form>
@@ -78,7 +82,7 @@
                         <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
                         <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
                         <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
-                        <td class="F-float F-money"><span {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                        <td class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</td>
                         <td>{{if rs.allCheckCount != rs.checkedCount}}
                             <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}} {{if rs.allCheckCount == rs.checkedCount}}
                             <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}}

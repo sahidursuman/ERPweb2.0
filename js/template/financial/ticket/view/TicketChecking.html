@@ -105,7 +105,12 @@
                 <td class="F-float F-count">{{rs.memberCount}}</td>
                 <td class="F-float F-money">{{rs.reduceMoney}}</td>
                 <td class="F-float F-money">{{rs.needPayMoney}}</td>
-                <td class="T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}"><a class="cursor T-action T-payDetails">社付<span class="F-float F-money">{{rs.payedMoney}}{{if rs.isGuidePay != 1}}</span>，导付<span class="F-float F-money">{{rs.realGuidePayMoney}}</span>{{/if}}</a></td>
+                <td class="T-payedDetail align-left" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">
+                    <a class="T-action T-payDetails">
+                        <span class="in-block">社付<span class="F-float F-money">{{rs.payedMoney}}</span></span>
+                        {{if rs.isGuidePay != 1}}<span class="in-block">导付<span class="F-float F-money">{{rs.realGuidePayMoney}}</span></span>{{/if}}
+                    </a>
+                </td>
                 <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td><input type="text" class="col-sm-12 F-float F-money"  name="settlementMoney" value="{{rs.settlementMoney}}"{{if !!rs.isConfirmAccount}}disabled{{/if}}></td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>

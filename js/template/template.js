@@ -258,9 +258,9 @@
           default:
             return "金牌";
         }
-    }), template.helper("getPlanPayTypeOption", function(status) {
-        var res = "";
-        return status = status || 0, res += '<select name="payType"><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
+    }), template.helper("getPlanPayTypeOption", function(status, isDisabled) {
+        var res = "", dis = "";
+        return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="payType" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
         res += '<option value="1" ' + (1 == status ? "selected" : "") + ">刷卡</option>", 
         res += '<option value="2" ' + (2 == status ? "selected" : "") + ">签单</option></select>";
     }), template.helper("getPayTypeText", function(payType) {
@@ -279,6 +279,9 @@
 
           case 4:
             return "其他";
+
+          case 6:
+            return "冲抵";
 
           default:
             return "网付";
@@ -300,12 +303,15 @@
           default:
             return "";
         }
-    }), template.helper("getPayTypeOptions", function(payType) {
+    }), template.helper("getPayTypeOptions", function(payType, isBalance, isNetPay) {
         var options = "", start = 0;
         return options += '<option value="0" ' + (start++ == payType ? "selected" : "") + ">现金</option>", 
         options += '<option value="1" ' + (start++ == payType ? "selected" : "") + ">银行转账</option>", 
         start++, options += '<option value="3" ' + (start++ == payType ? "selected" : "") + ">支票</option>", 
-        options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>";
+        options += '<option value="4" ' + (start++ == payType ? "selected" : "") + ">其他</option>", 
+        isNetPay && (options += '<option value="5" ' + (start++ == payType ? "selected" : "") + ">网付</option>"), 
+        1 == isBalance && (options += '<option value="6" ' + (6 == payType ? "selected" : "") + ">冲抵</option>"), 
+        options;
     }), template.helper("getArrangeIcon", function(status) {
         switch (1 * status) {
           case 1:
@@ -348,8 +354,10 @@
           default:
             return "全程";
         }
-    }), template.helper("getTaskSelect", function(status, isCar) {
-        var str = [ '<select name="taskType">' ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ];
+    }), template.helper("getTaskSelect", function(status, isCar, isDisabled) {
+        var dis = "";
+        isDisabled && (dis = "disabled");
+        var str = [ '<select name="taskType" ' + dis + ">" ], desc = [ "全程", "接机", "送机", "前段", "中段", "后段" ];
         isCar && desc.push("小车接客");
         for (var i = 0, len = desc.length; len > i; i++) str.push('<option value="' + i + '" ' + (status == i ? "selected" : "") + ">" + desc[i] + "</option>");
         return str.push("</select>"), str.join("");
@@ -482,6 +490,9 @@
 
           case 7:
             return "导游提交报账";
+
+          case 8:
+            return "删除";
 
           default:
             return console.info("Other Type:type"), "其他类型";

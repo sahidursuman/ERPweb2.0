@@ -15,12 +15,25 @@
                 <input type="text" value="{{searchParam.guideName}}" name="chooseGuideRealName" placeholder="全部的导游" />
                 <input type="hidden" value="{{searchParam.guideId}}" name="guideId" />
             </div>
-            <div class="form-group mar-r-10">
-                <label class="control-label"><span>开始日期 </span></label>
-                <input type="text" value="{{searchParam.startTime}}" name="startTime" class=" datepicker" style="width:88px;" placeholder="开始日期" />
+            <div class="form-group btn-group T-time-status mar-r-10">
+                <button data-value="{{searchParam.timeStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                    <span>
+                        {{if searchParam.timeStatus == 0}}
+                            出团日期
+                        {{else}}
+                            完团日期
+                        {{/if}}
+                    </span>
+                    <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a data-value="0" href="javascript:void(0)">出团日期</a></li>
+                    <li><a data-value="1" href="javascript:void(0)">完团日期</a></li>
+                </ul>
             </div>
             <div class="form-group mar-r-10">
-                <label class="control-label"><span>结束日期 </span></label>
+                <input type="text" value="{{searchParam.startTime}}" name="startTime" class=" datepicker" style="width:88px;" placeholder="开始日期" />
+                <label class="control-label"><span>至</span></label>
                 <input type="text" value="{{searchParam.endTime}}" name="endTime" class=" datepicker" style="width:88px;" placeholder="结束日期" />
             </div>
             <div class="form-group btn-status btn-group mar-r-10">

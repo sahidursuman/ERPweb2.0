@@ -254,8 +254,9 @@ define(function(require, exports) {
 					}
 					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
+					data.touristGroupList = JSON.parse(data.touristGroupList);
 					
-					addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
+					Tools.addTab(menuKey+"-view","查看发团安排",viewTemplate(data));
 					var $tab = $("#tab-arrange_all-view-content");
 					$tab.find('.T-restaurant-name').each(function() {
 						var $name = $(this);
@@ -617,6 +618,21 @@ define(function(require, exports) {
 			}
 			if (noticeJson.length > 0) {
 				$this.text('已设置');
+			}
+		})
+
+		var setUpTourists = $tab.find('.T-setUp')
+		setUpTourists.each(function(i) {
+			var $this = setUpTourists.eq(i),
+				noticeJson = $this.attr('touristgroup');
+				
+			if (!!noticeJson && typeof noticeJson == 'string') {
+				noticeJson = JSON.parse(noticeJson);
+			}
+			if (noticeJson.length > 0) {
+				$this.text('已设置');
+			}else{
+				$this.text('点击设置');
 			}
 		})
 
@@ -1697,8 +1713,11 @@ define(function(require, exports) {
 			tr.eq(tr.length-1).find(".T-whichDaysContainer").html(selectText);
 		}else{
 			tripPlan.$editTab.find(".T-whichDaysContainer").each(function(index){
-				var val = ($(this).attr("value") || 1)*1;
-				var selectText = '<select class="w-100" name="whichDay">';
+				var val = ($(this).attr("value") || 1)*1,isDis = $(this).data('isconfirmaccount'), disabled = '';
+				if (isDis) {
+					disabled = 'disabled = "disabled"';
+				}
+				var selectText = '<select class="w-100" name="whichDay" '+disabled+'>';
 				max = (max >= val-1)? max: val-1;
 				min = (min <= val-1)? min: val-1;
 				console.info(max);
@@ -1918,6 +1937,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('insurance','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
                 showLoading: false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2023,6 +2045,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('guide', 'findAll'),
 				dataType: "json",
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success: function(data) {
 					var result = showDialog(data);
@@ -2115,7 +2140,8 @@ define(function(require, exports) {
 				showLoading: false,
 				data:{
 					brand:$tr.find("input[name=brand]").val(),
-					busCompanyId:$tr.find("input[name=busCompanyId]").val()
+					busCompanyId:$tr.find("input[name=busCompanyId]").val(),
+					menuKey:menuKey
 				},
 				success:function(data){
 					if(showDialog(data)){
@@ -2158,7 +2184,8 @@ define(function(require, exports) {
 				url: KingServices.build_url('bookingOrder','getBusBrandList'),
 				data:{
 					seatCount:$tr.find("[name=needSeatCount]").val(),
-					busCompanyId:$tr.find("[name=busCompanyId]").val()
+					busCompanyId:$tr.find("[name=busCompanyId]").val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -2207,7 +2234,8 @@ define(function(require, exports) {
 				url: KingServices.build_url('busCompany','getLicenseNumbers'),
 				data: {
 					seatCount:$tr.find("[name=needSeatCount]").val(),
-					brand:$tr.find("[name=brand]").val()
+					brand:$tr.find("[name=brand]").val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -2251,7 +2279,8 @@ define(function(require, exports) {
 					dataType: 'json',
 					showLoading: false,
 					data: {
-						id: ui.item.id
+						id: ui.item.id,
+						menuKey:menuKey
 					},
 				})
 				.done(function(data) {
@@ -2274,7 +2303,8 @@ define(function(require, exports) {
 				data:  {
 					seatCount: $tr.find("[name=needSeatCount]").val(),
 					brand: $tr.find("[name=brand]").val(),
-					busId: $tr.find('input[name="busId"]').val()
+					busId: $tr.find('input[name="busId"]').val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -2403,6 +2433,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('restaurant','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
                 showLoading:false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2510,7 +2543,8 @@ define(function(require, exports) {
                     data: "id=" + ui.item.id,
                     success: function(data) {
 						if(showDialog(data)){
-							$parents.find("input[name=managerName]").val(data.hotel.managerName +' '+ data.hotel.mobileNumber);
+							var number = data.hotel.telNumber ? data.hotel.telNumber : data.hotel.mobileNumber;
+							$parents.find("input[name=managerName]").val(data.hotel.managerName +' '+ number);
 							$parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
@@ -2525,7 +2559,10 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('hotel','findHotelListByLevel'),
                 showLoading:false,
-                data:"level=" + hotelStarValue,
+                data:{
+                	level:hotelStarValue,
+                	menuKey:menuKey
+                },
                 success: function(data) {
 					if(showDialog(data)){
 						var hotelList = JSON.parse(data.hotelList);
@@ -2569,7 +2606,8 @@ define(function(require, exports) {
                     data: {
                     	id: ui.item.id,
                     	whichDay: whichDay,
-                    	enterTime: enterTime
+                    	enterTime: enterTime,
+                    	menuKey:menuKey
                     },
                     success: function(data) {
 						if(showDialog(data)){
@@ -2636,6 +2674,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('scenic','findAll'),
                 type: 'POST',
+                data:{
+					menuKey:menuKey
+				},
                 showLoading: false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2765,6 +2806,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('shop','findAll'),
                 type: 'POST',
+                data:{
+					menuKey:menuKey
+				},
                 showLoading:false,
                 success: function(data) {
 					if(showDialog(data)){
@@ -2878,6 +2922,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('selfpay','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading: false,
 				success:function(data){
 					if(showDialog(data)){
@@ -2983,6 +3030,9 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('ticket','findAll'),
 				type: 'POST',
+				data:{
+					menuKey:menuKey
+				},
 				showLoading:false,
 				success:function(data){
 					if(showDialog(data)) {
