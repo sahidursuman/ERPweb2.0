@@ -1626,6 +1626,33 @@ define(function(require, exports){
 						guideManageFee[i].taskJson = JSON.parse(guideManageFee[i].taskJson);
 					};
 					data.tripIncomeMap.guideIncomeMap.guideIncomeMapList = guideManageFee;
+
+					var guidePay = data.tripPayMap.guidePayMap.guidePayMapList;
+					for(var i = 0;i<guidePay.length;i++){
+						guidePay[i].taskJson = JSON.parse(guidePay[i].taskJson);
+					};
+
+					//循环去除购物导拥、购物社佣的空格
+					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
+					for(var i = 0;i<tRateList.length;i++){
+						var itemList = tRateList[i].shopArrangeItemList;
+						for(var j = 0;j<itemList.length;j++){
+							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+						}
+					};
+
+					//循环去除购物导拥、购物社佣的空格
+					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
+					for(var i = 0;i<tRateList.length;i++){
+						var itemList = tRateList[i].shopArrangeItemList;
+						for(var j = 0;j<itemList.length;j++){
+							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+						}
+					};
+					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
+					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
 					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
