@@ -485,7 +485,7 @@ define(function(require, exports) {
             $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
             //$that = $(this),
             $parents = $that.closest('tr'),
-            memberCount = $parents.attr("data-entity-memberCount");
+            memberCount = $parents.attr("data-memberCount");
         //计算已选人数
         arrangeIndividual.choosenAdultAndChildCount(arrangeIndividual.$tab);
 
