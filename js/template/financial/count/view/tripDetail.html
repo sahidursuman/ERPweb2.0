@@ -315,7 +315,7 @@
                                                     </td><!-- 商品 -->
 
                                                     <td>
-                                                        <span class="F-float F-money sumConsumeMoney"></span>
+                                                        <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
                                                     </td><!-- 金额小计 -->
 
                                                     <td name="shopGuideName">
@@ -497,8 +497,8 @@
                                                         
                                                         <td>
                                                             <div class="div-h-30"></div>
-                                                            <span class="F-float F-money sumConsumeMoney"></span>
-                                                            <input name="sumConsumeMoney" readonly="readonly" type="hidden" />
+                                                            <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
+                                                            <input name="sumConsumeMoney" readonly="readonly" type="hidden" value="{{itemSet.consumeMoney}}" />
                                                         </td><!-- 金额小计 -->
 
                                                         <td name="shopGuideName">
@@ -525,7 +525,7 @@
                                                                     <div class="mar-t-5 div-h-30" index = "{{i+1}}">
                                                                         {{if index > 1}}
                                                                             <span class="F-float F-money consumeMoney">{{rs.consumeMoney}}</span>
-                                                                            <input name="consumeMoney" type="hidden" value="{{rs.consumeMoney}}"/>
+                                                                            <input name="shopGuideMoney" type="hidden" value="{{rs.consumeMoney}}"/>
                                                                         {{else}}
                                                                             -
                                                                         {{/if}}
