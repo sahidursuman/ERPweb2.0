@@ -195,6 +195,14 @@
                                                                                 </td>
                                                                             {{/if}}
                                                                         {{/each}}
+                                                                    {{else}}
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                     {{/if}}
                                                                 <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
                                                                     <span class="F-float F-money">{{shopIncome.needPayAllMoney}}</span>
@@ -230,6 +238,14 @@
                                                                     </tr>
                                                                     {{/if}}
                                                                 {{/each}}
+                                                            {{else}}
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                             {{/if}}
                                                         {{/each}}
                                                     {{/if}}
@@ -1587,13 +1603,13 @@
                                                                      {{item.adultCount}}大{{item.childCount}}小
                                                                 </td>
                                                                 <td>
-                                                                    {{item.startTime}}
+                                                                    {{item.startTime | dateFormat: 'yyyy-MM-dd'}}
                                                                 </td>
                                                                 <td>
                                                                     {{item.restaurantName}}
                                                                 </td>
                                                                 <td>
-                                                                    {{item.standardType}}
+                                                                    {{item.standardType }}
                                                                 </td>
                                                                 <td>
                                                                     {{item.price}}

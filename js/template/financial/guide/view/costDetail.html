@@ -279,27 +279,32 @@
                             <div class="widget-main">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
-                                    <tr class="view-accountsPrint">
-                                        <th class="th-border">司机</th>
-                                        <th class="th-border">车队</th>
-                                        <th class="th-border">品牌</th>
-                                        <th class="th-border">车牌号</th>
-                                        <th class="th-border">支付类型</th>
-                                        <th class="th-border">导付</th>
-                                        <th class="th-border">单据</th>
-                                    </tr></thead>
+                                        <tr class="view-accountsPrint">
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border">司机</th>
+                                            <th class="th-border">车队</th>
+                                            <th class="th-border">品牌</th>
+                                            <th class="th-border">车牌号</th>
+                                            <th class="th-border">支付类型</th>
+                                            <th class="th-border">导付</th>
+                                            <th class="th-border">单据</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                    {{each guideArranges.busList as item}}
-                                    <tr class="view-accountsPrint">
-                                        <td>{{item.driverName}}</td>
-                                        <td>{{item.companyName}}</td>
-                                        <td>{{item.brand}}</td>
-                                        <td>{{item.licenseNumber}}</td>
-                                        <td><span class="F-float F-money">{{item.realPayType}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
-                                    </tr>
-                                    {{/each}} 
+                                        {{each guideArranges.busList as item}}
+                                            <tr class="view-accountsPrint">
+                                                <td>{{item.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                                <td>{{item.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                                <td>{{item.driverName}}</td>
+                                                <td>{{item.companyName}}</td>
+                                                <td>{{item.brand}}</td>
+                                                <td>{{item.licenseNumber}}</td>
+                                                <td><span class="F-float F-money">{{item.realPayType}}</span></td>
+                                                <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
+                                                <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                            </tr>
+                                        {{/each}} 
                                     </tbody>
                                 </table>
                             </div>
