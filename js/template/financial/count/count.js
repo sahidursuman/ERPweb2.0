@@ -2010,7 +2010,19 @@ define(function(require, exports){
 			'<input name = "currGuideRemark" type = "text" />'+
 			'</div>';
 
-		
+		if($tr.hasClass('noSumRate')){
+			moneyHtml = '<div style="margin-top:10px;" index = '+(index+1)+'>'+
+			'-'+
+			'</div>';
+
+			imgHtml = '<div style="margin-top:10px;" index = '+(index+1)+'>'+
+			'-'+
+			'</div>';
+
+			remarkHtml = '<div style="margin-top:10px;" index = '+(index+1)+'>'+
+			'-'+
+			'</div>';
+		};
 		if(tdName == 'shopGuideName'){
 			$thisTd.append(guideHtml);
 			$nextTd.append(moneyHtml);
@@ -2180,7 +2192,9 @@ define(function(require, exports){
 				thisSmoney = Count.changeTwoDecimal($(this).find('input[name=shopGuideMoney]').val());
 			};
 		});
-
+		if($tr.hasClass('noSumRate')){
+			thisSmoney = $tr.find('input[name=sumConsumeMoney]').val();
+		};
 		$tr.find('input[name=shopGuideMoney]').each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumSmoney += sum; 
@@ -4858,29 +4872,32 @@ define(function(require, exports){
 	};
 	//自动校验输入格式
 	Count.calculateCost = function($obj){
-		var vl = $($obj).val();
-		if(vl.length == 0){
-			$($obj).val(0);
-		}else{
-			$($obj).val(Count.changeTwoDecimal(parseFloat(vl)));
-		}
-		if($($obj).attr('name') == 'travelAgencyRate' || $($obj).attr('name') == 'guideRate'){
+		var $tbody = $obj.closest('tbody');
+		if(!$tbody.hasClass('T-count-shopping')){
 			var vl = $($obj).val();
-			var rate = parseFloat(vl);
-			if(rate > 100){
-				$($obj).val(100);
+			if(vl.length == 0){
+				$($obj).val(0);
+			}else{
+				$($obj).val(Count.changeTwoDecimal(parseFloat(vl)));
 			}
-			var type = $($obj).attr("name") == "travelAgencyRate"?1:2;
-			var travelAgencyRate = Count.changeTwoDecimal(parseFloat($($obj).closest('tr').find("input[name=travelAgencyRate]").val()));
-			var guideRate = Count.changeTwoDecimal(parseFloat($($obj).closest('tr').find("input[name=guideRate]").val()));
-			var sumRate = travelAgencyRate + guideRate;
-			if(sumRate > 100) {
-				if(type == "1") {
-					//社佣
-					$($obj).closest('tr').find("input[name=travelAgencyRate]").val(100-guideRate);
-				} else if(type == "2") {
-					//导佣
-					$($obj).closest('tr').find("input[name=guideRate]").val(100-travelAgencyRate);
+			if($($obj).attr('name') == 'travelAgencyRate' || $($obj).attr('name') == 'guideRate'){
+				var vl = $($obj).val();
+				var rate = parseFloat(vl);
+				if(rate > 100){
+					$($obj).val(100);
+				}
+				var type = $($obj).attr("name") == "travelAgencyRate"?1:2;
+				var travelAgencyRate = Count.changeTwoDecimal(parseFloat($($obj).closest('tr').find("input[name=travelAgencyRate]").val()));
+				var guideRate = Count.changeTwoDecimal(parseFloat($($obj).closest('tr').find("input[name=guideRate]").val()));
+				var sumRate = travelAgencyRate + guideRate;
+				if(sumRate > 100) {
+					if(type == "1") {
+						//社佣
+						$($obj).closest('tr').find("input[name=travelAgencyRate]").val(100-guideRate);
+					} else if(type == "2") {
+						//导佣
+						$($obj).closest('tr').find("input[name=guideRate]").val(100-travelAgencyRate);
+					}
 				}
 			}
 		}
@@ -5383,7 +5400,7 @@ define(function(require, exports){
 				if(!!$that.attr('shopArrangeId')){
 					shopArrange.itemList = [],shopArrange.cashList = [];
 					shopArrange.cashList = Count.getShopCashGuideData($that);
-					var shopData = installBusAndPerson($that);//人头返佣数据
+					var shopData = installShopData($that);
 					shopArrange.itemList.push(shopData);
 					var $nextTr = $that.nextAll();
 					for(var j = 0;j<$nextTr.length;j++){
@@ -5405,7 +5422,7 @@ define(function(require, exports){
 					};
 					addShopArrange.itemList = [],addShopArrange.cashList = [];
 					addShopArrange.cashList = Count.getShopCashGuideData($that);//现收导游
-					var shopData = installBusAndPerson($that);
+					var shopData = installShopData($that);
 					addShopArrange.itemList.push(shopData);
 					for(var i = 0;i<$nextTr.length;i++){
 						var tdLen = $nextTr.eq(i).children('td').length,
@@ -5442,6 +5459,8 @@ define(function(require, exports){
 				};
 			
 		});
+		console.log(saveJson.shopArrangeList);
+		console.log(saveJson.addShopArrangeList);
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');
@@ -5959,7 +5978,7 @@ define(function(require, exports){
 		}
 		for(var i = 0;i<shopArange.length;i++){
 			var thisItem = shopArange[i].itemList;
-			for(var j = 0;j<thisItem.length;j++){
+			for(var j = 2;j<thisItem.length;j++){
 				if(thisItem[j].shopPolicyId == ''){
 					submitFlag.submitStatus = true;
 					submitFlag.submitMeaasge = '请选择商品';
@@ -5974,7 +5993,7 @@ define(function(require, exports){
 				submitFlag.submitStatus = true;
 				submitFlag.submitMeaasge = '请选择购物店';
 			}else{
-				for(var j = 0;j<thisItem.length;j++){
+				for(var j = 2;j<thisItem.length;j++){
 					if(thisItem[j].shopPolicyId == ''){
 						submitFlag.submitStatus = true;
 						submitFlag.submitMeaasge = '请选择商品';
@@ -6478,25 +6497,25 @@ define(function(require, exports){
 		var html = '<td name="shopGuideMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5"  index="1">'+
-					'<input name="shopGuideMoney" type="text" class="w-80"/>'+
+					'-'+
 				'</div>'+
 			'</td>'+
 			'<td name="imgTd" index="1">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<span style="color:#bbb;">查看</span>'+
+					'-'+
 				'</div>'+
 			'</td>'+
 			'<td name="billRemark" index="1">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="billRemark" type="text"/>'+
+					'-'+
 				'</div>'+
 			'</td>'+
 			'<td name="guideRate" index="1">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guideRate" type="text" class="w-50"/>'+
+					'<input name="guideRate" class="w-50" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="guideRateMoney" >'+
