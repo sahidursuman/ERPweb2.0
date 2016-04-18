@@ -385,12 +385,11 @@ define(function(require, exports) {
             FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
             $tab.find(".T-btn-autofill").on('click', function(event) {
                 event.preventDefault();
-                var $datepicker = $tab.find('.T-time');
                 if ($(this).hasClass('btn-primary')) {
                     if (autoValidator.form()) {
                         var argsData = FinancialService.autoPayJson(args.shopId, $tab, new FinRule(2), 1);
                         if (!argsData) return;
-                        FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(), function() {
+                        FinancialService.autoPayConfirm($searchArea.find(".T-time").eq(0).val(), $searchArea.find(".T-time").eq(1).val(), function() {
                             FinShop.autoFillMoney($tab,argsData);
                         });
                     }
