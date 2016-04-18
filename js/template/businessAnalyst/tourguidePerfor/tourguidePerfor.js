@@ -205,8 +205,11 @@ define(function(require, exports) {
 		$tab.find('.T-allMoney').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			var $that=$(this),tripPlanId=$that.attr('data-tripPlanId'),shopArrangeId=$that.attr('data-arrangeId');
-			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId);
+			var $that=$(this),
+				tripPlanId=$that.attr('data-tripPlanId'),
+				shopArrangeId=$that.attr('data-arrangeId'),
+				guideArrangeId = $that.attr('guideArrangeId');
+			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId,guideArrangeId);
 		});;
 	};
 	//获取控件中的值
