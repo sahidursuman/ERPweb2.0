@@ -5336,15 +5336,15 @@ define(function(require, exports){
 		var $tripDetail = $obj.find('.T-tripDetail'),
 		$tr = $tripDetail.find('tr');
 		$tr.each(function(){
-			var guideArrangeId = $tr.find('input[name=guideArrangeId]').val(),
-				guideName = $tr.find('input[name=guideName]').val();
-			if(!!$tr.find('.guideName').text()){
-				guideName = $tr.find('.guideName').text();
+			var $that = $(this),guideArrangeId = $that.find('input[name=guideArrangeId]').val(),
+				guideName = $that.find('input[name=guideName]').val();
+			if(!!$that.find('.guideName').text()){
+				guideName = $that.find('.guideName').text();
 			};
 			var data = {
-				id:$(this).attr('id'),
-				currentNeedPayMoney:$(this).find('input[name=currentNeedPayMoney]').val(),
-				isReceived:$(this).find('[name=receiveStatus]').val(),
+				id:$that.attr('id'),
+				currentNeedPayMoney:$that.find('input[name=currentNeedPayMoney]').val(),
+				isReceived:$that.find('[name=receiveStatus]').val(),
 				guideArrangeId:guideArrangeId,
 				guideName:guideName
 			}
