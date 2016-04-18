@@ -289,10 +289,22 @@ table tr td {
 }
 
 .th-border {
-    border: 1px solid #ececec!important;
+    /*border: 1px solid #ececec!important;*/
     background: #f7f8f8!important;
 }
 
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>td {
+    border-top: 1px solid #ddd;
+}
+
+.table>thead>tr>th:last-child {
+    border-right-color: #ddd;
+}
 .pitch {
     margin-left: 25px
 }
