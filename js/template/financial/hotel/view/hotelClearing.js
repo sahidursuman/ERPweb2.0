@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":297,"md5":"b70bf84e70ac4ff3868af264d9080988"}*/
+/*TMODJS:{"debug":true,"version":246,"md5":"b70bf84e70ac4ff3868af264d9080988"}*/
 define(function(require) {
     return require("../../../template")("financial/hotel/view/hotelClearing", function($data, $filename) {
         try {

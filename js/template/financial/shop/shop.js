@@ -389,7 +389,7 @@ define(function(require, exports) {
                     if (autoValidator.form()) {
                         var argsData = FinancialService.autoPayJson(args.shopId, $tab, new FinRule(2), 1);
                         if (!argsData) return;
-                        FinancialService.autoPayConfirm($datepicker.eq(0).val(), $datepicker.eq(1).val(), function() {
+                        FinancialService.autoPayConfirm($searchArea.find(".T-time").eq(0).val(), $searchArea.find(".T-time").eq(1).val(), function() {
                             FinShop.autoFillMoney($tab,argsData);
                         });
                     }

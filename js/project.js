@@ -685,6 +685,7 @@ var modalScripts = {
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
+    'arrange_guide': 'js/template/arrange/guide/guide.js',  // 导游安排
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
@@ -2166,9 +2167,9 @@ KingServices.getMainList = function(key, onlyStyle) {
  * @param  {[type]} shopArrangeId 购物安排ID
  * @return {[type]}               [description]
  */
-KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId)  {
+KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId,guideArrangeId)  {
 	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
-		module.viewConsumeMoney(tripPlanId, shopArrangeId);
+		module.viewConsumeMoney(tripPlanId,shopArrangeId,guideArrangeId);
 	});
 }
 
