@@ -7,7 +7,6 @@
             <th class="th-border">数量</th>
             <th class="th-border">应付</th>
             <th class="th-border">已付</th>
-            <th class="th-border">导游报账备注</th>
             <th class="th-border">对账状态</th>
         </tr>
     </thead>
@@ -23,7 +22,6 @@
                     <input name="realNeedPayMoney" value="{{arrange.realNeedPayMoney}}" type="hidden" />
                 </td>
                 <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
-                <td>{{arrange.payedMoney}}</td>
                 <td>
                     {{if arrange.isConfirmAccount == 0}}
                         未对账
