@@ -60,7 +60,6 @@ define(function(require, exports){
 
 		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
-			console.log(Count.$searchArea.find(".T-time-status").data("value"));
 			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
@@ -1622,6 +1621,39 @@ define(function(require, exports){
 					//校验每个明细tab是否应该显示
 					var showJson = Count.isShowTabByData(data);
 					data.showJson = showJson;
+					var guideManageFee = data.tripIncomeMap.guideIncomeMap.guideIncomeMapList;
+					for(var i = 0;i<guideManageFee.length;i++){
+						guideManageFee[i].taskJson = JSON.parse(guideManageFee[i].taskJson);
+					};
+					data.tripIncomeMap.guideIncomeMap.guideIncomeMapList = guideManageFee;
+
+					var guidePay = data.tripPayMap.guidePayMap.guidePayMapList;
+					for(var i = 0;i<guidePay.length;i++){
+						guidePay[i].taskJson = JSON.parse(guidePay[i].taskJson);
+					};
+
+					//循环去除购物导拥、购物社佣的空格
+					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
+					for(var i = 0;i<tRateList.length;i++){
+						var itemList = tRateList[i].shopArrangeItemList;
+						for(var j = 0;j<itemList.length;j++){
+							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+						}
+					};
+
+					//循环去除购物导拥、购物社佣的空格
+					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
+					for(var i = 0;i<tRateList.length;i++){
+						var itemList = tRateList[i].shopArrangeItemList;
+						for(var j = 0;j<itemList.length;j++){
+							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+						}
+					};
+					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
+					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
+					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -2287,7 +2319,7 @@ define(function(require, exports){
 			td_cnt = $thisTr.children('td').length;
 		};
 		var thisTdLen = $thisTr.children('td').length;
-		
+
 		function totalMoney ($tr){
 			var	$moneyObj = $tr.find('input[name=sumConsumeMoney]'),
 				$travelObj = $tr.find('input[name=travelAgencyRateMoney]'),
@@ -2937,7 +2969,7 @@ define(function(require, exports){
 			selfPayId = $tr.attr('selfPayId'),
 			gRate = 0,tRate = 0,CRmoney = 0;
 		if(!!selfPayId){
-			var id = $tr.find('input[name=selfItemId]').val(),whichDay = $tr.attr('whichDay'),
+			var id = $tr.find('input[name=selfPayItemId]').val(),whichDay = $tr.attr('whichDay'),
 				startTime = $parentObj.find('.tripPlanStartTime').val();
 			Count.getRateAfAddGuide($obj,id,whichDay,startTime);
 		}else{
