@@ -534,7 +534,7 @@
                 </div>
                 {{/if}}
                 
-                {{if !!guideArranges.otherListMap && guideArranges.otherListMap.length }}
+                {{if !!guideArranges.otherList && guideArranges.otherList.length }}
                 <!-- 现付其它费用 -->
                 <div class="col-sm-13 widget-container-col margin-top">
                     <div class=" ui-sortable-handle">
@@ -553,7 +553,7 @@
                                         <th class="th-border">单据</th>
                                     </tr></thead>
                                     <tbody>
-                                    {{each guideArranges.otherListMap as item}}
+                                    {{each guideArranges.otherList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
