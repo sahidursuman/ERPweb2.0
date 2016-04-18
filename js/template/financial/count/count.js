@@ -2199,6 +2199,9 @@ define(function(require, exports){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumSmoney += sum; 
 		});
+		if($tr.hasClass('noSumRate')){
+			sumSmoney = $tr.find('input[name=sumConsumeMoney]').val();
+		};
 		if(!!shopId){
 			switch(editFeildTagName) {
 				case 'travelAgencyRate':
@@ -2265,9 +2268,10 @@ define(function(require, exports){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumtMoney += sum;
 		});
-
-		$sumConsumeMoney.val(sumSGmoney)//金额小计
-		$showConsumeMoney.text(sumSGmoney);
+		if(!$tr.hasClass('noSumRate')){
+			$sumConsumeMoney.val(sumSGmoney)//金额小计
+			$showConsumeMoney.text(sumSGmoney);
+		};
 		sumMoney = Count.changeTwoDecimal(sumgMoney+sumtMoney);//购物收入
 
 	        
@@ -3851,14 +3855,13 @@ define(function(require, exports){
 								sumBus = Count.changeTwoDecimal(busNumber)*Count.changeTwoDecimal(ui.item.parkingRebateMoney);
 								$tr.find('input[name=shopId]').val(ui.item.id);
 								$tr.find('input[name=shopPolicy]').val('');
-								$tr.find('input[name=shopGuideMoney]').val(sumPerson);
-								$tr.next().find('input[name=shopGuideMoney]').val(sumBus);
-								$tr.find().val();
+								$tr.find('.sumConsumeMoney').text(sumPerson);
+								$tr.next().find('.sumConsumeMoney').text(sumBus);
+								$tr.find('input[name=sumConsumeMoney]').val(sumPerson);
+								$tr.next().find('input[name=sumConsumeMoney]').val(sumBus);
 								Count.getShopPolicy($tr,$parentObj);
-								Count.calculateCost($(this));
 								//计算金额
 								Count.autoShopSum($(this),$parentObj);
-								Count.autoShopSum(nextTd.find('input[name=shopGuideMoney]'),$parentObj);
 								Count.totalRebeatMoney($(this));
 							}
 						}
@@ -4873,19 +4876,19 @@ define(function(require, exports){
 	//自动校验输入格式
 	Count.calculateCost = function($obj){
 		var $tbody = $obj.closest('tbody');
-		if(!$tbody.hasClass('T-count-shopping')){
+		var vl = $($obj).val();
+		if(vl.length == 0){
+			$($obj).val(0);
+		}else{
+			$($obj).val(Count.changeTwoDecimal(parseFloat(vl)));
+		}
+		if($($obj).attr('name') == 'travelAgencyRate' || $($obj).attr('name') == 'guideRate'){
 			var vl = $($obj).val();
-			if(vl.length == 0){
-				$($obj).val(0);
-			}else{
-				$($obj).val(Count.changeTwoDecimal(parseFloat(vl)));
+			var rate = parseFloat(vl);
+			if(rate > 100){
+				$($obj).val(100);
 			}
-			if($($obj).attr('name') == 'travelAgencyRate' || $($obj).attr('name') == 'guideRate'){
-				var vl = $($obj).val();
-				var rate = parseFloat(vl);
-				if(rate > 100){
-					$($obj).val(100);
-				}
+			if(!$tbody.hasClass('T-count-shopping')){
 				var type = $($obj).attr("name") == "travelAgencyRate"?1:2;
 				var travelAgencyRate = Count.changeTwoDecimal(parseFloat($($obj).closest('tr').find("input[name=travelAgencyRate]").val()));
 				var guideRate = Count.changeTwoDecimal(parseFloat($($obj).closest('tr').find("input[name=guideRate]").val()));

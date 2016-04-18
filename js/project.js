@@ -2167,9 +2167,9 @@ KingServices.getMainList = function(key, onlyStyle) {
  * @param  {[type]} shopArrangeId 购物安排ID
  * @return {[type]}               [description]
  */
-KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId)  {
+KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId,guideArrangeId)  {
 	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
-		module.viewConsumeMoney(tripPlanId, shopArrangeId);
+		module.viewConsumeMoney(tripPlanId,shopArrangeId,guideArrangeId);
 	});
 }
 
