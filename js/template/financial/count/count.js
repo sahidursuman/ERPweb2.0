@@ -1904,7 +1904,7 @@ define(function(require, exports){
 				'</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,'shopGuideName');
-		var guideShopMoneyHtml = Count.shopPersonAndBusGuide();
+		var guideShopMoneyHtml = Count.shopPersonAndBusGuide($obj);
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><div class="div-h-30"></div>'+
 				'<input type="text" name="shopPolicy" style="width:90px;"/>'+
@@ -6471,45 +6471,59 @@ define(function(require, exports){
 	//新增安排单导html拼接
 	Count.addArrangeGuideHtml = function(td,tdName){
 		var	guideCount = Count.guide.listMap.length,
-			guideHtml = '',
-			rowSpan = 1;
-			if(tdName == 'currGuide'){
-				rowSpan = 2;
-			};
-		if(guideCount>1){
-			guideHtml = td;
-		}else{
-			var guideName = Count.guide.listMap[0].guideName,
-				guideArrangeId = Count.guide.listMap[0].id;
-			guideHtml = '<td name="'+tdName+'" rowspan="'+rowSpan+'">'+
+			guideName = Count.guide.listMap[0].guideName,
+			guideArrangeId = Count.guide.listMap[0].id,
+			guideHtml = '';
+		if(tdName == 'currGuide'){
+			guideHtml = '<td rowspan="2" name="'+tdName+'">'+
 				'<div class="div-h-30">'+
 				'</div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<span class="guideName">'+guideName+'</span>'+
 					'<input name="guideArrangeId" type="hidden" value="'+guideArrangeId+'"/>'+
 				'</div>'+
-			'</td>'
+			'</td>';
+		}else{
+			guideHtml = '<td name="'+tdName+'">'+
+				'<div class="div-h-30">'+
+				'</div>'+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<span class="guideName">'+guideName+'</span>'+
+					'<input name="guideArrangeId" type="hidden" value="'+guideArrangeId+'"/>'+
+				'</div>'+
+			'</td>';
 		};
+		if(guideCount>1){
+			guideHtml = td;
+		}
 		return guideHtml;
 	};
 	//购物人数返佣、停车返佣导游html
-	Count.shopPersonAndBusGuide = function(){
+	Count.shopPersonAndBusGuide = function($obj){
+		var shopGuideMoney = '-',
+				imgTd = '-',
+				billRemark = '-';
+		if(!!$obj){
+			shopGuideMoney = '<input name="shopGuideMoney" class="w-80" type="text">';
+			imgTd = '<span style="color:#bbb;">查看</span>';
+			billRemark = '<input name="billRemark" type="text">';
+		};
 		var html = '<td name="shopGuideMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5"  index="1">'+
-					'-'+
+					shopGuideMoney+
 				'</div>'+
 			'</td>'+
 			'<td name="imgTd" index="1">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'-'+
+					imgTd+
 				'</div>'+
 			'</td>'+
 			'<td name="billRemark" index="1">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'-'+
+					billRemark+
 				'</div>'+
 			'</td>'+
 			'<td name="guideRate" index="1">'+
