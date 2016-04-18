@@ -313,9 +313,26 @@ define(function(require, exports) {
     			index = funcs.index($this);
     		
     		if($this.is(":checked")){
+    			if($this.hasClass('T-arrange')){
+    				tr.find('.T-arrgItem').prop("checked",true);
+    			}else if($this.hasClass('T-arrgItem')){
+    				tr.find('.T-arrange').prop("checked",true);
+    			}
     			tr.find('.T-submenu-check').prop("checked",true);
     			user.checkAuth(tr);
     			user.checkMenu(this);
+    		} else {
+    			if($this.hasClass('T-arrange')){
+    				tr.find('.T-arrgItem').prop("checked",false);
+    			} else if($this.hasClass('T-arrgItem')){
+    				var check = false;
+    				tr.find('.T-arrgItem').each(function(index, el) {
+    					if($(this).is(":checked")){
+    						check = true;
+    					}
+    				});
+    				tr.find('.T-arrange').prop("checked",check);
+    			}
     		}
     	});
     	$container.find(".T-submenu input[type=radio]").on("click",function(){

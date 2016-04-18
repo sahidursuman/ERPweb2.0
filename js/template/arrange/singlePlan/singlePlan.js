@@ -842,7 +842,7 @@ define(function(require, exports) {
 
                     //散客拼团
                     if(!isInnerSinglePlan){
-                        $('#tab-arrange_individual-content').find('.T-visitorTourist-search').trigger('click');
+                        $('#tab-arrange_individual-content').find('.T-search').trigger('click');
                     }
                     
                 });             
@@ -927,6 +927,7 @@ define(function(require, exports) {
         $tab.find('.T-action-plan-list').append(list);
     }
     singlePlan.viewTripPlan = function(id, planType){
+        planType = 0;
         var html = T.viewTripPlanSingle, viewMenuKey = menuKey+"_single_view";
         $.ajax({
             url : KingServices.build_url("tripController", "viewTripPlan"),
@@ -949,6 +950,11 @@ define(function(require, exports) {
                 data.busCompanyArrange = JSON.parse(data.busCompanyArrange);
                 data.guideArrange = JSON.parse(data.guideArrange);
                 data.insuranceArrange = JSON.parse(data.insuranceArrange);
+                if (data.guideArrange.length) {
+                    for (var i = data.guideArrange.length - 1; i >= 0; i--) {
+                        data.guideArrange[i].taskJson = JSON.parse(data.guideArrange[i].taskJson);
+                    }
+                }
                 if (planType == 1) {
                     data.touristGroup = JSON.parse(data.touristGroup);
                     data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
@@ -1749,5 +1755,6 @@ define(function(require, exports) {
     //散客发团计划编辑
     exports.updateSingleTripPlan = singlePlan.updateSingleTripPlan;
     exports.addTripPlan = singlePlan.addTripPlan;
+    exports.viewTripPlan = singlePlan.viewTripPlan;
     exports.listTripPlanSingle = singlePlan.listTripPlanSingle;
 });

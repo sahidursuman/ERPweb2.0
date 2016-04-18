@@ -66,7 +66,7 @@
                         <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
                     </td>
                     <td><span class="fix-w-5">计划预支款:</span>
-                        <input type="text" name="guidePlanAllPreMoney" class="F-float F-money" value="{{basicInfo.guidePlanAllPreMoney}}">
+                        <span class="T-guidePlanAllPreMoney F-float F-money">{{basicInfo.guidePlanAllPreMoney}}</span>
                     </td>
                 </tr>
             </tbody>
@@ -281,9 +281,11 @@
                                 <col style="width:120px">
                                 <col style="width:100px">
                                 <col style="width:100px;">
-                                <col style="width:60px;">
-                                <col style="width:80px;">
+                                <col style="width:100px;">
+                                <col style="width:100px;">
                                 <col style="width:110px;">
+                                <col style="width:80px;">
+                                <col style="width:80px;">
                                 <col style="width:80px;">
                                 <col style="width:80px;">
                                 <col>
@@ -291,7 +293,6 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="th-border"><span class="necessary">*</span>指定报账导游</th>
                                     <th class="th-border"><span class="necessary">*</span>开始日期</th>
                                     <th class="th-border"><span class="necessary">*</span>结束日期</th>
                                     <th class="th-border">任务</th>
@@ -299,23 +300,63 @@
                                     <th class="th-border">联系电话</th>
                                     <th class="th-border">导服费</th>
                                     <th class="th-border">管理费</th>
+                                    <th class="th-border">计划预支款</th>
                                     <th class="th-border">备注</th>
                                     <th class="th-border">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{each guideList as guide}} {{if guide != "[]" || guide != null}}
-                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}" {{if guide.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                {{each guideList as guide index}} {{if guide != "[]" || guide != null}}
+                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}">
                                     <td>
-                                        <input type="radio" name='isAccountGuide' {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} checked="checked" {{/if}} {{if guide.isConfirmAccount ||basicInfo.status !=0 }} disabled="disabled" {{/if}}>
+                                        {{if guide.taskJson}}
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
+                                            <input type="text" name="startTime" class="datepicker" value="{{task.sTime | dateFormat:'yyyy-MM-dd'}}">
+                                        </div>
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask" data-index="0">
+                                            <input type="text" name="startTime" class="datepicker" value="">
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
-                                        <input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}"　{{if guide.isConfirmAccount}} disabled="disabled" {{/if}}>
+                                        {{if guide.taskJson}}
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
+                                            <input type="text" name="endTime" class="datepicker" value="{{task.eTime | dateFormat:'yyyy-MM-dd'}}">
+                                        </div>
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask" data-index="0">
+                                            <input type="text" name="endTime" class="datepicker" value="">
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
-                                        <input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}"　{{if guide.isConfirmAccount}} disabled="disabled" {{/if}}>
+                                        {{if guide.taskJson}}
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}}mar-t-5{{/if}}" data-index="{{i}}">
+                                        {{#task.tType | getTaskSelect}}
+                                            <label style="float:right; padding-top:0px;">
+                                                <button class="btn btn-sm btn-white {{if i == 0}}btn-success T-add{{else}}btn-danger T-del{{/if}} T-guideBtn">
+                                                    <i class="ace-icon fa {{if i == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
+                                                </button>
+                                            </label>
+                                        </div>
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask mar-t-5" data-index="0">
+                                        {{#0 | getTaskSelect}}
+                                            <label style="float:right; padding-top:0px;">
+                                                <button class="btn btn-sm btn-white btn-success T-add T-guideBtn">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </button>
+                                            </label>
+                                        </div>
+                                        {{/if}}
                                     </td>
-                                    <td>{{#guide.taskType | getTaskSelect: false, guide.isConfirmAccount}}</td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
                                             <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="w-80 chooseGuide" />
@@ -327,16 +368,16 @@
                                             {{/if}}
                                         </div>
                                     </td>
-                                    <!-- <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td> -->
                                     <td>
                                         <input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12" />
                                     </td>
                                     <td>
-                                        <input type="text" name="price" {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} value="{{guide.price}}" class="w-80 price F-float F-money" {{else}} class="w-80 price hidden" {{/if}} maxlength="9" {{if guide.isConfirmAccount}} disabled="disabled" {{/if}}/>
+                                        <input type="text" name="price" value="{{guide.price}}" class="w-80 F-float F-money"maxlength="9" />
                                     </td>
                                     <td>
-                                        <input type="text" name="manageFee" {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} value="{{guide.manageFee}}" class="w-80 price F-float F-money" {{else}} class="w-80 price hidden" {{/if}} maxlength="9" {{if guide.isConfirmAccount}} disabled="disabled" {{/if}}/>
+                                        <input type="text" name="manageFee" value="{{guide.manageFee}}" class="w-80 F-float F-money" maxlength="9" />
                                     </td>
+                                    <td><input class="F-float F-money" type="text" name="guidePlanPreMoney" value="{{guide.guidePlanPreMoney}}" /></td>
                                     <td>
                                         <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" {{if guide.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
@@ -664,7 +705,7 @@
                         <p class="requirementsPlan">原酒店计划要求：{{basicInfo.oldHotelRequire}}</p>{{/if}} {{if basicInfo.nowHotelRequire}}
                         <p class="requirementsPlan">现酒店计划要求：{{basicInfo.nowHotelRequire}}</p>{{/if}}
                         <div class="overflow-x min-w-1050">
-                            <table class="table table-striped table-bordered table-hover table-tripPlan-container w-1400">
+                            <table class="table table-striped table-bordered table-hover table-tripPlan-container w-1500">
                                 <colgroup>
                                     <col style="width:110px">
                                     <col style="width:90px;">
