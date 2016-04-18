@@ -5389,14 +5389,8 @@ define(function(require, exports){
 					for(var j = 0;j<$nextTr.length;j++){
 						var $thisTr = $nextTr.eq(j);
 						if($that.attr('shopId') == $thisTr.attr('shopId') && $that.attr('whichDay') == $thisTr.attr('whichDay') && !$thisTr.hasClass('sumMoney')){
-							if(j == 0){
-								var shopData = installBusAndPerson($thisTr);//停车返佣数据
-								shopArrange.itemList.push(shopData);
-							}else{
-								var shopData = installShopData($thisTr);
-								shopArrange.itemList.push(shopData);
-							}
-							
+							var shopData = installShopData($thisTr);
+							shopArrange.itemList.push(shopData);
 						};
 					};
 					saveJson.shopArrangeList.push(shopArrange);
@@ -5417,14 +5411,8 @@ define(function(require, exports){
 						var tdLen = $nextTr.eq(i).children('td').length,
 							$thisTr = $nextTr.eq(i);
 						if(tdLen < td_cnt && !$thisTr.hasClass('sumMoney')){
-							if(i == 0){
-								var shopData = installBusAndPerson($thisTr);
-								addShopArrange.itemList.push(shopData);
-							}else{
-								var shopData = installShopData($thisTr);
-								addShopArrange.itemList.push(shopData);
-							}
-							
+							var shopData = installShopData($thisTr);
+							addShopArrange.itemList.push(shopData);
 						}else{
 							break;
 						};
@@ -5449,28 +5437,6 @@ define(function(require, exports){
 						travelAgencyRate:Count.changeTwoDecimal(parseFloat($tr.find('input[name=travelAgencyRate]').val())/100),
 						travelAgencyRebateMoney:$tr.find('[name=travelAgencyRateMoney]').val(),
 						guideDetails:Count.getShopGuideData($tr),
-					};
-					return itemList;
-				};
-				function installBusAndPerson ($tr){							 
-					var shopPolicy = '',id='',shopPolicyId = $tr.find('[name=shopPolicyId]').val();
-					if(!!$tr.find('input[name=shopPolicy]').val()){
-						shopPolicy = $tr.find('[name=shopPolicy]').val();
-					}else{
-						shopPolicy = $tr.find('.shopPolicy').text();
-					};
-					if(!!$tr.find('input[name=shopPolicyArrId]').val()){
-						id = $tr.find('input[name=shopPolicyArrId]').val();
-					}
-					var itemList={
-						id:id,
-						shopPolicyId:shopPolicyId,
-						name:shopPolicy,
-						consumeMoney:Count.changeTwoDecimal($tr.find('input[name=sumConsumeMoney]').val()),
-						travelAgencyRate:Count.changeTwoDecimal(parseFloat($tr.find('input[name=travelAgencyRate]').val())/100),
-						travelAgencyRebateMoney:$tr.find('input[name=travelAgencyRateMoney]').val(),
-						guideMoney:$tr.find('input[name=shopGuideMoney]').val(),
-						billRemark:$tr.find('input[name=billRemark]').val(),
 					};
 					return itemList;
 				};
