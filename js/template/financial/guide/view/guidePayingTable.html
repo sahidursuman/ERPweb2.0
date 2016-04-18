@@ -1,6 +1,6 @@
 {{each list as guide}}
 <tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{ if (!!guide.payMoney) && isPayMoney }} data-change='true' {{/if}}>
-    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
+    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}" data-guidearrangeid = "{{guide.guideArrangeId}}">{{guide.tripNumber}}</a></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
     <td>{{if guide.guideAllPreMoney == 0}}

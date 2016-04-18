@@ -97,6 +97,9 @@ input {
     padding-right: 5px;
 }
 
+.div-h-30 {
+    height:30px;
+}
 
 /**
  * 设置自定义popover的样式
@@ -286,10 +289,22 @@ table tr td {
 }
 
 .th-border {
-    border: 1px solid #ececec!important;
+    /*border: 1px solid #ececec!important;*/
     background: #f7f8f8!important;
 }
 
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>td {
+    border-top: 1px solid #ddd;
+}
+
+.table>thead>tr>th:last-child {
+    border-right-color: #ddd;
+}
 .pitch {
     margin-left: 25px
 }
@@ -428,10 +443,16 @@ table tr td {
     margin: 0;
 }
 
+.mar-t-5 {
+    margin-top: 5px;
+}
+
 .mar-t-20 {
     margin-top: 20px;
 }
-
+.mar-t-30 {
+    margin-top: 30px;
+}
 .mar-t-10 {
     margin-top: 10px;
 }
@@ -485,6 +506,9 @@ table tr td {
     margin-right: 20px!important;
 }
 
+.mar-b-0 {
+    margin-bottom: 0px;
+}
 .mar-b-10 {
     margin-bottom: 10px;
 }
@@ -731,7 +755,6 @@ table tr td {
     border: 2px solid #5d5d5d;
     text-align: right;
 }
-
 
 /*restaurant时间宽度*/
 

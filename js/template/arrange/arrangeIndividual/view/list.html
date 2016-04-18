@@ -29,14 +29,16 @@
     </thead>
     <tbody class="T-arrageVisitor-list">
         {{each touristGroupList as touristGroupL}}
-        <tr data-value="{{touristGroupL.id}}" data-entity-id="{{touristGroupL.lineProductId}}" 
+        <tr data-value="{{touristGroupL.id}}" data-id="{{touristGroupL.lineProductId}}" 
          data-entity-partnerAgency="{{touristGroupL.partnerAgencyName}}"
-         data-entity-name="{{touristGroupL.lineProductName}}" 
-         data-entity-type="{{touristGroupL.lineProductType}}"
-         data-entity-days="{{touristGroupL.lineProductDays}}" 
-         data-entity-startTime="{{touristGroupL.startTime}}" 
-         data-entity-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}" 
-         class="tr-{{touristGroupL.lineProductId}}-{{touristGroupL.startTime}}" data-entity-adultCount="{{touristGroupL.adultCount}}" data-entity-childCount="{{touristGroupL.childCount}}">
+         data-name="{{touristGroupL.lineProductName}}" 
+         data-type="{{touristGroupL.lineProductType}}"
+         data-days="{{touristGroupL.lineProductDays}}"
+         data-startTime="{{touristGroupL.startTime}}" 
+         data-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}"
+         class="tr-{{touristGroupL.lineProductId}}-{{touristGroupL.startTime}}" 
+         data-adultCount="{{touristGroupL.adultCount}}"
+         data-childCount="{{touristGroupL.childCount}}">
             <td style="vertical-align:middle;padding: 5px;">
                 <label class="pos-rel">
                     <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label>

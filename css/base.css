@@ -301,6 +301,9 @@ input.datepicker:not([class^="col-"]) {
 .table tr .btn{
 	position: initial;
 }
+.busCompanyAddSubtractBtn tr .btn{
+	position: absolute;
+}
 .hct-button-right{
 	margin-top: -4px;
     float: right;
@@ -907,6 +910,11 @@ input.datepicker:not([class^="col-"]) {
 /*金额input的宽度*/
 .w-80 {
 	width: 80px;
+}
+
+/*导游名字输入框*/
+.w-70 {
+	width: 60px;
 }
 
 /*时间input的宽度*/
