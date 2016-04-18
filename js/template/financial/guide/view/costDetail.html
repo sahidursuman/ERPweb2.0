@@ -241,6 +241,7 @@
                                     <thead>
                                     <tr class="view-accountsPrint">
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">费用项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
                                         <th class="th-border">应收</th>
@@ -252,6 +253,7 @@
                                     {{each guideArranges.otherIncomeList as item}}
                                     <tr class="view-accountsPrint">
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.title}}</td>
                                         <td><span class="F-float F-money">{{item.price}}</span></td>
                                         <td><span class="F-float F-count">{{item.count}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
@@ -550,6 +552,7 @@
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead><tr class="view-accountsPrint">
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">费用项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
                                         <th class="th-border">支付类型</th>
@@ -560,6 +563,7 @@
                                     {{each guideArranges.otherList as item}}
                                     <tr class="view-accountsPrint">
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.name}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
