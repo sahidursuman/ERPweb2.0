@@ -28,7 +28,7 @@ define(function(require, exports) {
     //产品销量页面list
     PerformanceFun.listemployeePerfor = function() {
         var html = listMainTemplate();
-        addTab(menuKey, "员工业绩", html);
+        Tools.addTab(menuKey, "员工业绩", html);
         //初始化页面绑定事件
         PerformanceFun.init_event();
         PerformanceFun.first = true;
@@ -50,30 +50,34 @@ define(function(require, exports) {
 
         $searchArea.find('.T-select-employeerDept').on('change', function(event) {
             event.preventDefault();
-            var i = 0;
+            var index = 2;  // 默认第三个模板
 
             switch ($(this).val()*1) {
                 case 1: // 员工
                     $status.add($childDepartment).addClass('hidden');
                     $personType.removeClass('hidden');
 
+                    index = 0;
                     if ($personType.val() === '0') {
-                    	i = 1;
+                        index = 1;
                     }
                     break;
                 case 2: // 部门
                     $status.add($childDepartment).removeClass('hidden');
                     $personType.addClass('hidden');
                     PerformanceFun.setChildDepartmentList($childDepartment);
-                    i = 2;
+                    break;
+                case 3: // 子部门
+                    $personType.add($childDepartment).addClass('hidden');
+                    $status.removeClass('hidden');
                     break;
                 default:
                     break;
             }
 
-            var $current = $tab.find('.table-area').children().addClass('hidden').eq(i).removeClass('hidden');
+            var $current = $tab.find('.table-area').children().addClass('hidden').eq(index).removeClass('hidden');
 
-            if (i=== 2 || !$current.hasClass('hasData')) {
+            if (index === 2 || !$current.hasClass('hasData')) {
             	PerformanceFun.getList();
             }
         });
@@ -90,7 +94,8 @@ define(function(require, exports) {
 
     PerformanceFun.getList = function(page) {
         var args = PerformanceFun.$form.serializeJson(),
-            url, template, method, index = 0, totalFun;
+            url, template, method, index = 0, totalFun,
+            childGroupSearchMethod = 'findByChildGroup';
 
         switch (args.object * 1) {
             case 1:
@@ -109,21 +114,26 @@ define(function(require, exports) {
                 break;
             case 2:
                 if (!method) {
-                    method = 'findByChildGroup';
-                    if (!args.businessGroupId) {
-                        method = 'findByBusinessGroup';
+                    method = 'findByBusinessGroup';
+                    if (!!args.businessGroupId) {
+                        method = childGroupSearchMethod;
                     }
                 }
 
                 template = listDeptTemplate;
-                totalFun = PerformanceFun.initFindBusinessGroupTotal;
+                index = 2;
+                break;
+            case 3:
+                method = childGroupSearchMethod;
+                delete args.businessGroupId;
+                template = listDeptTemplate;
                 index = 2;
                 break;
             default:
                 return;
         }
 
-        delete args.object;
+        args.object;
         args.pageNo = page || 0;
 
         $.ajax({
@@ -136,10 +146,26 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
+                data.isChildGroup = method === childGroupSearchMethod;
+                //累加数据初始化
+                data.getAdultCount=0;
+                data.getChildCount=0;
+                data.getNotDirectAdultCount=0;
+                data.getNotDirectChildCount=0;
+                data.tripCount=0;
+                data.adultCount=0;
+                data.childCount=0;
+                data.transAdultCount=0;
+                data.transChildCount=0;
+                data.innerAdultCount=0;
+                data.innerChildCount=0;
+                data.orderCount=0;
                 var $container = PerformanceFun.$tab.find('.table-area').children().addClass('hidden')
                 .eq(index).html(template(data)).removeClass('hidden').addClass('hasData');
 
-                totalFun(args);
+                if (!!totalFun) {
+                    totalFun(args);
+                }
                 laypage({
                     cont: $container.find('.T-pagenation'),
                     pages: data.searchParam.totalPage, //总页数
@@ -163,7 +189,9 @@ define(function(require, exports) {
                 data: "searchParam=" + encodeURIComponent(JSON.stringify(args)),
             })
             .done(function(data) {
-                PerformanceFun.$tab.find('.T-totalCount').text(data.adultCount + "大" + data.childCount + "小");
+                var adultCount = data.adultCount || 0, 
+                    childCount = data.childCount || 0;
+                PerformanceFun.$tab.find('.T-totalCount').text(adultCount + "大" + childCount + "小");
             })
     }
 
@@ -188,11 +216,13 @@ define(function(require, exports) {
 
     //部门统计
     PerformanceFun.initFindBusinessGroupTotal = function(args) {
-    	var method = 'sumFindByBusinessGroup';
+    	var method = 'sumFindByChildGroup';
 
-    	if (!!args.businessGroupId) {
-    		method = 'sumFindByChildGroup';
-    	}
+        if (!!args.object && args.object==2 && !!args.businessGroupId) {
+            method = 'sumFindByChildGroup';
+        }else if (!!args.object && args.object==2 && !args.businessGroupId) {
+            method = 'sumFindByBusinessGroup';
+        }
 
         $.ajax({
                 url: KingServices.build_url("performanceOfUser", method),

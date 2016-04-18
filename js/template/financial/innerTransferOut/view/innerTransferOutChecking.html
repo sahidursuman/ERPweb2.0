@@ -17,13 +17,15 @@
                   <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
               </label>
               <label class="control-label mar-r-10">录入人：
-                
                   <select name="operater" style="margin-top:5px;">
                   <option value="">&nbsp;全部&nbsp;</option>
                   {{each operateTransUserList as operater}}
                       <option value="{{operater.id}}" {{if searchParam.operateUserId == operater.id}}selected="selected"{{/if}}>{{operater.realname}}</option>
                   {{/each}} 
                   </select>
+              </label>
+              <label class="control-label mar-r-10">游客：
+                  <input type="text" name="contactInfo" value="{{searchParam.contactInfo}}" placeholder="联系人或联系电话" />
               </label>
               <label>对账状态：</label>
               <div class="btn-group T-check-status mar-r-10">

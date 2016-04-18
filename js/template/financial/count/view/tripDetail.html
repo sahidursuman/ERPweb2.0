@@ -171,10 +171,12 @@
                     <tbody class="T-tripDetail">
                     <tr>
                    {{each touristGroups as touristGroup index}}
-                        <tr id="{{touristGroup.id}}">
+                        <tr id="{{touristGroup.id}}"
+                        subStatus = "{{touristGroup.subStatus}}" 
+                        isInnerTransferConfirm = "{{touristGroup.isInnerTransferConfirm}}">
                             <td>{{index+1}}</td>
                             <td>{{if touristGroup.partnerAgency}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
-                            <td style="text-align: left;padding-left: 15px;"><p>收客单号：{{touristGroup.orderNumber}}</p> <p>{{tripPlan.lineProduct.name}}</p></td>
+                            <td style="text-align: left;padding-left: 15px;"><p>收客单号：{{touristGroup.orderNumber}}</p> <p>{{touristGroup.lineProduct.name}}</p></td>
                             <td>
                                 <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
                                 <br/>
@@ -205,10 +207,19 @@
                                 {{/if}}
                             </td>
                             <td><span class="F-float F-money">{{touristGroup.payedMoney}}</span></td>
-                            <td><span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span></td>
                             <td>
-                                {{if touristGroup.subStatus == 0 || touristGroup.isConfirmAccount == 1}}
-                                <a href="#" class="T-viewCostDetail">
+                                <span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
+                                <span>
+                                    {{if touristGroup.isReceived  == 0}}
+                                        未收到
+                                    {{else}}
+                                        已收到
+                                    {{/if}}
+                                </span>
+                            </td>
+                            <td>
+                            <a href="#" class="T-viewCostDetail">
+                                {{if touristGroup.subStatus == 0 || touristGroup.isInnerTransferConfirm == 1}}
                                     {{each touristGroup.touristGroupFeeList as touristGroupFee}}
                                         {{touristGroupFee.name}} ：
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
@@ -220,8 +231,8 @@
                                         <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
                                         <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
                                     {{/each}}
-                                </a>
                                 {{/if}}
+                            </a>
                             </td>
                         </tr>
                     {{/each}}

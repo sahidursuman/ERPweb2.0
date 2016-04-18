@@ -145,6 +145,7 @@ define(function(require,exports) {
 			args.lineProductId = $tab.find('input[name=lineProductId]').val();
 			args.accountStatus = $tab.find('input[name=accountStatus]').val();
 			args.orderNumber = $tab.find('input[name=orderNumber]').val();
+			args.contactInfo = $tab.find('input[name=contactInfo]').val();
 			args.lineProductName = $tab.find('input[name=lineProductName]').val();
 			args.operateUserId= $tab.find('select[name=operater]').val();
 			args.startDate = $tab.find('input[name=startDate]').val();
@@ -332,7 +333,9 @@ define(function(require,exports) {
                     startDate: $tab.find('input[name=startDate]').val(),
                     endDate: $tab.find('input[name=endDate]').val(),
                     accountStatus : args.accountStatus,
-                    orderNumber : $tab.find('input[name=orderNumber]').val()
+                    orderNumber : $tab.find('input[name=orderNumber]').val(),
+                    contactInfo : $tab.find('input[name=contactInfo]').val(),
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             FinancialService.exportReport(argsData,"exportArrangeInnerTransferOutFinancial");
@@ -340,7 +343,7 @@ define(function(require,exports) {
 		//全选事件
 		FinancialService.initCheckBoxs($tab.find(".T-selectAll"),$tab.find('.T-checkList .T-checkbox'));
 		//展开事件
-		$tab.on('click', '.T-seeGroup' ,function(event){
+		$tab.off('click.seeGroup').on('click.seeGroup', '.T-seeGroup' ,function(event){
 			InnerTransferOut.viewGroup($(this));
         });
         //监听扣款输入框的改变
@@ -424,6 +427,7 @@ define(function(require,exports) {
 					args.pageNo = 0;
 					args.toBusinessGroupName = $tab.find('input[name=toBusinessGroupName]').val();
 					args.orderNumber = $tab.find('input[name=orderNumber]').val();
+					args.contactInfo = $tab.find('input[name=contactInfo]').val();
 					args.operateUserId = $tab.find('select[name=operater]').val();
 					InnerTransferOut.getListData($tab,args,2);
 					$tab.data("isEdited",true);
@@ -553,6 +557,7 @@ define(function(require,exports) {
 			args.lineProductId = $tab.find('input[name=lineProductId]').val();
 			args.lineProductName = $tab.find('input[name=lineProductName]').val();
 			args.orderNumber = $tab.find('input[name=orderNumber]').val();
+			args.contactInfo = $tab.find('input[name=contactInfo]').val();
 			args.operateUserId = $tab.find('select[name=operater]').val();
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();

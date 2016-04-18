@@ -109,7 +109,7 @@ define(function(require, exports) {
                         tmp.deleteTitle = '';
 
                         // can edit
-                        if (((tmp.status < 3 || tmp.status == 6) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                        if (((tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
                             tmp.canEdit = true;
                         } else {
                             tmp.canEdit = false;
@@ -118,14 +118,14 @@ define(function(require, exports) {
                                 tmp.editTitle = '内转成功，不能编辑';
                             } else if (tmp.isConfirmAccount) {
                                 tmp.editTitle = '客户账务已对账，不能编辑';
-                            } else {
+                            } else {/*
                                 switch(tmp.status*1) {
                                     case 5:
                                         tmp.editTitle = '该小组已经分段，不能编辑';
                                         break;
                                     default: 
                                         break;
-                                } 
+                                } */
                             }
                         }
 
@@ -358,7 +358,13 @@ define(function(require, exports) {
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
                             joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
-                            joinTrip[i].lineNeedPayAllMoney = joinTrip[i].lineInfo.needPayAllMoney;
+                            var str = "", isCurrent = joinTrip[i].lineInfo.isCurrent;
+                            if(isCurrent == 1){
+                                str = "他部 " + joinTrip[i].lineInfo.dutyDepartmentName + " ";
+                            }else if(isCurrent == 2){
+                                str = "外转 " + joinTrip[i].lineInfo.transferPartnerAgency + " ";
+                            }
+                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney, 2);
                             joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
                             joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         }
@@ -383,7 +389,7 @@ define(function(require, exports) {
                             var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
                             str = str && str +" ";
                             str = str.length > 10 ? str.substr(0, 10)  + "... " : str;
-                            joinTrip[i].hotelInputValue = str + joinTrip[i].hotelNeedPayAllMoney;
+                            joinTrip[i].hotelInputValue = str + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
                         joinTrip[i].lineJson = {
@@ -886,7 +892,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-110 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
@@ -1130,9 +1136,9 @@ define(function(require, exports) {
                         $that.closest('tr').find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
                         var str = moneyData.needPayAllMoney;
                         if(moneyData.isTransfer === 1){
-                            str = "他部  " + moneyData.dutyDepartmentName + "  " + moneyData.needPayAllMoney;
+                            str = "他部  " + moneyData.dutyDepartmentName + "  " + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }else if(moneyData.isTransfer === 2){
-                            str = "外转  " + moneyData.transferPartnerAgency + "  " + moneyData.needPayAllMoney;
+                            str = "外转  " + moneyData.transferPartnerAgency + "  " + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }
                         $that.val(str).data('json', JSON.stringify(moneyData)).trigger('blur');
                     }else{
@@ -1194,8 +1200,10 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="businessName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="businessName"]').data('id');
+                        baseInfo.dutySubDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutySubDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -1275,8 +1283,10 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="businessName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="businessName"]').data('id');
+                        baseInfo.dutySubDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutySubDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -1303,7 +1313,7 @@ define(function(require, exports) {
                         var str = baseInfo.hotelName || baseInfo.require;
                         str = str && str +" ";
                         str = str.length > 10 ? str.substr(0, 10)  + "... " : str;
-                        $that.val(str + moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                        $that.val(str + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }
@@ -1385,8 +1395,10 @@ define(function(require, exports) {
                         baseInfo.transferPartnerAgencyId = $layer.find('[name="transferPartnerAgency"]').data('id');
                     }else if($layer.find('.T-abversion').val() == "1"){
                         baseInfo.isTransfer = 1;
-                        baseInfo.dutyDepartmentName = $layer.find('[name="groupName"]').val();
-                        baseInfo.dutyDepartmentId = $layer.find('[name="groupName"]').data('id');
+                        baseInfo.dutyDepartmentName = $layer.find('[name="businessName"]').val();
+                        baseInfo.dutyDepartmentId = $layer.find('[name="businessName"]').data('id');
+                        baseInfo.dutySubDepartmentName = $layer.find('[name="groupName"]').val();
+                        baseInfo.dutySubDepartmentId = $layer.find('[name="groupName"]').data('id');
                         baseInfo.dutyUserName = $layer.find('[name="dutyUserName"]').val();
                         baseInfo.dutyUserId = $layer.find('[name="dutyUserName"]').data('id');
                     }else{
@@ -2172,23 +2184,39 @@ define(function(require, exports) {
             var $dutyDepartment = $target.closest('.layui-layer-content').find('[name="dutyDepartmentName"]');
             $dutyDepartment = $dutyDepartment.length > 0 ? $dutyDepartment : $target.closest('.layui-layer-content').find('[name="groupName"]');
             var businessGroupId = $dutyDepartment.data('id');
+            var type = $dutyDepartment.data('type');
+            var url = !!type ? KingServices.build_url('group', 'selectDutyUser') : KingServices.build_url('innerTransferOperation', 'getDutyOPUserList');
+            var data = !!type ? {"groupId" : businessGroupId} : {businessGroupId : businessGroupId};
             if(!!businessGroupId){
                 $.ajax({
-                    url: KingServices.build_url('group', 'selectDutyUser'),
+                    url: url,
                     type: 'post',
-                    data: {"groupId" : businessGroupId},
+                    data: data,
                     showLoading: false,
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var dutUserList = data.dutUserList;
-                        if (!!dutUserList) {
-                            for (var i = 0, len = dutUserList.length;i < len; i++) {
-                                dutUserList[i].value = dutUserList[i].realName;
-                            }
+                        if(!!type){
+                            var dutyUserList = data.dutyUserList;
+                            if (!!dutyUserList) {
+                                for (var i = 0, len = dutyUserList.length;i < len; i++) {
+                                    dutyUserList[i].value = dutyUserList[i].dutyUserName;
+                                    dutyUserList[i].id = dutyUserList[i].dutyUserId;
+                                }
 
-                            $target.autocomplete('option', 'source', dutUserList);
-                            $target.autocomplete('search', '');
+                                $target.autocomplete('option', 'source', dutyUserList);
+                                $target.autocomplete('search', '');
+                            }
+                        }else{
+                            var opUserList = data.opUserList;
+                            if (!!opUserList) {
+                                for (var i = 0, len = opUserList.length;i < len; i++) {
+                                    opUserList[i].value = opUserList[i].realName;
+                                }
+
+                                $target.autocomplete('option', 'source', opUserList);
+                                $target.autocomplete('search', '');
+                            }
                         }
                     }
                 });
@@ -2377,6 +2405,9 @@ define(function(require, exports) {
             buyInsurance : $tab.find('[name="buyInsurance"]').is(":checked") ? 1 : 0,
             orderNumber : $tab.find('[name="orderNumber"]').val()
         };
+        if(typeof data.baseInfo.touristGroupFee.touristGroupFeeJsonDel !== "object"){
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || null);
+        }
         var receiveDateArr = [];
         if(data.baseInfo.customerType === 0){
             //接团
@@ -2406,9 +2437,7 @@ define(function(require, exports) {
                         receiveOther : typeof receiveOther !== "object" ? JSON.parse(receiveOther || "{}") : receiveOther
                     };
                 receiveDateArr.push(receiveTripData.arriveTime);
-                if($.isEmptyObject(receiveTripData.receiveHotel.hotel)){
-                    delete receiveTripData.receiveHotel.hotel;
-                }
+                
                 if($.isEmptyObject(receiveTripData.receiveBus)){
                     receiveTripData.receiveBus = null;
                 }else{
@@ -2487,7 +2516,7 @@ define(function(require, exports) {
                 joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
-                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id')}] : null;
+                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : null;
             }
             if($.isEmptyObject(joinTripData.lineInfo)){
                 joinTripData.lineInfo = null;

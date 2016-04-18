@@ -17,23 +17,22 @@
                             <input type="hidden" value="{{lineProduct.id}}" name="lineProductId">
                             <input type="hidden" value="" name="quoteId">
                         </div>
-                        <label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
-                        <div class="col-sm-1">
-                            <label class="control-label"> {{if lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
-                        </div>
-                    
-                        <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
-                        <div class="col-sm-1">
-                            <label class="control-label T-lineProductDays" data-entity-days="{{lineProduct.days}}" name="days" value=""><span class="F-float F-count">{{lineProduct.days}}天</span></label>
-                        </div>
-                        <label class="col-sm-1 control-label no-padding-right">类别:</label>
+                        <label class="col-sm-1 control-label no-padding-right">线路类型:</label>
                         <div class="col-sm-1">
                             <label class="control-label T-lineProductType">{{lineProduct.type}}</label>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">天数:</label>
+                        <div class="col-sm-1">
+                            <label class="control-label T-lineProductDays" data-entity-days="{{lineProduct.days}}" name="days" value=""><span class="F-float F-count">{{lineProduct.days}}天</span></label>
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">针对客源:</label>
                         <div class="col-sm-1">
                             <label class="control-label T-lineProductCusType"> {{if lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
                         </div>
+                        <label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
+                        <div class="col-sm-1">
+                            <label class="control-label"> {{if lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
+                        </div>                        
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
@@ -253,7 +252,7 @@
 													<thead>
 														<tr>
 															<th class="th-border">保险公司</th>
-															<th class="th-border">保险类型</th>
+															<th class="th-border">险种</th>
 															<th class="th-border">成本价</th>
 															<th class="th-border">市场价</th>
 															<th class="th-border">备注</th>
@@ -906,25 +905,25 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 								<div class="col-sm-8">
-                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.includeFee}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12" maxLength="5000">{{if lineProduct != null}}{{lineProduct.includeFee}}{{/if}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="excludeFee" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.excludeFee}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="excludeFee" class="col-sm-12" maxLength="5000">{{if lineProduct != null}}{{lineProduct.excludeFee}}{{/if}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="lineFeature" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.lineFeature}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="lineFeature" class="col-sm-12" maxLength="5000">{{if lineProduct != null}}{{lineProduct.lineFeature}}{{/if}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="lineNotice" class="col-sm-12">{{if lineProduct != null}}{{lineProduct.lineNotice}}{{/if}}</textarea>
+                                    <textarea class="form-control" name="lineNotice" class="col-sm-12" maxLength="5000">{{if lineProduct != null}}{{lineProduct.lineNotice}}{{/if}}</textarea>
 								</div>   
 							</div>
 						</div>

@@ -100,8 +100,8 @@
 						<th>线路产品</th>
 						<th width="100">出团日期</th>
 						<th width="100">完团日期</th>
-						<th>线路应付</th>
-						<th class="T-is-hidden">返程住宿</th>
+						<th width="260">线路应付</th>
+						<th class="T-is-hidden" width="260">返程住宿</th>
 						<th width="95">本段现收团款</th>
 						<th>状态</th>
 						<th>操作</th>
@@ -118,11 +118,11 @@
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>
 						<td>
-							<input type="text" class="w-110 T-action T-line-cope hct-cursor" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付">
+							<input type="text" class="min-w-200 T-action T-line-cope hct-cursor" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付">
 							<a class="cursor T-action T-clear" data-status="partLine">清空</a>
 						</td>
 						<td class="T-is-hidden">
-							<input type="text" class="w-110 F-float F-money T-action T-hotel hct-cursor" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿">
+							<input type="text" class="min-w-200 F-float F-money T-action T-hotel hct-cursor" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿">
 							<a class="cursor T-action T-clear" data-status="partHotel">清空</a>
 						</td>
 						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>
