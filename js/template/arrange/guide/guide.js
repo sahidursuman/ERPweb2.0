@@ -240,7 +240,7 @@ define(function(require, exports) {
                 repeated = false;
 
                 for (var k = 0, end = j + 1; k < end; k ++) {
-                    for (var cur = 0, len = res[k].length, target; cur < len; cur ++) {
+                    for (var cur = 0, arrangeLen = res[k].length, target; cur < arrangeLen; cur ++) {
                         target = res[k][cur];
                         if ((target.startTime < tmp.startTime && target.endTime > tmp.startTime)  // 开始日期在中间
                             || (target.startTime < tmp.endTime && target.endTime > tmp.endTime)   // 结束日期在中间
@@ -252,7 +252,7 @@ define(function(require, exports) {
                         }
                     }
 
-                    if (cur === len) {
+                    if (cur === arrangeLen) {
                         // 找到合适的位置，未重复
                         res[k].push(tmp);
                         break;
