@@ -521,14 +521,24 @@
                                                         <td name="shopGuideMoney">
                                                             <div class="div-h-30"></div>
                                                             {{if itemSet.guideDetails.length}}
-                                                                {{each itemSet.guideDetails as rs index}}
-                                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                                        -
+                                                                {{each itemSet.guideDetails as rs i}}
+                                                                    <div class="mar-t-5 div-h-30" index = "{{i+1}}">
+                                                                        {{if index > 1}}
+                                                                            <span class="F-float F-money consumeMoney">{{rs.consumeMoney}}</span>
+                                                                            <input name="consumeMoney" type="hidden" value="{{rs.consumeMoney}}"/>
+                                                                        {{else}}
+                                                                            -
+                                                                        {{/if}}
                                                                     </div>
                                                                 {{/each}}
                                                             {{else}}
-                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                                    -
+                                                                <div class="mar-t-5 div-h-30" index = "1">
+                                                                    {{if index > 1}}
+                                                                        <span class="F-float F-money consumeMoney">0</span>
+                                                                        <input name="consumeMoney" type="hidden" value="0"/>
+                                                                    {{else}}
+                                                                        -
+                                                                    {{/if}}
                                                                 </div>
                                                             {{/if}}
                                                         </td><!-- 金额 -->
@@ -536,14 +546,26 @@
                                                         <td name="imgTd">
                                                             <div class="div-h-30"></div>
                                                             {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
-                                                                {{each itemSet.guideDetails as rs index}}
-                                                                    <div class="mar-t-5 div-h-30" style="height:24px;" index="{{index+1}}">
-                                                                        -
+                                                                {{each itemSet.guideDetails as rs i}}
+                                                                    <div class="mar-t-5 div-h-30" style="height:24px;" index="{{i+1}}">
+                                                                        {{if index > 1}}
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                                <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        {{else}}
+                                                                            -
+                                                                        {{/if}}
                                                                     </div>
                                                                 {{/each}}
                                                             {{else}}
                                                                 <div class="mar-t-5 div-h-30" index="1">
-                                                                    -
+                                                                    {{if index > 1}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{else}}
+                                                                        -
+                                                                    {{/if}}
                                                                 </div>
                                                             {{/if}}
                                                         </td><!-- 单据 -->
@@ -551,14 +573,22 @@
                                                         <td name="billRemark">
                                                             <div class="div-h-30"></div>
                                                             {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
-                                                                {{each itemSet.guideDetails as rs index}}
-                                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                                        -
+                                                                {{each itemSet.guideDetails as rs i}}
+                                                                    <div class="mar-t-5 div-h-30" index = "{{i+1}}">
+                                                                        {{if index > 1}}
+                                                                            <span class="billRemark">{{rs.billRemark}}</span>
+                                                                        {{else}}
+                                                                            -
+                                                                        {{/if}}
                                                                     </div>
                                                                 {{/each}}
                                                             {{else}}
                                                                 <div class="mar-t-5 div-h-30" index = "1">
-                                                                    -
+                                                                    {{if index > 1}}
+                                                                        <span class="billRemark">{{rs.billRemark}}</span>
+                                                                    {{else}}
+                                                                        -
+                                                                    {{/if}}
                                                                 </div>
                                                             {{/if}}
                                                         </td><!-- 打单备注 -->
