@@ -142,7 +142,7 @@ define(function(require, exports) {
 				//查看总打单金额
 				var shopArrangeId = $that.closest('tr').attr('shopArrangeId'),
 					tripPlanId = $that.closest('tr').attr('tripPlanId');
-				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId);
+				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId,-1);
 			};
 		});
 	};
@@ -150,13 +150,13 @@ define(function(require, exports) {
 	/**
 	 *展示点击总打单
 	 */
-	shopStat.viewConsumeMoney = function(tripPlanId,shopArrangeId){
+	shopStat.viewConsumeMoney = function(tripPlanId,shopArrangeId,guideArrangeId){
 		$.ajax({
 			url:KingServices.build_url('financial/shopAccount','consumeMoney'),
 			data:{
 				tripPlanId:tripPlanId,
 				shopArrangeId:shopArrangeId,
-				
+				guideArrangeId:guideArrangeId,
 			},
 			type:'POST',
 			showLoading:false,
