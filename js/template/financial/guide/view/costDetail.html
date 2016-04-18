@@ -3,20 +3,20 @@
         <table class="table table-striped table-bordered table-hover all T-main-table">
             <tbody>
                 <tr class="AccountingTable-print">
-                    <td  style="text-align:left"><label>团号: {{tripPlan.tripNumber}}</label></td>
-                    <td  style="text-align:left"><label>全陪: {{tripPlan.accompanyGuideName}}</label></td>
-                    <td  style="text-align:left"><label>团队人数:
+                    <td class="text-a-l"><label>团号: {{tripPlan.tripNumber}}</label></td>
+                    <td class="text-a-l"><label>全陪: {{tripPlan.accompanyGuideName}}</label></td>
+                    <td class="text-a-l"><label>团队人数:
                             <span class="F-float F-count">{{tripPlan.adultCount}}</span>大
-                            <span class="F-float F-count">{{tripPlan.childCount}}</span>小<span class="T-ProductDays" style="font-weight: bold;"></span></label></td>
+                            <span class="F-float F-count">{{tripPlan.childCount}}</span>小<span class="T-ProductDays"></span></label></td>
                     <td><a href="javascript:void(0)" class="T-export T-noprint" style="font-weight: bold;">打印</a></td>
                 </tr>
                 <tr>
-                    <td style="text-align:left"><label>线路：{{tripPlan.lineProductName}}</label></td>
-                    <td style="text-align:left"><label>天数：{{tripPlan.days}}</label></td>
-                    <td style="text-align:left"><label>
+                    <td class="text-a-l"><label>线路：{{tripPlan.lineProductName}}</label></td>
+                    <td class="text-a-l"><label>天数：{{tripPlan.days}}</label></td>
+                    <td class="text-a-l"><label>
                         出团日期：{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}
                     </label></td>
-                    <td style="text-align:left"><label>
+                    <td  class="text-a-l"><label>
                         完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}
                     </label></td>
 
@@ -24,7 +24,6 @@
             </tbody>
         </table>
     <div class="clearfix"></div>
-
 
     <div class="tabbable">
         <ul class="nav nav-tabs" id="myTab">
