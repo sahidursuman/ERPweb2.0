@@ -2790,6 +2790,27 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 
 /* 财务已收样式 */
 .in-block{display: inline-block;white-space:nowrap;}
+/*中转安排*/
+.hct-tab .hct-new-tab{
+    height: 40px;
+    background: #e9fbfe;
+    border-bottom: none;
+}    
+.hct-tab .hct-new-tab li{
+    width: 65px;
+    height: 40px;
+    margin-top: 0px;
+    
+}
+.hct-tab .hct-new-tab li a{
+    margin-top: 0px;
+    height: inherit!important;
+    background: none;
+    border:none;
+    box-shadow: none!important;
+    line-height: 25px;
+}
+
 .hct-tab .nav-tabs>li.active>a,.hct-tab .nav-tabs>li.active>a:hover, .hct-tab .nav-tabs>li.active>a:focus{
     color:#fff;
     border: none;
@@ -2800,9 +2821,6 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 .hct-max-model .box .tab-content{
     border: none;
     padding:14px 0px;
-}
-.T-hide{
-    display: none;
 }
 .hct-max-model .nav-tabs .hct-box{
     width: 150px;
