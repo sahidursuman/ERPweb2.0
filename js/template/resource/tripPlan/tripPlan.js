@@ -3613,6 +3613,9 @@ define(function(require, exports) {
 				}
 				guideArrangeList.push(guideJson);
 			}
+		}else{
+			showMessageDialog($("#confirm-dialog-message"),'至少安排一个导游')
+			return;
 		}
 		
 		//获取tripPlan
