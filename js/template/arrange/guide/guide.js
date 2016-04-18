@@ -58,6 +58,9 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     GuideArrange.initGuideList = function($form, page) {
+        // set default date
+        GuideArrange._setDefaultDate($form);
+
         var args = $form.serializeJson();
 
         args.pageNo = page || 0;
@@ -87,6 +90,24 @@ define(function(require, exports) {
             });
     };
 
+    GuideArrange._setDefaultDate = function($form) {
+        var $start = $form.find('input[name="startTime"]'),
+            $end = $form.find('input[name="endTime"]'),
+            start = $start.val(),
+            end = $end.val(),
+            today = Tools.addDay(new Date(), 0),
+            factor = 15;
+
+        if (!start && !end) {
+            $start.val(Tools.addDay(today, -factor));
+            $end.val(Tools.addDay(today, factor));
+        } else if (!start) {
+            $start.val(Tools.addDay(end, -factor));            
+        } else if (!end) {
+            end = Tools.addDay(start, factor);
+            $end.val(end > today?today: end);
+        }
+    };
     /**
      * 组织表格数据
      * @param  {object} guides 导游安排数据
