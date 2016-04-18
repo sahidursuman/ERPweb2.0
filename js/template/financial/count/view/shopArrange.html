@@ -78,8 +78,8 @@
 
                                         <td>
                                             <div class="div-h-30"></div>
-                                            <span class="F-float F-money sumConsumeMoney"></span>
-                                            <input name="sumConsumeMoney" type="hidden" />
+                                            <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
+                                            <input name="sumConsumeMoney" type="hidden" value="{{itemSet.consumeMoney}}" />
                                         </td><!-- 金额小计 -->
 
                                         <td name="shopGuideName">
@@ -378,8 +378,13 @@
                                 
                                 <td>
                                     <div class="div-h-30"></div>
-                                    <span class="F-float F-money sumConsumeMoney"></span>
-                                    <input name="sumConsumeMoney" type="hidden" />
+                                    {{if index == 1}}
+                                        <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
+                                        <input name="sumConsumeMoney" type="hidden" value="{{itemSet.consumeMoney}}" />
+                                    {{else}}
+                                        <span class="F-float F-money sumConsumeMoney"></span>
+                                        <input name="sumConsumeMoney" type="hidden" />
+                                    {{/if}}
                                 </td><!-- 金额小计 -->
 
                                  <td name="shopGuideName">

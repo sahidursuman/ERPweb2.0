@@ -343,7 +343,7 @@ define(function(require, exports){
 		$shopObj.find('input[type=hidden]').off('change').on('change',function(){
 			Count.calculateCost($(this));
 			//计算金额
-			Count.autoShopSum($(this),$obj);
+			Count.autoShopSumCost($(this),$obj);
 			Count.formatDays($(this),$obj);
 			Count.totalRebeatMoney($(this),$obj);
 		});
