@@ -567,7 +567,6 @@ define(function(require, exports) {
                     var result = showDialog(data);
                         if(result){
                             var imgUrl = data.ERP_IMG_URL;
-                                // data.imgUrl = imgUrl;
                             var html = viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,
