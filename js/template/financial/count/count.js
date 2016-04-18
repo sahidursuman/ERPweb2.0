@@ -3845,7 +3845,7 @@ define(function(require, exports){
 							if(ui.item != null){
 								var $tr = $(this).closest('tr'),
 									adultCount = 0,busNumber = 0,
-									sumPerson = 0,sumBus = 0,
+									sumPerson = 0,sumBus = 0,tMoney = 0,tRate = 0,
 									nextTd = $tr.next();
 								adultCount = $parentObj.find('.tripPlanAdultCount').val();
 								if($parentObj.find('.busNumber').val() != 0 ){
@@ -3859,6 +3859,9 @@ define(function(require, exports){
 								$tr.next().find('.sumConsumeMoney').text(sumBus);
 								$tr.find('input[name=sumConsumeMoney]').val(sumPerson);
 								$tr.next().find('input[name=sumConsumeMoney]').val(sumBus);
+								tRate = $tr.next().find('input[name=travelAgencyRate]').val();
+								tMoney = sumBus*(Math.round(tRate)/100);
+								$tr.next().find('input[name=travelAgencyRateMoney]').val(tMoney);
 								Count.getShopPolicy($tr,$parentObj);
 								//计算金额
 								Count.autoShopSum($(this),$parentObj);
@@ -6543,7 +6546,7 @@ define(function(require, exports){
 			'</td>'+
 			'<td>'+
 				'<div class="div-h-30"></div >'+
-				'<input name="travelAgencyRate" type="text" class="w-80"/>'+
+				'<input name="travelAgencyRate" type="text" class="w-80" value="100"/>'+
 			'</td>'+
 			'<td>'+
 				'<div class="div-h-30"></div>'+
