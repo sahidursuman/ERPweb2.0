@@ -878,9 +878,9 @@
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                                     {{if itemSet.badStatus == 1}}
-                                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                                        <span class="F-float F-money">{{rs.realNeedPayMoney}}</span>
                                                                     {{else}}
-                                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                                        <span class="F-float F-money">{{rs.realNeedPayMoney}}</span>
                                                                         <input type="hidden" name="realNeedPayMoney" value="{{rs.realNeedPayMoney}}"/>
                                                                     {{/if}}
                                                                 </div>
@@ -1206,9 +1206,9 @@
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                                     {{if itemSet.badStatus == 1}}
-                                                                        
+                                                                        <span class="F-float F-money">{{rs.realNeedPayMoney}}</span>
                                                                     {{else}}
-                                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                                        <span class="F-float F-money">{{rs.realNeedPayMoney}}</span>
                                                                         <input type="hidden" name="realNeedPayMoney" value="{{rs.realNeedPayMoney}}"/>
                                                                     {{/if}}
                                                                 </div>
