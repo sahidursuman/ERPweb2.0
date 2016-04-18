@@ -132,6 +132,8 @@ define(function(require, exports){
 			$tab = $('#tab-' + menuKey + '-content').off();
 
 			FinancialService.initPayEvent($tab);
+			// 必须在初始化之后，因为初始化的时候，修改了值
+			$tab.find('input[name="beginningBalance"]').val(args.beginningBalance || '');
 			Payment.getTotal(args,$tab);
 			Payment.ajaxInit(args);
 			Payment.$tab = $tab;
