@@ -147,23 +147,47 @@
                                         
                                         <td name="shopGuideMoney">
                                             <div class="div-h-30"></div>
-                                            <div class="div-h-30 mar-t-5" index="1">
-                                                -
-                                            </div> 
+                                            {{if itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                        -
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    -
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 金额 -->
                                             
                                         <td name="imgTd">
                                             <div class="div-h-30"></div>
-                                            <div class="div-h-30 mar-t-5" index="1">
-                                                -
-                                            </div>
+                                            {{if itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                        -
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    -
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 单据 -->
 
                                         <td name="billRemark">
                                             <div class="div-h-30"></div>
-                                            <div class="div-h-30 mar-t-5" index="1">
-                                                -
-                                            </div>
+                                            {{if itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                        -
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    -
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 打单备注 -->
 
                                         <td name="guideRate">
@@ -423,23 +447,47 @@
                                 
                                 <td name="shopGuideMoney">
                                     <div class="div-h-30"></div>
-                                    <div class="div-h-30 mar-t-5" index="1">
-                                        -
-                                    </div> 
+                                    {{if itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                -
+                                            </div>
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                            -
+                                        </div>
+                                    {{/if}} 
                                 </td><!-- 金额 -->
                                     
                                 <td name="imgTd">
                                     <div class="div-h-30"></div>
-                                    <div class="div-h-30 mar-t-5" index="1">
-                                        -
-                                    </div>  
+                                    {{if itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                -
+                                            </div>
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                            -
+                                        </div>
+                                    {{/if}} 
                                 </td><!-- 单据 -->
 
                                 <td name="billRemark">
                                     <div class="div-h-30"></div>
-                                    <div class="div-h-30 mar-t-5" index="1">
-                                        -
-                                    </div>                                   
+                                    {{if itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                -
+                                            </div>
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                            -
+                                        </div>
+                                    {{/if}}                                  
                                 </td><!-- 打单备注 -->
 
                                 <td name="guideRate">
