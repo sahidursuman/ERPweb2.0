@@ -242,6 +242,7 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">费用项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
                                         <th class="th-border">应收</th>
@@ -253,6 +254,7 @@
                                     {{each guideArranges.otherIncomeList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.title}}</td>
                                         <td><span class="F-float F-money">{{item.price}}</span></td>
                                         <td><span class="F-float F-count">{{item.count}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
