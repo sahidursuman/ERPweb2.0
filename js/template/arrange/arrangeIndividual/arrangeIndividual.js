@@ -149,14 +149,14 @@ define(function(require, exports) {
                 if (result) {
                     data.searchParam = data.searchParam;
                     data.touristGroupList = data.touristGroupList;
-                    if (customerType == 0) { //散拼
+                    if (formData.customerType == 0) { //散拼
                         var html = listTemplate(data);
                         html = filterUnAuth(html);
                         arrangeIndividual.$tab.find('.T-touristVisitor-list').html(html);
                         //初始化页面事件
-                        arrangeIndividual.init_visitorEvent();
+                        arrangeIndividual.initVisitorEvent();
                         //散拼分页选中效果
-                        arrangeIndividual.pagerChecked(customerType);
+                        arrangeIndividual.pagerChecked(formData.customerType);
                     }
                     // 绑定共用翻页组件
                     laypage({
@@ -485,7 +485,7 @@ define(function(require, exports) {
             $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
             //$that = $(this),
             $parents = $that.closest('tr'),
-            memberCount = $parents.attr("data-entity-memberCount");
+            memberCount = $parents.attr("data-memberCount");
         //计算已选人数
         arrangeIndividual.choosenAdultAndChildCount(arrangeIndividual.$tab);
 

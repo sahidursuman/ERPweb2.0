@@ -60,7 +60,6 @@ define(function(require, exports){
 
 		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
-			console.log(Count.$searchArea.find(".T-time-status").data("value"));
 			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
@@ -1622,6 +1621,39 @@ define(function(require, exports){
 					//校验每个明细tab是否应该显示
 					var showJson = Count.isShowTabByData(data);
 					data.showJson = showJson;
+					var guideManageFee = data.tripIncomeMap.guideIncomeMap.guideIncomeMapList;
+					for(var i = 0;i<guideManageFee.length;i++){
+						guideManageFee[i].taskJson = JSON.parse(guideManageFee[i].taskJson);
+					};
+					data.tripIncomeMap.guideIncomeMap.guideIncomeMapList = guideManageFee;
+
+					var guidePay = data.tripPayMap.guidePayMap.guidePayMapList;
+					for(var i = 0;i<guidePay.length;i++){
+						guidePay[i].taskJson = JSON.parse(guidePay[i].taskJson);
+					};
+
+					//循环去除购物导拥、购物社佣的空格
+					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
+					for(var i = 0;i<tRateList.length;i++){
+						var itemList = tRateList[i].shopArrangeItemList;
+						for(var j = 0;j<itemList.length;j++){
+							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+						}
+					};
+
+					//循环去除购物导拥、购物社佣的空格
+					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
+					for(var i = 0;i<tRateList.length;i++){
+						var itemList = tRateList[i].shopArrangeItemList;
+						for(var j = 0;j<itemList.length;j++){
+							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+						}
+					};
+					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
+					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
+					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -1801,7 +1833,7 @@ define(function(require, exports){
 			'</td>'+
 			'<td rowspan="2">未对账&nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
 			'</tr>'+
-			'<tr arrangeType="shopArrange">'+
+			'<tr arrangeType="shopArrange" class="noSumRate">'+
 			'<td><span class="shopPolicy">停车返佣</span>'+
 				'<button class="btn btn-success btn-sm btn-white T-addShop pull-right">'+ 
 					'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
@@ -2287,7 +2319,7 @@ define(function(require, exports){
 			td_cnt = $thisTr.children('td').length;
 		};
 		var thisTdLen = $thisTr.children('td').length;
-		
+
 		function totalMoney ($tr){
 			var	$moneyObj = $tr.find('input[name=sumConsumeMoney]'),
 				$travelObj = $tr.find('input[name=travelAgencyRateMoney]'),
@@ -2937,7 +2969,7 @@ define(function(require, exports){
 			selfPayId = $tr.attr('selfPayId'),
 			gRate = 0,tRate = 0,CRmoney = 0;
 		if(!!selfPayId){
-			var id = $tr.find('input[name=selfItemId]').val(),whichDay = $tr.attr('whichDay'),
+			var id = $tr.find('input[name=selfPayItemId]').val(),whichDay = $tr.attr('whichDay'),
 				startTime = $parentObj.find('.tripPlanStartTime').val();
 			Count.getRateAfAddGuide($obj,id,whichDay,startTime);
 		}else{
@@ -3412,7 +3444,7 @@ define(function(require, exports){
 	Count.delRestArrange = function($obj,$parentObj){
 
 		var $tr = $obj.closest('tr');
-		var restArrId = $tr.attr('restaurantArrangeId');
+		var restArrId = $tr.find('input[name=restaurantArrangeId]').val();
 		if(!!restArrId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 				Count.delArrangeData(restArrId,'restaurant',removeItem);
@@ -3470,7 +3502,7 @@ define(function(require, exports){
 	//删除酒店安排
 	Count.delHotelArrange = function($obj,$parentObj){
 		var $tr = $obj.closest('tr');
-		var hotelArrangeId = $tr.attr('hotelArrangeId');
+		var hotelArrangeId = $tr.find('input[name=hotelArrangeId]').val();
 		if(!!hotelArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 				Count.delArrangeData(hotelArrangeId,'hotel',removeItem);
@@ -3529,7 +3561,7 @@ define(function(require, exports){
 	//删除景区安排
 	Count.delSecnicArrange = function($obj,$parentObj){
 		var $tr = $obj.closest('tr');
-		var scenicArrangeId = $tr.attr('scenicArrangeId');
+		var scenicArrangeId = $tr.find('input[name=scenicArrangeId]').val();
 		if(!!scenicArrangeId){
 			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
 				Count.delArrangeData(scenicArrangeId,'scenic',removeItem);
@@ -3710,6 +3742,12 @@ define(function(require, exports){
 				sumCount = 0,
 				sumPay = 0,
 				realCount = 0;
+			if(!!$tr.find('input[name=badStatus]').val()){
+					badStatus = $tr.find('input[name=badStatus]').val();
+				};
+			if(!!$tr.find('input[name=isConfirmAccount]').val()){
+				isConfirmAccount = $tr.find('input[name=isConfirmAccount]').val();
+			};
 			guideRealCount.each(function(){
 				var sum = Count.changeTwoDecimal($(this).val());
 				sumCount += sum
@@ -5596,7 +5634,7 @@ define(function(require, exports){
 		var $restObj = $obj.find('.T-count-restaurant'),
 		$tr = $restObj.find('tr');
 		$tr.each(function(){
-			var id = '',restaurantArrangeId = $(this).attr('restaurantArrangeId'),
+			var id = '',restaurantArrangeId = $(this).find('input[name=restaurantArrangeId]').val(),
 				restaurantId = '';
 				whichDay = $(this).find('[name="whichDay"]').val(),
 				restaurantName = $(this).find('[name=restaurantName]').val();
@@ -5609,7 +5647,7 @@ define(function(require, exports){
 				if($(this).attr('isChoose')==1){
 					restaurantId = $(this).find('select[name=chooseRest]').val()
 				};
-			if($(this).attr('restaurantArrangeId')){
+			if(!!restaurantArrangeId){
 				var restaurantArrange = {
 					id:restaurantArrangeId,
 					whichDay:whichDay,
@@ -5640,7 +5678,7 @@ define(function(require, exports){
 		var $hotelObj = $obj.find('.T-count-hotel'),
 		$tr = $hotelObj.find('tr');
 		$tr.each(function(){
-			var id = '',hotelArrangeId = $(this).attr('hotelArrangeId'),
+			var id = '',hotelArrangeId = $(this).find('input[name=hotelArrangeId]').val(),
 				whichDay = $(this).find('[name="whichDay"]').val(),
 				hotelName = $(this).find('[name=hotelName]').val();
 				if(!!$(this).find('.hotelName').text()){
@@ -5679,7 +5717,7 @@ define(function(require, exports){
 		var $scenicObj = $obj.find('.T-count-scenic'),
 		$tr = $scenicObj.find('tr');
 		$tr.each(function(){
-			var id = '',scenicArrangeId = $(this).attr('scenicArrangeId'),
+			var id = '',scenicArrangeId = $(this).find('input[name=scenicArrangeId]').val(),
 			whichDay = $(this).find('[name="whichDay"]').val(),
 			scenicName = $(this).find('[name=scenicName]').val();
 			if(!!$(this).find('.scenicName').text()){

@@ -183,13 +183,13 @@
                                                                                         <span style="color:#bbb;">查看</span>
                                                                                     {{/if}}
                                                                                 </td>
-                                                                                <td>{{item.travelAgencyRate*100}}</td>
+                                                                                <td>{{item.travelAgencyRate}}</td>
                                                                                 <td>
                                                                                     <span class="F-float F-money">
                                                                                         {{item.travelAgencyRebateMoney}}
                                                                                     </span>
                                                                                 </td>
-                                                                                <td>{{item.guideRate*100}}</td>
+                                                                                <td>{{item.guideRate}}</td>
                                                                                 <td>
                                                                                     <span class="F-float F-money">{{item.guideRebateMoney}}</span>
                                                                                 </td>
@@ -217,13 +217,13 @@
                                                                                 <span style="color:#bbb;">查看</span>
                                                                             {{/if}}
                                                                         </td>
-                                                                        <td>{{item.travelAgencyRate*100}}</td>
+                                                                        <td>{{item.travelAgencyRate}}</td>
                                                                         <td>
                                                                             <span class="F-float F-money">
                                                                                 {{item.travelAgencyRebateMoney}}
                                                                             </span>
                                                                         </td>
-                                                                        <td>{{item.guideRate*100}}</td>
+                                                                        <td>{{item.guideRate}}</td>
                                                                         <td>
                                                                             <span class="F-float F-money">{{item.guideRebateMoney}}</span>
                                                                         </td>
@@ -360,25 +360,49 @@
                                                         {{each tripIncomeMap.guideIncomeMap.guideIncomeMapList as item}}
                                                             <tr class="view-accountsPrint">
                                                                 <td>
-                                                                    {{item.startTime}}
-                                                                </td>
-                                                                <td>
-                                                                    {{item.endTime}}
-                                                                </td>
-                                                                <td>
-                                                                    {{if item.taskType == 0}}
-                                                                        全程
-                                                                    {{else if item.taskType == 1}}
-                                                                        接机
-                                                                    {{else if item.taskType == 2}}
-                                                                        送机
-                                                                    {{else if item.taskType == 3}}
-                                                                        前段
-                                                                    {{else if item.taskType == 4}}
-                                                                        中段
-                                                                    {{else if item.taskType == 5}}
-                                                                        后段
+                                                                    {{if item.taskJson.length}}
+                                                                        {{each item.taskJson as rs i}}
+                                                                            <div>
+                                                                                {{rs.sTime}}
+                                                                            </div>
+                                                                        {{/each}}
+                                                                    {{else}}
+                                                                        -    
                                                                     {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.taskJson.length}}
+                                                                        {{each item.taskJson as rs i}}
+                                                                            <div>
+                                                                                {{rs.eTime}}
+                                                                            </div>
+                                                                        {{/each}}
+                                                                    {{else}}
+                                                                        -    
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                {{if item.taskJson.length}}
+                                                                    {{each item.taskJson as rs i}}
+                                                                        <div>
+                                                                            {{if rs.tType == 0}}
+                                                                                全程
+                                                                            {{else if rs.tType == 1}}
+                                                                                接机
+                                                                            {{else if rs.tType == 2}}
+                                                                                送机
+                                                                            {{else if rs.tType == 3}}
+                                                                                前段
+                                                                            {{else if rs.tType == 4}}
+                                                                                中段
+                                                                            {{else if rs.tType == 5}}
+                                                                                后段
+                                                                            {{/if}}
+                                                                        </div>
+                                                                    {{/each}}
+                                                                {{else}}
+                                                                    -
+                                                                {{/if}}
                                                                 </td>
                                                                 <td>
                                                                     {{item.guideName}}
@@ -1238,25 +1262,49 @@
                                                         {{each tripPayMap.guidePayMap.guidePayMapList as item}}
                                                             <tr class="view-accountsPrint">
                                                                 <td>
-                                                                    {{item.startTime}}
-                                                                </td>
-                                                                <td>
-                                                                    {{item.endTime}}
-                                                                </td>
-                                                                <td>
-                                                                    {{if item.taskType == 0}}
-                                                                        全程
-                                                                    {{else if item.taskType == 1}}
-                                                                        接机
-                                                                    {{else if item.taskType == 2}}
-                                                                        送机
-                                                                    {{else if item.taskType == 3}}
-                                                                        前段
-                                                                    {{else if item.taskType == 4}}
-                                                                        中段
-                                                                    {{else if item.taskType == 5}}
-                                                                        后段
+                                                                    {{if item.taskJson.length}}
+                                                                        {{each item.taskJson as rs i}}
+                                                                            <div>
+                                                                                {{rs.sTime}}
+                                                                            </div>
+                                                                        {{/each}}
+                                                                    {{else}}
+                                                                        -    
                                                                     {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{if item.taskJson.length}}
+                                                                        {{each item.taskJson as rs i}}
+                                                                            <div>
+                                                                                {{rs.eTime}}
+                                                                            </div>
+                                                                        {{/each}}
+                                                                    {{else}}
+                                                                        -    
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                {{if item.taskJson.length}}
+                                                                    {{each item.taskJson as rs i}}
+                                                                        <div>
+                                                                            {{if rs.tType == 0}}
+                                                                                全程
+                                                                            {{else if rs.tType == 1}}
+                                                                                接机
+                                                                            {{else if rs.tType == 2}}
+                                                                                送机
+                                                                            {{else if rs.tType == 3}}
+                                                                                前段
+                                                                            {{else if rs.tType == 4}}
+                                                                                中段
+                                                                            {{else if rs.tType == 5}}
+                                                                                后段
+                                                                            {{/if}}
+                                                                        </div>
+                                                                    {{/each}}
+                                                                {{else}}
+                                                                    -
+                                                                {{/if}}
                                                                 </td>
                                                                 <td>
                                                                     {{item.guideName}}
