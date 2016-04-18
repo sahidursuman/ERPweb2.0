@@ -1833,7 +1833,7 @@ define(function(require, exports){
 			'</td>'+
 			'<td rowspan="2">未对账&nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
 			'</tr>'+
-			'<tr arrangeType="shopArrange">'+
+			'<tr arrangeType="shopArrange" class="noSumRate">'+
 			'<td><span class="shopPolicy">停车返佣</span>'+
 				'<button class="btn btn-success btn-sm btn-white T-addShop pull-right">'+ 
 					'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
