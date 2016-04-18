@@ -80,42 +80,170 @@
                                             <input name="sumConsumeMoney" type="hidden" />
                                         </td><!-- 金额小计 -->
 
-                                        <td>
-                                            -
+                                        <td name="shopGuideName">
+                                            <div class="div-h-30">
+                                            {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                                                <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </button>
+                                            {{/if}}
+                                                <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
+                                            </div>
+                                        
+                                            {{if itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
+                                                        {{if guideCount > 1}}
+                                                            {{if rs.guideName == '' || rs.guideName == null}}
+                                                                <input name="shopGuideName"  type="text" class="w-80" 
+                                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                                    disabled="disabled"
+                                                                {{/if}} />
+                                                                <input name="shopGuideId" type="hidden" />
+                                                                <input name="guideArrangeId" type="hidden" />
+                                                            {{else}}
+                                                                <span class="guideName">{{rs.guideName}}</span>
+                                                                <input name="shopGuideId" value="{{rs.id}}" type="hidden" />
+                                                                <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                                            {{/if}}
+                                                        {{else}}
+                                                            <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                        {{/if}}
+                                                        
+                                                        {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                                                            <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
+                                                                <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                            </button>
+                                                        {{/if}}
+                                                        <!-- <a href="#" class="T-delShopGuide pull-right">删除</a> -->
+                                                    </div>
+                                                {{/each}}
+                                                {{else}}
+                                                <div class="mar-t-5 div-h-30" index="1">
+                                                    {{if guideCount > 1}}
+                                                        <input name="shopGuideName"  type="text" class="w-80" 
+                                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                            disabled="disabled"
+                                                        {{/if}} />
+                                                        <input name="shopGuideId" type="hidden" />
+                                                        <input name="guideArrangeId" type="hidden" />
+                                                        {{if arrange.isConfirmAccount != 1}}
+                                                            <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
+                                                                <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                            </button>
+                                                        {{/if}}
+                                                        <!-- <a href="#" class="T-delShopGuide pull-right">删除</a> -->
+                                                    {{else}}
+                                                        <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                        <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                    {{/if}}
+                                                    
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 导游 -->
-
-                                        <td>
-                                            <input class="F-float F-money w-80" 
-                                            name="shopGuideMoney"  type="text" value="{{itemSet.consumeMoney}}"
-                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                                readOnly="readOnly" 
-                                            {{/if}}/>
-                                           
+                                        
+                                        <td name="shopGuideMoney">
+                                            <div class="div-h-30"></div>
+                                            {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index="{{index+1}}">
+                                                        <input name="shopGuideMoney" value="{{rs.consumeMoney}}" class="w-80" type="text" 
+                                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                            readOnly="readOnly" 
+                                                        {{/if}}/>
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index="1">
+                                                    <input name="shopGuideMoney" class="w-80" type="text" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                        readOnly="readOnly" 
+                                                    {{/if}}/>
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 金额 -->
-
-                                        <td>
-                                            <span style="color:#bbb;">查看</span>
+                                            
+                                        <td name="imgTd">
+                                            <div class="div-h-30"></div>
+                                            {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" style="height:24px;" index="{{index+1}}">
+                                                        {{if rs.billImage != null && rs.billImage != ""}}
+                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                        {{else}}
+                                                            <span style="color:#bbb;">查看</span>
+                                                        {{/if}}
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index="1">
+                                                    <span style="color:#bbb;">查看</span>
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 单据 -->
 
-                                        <td >
-                                        <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                        <td name="billRemark">
+                                            <div class="div-h-30"></div>
+                                            {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                        <input name="billRemark" type="text" value="{{rs.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index = "1">
+                                                    <input name="billRemark" type="text" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 打单备注 -->
-                                
-                                        <td>
-                                            <span class="guideRate">0</span>
-                                        </td><!-- 导佣比例-->
-                                
-                                        <td>
-                                            <span class="guideRateMoney">0</span>
+
+                                        <td name="guideRate">
+                                            <div class="div-h-30"></div>
+                                            {{if itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                        <input name="guideRate" value="{{rs.guideRate*100}}" type="text" class="w-50" 
+                                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index = "1">
+                                                    <input name="guideRate" type="text" class="w-50" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                </div>
+                                            {{/if}}
+                                        </td><!-- 导佣比例 -->
+                                        
+                                        <td name="guideRateMoney">
+                                            <div class="div-h-30"></div>
+                                            {{if itemSet.guideDetails.length}}
+                                                {{each itemSet.guideDetails as rs index}}
+                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                        <input name="guideRateMoney" value="{{rs.guideRebateMoney}}" type="text" class="w-80" 
+                                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                    </div>
+                                                {{/each}}
+                                            {{else}}
+                                                <div class="mar-t-5 div-h-30" index = "1">
+                                                    <input name="guideRateMoney" type="text" class="w-80" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                </div>
+                                            {{/if}}
                                         </td><!-- 导佣金额 -->
 
+                                        
+
                                         <td>
-                                        <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" 
-                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50"/>
+                                            <div class="div-h-30"></div>
+                                            <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
                                         </td><!-- 社佣比例 -->
-                                
+                                        
                                         <td>
-                                        <input type="text" class="F-float F-money w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
+                                            <div class="div-h-30"></div>
+                                            <input type="text" class="w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" 
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
+
                                         </td><!-- 社佣金额 -->
                                     {{/if}}
                                 {{/each}}
@@ -267,196 +395,166 @@
                                 </td><!-- 金额小计 -->
 
                                  <td name="shopGuideName">
-                                    {{if index == 1}}
-                                        -
-                                    {{else}}
-                                        
-                                            <div class="div-h-30">
-                                            {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
-                                                <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
-                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </button>
-                                            {{/if}}
-                                                <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
-                                            </div>
-                                        
-                                        {{if itemSet.guideDetails.length}}
-                                            {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
-                                                    {{if guideCount > 1}}
-                                                        {{if rs.guideName == '' || rs.guideName == null}}
-                                                            <input name="shopGuideName"  type="text" class="w-80" 
-                                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                                                disabled="disabled"
-                                                            {{/if}} />
-                                                            <input name="shopGuideId" type="hidden" />
-                                                            <input name="guideArrangeId" type="hidden" />
-                                                        {{else}}
-                                                            <span class="guideName">{{rs.guideName}}</span>
-                                                            <input name="shopGuideId" value="{{rs.id}}" type="hidden" />
-                                                            <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
-                                                        {{/if}}
-                                                    {{else}}
-                                                        <span>{{guideArrange.listMap[0].guideName}}</span>
-                                                        <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
-                                                    {{/if}}
-                                                    
-                                                    {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
-                                                        <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
-                                                            <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                        </button>
-                                                    {{/if}}
-                                                    <!-- <a href="#" class="T-delShopGuide pull-right">删除</a> -->
-                                                </div>
-                                            {{/each}}
-                                        {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
+                                    <div class="div-h-30">
+                                    {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                                        <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
+                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                        </button>
+                                    {{/if}}
+                                        <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
+                                    </div>
+                                
+                                    {{if itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
                                                 {{if guideCount > 1}}
-                                                    <input name="shopGuideName"  type="text" class="w-80" 
-                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                                        disabled="disabled"
-                                                    {{/if}} />
-                                                    <input name="shopGuideId" type="hidden" />
-                                                    <input name="guideArrangeId" type="hidden" />
-                                                    {{if arrange.isConfirmAccount != 1}}
-                                                        <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
-                                                            <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
-                                                        </button>
+                                                    {{if rs.guideName == '' || rs.guideName == null}}
+                                                        <input name="shopGuideName"  type="text" class="w-80" 
+                                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                            disabled="disabled"
+                                                        {{/if}} />
+                                                        <input name="shopGuideId" type="hidden" />
+                                                        <input name="guideArrangeId" type="hidden" />
+                                                    {{else}}
+                                                        <span class="guideName">{{rs.guideName}}</span>
+                                                        <input name="shopGuideId" value="{{rs.id}}" type="hidden" />
+                                                        <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
                                                     {{/if}}
-                                                    <!-- <a href="#" class="T-delShopGuide pull-right">删除</a> -->
                                                 {{else}}
                                                     <span>{{guideArrange.listMap[0].guideName}}</span>
                                                     <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
                                                 {{/if}}
                                                 
+                                                {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                                                    <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
+                                                {{/if}}
+                                                <!-- <a href="#" class="T-delShopGuide pull-right">删除</a> -->
                                             </div>
-                                        {{/if}}
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="mar-t-5 div-h-30" index="1">
+                                            {{if guideCount > 1}}
+                                                <input name="shopGuideName"  type="text" class="w-80" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                    disabled="disabled"
+                                                {{/if}} />
+                                                <input name="shopGuideId" type="hidden" />
+                                                <input name="guideArrangeId" type="hidden" />
+                                                {{if arrange.isConfirmAccount != 1}}
+                                                    <button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
+                                                {{/if}}
+                                                <!-- <a href="#" class="T-delShopGuide pull-right">删除</a> -->
+                                            {{else}}
+                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                            {{/if}}
+                                            
+                                        </div>
                                     {{/if}}
                                 </td><!-- 导游 -->
                                 
                                 <td name="shopGuideMoney">
-                                    {{if index == 1}}
-                                        <input name="shopGuideMoney" class="w-80" type="text" value="{{itemSet.consumeMoney}}" />
-                                    {{else}}
-                                        <div class="div-h-30"></div>
-                                        {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
-                                            {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="shopGuideMoney" value="{{rs.consumeMoney}}" class="w-80" type="text" 
-                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                                        readOnly="readOnly" 
-                                                    {{/if}}/>
-                                                </div>
-                                            {{/each}}
-                                        {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
-                                                <input name="shopGuideMoney" class="w-80" type="text" 
+                                    <div class="div-h-30"></div>
+                                    {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index="{{index+1}}">
+                                                <input name="shopGuideMoney" value="{{rs.consumeMoney}}" class="w-80" type="text" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
                                                     readOnly="readOnly" 
                                                 {{/if}}/>
                                             </div>
-                                        {{/if}}
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index="1">
+                                            <input name="shopGuideMoney" class="w-80" type="text" 
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                readOnly="readOnly" 
+                                            {{/if}}/>
+                                        </div>
                                     {{/if}}
                                 </td><!-- 金额 -->
                                     
                                 <td name="imgTd">
-                                    {{if index == 1}}
-                                    <span style="color:#bbb;">查看</span>
-                                    {{else}}
-                                        <div class="div-h-30"></div>
-                                        {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
-                                            {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" style="height:24px;" index="{{index+1}}">
-                                                    {{if rs.billImage != null && rs.billImage != ""}}
-                                                        <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
-                                                    {{else}}
-                                                        <span style="color:#bbb;">查看</span>
-                                                    {{/if}}
-                                                </div>
-                                            {{/each}}
-                                        {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
-                                                <span style="color:#bbb;">查看</span>
+                                    <div class="div-h-30"></div>
+                                    {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" style="height:24px;" index="{{index+1}}">
+                                                {{if rs.billImage != null && rs.billImage != ""}}
+                                                    <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                {{else}}
+                                                    <span style="color:#bbb;">查看</span>
+                                                {{/if}}
                                             </div>
-                                        {{/if}}
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index="1">
+                                            <span style="color:#bbb;">查看</span>
+                                        </div>
                                     {{/if}}
                                 </td><!-- 单据 -->
 
                                 <td name="billRemark">
-                                    {{if index == 1}}
-                                         <input name="billRemark" type="text" value="{{itemSet.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                    {{else}}
-                                        <div class="div-h-30"></div>
-                                        {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
-                                            {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                    <input name="billRemark" type="text" value="{{rs.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
-                                                </div>
-                                            {{/each}}
-                                        {{else}}
-                                            <div class="mar-t-5 div-h-30" index = "1">
-                                                <input name="billRemark" type="text" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
+                                    <div class="div-h-30"></div>
+                                    {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                <input name="billRemark" type="text" value="{{rs.billRemark}}" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
                                             </div>
-                                        {{/if}}
-                                    {{/if}}    
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index = "1">
+                                            <input name="billRemark" type="text" maxlength="1000" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/> 
+                                        </div>
+                                    {{/if}}
                                 </td><!-- 打单备注 -->
 
                                 <td name="guideRate">
-                                    {{if index == 1}}
-                                        0
-                                    {{else}}
-                                        <div class="div-h-30"></div>
-                                        {{if itemSet.guideDetails.length}}
-                                            {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                    <input name="guideRate" value="{{rs.guideRate*100}}" type="text" class="w-50" 
-                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                                </div>
-                                            {{/each}}
-                                        {{else}}
-                                            <div class="mar-t-5 div-h-30" index = "1">
-                                                <input name="guideRate" type="text" class="w-50" 
+                                    <div class="div-h-30"></div>
+                                    {{if itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                <input name="guideRate" value="{{rs.guideRate*100}}" type="text" class="w-50" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
-                                        {{/if}}
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index = "1">
+                                            <input name="guideRate" type="text" class="w-50" 
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                        </div>
                                     {{/if}}
-                                    <!--  -->
                                 </td><!-- 导佣比例 -->
                                 
                                 <td name="guideRateMoney">
-                                    {{if index == 1}}
-                                        0
-                                    {{else}}
-                                        <div class="div-h-30"></div>
-                                        {{if itemSet.guideDetails.length}}
-                                            {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                    <input name="guideRateMoney" value="{{rs.guideRebateMoney}}" type="text" class="w-80" 
-                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                                </div>
-                                            {{/each}}
-                                        {{else}}
-                                            <div class="mar-t-5 div-h-30" index = "1">
-                                                <input name="guideRateMoney" type="text" class="w-80" 
+                                    <div class="div-h-30"></div>
+                                    {{if itemSet.guideDetails.length}}
+                                        {{each itemSet.guideDetails as rs index}}
+                                            <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                <input name="guideRateMoney" value="{{rs.guideRebateMoney}}" type="text" class="w-80" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
-                                        {{/if}}
+                                        {{/each}}
+                                    {{else}}
+                                        <div class="mar-t-5 div-h-30" index = "1">
+                                            <input name="guideRateMoney" type="text" class="w-80" 
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                        </div>
                                     {{/if}}
                                 </td><!-- 导佣金额 -->
 
                                 
 
                                 <td>
-                                    {{if index>1}}
                                     <div class="div-h-30"></div>
-                                    {{/if}}
                                     <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
                                 </td><!-- 社佣比例 -->
                                 
                                 <td>
-                                    {{if index>1}}
                                     <div class="div-h-30"></div>
-                                    {{/if}}
                                     <input type="text" class="w-80" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" 
                                     {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
 

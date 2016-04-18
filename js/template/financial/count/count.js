@@ -516,7 +516,7 @@ define(function(require, exports){
 			KingServices.viewTransit(id);
 		});
 
-		//团款tripDetail
+		//团款tripDetail checkTripCostStatus
 		var $tripCostObj = $listObj.find('.T-tripDetail');
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
@@ -1641,16 +1641,6 @@ define(function(require, exports){
 							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
 						}
 					};
-
-					//循环去除购物导拥、购物社佣的空格
-					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
-					for(var i = 0;i<tRateList.length;i++){
-						var itemList = tRateList[i].shopArrangeItemList;
-						for(var j = 0;j<itemList.length;j++){
-							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
-							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
-						}
-					};
 					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
 					console.log(data);
@@ -1787,7 +1777,7 @@ define(function(require, exports){
 	};
 	//新增购物安排--报账、审核通用
 	Count.addShopping = function($bodyObj,$parentObj){
-		var td = '<td rowspan="2" name="currGuide">'+
+		var cashTd = '<td rowspan="2" name="currGuide">'+
 				'<div class="div-h-30">'+
 					'<button class="btn btn-success btn-sm btn-white T-currGuide pull-right">'+
 			            '<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
@@ -1801,7 +1791,23 @@ define(function(require, exports){
 					'<input type="hidden" name="guideArrangeId"/>'+
 				'</div>'+
 			'</td>';
-		var	guideHtml = Count.addArrangeGuideHtml(td,"currGuide");
+		var shopTd = '<td name="shopGuideName">'+
+				'<div class="div-h-30">'+
+					'<button class="btn btn-success btn-sm btn-white T-shopGuide pull-right">'+
+						'<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
+					'</button>'+
+				'</div>'+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right">'+
+						'<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
+					'</button>'+
+					'<input name="shopGuideName" type="text" class="w-80"/>'+
+					'<input name="guideArrangeId" type="hidden"/>'+
+				'</div>'+
+			'</td>';
+		var	cashGuideHtml = Count.addArrangeGuideHtml(cashTd,"currGuide");
+		var	shopGuideHtml = Count.addArrangeGuideHtml(shopTd,'shopGuideName');
+		var guideShopMoneyHtml = Count.shopPersonAndBusGuide();
 		var html = '<tr class="oldData noSumRate" arrangeType="shopArrange">'+
 			'<td class="countWhichDaysContainer" rowspan="2"></td>'+
 			'<td rowspan="2"><div class="div-h-30"></div><input type="text" name="shopName" style="width:90px;"/><input type="hidden" name="shopId" /></td>'+
@@ -1810,15 +1816,9 @@ define(function(require, exports){
 				'<span class="F-float F-money sumConsumeMoney"></span>'+
 				'<input name="sumConsumeMoney" type="hidden" />'+
 			'</td>'+
-			'<td>-</td>'+
-			'<td><input type="text" name="shopGuideMoney" class="w-80"/></td>'+
-			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="billRemark"/></td>'+
-			'<td><span class="guideRate">0</span></td>'+
-			'<td><span class="guideRateMoney">0</span></td>'+
-			'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
-			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
-			guideHtml+
+			shopGuideHtml+
+			guideShopMoneyHtml+
+			cashGuideHtml+
 			'<td rowspan="2" name="currGuideMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
@@ -1843,14 +1843,8 @@ define(function(require, exports){
 				'<span class="F-float F-money sumConsumeMoney"></span>'+
 				'<input name="sumConsumeMoney" type="hidden" />'+
 			'</td>'+
-			'<td>-</td>'+
-			'<td><input type="text" name="shopGuideMoney" class="w-80"/></td>'+
-			'<td><span style="color:#bbb;">查看</span></td>'+
-			'<td><input type="text" name="billRemark"/></td>'+
-			'<td><span class="guideRate">0</span></td>'+
-			'<td><span class="guideRateMoney">0</span></td>'+
-			'<td><input type="text" name="travelAgencyRate" class="w-50" value="100"/></td>'+
-			'<td><input type="text" name="travelAgencyRateMoney" class="w-80"/></td>'+
+			shopGuideHtml+
+			guideShopMoneyHtml+
 			'</tr>'+
 			'<tr class="sumMoney">'+
 				'<td style="font-weight: bold;text-align:right;" colspan="3">购物小计：</td>'+
@@ -1910,6 +1904,7 @@ define(function(require, exports){
 				'</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,'shopGuideName');
+		var guideShopMoneyHtml = Count.shopPersonAndBusGuide();
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><div class="div-h-30"></div>'+
 				'<input type="text" name="shopPolicy" style="width:90px;"/>'+
@@ -1924,44 +1919,7 @@ define(function(require, exports){
 				'<input name="sumConsumeMoney" type="hidden" />'+
 			'</td>'+
 			guideHtml+
-			'<td name="shopGuideMoney">'+
-				'<div class="div-h-30"></div>'+
-				'<div class="div-h-30 mar-t-5"  index="1">'+
-					'<input name="shopGuideMoney" type="text" class="w-80"/>'+
-				'</div>'+
-			'</td>'+
-			'<td name="imgTd" index="1">'+
-				'<div class="div-h-30"></div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<span style="color:#bbb;">查看</span>'+
-				'</div>'+
-			'</td>'+
-			'<td name="billRemark" index="1">'+
-				'<div class="div-h-30"></div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="billRemark" type="text"/>'+
-				'</div>'+
-			'</td>'+
-			'<td name="guideRate" index="1">'+
-				'<div class="div-h-30"></div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guideRate" type="text" class="w-50"/>'+
-				'</div>'+
-			'</td>'+
-			'<td name="guideRateMoney" >'+
-				'<div class="div-h-30"></div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guideRateMoney" type="text" class="w-80"/>'+
-				'</div>'+
-			'</td>'+
-			'<td>'+
-				'<div class="div-h-30"></div >'+
-				'<input name="travelAgencyRate" type="text" class="w-80"/>'+
-			'</td>'+
-			'<td>'+
-				'<div class="div-h-30"></div>'+
-				'<input name="travelAgencyRateMoney" type="text" class="w-80"/>'+
-			'</td>'+
+			guideShopMoneyHtml+
 			'</tr>';
 			
 		if($next.length>1){
@@ -5102,7 +5060,6 @@ define(function(require, exports){
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
 		console.log(saveJsonStr);
-		
 		//校验同一天不能安排同一家购物店
 		var submitStatus =  Count.checkShopArrange(saveJsonStr);
 		if(submitStatus.submitStatus){
@@ -6268,9 +6225,14 @@ define(function(require, exports){
 			},
 			select:function(event,ui){
 				if(ui.item != null){
-					var $div = $(this).closest('div');
+					var $div = $(this).closest('div'),$tr = $(this).closest('tr'),
+						receiveStatus = $tr.find('select[name=receiveStatus]');
 					$div.find('input[name=guideArrangeId]').val(ui.item.id);
 					$div.find('input[name=shopGuideArrangeId]').val(ui.item.id);
+					if(receiveStatus.length){
+						receiveStatus.val(1);
+					};
+
 				}
 			}
 		}).off('click').on('click', function() {
@@ -6544,6 +6506,48 @@ define(function(require, exports){
 			'</td>'
 		};
 		return guideHtml;
+	};
+	//购物人数返佣、停车返佣导游html
+	Count.shopPersonAndBusGuide = function(){
+		var html = '<td name="shopGuideMoney">'+
+				'<div class="div-h-30"></div>'+
+				'<div class="div-h-30 mar-t-5"  index="1">'+
+					'<input name="shopGuideMoney" type="text" class="w-80"/>'+
+				'</div>'+
+			'</td>'+
+			'<td name="imgTd" index="1">'+
+				'<div class="div-h-30"></div>'+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<span style="color:#bbb;">查看</span>'+
+				'</div>'+
+			'</td>'+
+			'<td name="billRemark" index="1">'+
+				'<div class="div-h-30"></div>'+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<input name="billRemark" type="text"/>'+
+				'</div>'+
+			'</td>'+
+			'<td name="guideRate" index="1">'+
+				'<div class="div-h-30"></div>'+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<input name="guideRate" type="text" class="w-50"/>'+
+				'</div>'+
+			'</td>'+
+			'<td name="guideRateMoney" >'+
+				'<div class="div-h-30"></div>'+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<input name="guideRateMoney" type="text" class="w-80"/>'+
+				'</div>'+
+			'</td>'+
+			'<td>'+
+				'<div class="div-h-30"></div >'+
+				'<input name="travelAgencyRate" type="text" class="w-80"/>'+
+			'</td>'+
+			'<td>'+
+				'<div class="div-h-30"></div>'+
+				'<input name="travelAgencyRateMoney" type="text" class="w-80"/>'+
+			'</td>';
+			return html;
 	};
 	//主页时间控件绑定
 	Count.setDatePicker = function($obj) {
