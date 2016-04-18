@@ -41,7 +41,7 @@
                     {{each scenicArrange.listMap as arrange index}}
                         <tr badStatus="{{arrange.badStatus}}" scenicArrangeId="{{arrange.id}}" whichDay="{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="scenicArrange">
                             
-                        <td>
+                        <td rowspan="1">
                             <div class="div-h-30"></div>
                             <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
                         </td><!-- 日期 -->

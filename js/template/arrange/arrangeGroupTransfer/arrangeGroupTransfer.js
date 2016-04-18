@@ -535,11 +535,8 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
     arrangeGroupTransfer.innerEditFeeEvent = function(type) {
-        var $editFeeObj = $("#T-innerEditFeeMain"),
-            validator = rule.transferCheckor($editFeeObj);
-        //精度限制
-        $count = $editFeeObj.find('.T-count');
-        Tools.inputCtrolFloat($count);
+        var $editFeeObj = $("#T-innerEditFeeMain");
+        var validator = rule.transferCheckor($editFeeObj);
         $editFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
             arrangeGroupTransfer.newAddFee($editFeeObj, type, validator);
@@ -566,11 +563,9 @@ define(function(require, exports) {
         //提交编辑转客费用信息
         $editFeeObj.find('.T-updateFee').on('click', function(event) {
             event.preventDefault();
-            //表单验证
-            if (!validator.form()) {
-                return;
-            }
             /* Act on the event */
+            //表单验证
+            if (!validator.form()) { return;}
             arrangeGroupTransfer.saveInTransFee($editFeeObj);
         });
 
@@ -592,7 +587,6 @@ define(function(require, exports) {
     arrangeGroupTransfer.outEditFeeEvent = function(type) {
         var $outFeeObj = $("#T-outEditFeeMain");
         var validator = rule.transferCheckor($outFeeObj);
-
         $outFeeObj.find(".T-newEditFee").on('click', function(event) {
             //新增内外转编辑费用
             arrangeGroupTransfer.newAddFee($outFeeObj, type, validator);
@@ -627,12 +621,10 @@ define(function(require, exports) {
 
         //提交编辑转客费用信息
         $outFeeObj.find('.T-updateFee').on('click', function(event) {
-            /* Act on the event */
             event.preventDefault();
+            /* Act on the event */
             //表单验证
-            if (!validator.form()) {
-                return;
-            }
+            if (!validator.form()) { return; }
             arrangeGroupTransfer.saveTransFee($outFeeObj, type);
         });
     };

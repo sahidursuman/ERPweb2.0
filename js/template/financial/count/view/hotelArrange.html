@@ -41,7 +41,7 @@
                 {{each hotelArrange.listMap as arrange index}}
                     <tr badStatus = "{{arrange.badStatus}}" hotelArrangeId="{{arrange.id}}"  whichDay = "{{arrange.whichDay}}" isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="hotelArrange">
                         
-                        <td><div class="div-h-30"></div><span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td><!-- 日期 -->
+                        <td rowspan="1"><div class="div-h-30"></div><span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td><!-- 日期 -->
 
                         
                         <td>

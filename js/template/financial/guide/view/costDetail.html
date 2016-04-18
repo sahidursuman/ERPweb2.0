@@ -1,5 +1,5 @@
 <div class="col-sm-12 countUpdate">
-        <p style="display:none;" class="T-print">导游报账表</p>
+        <p style="display:none;" class="T-print T-printCenter">导游报账表</p>
         <table class="table table-striped table-bordered table-hover all T-main-table">
             <tbody>
                 <tr>
@@ -19,10 +19,12 @@
                     <td style="text-align:left"><label style="font-weight: bold;">
                         完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}
                     </label></td>
+
                 </tr>
             </tbody>
         </table>
     <div class="clearfix"></div>
+
 
     <div class="tabbable">
         <ul class="nav nav-tabs" id="myTab">
@@ -173,6 +175,7 @@
                                         <th class="th-border">项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
+                                        <th class="th-border">应收优惠</th>
                                         <th class="th-border">应收</th>
                                         <th class="th-border">导收</th>
                                         <th class="th-border">单据</th>
@@ -185,6 +188,7 @@
                                         <td>{{item.selfItemName}}</td>
                                         <td><span class="F-float F-money">{{item.realMarketPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.needIncomeCount}}</span></td>
+                                        <td><span class="F-float F-count">{{item.reduceMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.guideGetMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -278,9 +282,9 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">司机</th>
+                                        <th class="th-border">车队</th>
                                         <th class="th-border">品牌</th>
                                         <th class="th-border">车牌号</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -289,9 +293,9 @@
                                     {{each guideArranges.busList as item}}
                                     <tr>
                                         <td>{{item.driverName}}</td>
+                                        <td>{{item.companyName}}</td>
                                         <td>{{item.brand}}</td>
                                         <td>{{item.licenseNumber}}</td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -318,10 +322,10 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">用餐日期</th>
+                                        <th class="th-border">餐厅</th>
                                         <th class="th-border">用餐类型</th>
                                         <th class="th-border">餐标</th>
                                         <th class="th-border">人数</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -331,10 +335,16 @@
                                     {{each guideArranges.restaurantList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>
+                                            {{if item.restaurantName == '' || item.restaurantName == null}}
+                                                导游自选
+                                            {{else}}
+                                                {{item.restaurantName}}
+                                            {{/if}}
+                                        </td>
                                         <td>{{item.type}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span>/人</td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -361,10 +371,10 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">入住日期</th>
+                                        <th class="th-border">酒店</th>
                                         <th class="th-border">房型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -373,10 +383,10 @@
                                     {{each guideArranges.hotelList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.hotelName}}</td>
                                         <td>{{item.roomType}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span>/间</td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -407,7 +417,6 @@
                                         <th class="th-border">收费项目</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -420,7 +429,6 @@
                                         <td>{{item.scenicItemName}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -447,10 +455,10 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">票务公司</th>
                                         <th class="th-border">类型</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -459,10 +467,10 @@
                                     {{each guideArranges.ticketList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td>{{item.ticketName}}</td>
                                         <td>{{item.type | getTicketText}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -489,9 +497,10 @@
                                     <thead>
                                     <tr>
                                         <th class="th-border">日期</th>
+                                        <th class="th-border">自费商家</th>
+                                        <th class="th-border">自费项目</th>
                                         <th class="th-border">底价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -500,9 +509,18 @@
                                     {{each guideArranges.selfpayList as item}}
                                     <tr>
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                        <td><span class="F-float F-money">{{item.selfName}}</span></td>
+                                        <td>
+                                            <span>
+                                                {{if item.selfItemName == '' || item.selfItemName == null}}
+                                                    -
+                                                {{else}}
+                                                    {{item.selfItemName}}
+                                                {{/if}}
+                                            </span>
+                                        </td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -530,7 +548,6 @@
                                         <th class="th-border">日期</th>
                                         <th class="th-border">单价</th>
                                         <th class="th-border">数量</th>
-                                        <th class="th-border">应付</th>
                                         <th class="th-border">支付类型</th>
                                         <th class="th-border">导付</th>
                                         <th class="th-border">单据</th>
@@ -541,7 +558,6 @@
                                         <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                        <td><span class="F-float F-money">{{item.realNeedPayMoney}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money">{{item.realGuidePayMoney}}</span></td>
                                         <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
@@ -555,7 +571,6 @@
                 </div>
                 {{/if}}  <!-- 结束现付 -->
 
-                
                 {{if !!guideArranges.selfRebateList && guideArranges.selfRebateList.length }}
                 <!-- 自费导佣 -->
                 <div class="col-sm-13 widget-container-col margin-top">

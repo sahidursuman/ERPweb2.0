@@ -42,7 +42,7 @@
                 <tr badStatus = "{{arrange.badStatus}}"  isChoose="{{arrange.isChoose}}" restaurantArrangeId="{{arrange.id}}"
                  whichDay="{{arrange.whichDay}}"
                 isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="restArrange">
-                        <td>
+                        <td rowspan="1">
                             <div class="div-h-30"></div>
                             <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
                         </td>
@@ -93,8 +93,13 @@
                             <div class="div-h-30"></div>
                             {{if tripPlan.billStatus == -1}}
                                 {{if arrange.isChoose == 1}}
-                                    <input  value="{{arrange.realPrice}}" type="text" name="price" class="w-80" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-                                    <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
+                                    {{if editStatus != 2}}
+                                        <input  value="{{arrange.realPrice}}" type="text" name="price" class="w-80" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                        <input type="hidden" name="standardId"><input type="hidden" name="type" value="{{arrange.type}}">
+                                    {{else}}
+                                        <span class="F-float F-money">{{arrange.realPrice}}</span>
+                                        <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
+                                    {{/if}}
                                 {{else}}
                                     <span class="F-float F-money">{{arrange.realPrice}}</span>
                                     <input type="hidden" name="price" value="{{arrange.realPrice}}"/>

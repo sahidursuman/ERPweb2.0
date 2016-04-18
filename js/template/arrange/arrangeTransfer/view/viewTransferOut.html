@@ -1,3 +1,6 @@
+<div class="col-xs-12">
+    <button class="btn btn-sm btn-success export-Btn T-statementsBtn ">结算单</button>
+</div>
 <form class="form-horizontal" role="form" style="margin-top:10px">
     <div class=" ui-sortable-handle">
         <h5 class="">
@@ -11,7 +14,7 @@
             <tr>
                 <td class="style-myself">应付：</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</span></td>
-                <td colspan="3">
+                <td colspan="3"> 
                     {{if touristGroup.operateCurrentNeedPayMoney==1}}
                     <label>
                         <input type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">

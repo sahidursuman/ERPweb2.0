@@ -324,7 +324,7 @@
 
                                                     <td>
                                                         <span class="F-float F-money shopGuideMoney">{{itemSet.consumeMoney}}</span>
-                                                        <input name="shopGuideMoney"  type="hidden" value="{{itemSet.consumeMoney}}"
+                                                        <input name="shopGuideMoney"  type="hidden" value="{{itemSet.consumeMoney}}">
                                                        
                                                     </td><!-- 金额 -->
 
@@ -420,14 +420,18 @@
                                                         {{if index == 1}}class="noSumRate "{{/if}}
                                                         arrangeType="shopArrange">
                                                         <td>
+                                                            {{if index >1}}
+                                                                <div class="div-h-30"></div>
+                                                            {{/if}}
                                                             <span class="shopPolicy">
                                                                 {{itemSet.itemName}}
                                                             </span>
                                                         </td><!-- 商品 -->
                                                         
                                                         <td>
+                                                            <div class="div-h-30"></div>
                                                             <span class="F-float F-money sumConsumeMoney"></span>
-                                                            <inputname="sumConsumeMoney" readonly="readonly" type="hidden" />
+                                                            <input name="sumConsumeMoney" readonly="readonly" type="hidden" />
                                                         </td><!-- 金额小计 -->
 
                                                          <td name="shopGuideName">
@@ -461,7 +465,7 @@
                                                                 {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                                                     {{each itemSet.guideDetails as rs index}}
                                                                         <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                                            <span class="guideName">{{rs.guideName}}</span>
+                                                                            <span class="consumeMoney">{{rs.consumeMoney}}</span>
                                                                             <input name="shopGuideMoney" value="{{rs.consumeMoney}}" type="hidden"/>
                                                                         </div>
                                                                     {{/each}}
@@ -830,9 +834,9 @@
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                                     {{if itemSet.badStatus == 1}}
-                                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                                        <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
                                                                     {{else}}
-                                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                                        <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
                                                                         <input type="hidden" name="guidePayedMoney" 
                                                                         value="{{rs.guidePayedMoney}}" />
                                                                     {{/if}}
@@ -1158,7 +1162,7 @@
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                                     {{if itemSet.badStatus == 1}}
-                                                                        <span class="F-float F-money">{{rs.realCount}}</span>
+                                                                        <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
                                                                     {{else}}
                                                                         <span class="F-float F-money guidePayedMoney">{{rs.guidePayedMoney}}</span>
                                                                         <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" />
