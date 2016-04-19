@@ -78,7 +78,10 @@
 
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->
+                                        {{if editStatus != 1}}<span class="realMarketPrice">{{itemSet.realMarketPrice}}</span>
+                                        {{else}}
+                                        <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                        {{/if}}
                                     </td>
 
                                     <td name="selfGuideName">
@@ -209,9 +212,19 @@
                                         {{/if}}
                                     </td><!-- 现收 -->
 
+                                    <!-- 底价 -->
                                     <td>
-                                        <div class="div-h-30"></div>
-                                        <span class="realPrice">{{itemSet.realPrice}}</span><!-- 底价 -->
+                                        <div class="div-h-30"> </div>
+                                        {{if tripPlan.billStatus == -1}}
+                                            {{if itemSet.badStatus == 1}}
+                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
+                                            {{else}}
+                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
+                                            {{/if}}
+                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
+                                        {{else}}
+                                            <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                        {{/if}}
                                     </td>
 
                                     <td name="realCount">
@@ -501,7 +514,10 @@
                                     </td>
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->
+                                        {{if editStatus != 1}}<span class="realMarketPrice">{{itemSet.realMarketPrice}}</span>
+                                        {{else}}
+                                        <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                        {{/if}}
                                     </td>
 
                                     <td name="selfGuideName">
@@ -637,7 +653,16 @@
 
                                     <td>
                                         <div class="div-h-30"></div>
-                                        <span class="realPrice">{{itemSet.realPrice}}</span><!-- 底价 -->
+                                        {{if tripPlan.billStatus == -1}}
+                                            {{if itemSet.badStatus == 1}}
+                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
+                                            {{else}}
+                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
+                                            {{/if}}
+                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
+                                        {{else}}
+                                            <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                        {{/if}}
                                     </td>
 
                                     <td name="realCount">

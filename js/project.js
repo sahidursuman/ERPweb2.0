@@ -1069,11 +1069,22 @@ var _statusText = {
 						fn.success(data, textStatus);
 					},
 					complete: function()  {
+						var urls = opt.url.split('?'),
+							path = urls[0],
+							method = urls[1].split('&')[0].split('=')[1],
+							duration = (new Date()).getTime() - _startTime;
+
+						// CNZZ超时记录
+						if (!!_czc && duration > 1000) {
+							_czc.push( ["_trackEvent", 'AJAX', path,  method, duration, siteId]);
+						}
+
 						if (opt.removeLoading) {
 							layer.close(globalLoadingLayer);
-						}
+						}						
 					}
 				});
+			var _startTime = (new Date()).getTime();
 			return _ajax(opt);
 		}
 	};
