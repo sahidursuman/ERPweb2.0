@@ -2073,13 +2073,7 @@ define(function(require, exports) {
     //时间控件
     touristGroup.formatTime = function($obj) {
         Tools.setDatePicker($obj.find('.datepicker'), true);
-        
-        $obj.find(".datetimepicker").datetimepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'L',
-            language: 'zh-CN'
-        });
+        Tools.setDateHSPicker($obj, 'datetimepicker');
     };
 
     /**

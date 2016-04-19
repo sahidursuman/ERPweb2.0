@@ -2015,6 +2015,23 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
 };
 
 /**
+ * setDateHSTimePicker 控件日期时间方法
+ */
+
+Tools.setDateHSPicker = function($obj,className){
+	if (!$obj || !$obj.length) {
+        console.log('元素为空，无法绑定日期控件');
+        return;
+    }
+    $obj.find('.' + className).datetimepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'YYYY-MM-DD HH:mm',
+        language: 'zh-CN'
+       });  
+};
+
+/**
  * 选择日期组件组
  * @param {object} $dateObjs 日期的Jquery对象
  */
