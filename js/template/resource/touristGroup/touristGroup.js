@@ -2071,15 +2071,16 @@ define(function(require, exports) {
         $parents.find('[name=fromBussinessGroupId]').val("");
     };
     //时间控件
-    touristGroup.formatTime = function($obj) {
+    touristGroup.formatTime = function($obj,className) {
         Tools.setDatePicker($obj.find('.datepicker'), true);
         
-        $obj.find(".datetimepicker").datetimepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'L',
-            language: 'zh-CN'
-        });
+        // $obj.find(".datetimepicker").datetimepicker({
+        //     autoclose: true,
+        //     todayHighlight: true,
+        //     format: 'L',
+        //     language: 'zh-CN'
+        // });
+        Tools.setDateHSPicker($obj, 'datetimepicker');
     };
 
     /**
