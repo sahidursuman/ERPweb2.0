@@ -192,16 +192,7 @@ define(function(require, exports) {
             data : {searchParam : JSON.stringify(arge)}
         }).done(function(data){
             if(showDialog(data)){
-                var rs = JSON.parse(data.result);
-                data.result = rs;
-                for (var i = rs.length - 1; i >= 0; i--) {
-                    if(rs[i].tripPlanTouristList.length === 1 && !!rs[i].tripPlanTouristList[0].touristGroup &&
-                        rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
-                        rs[i].lineProduct && 
-                        rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
-                        rs[i].tripPlanTouristList.splice(0, 1);
-                    }
-                };
+                data.result = JSON.parse(data.result);
 
                 var singleHrml = filterUnAuth(singleListTemplate(data));
                 $tab.find('.T-tripPlan-singleList').html(singleHrml);
