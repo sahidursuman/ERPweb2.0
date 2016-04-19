@@ -3710,13 +3710,7 @@ define(function(require, exports) {
 			});
 		}
 	};
-	tripPlan.dateTimePicker = function($obj,className){
-		// obj.find(".T-dateTimePicker").datetimepicker({
-		// 	autoclose: true,
-		// 	todayHighlight: true,
-		// 	format: 'L',
-		// 	language: 'zh-CN'
-		// });
+	tripPlan.dateTimePicker = function($obj){
 		Tools.setDateHSPicker($obj, 'T-dateTimePicker'); 
 	};
 

@@ -335,13 +335,7 @@ define(function(require, exports) {
 	 * @param  {[type]} $container [description]
 	 * @return {[type]}            [description]
 	 */
-	BookingArrange.datetimepicker = function($obj,className){
-		// $container.find('.datetimepicker').datetimepicker({
-		// 	autoclose: true,
-		// 	todayHighlight: true,
-		// 	format: 'L',
-		// 	language: 'zh-CN'
-		// });
+	BookingArrange.datetimepicker = function($obj){
 		Tools.setDateHSPicker($obj, 'datetimepicker'); 
 	}
 

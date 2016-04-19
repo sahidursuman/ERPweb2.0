@@ -1570,13 +1570,7 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	transit.dateTimePicker = function($obj,className){
-		// obj.find(".T-dateTimePicker").datetimepicker({
-		// 	autoclose: true,
-		// 	todayHighlight: true,
-		// 	format: 'L',
-		// 	language: 'zh-CN'
-		// });
+	transit.dateTimePicker = function($obj){
 		Tools.setDateHSPicker($obj, 'T-dateTimePicker'); 
 	};
 
