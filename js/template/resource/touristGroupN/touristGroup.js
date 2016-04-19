@@ -360,9 +360,9 @@ define(function(require, exports) {
                             joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isCurrent = joinTrip[i].lineInfo.isCurrent;
                             if(isCurrent == 1){
-                                str = "他部 " + joinTrip[i].lineInfo.dutyDepartmentName + " ";
+                                str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
                             }else if(isCurrent == 2){
-                                str = "外转 " + joinTrip[i].lineInfo.transferPartnerAgency + " ";
+                                str = "外转　" + joinTrip[i].lineInfo.transferPartnerAgency + "　";
                             }
                             joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney, 2);
                             joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
@@ -388,8 +388,8 @@ define(function(require, exports) {
 
                             var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
                             str = str && str +" ";
-                            str = str.length > 10 ? str.substr(0, 10)  + "... " : str;
-                            joinTrip[i].hotelInputValue = str + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
+                            str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                            joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
                         joinTrip[i].lineJson = {
@@ -487,9 +487,9 @@ define(function(require, exports) {
                             joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = joinTrip[i].lineInfo.needPayAllMoney;
                             if(joinTrip[i].isTransfer === 1){
-                                str = "内转  " + joinTrip[i].dutyDepartmentName + "  " + joinTrip[i].needPayAllMoney;
+                                str = "内转　" + joinTrip[i].dutyDepartmentName + "　" + joinTrip[i].needPayAllMoney;
                             }else if(joinTrip[i].isTransfer === 2){
-                                str = "外转  " + joinTrip[i].transferPartnerAgency + "  " + joinTrip[i].needPayAllMoney;;
+                                str = "外转　" + joinTrip[i].transferPartnerAgency + "　" + joinTrip[i].needPayAllMoney;;
                             }
                             joinTrip[i].lineNeedPayAllMoney = str;
 
@@ -497,6 +497,26 @@ define(function(require, exports) {
                         }
                         if(joinTrip[i].hotelInfo){
                             joinTrip[i].hotelNeedPayAllMoney = joinTrip[i].hotelInfo.needPayAllMoney;
+                            joinTrip[i].hotelInfoId = joinTrip[i].hotelInfo.id;
+                            joinTrip[i].hotelOutRemarkId = joinTrip[i].hotelInfo.outRemarkId;
+                            joinTrip[i].hotelInfo.hotel = [];
+                            var hotelIds = joinTrip[i].hotelInfo.hotelIds,
+                                hotelNames = joinTrip[i].hotelInfo.hotelName;
+                            if(!!hotelIds){
+                                hotelIds = hotelIds.split(',');
+                                hotelNames = hotelNames.split(',');
+                                for(var j = 0; j < hotelIds.length; j++){
+                                    joinTrip[i].hotelInfo.hotel[j] = {
+                                        id : hotelIds[j],
+                                        name : hotelNames[j]
+                                    }
+                                }
+                            }
+
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
+                            str = str && str +" ";
+                            str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                            joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
                         joinTrip[i].lineJson = {
@@ -1136,9 +1156,9 @@ define(function(require, exports) {
                         $that.closest('tr').find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
                         var str = moneyData.needPayAllMoney;
                         if(moneyData.isTransfer === 1){
-                            str = "他部  " + moneyData.dutyDepartmentName + "  " + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
+                            str = "他部　" + moneyData.dutyDepartmentName + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }else if(moneyData.isTransfer === 2){
-                            str = "外转  " + moneyData.transferPartnerAgency + "  " + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
+                            str = "外转　" + moneyData.transferPartnerAgency + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }
                         $that.val(str).data('json', JSON.stringify(moneyData)).trigger('blur');
                     }else{
@@ -1311,14 +1331,12 @@ define(function(require, exports) {
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
                         var str = baseInfo.hotelName || baseInfo.require;
-                        str = str && str +" ";
-                        str = str.length > 10 ? str.substr(0, 10)  + "... " : str;
-                        $that.val(str + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                        str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                        $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }
                     layer.close(index);
-                    F.subtotal($that.closest('tr'), type === 1 ? 1 : 0);
                 });
 		    }
 		});
@@ -2407,6 +2425,8 @@ define(function(require, exports) {
         };
         if(typeof data.baseInfo.touristGroupFee.touristGroupFeeJsonDel !== "object"){
             data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || null);
+        }else if(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel.length === 0){
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = null;
         }
         var receiveDateArr = [];
         if(data.baseInfo.customerType === 0){
@@ -2751,7 +2771,11 @@ define(function(require, exports) {
             var $tr = $that.closest('tr'),
                 price = $tr.find('[name="count"]').val() * $tr.find('[name="price"]').val()
             $tr.find('[name="money"]').val(isNaN(price) ? 0 : price);
-            $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
+            if($tab.find('[name="sumNeedGetMoney"]').length > 0){
+                $tab.find('[name="sumNeedGetMoney"]').val(F.calcRece($tab));
+            }else{
+                $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
+            }
         },
         //组装应收数据
         assemblyMoneyData : function($tab){

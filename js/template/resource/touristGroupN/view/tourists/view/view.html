@@ -105,7 +105,7 @@
 						<td>{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td><a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a></td>
 						{{if baseInfo.customerType == 0}}
-						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelNeedPayAllMoney}}</a></td>
+						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelInputValue}}</a></td>
 						<td><span class="F-float F-money">{{rs.operateCurrentNeedPayMoney}}</span></td>
 						{{/if}}
 						<td>{{rs.status | getPartGroupStatusText}}</td>
