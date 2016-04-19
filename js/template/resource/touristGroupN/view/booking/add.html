@@ -1,9 +1,9 @@
-<div class="container-fluid T-container">
+<div class="container-fluid T-container" data-id="{{id}}">
     <div class="row">
         <div class="col-xs-12">
             <div class="pull-right" style="margin-top: -6px;">
                 <label class="pull-left control-label text-right mar-r-10">代订单号</label>
-                <input type="text" class="pull-left w-150" name="orderNumber">
+                <input type="text" class="pull-left w-150" name="orderNumber" placeholder="默认系统自动生成" value="{{orderNumber}}">
             </div>
         </div>
         <div class="col-xs-12 mar-t-10">
@@ -27,16 +27,28 @@
                 </thead>
                 <tbody class="T-booking-info">
                     <tr>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" placeholder="点击选择客户"></td>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-hotel" readonly name="" placeholder="点击填写酒店"></td>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-ticket" readonly name="" placeholder="点击填写票务"></td>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-scenic" readonly name="" placeholder="点击填写景区"></td>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-bus" readonly name="" placeholder="点击填写旅游车"></td>
-                        <td><input type="text" class="col-xs-12" readonly name=""></td>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable" readonly name="" placeholder="点击填写应收"></td>
-                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" placeholder="点击填写客人信息"></td>
-                        <td><input type="text" class="col-xs-12" name="mobileNumber" readonly></td>
-                        <td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" placeholder="点击选择客户" value="{{partnerAgencyName}}" data-id="{{partnerAgencyId}}" data-contact-id="{{contactId}}"></td>
+                        <td>
+                            <input type="text" class="col-xs-12 hct-cursor T-action T-hotel F-float F-money" readonly placeholder="点击填写酒店" {{if !!hotel}}value="{{hotelNeedPayMoney}}" data-json="{{hotel}}"{{/if}} data-id="{{hotelId}}">
+                            <a class="cursor T-action T-clear" data-status="hotel">清空</a>
+                        </td>
+                        <td>
+                            <input type="text" class="col-xs-12 hct-cursor T-action T-ticket F-float F-money" readonly placeholder="点击填写票务" {{if !!ticket}}value="{{ticketNeedPayMoney}}" data-json="{{ticket}}"{{/if}} data-id="{{ticketId}}">
+                            <a class="cursor T-action T-clear" data-status="ticket">清空</a>
+                        </td>
+                        <td>
+                            <input type="text" class="col-xs-12 hct-cursor T-action T-scenic F-float F-money" readonly placeholder="点击填写景区" {{if !!scenic}}value="{{scenicNeedPayMoney}}" data-json="{{scenic}}"{{/if}} data-id="{{scenicId}}">
+                            <a class="cursor T-action T-clear" data-status="scenic">清空</a>
+                        </td>
+                        <td>
+                            <input type="text" class="col-xs-12 hct-cursor T-action T-bus F-float F-money" readonly placeholder="点击填写旅游车" {{if !!bus}}value="{{busNeedPayMoney}}" data-json="{{bus}}"{{/if}} data-id="{{busId}}">
+                            <a class="cursor T-action T-clear" data-status="bus">清空</a>
+                        </td>
+                        <td><input type="text" class="col-xs-12 F-float F-money" readonly name="" value="{{hotelNeedPayMoney + ticketNeedPayMoney + scenicNeedPayMoney + busNeedPayMoney}}"></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float F-money" readonly name="" placeholder="点击填写应收" {{if !!needGet}}value="{{needGetNeedPayMoney}}" data-json="{{needGet}}"{{/if}}></td>
+                        <td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" placeholder="点击填写客人信息" {{if !!tourist}}value="{{touristInfo}}" data-json="{{tourist}}"{{/if}}></td>
+                        <td><input type="text" class="col-xs-12" name="mobileNumber" readonly value="{{touristMobileNumber}}"></td>
+                        <td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName" value="{{outOPUserName}}" data-id="{{outOPUserId}}"></td>
                     </tr>
                 </tbody>
             </table>
@@ -48,3 +60,16 @@
         </div>
     </div>
 </div>
+{{if type == 1}}
+<div style="position: fixed; right: 20px; bottom: 10px;min-width: 50px;">
+    <a class="btn btn-warning T-refresh" title="重新加载数据" style="border-radius: 5px;">
+        <i class="ace-icon fa fa-refresh bigger-160" style="margin-right: 0;"></i>
+    </a>
+</div>
+{{else}}
+<div style="position: fixed; right: 20px; bottom: 10px;min-width: 50px;">
+    <a class="btn btn-warning T-restore" title="恢复上次填写数据" style="border-radius: 5px;">
+        <i class="ace-icon fa fa-undo bigger-160" style="margin-right: 0;"></i>
+    </a>
+</div>
+{{/if}}
