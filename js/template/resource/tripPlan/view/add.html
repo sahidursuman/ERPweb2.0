@@ -359,7 +359,7 @@
                                     </td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
-                                            <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="w-80 chooseGuide" />
+                                            <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="col-sm-12 chooseGuide" />
                                             <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" />
                                             {{if !guide.isConfirmAccount}}
                                             <span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游">
@@ -372,10 +372,10 @@
                                         <input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12" />
                                     </td>
                                     <td>
-                                        <input type="text" name="price" value="{{guide.price}}" class="w-80 F-float F-money"maxlength="9" />
+                                        <input type="text" name="price" value="{{guide.price}}" class="col-sm-12 F-float F-money"maxlength="9" />
                                     </td>
                                     <td>
-                                        <input type="text" name="manageFee" value="{{guide.manageFee}}" class="w-80 F-float F-money" maxlength="9" />
+                                        <input type="text" name="manageFee" value="{{guide.manageFee}}" class="col-sm-12 F-float F-money" maxlength="9" />
                                     </td>
                                     <td><input class="F-float F-money" type="text" name="guidePlanPreMoney" value="{{guide.guidePlanPreMoney}}" /></td>
                                     <td>
