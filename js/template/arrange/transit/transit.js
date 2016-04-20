@@ -1571,7 +1571,7 @@ define(function(require, exports) {
 		})
 	};
 	transit.dateTimePicker = function(){
-		Tools.setDateHSPicker('T-dateTimePicker'); 
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
 	};
 
 	transit.save = function(saveType){

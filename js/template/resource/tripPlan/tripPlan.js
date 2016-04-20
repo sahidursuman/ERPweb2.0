@@ -3711,7 +3711,7 @@ define(function(require, exports) {
 		}
 	};
 	tripPlan.dateTimePicker = function(){
-		Tools.setDateHSPicker('T-dateTimePicker'); 
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
 	};
 
 	/**
