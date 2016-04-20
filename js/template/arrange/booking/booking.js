@@ -335,8 +335,8 @@ define(function(require, exports) {
 	 * @param  {[type]} $container [description]
 	 * @return {[type]}            [description]
 	 */
-	BookingArrange.datetimepicker = function($obj){
-		Tools.setDateHSPicker($obj, 'datetimepicker'); 
+	BookingArrange.datetimepicker = function(){
+		Tools.setDateHSPicker($('.datetimepicker')); 
 	}
 
 	/**

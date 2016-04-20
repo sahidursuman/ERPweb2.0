@@ -304,6 +304,10 @@ define(function(require, exports){
 	};
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
+
+		//显示隐藏
+		Count.showOrhideList($obj);
+		
 		var $listObj = $obj.find('.T-list');
 		
 		//中转明细
@@ -505,6 +509,10 @@ define(function(require, exports){
 	};
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
+		
+		//显示隐藏
+		Count.showOrhideList($obj);
+
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -958,6 +966,8 @@ define(function(require, exports){
 	};
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
+		//显示隐藏
+		Count.showOrhideList($obj);
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -6594,6 +6604,23 @@ define(function(require, exports){
 			};
 		});
 		return isReceived;
+	};
+	//显示隐藏列表
+	Count.showOrhideList = function($obj){
+		$obj.find('.T-toggle-List').off('click.toggle').on('click.toggle', function() {
+			var $this = $(this), $tbody = $this.closest('h5').next();/*$tab.find('.T-tripPlanDayList-tbody')*/;
+			if ($this.hasClass('T-show')) {
+				$this.addClass('T-hide');
+				$tbody.hide();
+				$this.text('展开');
+				$this.removeClass('T-show');
+			}else if ($this.hasClass('T-hide')) {
+				$this.addClass('T-show');
+				$tbody.show();
+				$this.text('收起');
+				$this.removeClass('T-hide');
+			}
+		});
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;

@@ -3710,8 +3710,8 @@ define(function(require, exports) {
 			});
 		}
 	};
-	tripPlan.dateTimePicker = function($obj){
-		Tools.setDateHSPicker($obj, 'T-dateTimePicker'); 
+	tripPlan.dateTimePicker = function(){
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
 	};
 
 	/**

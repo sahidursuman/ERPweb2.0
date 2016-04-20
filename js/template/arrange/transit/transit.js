@@ -1570,8 +1570,8 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	transit.dateTimePicker = function($obj){
-		Tools.setDateHSPicker($obj, 'T-dateTimePicker'); 
+	transit.dateTimePicker = function(){
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
 	};
 
 	transit.save = function(saveType){
