@@ -46,8 +46,8 @@
                         {{/if}}
                     </p>
                     <p class="h-memberName">
-                        导游：{{rs.guideNames}}&nbsp;&nbsp;
-                        责任计调：{{rs.dutyOPUserName}}
+                        {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}&nbsp;&nbsp;
+                        {{if !!rs.dutyOPUserName}}<span class="h-memberName">责任计调：{{rs.dutyOPUserName}}</span>{{/if}}
                     </p>
                 </td>
                 <td class=""><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span><br> - <br><span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>

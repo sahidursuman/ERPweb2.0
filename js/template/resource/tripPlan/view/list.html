@@ -64,8 +64,12 @@
                     {{/if}}
                 </p>
                 <p class="h-memberName">
-                    导游：{{tripplan.guideNames}}&nbsp;&nbsp;
-                    责任计调：{{tripplan.dutyOPUserName}}
+                    {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
+                        {{if index == 0}}
+                            导游：{{tripPlanDetails.guideNames}}&nbsp;&nbsp;
+                            责任计调：{{tripPlanDetails.dutyOPUserName}}
+                        {{/if}}
+                    {{/each}}
                 </p>
             </td>
             <td class="h-touristGroupInfo">

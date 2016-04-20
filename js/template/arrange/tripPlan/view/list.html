@@ -45,14 +45,14 @@
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName">&lt;{{rs.lineProduct.name}}&gt;</p>
                     <p>
-                        {{if !!rs.tripPlanDetails}}<span class="h-memberName">导游：{{rs.tripPlanDetails[0].guideNames}}</span>{{/if}}
-                        {{if !!rs.tripPlanDetails}}<span class="h-memberName">责任计调：{{rs.tripPlanDetails[0].dutyOPUserName}}</span>{{/if}}
+                        {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}&nbsp;&nbsp;
+                        {{if !!rs.dutyOPUserName}}<span class="h-memberName">责任计调：{{rs.dutyOPUserName}}</span>{{/if}}
                     </p>
                 </td>
                 <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
                 <td style="vertical-align:middle">
-                {{if !!rs.tripPlanDetails && !!rs.tripPlanDetails[1]}}
-                {{rs.tripPlanDetails[1].travelAgencyName}}
+                {{if !!rs.tripPlanDetails && !!rs.tripPlanDetails[0]}}
+                {{rs.tripPlanDetails[0].travelAgencyName}}
                 {{/if}}
                 </td>
                 <td>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
