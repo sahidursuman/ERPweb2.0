@@ -80,7 +80,7 @@
             <div class="form-group mar-r-10">
                 <label class="control-label">付款方式：</label>
                 <select class="form-control T-sumPayType" name="sumPayType">
-                    {{#sumPayType | getPayTypeOptions: 5 }}
+                    {{#sumPayType | getPayTypeOptions:0,1 }}
                 </select>
             </div>
             <div class="form-group mar-r-10">
