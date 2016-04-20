@@ -667,7 +667,7 @@
 </div>
 {{if tripPlan.billStatus > -1}}
 <div style="width:60%;">
-    <div> 
+    <div arrangeType="hotel"> 
         <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
         <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].opCheckRemark}}{{/if}}" />
     

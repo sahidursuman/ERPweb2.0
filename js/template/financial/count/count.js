@@ -5483,7 +5483,7 @@ define(function(require, exports){
 			var id = '',selfPayItemId = '',realMarketPrice = Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
 				realPrice = Count.changeTwoDecimal($that.find('.price').text());
 			if(!!$that.find('input[name=marketPrice]').val()){
-				realMarketPrice = $that.find('input[name=realMarketPrice]').val();
+				realMarketPrice = $that.find('input[name=marketPrice]').val();
 			};
 			if(!!$that.find('input[name=price]').val()){
 				realPrice = $that.find('input[name=price]').val();
@@ -5803,28 +5803,28 @@ define(function(require, exports){
 		var $guideObj = $obj.find('.T-count-guide'),
 		$tr = $guideObj.find('tr');
 		$tr.each(function(){
-			if($(this).attr('isAccountGuide') == 1){
-				var guideJson = {
-					id:$(this).attr('arrangeid'),
-					price:$(this).find('input[name=price]').val(),
-					manageFee:$(this).find('input[name=manageFee]').val(),
-					remark:$(this).find('input[name=remark]').val()
-				};
-				saveJson.guideArrangeList.push(guideJson);
-			}
+			var guideJson = {
+				id:$(this).attr('arrangeid'),
+				price:$(this).find('input[name=price]').val(),
+				manageFee:$(this).find('input[name=manageFee]').val(),
+				remark:$(this).find('input[name=remark]').val()
+			};
+			saveJson.guideArrangeList.push(guideJson);
 		});
 		
 		// 批注
         var $tab = $obj,
             $financialRemark = $tab.find('input[name="accountFinancialCheckComment"]'),
             $accountOPCheckComment = $tab.find('input[name="accountOPCheckComment"]'),
+            type = 0,
             remarkList = [];
         for (var i = 0, len = $financialRemark.length, opCheckRemark, financeCheckRemark; i < len; i ++)  {
             opCheckRemark = $financialRemark.eq(i).val();
             financeCheckRemark = $accountOPCheckComment.eq(i).val();
+            var arrangeType = $financialRemark.eq(i).closest('div').attr('arrangeType');
             if (opCheckRemark || financeCheckRemark)  {
                 remarkList.push({
-                    type: (i+''),               // server要求字符串
+                    type:(i+''),               // server要求字符串
                     opCheckRemark: opCheckRemark,
                     financeCheckRemark: financeCheckRemark
                 })
