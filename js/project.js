@@ -2029,15 +2029,15 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
  * setDateHSTimePicker 控件日期时间方法
  */
 
-Tools.setDateHSPicker = function($obj,className){
-	if (!$obj || !$obj.length) {
+Tools.setDateHSPicker = function(className){
+	if (!className || !className.length) {
         console.log('元素为空，无法绑定日期控件');
         return;
     }
-    $obj.find('.' + className).datetimepicker({
+    $('.' + className).datetimepicker({
         autoclose: true,
         todayHighlight: true,
-        format: 'YYYY-MM-DD HH:mm',
+        format: 'YYYY-MM-DD HH:mm:ss',
         language: 'zh-CN'
        });  
 };
