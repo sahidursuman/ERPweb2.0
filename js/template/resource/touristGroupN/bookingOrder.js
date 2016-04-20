@@ -24,8 +24,15 @@ define(function(require, exports, module) {
             updateMoney : require('./view/booking/update/updateMoney'),//编辑应收
             updaeGuestInfo : require('./view/booking/update/updaeGuestInfo'),//编辑客人信息
             view : require('./view/booking/view/view'),//查看页面
+            viewHotel : require('./view/booking/view/viewHotel'),//查看酒店
+            viewTicketl : require('./view/booking/view/viewTicket'),//查看票务
+            viewScenic : require('./view/booking/view/viewScenic'),//查看酒店
+            viewMoney : require('./view/booking/view/viewMoney'),//查看酒店
+            viewBus : require('./view/booking/view/viewBus'),//查看车
+            viewGuestInfo : require('./view/booking/view/viewGuestInfo'),//查看客人信息
         },
         bookingOrder = {
+            pageNo : 0
         },
         touristsOrderExports = require('./touristGroup'),//游客订单
         touristsOrder = touristsOrderExports.touristGroup,//游客订单
@@ -66,6 +73,7 @@ define(function(require, exports, module) {
                 html = filterUnAuth(html);
                 $tab.find('.T-booking-list').html(html);
                 $tab.find('.T-record-size').html(data.recordSize);
+                bookingOrder.pageNo = args.pageNo;
                 //绑定分页插件
                 laypage({
                     cont: $tab.find('.T-pagenation'),
@@ -95,7 +103,7 @@ define(function(require, exports, module) {
         });
         //添加游客小组事件
         $tab.find('.T-btn-add').on('click', function(){
-            bookingOrder.addBooking();
+            bookingOrder.operationBooking();
         });
         bookingOrder.getOPUserList($tab.find('.T-choose-outUserList'), false).trigger('click');
         //表内操作
@@ -108,7 +116,7 @@ define(function(require, exports, module) {
                 bookingOrder.getUpdateBooking(id, 1);
             }else if($that.hasClass('T-delete')){
                 showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
-                    
+                    bookingOrder.deleteBooking(id, $tab);
                 });
             }
         });
@@ -125,11 +133,12 @@ define(function(require, exports, module) {
             return args;
         }
     };
+
     /**
      * 新增项目代订 & 编辑项目代订
      * @param {[type]} data [description]
      */
-    bookingOrder.addBooking = function(data, type){
+    bookingOrder.operationBooking = function(data, type){
         if(!!data){
             if(!!data.hotel){
                 data.hotelNeedPayMoney = data.hotel.needPayMoney;
@@ -184,8 +193,8 @@ define(function(require, exports, module) {
     
     /**
      * 获取编辑&查看项目代订
-     * @param  {[type]} id [description]
-     * @return {[type]}    [description]
+     * @param  {number} id    ID
+     * @param  {number} type  0新增；1编辑；2查看。
      */
     bookingOrder.getUpdateBooking = function(id, type){
         $.ajax({
@@ -196,16 +205,40 @@ define(function(require, exports, module) {
                 var partnerAgencyName = data.bookingOrder.partnerAgencyName + "（"+ data.bookingOrder.contactRealname +"）";
                 data.bookingOrder.partnerAgencyName = partnerAgencyName;
                 if(type === 1){
-                    bookingOrder.addBooking(data.bookingOrder, 1);
+                    bookingOrder.operationBooking(data.bookingOrder, 1);
                 }else{
-                    bookingOrder.addBooking(data.bookingOrder, 2);
+                    bookingOrder.operationBooking(data.bookingOrder, 2);
                 }
             }
         })
-    }
+    };
 
     /**
-     * [commonEvents description]
+     * 删除项目代订
+     * @param  {[type]} id   [description]
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    bookingOrder.deleteBooking = function(id, $tab){
+        $.ajax({
+            url : KingServices.build_url('bookingOrderV2', 'deleteBookingOrder'),
+            data : {id : id},
+            type: 'POST',
+            success : function(data){
+                if (showDialog(data)) {
+                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        touristGroup.getList({
+                            pageNo : bookingOrder.pageNo
+                        }, $tab);
+                    });
+                }
+            }
+        });
+        return this;
+    };
+
+    /**
+     * 新增&编辑&查看公用事件
      * @param  {[type]} $tab [description]
      * @param  {[type]} type [description]
      * @return {[type]}      [description]
@@ -235,7 +268,9 @@ define(function(require, exports, module) {
         });
         bookingOrder.getOPUserList($tab.find('.T-chooseUser'), true).trigger('click');
         $tab.on('change', '.T-container', function(event){
-            bookingOrder.saveData($tab, false, false, true);
+            if(type === 0){
+                bookingOrder.saveData($tab, false, false, true);
+            }
         });
         $tab.find(".T-btn-save").on('click', function(){
             bookingOrder.saveData($tab);
@@ -244,7 +279,7 @@ define(function(require, exports, module) {
            showConfirmDialog($("#confirm-dialog-message"), "确定还原到上次操作?", function() {
                 var data = window.localStorage.getItem("hct_booking_order_add");
                 data = JSON.parse(data || null);
-                bookingOrder.addBooking(data);
+                bookingOrder.operationBooking(data);
             });
         });
         $tab.find('.T-refresh').on('click', function(){
@@ -256,25 +291,30 @@ define(function(require, exports, module) {
         });
 
         return this;
-        function clearItem(){
+        function clearItem($that){
             var status = $that.data('status'), tps = "确定清空该条数据？";
             switch(status){
                 case "bus":
-                    tps = "确定清空该条旅游车数据？";
+                    tps = "确定清空旅游车数据？";
                     break;
                 case "hotel":
-                    tps = "确定清空该条酒店数据？";
+                    tps = "确定清空酒店数据？";
                     break;
                 case "scenic":
-                    tps = "确定清空该条景区数据？";
+                    tps = "确定清空景区数据？";
                     break;
                 case "ticket":
-                    tps = "确定清空该条票务数据？";
+                    tps = "确定清空票务数据？";
                     break;
             }
             if($that.prevAll('input[type="text"]').val() !== ""){
                 showConfirmDialog($("#confirm-dialog-message"), tps, function() {
-                    $that.prevAll('input[type="text"]').val('').data('json', '').data('clear', '1');
+                    var $text = $that.prevAll('input[type="text"]'),
+                        clearId = $text.data('id');
+                    if(!!clearId){
+                        $text.data('old-json', $text.data('json'));
+                    }
+                    $text.val('').data('json', '').data('clear', '1');
                 });
             }else{
                 showMessageDialog($("#confirm-dialog-message"), "数据已经清空！");
@@ -294,7 +334,7 @@ define(function(require, exports, module) {
             data = JSON.parse(data || "{}");
         }
         data.feeDel = JSON.stringify(data.feeDel || null);
-        if(optionType === 1){
+        if(optionType === 2){
             html = T.viewHotel(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
@@ -338,6 +378,7 @@ define(function(require, exports, module) {
                     $.extend(baseInfo, commonData);
                     $that.val(commonData.needPayMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     bookingOrder.saveData($that.closest('.T-container'), false, false, true);
+                    F.sumBookingSubtotal($that.closest('.T-container'));
                     layer.close(index);
                 });
             }
@@ -356,8 +397,8 @@ define(function(require, exports, module) {
             data = JSON.parse(data || "{}");
         }
         data.feeDel = JSON.stringify(data.feeDel || null);
-        if(optionType === 1){
-            html = T.viewHotel(data);
+        if(optionType === 2){
+            html = T.viewTicketl(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
@@ -392,6 +433,7 @@ define(function(require, exports, module) {
                     $.extend(baseInfo, commonData);
                     $that.val(commonData.needPayMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     bookingOrder.saveData($that.closest('.T-container'), false, false, true);
+                    F.sumBookingSubtotal($that.closest('.T-container'));
                     layer.close(index);
                 });
             }
@@ -410,8 +452,8 @@ define(function(require, exports, module) {
             data = JSON.parse(data || "{}");
         }
         data.feeDel = JSON.stringify(data.feeDel || null);
-        if(optionType === 1){
-            html = T.viewHotel(data);
+        if(optionType === 2){
+            html = T.viewScenic(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
@@ -448,6 +490,7 @@ define(function(require, exports, module) {
                     $.extend(baseInfo, commonData);
                     $that.val(commonData.needPayMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     bookingOrder.saveData($that.closest('.T-container'), false, false, true);
+                    F.sumBookingSubtotal($that.closest('.T-container'));
                     layer.close(index);
                 });
             }
@@ -466,8 +509,8 @@ define(function(require, exports, module) {
             data = JSON.parse(data || "{}");
         }
         data.feeDel = JSON.stringify(data.feeDel || null);
-        if(optionType === 1){
-            html = T.viewHotel(data);
+        if(optionType === 2){
+            html = T.viewBus(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
@@ -496,6 +539,7 @@ define(function(require, exports, module) {
                     $.extend(baseInfo, commonData);
                     $that.val(commonData.needPayMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     bookingOrder.saveData($that.closest('.T-container'), false, false, true);
+                    F.sumBookingSubtotal($that.closest('.T-container'));
                     layer.close(index);
                 });
             }
@@ -518,7 +562,7 @@ define(function(require, exports, module) {
         data.feeDel = JSON.stringify(data.feeDel || null);
 
         $.extend(data, moneyData);
-        if(optionType === 1){
+        if(optionType === 2){
             html = T.viewMoney(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
@@ -573,7 +617,7 @@ define(function(require, exports, module) {
         if(typeof data !== "object"){
             data = JSON.parse(data || "{}");
         }
-        if(optionType === 1){
+        if(optionType === 2){
             title = "查看客人信息";
             html = T.viewGuestInfo(data);
         }else{
@@ -589,7 +633,7 @@ define(function(require, exports, module) {
             scrollbar: false,
             success:function(obj, index){
                 var $layer = $(obj);
-                if(optionType === 1){
+                if(optionType === 2){
                     $layer.find('.T-btn-close').on('click', function(){
                         layer.close(index);
                     });
@@ -623,7 +667,7 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.bindLayerCommonFeeEvents = function($layer, layerIndex, type){
-        if(type === 1){
+        if(type === 2){
             $layer.find('.T-btn-close').on('click', function(){
                 layer.close(layerIndex);
             });
@@ -707,7 +751,7 @@ define(function(require, exports, module) {
             var $this = $(this), $tr = $this.closest('tr') , id = $tr.data('id');
             if($this.hasClass('T-delete')){
                 if(!!id){
-                    var delJson = $this.closest('.T-fee-list').data('del-json');
+                    var delJson = $this.closest('.T-fee-list').data('del-json') || [];
                     if(typeof delJson !== "object"){
                         delJson = JSON.parse(delJson || "[]");
                     };
@@ -764,6 +808,8 @@ define(function(require, exports, module) {
                     }
                 }
             }
+            
+            hotelJson.deleteFeeIds = F.assemblyFeeDelIds(hotelJson.feeDel);
             if(!!hotelId){
                 hotelJson.id = hotelId;
             }
@@ -777,6 +823,9 @@ define(function(require, exports, module) {
         if(!!ticketId && ticketJson){
             ticketJson.id = ticketId;
         }
+        if(!!ticketJson){
+            ticketJson.deleteFeeIds = F.assemblyFeeDelIds(ticketJson.feeDel);
+        }
         bookingOrderJson.ticket = ticketJson;
 
         var $scenic = $baseInfo.find('.T-scenic'),
@@ -785,6 +834,9 @@ define(function(require, exports, module) {
         scenicJson = typeof scenicJson !== "object" ? JSON.parse(scenicJson || null) : scenicJson;
         if(!!scenicId && !!scenicJson){
             scenicJson.id = scenicId;
+        }
+        if(!!scenicJson){
+            scenicJson.deleteFeeIds = F.assemblyFeeDelIds(scenicJson.feeDel);
         }
         bookingOrderJson.scenic = scenicJson;
 
@@ -796,10 +848,16 @@ define(function(require, exports, module) {
         if(!!busId && !!busJson){
             busJson.id = busId;
         }
+        if(!!busJson){
+            busJson.deleteFeeIds = F.assemblyFeeDelIds(busJson.feeDel);
+        }
         bookingOrderJson.bus = busJson;
 
         var receivableJson = $baseInfo.find('.T-receivable').data('json');
         receivableJson = typeof receivableJson !== "object" ? JSON.parse(receivableJson || null) : receivableJson;
+        if(!!receivableJson){
+            receivableJson.deleteFeeIds = F.assemblyFeeDelIds(receivableJson.feeDel);
+        }
         bookingOrderJson.needGet = receivableJson;
 
         var guestInfoJson = $baseInfo.find('.T-guest-info').data('json');
@@ -834,7 +892,7 @@ define(function(require, exports, module) {
                             Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                             var $listTab = $("#tab-customer_order-content");
                             if($listTab.length > 0){
-                                $listTab.find('#customerOrderBookingOrder').find('.T-touristGroupList-search').trigger('click');
+                                $listTab.find('#customerOrderBookingOrder').find('.T-search-area').trigger('click');
                             }else{
                                 bookingOrder.showListPage(0);
                             }
@@ -843,6 +901,8 @@ define(function(require, exports, module) {
                             window.localStorage.removeItem("hct_booking_order_add");
                         }
                     });
+                }else{
+
                 }
             }
         })
@@ -1010,16 +1070,38 @@ define(function(require, exports, module) {
         return $.extend({}, data, moneyData);
     };
 
+    /**
+     * 计算代订小计
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
     F.sumBookingSubtotal = function($tab){
         var hotelMoney = $tab.find('.T-hotel').val() || 0,
             ticketMoney = $tab.find('.T-ticket').val() || 0,
             scenicMoney = $tab.find('.T-scenic').val() || 0,
             busMoney = $tab.find('.T-bus').val() || 0;
-        hotelMoney = isNaN(hotelMoney) ? 0 : hotelMoney;
-        ticketMoney = isNaN(ticketMoney) ? 0 : ticketMoney;
-        scenicMoney = isNaN(scenicMoney) ? 0 : scenicMoney;
-        busMoney = isNaN(busMoney) ? 0 : busMoney;
-        return hotelMoney*1 + ticketMoney*1 + * scenicMoney*1 + busMoney*1;
+        $tab.find('[name="bookingSubtotal"]').val(hotelMoney*1 + ticketMoney*1 + scenicMoney*1 + busMoney*1);
+        return this;
+    };
+
+    /**
+     * 组装删除费用项ID集合
+     * @param  {[type]} arr [description]
+     * @return {[type]}     [description]
+     */
+    F.assemblyFeeDelIds = function(arr){
+        var delIds = null;
+        if(!!arr && arr.length > 0){
+            delIds = "";
+            for(var i=0; i<arr.length; i++){
+                if(i != arr.length -1){
+                    delIds += arr[i].id + ",";
+                }else{
+                    delIds += arr[i].id;
+                }
+            }
+        }
+        return delIds;
     };
 
     return bookingOrder;
