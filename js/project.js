@@ -1069,11 +1069,22 @@ var _statusText = {
 						fn.success(data, textStatus);
 					},
 					complete: function()  {
+						var urls = opt.url.split('?'),
+							path = urls[0],
+							method = urls[1].split('&')[0].split('=')[1],
+							duration = (new Date()).getTime() - _startTime;
+
+						// CNZZ超时记录
+						if (!!_czc && duration > 1000) {
+							_czc.push( ["_trackEvent", 'AJAX', path,  method, duration, siteId]);
+						}
+
 						if (opt.removeLoading) {
 							layer.close(globalLoadingLayer);
-						}
+						}						
 					}
 				});
+			var _startTime = (new Date()).getTime();
 			return _ajax(opt);
 		}
 	};
@@ -2012,6 +2023,23 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
     }
 
     return $obj;
+};
+
+/**
+ * setDateHSTimePicker 控件日期时间方法
+ */
+
+Tools.setDateHSPicker = function($obj,className){
+	if (!$obj || !$obj.length) {
+        console.log('元素为空，无法绑定日期控件');
+        return;
+    }
+    $obj.find('.' + className).datetimepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'YYYY-MM-DD HH:mm',
+        language: 'zh-CN'
+       });  
 };
 
 /**
