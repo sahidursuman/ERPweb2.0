@@ -307,7 +307,9 @@ define(function(require, exports){
 
 		//显示隐藏
 		Count.showOrhideList($obj);
-
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});
 		var $listObj = $obj.find('.T-list');
 		
 		//中转明细
@@ -512,7 +514,11 @@ define(function(require, exports){
 		
 		//显示隐藏
 		Count.showOrhideList($obj);
-
+		//显示计算公式
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});
+		
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -968,6 +974,10 @@ define(function(require, exports){
 	Count.updateEvent = function($obj){//页面tabid--$obj
 		//显示隐藏
 		Count.showOrhideList($obj);
+		//显示计算公式
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -6675,7 +6685,18 @@ define(function(require, exports){
 				$this.removeClass('T-hide');
 			}
 		});
+
 	};
+	Count.showFormula = function($obj){
+		var selfFormula = $obj.find('.T-formula-List');
+		if(selfFormula.hasClass('hide')){
+			selfFormula.removeClass('hide');
+			selfFormula.show();
+		}else{
+			selfFormula.addClass('hide');
+		}
+	}
+	
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;
