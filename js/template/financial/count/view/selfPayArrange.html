@@ -3,7 +3,7 @@
         <i class="ace-icon fa fa-medkit"></i> 自费安排
         <a href="javascript:void(0)" class="T-addSelf">
             <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
-                <i class="ace-icon fa fa-plus"></i>
+                <i class="ace-icon fa fa-credit-card"></i>
                 新增
             </button>
         </a>
@@ -22,28 +22,27 @@
                 
             </tr>
             <tr class="bg-blur">
-              <th><span class="necessary">*</span>时间</th>
-              <th><span class="necessary">*</span>自费商家</th>
-              <th><span class="necessary">*</span>项目</th>
-              <th><span class="necessary">*</span>单价</th>
-              <th><span class="necessary">*</span>导游</th>
-              <th><span class="necessary">*</span>应收数量</th>
-              <th>应收优惠</th>
-              <th>应收</th>
-              <th>现收</th>
-              <th><span class="necessary">*</span>底价</th>
-              <th><span class="necessary">*</span>应付数量</th>
-              <th>优惠</th>
-              <th>应付</th>
-              <th>已付</th>
-              <th>导付</th>
-              <th>付款方式</th>
-              <th>单据</th>
-              <th><span class="necessary">*</span>比例%</th>
-              <th>返佣</th>
-              <th><span class="necessary">*</span>比例%</th>
-              <th>返佣</th>
-              
+                <th><span class="necessary">*</span>时间</th>
+                <th><span class="necessary">*</span>自费商家</th>
+                <th><span class="necessary">*</span>项目</th>
+                <th><span class="necessary">*</span>单价</th>
+                <th><span class="necessary">*</span>导游</th>
+                <th><span class="necessary">*</span>应收数量</th>
+                <th>应收优惠</th>
+                <th>应收</th>
+                <th>现收</th>
+                <th><span class="necessary">*</span>底价</th>
+                <th><span class="necessary">*</span>应付数量</th>
+                <th>优惠</th>
+                <th>应付</th>
+                <th>已付</th>
+                <th>导付</th>
+                <th>付款方式</th>
+                <th>单据</th>
+                <th><span class="necessary">*</span>比例%</th>
+                <th>返佣</th>
+                <th><span class="necessary">*</span>比例%</th>
+                <th>返佣</th>
             </tr>
         </thead>
         <tbody class="T-count-selfPay">
@@ -78,11 +77,11 @@
 
                                     <td>
                                         <div class="div-h-30"></div>
-                                        {{if editStatus != 1}}<span class="realMarketPrice">{{itemSet.realMarketPrice}}</span>
+                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
                                         {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                         {{/if}}
-                                    </td>
+                                    </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
@@ -514,11 +513,11 @@
                                     </td>
                                     <td>
                                         <div class="div-h-30"></div>
-                                        {{if editStatus != 1}}<span class="realMarketPrice">{{itemSet.realMarketPrice}}</span>
+                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
                                         {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                         {{/if}}
-                                    </td>
+                                    </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
