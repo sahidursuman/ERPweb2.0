@@ -3613,7 +3613,7 @@ define(function(require, exports) {
 				}
 				guideArrangeList.push(guideJson);
 			}
-		}else{
+		}else if ($tab.find('.T-status').text() == 1) {
 			showMessageDialog($("#confirm-dialog-message"),'至少安排一个导游')
 			return;
 		}
