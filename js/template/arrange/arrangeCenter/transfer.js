@@ -1714,7 +1714,7 @@ define(function(require, exports) {
      */
     Transfer._initOtherArrange = function($tab) {
             Transfer.setDate($tab);
-
+            Transfer.addResource($tab); 
             // 绑定安排完成的选择
             $tab.find('#myTab_transitArrange').on('click', 'a', function(event) {
                 event.preventDefault();
@@ -1857,10 +1857,11 @@ define(function(require, exports) {
     Transfer.addRestaurant = function($tbody) {
         var html = '<tr data-entity-id="">' +
             '<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="" /></td>' +
-            '<td><div class="col-sm-12"><input class="col-sm-12 bind-change T-autocomplete-input T-chooseRestaurant" name="restaurant" type="text" value="" />' +
-            '<input type="hidden" name="restaurantId" value="" />' +
-            '<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
-            '<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="" /></td>' +
+            '<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="0" /><input class="col-sm-12 bind-change T-autocomplete-input T-chooseRestaurant" name="restaurant" type="text" value="" />'+
+            '<input type="hidden" name="restaurantId" value="" />'+
+            '<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">'+
+            '<i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
+            '<td><input class="col-sm-11" name="manager" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>' +
             '<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>' +
             '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="price" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />' +
@@ -1874,7 +1875,7 @@ define(function(require, exports) {
             '</tr>',
             $line = filterUnAuth(html);
         $tbody.append($line);
-        Transfer.addResource($line);
+        Transfer.addResource($line);  
         Transfer.setDate($line);
     };
     Transfer.addTicket = function($tbody) {
