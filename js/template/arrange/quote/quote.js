@@ -3837,8 +3837,8 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	quote.dateTimePicker = function($obj){
-		Tools.setDateHSPicker($obj, 'T-dateTimePicker'); 
+	quote.dateTimePicker = function(){
+		Tools.setDateHSPicker('T-dateTimePicker'); 
 	}
 	quote.jsonToString = function(jTs) {
 		if (typeof jTs != 'string') {
