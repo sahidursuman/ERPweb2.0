@@ -5798,7 +5798,6 @@ define(function(require, exports){
 			};
             
 		});
-		console.log(saveJson.addOtherArrangeList);
 		//导游
 		var $guideObj = $obj.find('.T-count-guide'),
 		$tr = $guideObj.find('tr');
@@ -5822,9 +5821,50 @@ define(function(require, exports){
             opCheckRemark = $financialRemark.eq(i).val();
             financeCheckRemark = $accountOPCheckComment.eq(i).val();
             var arrangeType = $financialRemark.eq(i).closest('div').attr('arrangeType');
+            switch(arrangeType){
+            	case 'tripDetail' :
+            		type = 0;
+            	break;
+            	case 'shop' :
+            		type = 1;
+            	break;
+            	case 'self' :
+            		type = 2;
+            	break;
+            	case 'otherIn' :
+            		type = 3;
+            	break;
+            	case 'bus' :
+            		type = 4;
+            	break;
+            	case 'rest' :
+            		type = 5;
+            	break;
+            	case 'hotel' :
+            		type = 6;
+            	break;
+            	case 'scenic' :
+            		type = 7;
+            	break;
+            	case 'ticket' :
+            		type = 8;
+            	break;
+            	case 'otherOut' :
+            		type = 9;
+            	break;
+            	case 'innerTransfer' :
+            		type = 10;
+            	break;
+            	case 'insure' :
+            		type = 11;
+            	break;
+            	case 'guide' :
+            		type = 12;
+            	break;
+            };
             if (opCheckRemark || financeCheckRemark)  {
                 remarkList.push({
-                    type:(i+''),               // server要求字符串
+                    type:type,               // server要求字符串
                     opCheckRemark: opCheckRemark,
                     financeCheckRemark: financeCheckRemark
                 })
