@@ -46,12 +46,8 @@
                         {{/if}}
                     </p>
                     <p class="h-memberName">
-                        {{each rs.tripPlanDetails as tripPlanDetails index}}
-                            {{if index == 0}}
-                                导游：{{tripPlanDetails.guideNames}}&nbsp;&nbsp;
-                                责任计调：{{tripPlanDetails.dutyOPUserName}}
-                            {{/if}}
-                        {{/each}}
+                        导游：{{rs.guideNames}}&nbsp;&nbsp;
+                        责任计调：{{rs.dutyOPUserName}}
                     </p>
                 </td>
                 <td class=""><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span><br> - <br><span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
@@ -100,7 +96,7 @@
                     </a>
                 </td>
             </tr>
-            {{if rs.tripPlanDetails.length>0}}
+            {{if rs.tripPlanDetails.length>1}}
                 {{each rs.tripPlanDetails as touristGroup index}}
                 {{if index>0}}
                 <tr class="hidden">
