@@ -3838,7 +3838,7 @@ define(function(require, exports) {
 		})
 	};
 	quote.dateTimePicker = function(){
-		Tools.setDateHSPicker('T-dateTimePicker'); 
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
 	}
 	quote.jsonToString = function(jTs) {
 		if (typeof jTs != 'string') {

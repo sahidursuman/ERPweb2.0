@@ -2073,7 +2073,7 @@ define(function(require, exports) {
     //时间控件
     touristGroup.formatTime = function($obj) {
         Tools.setDatePicker($obj.find('.datepicker'), true);
-        Tools.setDateHSPicker('datetimepicker');
+        Tools.setDateHSPicker($('.datetimepicker'));
     };
 
     /**
