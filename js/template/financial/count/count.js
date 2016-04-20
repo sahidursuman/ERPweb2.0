@@ -307,7 +307,7 @@ define(function(require, exports){
 
 		//显示隐藏
 		Count.showOrhideList($obj);
-		
+
 		var $listObj = $obj.find('.T-list');
 		
 		//中转明细
@@ -4138,7 +4138,7 @@ define(function(require, exports){
 					};
 					if($obj.attr('selfPayId')){
 						$obj.find('.realMarketPrice').text(data.marketPrice);
-						$obj.find('.realPrice').text(data.price);
+						$obj.find('.price').text(data.price);
 						$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
 						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
 							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
@@ -5197,18 +5197,18 @@ define(function(require, exports){
 			}
 		}
 
-		var addoOherInList = saveJsonStr.otherInList;
+		var addoOherInList = saveJsonStr.addOtherIncomeList;
 		for(var i = 0;i<addoOherInList.length;i++){
 			if(addoOherInList[i].title == "" || addoOherInList[i].price == "" || addoOherInList[i].count == ""){
 				var message="";
 				if(addoOherInList[i].title == ""){
-					message = "请输入项目"
+					message = "请输入其他收入的消费项目"
 				}else{
 					if(addoOherInList[i].price == ""){
-						message="请输入单价"
+						message="请输入其他收入的消费单价"
 					}else{
 						if(addoOherInList[i].count == ""){
-							message="请输入数量"
+							message="请输入其他收入的消费数量"
 						}
 					}
 				};
@@ -5217,18 +5217,18 @@ define(function(require, exports){
 			}
 		}
 
-		var addoOherList = saveJsonStr.otherArrangeList;
-		for(var i = 0;i<addoOherList.length;i++){
-			if(addoOherList[i].title == "" || addoOherList[i].price == "" || addoOherList[i].realCount == ""){
+		var addOherList = saveJsonStr.addOtherArrangeList;
+		for(var i = 0;i<addOherList.length;i++){
+			if(addOherList[i].otherName == "" || addOherList[i].realPrice == "" || addOherList[i].realCount == ""){
 				var message="";
-				if(addoOherList[i].title == ""){
-					message = "请输入项目"
+				if(addOherList[i].otherName == ""){
+					message = "请输入其他支出的消费项目"
 				}else{
-					if(addoOherList[i].price == ""){
-						message="请输入单价"
+					if(addOherList[i].realPrice == ""){
+						message="请输入其他支出的消费单价"
 					}else{
-						if(addoOherList[i].realCount == ""){
-							message="请输入数量"
+						if(addOherList[i].realCount == ""){
+							message="请输入其他支出的消费数量"
 						}
 					}
 				};
@@ -5258,7 +5258,7 @@ define(function(require, exports){
 		var url = KingServices.build_url('financialTripPlan',method);
 		if(typeFlag == 3){
 			url += "&category=category";
-		}
+		};
 		$.ajax({
 			url: url,
 			data:{
@@ -5475,14 +5475,19 @@ define(function(require, exports){
 				};
 			
 		});
-		console.log(saveJson.shopArrangeList);
-		console.log(saveJson.addShopArrangeList);
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');
 		$tr.each(function(){
 			var $that = $(this);
-			var id = '',selfPayItemId = '';
+			var id = '',selfPayItemId = '',realMarketPrice = Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
+				realPrice = Count.changeTwoDecimal($that.find('.price').text());
+			if(!!$that.find('input[name=marketPrice]').val()){
+				realMarketPrice = $that.find('input[name=marketPrice]').val();
+			};
+			if(!!$that.find('input[name=price]').val()){
+				realPrice = $that.find('input[name=price]').val();
+			};
 			if(!!$that.find('input[name=selfPayArrangeId]').val()){
 				id = $that.find('input[name=selfPayArrangeId]').val();
 			};
@@ -5493,8 +5498,8 @@ define(function(require, exports){
 				var selfPayArrange = {
 					id:id,
 					selfPayItemId:selfPayItemId,
-					realMarketPrice:Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
-					realPrice:Count.changeTwoDecimal($that.find('.realPrice').text()),
+					realMarketPrice:realMarketPrice,
+					realPrice:realPrice,
 					guideDetails:Count.getSelfGuideData($that)
 				};
 				saveJson.selfPayArrangeList.push(selfPayArrange);
@@ -5798,28 +5803,28 @@ define(function(require, exports){
 		var $guideObj = $obj.find('.T-count-guide'),
 		$tr = $guideObj.find('tr');
 		$tr.each(function(){
-			if($(this).attr('isAccountGuide') == 1){
-				var guideJson = {
-					id:$(this).attr('arrangeid'),
-					price:$(this).find('input[name=price]').val(),
-					manageFee:$(this).find('input[name=manageFee]').val(),
-					remark:$(this).find('input[name=remark]').val()
-				};
-				saveJson.guideArrangeList.push(guideJson);
-			}
+			var guideJson = {
+				id:$(this).attr('arrangeid'),
+				price:$(this).find('input[name=price]').val(),
+				manageFee:$(this).find('input[name=manageFee]').val(),
+				remark:$(this).find('input[name=remark]').val()
+			};
+			saveJson.guideArrangeList.push(guideJson);
 		});
 		
 		// 批注
         var $tab = $obj,
             $financialRemark = $tab.find('input[name="accountFinancialCheckComment"]'),
             $accountOPCheckComment = $tab.find('input[name="accountOPCheckComment"]'),
+            type = 0,
             remarkList = [];
         for (var i = 0, len = $financialRemark.length, opCheckRemark, financeCheckRemark; i < len; i ++)  {
             opCheckRemark = $financialRemark.eq(i).val();
             financeCheckRemark = $accountOPCheckComment.eq(i).val();
+            var arrangeType = $financialRemark.eq(i).closest('div').attr('arrangeType');
             if (opCheckRemark || financeCheckRemark)  {
                 remarkList.push({
-                    type: (i+''),               // server要求字符串
+                    type:(i+''),               // server要求字符串
                     opCheckRemark: opCheckRemark,
                     financeCheckRemark: financeCheckRemark
                 })
@@ -6030,7 +6035,6 @@ define(function(require, exports){
 				if(showDialog(data)){
 					showMessageDialog($( "#confirm-dialog-message" ),"删除成功!");
 					fn();
-					
 				}
             }
         });

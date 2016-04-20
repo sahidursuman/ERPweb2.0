@@ -669,7 +669,7 @@
 </div>
 {{if tripPlan.billStatus > -1}}
 <div style="width:60%;">
-    <div>
+    <div arrangeType="scenic">
         <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
         <input name="accountFinancialCheckComment" {{if !isFinance}}readonly="readonly" {{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.scenicRemark.length>0}}{{remarkArrangeList.scenicRemark[0].opCheckRemark}}{{/if}}" />
         <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
