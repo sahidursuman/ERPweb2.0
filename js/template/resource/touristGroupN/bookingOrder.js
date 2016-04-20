@@ -63,6 +63,13 @@ define(function(require, exports, module) {
      * @return {[type]}      [description]
      */
     bookingOrder.getList = function(args, $tab){
+        var page = 0;
+        if(typeof args === "number"){
+            page = args;
+        }
+        if(typeof args !== "object"){
+            args = getArgs($tab.find(".T-search-area"));
+        }
         $.ajax({
             url: KingServices.build_url('bookingOrderV2','getBookingOrderList'),
             data: args,
@@ -88,6 +95,17 @@ define(function(require, exports, module) {
                 });
             }
         });
+        return this;
+        function getArgs($searchArea){
+            var args = {
+                pageNo : page,
+                orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                partnerAgencyName : $searchArea.find('[name="partnerAgencyName"]').val(),
+                outOPUserName : $searchArea.find('[name="outOPUserName"]').val(),
+                status : $searchArea.find('.T-select-status').val()
+            };
+            return args;
+        }
     };
 
     /**
@@ -99,7 +117,7 @@ define(function(require, exports, module) {
         var $searchArea = $tab.find(".T-search-area");
         //搜索
         $searchArea.find('.T-btn-search').on('click', function(){
-            bookingOrder.getList(getArgs($searchArea), $tab);
+            bookingOrder.getList(0, $tab);
         });
         //添加游客小组事件
         $tab.find('.T-btn-add').on('click', function(){
@@ -122,16 +140,6 @@ define(function(require, exports, module) {
         });
 
         return this;
-        function getArgs($searchArea){
-            var args = {
-                pageNo : 0,
-                orderNumber : $searchArea.find('[name="orderNumber"]').val(),
-                partnerAgencyName : $searchArea.find('[name="partnerAgencyName"]').val(),
-                outOPUserName : $searchArea.find('[name="outOPUserName"]').val(),
-                status : $searchArea.find('.T-select-status').val()
-            };
-            return args;
-        }
     };
 
     /**
@@ -227,9 +235,7 @@ define(function(require, exports, module) {
             success : function(data){
                 if (showDialog(data)) {
                     showMessageDialog($("#confirm-dialog-message"), data.message, function() {
-                        touristGroup.getList({
-                            pageNo : bookingOrder.pageNo
-                        }, $tab);
+                        bookingOrder.getList(bookingOrder.pageNo, $tab);
                     });
                 }
             }
@@ -244,7 +250,6 @@ define(function(require, exports, module) {
      * @return {[type]}      [description]
      */
     bookingOrder.commonEvents = function($tab, type, bookingId){
-
         $tab.find('.T-booking-info').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this);
@@ -271,6 +276,9 @@ define(function(require, exports, module) {
             if(type === 0){
                 bookingOrder.saveData($tab, false, false, true);
             }
+        });
+        $tab.find('.T-btn-close').on('click', function(){
+            Tools.closeTab(Tools.getTabKey($tab.prop('id')));
         });
         $tab.find(".T-btn-save").on('click', function(){
             bookingOrder.saveData($tab);
@@ -796,7 +804,7 @@ define(function(require, exports, module) {
             hotelJson = $hotel.data('json'),
             hotelId = $hotel.data('id');
         hotelJson = typeof hotelJson !== "object" ? JSON.parse(hotelJson || null) : hotelJson;
-        if(!!hotelJson){
+        if(!$.isEmptyObject(hotelJson)){
             hotelJson.hotel = typeof hotelJson.hotel !== "object" ? JSON.parse(hotelJson.hotel || null) : hotelJson.hotel;
             if(!!hotelJson.hotel){
                 hotelJson.arrangeHotelIds = "";
@@ -820,10 +828,10 @@ define(function(require, exports, module) {
             ticketJson = $ticket.data('json'),
             ticketId = $ticket.data('id');
         ticketJson = typeof ticketJson !== "object" ? JSON.parse(ticketJson || null) : ticketJson;
-        if(!!ticketId && ticketJson){
+        if(!!ticketId && !$.isEmptyObject(ticketJson)){
             ticketJson.id = ticketId;
         }
-        if(!!ticketJson){
+        if(!$.isEmptyObject(ticketJson)){
             ticketJson.deleteFeeIds = F.assemblyFeeDelIds(ticketJson.feeDel);
         }
         bookingOrderJson.ticket = ticketJson;
@@ -832,10 +840,10 @@ define(function(require, exports, module) {
             scenicJson = $scenic.data('json'),
             scenicId = $scenic.data('id');
         scenicJson = typeof scenicJson !== "object" ? JSON.parse(scenicJson || null) : scenicJson;
-        if(!!scenicId && !!scenicJson){
+        if(!!scenicId && !$.isEmptyObject(scenicJson)){
             scenicJson.id = scenicId;
         }
-        if(!!scenicJson){
+        if(!$.isEmptyObject(scenicJson)){
             scenicJson.deleteFeeIds = F.assemblyFeeDelIds(scenicJson.feeDel);
         }
         bookingOrderJson.scenic = scenicJson;
@@ -845,17 +853,17 @@ define(function(require, exports, module) {
             busId = $bus.data('id');
 
         busJson = typeof busJson !== "object" ? JSON.parse(busJson || null) : busJson;
-        if(!!busId && !!busJson){
+        if(!!busId && !$.isEmptyObject(busJson)){
             busJson.id = busId;
         }
-        if(!!busJson){
+        if(!!busJson && !$.isEmptyObject(busJson)){
             busJson.deleteFeeIds = F.assemblyFeeDelIds(busJson.feeDel);
         }
         bookingOrderJson.bus = busJson;
 
         var receivableJson = $baseInfo.find('.T-receivable').data('json');
         receivableJson = typeof receivableJson !== "object" ? JSON.parse(receivableJson || null) : receivableJson;
-        if(!!receivableJson){
+        if(!$.isEmptyObject(receivableJson)){
             receivableJson.deleteFeeIds = F.assemblyFeeDelIds(receivableJson.feeDel);
         }
         bookingOrderJson.needGet = receivableJson;
@@ -892,7 +900,7 @@ define(function(require, exports, module) {
                             Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                             var $listTab = $("#tab-customer_order-content");
                             if($listTab.length > 0){
-                                $listTab.find('#customerOrderBookingOrder').find('.T-search-area').trigger('click');
+                                $listTab.find('#customerOrderBookingOrder').find('.T-btn-search').trigger('click');
                             }else{
                                 bookingOrder.showListPage(0);
                             }
@@ -917,8 +925,10 @@ define(function(require, exports, module) {
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
-                    $target.val('')
-                    .data('id', '');
+                    if($target.closest('.T-search-area').length === 0){
+                        $target.val('');
+                    }
+                    $target.data('id', '');
                 }
             },
             select:function(event,ui){
