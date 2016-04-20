@@ -3399,7 +3399,9 @@ define(function(require, exports){
 		'</select>'+
 		'</td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/><input type="hidden" name="standardId"></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3468,7 +3470,9 @@ define(function(require, exports){
 		'<td><div class="div-h-30"></div><input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3526,7 +3530,9 @@ define(function(require, exports){
 		'<td><div class="div-h-30"></div><input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3596,7 +3602,9 @@ define(function(require, exports){
 		'<td><div class="div-h-30"></div><input type="text" name="shift" style="width:60px;"/></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="seatLevel" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3662,7 +3670,9 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="addOtherOutName" style="width:90px;"/></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
