@@ -304,6 +304,12 @@ define(function(require, exports){
 	};
 	//单团明细页面事件
 	Count.detailEvents = function($obj){
+
+		//显示隐藏
+		Count.showOrhideList($obj);
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});
 		var $listObj = $obj.find('.T-list');
 		
 		//中转明细
@@ -505,6 +511,14 @@ define(function(require, exports){
 	};
 	//单团报账页面事件
 	Count.reimbursementEvents = function($obj){
+		
+		//显示隐藏
+		Count.showOrhideList($obj);
+		//显示计算公式
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});
+		
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -958,6 +972,12 @@ define(function(require, exports){
 	};
 	//单团审核页面事件
 	Count.updateEvent = function($obj){//页面tabid--$obj
+		//显示隐藏
+		Count.showOrhideList($obj);
+		//显示计算公式
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -3389,7 +3409,9 @@ define(function(require, exports){
 		'</select>'+
 		'</td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/><input type="hidden" name="standardId"></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3458,7 +3480,9 @@ define(function(require, exports){
 		'<td><div class="div-h-30"></div><input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3516,7 +3540,9 @@ define(function(require, exports){
 		'<td><div class="div-h-30"></div><input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3586,7 +3612,9 @@ define(function(require, exports){
 		'<td><div class="div-h-30"></div><input type="text" name="shift" style="width:60px;"/></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="seatLevel" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -3652,7 +3680,9 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="addOtherOutName" style="width:90px;"/></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="price" class="w-80"/></td>'+
-		'<td><div class="div-h-30"></div><input type="text" name="realCount" class="w-50" readonly="readonly"/></td>'+
+		'<td><div class="div-h-30"></div>'+
+		'<span class="F-float F-money realCount">0</span>'+
+		'<input type="hidden" name="realCount" /></td>'+
 		'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-80"/></td>'+
 		'<td><div class="div-h-30"></div><span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td><div class="div-h-30"></div>0</td>'+
@@ -4128,7 +4158,7 @@ define(function(require, exports){
 					};
 					if($obj.attr('selfPayId')){
 						$obj.find('.realMarketPrice').text(data.marketPrice);
-						$obj.find('.realPrice').text(data.price);
+						$obj.find('.price').text(data.price);
 						$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
 						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
 							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
@@ -5187,18 +5217,18 @@ define(function(require, exports){
 			}
 		}
 
-		var addoOherInList = saveJsonStr.otherInList;
+		var addoOherInList = saveJsonStr.addOtherIncomeList;
 		for(var i = 0;i<addoOherInList.length;i++){
 			if(addoOherInList[i].title == "" || addoOherInList[i].price == "" || addoOherInList[i].count == ""){
 				var message="";
 				if(addoOherInList[i].title == ""){
-					message = "请输入项目"
+					message = "请输入其他收入的消费项目"
 				}else{
 					if(addoOherInList[i].price == ""){
-						message="请输入单价"
+						message="请输入其他收入的消费单价"
 					}else{
 						if(addoOherInList[i].count == ""){
-							message="请输入数量"
+							message="请输入其他收入的消费数量"
 						}
 					}
 				};
@@ -5207,18 +5237,18 @@ define(function(require, exports){
 			}
 		}
 
-		var addoOherList = saveJsonStr.otherArrangeList;
-		for(var i = 0;i<addoOherList.length;i++){
-			if(addoOherList[i].title == "" || addoOherList[i].price == "" || addoOherList[i].realCount == ""){
+		var addOherList = saveJsonStr.addOtherArrangeList;
+		for(var i = 0;i<addOherList.length;i++){
+			if(addOherList[i].otherName == "" || addOherList[i].realPrice == "" || addOherList[i].realCount == ""){
 				var message="";
-				if(addoOherList[i].title == ""){
-					message = "请输入项目"
+				if(addOherList[i].otherName == ""){
+					message = "请输入其他支出的消费项目"
 				}else{
-					if(addoOherList[i].price == ""){
-						message="请输入单价"
+					if(addOherList[i].realPrice == ""){
+						message="请输入其他支出的消费单价"
 					}else{
-						if(addoOherList[i].realCount == ""){
-							message="请输入数量"
+						if(addOherList[i].realCount == ""){
+							message="请输入其他支出的消费数量"
 						}
 					}
 				};
@@ -5248,7 +5278,7 @@ define(function(require, exports){
 		var url = KingServices.build_url('financialTripPlan',method);
 		if(typeFlag == 3){
 			url += "&category=category";
-		}
+		};
 		$.ajax({
 			url: url,
 			data:{
@@ -5465,14 +5495,19 @@ define(function(require, exports){
 				};
 			
 		});
-		console.log(saveJson.shopArrangeList);
-		console.log(saveJson.addShopArrangeList);
 		//自费数据
 		var $selfObj = $obj.find('.T-count-selfPay'),
 		$tr = $selfObj.find('tr');
 		$tr.each(function(){
 			var $that = $(this);
-			var id = '',selfPayItemId = '';
+			var id = '',selfPayItemId = '',realMarketPrice = Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
+				realPrice = Count.changeTwoDecimal($that.find('.price').text());
+			if(!!$that.find('input[name=marketPrice]').val()){
+				realMarketPrice = $that.find('input[name=marketPrice]').val();
+			};
+			if(!!$that.find('input[name=price]').val()){
+				realPrice = $that.find('input[name=price]').val();
+			};
 			if(!!$that.find('input[name=selfPayArrangeId]').val()){
 				id = $that.find('input[name=selfPayArrangeId]').val();
 			};
@@ -5483,8 +5518,8 @@ define(function(require, exports){
 				var selfPayArrange = {
 					id:id,
 					selfPayItemId:selfPayItemId,
-					realMarketPrice:Count.changeTwoDecimal($that.find('.realMarketPrice').text()),
-					realPrice:Count.changeTwoDecimal($that.find('.realPrice').text()),
+					realMarketPrice:realMarketPrice,
+					realPrice:realPrice,
 					guideDetails:Count.getSelfGuideData($that)
 				};
 				saveJson.selfPayArrangeList.push(selfPayArrange);
@@ -5783,37 +5818,77 @@ define(function(require, exports){
 			};
             
 		});
-		console.log(saveJson.addOtherArrangeList);
 		//导游
 		var $guideObj = $obj.find('.T-count-guide'),
 		$tr = $guideObj.find('tr');
 		$tr.each(function(){
-			if($(this).attr('isAccountGuide') == 1){
-				var guideJson = {
-					id:$(this).attr('arrangeid'),
-					price:$(this).find('input[name=price]').val(),
-					manageFee:$(this).find('input[name=manageFee]').val(),
-					remark:$(this).find('input[name=remark]').val()
-				};
-				saveJson.guideArrangeList.push(guideJson);
-			}
+			var guideJson = {
+				id:$(this).attr('arrangeid'),
+				price:$(this).find('input[name=price]').val(),
+				manageFee:$(this).find('input[name=manageFee]').val(),
+				remark:$(this).find('input[name=remark]').val()
+			};
+			saveJson.guideArrangeList.push(guideJson);
 		});
 		
 		// 批注
         var $tab = $obj,
             $financialRemark = $tab.find('input[name="accountFinancialCheckComment"]'),
             $accountOPCheckComment = $tab.find('input[name="accountOPCheckComment"]'),
+            type = 0,
             remarkList = [];
         for (var i = 0, len = $financialRemark.length, opCheckRemark, financeCheckRemark; i < len; i ++)  {
             opCheckRemark = $financialRemark.eq(i).val();
             financeCheckRemark = $accountOPCheckComment.eq(i).val();
-            if (opCheckRemark || financeCheckRemark)  {
+            var arrangeType = $financialRemark.eq(i).closest('div').attr('arrangeType');
+            switch(arrangeType){
+            	case 'tripDetail' :
+            		type = 0;
+            	break;
+            	case 'shop' :
+            		type = 1;
+            	break;
+            	case 'self' :
+            		type = 2;
+            	break;
+            	case 'otherIn' :
+            		type = 3;
+            	break;
+            	case 'bus' :
+            		type = 4;
+            	break;
+            	case 'rest' :
+            		type = 5;
+            	break;
+            	case 'hotel' :
+            		type = 6;
+            	break;
+            	case 'scenic' :
+            		type = 7;
+            	break;
+            	case 'ticket' :
+            		type = 8;
+            	break;
+            	case 'otherOut' :
+            		type = 9;
+            	break;
+            	case 'innerTransfer' :
+            		type = 10;
+            	break;
+            	case 'insure' :
+            		type = 11;
+            	break;
+            	case 'guide' :
+            		type = 12;
+            	break;
+            };
+            if (!!opCheckRemark || !!financeCheckRemark)  {
                 remarkList.push({
-                    type: (i+''),               // server要求字符串
+                    type:type,               // server要求字符串
                     opCheckRemark: opCheckRemark,
                     financeCheckRemark: financeCheckRemark
                 })
-            }
+            };
         }
         saveJson.remarkArrangeList = remarkList;
         return saveJson;
@@ -6020,7 +6095,6 @@ define(function(require, exports){
 				if(showDialog(data)){
 					showMessageDialog($( "#confirm-dialog-message" ),"删除成功!");
 					fn();
-					
 				}
             }
         });
@@ -6595,6 +6669,34 @@ define(function(require, exports){
 		});
 		return isReceived;
 	};
+	//显示隐藏列表
+	Count.showOrhideList = function($obj){
+		$obj.find('.T-toggle-List').off('click.toggle').on('click.toggle', function() {
+			var $this = $(this), $tbody = $this.closest('h5').next();/*$tab.find('.T-tripPlanDayList-tbody')*/;
+			if ($this.hasClass('T-show')) {
+				$this.addClass('T-hide');
+				$tbody.hide();
+				$this.text('展开');
+				$this.removeClass('T-show');
+			}else if ($this.hasClass('T-hide')) {
+				$this.addClass('T-show');
+				$tbody.show();
+				$this.text('收起');
+				$this.removeClass('T-hide');
+			}
+		});
+
+	};
+	Count.showFormula = function($obj){
+		var selfFormula = $obj.find('.T-formula-List');
+		if(selfFormula.hasClass('hide')){
+			selfFormula.removeClass('hide');
+			selfFormula.show();
+		}else{
+			selfFormula.addClass('hide');
+		}
+	}
+	
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

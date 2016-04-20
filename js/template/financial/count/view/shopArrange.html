@@ -4,7 +4,7 @@
             <i class="ace-icon fa fa-medkit"></i> 购物安排
             <a href="javascript:void(0)" class="T-addShopping">
                 <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
-                    <i class="ace-icon fa fa-plus"></i>
+                    <i class="ace-icon fa fa-shopping-cart"></i>
                     新增
                 </button>
             </a>
@@ -19,35 +19,35 @@
     </div>
     <table class="table overflow-table table-striped table-bordered table-hover">
         <thead>
-            <tr>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>时间</th>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>购物店</th>
-                <th class="th-border" colspan="6">打单</th>
-                <th class="th-border" colspan="2">导佣</th>
-                <th class="th-border" colspan="2">社佣</th>
-                <th class="th-border" colspan="3">返佣现收</th>
-                <th class="th-border" rowspan="2">是否对账</th>
+            <tr class="bg-blur T-tr-fixed" style="transform: translateY();">
+                <th rowspan="2"><span class="necessary">*</span>时间</th>
+                <th  rowspan="2"><span class="necessary">*</span>购物店</th>
+                <th  colspan="6">打单</th>
+                <th  colspan="2">导佣</th>
+                <th  colspan="2">社佣</th>
+                <th  colspan="3">返佣现收</th>
+                <th  rowspan="2">是否对账</th>
             </tr>
-            <tr>
-                <th class="th-border"><span class="necessary">*</span>商品</th>
-                <th class="th-border">金额小计</th>
-                <th class="th-border"><span class="necessary">*</span>导游</th>
-                <th class="th-border"><span class="necessary">*</span>金额</th>
-                <th class="th-border">单据</th>
-                <th class="th-border">打单备注</th>
-                <th class="th-border"><span class="necessary">*</span>比例%</th>
-                <th class="th-border"> 
+            <tr class="bg-blur T-tr-fixed" style="transform: translateY();">
+                <th ><span class="necessary">*</span>商品</th>
+                <th >金额小计</th>
+                <th ><span class="necessary">*</span>导游</th>
+                <th ><span class="necessary">*</span>金额</th>
+                <th >单据</th>
+                <th >打单备注</th>
+                <th ><span class="necessary">*</span>比例%</th>
+                <th > 
                     <span>返佣</span>
-                    <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="guideRateMoney">四舍五入</button>
+                    <button class="btn btn-xs btn-primary  pull-right T-math-round" style="width:60px;height:25px;padding:0px;border:0px;" data-target="guideRateMoney">四舍五入</button>
                 </th>
-                <th class="th-border"><span class="necessary">*</span>比例%</th>
-                <th class="th-border"> 
+                <th ><span class="necessary">*</span>比例%</th>
+                <th > 
                     <span>返佣</span>
-                    <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="travelAgencyRateMoney">四舍五入</button>
+                    <button class="btn btn-xs btn-primary pull-right T-math-round" style="width:60px;height:25px;padding:0px;border:0px;" data-target="travelAgencyRateMoney">四舍五入</button>
                 </th>
-                <th class="th-border">导游</th>
-                <th class="th-border">金额</th>
-                <th class="th-border">现收备注</th>
+                <th >导游</th>
+                <th >金额</th>
+                <th >现收备注</th>
             </tr>
         </thead>
         <tbody class="T-count-shopping"> 
@@ -55,7 +55,7 @@
             {{if !!shopArrange.listMap &&shopArrange.listMap.length}}
                 {{each shopArrange.listMap as arrange index}}
                     {{if arrange != null}}
-                        <tr class="oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange">
+                        <tr class=" oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange">
 
                             <td rowspan="{{arrange.itemList.length}}"><span>{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> </td><!-- 日期 -->
                             
@@ -608,12 +608,14 @@
     </table>
 
     {{if tripPlan.billStatus > -1}}
-    <div style="width:60%;"><div> 
-        <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-        <input name="accountFinancialCheckComment" {{if !isFinance}}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.shopReamrk.length>0}}{{remarkArrangeList.shopReamrk[0].opCheckRemark}}{{/if}}" />
-    
-        <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-        <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.shopReamrk.length>0}}{{remarkArrangeList.shopReamrk[0].financeCheckRemark}}{{/if}}" />
+    <div style="width:60%;" > 
+        <div arrangeType="shop">
+            <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
+            <input name="accountFinancialCheckComment" {{if !isFinance}}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.shopReamrk.length>0}}{{remarkArrangeList.shopReamrk[0].opCheckRemark}}{{/if}}" />
+        
+            <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.shopReamrk.length>0}}{{remarkArrangeList.shopReamrk[0].financeCheckRemark}}{{/if}}" />
+        </div>
     </div>
-    </div>{{/if}}
+    {{/if}}
 </div>

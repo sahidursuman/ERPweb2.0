@@ -3,47 +3,77 @@
         <i class="ace-icon fa fa-medkit"></i> 自费安排
         <a href="javascript:void(0)" class="T-addSelf">
             <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
-                <i class="ace-icon fa fa-plus"></i>
+                <i class="ace-icon fa fa-credit-card"></i>
                 新增
             </button>
         </a>
+        <span style="margin-left: 20px">
+            <a href="#" class="T-formula">计算公式</a> 
+        </span>
     </h5>
+</div>
+<div class="T-formula-List hide">
+    <table class="table overflow-table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="th-border">项目</th>
+                <th class="th-border">公式</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>应收优惠</td>
+                <td>应收优惠&nbsp;=&nbsp;单价&nbsp;x&nbsp;应收数量&nbsp;-&nbsp;现收</td>
+            </tr>
+            
+            <tr>
+                <td>社佣</td>
+                <td>社佣&nbsp;=&nbsp;(现收&nbsp;-&nbsp;底价&nbsp;x&nbsp;应收数量)&nbsp;x&nbsp;社佣比例</td>
+            </tr>
+            <tr>
+                <td>导佣</td>
+                <td>导佣&nbsp;=&nbsp;(现收&nbsp;-&nbsp;底价&nbsp;x&nbsp;应收数量)&nbsp;x&nbsp;导佣比例</td>
+            </tr>
+            
+        </tbody>
+    </table>
 </div>
 <div class="overflow-x min-w-1050">
     <table class="table overflow-table table-striped table-bordered table-hover w-1400">
         <thead>
-            <tr>
-                <th class="th-border" colspan="17">消费</th>
-                <th class="th-border" rowspan="2">人数返佣</th>
-                <th class="th-border" colspan="2">社佣</th>
-                <th class="th-border" colspan="2">导佣</th>
-                <th class="th-border" rowspan="2">导游报账备注</th>
-                <th class="th-border" rowspan="2">是否对账</th>
+            <tr class="bg-blur">
+                <th colspan="17">消费</th>
+                <th rowspan="2">人数返佣</th>
+                <th colspan="2">社佣</th>
+                <th colspan="2">导佣</th>
+                <th rowspan="2">导游报账备注</th>
+                <th rowspan="2">是否对账</th>
                 
             </tr>
-            <tr>
-              <th class="th-border"><span class="necessary">*</span>时间</th>
-              <th class="th-border"><span class="necessary">*</span>自费商家</th>
-              <th class="th-border"><span class="necessary">*</span>项目</th>
-              <th class="th-border"><span class="necessary">*</span>单价</th>
-              <th class="th-border"><span class="necessary">*</span>导游</th>
-              <th class="th-border"><span class="necessary">*</span>应收数量</th>
-              <th class="th-border">应收优惠</th>
-              <th class="th-border">应收</th>
-              <th class="th-border">现收</th>
-              <th class="th-border"><span class="necessary">*</span>底价</th>
-              <th class="th-border"><span class="necessary">*</span>应付数量</th>
-              <th class="th-border">优惠</th>
-              <th class="th-border">应付</th>
-              <th class="th-border">已付</th>
-              <th class="th-border">导付</th>
-              <th class="th-border">付款方式</th>
-              <th class="th-border">单据</th>
-              <th class="th-border"><span class="necessary">*</span>比例%</th>
-              <th class="th-border">返佣</th>
-              <th class="th-border"><span class="necessary">*</span>比例%</th>
-              <th class="th-border">返佣</th>
-              
+            <tr class="bg-blur">
+                <th><span class="necessary">*</span>时间</th>
+                <th><span class="necessary">*</span>自费商家</th>
+                <th><span class="necessary">*</span>项目</t
+                h>
+                <th><span class="necessary">*</span>单价</th>
+                <th><span class="necessary">*</span>导游</th>
+                <th><span class="necessary">*</span>应收数量</th>
+                <th>应收优惠</th>
+                <th>应收</th>
+                <th>现收</th>
+                <th><span class="necessary">*</span>底价</th>
+                <th><span class="necessary">*</span>应付数量</th>
+                <th>优惠</th>
+                <th>应付</th>
+                <th>已付</th>
+                <th>导付</th>
+                <th>付款方式</th>
+                <th>单据</th>
+                <th><span class="necessary">*</span>比例%</th>
+                <th>返佣</th>
+                <th><span class="necessary">*</span>比例%</th>
+                <th>返佣</th>
             </tr>
         </thead>
         <tbody class="T-count-selfPay">
@@ -78,11 +108,11 @@
 
                                     <td>
                                         <div class="div-h-30"></div>
-                                        {{if editStatus != 1}}<span class="realMarketPrice">{{itemSet.realMarketPrice}}</span>
+                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
                                         {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                         {{/if}}
-                                    </td>
+                                    </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
@@ -514,11 +544,11 @@
                                     </td>
                                     <td>
                                         <div class="div-h-30"></div>
-                                        {{if editStatus != 1}}<span class="realMarketPrice">{{itemSet.realMarketPrice}}</span>
+                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
                                         {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                                         {{/if}}
-                                    </td>
+                                    </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
                                         <div class="div-h-30">
@@ -941,12 +971,12 @@
 </div>
 
 {{if tripPlan.billStatus > -1}}
-    <div style="width:70%;">
-        <div> 
+    <div style="width:60%;">
+        <div arrangeType="self"> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
-            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="" />
+            <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.selfRemark.length>0}}{{remarkArrangeList.selfRemark[0].opCheckRemark}}{{/if}}" />
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
-            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="" />
+            <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.selfRemark.length>0}}{{remarkArrangeList.selfRemark[0].financeCheckRemark}}{{/if}}" />
         </div>
     </div>
 {{/if}}
