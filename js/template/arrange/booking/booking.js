@@ -335,8 +335,8 @@ define(function(require, exports) {
 	 * @param  {[type]} $container [description]
 	 * @return {[type]}            [description]
 	 */
-	BookingArrange.datetimepicker = function($obj){
-		Tools.setDateHSPicker($obj, 'datetimepicker'); 
+	BookingArrange.datetimepicker = function(){
+		Tools.setDateHSPicker('datetimepicker'); 
 	}
 
 	/**
@@ -1241,6 +1241,7 @@ define(function(require, exports) {
 		// 	showMessageDialog($( "#confirm-dialog-message" ),"预付款发生改变，请通知财务！");
 		// 	return;
 		// }
+		console.log(bookingOrder); 
 		BookingArrange.ajax({
 			'url' : 'bookingOrder', 
 			'method' : 'saveBookingOrder', 
