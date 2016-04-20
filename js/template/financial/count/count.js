@@ -5862,13 +5862,13 @@ define(function(require, exports){
             		type = 12;
             	break;
             };
-            if (opCheckRemark || financeCheckRemark)  {
+            if (!!opCheckRemark || !!financeCheckRemark)  {
                 remarkList.push({
                     type:type,               // server要求字符串
                     opCheckRemark: opCheckRemark,
                     financeCheckRemark: financeCheckRemark
                 })
-            }
+            };
         }
         saveJson.remarkArrangeList = remarkList;
         return saveJson;
