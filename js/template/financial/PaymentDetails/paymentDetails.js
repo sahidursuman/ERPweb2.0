@@ -122,9 +122,6 @@ define(function(require, exports){
 			url : KingServices.build_url('financialIncomeOrPay', 'findSelectValue'),
 			type : "POST",
 		}).done(function(data){
-			data.businessTypes = JSON.parse(data.businessTypes);
-			data.costTypes = JSON.parse(data.costTypes);
-			data.incomeOrPayTypes = JSON.parse(data.incomeOrPayTypes);
 			data.receivableTypes = JSON.parse(data.receivableTypes);
 			data.total = Payment.total;
 			data.searchParam = args;
@@ -208,7 +205,7 @@ define(function(require, exports){
 		else if(args.payType == 0){
 			args.bankId = Payment.$tab.find('input[name=cash-id]').val();
 		}
-		else if (args.payType == 1) {
+		else if (args.payType == 1 || args.payType == 5) {
 			args.bankId = Payment.$tab.find('input[name=card-id]').val();
 		}
 		return args;
