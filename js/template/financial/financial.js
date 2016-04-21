@@ -8,12 +8,6 @@ FinancialService.initPayEvent = function($container,rule)  {
     var currDate = new Date();
     var str = new Date(+new Date()+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
     $container.find('input[name="tally-date"]').val(str);
-    // $container.find('input[name="tally-date"]').datetimepicker({
-    //     autoclose:true,
-    //     todayHighlight:true,
-    //     format:'L',
-    //     language:'zh-CN'
-    // });
     Tools.setDateHSPicker($("input[name='tally-date']")); 
 
     var $cash = $container.find('input[name=cash-number]'),
