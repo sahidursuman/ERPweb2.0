@@ -61,7 +61,6 @@ define(function(require, exports){
 
 		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
-			id:"",
 			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
 			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
 			lineProductName = Count.$searchArea.find('input[name=chooseLineProductName]').val();
@@ -79,7 +78,6 @@ define(function(require, exports){
 			url:KingServices.build_url("financialTripPlan","findFinancialListPageCount"),
 			type:'POST',
 			data:{
-				id:id,
                 tripNumber:tripNumber,
                 lineProductId:lineProductId,
                 guideId:guideId,
@@ -102,7 +100,6 @@ define(function(require, exports){
 					//获取主体列表数据
 					Count.$args={
 						pageNo:pageNo,
-						id:id,
 		                tripNumber:tripNumber,
 		                lineProductId:lineProductId,
 		                guideId:guideId,
@@ -2591,7 +2588,8 @@ define(function(require, exports){
 			$travelAgencyRate = $tr.find('td[name=travelAgencyRate]'),
 			$travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
 			$guideRate = $tr.find('td[name=guideRate]'),
-			$guideRebateMoney = $tr.find('td[name=guideRebateMoney]');
+			$guideRebateMoney = $tr.find('td[name=guideRebateMoney]'),
+			editFeildTagName = $obj.attr('name');
 
 		var price = $tr.find('input[name=price]').val();//协议价
 		if(!!$tr.find('.realPrice').text()){
@@ -2629,8 +2627,7 @@ define(function(require, exports){
 
 		sum = Count.changeTwoDecimal((cashMoney-(inCount*price)));
 			//导游佣金= (现收-应收数量*低价)*导佣比例
-			var selfId = $tr.attr('selfPayId'),
-				editFeildTagName = $obj.attr('name');
+			var selfId = $tr.attr('selfPayId');
 			if(!!selfId){
 				switch(editFeildTagName) {
 					case 'travelAgencyRate':
@@ -2651,6 +2648,14 @@ define(function(require, exports){
 						guideMoney();
 						travelMoney();
 						break;
+					case 'price':
+						guideMoney();
+						travelMoney();
+						break;
+					case 'marketPrice':
+						guideMoney();
+						travelMoney();
+						break;
 					default: break;
 				};
 			}else{
@@ -2662,21 +2667,77 @@ define(function(require, exports){
 			function guideMoney (){
 				$guideRebateMoney.find('div').each(function(){
 					var index = $(this).attr('index');
+						
 					if(index == thisIndex){
-						gMoney = sum*gRate
+						gMoney = sum*gRate;
 						$(this).find('input[name=guideRebateMoney]').val(gMoney);
+					};
+					if(editFeildTagName == 'marketPrice' || editFeildTagName == 'price'){
+						sumChangePrice();
 					};
 				});//导佣
 			};
 			function travelMoney (){
 				$travelAgencyRebateMoney.find('div').each(function(){
 					var index = $(this).attr('index');
+						
 					if(index == thisIndex){
-						tMoney = sum*tRate
+						tMoney = sum*tRate;
 						$(this).find('input[name=travelAgencyRebateMoney]').val(tMoney);
 					};
+					if(editFeildTagName == 'marketPrice' || editFeildTagName == 'price'){
+						sumChangePrice();
+					};
 				});//社佣
-			}
+			};
+			function sumChangePrice (){
+
+				$cashMoney.find('div').each(function(){
+					var cashIndex = $(this).attr('index'),
+						cashVal = $(this).find('input[name=cashMoney]').val();//现收
+					$incomeCount.find('div').each(function(){
+						var inCountIndex = $(this).attr('index');
+						if(inCountIndex == cashIndex){
+							inCount =Count.changeTwoDecimal($(this).find('input[name=incomeCount]').val());
+						};
+					});//应收数量
+
+					$travelAgencyRate.find('div').each(function(){
+						var tRateIndex = $(this).attr('index');
+						if(tRateIndex == cashIndex){
+							tRate = Count.changeTwoDecimal($(this).find('input[name=travelAgencyRate]').val()/100);
+						};
+					});//社佣比例
+
+					$guideRate.find('div').each(function(){
+						var gRateIndex = $(this).attr('index');
+						if(gRateIndex == cashIndex){
+							gRate =Count.changeTwoDecimal($(this).find('input[name=guideRate]').val()/100);
+						};
+					});//导游比例
+					var sumPGmoney = Count.changeTwoDecimal((cashVal-(inCount*price))*gRate);
+					var sumPTmoney = Count.changeTwoDecimal((cashVal-(inCount*price))*tRate);
+
+					$travelAgencyRebateMoney.find('div').each(function(){
+						var tMoneyIndex = $(this).attr('index');
+							
+						if(tMoneyIndex == cashIndex){
+							$(this).find('input[name=travelAgencyRebateMoney]').val(sumPTmoney);
+						};
+					});//社佣
+
+					$guideRebateMoney.find('div').each(function(){
+						var gMoneyIndex = $(this).attr('index');
+						if(gMoneyIndex == cashIndex){
+							$(this).find('input[name=guideRebateMoney]').val(sumPGmoney);
+						};
+					});//社佣
+
+				});//现收
+
+				
+				
+			};
 			Count.autoSelfSum($obj,$parentObj);
 	};
 	//自费金额计算
