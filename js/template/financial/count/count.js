@@ -26,7 +26,7 @@ define(function(require, exports){
 		guideTamplate = require('./view/guideAccount'),
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
-		//formulaTemplate = require('./view/formulaList'),
+		formulaTemplate = require('./view/formulaList'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -290,6 +290,8 @@ define(function(require, exports){
 	                };
 	                Count.guide = data.guideArranges;
 	                tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
+	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
+	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 	                var html = tripDetailTempLate(tmp);
 	                Tools.addTab(tripDetailId,'单团明细',html);
 	                var $detailId = $("#tab-"+tripDetailId+"-content");
@@ -496,6 +498,7 @@ define(function(require, exports){
 	                };
 	                Count.guide = data.guideArranges;
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
+	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 	                var html = Reimbursement(tmp);
 	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
@@ -939,6 +942,8 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
                     Count.guide = data.guideArranges;
+                    tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
+                    tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 					var html = updateTemplate(tmp);
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
@@ -6705,12 +6710,12 @@ define(function(require, exports){
 				if(shopItemList[j].guideDetails.length){
 					var guideData = shopItemList[j].guideDetails;
 					for(var k = 0;k<guideData.length;k++){
-						guideData[k].guideRate = ((Math.round(guideData[k].guideRate*100))/100)
+						guideData[k].guideRate = ((Math.round(guideData[k].guideRate*100)))
 					}
 				}else{
-					shopItemList[j].guideRate = ((Math.round(shopItemList[j].guideRate*100))/100);
+					shopItemList[j].guideRate = ((Math.round(shopItemList[j].guideRate*100)));
 				}
-				shopItemList[j].travelAgencyRate = ((Math.round(shopItemList[j].travelAgencyRate*100))/100);
+				shopItemList[j].travelAgencyRate = ((Math.round(shopItemList[j].travelAgencyRate*100)));
 			}
 		};
 		return newRateArr;
@@ -6719,17 +6724,15 @@ define(function(require, exports){
 	Count.formatSelfRate = function(data){
 		var newRateArr = data;
 		for(var i = 0;i<newRateArr.length;i++){
-			var shopItemList = newRateArr[i].itemList;
-			for(var j = 0;j<shopItemList.length;j++){
-				if(shopItemList[j].guideDetails.length){
-					var guideData = shopItemList[j].guideDetails;
+			var selfPayItem = newRateArr[i].selfPayItem;
+			for(var j = 0;j<selfPayItem.length;j++){
+				if(selfPayItem[j].guideDetails.length){
+					var guideData = selfPayItem[j].guideDetails;
 					for(var k = 0;k<guideData.length;k++){
-						guideData[k].guideRate = ((Math.round(guideData[k].guideRate*100))/100)
+						guideData[k].guideRate = ((Math.round(guideData[k].guideRate*100)));
+						guideData[k].travelAgencyRate = ((Math.round(guideData[k].travelAgencyRate*100)));
 					}
-				}else{
-					shopItemList[j].guideRate = ((Math.round(shopItemList[j].guideRate*100))/100);
-				}
-				shopItemList[j].travelAgencyRate = ((Math.round(shopItemList[j].travelAgencyRate*100))/100);
+				};
 			}
 		};
 		return newRateArr;
