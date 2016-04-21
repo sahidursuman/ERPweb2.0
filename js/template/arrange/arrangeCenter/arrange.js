@@ -20,7 +20,7 @@ define(function(require, exports) {
      * @return {[type]} [description]
      */
     FrameFun.initMain = function() {
-        if (Tools.addTab(tabKey, '中转安排', MainFrameTemplate())) {
+        if (Tools.addTab(tabKey, '单项操作', MainFrameTemplate())) {
             FrameFun.initMainEvent();
         }
     };
@@ -163,14 +163,14 @@ define(function(require, exports) {
                 BookingFun.getList($(this).closest('form'));
             })
             // table内操作
-            .on('click', '.T-action', function(event) {
+            .end().on('click', '.T-action', function(event) {
                 event.preventDefault();
                 var $that = $(this);
 
-                if ($that.hasClass('T-inform')) {
+                if ($that.hasClass('T-send')) {
                     // 通知
                     FrameFun.inform($that);
-                } else if ($that.hasClass('T-arrange-item')) {
+                } else if ($that.hasClass('T-plan')) {
                     // 安排
                     BookingFun.arrange($that);
                 } else if ($that.hasClass('T-view')) {
