@@ -205,7 +205,7 @@ define(function(require, exports){
 		else if(args.payType == 0){
 			args.bankId = Payment.$tab.find('input[name=cash-id]').val();
 		}
-		else if (args.payType == 1) {
+		else if (args.payType == 1 || args.payType == 5) {
 			args.bankId = Payment.$tab.find('input[name=card-id]').val();
 		}
 		return args;
