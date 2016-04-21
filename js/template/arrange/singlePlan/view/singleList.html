@@ -98,7 +98,7 @@
             </tr>
             {{if rs.tripPlanDetails.length>1}}
                 {{each rs.tripPlanDetails as touristGroup index}}
-                {{if index>0}}
+                {{if index>=0}}
                 <tr class="hidden">
                     <td class="h-touristGroupInfo">
                     <p>{{touristGroup.lineProductName}}</p>
@@ -112,20 +112,20 @@
                     <td>{{touristGroup.adultCount}}大{{touristGroup.childCount}}小<br>
                         {{touristGroup.contactUser}}
                     </td>
-                    {{if index == 1}}
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140011"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140013"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140012"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140014"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140015"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140016"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140017"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140018"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140019"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}" class="R-right" data-right="1140020"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}"></td>
-                    <td rowspan="{{rs.tripPlanDetails.length-1}}"></td>
+                    {{if index == 0}}
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140011"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140013"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140012"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140014"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140015"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140016"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140017"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140018"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140019"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}" class="R-right" data-right="1140020"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}"></td>
+                    <td rowspan="{{rs.tripPlanDetails.length}}"></td>
                     {{/if}}
                 </tr> 
                 {{/if}}                               
