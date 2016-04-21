@@ -26,7 +26,7 @@ define(function(require, exports){
 		guideTamplate = require('./view/guideAccount'),
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
-		//formulaTemplate = require('./view/formulaList'),
+		formulaTemplate = require('./view/formulaList'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -495,7 +495,6 @@ define(function(require, exports){
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                Count.guide = data.guideArranges;
-	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                var html = Reimbursement(tmp);
 	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
@@ -1658,7 +1657,7 @@ define(function(require, exports){
 						guidePay[i].taskJson = JSON.parse(guidePay[i].taskJson);
 					};
 
-					//循环购物导拥、购物社佣去除多余的小数位
+					//循环去除购物导拥、购物社佣的空格
 					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
 					for(var i = 0;i<tRateList.length;i++){
 						var itemList = tRateList[i].shopArrangeItemList;
@@ -1669,6 +1668,7 @@ define(function(require, exports){
 					};
 					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
+					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -3633,7 +3633,13 @@ define(function(require, exports){
 		Count.getTicketData($obj,$parentObj);
 		//绑定事件
 		//给日期格式化
-		Tools.setDateHSPicker($('.date-Picker'));
+		$('.date-Picker').datetimepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'L',
+			language: 'zh-CN'
+		});
+		// Tools.setDateHSPicker($('.date-Picker'));
 		//获取导游
 		$obj.find('td[name=guideName]').find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
@@ -6696,44 +6702,7 @@ define(function(require, exports){
 			selfFormula.addClass('hide');
 		}
 	}
-	//循环去除导佣、社佣的小数位
-	Count.formatShopRate = function(data){
-		var newRateArr = data;
-		for(var i = 0;i<newRateArr.length;i++){
-			var shopItemList = newRateArr[i].itemList;
-			for(var j = 0;j<shopItemList.length;j++){
-				if(shopItemList[j].guideDetails.length){
-					var guideData = shopItemList[j].guideDetails;
-					for(var k = 0;k<guideData.length;k++){
-						guideData[k].guideRate = ((Math.round(guideData[k].guideRate*100))/100)
-					}
-				}else{
-					shopItemList[j].guideRate = ((Math.round(shopItemList[j].guideRate*100))/100);
-				}
-				shopItemList[j].travelAgencyRate = ((Math.round(shopItemList[j].travelAgencyRate*100))/100);
-			}
-		};
-		return newRateArr;
-	};
-	//循环去除导佣、社佣的小数位
-	Count.formatSelfRate = function(data){
-		var newRateArr = data;
-		for(var i = 0;i<newRateArr.length;i++){
-			var shopItemList = newRateArr[i].itemList;
-			for(var j = 0;j<shopItemList.length;j++){
-				if(shopItemList[j].guideDetails.length){
-					var guideData = shopItemList[j].guideDetails;
-					for(var k = 0;k<guideData.length;k++){
-						guideData[k].guideRate = ((Math.round(guideData[k].guideRate*100))/100)
-					}
-				}else{
-					shopItemList[j].guideRate = ((Math.round(shopItemList[j].guideRate*100))/100);
-				}
-				shopItemList[j].travelAgencyRate = ((Math.round(shopItemList[j].travelAgencyRate*100))/100);
-			}
-		};
-		return newRateArr;
-	};
+	
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;
