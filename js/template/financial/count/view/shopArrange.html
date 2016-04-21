@@ -196,7 +196,7 @@
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                        <input name="guideRate" value="{{rs.guideRate*100}}" type="text" class="w-50" 
+                                                        <input name="guideRate" value="{{rs.guideRate}}" type="text" class="w-50" 
                                                         {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                                     </div>
                                                 {{/each}}
@@ -229,7 +229,7 @@
 
                                         <td>
                                             <div class="div-h-30"></div>
-                                            <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
+                                            <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
                                         </td><!-- 社佣比例 -->
                                         
                                         <td>
@@ -542,7 +542,7 @@
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs index}}
                                             <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                <input name="guideRate" value="{{rs.guideRate*100}}" type="text" class="w-50" 
+                                                <input name="guideRate" value="{{rs.guideRate}}" type="text" class="w-50" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
                                         {{/each}}
@@ -575,7 +575,7 @@
 
                                 <td>
                                     <div class="div-h-30"></div>
-                                    <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate*100}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
+                                    <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
                                 </td><!-- 社佣比例 -->
                                 
                                 <td>
