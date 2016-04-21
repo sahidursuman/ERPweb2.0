@@ -1068,14 +1068,14 @@ var _statusText = {
 
 						fn.success(data, textStatus);
 					},
-					complete: function()  {
-						var urls = opt.url.split('?'),
-							path = urls[0],
-							method = urls[1].split('&')[0].split('=')[1],
-							duration = (new Date()).getTime() - _startTime;
-
+					complete: function()  {			
 						// CNZZ超时记录
-						if (!!_czc && duration > 1000) {
+						if (&& /^\/huochaitou\//.test(opt.url) && !!_czc && duration > 1000) {
+							var urls = opt.url.split('?'),
+								path = urls[0],
+								method = urls[1].split('&')[0].split('=')[1],
+								duration = (new Date()).getTime() - _startTime;
+
 							_czc.push( ["_trackEvent", 'AJAX', path,  method, duration, siteId]);
 						}
 
