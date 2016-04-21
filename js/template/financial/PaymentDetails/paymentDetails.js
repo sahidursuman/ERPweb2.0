@@ -240,5 +240,6 @@ define(function(require, exports) {
 
     // 初始页面接口
     exports.init = PaymentDetailUtil.initMain;
-    // exports.
+    //收付款
+    exports.viewDetails=PaymentDetailUtil.viewDetails;
 });
