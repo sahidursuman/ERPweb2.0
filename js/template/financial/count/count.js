@@ -26,6 +26,7 @@ define(function(require, exports){
 		guideTamplate = require('./view/guideAccount'),
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
+		formulaTemplate = require('./view/formulaList'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -514,11 +515,15 @@ define(function(require, exports){
 		
 		//显示隐藏
 		Count.showOrhideList($obj);
+		/*//显示计算公式
+		$obj.find('.T-formula').on('click',function(){
+			var html = formulaTemplate();
+			Tools.addTab(menuKey+'formula','计算公式',html);
+		});*/
 		//显示计算公式
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
 		});
-		
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
