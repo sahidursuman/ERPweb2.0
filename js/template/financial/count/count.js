@@ -5063,7 +5063,7 @@ define(function(require, exports){
 		$sumGuideMoney.each(function(){
 			var $that = $(this),
 				thisIndex = $that.closest('div').attr('index'),
-				consumeMoney = $that.val();
+				consumeMoney = $that.val() || 0;
 			$.ajax({
 				url:KingServices.build_url('shop','findShopCostRebateBy'),
 				type:'POST',
