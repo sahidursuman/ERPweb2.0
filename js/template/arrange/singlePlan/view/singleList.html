@@ -33,8 +33,8 @@
                                 {{/if}}
                             {{/each}}
                         {{else}}
-                            {{if tripPlan.lineProduct}}
-                                {{tripPlan.lineProduct.name}}
+                            {{if rs.lineProduct}}
+                                {{rs.lineProduct.name}}
                             {{/if}}
                         {{/if}}
                         {{if rs.tripPlanDetails.length >1}}
@@ -46,12 +46,8 @@
                         {{/if}}
                     </p>
                     <p class="h-memberName">
-                        {{each rs.tripPlanDetails as tripPlanDetails index}}
-                            {{if index == 0}}
-                                导游：{{tripPlanDetails.guideNames}}&nbsp;&nbsp;
-                                责任计调：{{tripPlanDetails.dutyOPUserName}}
-                            {{/if}}
-                        {{/each}}
+                        {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}&nbsp;&nbsp;
+                        {{if !!rs.dutyOPUserName}}<span class="h-memberName">责任计调：{{rs.dutyOPUserName}}</span>{{/if}}
                     </p>
                 </td>
                 <td class=""><span>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}}</span><br> - <br><span>{{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</span></td>
@@ -100,7 +96,7 @@
                     </a>
                 </td>
             </tr>
-            {{if rs.tripPlanDetails.length>0}}
+            {{if rs.tripPlanDetails.length>1}}
                 {{each rs.tripPlanDetails as touristGroup index}}
                 {{if index>0}}
                 <tr class="hidden">

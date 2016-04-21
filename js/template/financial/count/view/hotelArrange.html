@@ -14,25 +14,25 @@
 <div class="overflow-x min-w-1050">
     <table class="table overflow-table table-striped table-bordered table-hover w-1500">
         <thead>
-            <tr>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>时间</th>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>酒店</th>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>房型</th>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>单价</th>
-                <th class="th-border" rowspan="2"><span class="necessary">*</span>间数合计</th>
-                <th class="th-border" rowspan="2">优惠</th>
-                <th class="th-border" rowspan="2">应付</th>
-                <th class="th-border" rowspan="2">已付</th>
-                <th class="th-border" colspan="6">导游实销</th>
-                <th class="th-border" rowspan="2">操作</th>
+            <tr class="bg-blur">
+                <th rowspan="2"><span class="necessary">*</span>时间</th>
+                <th rowspan="2"><span class="necessary">*</span>酒店</th>
+                <th rowspan="2"><span class="necessary">*</span>房型</th>
+                <th rowspan="2"><span class="necessary">*</span>单价</th>
+                <th rowspan="2"><span class="necessary">*</span>间数合计</th>
+                <th rowspan="2">优惠</th>
+                <th rowspan="2">应付</th>
+                <th rowspan="2">社付</th>
+                <th colspan="6">导游实销</th>
+                <th rowspan="2">操作</th>
             </tr>
-            <tr>
-                <th class="th-border">导游</th>
-                <th class="th-border">间数</th>
-                <th class="th-border">金额</th>
-                <th class="th-border">付款方式</th>
-                <th class="th-border">单据</th>
-                <th class="th-border">导游报账备注</th>
+            <tr class="bg-blur">
+                <th>导游</th>
+                <th>间数</th>
+                <th>金额</th>
+                <th>付款方式</th>
+                <th>单据</th>
+                <th>导游报账备注</th>
             </tr> 
         </thead>
         <tbody class="T-count-hotel">
@@ -119,7 +119,7 @@
                                         <input type="hidden" name="realNeedPayMoney" value="{{result.realNeedPayMoney}}">
                                     </td><!-- 应付 -->
 
-                                    <td><div class="div-h-30"></div><span class="F-float F-money">{{result.payedMoney}}</span></td><!-- 已付 -->
+                                    <td><div class="div-h-30"></div><span class="F-float F-money">{{result.payedMoney}}</span></td><!-- 社付 -->
 
                                     <td name="guideName">
                                             <div class="div-h-30">
@@ -431,7 +431,7 @@
                                             <input type="hidden" name="realNeedPayMoney" value="{{result.realNeedPayMoney}}">
                                         </td><!-- 应付 -->
 
-                                        <td><div class="div-h-30"></div><span class="F-float F-money">{{result.payedMoney}}</span></td><!-- 已付 -->
+                                        <td><div class="div-h-30"></div><span class="F-float F-money">{{result.payedMoney}}</span></td><!-- 社付 -->
 
                                         <td name="guideName">
                                             <div class="div-h-30">
@@ -667,7 +667,7 @@
 </div>
 {{if tripPlan.billStatus > -1}}
 <div style="width:60%;">
-    <div> 
+    <div arrangeType="hotel"> 
         <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
         <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.hotelRemark.length>0}}{{remarkArrangeList.hotelRemark[0].opCheckRemark}}{{/if}}" />
     
