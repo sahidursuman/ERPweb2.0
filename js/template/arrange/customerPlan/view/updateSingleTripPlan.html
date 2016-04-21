@@ -320,13 +320,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-insurance-plan">
-                                    {{each insuranceRequireList as insurance}}
+                                    {{each requireJson.insuranceRequireList as insurance}}
                                     <tr entity-id="{{insurance.id}}" arrangeType = "insurance">
                                         <td>
-                                            <input type="text" name="startTime" value="{{insurance.startTime}}" class="T-datepicker">
+                                            <input type="hidden" name="dutySubDepartmentId" value="{{insurance.id}}">
+                                            <input type="text" name="startTime" value="{{insurance.startTime | dateFormat: 'yyyy.MM.dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
-                                            <input type="text" name="endTime" value="{{insurance.endTime}}" class="T-datepicker">
+                                            <input type="text" name="endTime" value="{{insurance.endTime | dateFormat: 'yyyy.MM.dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
                                             <input type="text" name="requireContent" value="{{insurance.requireContent}}" class="col-xs-12">
@@ -378,13 +379,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-guide-plan">
-                                    {{each guideRequireList as guide}}
+                                    {{each requireJson.guideRequireList as guide}}
                                     <tr entity-id="{{guide.id}}" arrangeType = "guide">
                                         <td>
-                                            <input type="text" name="startTime" value="{{guide.startTime}}" class="T-datepicker">
+                                            <input type="hidden" name="id" value="{{guide.id}}">
+                                            <input type="text" name="startTime" value="{{guide.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
-                                            <input type="text" name="endTime" value="{{guide.endTime}}" class="T-datepicker">
+                                            <input type="text" name="endTime" value="{{guide.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
                                             <input type="text" name="requireContent" value="{{guide.requireContent}}" class="col-xs-12">
@@ -436,13 +438,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-bus-plan">
-                                    {{each busRequireList as bus}}
+                                    {{each requireJson.busRequireList as bus}}
                                     <tr entity-id="{{bus.id}}" arrangeType = "bus">
                                         <td>
-                                            <input type="text" name="startTime" value="{{bus.startTime}}" class="T-datepicker">
+                                            <input type="hidden" name="id" value="{{bus.id}}">
+                                            <input type="text" name="startTime" value="{{bus.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
-                                            <input type="text" name="endTime" value="{{bus.endTime}}" class="T-datepicker">
+                                            <input type="text" name="endTime" value="{{bus.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
                                             <input type="text" name="requireContent" value="{{bus.requireContent}}" class="col-xs-12">
@@ -495,13 +498,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="T-restaurant-plan">
-                                        {{each restaurantRequireList as restaurant}}
+                                        {{each requireJson.restaurantRequireList as restaurant}}
                                         <tr entity-id="{{restaurant.id}}" arrangeType = "restaurant">
                                             <td>
-                                                <input type="text" name="startTime" value="{{restaurant.startTime}}" class="T-datepicker">
+                                                <input type="hidden" name="id" value="{{restaurant.id}}">
+                                                <input type="text" name="startTime" value="{{restaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" value="{{restaurant.endTime}}" class="T-datepicker">
+                                                <input type="text" name="endTime" value="{{restaurant.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
                                                 <input type="text" name="requireContent" value="{{restaurant.requireContent}}" class="col-xs-12">
@@ -557,13 +561,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="T-hotel-plan">
-                                        {{each hotelRequireList as hotel}}
+                                        {{each requireJson.hotelRequireList as hotel}}
                                         <tr entity-id="{{hotel.id}}" arrangeType = "hotel">
                                             <td>
-                                                <input type="text" name="startTime" value="{{hotel.startTime}}" class="T-datepicker">
+                                                <input type="hidden" name="id" value="{{hotel.id}}">
+                                                <input type="text" name="startTime" value="{{hotel.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" value="{{hotel.endTime}}" class="T-datepicker">
+                                                <input type="text" name="endTime" value="{{hotel.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td><input type="text" class="T-choose-hotel" class="col-xs-12" readonly="readonly"></td>
                                             <td>
@@ -618,13 +623,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="T-scenic-plan">
-                                        {{each scenicRequireList as scenic}}
+                                        {{each requireJson.scenicRequireList as scenic}}
                                         <tr entity-id="{{scenic.id}}" arrangeType = "scenic">
                                             <td>
-                                                <input type="text" name="startTime" value="{{scenic.startTime}}" class="T-datepicker">
+                                                <input type="hidden" name="id" value="{{scenic.id}}">
+                                                <input type="text" name="startTime" value="{{scenic.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" value="{{scenic.endTime}}" class="T-datepicker">
+                                                <input type="text" name="endTime" value="{{scenic.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
                                                 <input type="text" name="requireContent" value="{{scenic.requireContent}}" class="col-xs-12">
@@ -677,13 +683,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-shop-plan">
-                                    {{each shopRequireList as shop}}
+                                    {{each requireJson.shopRequireList as shop}}
                                     <tr entity-id="{{shop.id}}" arrangeType = "shop">
                                         <td>
-                                            <input type="text" name="startTime" value="{{shop.startTime}}" class="T-datepicker">
+                                            <input type="hidden" name="id" value="{{shop.id}}">
+                                            <input type="text" name="startTime" value="{{shop.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
-                                            <input type="text" name="endTime" value="{{shop.endTime}}" class="T-datepicker">
+                                            <input type="text" name="endTime" value="{{shop.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
                                             <input type="text" name="requireContent" value="{{shop.requireContent}}" class="col-xs-12">
@@ -736,13 +743,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="T-selfPay-plan">
-                                        {{each selfPayRequireList as selfPay}}
+                                        {{each requireJson.selfPayRequireList as selfPay}}
                                         <tr entity-id="{{selfPay.id}}" arrangeType = "selfPay">
                                             <td>
-                                                <input type="text" name="startTime" value="{{selfPay.startTime}}" class="T-datepicker">
+                                                <input type="hidden" name="id" value="{{selfPay.id}}">
+                                                <input type="text" name="startTime" value="{{selfPay.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" value="{{selfPay.endTime}}" class="T-datepicker">
+                                                <input type="text" name="endTime" value="{{selfPay.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
                                                 <input type="text" name="requireContent" value="{{selfPay.requireContent}}" class="col-xs-12">
@@ -796,13 +804,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="T-ticket-plan">
-                                        {{each ticketRequireList as ticket}}
+                                        {{each requireJson.ticketRequireList as ticket}}
                                         <tr entity-id="{{ticket.id}}" arrangeType = "ticket">
                                             <td>
-                                                <input type="text" name="startTime" value="{{ticket.startTime}}" class="T-datepicker">
+                                                <input type="hidden" name="id" value="{{ticket.id}}">
+                                                <input type="text" name="startTime" value="{{ticket.startTime  | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" value="{{ticket.endTime}}" class="T-datepicker">
+                                                <input type="text" name="endTime" value="{{ticket.endTime  | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
                                                 <input type="text" name="requireContent" value="{{ticket.requireContent}}" class="col-xs-12">
@@ -856,13 +865,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="T-other-plan">
-                                        {{each otherRequireList as other}}
+                                        {{each requireJson.otherRequireList as other}}
                                         <tr entity-id="{{other.id}}" arrangeType = "other">
                                             <td>
-                                                <input type="text" name="startTime" value="{{other.startTime}}" class="T-datepicker">
+                                                <input type="hidden" name="id" value="{{other.id}}">
+                                                <input type="text" name="startTime" value="{{other.startTime  | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" value="{{other.endTime}}" class="T-datepicker">
+                                                <input type="text" name="endTime" value="{{other.endTime  | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
                                             <td>
                                                 <input type="text" name="requireContent" value="{{other.requireContent}}" class="col-xs-12">

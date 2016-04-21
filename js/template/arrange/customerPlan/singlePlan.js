@@ -802,6 +802,7 @@ define(function(require, exports) {
                 singlePlan.addOther($tab);
             }
         });
+        Tools.setDatePicker($tab.find('.T-datepicker'), true);
         //部门下拉框
         $tab.find('input[name="dutyDepartmentName"]').each(function(index, el) {
             singlePlan.getBusinessList($(this));
@@ -817,7 +818,8 @@ define(function(require, exports) {
         //删除保险
         $tab.find('.T-del-plan').on('click', function(event) {
             event.preventDefault();
-            singlePlan.deleteArrangePlan($(this));
+            var  $that = $(this);
+            singlePlan.deleteArrangePlan($that);
         });
         //酒店弹窗
         $tab.find('.T-choose-hotel').on('click', function(event) {
@@ -849,6 +851,7 @@ define(function(require, exports) {
                     $dutyUser.val('').data('id', '');
                 }
                 $target.blur().data('id', item.id);
+                $target.siblings('input[name="dutyDepartmentId"]').val(item.id);
             }
         }).on('click', function(event) {
             event.preventDefault();
@@ -919,10 +922,12 @@ define(function(require, exports) {
                             for (var i = 0, len = groupMapList.length;i < len; i++) {
                                 groupMapList[i].id = groupMapList[i].groupId;
                                 groupMapList[i].value = groupMapList[i].groupName;
+                                $target.siblings('input[name="dutySubDepartmentId"]').val(groupMapList[i].id);
                             }
 
                             $target.autocomplete('option', 'source', groupMapList);
                             $target.autocomplete('search', '');
+
                         }
                     }
                 });
@@ -974,6 +979,7 @@ define(function(require, exports) {
                                 for (var i = 0, len = dutyUserList.length;i < len; i++) {
                                     dutyUserList[i].value = dutyUserList[i].dutyUserName;
                                     dutyUserList[i].id = dutyUserList[i].dutyUserId;
+                                    $target.siblings('input[name="dutyUserId"]').val(dutyUserList[i].id);
                                 }
 
                                 $target.autocomplete('option', 'source', dutyUserList);
@@ -1010,9 +1016,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input type="hidden" name="dutyDepartmentId" value=""></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input type="hidden" name="dutySubDepartmentId" value=""></td>'+
+                    '<td><input type="text" name="dutyUserName" value=""><input type="hidden" name="dutyUserId" value=""></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1051,9 +1057,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class="T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input name="dutyDepartmentId" type="hidden" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" /></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1087,9 +1093,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1128,9 +1134,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1170,9 +1176,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1216,9 +1222,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1257,9 +1263,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1380,9 +1386,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1563,41 +1569,75 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     singlePlan.deleteArrangePlan = function($obj) {
-        var $tr = $obj.closest('tr'),id = $tr.data('entity-id'),arrangeType = $obj.attr('arrangeType');
-        $tr.fadeOut(function(){
-            $that.parents('tr').remove();
-        })
+        var $tr = $obj.closest('tr'),id = $tr.attr('entity-id'),arrangeType = $tr.attr('arrangeType');
+        console.log($obj);
         if(arrangeType == 'bus'){
             //车ID缓存
-            singlePlan.busRequireListDel.push(id);
+            var  RequireListDelJson = {
+                id : id
+            }
+            singlePlan.busRequireListDel.push(singleDateArray);
         }else if(arrangeType=="other"){
             //其他ID缓存
-            singlePlan.otherRequireListDel.push(id);
+             var singleDateArray = {
+                    id : id
+                }
+            singlePlan.otherRequireListDel.push(singleDateArray);
         }else if(arrangeType=="ticket"){
             //票务ID缓存
-            singlePlan.ticketRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.ticketRequireListDel.push(singleDateArray);
         }
         else if(arrangeType=="selfPay"){
             //自费ID缓存
-            singlePlan.selfPayRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.selfPayRequireListDel.push(singleDateArray);
         }
         else if(arrangeType=="shop"){
             //购物ID缓存
-            singlePlan.shopRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.shopRequireListDel.push(singleDateArray);
         }
         else if(arrangeType=="scenic"){
             //景区ID缓存
-            singlePlan.scenicRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.scenicRequireListDel.push(singleDateArray);
         }else if(arrangeType=="hotel"){
             //酒店ID缓存
-            singlePlan.hotelRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.hotelRequireListDel.push(singleDateArray);
         }else if(arrangeType=="restaurant"){
             //餐ID缓存
-            singlePlan.restaurantRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.restaurantRequireListDel.push(singleDateArray);
         }else if(arrangeType=="insurance"){
             //保险ID缓存
-            singlePlan.insuranceRequireListDel.push(id);
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.insuranceRequireListDel.push(singleDateArray);
+        }else if(arrangeType=="guide"){
+            //保险ID缓存
+            var singleDateArray = {
+                    id : id
+                }
+            singlePlan.guideRequireListDel.push(singleDateArray);
         }
+        $tr.fadeOut(function(){
+            $that.parents('tr').remove();
+        })
         
     };
     
@@ -1715,17 +1755,17 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
+                singlePlan.busRequireListDel = [];
+                singlePlan.shopRequireListDel = [];
+                singlePlan.guideRequireListDel = [];
+                singlePlan.hotelRequireListDel = [];
+                singlePlan.otherRequireListDel = [];
+                singlePlan.ticketRequireListDel = []
+                singlePlan.scenicRequireListDel = [];
+                singlePlan.selfPayRequireListDel = [];
+                singlePlan.insuranceRequireListDel = [];
+                singlePlan.restaurantRequireListDel = [];
                 showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
-                    busRequireListDel = [];
-                    shopRequireListDel = [];
-                    guideRequireListDel = [];
-                    hotelRequireListDel = [];
-                    otherRequireListDel = [];
-                    ticketRequireListDel = []
-                    scenicRequireListDel = [];
-                    selfPayRequireListDel = [];
-                    insuranceRequireListDel = [];
-                    restaurantRequireListDel = [];
                     if(!!tabArgs){
                         if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
                             singlePlan.initSigleEvent($("#tab-"+tabArgs[0]+"-content"));
