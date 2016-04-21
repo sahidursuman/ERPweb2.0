@@ -3638,12 +3638,7 @@ define(function(require, exports){
 		Count.getTicketData($obj,$parentObj);
 		//绑定事件
 		//给日期格式化
-		$('.date-Picker').datetimepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'L',
-			language: 'zh-CN'
-		});
+		Tools.setDateHSPicker($('.date-Picker'));
 		//获取导游
 		$obj.find('td[name=guideName]').find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
