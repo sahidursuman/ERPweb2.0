@@ -22,14 +22,26 @@ define(function(require, exports) {
         feeList : require("./view/feeList"),
         addPartnerManager : require('./view/addPartnerManager'),
         viewTripPlanSingle : require('./view/viewTripPlanSingle'),
-        batchAddTourist : require('./view/batchAddTourist')
+        batchAddTourist : require('./view/batchAddTourist'),
+        chooseHotel : require('./view/chooseHotel'),
+        chooseHotelList : require('./view/chooseHotelList')
     }
     var singlePlan = {
         searchData : false,
         $tab : false,
         $searchArea : false,
         autocompleteDate : {},
-        insuranceRequireListDel : []
+        //删除计划缓存ID
+        busRequireListDel : [],
+        guideRequireListDel : [],
+        hotelRequireListDel : [],
+        insuranceRequireListDel : [],
+        otherRequireListDel : [],
+        restaurantRequireListDel : [],
+        scenicRequireListDel : [],
+        selfPayRequireListDel : [],
+        shopRequireListDel : [],
+        ticketRequireListDel : []
     };
 
     singlePlan.initModule = function() {
@@ -807,6 +819,11 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //酒店弹窗
+        $tab.find('.T-choose-hotel').on('click', function(event) {
+            event.preventDefault();
+            singlePlan.chooseHotel($(this));
+        });
     };
     /**
      * 绑定部门
@@ -867,7 +884,9 @@ define(function(require, exports) {
      */
     singlePlan.getGroupMapList = function($target){
         var $businessName = $target.closest('.layui-layer-content').find('[name="businessName"]'),
-            $dutyUser = $target.closest('.layui-layer-content').find('[name="dutyUserName"]');
+            $dutyUser = $target.closest('.layui-layer-content').find('[name="dutyUserName"]'),
+            $tr = $target.closest('tr');
+
         return $target.autocomplete({
             minLength:0,
             change:function(event,ui){
@@ -886,7 +905,7 @@ define(function(require, exports) {
         }).on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var businessNameId = $businessName.data('id');
+            var businessNameId = $tr.find('input[name=dutyDepartmentName]').data('id');
             if(!!businessNameId){
                 $.ajax({
                     url: KingServices.build_url('group', 'selectGroup'),
@@ -934,10 +953,10 @@ define(function(require, exports) {
         })
         .on('click', function(event) {
             event.preventDefault();
-            var $dutyDepartment = $target.closest('.layui-layer-content').find('[name="dutyDepartmentName"]');
+            var $tr = $target.closest('tr'),$dutyDepartment = $tr.find('[name="dutySubDepartmentName"]');
             $dutyDepartment = $dutyDepartment.length > 0 ? $dutyDepartment : $target.closest('.layui-layer-content').find('[name="groupName"]');
             var businessGroupId = $dutyDepartment.data('id');
-            var type = $dutyDepartment.data('type');
+            var type = 1;//$dutyDepartment.data('type');
             var url = !!type ? KingServices.build_url('group', 'selectDutyUser') : KingServices.build_url('innerTransferOperation', 'getDutyOPUserList');
             var data = !!type ? {"groupId" : businessGroupId} : {businessGroupId : businessGroupId};
             if(!!businessGroupId){
@@ -1029,25 +1048,34 @@ define(function(require, exports) {
      */
     singlePlan.addGuide = function($obj) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input name="dutyDepartmentId" type="hidden" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" /></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
                     '</tr>';
         var $tbody = $obj.find('.T-guide-plan');
         $tbody.append(html);
+        Tools.setDatePicker($obj.find('.T-datepicker'), true);
         //删除房
-        $obj.find('.T-del-plan').on('click', function() {
+        $tbody.find('.T-del-plan').on('click', function() {
             singlePlan.deleteArrangePlan($(this));
         });
         //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
+        $tbody.find('input[name="dutyDepartmentName"]').each(function(index, el) {
             singlePlan.getBusinessList($(this));
+        });
+        //子部门下拉框
+        $tbody.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
+            singlePlan.getGroupMapList($(this));
+        });
+         //责任计调下拉框
+        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
+            singlePlan.getDutyUserName($(this));
         });
     };
     /**
@@ -1140,6 +1168,7 @@ define(function(require, exports) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"></td>'+
                     '<td><input type="text" name="dutySubDepartmentName"></td>'+
@@ -1171,6 +1200,11 @@ define(function(require, exports) {
         $obj.find('.T-del-plan').on('click', function(event) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
+        });
+        //酒店弹窗
+        $obj.find('.T-choose-hotel').on('click', function(event) {
+            event.preventDefault();
+            singlePlan.chooseHotel($(this));
         });
     };
     /**
@@ -1379,17 +1413,194 @@ define(function(require, exports) {
         });
     };
     /**
+     * 自选酒店
+     * @param  {object} $that 触发对象的jQuery对象
+     */
+    singlePlan.chooseHotel = function($that){
+        var data = typeof $that.data('json') === 'object' ? $that.data('json') : JSON.parse($that.data('json') || "[]");
+        singlePlan.selectHotelCache = data;
+        layer.open({
+            type: 1,
+            title: "自选酒店",
+            skin: 'layui-layer-rim', //加上边框
+            area: '70%', //宽高
+            zIndex:1028,
+            content: T.chooseHotel(),
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+                singlePlan.getHotelList(0, $layer);
+                $layer.find('.T-btn-search').on('click', function(){
+                    singlePlan.getHotelList({
+                        pageNo : 0,
+                        name : $layer.find('.T-hotel-name').val()
+                    }, $layer);
+                });
+                $layer.find('.T-hotel-list').on('change', '.T-select', function(){
+                    var $that = $(this);
+                    if($that.is(":checked")){
+                        cacheCheckData($that, 1);
+                    }else{
+                        cacheCheckData($that, 0);
+                    }
+                });
+                $layer.find('.T-btn-save').on('click', function(){
+                    var str = "";
+                    for(var i=0, len = singlePlan.selectHotelCache.length; i<len;i++){
+                        if(i != len - 1){
+                            str = str + singlePlan.selectHotelCache[i].name + ",";
+                        }else{
+                            str += singlePlan.selectHotelCache[i].name;
+                        }
+                    }
+                    $that.data('json', JSON.stringify(singlePlan.selectHotelCache)).val(str);
+                    layer.close(index);
+                });
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
+                    layer.close(index);
+                });
+            }
+        });
+
+        return;
+        function cacheCheckData($that, operation) {
+            var $tr = $that.closest('tr'),
+                id = $tr.data('id'),
+                name = $tr.find('[name="hotelName"]').text();
+            if(singlePlan.selectHotelCache.length > 0){
+                for(var i=0, len = singlePlan.selectHotelCache.length; i<len; i++){
+                    if(operation === 1){
+                        if(singlePlan.selectHotelCache[i].id === id){
+                            break;
+                        }
+                        if(i === len - 1 && id !== singlePlan.selectHotelCache[i].id){
+                            singlePlan.selectHotelCache.push({
+                                id : id,
+                                name : name,
+                                ischeck : 1
+                            });
+                        }
+                    }else{
+                        if(singlePlan.selectHotelCache[i].id == id){
+                            singlePlan.selectHotelCache.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }else if(operation === 1){
+                singlePlan.selectHotelCache.push({
+                    id : id,
+                    name : name,
+                    ischeck : 1
+                });
+            }
+        }
+    };
+    /**
+     * 获取自选酒店列表
+     * @param  {number/object} args       请求参数
+     * @param  {object}        $layer     layer的jQuery对象
+     * @param  {number}        layerIndex layer的索引
+     */
+    singlePlan.getHotelList = function(args, $layer, layerIndex){
+        if(typeof args === "number"){
+            var page = args;
+            args = {};
+            args.pageNo = page;
+        }
+        $.ajax({
+            url : KingServices.build_url('hotel', 'selectHotel'),
+            data : args,
+            type: 'POST',
+            success : function(data){
+                if(showDialog(data)){
+                    data.hotelList = JSON.parse(data.hotelList);
+                    data.hotelList = singlePlan.getTempDate(data.hotelList, singlePlan.selectHotelCache);
+                    var html = T.chooseHotelList(data);
+                    $layer.find('.T-hotel-list').html(html);
+                    //绑定分页插件
+                    laypage({
+                        cont: $layer.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (args.pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                args.pageNo = (obj.curr - 1);
+                                singlePlan.getHotelList(args, $layer);
+                            }
+                        }
+                    });
+                    $(document).trigger('resize');
+                }else if(!!layerIndex){
+                    layer.close(layerIndex);
+                }
+            }
+        });
+    };
+    /**
+     * 替换数据
+     * @param  {Array}  resultList  原有的数据
+     * @param  {Array}  tempJson   新数据
+     */
+    singlePlan.getTempDate = function(resultList,tempJson){
+        if(!!tempJson && tempJson.length){
+            for(var i = 0; i < tempJson.length; i++){
+                var tempId = tempJson[i].id;
+                for(var j = 0; j < resultList.length; j++){
+                    var id = resultList[j].id;
+                    if(tempId == id){
+                        resultList[j].ischeck = tempJson[i].ischeck || true;
+                    }
+                }
+            }
+        };
+        return resultList;
+    };
+    /**
      * 删除车安排
      * @param  {object} $obj 删除按钮
      * @return {[type]}      [description]
      */
     singlePlan.deleteArrangePlan = function($obj) {
-        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id'),arrangeType = $obj.attr('arrangeType');
         $tr.fadeOut(function(){
             $that.parents('tr').remove();
         })
-        singlePlan.insuranceRequireListDel.push(id);
+        if(arrangeType == 'bus'){
+            //车ID缓存
+            singlePlan.busRequireListDel.push(id);
+        }else if(arrangeType=="other"){
+            //其他ID缓存
+            singlePlan.otherRequireListDel.push(id);
+        }else if(arrangeType=="ticket"){
+            //票务ID缓存
+            singlePlan.ticketRequireListDel.push(id);
+        }
+        else if(arrangeType=="selfPay"){
+            //自费ID缓存
+            singlePlan.selfPayRequireListDel.push(id);
+        }
+        else if(arrangeType=="shop"){
+            //购物ID缓存
+            singlePlan.shopRequireListDel.push(id);
+        }
+        else if(arrangeType=="scenic"){
+            //景区ID缓存
+            singlePlan.scenicRequireListDel.push(id);
+        }else if(arrangeType=="hotel"){
+            //酒店ID缓存
+            singlePlan.hotelRequireListDel.push(id);
+        }else if(arrangeType=="restaurant"){
+            //餐ID缓存
+            singlePlan.restaurantRequireListDel.push(id);
+        }else if(arrangeType=="insurance"){
+            //保险ID缓存
+            singlePlan.insuranceRequireListDel.push(id);
+        }
+        
     };
+    
     // 、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
 
     singlePlan.jsonToString = function(jTs) {
@@ -1407,16 +1618,16 @@ define(function(require, exports) {
         if(!validate.form())return;
 
         var args = $tab.find('.T-basic-info').serializeJson();
-        var insuranceRequireList = $tab.find('.T-insurance-list').serializeJson();
-        var guideRequireList = $tab.find('.T-guide-list').serializeJson();
-        var busRequireList = $tab.find('.T-bus-list').serializeJson();
-        var restaurantRequireList = $tab.find('.T-restaurant-list').serializeJson();
-        var scenicRequireList = $tab.find('.T-scenic-list').serializeJson();
-        var hotelRequireList = $tab.find('.T-hotel-list').serializeJson();
-        var shopRequireList = $tab.find('.T-shop-list').serializeJson();
-        var selfPayRequireList = $tab.find('.T-selfPay-list').serializeJson();
-        var ticketRequireList = $tab.find('.T-ticket-list').serializeJson();
-        var otherRequireList = $tab.find('.T-other-list').serializeJson();
+        var insuranceRequireList = Tools.getTableVal($tab.find('.T-insurance-plan'), 'entity-id');
+        var guideRequireList = Tools.getTableVal($tab.find('.T-guide-plan'), 'entity-id');
+        var busRequireList = Tools.getTableVal($tab.find('.T-bus-plan'), 'entity-id');
+        var restaurantRequireList = Tools.getTableVal($tab.find('.T-restaurant-plan'), 'entity-id');
+        var scenicRequireList = Tools.getTableVal($tab.find('.T-scenic-plan'), 'entity-id');
+        var hotelRequireList = Tools.getTableVal($tab.find('.T-hotel-plan'), 'entity-id');
+        var shopRequireList = Tools.getTableVal($tab.find('.T-shop-plan'), 'entity-id');
+        var selfPayRequireList = Tools.getTableVal($tab.find('.T-selfPay-plan'), 'entity-id');
+        var ticketRequireList = Tools.getTableVal($tab.find('.T-ticket-plan'), 'entity-id');
+        var otherRequireList = Tools.getTableVal($tab.find('.T-other-plan'), 'entity-id');
 
         args.isContainSelfPay = $tab.find('[name="isContainSelfPay"]').is(":checked") ? 1 : 0;
         args.shopIds = $tab.find('[name="shopNames"]').data("propover") || "";
@@ -1469,7 +1680,6 @@ define(function(require, exports) {
         args.touristGroupIdJson =  JSON.stringify(args.touristGroupIdJson);
         /*args.touristAdultCount = adultcount;
         args.touristChildCount = childcount;*/
-        args.insuranceRequireListDel = singlePlan.insuranceRequireListDel;
         var requireJson = {
             insuranceRequireList : insuranceRequireList,
             guideRequireList : guideRequireList,
@@ -1481,7 +1691,19 @@ define(function(require, exports) {
             shopRequireList : shopRequireList,
             selfPayRequireList : selfPayRequireList,
             ticketRequireList : ticketRequireList,
-            otherRequireList : otherRequireList
+            otherRequireList : otherRequireList,
+            //缓存删除id
+            busRequireListDel : singlePlan.busRequireListDel,
+            guideRequireListDel : singlePlan.guideRequireListDel,
+            hotelRequireListDel : singlePlan.hotelRequireListDel,
+            insuranceRequireListDel : singlePlan.insuranceRequireListDel,
+            otherRequireListDel : singlePlan.otherRequireListDel,
+            restaurantRequireListDel : singlePlan.restaurantRequireListDel,
+            scenicRequireListDel : singlePlan.scenicRequireListDel,
+            selfPayRequireListDel : singlePlan.selfPayRequireListDel,
+            shopRequireListDel : singlePlan.shopRequireListDel,
+            ticketRequireListDel : singlePlan.ticketRequireListDel
+
         }
         $.ajax({
             url: KingServices.build_url('v2/tripController', 'saveRetailClient'),
@@ -1494,6 +1716,16 @@ define(function(require, exports) {
         .done(function(data) {
             if (showDialog(data)) {
                 showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+                    busRequireListDel = [];
+                    shopRequireListDel = [];
+                    guideRequireListDel = [];
+                    hotelRequireListDel = [];
+                    otherRequireListDel = [];
+                    ticketRequireListDel = []
+                    scenicRequireListDel = [];
+                    selfPayRequireListDel = [];
+                    insuranceRequireListDel = [];
+                    restaurantRequireListDel = [];
                     if(!!tabArgs){
                         if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
                             singlePlan.initSigleEvent($("#tab-"+tabArgs[0]+"-content"));
