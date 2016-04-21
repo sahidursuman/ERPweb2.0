@@ -26,7 +26,7 @@ define(function(require, exports){
 		guideTamplate = require('./view/guideAccount'),
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
-		formulaTemplate = require('./view/formulaList'),
+		//formulaTemplate = require('./view/formulaList'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
