@@ -202,54 +202,619 @@
 	<!-- 4. 操作计划 -->
 	<div class="row">
 		<div class="col-xs-12 hd">
-			<h3 class="pull-left">操作计划</h3>
-			<div class="pull-left mar-l-15 T-action-plan">
-				<label data-type="insurance" class="control-label T-add-action">
-					<input type="checkbox" class="ace">
-					<span class="lbl">保险</span>
-				</label>
-				<label data-type="guide" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">导游</span>
-				</label>
-				<label data-type="bus" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">车辆</span>
-				</label>
-				<label data-type="restaurant" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">餐饮</span>
-				</label>
-				<label data-type="hotel" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">酒店</span>
-				</label>
-				<label data-type="scenic" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">景区</span>
-				</label>
-				<label data-type="ticket" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">票务</span>
-				</label>
-				<label data-type="shop" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">购物</span>
-				</label>
-				<label data-type="selfPay" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">自费</span>
-				</label>
-				<label data-type="other" class="control-label T-add-action mar-l-10">
-					<input type="checkbox" class="ace">
-					<span class="lbl">其它</span>
-				</label>
-				<label data-type="all" class="control-label T-add-all mar-l-15">
-					<input type="checkbox" class="ace">
-					<span class="lbl">全选</span>
-				</label>
-			</div>
-		</div>
+            <h3 class="pull-left">操作计划</h3>
+        </div>
+        <div class="tabbable">
+            <ul class="nav nav-tabs T-arrange-tabs">
+                <li class="col-sm-1 no-padding align-center R-right active" data-right="1140011"> <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="true">导游</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140012"> <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="false">保险</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140013"> <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140014"> <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="true">餐饮</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140015"> <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="true">酒店</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140016"> <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="true">景区</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140017"> <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="true">票务</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140018"> <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="true">购物</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019"> <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="true">自费</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019"> <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="true">其他</a> </li>
+            </ul>
+            <div class="tab-content T-tab-content" style="position:relative;top: -2px">
+                <!-- 保险 -->
+                <div id="tripPlan_addPlan_insurance" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-medkit"></i> 保险计划 <button class="btn btn-sm btn-success T-addResource T-addInsurance" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <form class="T-insurance-list">
+                            <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                <colgroup>
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col style="width:300px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:10px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="th-border">开始时间</th>
+                                        <th class="th-border">结束时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>保险要求</th>
+                                        <th class="th-border">部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                        <th class="th-border">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-insurance-plan">
+                                    {{each insuranceRequireList as insurance}}
+                                    <tr entity-id="{{insurance.id}}" arrangeType = "insurance">
+                                        <td>
+                                            <input type="text" name="startTime" value="{{insurance.startTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="endTime" value="{{insurance.endTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="requireContent" value="{{insurance.requireContent}}" class="col-xs-12">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyDepartmentId" value="{{insurance.dutyDepartmentId}}">
+                                            <input type="text" name="dutyDepartmentName" value="{{insurance.dutyDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutySubDepartmentId" value="{{insurance.dutySubDepartmentId}}">
+                                            <input type="text" name="dutySubDepartmentName" value="{{insurance.dutySubDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyUserId" value="{{insurance.dutyUserId}}">
+                                            <input type="text" name="dutyUserName" value="{{insurance.dutyUserName}}">
+                                        </td>
+                                        <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- 导游 -->
+                <div id="tripPlan_addPlan_guide" class="tab-pane fade active in">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-user"></i> 导游计划 <button class="btn btn-sm btn-success T-addResource T-addGuide" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <form class="T-guide-list">
+                            <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                <colgroup>
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col style="width:300px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:10px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="th-border">开始时间</th>
+                                        <th class="th-border">结束时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>导游要求</th>
+                                        <th class="th-border"><span class="necessary">*</span>责任部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                        <th class="th-border">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-guide-plan">
+                                    {{each guideRequireList as guide}}
+                                    <tr entity-id="{{guide.id}}" arrangeType = "guide">
+                                        <td>
+                                            <input type="text" name="startTime" value="{{guide.startTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="endTime" value="{{guide.endTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="requireContent" value="{{guide.requireContent}}" class="col-xs-12">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyDepartmentId" value="{{guide.dutyDepartmentId}}">
+                                            <input type="text" name="dutyDepartmentName" value="{{guide.dutyDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutySubDepartmentId" value="{{guide.dutySubDepartmentId}}">
+                                            <input type="text" name="dutySubDepartmentName" value="{{guide.dutySubDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyUserId" value="{{guide.dutyUserId}}">
+                                            <input type="text" name="dutyUserName" value="{{guide.dutyUserName}}">
+                                        </td>
+                                        <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- 车辆 -->
+                <div id="tripPlan_addPlan_bus" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-bus"></i> 车辆计划 <button class="btn btn-sm btn-success T-addResource T-addBus" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <form class="T-bus-list">
+                            <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                <colgroup>
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col style="width:300px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:10px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="th-border">开始时间</th>
+                                        <th class="th-border">结束时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>车俩要求</th>
+                                        <th class="th-border"><span class="necessary">*</span>责任部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                        <th class="th-border">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-bus-plan">
+                                    {{each busRequireList as bus}}
+                                    <tr entity-id="{{bus.id}}" arrangeType = "bus">
+                                        <td>
+                                            <input type="text" name="startTime" value="{{bus.startTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="endTime" value="{{bus.endTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="requireContent" value="{{bus.requireContent}}" class="col-xs-12">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyDepartmentId" value="{{bus.dutyDepartmentId}}">
+                                            <input type="text" name="dutyDepartmentName" value="{{bus.dutyDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutySubDepartmentId" value="{{bus.dutySubDepartmentId}}">
+                                            <input type="text" name="dutySubDepartmentName" value="{{bus.dutySubDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyUserId" value="{{bus.dutyUserId}}">
+                                            <input type="text" name="dutyUserName" value="{{bus.dutyUserName}}">
+                                        </td>
+                                        <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- 餐饮 -->
+                <div id="tripPlan_addPlan_restaurant" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-cutlery"></i> 餐饮计划 <button class="btn btn-sm btn-success T-addResource T-addRestaurant" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <div class="overflow-x min-w-1050">
+                            <form class="T-restaurant-list">
+                                <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                    <colgroup>
+                                        <col style="width:100px">
+                                        <col style="width:100px">
+                                        <col style="width:300px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:10px;">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border"><span class="necessary">*</span>餐饮要求</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                            <th class="th-border">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="T-restaurant-plan">
+                                        {{each restaurantRequireList as restaurant}}
+                                        <tr entity-id="{{restaurant.id}}" arrangeType = "restaurant">
+                                            <td>
+                                                <input type="text" name="startTime" value="{{restaurant.startTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="endTime" value="{{restaurant.endTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="requireContent" value="{{restaurant.requireContent}}" class="col-xs-12">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyDepartmentId" value="{{restaurant.dutyDepartmentId}}">
+                                                <input type="text" name="dutyDepartmentName" value="{{restaurant.dutyDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutySubDepartmentId" value="{{restaurant.dutySubDepartmentId}}">
+                                                <input type="text" name="dutySubDepartmentName" value="{{restaurant.dutySubDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyUserId" value="{{restaurant.dutyUserId}}">
+                                                <input type="text" name="dutyUserName" value="{{restaurant.dutyUserName}}">
+                                            </td>
+                                            <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 酒店 -->
+                <div id="tripPlan_addPlan_hotel" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-hotel"></i> 酒店计划 <button class="btn btn-sm btn-success T-addResource T-addHotel" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button></h5>
+                        <div class="overflow-x min-w-1050">
+                            <form class="T-hotel-list">
+                                <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                    <colgroup>
+                                        <col style="width:10%">
+                                        <col style="width:10%">
+                                        <col style="width:20%">
+                                        <col style="width:20%;">
+                                        <col style="width:10%;">
+                                        <col style="width:10%;">
+                                        <col style="width:10%;">
+                                        <col style="width:10%;">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border">酒店</th>
+                                            <th class="th-border"><span class="necessary">*</span>酒店要求</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                            <th class="th-border">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="T-hotel-plan">
+                                        {{each hotelRequireList as hotel}}
+                                        <tr entity-id="{{hotel.id}}" arrangeType = "hotel">
+                                            <td>
+                                                <input type="text" name="startTime" value="{{hotel.startTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="endTime" value="{{hotel.endTime}}" class="T-datepicker">
+                                            </td>
+                                            <td><input type="text" class="T-choose-hotel" class="col-xs-12" readonly="readonly"></td>
+                                            <td>
+                                                <input type="text" name="requireContent" value="{{hotel.requireContent}}" class="col-xs-12">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyDepartmentId" value="{{hotel.dutyDepartmentId}}">
+                                                <input type="text" name="dutyDepartmentName" value="{{hotel.dutyDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutySubDepartmentId" value="{{hotel.dutySubDepartmentId}}">
+                                                <input type="text" name="dutySubDepartmentName" value="{{hotel.dutySubDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyUserId" value="{{hotel.dutyUserId}}">
+                                                <input type="text" name="dutyUserName" value="{{hotel.dutyUserName}}">
+                                            </td>
+                                            <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 景区 -->
+                <div id="tripPlan_addPlan_scenic" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-tree"></i> 景区计划 <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addScenic"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <div class="overflow-x min-w-1050">
+                            <form class="T-scenic-list">
+                                <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                    <colgroup>
+                                        <col style="width:100px">
+                                        <col style="width:100px">
+                                        <col style="width:300px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:10px;">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border"><span class="necessary">*</span>景区要求</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                            <th class="th-border">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="T-scenic-plan">
+                                        {{each scenicRequireList as scenic}}
+                                        <tr entity-id="{{scenic.id}}" arrangeType = "scenic">
+                                            <td>
+                                                <input type="text" name="startTime" value="{{scenic.startTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="endTime" value="{{scenic.endTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="requireContent" value="{{scenic.requireContent}}" class="col-xs-12">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyDepartmentId" value="{{scenic.dutyDepartmentId}}">
+                                                <input type="text" name="dutyDepartmentName" value="{{scenic.dutyDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutySubDepartmentId" value="{{scenic.dutySubDepartmentId}}">
+                                                <input type="text" name="dutySubDepartmentName" value="{{scenic.dutySubDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyUserId" value="{{scenic.dutyUserId}}">
+                                                <input type="text" name="dutyUserName" value="{{scenic.dutyUserName}}">
+                                            </td>
+                                            <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 购物 -->
+                <div id="tripPlan_addPlan_shop" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-shopping-cart"></i> 购物计划 <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addShop"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <form class="T-shop-list">
+                            <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                <colgroup>
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col style="width:300px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:100px;">
+                                    <col style="width:10px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="th-border">开始时间</th>
+                                        <th class="th-border">结束时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>购物要求</th>
+                                        <th class="th-border"><span class="necessary">*</span><span class="necessary">*</span>责任部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                        <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                        <th class="th-border">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-shop-plan">
+                                    {{each shopRequireList as shop}}
+                                    <tr entity-id="{{shop.id}}" arrangeType = "shop">
+                                        <td>
+                                            <input type="text" name="startTime" value="{{shop.startTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="endTime" value="{{shop.endTime}}" class="T-datepicker">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="requireContent" value="{{shop.requireContent}}" class="col-xs-12">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyDepartmentId" value="{{shop.dutyDepartmentId}}">
+                                            <input type="text" name="dutyDepartmentName" value="{{shop.dutyDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutySubDepartmentId" value="{{shop.dutySubDepartmentId}}">
+                                            <input type="text" name="dutySubDepartmentName" value="{{shop.dutySubDepartmentName}}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="dutyUserId" value="{{shop.dutyUserId}}">
+                                            <input type="text" name="dutyUserName" value="{{shop.dutyUserName}}">
+                                        </td>
+                                        <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- 自费 -->
+                <div id="tripPlan_addPlan_selfPay" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-credit-card"></i> 自费计划 <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addSelfPay"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <div class="overflow-x min-w-1050">
+                            <form class="T-selfPay-list">
+                                <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                    <colgroup>
+                                        <col style="width:100px">
+                                        <col style="width:100px">
+                                        <col style="width:300px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:10px;">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border"><span class="necessary">*</span>自费要求</th>
+                                            <th class="th-border"><span class="necessary">*</span><span class="necessary">*</span>责任部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                            <th class="th-border">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="T-selfPay-plan">
+                                        {{each selfPayRequireList as selfPay}}
+                                        <tr entity-id="{{selfPay.id}}" arrangeType = "selfPay">
+                                            <td>
+                                                <input type="text" name="startTime" value="{{selfPay.startTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="endTime" value="{{selfPay.endTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="requireContent" value="{{selfPay.requireContent}}" class="col-xs-12">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyDepartmentId" value="{{selfPay.dutyDepartmentId}}">
+                                                <input type="text" name="dutyDepartmentName" value="{{selfPay.dutyDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutySubDepartmentId" value="{{selfPay.dutySubDepartmentId}}">
+                                                <input type="text" name="dutySubDepartmentName" value="{{selfPay.dutySubDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyUserId" value="{{selfPay.dutyUserId}}">
+                                                <input type="text" name="dutyUserName" value="{{selfPay.dutyUserName}}">
+                                            </td>
+                                            <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 票务 -->
+                <div id="tripPlan_addPlan_ticket" class="tab-pane fade">
+                    <div class=" ui-sortable-handle">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-car"></i> 票务计划 <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addTicket"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <div class="overflow-x min-w-1050">
+                            <form class="T-ticket-list">
+                                <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                    <colgroup>
+                                        <col style="width:100px">
+                                        <col style="width:100px">
+                                        <col style="width:300px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:10px;">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border"><span class="necessary">*</span>票务要求</th>
+                                            <th class="th-border"><span class="necessary">*</span><span class="necessary">*</span>责任部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>子部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                            <th class="th-border">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="T-ticket-plan">
+                                        {{each ticketRequireList as ticket}}
+                                        <tr entity-id="{{ticket.id}}" arrangeType = "ticket">
+                                            <td>
+                                                <input type="text" name="startTime" value="{{ticket.startTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="endTime" value="{{ticket.endTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="requireContent" value="{{ticket.requireContent}}" class="col-xs-12">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyDepartmentId" value="{{ticket.dutyDepartmentId}}">
+                                                <input type="text" name="dutyDepartmentName" value="{{ticket.dutyDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutySubDepartmentId" value="{{ticket.dutySubDepartmentId}}">
+                                                <input type="text" name="dutySubDepartmentName" value="{{ticket.dutySubDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyUserId" value="{{ticket.dutyUserId}}">
+                                                <input type="text" name="dutyUserName" value="{{ticket.dutyUserName}}">
+                                            </td>
+                                            <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 其他 -->
+                <div id="tripPlan_addPlan_other" class="tab-pane fade T-otherOut">
+                    <div class="ui-sortable-handle widget-container-col">
+                        <h5 class="title-size"> <i class="ace-icon fa fa-car"></i> 票务计划 <button class="btn btn-sm btn-success mar-l-15 T-addResource T-addOther"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
+                        <div class="overflow-x min-w-1050">
+                            <form class="T-other-list">
+                                <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                                    <colgroup>
+                                        <col style="width:100px">
+                                        <col style="width:100px">
+                                        <col style="width:300px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:100px;">
+                                        <col style="width:10px;">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th class="th-border">开始时间</th>
+                                            <th class="th-border">结束时间</th>
+                                            <th class="th-border"><span class="necessary">*</span>其他要求</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任部门</th>
+                                            <th class="th-border"><span class="necessary">*</span><span class="necessary">*</span>子部门</th>
+                                            <th class="th-border"><span class="necessary">*</span>责任计调</th>
+                                            <th class="th-border">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="T-other-plan">
+                                        {{each otherRequireList as other}}
+                                        <tr entity-id="{{other.id}}" arrangeType = "other">
+                                            <td>
+                                                <input type="text" name="startTime" value="{{other.startTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="endTime" value="{{other.endTime}}" class="T-datepicker">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="requireContent" value="{{other.requireContent}}" class="col-xs-12">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyDepartmentId" value="{{other.dutyDepartmentId}}">
+                                                <input type="text" name="dutyDepartmentName" value="{{other.dutyDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutySubDepartmentId" value="{{other.dutySubDepartmentId}}">
+                                                <input type="text" name="dutySubDepartmentName" value="{{other.dutySubDepartmentName}}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="dutyUserId" value="{{other.dutyUserId}}">
+                                                <input type="text" name="dutyUserName" value="{{other.dutyUserName}}">
+                                            </td>
+                                            <td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12 T-action-plan-list">
