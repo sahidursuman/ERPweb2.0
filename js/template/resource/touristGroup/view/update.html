@@ -424,8 +424,7 @@
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
 										        	<span class="necessary">*</span><label class="mar-r-10">接团时间</label>
-										            <input type="text" name="arriveTime" value="{{touristGroupDetail.outRemarkArrange.arriveTime | dateFormat:'yyyy-MM-dd h:m'}}" class="form-control date-picker datetimepicker" />
-                                                    <input type="hidden" name="arrid" value="{{touristGroupDetail.outRemarkArrange.arriveTime | dateFormat:'yyyy-MM-dd h:m:s'}}">
+										            <input type="text" name="arriveTime" value="{{touristGroupDetail.outRemarkArrange.arriveTime | dateFormat:'yyyy-MM-dd hh:mm'}}" class="form-control date-picker datetimepicker" />
 										        </div>
 										    </div>
 										    <div class="form-inline" style="padding:0 0 7px 14px;">
@@ -578,8 +577,8 @@
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
 										            <span class="necessary">*</span><label>送团时间</label>
-										            <input type="text" name="leaveTime" value="{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat:'yyyy-MM-dd h:m'}}"  class="form-control date-picker datetimepicker" />
-                                                    <input type="hidden" name="lers" value="{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat:'yyyy-MM-dd h:m:s'}}">
+										            <input type="text" name="leaveTime" value="{{touristGroupDetail.outRemarkArrange.leaveTime 
+                                                    | dateFormat:'yyyy-MM-dd hh:mm'}}"  class="form-control date-picker datetimepicker" />
 										        </div>
 										    </div>
 										    <div class="form-inline" style="padding:0 0 7px 14px;">
