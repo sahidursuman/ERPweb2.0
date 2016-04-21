@@ -391,8 +391,8 @@
                                                         {{if itemSet.guideDetails.length}}
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                                    <span>{{rs.guideRate*100}}</span>
-                                                                    <input name="guideRate" value="{{rs.guideRate*100}}" type="hidden"/>
+                                                                    <span>{{rs.guideRate}}</span>
+                                                                    <input name="guideRate" value="{{rs.guideRate}}" type="hidden"/>
                                                                 </div>
                                                             {{/each}}
                                                         {{else}}
@@ -420,8 +420,8 @@
                                                     </td><!-- 导佣金额 -->
 
                                                     <td>
-                                                    <span class="F-float F-money travelAgencyRate">{{itemSet.travelAgencyRate*100}}</span>
-                                                    <input name="travelAgencyRate" type="hidden" value="{{itemSet.travelAgencyRate*100}}"/>
+                                                    <span class="F-float F-money travelAgencyRate">{{itemSet.travelAgencyRate}}</span>
+                                                    <input name="travelAgencyRate" type="hidden" value="{{itemSet.travelAgencyRate}}"/>
                                                     </td><!-- 社佣比例 -->
                                             
                                                     <td>
@@ -609,8 +609,8 @@
                                                             {{if itemSet.guideDetails.length}}
                                                                 {{each itemSet.guideDetails as rs index}}
                                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                                        <span>{{rs.guideRate*100}}</span>
-                                                                        <input name="guideRate" value="{{rs.guideRate*100}}" type="hidden"/>
+                                                                        <span>{{rs.guideRate}}</span>
+                                                                        <input name="guideRate" value="{{rs.guideRate}}" type="hidden"/>
                                                                     </div>
                                                                 {{/each}}
                                                             {{else}}
@@ -641,8 +641,8 @@
 
                                                         <td>
                                                             <div class="div-h-30"></div>
-                                                            <span class="F-float F-money">{{itemSet.travelAgencyRate*100}}</span>
-                                                            <input name="travelAgencyRate" type="hidden" value="{{itemSet.travelAgencyRate*100}}" />
+                                                            <span class="F-float F-money">{{itemSet.travelAgencyRate}}</span>
+                                                            <input name="travelAgencyRate" type="hidden" value="{{itemSet.travelAgencyRate}}" />
                                                         </td><!-- 社佣比例 -->
                                                         
                                                         <td>
@@ -1003,10 +1003,10 @@
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                                     {{if itemSet.badStatus == 1}}
-                                                                        <span class="travelAgencyRate">{{rs.travelAgencyRate*100}}</span>
+                                                                        <span class="travelAgencyRate">{{rs.travelAgencyRate}}</span>
                                                                     {{else}}
-                                                                        <span class="travelAgencyRate">{{rs.travelAgencyRate*100}}</span>
-                                                                        <input type="hidden" name="travelAgencyRate" value="{{rs.travelAgencyRate*100}}" />
+                                                                        <span class="travelAgencyRate">{{rs.travelAgencyRate}}</span>
+                                                                        <input type="hidden" name="travelAgencyRate" value="{{rs.travelAgencyRate}}" />
                                                                     {{/if}}
                                                                 </div>
                                                             {{/each}}
@@ -1043,10 +1043,10 @@
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                                     {{if itemSet.badStatus == 1}}
-                                                                        <span class="guideRate">{{rs.guideRate*100}}</span>
+                                                                        <span class="guideRate">{{rs.guideRate}}</span>
                                                                     {{else}}
-                                                                        <span class="guideRate">{{rs.guideRate*100}}</span> 
-                                                                        <input type="hidden" name="guideRate" value="{{rs.guideRate*100}}" />
+                                                                        <span class="guideRate">{{rs.guideRate}}</span> 
+                                                                        <input type="hidden" name="guideRate" value="{{rs.guideRate}}" />
                                                                     {{/if}}
                                                                 </div>
                                                             {{/each}}
@@ -1332,8 +1332,8 @@
                                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                                        <span class="travelAgencyRate">{{rs.travelAgencyRate*100}}</span>
-                                                                        <input type="hidden" name="travelAgencyRate" value="{{rs.travelAgencyRate*100}}" />
+                                                                        <span class="travelAgencyRate">{{rs.travelAgencyRate}}</span>
+                                                                        <input type="hidden" name="travelAgencyRate" value="{{rs.travelAgencyRate}}" />
                                                                 </div>
                                                             {{/each}}
                                                         {{else}}
@@ -1364,9 +1364,9 @@
                                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                                             {{each itemSet.guideDetails as rs index}}
                                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                                        <span class="guideRate">{{rs.guideRate*100}}</span>
+                                                                        <span class="guideRate">{{rs.guideRate}}</span>
                                                                         <input type="hidden" name="guideRate" 
-                                                                        value="{{rs.guideRate*100}}" />
+                                                                        value="{{rs.guideRate}}" />
                                                                 </div>
                                                             {{/each}}
                                                         {{else}}
