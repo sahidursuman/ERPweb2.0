@@ -494,8 +494,11 @@ define(function(require, exports){
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                Count.guide = data.guideArranges;
+<<<<<<< HEAD
+=======
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
+>>>>>>> 7eff52e175f321cc99e9b17e647d5e3e2a26b94d
 	                var html = Reimbursement(tmp);
 	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
@@ -1660,7 +1663,7 @@ define(function(require, exports){
 						guidePay[i].taskJson = JSON.parse(guidePay[i].taskJson);
 					};
 
-					//循环购物导拥、购物社佣去除多余的小数位
+					//循环去除购物导拥、购物社佣的空格
 					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
 					for(var i = 0;i<tRateList.length;i++){
 						var itemList = tRateList[i].shopArrangeItemList;
@@ -1671,6 +1674,7 @@ define(function(require, exports){
 					};
 					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
+					console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -3699,7 +3703,13 @@ define(function(require, exports){
 		Count.getTicketData($obj,$parentObj);
 		//绑定事件
 		//给日期格式化
-		Tools.setDateHSPicker($('.date-Picker'));
+		$('.date-Picker').datetimepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'L',
+			language: 'zh-CN'
+		});
+		// Tools.setDateHSPicker($('.date-Picker'));
 		//获取导游
 		$obj.find('td[name=guideName]').find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
@@ -6762,6 +6772,7 @@ define(function(require, exports){
 			selfFormula.addClass('hide');
 		}
 	}
+
 	//循环去除导佣、社佣的小数位
 	Count.formatShopRate = function(data){
 		var newRateArr = data;
