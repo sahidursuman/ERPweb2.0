@@ -494,11 +494,8 @@ define(function(require, exports){
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                Count.guide = data.guideArranges;
-<<<<<<< HEAD
-=======
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
->>>>>>> 7eff52e175f321cc99e9b17e647d5e3e2a26b94d
 	                var html = Reimbursement(tmp);
 	                console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
