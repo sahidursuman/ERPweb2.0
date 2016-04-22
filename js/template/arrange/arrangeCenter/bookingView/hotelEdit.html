@@ -1,10 +1,9 @@
-<div class="base-info">
+<div class="base-info" data-id="{{bookingOrder.id}}">
     代订单号：<span class="mar-r-20">{{bookingOrder.orderNumber}}</span> 客人信息：
     <span class="mar-r-20">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</span> 外联销售：{{bookingOrder.outOPUserName}}
 </div>
 <div class=" ui-sortable-handle">
     <h5 class="">
-        <span class="badge badge-primary">2</span>
         <label class="middle title-size">酒店代订</label>
         <button class="btn btn-sm btn-success mar-l-20 T-hotel-add T-action">
             <i class="ace-icon fa fa-plus"></i>
@@ -12,7 +11,7 @@
         </button>
     </h5>
     
-    <p class="panel">现酒店计划要求：{{required}}</p>
+    <p class="panel hct-mh-required">现酒店计划要求：{{required}}</p>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
@@ -45,7 +44,7 @@
                         <td>
                             <select name="hotelLevel" class="col-sm-12">
                                 <option value="" {{if !rs.hotelLevel}}selected="selected"{{/if}}>--全部--</option>
-                                {{#110 | getHotelLevelOptions}}
+                                {{#rs.hotelLevel | getHotelLevelOptions}}
                             </select>
                         </td>
                         <td>
@@ -64,7 +63,7 @@
                             <input name="reduceMoney" value="{{rs.reduceMoney}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
                         </td>
                         <td>
-                            <input name="sumCostMoney" value="{{rs.sumCostMoney}}" type="text" class="col-sm-12 F-float F-money" style="width:55px;" readonly />
+                            <input name="sumCostMoney" value="{{rs.sumCostMoney}}" type="text" class="col-sm-12 F-float F-money" readonly />
                         </td>
                         <td>
                             <input name="prePayMoney" value="{{rs.prePayMoney}}" type="text" class="col-sm-12 F-float F-money" />
@@ -107,7 +106,7 @@
                             <input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" />
                         </td>
                         <td>
-                            <input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" style="width:55px;" readonly />
+                            <input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly />
                         </td>
                         <td>
                             <input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" />

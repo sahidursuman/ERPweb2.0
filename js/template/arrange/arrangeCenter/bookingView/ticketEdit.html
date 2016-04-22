@@ -1,6 +1,6 @@
-<div class="base-info">
-    代订单号：<span class="mar-r-20">{{baseInfo.orderNumber}}</span> 客人信息：
-    <span class="mar-r-20">{{baseInfo.contactor}} {{baseInfo.AdultCount}}大{{baseInfo.childCount}}小</span> 外联销售：{{baseInfo.saleMan}}
+<div class="base-info" data-id="{{bookingOrder.id}}">
+    代订单号：<span class="mar-r-20">{{bookingOrder.orderNumber}}</span> 客人信息：
+    <span class="mar-r-20">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</span> 外联销售：{{bookingOrder.outOPUserName}}
 </div>
 <div class=" ui-sortable-handle">
     <h5 class="">
@@ -10,13 +10,7 @@
             新增
         </button>
     </h5>
-    {{if !!arrangeInfo.oldRequire}}
-    <p class="panel">原票务代订计划要求：{{arrangeInfo.oldRequire}}</p>
-    {{/if}}
-
-    {{if !!arrangeInfo.require}}
-    <p class="panel">现票务代订计划要求：{{arrangeInfo.require}}</p>
-    {{/if}}
+    <p class="panel hct-mh-required">现票务计划要求：{{required}}</p>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
@@ -27,85 +21,132 @@
                         <th class="th-border">出发城市</th>
                         <th class="th-border">到达城市</th>
                         <th class="th-border"><span class="necessary">*</span>班次</th>
+                        <th class="th-border" width="100"><span class="necessary">*</span>时间</th>
                         <th class="th-border"><span class="necessary">*</span>座位级别</th>
-                        <th class="th-border" width="50"><span class="necessary">*</span>时间</th>
-                        <th class="th-border"><span class="necessary">*</span>数量</th>
-                        <th class="th-border">成本单价</th>
-                        <th class="th-border">销售单价</th>
-                        <th class="th-border">成本</th>
-                        <th class="th-border">应收</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">优惠</th>
+                        <th class="th-border">应付</th>
                         <th class="th-border ">预付款</th>
-                        <th class="th-border" style="width: 100px">操作</th>
+                        <th class="th-border ">备注</th>
+                        <th class="th-border" width="60">操作</th>
                     </tr>
                 </thead>
-                <tbody class="T-ticketList">{{each bookingOrder.bookingTicketList as ticketList}}
-                    <tr data-entity-id="{{ticketList.id}}">
+                <tbody class="T-ticketList">
+                {{if !!arrangeList && arrangeList.length > 0}}
+                {{each arrangeList as rs}}
+                    <tr data-id="{{rs.id}}">
                         <td>
-                            <input name="ticketName" value="{{if ticketList.ticket != null}}{{ticketList.ticket.name}}{{/if}}" type="text" class="col-sm-12 T-chooseTicket bind-change" />
-                            <input name="ticketId" value="{{if ticketList.ticket != null}}{{ticketList.ticket.id}}{{/if}}" type="hidden" />
+                            <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" />
                         </td>
                         <td>
                             <select name="type">
-                                <option {{if ticketList.type==1}}selected="selected" {{/if}} value="1">机票</option>
-                                <option {{if ticketList.type==2}}selected="selected" {{/if}} value="2">汽车票</option>
-                                <option {{if ticketList.type==3}}selected="selected" {{/if}} value="3">火车票</option>
-                                <option {{if ticketList.type==4}}selected="selected" {{/if}} value="4">轮船票</option>
+                                <option {{if rs.type==1}}selected="selected" {{/if}} value="1">机票</option>
+                                <option {{if rs.type==2}}selected="selected" {{/if}} value="2">汽车票</option>
+                                <option {{if rs.type==3}}selected="selected" {{/if}} value="3">火车票</option>
+                                <option {{if rs.type==4}}selected="selected" {{/if}} value="4">轮船票</option>
                             </select>
                         </td>
-                        <!-- <input name="type" value="{{ticketList.type}}" type="text" class="col-sm-12"/> -->
                         <td>
-                            <input name="startCity" value="{{ticketList.startCity}}" type="text" class="col-sm-12" maxlength="30" />
+                            <input name="startCity" value="{{rs.startCity}}" type="text" class="col-sm-12" maxlength="30" />
                         </td>
                         <td>
-                            <input name="arriveCity" value="{{ticketList.arriveCity}}" type="text" class="col-sm-12" maxlength="30" />
+                            <input name="arriveCity" value="{{rs.arriveCity}}" type="text" class="col-sm-12" maxlength="30" />
                         </td>
                         <td>
-                            <input name="shift" value="{{ticketList.shift}}" type="text" class="col-sm-12" maxlength="50" />
+                            <input name="shift" value="{{rs.shift}}" type="text" class="col-sm-12" maxlength="50" />
                         </td>
                         <td>
-                            <input name="seatLevel" value="{{ticketList.seatLevel}}" type="text" class="col-sm-12" maxlength="30" />
+                            <input name="startTime" value="{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" type="text" class="col-sm-12 datetimepicker" />
                         </td>
                         <td>
-                            <div class="input-group" style="min-width: 165px;">
-                                <input name="startTime" value="{{ticketList.startTime}}" type="text" class="datetimepicker col-sm-12" />
-                                <span class="input-group-addon">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </span>
-                            </div>
+                            <input name="seatLevel" value="{{rs.seatLevel}}" type="text" class="col-sm-12" maxlength="30" />
                         </td>
                         <td>
-                            <input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" />
+                            <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur" />
                         </td>
                         <td>
-                            <input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                            <input name="roomCount" value="{{rs.roomCount}}" type="text" class="col-sm-12 T-action-blur" />
                         </td>
                         <td>
-                            <input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                            <input name="reduceMoney" value="{{rs.reduceMoney}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
                         </td>
                         <td>
-                            <input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                            <input name="sumCostMoney" value="{{rs.sumCostMoney}}" type="text" class="col-sm-12 F-float F-money" readonly />
                         </td>
                         <td>
-                            <input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                            <input name="prePayMoney" value="{{rs.prePayMoney}}" type="text" class="col-sm-12 F-float F-money" />
                         </td>
                         <td>
-                            <input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                            <input name="remark" value="{{rs.remark}}" type="text" class="col-sm-12" />
                         </td>
                         <td>
                             <a class="cursor T-action T-ticket-delete">删除</a>
                         </td>
-                    </tr>{{/each}}
+                    </tr>
+                {{/each}}
+                {{else}}
+                    <tr>
+                        <td>
+                            <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                        </td>
+                        <td>
+                            <select name="type">
+                                <option value="1">机票</option>
+                                <option value="2">汽车票</option>
+                                <option value="3">火车票</option>
+                                <option value="4">轮船票</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input name="startCity" type="text" class="col-sm-12" maxlength="30" />
+                        </td>
+                        <td>
+                            <input name="arriveCity" type="text" class="col-sm-12" maxlength="30" />
+                        </td>
+                        <td>
+                            <input name="shift" type="text" class="col-sm-12" maxlength="50" />
+                        </td>
+                        <td>
+                            <input name="startTime" type="text" class="col-sm-12 datetimepicker" />
+                        </td>
+                        <td>
+                            <input name="seatLevel" type="text" class="col-sm-12" maxlength="30" />
+                        </td>
+                        <td>
+                            <input name="costPrice" type="text" class="col-sm-12 T-action-blur" />
+                        </td>
+                        <td>
+                            <input name="roomCount" type="text" class="col-sm-12 T-action-blur" />
+                        </td>
+                        <td>
+                            <input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly />
+                        </td>
+                        <td>
+                            <input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="remark" type="text" class="col-sm-12" />
+                        </td>
+                        <td>
+                            <a class="cursor T-action T-ticket-delete">删除</a>
+                        </td>
+                    </tr>
+                {{/if}}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 <div class="text-center mar-t-20">
-    <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
-    <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
+    <button class="btn btn-sm btn-primary T-cancel mar-r-20"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
+    <button class="btn btn-sm btn-primary mar-r-20  T-ticket-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
     <span class="checkbox checkbox-inline mar-0" data-target="#booking_receive_ticket">
         <label>
-            <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
+            <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 1}}checked{{/if}}>
             <span class="lbl font-w"> 票务安排完成</span>
         </label>
     </span>
