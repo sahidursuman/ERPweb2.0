@@ -460,6 +460,8 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	tripPlan.init_event = function($tab,id,target) {
+
+		Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
 		tripPlan.$editTab = $tab;
 		// 计算导付
 		tripPlan.moneyTripPlan($tab);
@@ -3585,7 +3587,7 @@ define(function(require, exports) {
 		var guide = $tab.find('#tripPlan_addPlan_guide').find('tbody tr'), guideArrangeList = [];
 		if (guide.length > 0) {
 			for (var i = 0,len = guide.length; i < len; i++) {
-				var $this = guide.eq(i),isAccountGuide = 0;
+				var $this = guide.eq(i),isAccountGuide = 0,oldguideid = $this.data('oldguideid');
 				if ($this.find('[name=isAccountGuide]').is(':checked')) {
 					isAccountGuide = 1;
 				}
@@ -3598,6 +3600,19 @@ define(function(require, exports) {
 					isAccountGuide: isAccountGuide,
 					remark: $this.find('[name=remark]').val(),
 					taskJson: []
+				}
+				if (!!oldguideid && !!guideJson.guideId && oldguideid != guideJson.guideId) {
+					$.ajax({
+						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
+	                    type: "post",
+	                    async: false,
+	                    showLoading: false,
+	                    data:"cateName=guide&cateId="+guideJson.id,
+	                    success: function(data) {
+							if(showDialog(data)){
+							}
+	                    }
+	                });
 				}
 				var divLen = $this.find('[name=taskType]').length;
 				for (var j = 0; j < divLen; j++) {
