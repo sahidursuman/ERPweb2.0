@@ -1171,18 +1171,32 @@ define(function(require, exports) {
      * @param {[type]} validator [验证]
      */
     singlePlan.addHotel = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+        var html = '<tr entity-id="" arrangeType = "hotel">'+
                     '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
+                        '<input type="hidden" name="id" value="">'+
+                        '<input type="text" name="startTime" value="" class="T-datepicker">'+
                     '</td>'+
-                    '</tr>';
+                    '<td>'+
+                        '<input type="text" name="endTime" value="" class="T-datepicker">'+
+                    '</td>'+
+                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
+                    '<td>'+
+                        '<input type="text" name="requireContent" value="" class="col-xs-12">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" name="dutyDepartmentId" value="">'+
+                        '<input type="text" name="dutyDepartmentName" value="">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" name="dutySubDepartmentId" value="">'+
+                        '<input type="text" name="dutySubDepartmentName" value="">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" name="dutyUserId" value="">'+
+                        '<input type="text" name="dutyUserName" value="">'+
+                    '</td>'+
+                    '<td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>'+
+                '</tr>';
         var $tbody = $obj.find('.T-hotel-plan');
         $tbody.append(html);
         Tools.setDatePicker($obj.find('.T-datepicker'), true);
