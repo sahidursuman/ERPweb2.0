@@ -72,7 +72,7 @@ define(function(require, exports) {
 		       customerVolObj.datepicker(customerVolObj.$tab);
 
 		       //初始化页面绑定事件
-		       customerVolObj.init_event();
+		       customerVolObj.init_event(startTime,endTime);
 
 		       	// 绑定翻页组件
 				laypage({
@@ -112,7 +112,7 @@ define(function(require, exports) {
 	    		/* Act on the event */
     				var $that=$(this),
     		            id=$that.data('value');
-    		        customerVolObj.getCusDetail(id,0,customerVolObj.$tab.find('input[name=startTime]').val(),customerVolObj.$tab.find('input[name=endTime]').val());
+    		        customerVolObj.getCusDetail(id,0,startTime,endTime);
 	    	});
 
 
