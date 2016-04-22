@@ -46,7 +46,7 @@ FinancialService.initPayEvent = function($container,rule)  {
 
         $balance.closest('div').toggleClass('hidden', val != 6);
         
-        $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
+        // $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
     }).trigger('change');
 };
 
