@@ -491,6 +491,62 @@ define(function(require, exports) {
         })
     };
 
+    /**
+     * [loadSubjectHtml 根据业务类别加载对应会计科目+]
+     * @param  {[type]} type       [业务类别]
+     * @param  {[type]} $container [容器]
+     * @return {[type]}            [description]
+     */
+    PaymentDetailUtil.loadSubjectHtml = function(type,$container){
+        var subList = false,subjectHtml = "";
+        if(type == 0) { subList = PaymentDetailUtil.subList0; }
+        else if(type == 1) { subList = PaymentDetailUtil.subList1; }
+        else if(type == 2) { subList = PaymentDetailUtil.subList2; }  
+        if(subList.length > 0){
+            for(var i = 0; i < subList.length; i++){
+                subjectHtml += "<option value=" + subList[i].id + ">" + subList[i].subjectName + "</option>";
+            }
+            $container.find(".T-subject").html(subjectHtml);
+            $container.find("input[name=subjectName]").val(subList[0].subjectName);
+            PaymentDetailUtil.loadResTypeSelect(subList[0].subjectName, $container);
+        } else {
+            showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
+                $container.find(".T-subject").html("");
+                $container.find("input[name=subjectName]").val("");
+            });
+        }
+    };
+
+    /**
+     * [loadResTypeSelect 会计科目加载资源]
+     * @param  {[type]} resTypeText [会计科目Text]
+     * @param  {[type]} $container  [容器]
+     * @return {[type]}             [description]
+     */
+    PaymentDetailUtil.loadResTypeSelect =function(resTypeText, $container){
+        var resPayTypeList=[{id:'20',name:'酒店'}],resRecTypeList=[{id:'21',name:'购物'},{id:'22',name:'客户'}],
+            resTypeOption="<select name='resourceType' class='col-sm-12 T-selct-rsType'>";
+        if (resTypeText==="预付账款") {
+           for(var i = 0; i < resPayTypeList.length; i++){
+             resTypeOption+="<option  value=" + resPayTypeList[i].id + ">" + resPayTypeList[i].name + "</option>";
+           }
+        }
+        if (resTypeText==="预收账款") {
+            for(var i = 0; i < resRecTypeList.length; i++){
+             resTypeOption+="<option  value=" + resRecTypeList[i].id + ">" + resRecTypeList[i].name + "</option>";
+           }
+        }
+        resTypeOption+='</select>';
+        if (resTypeText==="预收账款" || resTypeText==="预付账款") {
+            $container.find(".T-resourceType").html(resTypeOption);
+            $container.find('.T-resType').removeClass('hidden');
+        }else{
+            $container.find(".T-resourceType").html("");
+            $container.find('.T-resType').addClass('hidden');
+        }
+        $container.find('input[name=resourceName]').val('').next().val('');
+    };
+
     // 初始页面接口
     exports.init = PaymentDetailUtil.initMain;
     //收付款
