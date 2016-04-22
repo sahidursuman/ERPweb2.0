@@ -3711,14 +3711,14 @@ define(function(require, exports) {
 		}
 	};
 	tripPlan.dateTimePicker = function(){
-		//Tools.setDateHSPicker($('.T-dateTimePicker')); 
-		var $className = $('.T-dateTimePicker');
-		$className.datetimepicker({
-	        autoclose: true,
-	        todayHighlight: true,
-	        format: 'L',
-	        language: 'zh-CN'
-	   	}); 
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
+		// var $className = $('.T-dateTimePicker');
+		// $className.datetimepicker({
+	 //        autoclose: true,
+	 //        todayHighlight: true,
+	 //        format: 'L',
+	 //        language: 'zh-CN'
+	 //   	}); 
 	};
 
 	/**
