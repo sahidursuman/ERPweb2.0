@@ -2037,7 +2037,7 @@ Tools.setDateHSPicker = function($className){
     $className.datetimepicker({
         autoclose: true,
         todayHighlight: true,
-        format: 'L',
+        format: 'YYYY-MM-DD HH:mm',
         language: 'zh-CN'
        });  
 };
@@ -2129,6 +2129,18 @@ Tools.addDay = function(date, days) {
 	return date;
 }
 
+/**
+ * [getDataForMat description]时间日期公共方法
+ * @param  {[type]} date [description]
+ * @return {[type]}      [description]
+ */
+Tools.getDataForMat = function(date){
+	return (new Date(date)).Format('yyyy-MM-dd hh:mm:ss');
+}
+
+Tools.getDataForMatHS = function(date){
+	return (new Date(date)).Format('yyyy-MM-dd hh:mm');
+}
 /**
  * 获取记录描述信息
  * 主要是为了统一描述

@@ -84,7 +84,7 @@
 													<td>{{outBus.brand}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-													<td>{{if outBus.useTime != null}}{{outBus.useTime | dateFormat:'yyyy-MM-dd hh:mm'}}{{/if}}</td>
+													<td>{{if outBus.useTime != null}}{{outBus.useTime | getDataForMatHS}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
 													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
 													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
@@ -204,7 +204,7 @@
 													</td>
 													<td>{{outTicket.startingCity}}</td>
 													<td>{{outTicket.arriveCity}}</td>
-													<td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
+													<td>{{if outTicket.startTime != null}}{{outTicket.startTime | getDataForMatHS}}{{/if}}</td>
 													<td>{{outTicket.shift}}</td>
 													<td>{{outTicket.seatLevel}}</td>
 													<td><span class=" F-float F-money">{{outTicket.price}}</span></td>
@@ -354,7 +354,7 @@
 													<td>{{outBus.brand}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-													<td>{{if outBus.useTime != null}}{{outBus.useTime | dateFormat:'yyyy-MM-dd hh:mm'}}{{/if}}</td>
+													<td>{{if outBus.useTime != null}}{{outBus.useTime | getDataForMatHS}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
 													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
 													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
@@ -474,7 +474,7 @@
 													</td>
 													<td>{{outTicket.startingCity}}</td>
 													<td>{{outTicket.arriveCity}}</td>
-													<td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
+													<td>{{if outTicket.startTime != null}}{{outTicket.startTime | getDataForMatHS}}{{/if}}</td>
 													<td>{{outTicket.shift}}</td>
 													<td>{{outTicket.seatLevel}}</td>
 													<td><span class=" F-float F-money">{{outTicket.price}}</span></td>

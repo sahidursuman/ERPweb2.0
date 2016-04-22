@@ -21,10 +21,23 @@ template.helper("dateFormat", function(date, fmt) {
     return fmt;
 });
 
+/**
+ * [description] 时间日期格式公共方法
+ * @param  {[type]} date) [description]
+ * @return {[type]}       [description]
+ */
+template.helper("getDataForMat", function(date) {
+    if (!date) return '';
+    return Tools.getDataForMat(date);
+});
+template.helper("getDataForMatHS", function(date) {
+    if (!date) return '';
+    return Tools.getDataForMatHS(date);
+});
+ 
 template.helper("getDateText", function(startTime, whichDay) {
     return Tools.addDay(startTime, whichDay -1);
 });
-
 
 template.helper("encode", function(data) {
     return encodeURIComponent(data);
@@ -107,7 +120,7 @@ template.helper("getFeeItemType", function(type,isTransfer) {
 });
 template.helper("getWayTypeText", function(status) {
     var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
-    status = status || 1;
+    status = status || 1; 
     return res[status];
 });
 template.helper("checked", function(status) {
