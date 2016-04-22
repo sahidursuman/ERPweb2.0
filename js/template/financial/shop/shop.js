@@ -805,7 +805,13 @@ define(function(require, exports) {
         $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
         $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);
         $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
-        if($tab.find('.T-sumSettlementMoney').length > 0){
+
+        if($tab.find('.T-checkedUnPayedMoney').length > 0){
+            $tab.find(".T-unpayMoney").text(total.sumUnReceiveMoney);
+            $tab.find(".T-checkedUnPayedMoney").text(total.checkedUnPayedMoney);
+        } else {
+            $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
+            $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);
             $tab.find('.T-sumSettlementMoney').text(total.sumSettlementMoney);
         }
     };
