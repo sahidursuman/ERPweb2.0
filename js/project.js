@@ -2130,17 +2130,16 @@ Tools.addDay = function(date, days) {
 }
 
 /**
- * [getDataForMat description]时间日期公共方法
- * @param  {[type]} date [description]
- * @return {[type]}      [description]
+ * 格式化日期时间
+ * @param  {string} date 时间、日期
+ * @param  {string} fmt  需要输出的格式
+ * @return {string}      格式化之后的日期/时间
  */
-Tools.getDataForMat = function(date){
-	return (new Date(date)).Format('yyyy-MM-dd hh:mm:ss');
-}
+Tools.getDateTimeFormat = function(date, fmt) {
+	fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+	return (new Date(date)).Format(fmt);
+};
 
-Tools.getDataForMatHS = function(date){
-	return (new Date(date)).Format('yyyy-MM-dd hh:mm');
-}
 /**
  * 获取记录描述信息
  * 主要是为了统一描述

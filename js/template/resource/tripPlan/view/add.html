@@ -501,7 +501,7 @@
                                                 <input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12" />
                                             </td>
                                             <td> 
-                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime | getDataForMatHS}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
+                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime | dateTimeHSFormat}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
                                             </td>
                                             <td>
                                                 <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
@@ -1219,7 +1219,7 @@
                                             <input type="text" name="shift" maxlength="9" class="col-sm-12" value="{{ticket.shift}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime | getDataForMatHS}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime | dateTimeHSFormat}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="seatLevel" maxlength="32" value="{{ticket.seatLevel}}" class="col-sm-12" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>

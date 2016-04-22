@@ -20,21 +20,28 @@ template.helper("dateFormat", function(date, fmt) {
         }
     return fmt;
 });
-
 /**
- * [description] 时间日期格式公共方法
- * @param  {[type]} date) [description]
- * @return {[type]}       [description]
+ * 默认日期时间格式化
+ * @param  {string} date 日期 
+ * @param  {string} 日期格式
+ * @return {[string}  日期
  */
-template.helper("getDataForMat", function(date) {
+template.helper("dateTimeFormat", function(date, fmt) {
     if (!date) return '';
-    return Tools.getDataForMat(date);
-});
-template.helper("getDataForMatHS", function(date) {
-    if (!date) return '';
-    return Tools.getDataForMatHS(date);
+    return Tools.getDateTimeFormat(date, fmt);
 });
  
+/**
+ * 日期时间格式化,去掉秒
+ * @param  {string} date 日期 
+ * @param  {string} 日期格式
+ * @return {[string}  日期
+ */
+template.helper("dateTimeHSFormat", function(date) {
+    if (!date) return '';
+    return Tools.getDateTimeFormat(date, 'yyyy-MM-dd hh:mm');
+});
+
 template.helper("getDateText", function(startTime, whichDay) {
     return Tools.addDay(startTime, whichDay -1);
 });
