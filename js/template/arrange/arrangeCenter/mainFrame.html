@@ -772,9 +772,10 @@
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
-                                    <select name="status" id="">
-                                        <option value="0">未完成</option>
-                                        <option value="1">已完成</option>
+                                    <select name="status">
+                                        <option value="">全部</option>
+                                        <option value="0">未安排</option>
+                                        <option value="1">已安排</option>
                                     </select>
                                 </div>
                                 <div class="form-group ">
@@ -805,8 +806,7 @@
                                     <label>星级 </label>
                                     <select name="level" id="">
                                         <option value="">全部</option>
-                                        <option value="0">三星以下</option>
-                                        <option value="1">三星</option>
+                                        {{#110 | getHotelLevelOptions}}
                                     </select>
                                 </div>
                                 <div class="form-group mar-r-20">
@@ -816,9 +816,10 @@
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
-                                    <select name="status" id="">
-                                        <option value="0">未完成</option>
-                                        <option value="1">已完成</option>
+                                    <select name="status">
+                                        <option value="">全部</option>
+                                        <option value="0">未安排</option>
+                                        <option value="1">已安排</option>
                                     </select>
                                 </div>
                                 <div class="form-group ">
@@ -836,7 +837,6 @@
                     <!-- 票务安排 -->
                     <div id="booking-ticket-arrange" class="tab-pane fade" data-target="ticket">
                         <form class="T-search-area" role="form" onsubmit="return false">
-                            <form class="T-search-area" role="form" onsubmit="return false">
                             <div class="form-inline">
                                 <div class="form-group mar-r-10">
                                     <label>代订单号</label>
@@ -846,9 +846,10 @@
                                     <label>类型 </label>
                                     <select name="level" id="">
                                         <option value="">全部</option>
-                                        <option value="0">火车票</option>
-                                        <option value="1">飞机票</option>
-                                        <option value="1">轮船票</option>
+                                        <option value="1">机票</option>
+                                        <option value="2">汽车票</option>
+                                        <option value="3">火车票</option>
+                                        <option value="4">轮船票</option>
                                     </select>
                                 </div>
                                 <div class="form-group mar-r-10">
@@ -862,9 +863,10 @@
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
-                                    <select name="status" id="">
-                                        <option value="0">未完成</option>
-                                        <option value="1">已完成</option>
+                                    <select name="status">
+                                        <option value="">全部</option>
+                                        <option value="0">未安排</option>
+                                        <option value="1">已安排</option>
                                     </select>
                                 </div>
                                 <div class="form-group ">
@@ -876,25 +878,10 @@
                                 </div>
                             </div>
                         </form>
-                            <div class="form-inline hct-search-area hidden">
-                                <div class="form-group mar-r-20">
-                                    <label>责任计调</label>
-                                    <input type="text" name="dutyOPUserName" value="" class="form-control T-orderNumber" />
-                                    <input type="hidden" name="dutyOPUserId">
-                                </div>
-                                <div class="form-group T-hotelState r-20 mar-r-20">
-                                    <label>状态 </label>
-                                    <select name="status" id="">
-                                        <option value="0">未完成</option>
-                                        <option value="1">已完成</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
                         <div class="T-table-area"></div>
                     </div>
                     <!-- 景区安排 -->
-                    <div id="booking-scence-arrange" class="tab-pane fade" data-target="scence">
+                    <div id="booking-scence-arrange" class="tab-pane fade" data-target="scenic">
                         <form class="T-search-area" role="form" onsubmit="return false">
                             <div class="form-inline">
                                 <div class="form-group mar-r-10">
@@ -912,9 +899,10 @@
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
-                                    <select name="status" id="">
-                                        <option value="0">未完成</option>
-                                        <option value="1">已完成</option>
+                                    <select name="status">
+                                        <option value="">全部</option>
+                                        <option value="0">未安排</option>
+                                        <option value="1">已安排</option>
                                     </select>
                                 </div>
                                 <div class="form-group ">

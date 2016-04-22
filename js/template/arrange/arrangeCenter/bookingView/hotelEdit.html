@@ -1,6 +1,6 @@
 <div class="base-info">
-    代订单号：<span class="mar-r-20">{{baseInfo.orderNumber}}</span> 客人信息：
-    <span class="mar-r-20">{{baseInfo.contactor}} {{baseInfo.AdultCount}}大{{baseInfo.childCount}}小</span> 外联销售：{{baseInfo.saleMan}}
+    代订单号：<span class="mar-r-20">{{bookingOrder.orderNumber}}</span> 客人信息：
+    <span class="mar-r-20">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</span> 外联销售：{{bookingOrder.outOPUserName}}
 </div>
 <div class=" ui-sortable-handle">
     <h5 class="">
@@ -11,92 +11,115 @@
             新增
         </button>
     </h5>
-    {{if !!arrangeInfo.oldRequire}}
-    <p class="panel">原酒店代订计划要求：{{arrangeInfo.oldRequire}}</p>
-    {{/if}}
-
-    {{if !!arrangeInfo.require}}
-    <p class="panel">现酒店代订计划要求：{{arrangeInfo.require}}</p>
-    {{/if}}
+    
+    <p class="panel">现酒店计划要求：{{required}}</p>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
                 <thead>
                     <tr>
-                        <th class="th-border" width="50"><span class="necessary">*</span>入住日期</th>
-                        <th class="th-border" width="50"><span class="necessary">*</span>离店日期</th>
-                        <th class="th-border"><span class="necessary">*</span>星级</th>
+                        <th class="th-border" width="110"><span class="necessary">*</span>入住日期</th>
+                        <th class="th-border" width="110"><span class="necessary">*</span>离店日期</th>
+                        <th class="th-border">星级</th>
                         <th class="th-border"><span class="necessary">*</span>酒店</th>
                         <th class="th-border"><span class="necessary">*</span>房型</th>
-                        <th class="th-border">天数</th>
-                        <th class="th-border"><span class="necessary">*</span>数量</th>
-                        <th class="th-border" width="110"> 成本单价</th>
-                        <th class="th-border" width="110"> 销售单价</th>
-                        <th class="th-border">成本</th>
-                        <th class="th-border">应收</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border" width="110">优惠</th>
+                        <th class="th-border" width="110">应收</th>
                         <th class="th-border">预付款</th>
+                        <th class="th-border">备注</th>
                         <th class="th-border" style="width: 100px">操作</th>
                     </tr>
                 </thead>
-                <tbody class="T-hotelList">{{each bookingOrder.bookingHotelList as hotelList}}
-                    <tr data-entity-id="{{hotelList.id}}">
+                <tbody class="T-hotelList">
+                {{if !!arrangeList && arrangeList.length > 0}}
+                {{each arrangeList as rs}}
+                    <tr data-id="{{rs.id}}">
                         <td>
-                            <div class="input-group">
-                                <input name="enterTime" value="{{hotelList.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
-                            </div>
+                            <input name="enterTime" value="{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
                         </td>
                         <td>
-                            <div class="input-group">
-                                <input name="leaveTime" value="{{hotelList.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
-                            </div>
+                            <input name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
                         </td>
                         <td>
-                            <select name="level" class="col-sm-12 T-hotelStar">
-                                <option selected="selected" value="" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}}>全部</option>
-                                <option value="1">三星以下</option>
-                                <option value="2" {{if hotelList.hotel.level==2 }}selected="selected" {{/if}}>三星</option>
-                                <option value="3" {{if hotelList.hotel.level==3 }}selected="selected" {{/if}}>准四星</option>
-                                <option value="4" {{if hotelList.hotel.level==4 }}selected="selected" {{/if}}>四星</option>
-                                <option value="5" {{if hotelList.hotel.level==5 }}selected="selected" {{/if}}>准五星</option>
-                                <option value="6" {{if hotelList.hotel.level==6 }}selected="selected" {{/if}}>五星</option>
-                                <option value="7" {{if hotelList.hotel.level==7 }}selected="selected" {{/if}}>五星以上</option>
+                            <select name="hotelLevel" class="col-sm-12">
+                                <option value="" {{if !rs.hotelLevel}}selected="selected"{{/if}}>--全部--</option>
+                                {{#110 | getHotelLevelOptions}}
                             </select>
                         </td>
                         <td>
-                            <input name="hotelName" value="{{if hotelList.hotel != null}}{{hotelList.hotel.name}}{{/if}}" type="text" class="col-sm-12 T-chooseHotel bind-change" />
-                            <input name="hotelId" type="hidden" value="{{if hotelList.hotel != null}}{{hotelList.hotel.id}}{{/if}}" />
+                            <input name="hotelName" value="{{rs.hotelName}}" data-id="{{rs.hotelId}}" type="text" class="col-sm-12 bind-change" />
                         </td>
                         <td>
-                            <input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 T-chooseHotelRoom bind-change" />
-                            <input name="hotelRoomId" type="hidden" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.id}}{{/if}}" />
+                            <input name="hotelRoomType" value="{{rs.hotelRoomType}}" data-id="{{rs.hotelRoomId}}" type="text" class="col-sm-12 bind-change" />
                         </td>
                         <td>
-                            <input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="4" readonly="readonly" />
+                            <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
                         </td>
                         <td>
-                            <input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" />
+                            <input name="roomCount" value="{{rs.roomCount}}" type="text" class="col-sm-12 T-action-blur F-float F-count" />
                         </td>
                         <td>
-                            <input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" style="width:55px;" maxlength="9" />
-                            <label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;">/天</label>
+                            <input name="reduceMoney" value="{{rs.reduceMoney}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
                         </td>
                         <td>
-                            <input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" style="width:55px;" maxlength="9" />
-                            <label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;">/天</label>
+                            <input name="sumCostMoney" value="{{rs.sumCostMoney}}" type="text" class="col-sm-12 F-float F-money" style="width:55px;" readonly />
                         </td>
                         <td>
-                            <input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                            <input name="prePayMoney" value="{{rs.prePayMoney}}" type="text" class="col-sm-12 F-float F-money" />
                         </td>
                         <td>
-                            <input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
-                        </td>
-                        <td>
-                            <input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                            <input type="text" name="remark" value="{{rs.remark}}" class="col-sm-12">
                         </td>
                         <td>
                             <a class="cursor T-action T-hotel-delete">删除</a>
                         </td>
-                    </tr>{{/each}}
+                    </tr>
+                {{/each}}
+                {{else}}
+                    <tr>
+                        <td>
+                            <input name="enterTime" type="text" class="datepicker" />
+                        </td>
+                        <td>
+                            <input name="leaveTime" type="text" class="datepicker" />
+                        </td>
+                        <td>
+                            <select name="hotelLevel" class="col-sm-12">
+                                <option selected="selected" value="">--全部--</option>
+                                {{#110 | getHotelLevelOptions}}
+                            </select>
+                        </td>
+                        <td>
+                            <input name="hotelName" type="text" class="col-sm-12 bind-change" />
+                        </td>
+                        <td>
+                            <input name="hotelRoomType" type="text" class="col-sm-12 bind-change" />
+                        </td>
+                        <td>
+                            <input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" />
+                        </td>
+                        <td>
+                            <input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" style="width:55px;" readonly />
+                        </td>
+                        <td>
+                            <input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" />
+                        </td>
+                        <td>
+                            <input type="text" name="remark" class="col-sm-12">
+                        </td>
+                        <td>
+                            <a class="cursor T-action T-hotel-delete">删除</a>
+                        </td>
+                    </tr>
+                {{/if}}
                 </tbody>
             </table>
         </div>
@@ -104,11 +127,11 @@
 </div>
 
 <div class="text-center mar-t-20">
-    <button class="btn btn-sm btn-primary T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
+    <button class="btn btn-sm btn-primary T-cancel mar-r-20"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
     <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
     <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
         <label>
-            <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
+            <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 1}}checked{{/if}}>
             <span class="lbl font-w"> 酒店安排完成</span>
         </label>
     </span>

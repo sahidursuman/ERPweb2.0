@@ -32,7 +32,8 @@ define(function(require, exports, module) {
             viewGuestInfo : require('./view/booking/view/viewGuestInfo'),//查看客人信息
         },
         bookingOrder = {
-            pageNo : 0
+            pageNo : 0,
+            openAddTime : false
         },
         touristsOrderExports = require('./touristGroup'),//游客订单
         touristsOrder = touristsOrderExports.touristGroup,//游客订单
@@ -121,6 +122,7 @@ define(function(require, exports, module) {
         });
         //添加游客小组事件
         $tab.find('.T-btn-add').on('click', function(){
+            bookingOrder.openAddTime = +new Date();
             bookingOrder.operationBooking();
         });
         bookingOrder.getOPUserList($tab.find('.T-choose-outUserList'), false).trigger('click');
@@ -287,6 +289,13 @@ define(function(require, exports, module) {
            showConfirmDialog($("#confirm-dialog-message"), "确定还原到上次操作?", function() {
                 var data = window.localStorage.getItem("hct_booking_order_add");
                 data = JSON.parse(data || null);
+                if(!!data){
+                    for(var i in data){
+                        console.log(data[i])
+                    }
+                }else{
+                    showMessageDialog($("#confirm-dialog-message"), "暂无缓存数据！");
+                }
                 bookingOrder.operationBooking(data);
             });
         });
@@ -877,14 +886,19 @@ define(function(require, exports, module) {
             bookingOrderJson.id = id;
         }
 
-        data.bookingOrder = JSON.stringify(bookingOrderJson);
 
         if(!!isCache && !!window.localStorage){
-            window.localStorage.setItem("hct_booking_order_add", data.bookingOrder);
+            var hctBookingOrderAdd = window.localStorage.getItem("hct_booking_order_add");
+            hctBookingOrderAdd = JSON.parse(hctBookingOrderAdd || null) || {};
+            hctBookingOrderAdd[bookingOrder.openAddTime] = bookingOrderJson;
+            console.log(bookingOrderJson)
+            console.log(hctBookingOrderAdd);
+            window.localStorage.setItem("hct_booking_order_add", JSON.stringify(hctBookingOrderAdd));
             return false;
         }else if(!!isCache){
             return false;
         }
+        data.bookingOrder = JSON.stringify(bookingOrderJson);
         $.ajax({
             url : KingServices.build_url('bookingOrderV2', "saveBookingOrder"),
             data : data,
