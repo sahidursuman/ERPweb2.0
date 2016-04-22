@@ -2037,7 +2037,7 @@ Tools.setDateHSPicker = function($className){
     $className.datetimepicker({
         autoclose: true,
         todayHighlight: true,
-        format: 'YYYY-MM-DD HH:mm',
+        format: 'L',
         language: 'zh-CN'
        });  
 };

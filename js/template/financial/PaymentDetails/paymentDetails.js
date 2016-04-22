@@ -55,7 +55,7 @@ define(function(require, exports) {
             PaymentDetailUtil.add();
         });
 
-        $tab.on('change', '.T-beginningBalance, .T-search-payment', function() {
+        $searchArea.on('change', '.T-beginningBalance, .T-search-payment', function() {
             PaymentDetailUtil.getList();
         });
 
