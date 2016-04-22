@@ -144,7 +144,7 @@
                     </a>
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.creatorName}}</td>
-                <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateTimeFormat}}</td>
                 <td rowspan="{{rs.rowLen}}" class="T-contractMoney F-float F-money">{{rs.contractMoney}}</td>
                 <td>{{if rs.detailList.transitFee.transitFeeList.length > 0}}
                     <!-- 若有中转结算价 -->
