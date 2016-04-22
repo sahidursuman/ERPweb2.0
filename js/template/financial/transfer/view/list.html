@@ -2,7 +2,7 @@
     <div class="form-horizontal search-area">
         <div class="form-group T-search-area">
             <label class="mar-l-10">同行地接 </label>
-            <input type="text" class="T-choosePartnerAgency" name="partnerAgencyName" value="{{if searchParam.partnerAgencyName == " "}}全部{{else}}{{searchParam.partnerAgencyName}}{{/if}}" />
+            <input type="text" class="T-choosePartnerAgency" name="partnerAgencyName" value="{{if searchParam.partnerAgencyName == " "}}全部{{else}}{{searchParam.partnerAgencyName}}{{/if}}" placeholder="所有同行"/>
             <input type="hidden" name="partnerAgencyId" value="{{searchParam.partnerAgencyId}}" />
             <label class="control-label mar-r-10">账期 </label>
             <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />

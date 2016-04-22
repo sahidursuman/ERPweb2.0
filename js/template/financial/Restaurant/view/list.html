@@ -1,7 +1,7 @@
 <div class="row">
     <div class="form-group T-search-area">
         <label>餐厅 </label>
-        <input type="text" class="T-chooseRestaurant mar-r-10" name="restaurantName" value="{{if searchParam.restaurantName == " "}}全部{{else}}{{searchParam.restaurantName}}{{/if}}" />
+        <input type="text" class="T-chooseRestaurant mar-r-10" name="restaurantName" value="{{if searchParam.restaurantName == " "}}全部{{else}}{{searchParam.restaurantName}}{{/if}}" placeholder="所有餐厅"/>
         <input type="hidden" name="restaurantId" value="{{searchParam.restaurantId}}" />
         <label class="control-label ">账期 </label>
         <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />
@@ -32,6 +32,10 @@
                 </li>
             </ul>
         </div>
+        <select name="orderBy" class="mar-r-10">
+            <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+            <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+        </select>
         <button class="btn-sm search-btn T-search"><i class="ace-icon fa fa-search"></i> 搜索 </button>
     </div>
     <div class="form-inline T-sum-area">

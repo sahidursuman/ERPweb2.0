@@ -64,7 +64,7 @@ define(function(require, exports) {
 	 */
 	transit.init_eventMain = function() {
 		//搜索栏状态button下拉事件
-		transit.$searchArea.find('.T-transitState').on('change', function() {
+		transit.$searchArea.find('.T-transitState, #order_by').on('change', function() {
 			transit.listTransit(0);
 		});
 
@@ -110,11 +110,13 @@ define(function(require, exports) {
             arrangeStartTime = transit.$searchArea.find("input[name=arrangeStartTime]").val(),
             arrangeEndTime = transit.$searchArea.find("input[name=arrangeEndTime]").val(),
             status = transit.$searchArea.find(".T-transitState").val(),
-            tgOrderNumber = transit.$searchArea.find(".T-orderNumber").val(),
+            tgOrderNumber = transit.$searchArea.find(".T-tgOrderNumber").val(),
+            orderNumber = transit.$searchArea.find(".T-orderNumber").val(),
             shuttleType = transit.$searchArea.find("[name=shuttleType]").val(),
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val(),
             arrangeItem = transit.$searchArea.find("[name=arrangeItem]").val(),
             arrangeItemStatus = transit.$searchArea.find("[name=arrangeItemStatus]").val(),
+            contactInfo = transit.$searchArea.find("[name=contactInfo]").val(),
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
 
@@ -131,10 +133,12 @@ define(function(require, exports) {
 				arrangeEndTime: arrangeEndTime,
 				status: status,
 				tgOrderNumber: tgOrderNumber,
+				orderNumber: orderNumber,
 				shuttleType: shuttleType,
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
 				arrangeItemStatus: arrangeItemStatus,
+				contactInfo: contactInfo,
 				shift: shift
 			}
         	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(exportData));
@@ -150,7 +154,8 @@ define(function(require, exports) {
 			type:"POST",
 			data: {
 				pageNo: page,
-				sortType: 'auto',
+				sortType: 'touristGroup.startTime',
+				order: transit.$searchArea.find("#order_by").val(),
 				fromPartnerAgencyName: fromPartnerAgencyName,
 				fromPartnerAgencyId: fromPartnerAgencyId,
 				lineProductName: lineProductName,
@@ -162,10 +167,12 @@ define(function(require, exports) {
 				arrangeEndTime: arrangeEndTime,
 				status: status,
 				tgOrderNumber: tgOrderNumber,
+				orderNumber: orderNumber,
 				shuttleType: shuttleType,
 				shuttleTime: shuttleTime,
 				arrangeItem: arrangeItem,
 				arrangeItemStatus: arrangeItemStatus,
+				contactInfo:contactInfo,
 				shift: shift
 			},
 			success:function(data){
@@ -980,7 +987,8 @@ define(function(require, exports) {
 				showLoading: false,
 				data:{
 					brand:$tr.find("input[name=busbrand]").val(),
-					busCompanyId:$tr.find("input[name=busCompanyId]").val()
+					busCompanyId:$tr.find("input[name=busCompanyId]").val(),
+					menuKey:menuKey
 				},
 				success:function(data){
 					if(showDialog(data)){
@@ -1028,7 +1036,8 @@ define(function(require, exports) {
 					url: KingServices.build_url('bookingOrder','getBusBrandList'),
 					data:{
 						seatCount:$tr.find("[name=seatCount]").val(),
-						busCompanyId:$tr.find("[name=busCompanyId]").val()
+						busCompanyId:$tr.find("[name=busCompanyId]").val(),
+						menuKey:menuKey
 					},
 					showLoading:false,
 					type:"POST",
@@ -1081,7 +1090,8 @@ define(function(require, exports) {
 					data: {
 						seatCount: seatCount,
 						brand: busBrand,
-						busCompanyId: busCompanyId
+						busCompanyId: busCompanyId,
+						menuKey:menuKey
 					},
 					showLoading:false,
 					type:"POST",
@@ -1157,7 +1167,8 @@ define(function(require, exports) {
 				data:  {
 					seatCount: parents.find("[name=seatCount]").val(),
 					brand: parents.find("[name=busbrand]").val(),
-					busId: parents.find('input[name="busLicenseNumberId"]').val()
+					busId: parents.find('input[name="busLicenseNumberId"]').val(),
+					menuKey:menuKey
 				},
 				showLoading:false,
 				type:"POST",
@@ -1290,7 +1301,10 @@ define(function(require, exports) {
 			$.ajax({
 				url: KingServices.build_url('hotel','findHotelListByLevel'),
 				showLoading:false,
-				data:"level=" + hotelStarValue,
+				data:{
+					menuKey:menuKey,
+					level:hotelStarValue
+				},
 				success: function(data) {
 					if(showDialog(data)){
 						var hotelList = JSON.parse(data.hotelList);
@@ -1399,6 +1413,9 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('ticket','findAll'),
+				data:{
+					menuKey:menuKey
+				},
 				showLoading: false,
 				success: function(data) {
 					if(showDialog(data)) {
@@ -1468,6 +1485,9 @@ define(function(require, exports) {
 			var obj = this;
 			$.ajax({
 				url: KingServices.build_url('restaurant','findAll'),
+				data:{
+					menuKey:menuKey
+				},
 				showLoading: false,
 				success: function(data) {
 					if(showDialog(data)) {
@@ -1550,13 +1570,8 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	transit.dateTimePicker = function(obj){
-		obj.find(".T-dateTimePicker").datetimepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'L',
-			language: 'zh-CN'
-		});
+	transit.dateTimePicker = function(){
+		Tools.setDateHSPicker($('.T-dateTimePicker')); 
 	};
 
 	transit.save = function(saveType){

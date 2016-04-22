@@ -167,8 +167,8 @@ define(function(require, exports) {
 			success:function(data){
 				data.selfpay = JSON.parse(data.selfpay);
 				if(data.selfpay.province != null){var provinceId = data.selfpay.province.id};
-				if(data.selfpay.province != null){var cityId = data.selfpay.city.id};
-				if(data.selfpay.province != null){var districtId = data.selfpay.district.id};
+				if(data.selfpay.city != null){var cityId = data.selfpay.city.id};
+				if(data.selfpay.district != null){var districtId = data.selfpay.district.id};
 				var result = showDialog(data);
 				if(result){
 					var html = updateTemplate(data);
@@ -306,7 +306,7 @@ define(function(require, exports) {
 		var $tbody = $container.find('.T-selfpayList-Tbody'),
 		    index = $tbody.find('tr').find('td').children('div').length;
 		var html = '<tr><td><input name="name" class="col-sm-12" type="text" style="min-width:100px;" maxlength="100"/></td>'+
-			'<td><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
+			'<td class="hidden"><select class="col-sm-12" name="customerType" style="min-width:100px;"><option value="0">散客</option><option value="1">团体</option></select></td>'+
 			'<td><div class="col-sm-12 no-padding"><label class="col-sm-10">日常价格</label><label class="priceArea" style="padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input data-index="'+(index)+'" name="normalMarketPrice" class="col-sm-12 T-marketPrice T-calc F-float F-money" type="text" maxlength="10"/></div></td>'+
 			'<td><div class="col-sm-12 no-padding"><input data-index="0" name="customerRebateMoney" class="col-sm-12 T-customerRebateMoney T-calc F-float F-money" type="text" maxlength="10"/></div></td>'+
@@ -665,7 +665,7 @@ define(function(require, exports) {
 							//内部价格
 							$tr.find('.T-marketPrice').eq(index).val(marketVal);
 					};
-			} else if ($that.hasClass('T-contractPrice')) {
+			} else if ($that.hasClass('T-contractPrice') && false) {
 				// 内部价格改变时
 				var contractVal = $tr.find('.T-contractPrice').eq(index).val(),
 					customerVal = $tr.find('.T-customerRebateMoney').eq(0).val();

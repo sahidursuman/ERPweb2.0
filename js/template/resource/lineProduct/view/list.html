@@ -45,6 +45,8 @@
             <thead>
                 <tr class="bg-blur T-tr-fixed">
                     <th>线路产品名称</th>
+                    <th>销售部门</th>
+                    <th>发布范围</th>
                     <th>车</th>
                     <th>险</th>
                     <th>餐</th>
@@ -72,6 +74,11 @@
 								{{/if}}
 							</span>
                             <span class="F-float F-count h-peopleCount">{{lineProduct.days}}天</span></p>
+                    </td>
+                    <td>{{if !!lineProduct.businessGroup}}{{lineProduct.businessGroup.name}}{{/if}}</td>
+                    <td class="">
+
+                            {{ if lineProduct.publishAuthArea==1 }} 个人 {{else if lineProduct.publishAuthArea==2 }} 子部门 {{else if lineProduct.publishAuthArea==3 }} 业务部 {{else if lineProduct.publishAuthArea==4 }} 公司 {{/if}}
                     </td>
                     <td>
                         {{if lineProduct.busCompanyStatus == 1}}

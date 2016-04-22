@@ -20,7 +20,7 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
 				<div class="col-xs-8">
-					<input type="text" name="lineProductName" readonly class="col-xs-12" value="{{tripPlan.lineProductName}}">
+					<input type="text" name="lineProductName" data-entity-days="{{tripPlanDayList.length}}" readonly class="col-xs-12" value="{{tripPlan.lineProductName}}">
 					<input type="hidden" name="lineProductId" value="{{tripPlan.lineProductId}}">
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 				</div>
 			</div>
 			<div class="col-xs-3">
-				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户联系人</label>
+				<label class="col-xs-4 control-label text-right">客户联系人</label>
 				<div class="hct-input-group col-xs-8">
 					<input type="text" class="col-xs-12" name="contactRealname" value="{{if !!touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.contactRealname}}-[{{touristGroup.partnerAgencyContact.contactMobileNumber}}]{{/if}}">
 					<input type="hidden" name="fromPartnerAgencyContactId" value="{{if !!touristGroup.partnerAgencyContact}}{{touristGroup.partnerAgencyContact.id}}{{/if}}">
@@ -175,6 +175,25 @@
 				<div class="col-xs-11">
 					<textarea class="col-xs-12" name="remark" maxlength="1000">{{tripPlan.remark}}</textarea>
 				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<table class="table table-bordered">
+				    <tbody>
+				        <tr>
+				            <td>计划现收：<span class="F-float F-money">{{tripPlan.guideAllNowMoney}}</span></td>
+				            <td>计划导付：
+								{{if guideDetail.cashMoney}} 现金<span class="F-float F-money">{{guideDetail.cashMoney}}</span>{{/if}}
+								{{if guideDetail.cardMoney}} 刷卡<span class="F-float F-money">{{guideDetail.cardMoney}}</span>{{/if}}
+								{{if guideDetail.signMoney}} 签单<span class="F-float F-money">{{guideDetail.signMoney}}</span>{{/if}}
+								{{if !guideDetail.cashMoney && !guideDetail.cardMoney && !guideDetail.signMoney}}0{{/if}}
+				            </td>
+				            <td>计划预支款：<span class="F-float F-money">{{tripPlan.guidePlanAllPreMoney}}</span></td>
+				        </tr>
+				    </tbody>
+				</table>
 			</div>
 		</div>
 		<!-- <div class="row">
@@ -422,7 +441,7 @@
 						</td>
 						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
-						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{if rs.count && rs.price}}{{rs.count * rs.price}}{{/if}}"></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.count*rs.price}}"></td>
 						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12" name="feeRemark" value="{{rs.remark}}" maxlength="100"></td>
 						<td>{{if !!touristGroup.orderNumber == false  &&  !!tripPlan.quoteNumber == false}}<a class="cursor T-action T-delete" title="删除">删除</a>{{/if}}</td>
 					</tr>

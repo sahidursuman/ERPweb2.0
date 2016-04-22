@@ -128,7 +128,7 @@
 											<tbody>{{each receiveGroup.outHotelList as outHotel}}
 													{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 												<tr>
-													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime}}{{/if}}</td>
 													<td>{{if outHotel.hotel.level == 1}}
 														三星以下
 														{{else if outHotel.hotel.level == 2}}
@@ -398,7 +398,7 @@
 											<tbody>{{each sendGroup.outHotelList as outHotel}}
 												{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 												<tr>
-													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime}}{{/if}}</td>
 													<td>{{if outHotel.hotel.level == 1}}
 														三星以下
 														{{else if outHotel.hotel.level == 2}}

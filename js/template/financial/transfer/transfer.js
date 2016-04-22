@@ -6,7 +6,8 @@ define(function(require, exports) {
 	    transferClearing = require("./view/transferClearing"),
 	    payedDetailTempLate = require("./view/viewPayedDetail"),
         needPayDetailTempLate = require("./view/viewNeedPayDetail"),
-        viewGroupTemplate = require("./view/viewTouristGroup");
+        viewGroupTemplate = require("./view/viewTouristGroup"),
+        addFeeTemplate = require("./view/addFee");
 
     var Transfer = {
     	searchData : false,
@@ -57,7 +58,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                	Transfer.partnerList = data.partnerAgencyNameList;
+                    Transfer.partnerList = data.partnerAgencyNameList;
                 	var html = listTemplate(data);
                     Tools.addTab(menuKey,"外转账务",html);
                     Transfer.$tab = $('#tab-' + menuKey + "-content");
@@ -138,9 +139,11 @@ define(function(require, exports) {
             args.operateId = $tab.find("input[name=operateId]").val();
             args.operateName = $tab.find("input[name=operateName]").val();
             args.orderNumber = $tab.find("input[name=orderNumber]").val();
+            args.contactInfo = $tab.find("input[name=contactInfo]").val();
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
@@ -166,13 +169,23 @@ define(function(require, exports) {
                         resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
                     }
                     data.financialTransferList = resultList;
+                    if(Transfer.checkTemp && Transfer.checkTemp.length > 0){
+                        data.financialTransferList = Transfer.getCheckTemp(data.financialTransferList);
+                        data.sumPunishMoney = Transfer.checkTemp.sumPunishMoney;
+                        data.sumSettlementMoney = Transfer.checkTemp.sumSettlementMoney;
+                        data.sumUnPayedMoney = Transfer.checkTemp.sumUnPayedMoney;
+                    }                    
 
                     var html = transferChecking(data);
                     
                     var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "外转对账", html)) {
-                        Transfer.initCheck(args,$tab);                      
+                        $tab = $("#tab-" + menuKey + "-checking-content");
+                        if(Transfer.checkTemp && Transfer.checkTemp.length > 0){
+                            $tab.data('isEdited',true);
+                        }
+                        Transfer.initCheck(args,$tab);
                     } else {
                         Transfer.$checkTab.data("next",args);
                     }
@@ -191,9 +204,16 @@ define(function(require, exports) {
                         curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Transfer.$checkTab.data("isEdited",false);
-                                args.pageNo = obj.curr-1;
-                                Transfer.transferCheck(args);
+                                var temp = Transfer.saveCheckingJson(Transfer.$checkTab);
+                                console.log(temp);
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    Transfer.checkTemp = temp;
+                                    Transfer.$checkTab.data("isEdited",false);
+                                    args.pageNo = obj.curr-1;
+                                    Transfer.transferCheck(args);
+                                }
                             }
                         }
                     });
@@ -208,16 +228,30 @@ define(function(require, exports) {
         Transfer.init_event(args,$tab,"check");
         Tools.setDatePicker($tab.find(".date-picker"),true);
         FinancialService.updateMoney_checking($tab,3);
+        Transfer.getPartnerList($tab,false);
 
         //表单验证
         var validator = new FinRule(0);
         var validatorCheck = validator.check($tab);
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
+        });
         //搜索按钮事件
         $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            Transfer.transferCheck({pageNo : 0},$tab);
+            args.pageNo = 0;
+            Transfer.transferCheck(args,$tab);
         });
+
+        //费用调整
+        Transfer.addFee(args,$tab);
 
         //导出报表事件 btn-hotelExport
         $tab.find(".T-btn-export").click(function(){
@@ -229,7 +263,11 @@ define(function(require, exports) {
                     partnerAgencyId:$tab.find('input[name=partnerAgencyId]').val(),
                     travelAgencyId:"",
                     startDate: $tab.find('input[name=startDate]').val(),
-                    endDate: $tab.find('input[name=endDate]').val()
+                    endDate: $tab.find('input[name=endDate]').val(),
+                    accountStatus : args.accountStatus,
+                    orderNumber : $tab.find("input[name=orderNumber]").val(),
+                    contactInfo : $tab.find("input[name=contactInfo]").val(),
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
             argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;
@@ -266,11 +304,16 @@ define(function(require, exports) {
             args.startDate = $tab.find("input[name=startDate]").val();
             args.endDate = $tab.find("input[name=endDate]").val();
             args.orderNumber = $tab.find("input[name=orderNumber]").val();
+            args.contactInfo = $tab.find("input[name=contactInfo]").val();
             args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
         args.operateName = (args.operateName == "全部") ? "" : args.operateName;
         args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
 
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
         if(args.isAutoPay == 1){
            args.sumCurrentPayMoney = Transfer.$clearTab.find('input[name=sumPayMoney]').val();
         }
@@ -295,14 +338,10 @@ define(function(require, exports) {
                         data.bankId = Transfer.clearTempSumDate.bankId;
                         data.voucher = Transfer.clearTempSumDate.voucher;
                         data.billTime = Transfer.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialTransferList;
                     data.financialTransferList = FinancialService.getTempDate(resultList,Transfer.clearTempData);
-                    data.isAutoPay = args.isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     for(var i = 0; i < data.financialTransferList.length; i++){
                         data.financialTransferList[i].memberList = JSON.stringify(data.financialTransferList[i].memberList);
                     }
@@ -340,21 +379,25 @@ define(function(require, exports) {
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Transfer.$clearTab,Transfer.clearTempData,new FinRule(1));
-                                Transfer.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
-                                Transfer.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Transfer.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Transfer.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Transfer.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Transfer.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Transfer.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-number]').val() : Transfer.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Transfer.$clearTab.find('input[name=cash-id]').val() : Transfer.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Transfer.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Transfer.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
                                 Transfer.$clearTab.data("isEdited",false);
                                 args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
                                 Transfer.transferClear(args,Transfer.$clearTab);
                             }
                         }
@@ -365,21 +408,10 @@ define(function(require, exports) {
     };
 
     Transfer.initClear = function(args,$tab){
-        console.log(args);
         Transfer.init_event(args,$tab,"clear");
         Tools.setDatePicker($tab.find(".date-picker"),true);
+        Transfer.getPartnerList($tab,true);
 
-        if(args.isAutoPay == 0){
-            $tab.find(".T-cancel-auto").hide();
-        } else {
-            $tab.find('input[name=sumPayMoney]').prop("disabled",true);
-            $tab.find(".T-clear-auto").hide(); 
-            if(args.isAutoPay == 1){
-                $tab.data('isEdited',true);
-            } else if(args.isAutoPay == 2){
-                $tab.find(".T-cancel-auto").hide();
-            }
-        }
         //表单验证
         var settleValidator = args.isAutoPay == 2 ? new FinRule(3) : new FinRule(1),
             autoValidator = new FinRule(2);
@@ -387,6 +419,15 @@ define(function(require, exports) {
         autoValidatorCheck = autoValidator.check($tab.find('.T-count'));
             
         FinancialService.initPayEvent($tab);
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Transfer.transferClear(args,$tab);
+        });
         //搜索事件
         $tab.find(".T-search").click(function(){
             args.pageNo = 0;
@@ -435,7 +476,8 @@ define(function(require, exports) {
             Transfer.clearTempData = false;
             $tab.data('isEdited',false);
             args.isAutoPay = 0;
-            args.pageNo = 0;
+            args.autoPay = 0;
+            // args.pageNo = 0;
             Transfer.transferClear(args);
         });
 
@@ -497,7 +539,7 @@ define(function(require, exports) {
     //对账数据保存
     Transfer.saveChecking = function($tab,args,tabArgs){
         var argLen = arguments.length,
-            saveJson = Transfer.saveCheckingJson(Transfer.$checkTab); 
+            saveJson = Transfer.saveCheckingJson(Transfer.$checkTab,true); 
         if(!saveJson){return false;}
 
         $.ajax({
@@ -511,14 +553,12 @@ define(function(require, exports) {
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         $tab.data('isEdited', false);
+                        Transfer.checkTemp = false;
                         if(argLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        } else if(argLen === 2){
+                        } else {
                             Transfer.transferCheck(args,$tab);
-                        } else if(argLen === 3){
-                            Tools.addTab(tabArgs[0],tabArgs[1],tabArgs[2]);
-                            Transfer.initCheck(args,$tab);
                         }
                     });
                 }
@@ -529,12 +569,9 @@ define(function(require, exports) {
     Transfer.saveClear = function($tab,args,tabArgs){
         var isAutoPay = (arguments.length > 1) ? args.isAutoPay : $tab.data("isAutoPay"),
             settleValidator = new FinRule(isAutoPay == 2 ? 3 : 1);
-        if(!FinancialService.isClearSave($tab,settleValidator)){
-            return false;
-        };
-
         var argLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator);
+            clearSaveJson = FinancialService.clearSaveJson($tab,Transfer.clearTempData,settleValidator,true);
+        if(!clearSaveJson){ return false;}
         var payType = Transfer.$clearTab.find('select[name=sumPayType]').val();
         searchParam = {
             partnerAgencyId : (arguments.length > 1) ? args.partnerAgencyId : $tab.data("id"),
@@ -546,7 +583,6 @@ define(function(require, exports) {
             billTime : $tab.find('input[name=tally-date]').val()
         };
 
-        clearSaveJson = JSON.stringify(clearSaveJson);
         searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","saveAccountSettlement"),
@@ -565,11 +601,9 @@ define(function(require, exports) {
                         if(argLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
                             Transfer.listTransfer(Transfer.searchData.pageNo,Transfer.searchData.partnerAgencyId,Transfer.searchData.partnerAgencyName,Transfer.searchData.startDate,Transfer.searchData.endDate);
-                        }else if(argLen === 2){
+                        } else {
                             args.isAutoPay = (args.isAutoPay == 2) ? 2 : 0 ;
-                            Transfer.transferClear(args,$tab);
-                        } else if(argLen === 3){
-                            args.isAutoPay = (isAutoPay == 1) ? 0 : args.isAutoPay
+                            args.autoPay = 0;
                             Transfer.transferClear(args,$tab);
                         }
                     }); 
@@ -589,7 +623,8 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    Transfer.initCheck($tab.data('next'),$tab);
+                    Transfer.checkTemp = false;
+                    Transfer.transferCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
                     Transfer.clearTempData = false;
                     Transfer.clearTempSumDate = false;
@@ -602,9 +637,9 @@ define(function(require, exports) {
             .on('switch.tab.save', function(event, tab_id, title, html) {
                 event.preventDefault();
                 if(option == "check"){
-                    Transfer.saveChecking($tab,args,[tab_id, title, html]);
+                    Transfer.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
                 } else if(option == "clear"){
-                    Transfer.saveClear($tab,args,[tab_id, title, html]);
+                    Transfer.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
                 }
             })
             // 保存后关闭
@@ -616,6 +651,15 @@ define(function(require, exports) {
                     $tab.data("isAutoPay",args.isAutoPay);
                     $tab.data("id",args.partnerAgencyId);
                     Transfer.saveClear($tab);
+                }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    Transfer.clearTempData = false;
+                    Transfer.clearTempSumDate = false;
+                } else if(option == "check"){
+                    Transfer.checkTemp = false;
                 }
             });
         }
@@ -663,6 +707,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        Transfer.partnerList = partnerList.slice(all);
         partnerList.unshift(all);
 
         //同行地接
@@ -762,63 +807,233 @@ define(function(require, exports) {
     };
 
     //对账数据组装
-    Transfer.saveCheckingJson = function($tab){
+    Transfer.saveCheckingJson = function($tab,isSave){
+        var rule = new FinRule(0),
+            validator = rule.check($tab);
+        if(!validator.form()){ return false; }//未通过验证不允许翻页或提交
+
         if(!$tab.data('isEdited')){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
-            return false;
+            if(isSave && !Transfer.checkTemp){
+                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                return false;
+            } else {
+                // return tempJson;
+            }
         }
 
         var $list = $tab.find(".T-checkList"),
             $tr = $list.find(".T-checkTr"),
-            saveJson = []; 
+            saveJson = Transfer.checkTemp || [],
+            len = saveJson.length; 
         $tr.each(function(){
-            var $this = $(this),
-                isConfirmAccount = $this.data("confirm"),
-                isCheck = "";
-            if ($this.find(".T-checkbox").is(':checked')) {
-                isCheck = 1;
-            } else {
-                isCheck = 0; 
-            }
+            var $this = $(this);
+            if($this.data("change")){//遍历修改行
+                validator = rule.check($this);
+                if(!validator.form()){ return false; }//未通过验证退出当前行
 
-            if(isCheck != isConfirmAccount || isConfirmAccount == 1){//修改了对账状态
-                var push = false,
-                    checkRecord = {
-                        id : $this.data("id"),
-                        isConfirmAccount : isCheck,
-                        unPayedMoney : $this.find(".T-unReceivedMoney").text(),
-                        checkRemark : $this.find(".T-remark").val()
-                    };
-                if($this.data("trans") == "trans"){//有中转结算价
-                    if($this.data("change")){
-                        checkRecord.outTransferBackMoney = $this.find(".T-refund").val();
-                        checkRecord.outTransferSettlementMoney = $this.find(".T-settlementMoney").text();
-                        push = true;
-                    }
-                    var $childTr = $this.next();
-                    if($childTr.length > 0 && $childTr.data("change")){//有非中转费用并修改
-                        checkRecord.punishMoney = $childTr.find(".T-refund").val();
-                        checkRecord.settlementMoney = $childTr.find(".T-settlementMoney").text();
-                        push = true;
-                    }
-                } else { //无中转结算价
-                    if($this.data("change")){
-                        checkRecord.punishMoney = $this.find(".T-refund").val();
-                        checkRecord.settlementMoney = $this.find(".T-settlementMoney").text();
-                        push = true;
+                var isChecked = "";
+                if ($this.find(".T-checkbox").is(':checked')) {
+                    isChecked = 1;
+                } else {
+                    isChecked = 0; 
+                }
+
+                //已有数据更新
+                for(var i = 0; i < len; i++){
+                    var $childTr = $this,
+                        detailList = [],
+                        end = false;
+                    while(!end && $childTr.length > 0){
+                        if(saveJson[i].id == $this.data("id")){
+                            if($childTr.data('trans')){
+                                saveJson[i].outTransferBackMoney = $childTr.find("input[name=settlementMoney]").val();
+                                saveJson[i].outTransferSettlementMoney = $childTr.find(".T-settlementMoney").text();
+                            } else {
+                                saveJson[i].punishMoney = $childTr.find("input[name=settlementMoney]").val();
+                                saveJson[i].settlementMoney = $childTr.find(".T-settlementMoney").text();
+                            }
+                            saveJson[i].unPayedMoney = $this.find(".T-unReceivedMoney").text();
+                            saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
+                            return;
+                        }
+                        $childTr = $childTr.next();
+                        if($childTr.hasClass('T-checkTr')){
+                            end = true;
+                        }
                     }
                 }
-                if(push){
-                    saveJson.push(checkRecord);
+                //新数据
+                if(i >= len){
+                    var $childTr = $this,
+                        checkRecord = {
+                            id : $this.data("id"),
+                            unPayedMoney : $this.find(".T-unReceivedMoney").text(),
+                            checkRemark : $this.find("[name=checkRemark]").val(),
+                            confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
+                            isChecked : isChecked
+                        },
+                        end = false;
+                    while(!end && $childTr.length > 0){
+                        if($childTr.data("change")){
+                            if($childTr.data('trans')){
+                                checkRecord.trans = true;
+                                checkRecord.outTransferBackMoney = $childTr.find("input[name=settlementMoney]").val();
+                                checkRecord.outTransferSettlementMoney = $childTr.find(".T-settlementMoney").text();
+                            } else {
+                                checkRecord.punishMoney = $childTr.find("input[name=settlementMoney]").val();
+                                checkRecord.settlementMoney = $childTr.find(".T-settlementMoney").text();
+                            }
+                        }
+                        $childTr = $childTr.next();
+                        if($childTr.hasClass('T-checkTr')){
+                            end = true;
+                        }
+                    }
+                    saveJson.push(checkRecord);  
                 }
             }
         });
-        if(saveJson.length == 0){
-            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
-            return false;
+        if(isSave){
+            if(saveJson.length == 0){
+                showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+                return false;
+            }
+            //保存数据处理,
+            for(var i = 0; i < saveJson.length; i++){
+                if(saveJson[i].confirm == 0 && saveJson[i].isChecked == 0){
+                    saveJson.splice(i,1);//删除不需提交的行
+                    i--;
+                } else {
+                    saveJson[i].isConfirmAccount = saveJson[i].isChecked;
+                }
+            }
+            saveJson = JSON.stringify(saveJson);
+        } else {
+           saveJson.sumPunishMoney = $tab.find('.T-sumBackMoney').text();
+           saveJson.sumSettlementMoney = $tab.find('.T-sumSettlementMoney').text();
+           saveJson.sumUnPayedMoney = $tab.find('.T-sumUnReceivedMoney').text();
         }
+        return saveJson;
+    };
 
-        return JSON.stringify(saveJson);
+    Transfer.getCheckTemp = function(resultList){
+        var tempJson = Transfer.checkTemp;
+        if(!!tempJson && tempJson.length){
+            for(var i = 0; i < tempJson.length; i++){
+                for(var j = 0; j < resultList.length; j++){
+                    if(tempJson[i].id == resultList[j].id){
+                        resultList[j].change = true;
+                        resultList[j].outTransferBackMoney = tempJson[i].outTransferBackMoney;
+                        resultList[j].outTransferSettlementMoney = tempJson[i].outTransferSettlementMoney;
+                        resultList[j].punishMoney = tempJson[i].punishMoney ? tempJson[i].punishMoney : resultList[j].punishMoney;
+                        resultList[j].settlementMoney = tempJson[i].settlementMoney ? tempJson[i].settlementMoney : resultList[j].settlementMoney;
+                        resultList[j].checkRemark = tempJson[i].checkRemark;
+                        resultList[j].isChecked = tempJson[i].isChecked;
+                        break;
+                    }
+                }
+            }
+        }
+        return resultList;
+    }
+
+    Transfer.addFee = function(args, $tab) {
+        $tab.find('.T-addFee').on('click', function() {
+            var $this = $(this), id = $this.attr('data-id');
+            var addFeeLayer = layer.open({
+                type: 1,
+                title:'费用调整',
+                skin: 'layui-layer-rim', //加上边框
+                area: ['1000px', '450px'], //宽高
+                zIndex:1028,
+                content: addFeeTemplate(),
+                success: function() {
+                    var $content = $('.T-transfer-addFee');
+
+                    var rule = $content.formValidate([
+                        {   //明细数量
+                            $ele: $content.find('input[name=count]'),
+                            rules: [
+                                {
+                                    type: 'nonnegative-float',
+                                    errMsg: '请输入非负数'
+                                },
+                                {
+                                    type: 'null',
+                                    errMsg: '数量不能为空'
+                                }
+                            ]
+                        },
+                        {   //明细价格
+                            $ele: $content.find('input[name=price]'),
+                            rules: [
+                                {
+                                    type: 'float',
+                                    errMsg:'请输入数字金额'
+                                },
+                                {
+                                    type: 'null',
+                                    errMsg: '单价不能为空'
+                                }
+                            ]
+                        }
+                    ]);
+                    function getValue($obj, name) {
+                        return $obj.find('[name='+name+']').val();
+                    }
+
+                    $content.find('.T-addCostTbody, .T-addTransferCostTbody').on('change', '.T-calc', function() {
+                        var $this = $(this), $parent = $this.closest('tr');
+                        var count = getValue($parent, 'count') || 0,
+                            price = getValue($parent, 'price') || 0;
+                        $parent.find('.T-payMoney').val(count * price);
+                    })
+                    $content.find('.T-addCostTbody').on('change', '[name=type],[name=count],[name=price]', function() {
+                        var $this = $(this), $parent = $this.closest('tr');
+                        var type = getValue($parent, 'type') || 0,
+                            count = getValue($parent, 'count') || 0,
+                            price = getValue($parent, 'price') || 0;
+                        $content.find('.T-addTransferCostTbody').find('[name=type]').val(type);
+                        $content.find('.T-addTransferCostTbody').find('[name=count]').val(count).trigger('change');
+                        $content.find('.T-addTransferCostTbody').find('[name=price]').val(price).trigger('change');
+                    })
+                    $content.find('.T-add-Fee-submit').off('click').on('click', function() {
+                        if (!rule.form()) {
+                            return;
+                        }
+                        var feeJson = {
+                            type: getValue( $content.find('.T-addCostTbody'), 'type'),
+                            count: getValue($content.find('.T-addCostTbody'), 'count'),
+                            price: getValue($content.find('.T-addCostTbody'), 'price'),
+                            remark: getValue($content.find('.T-addCostTbody'), 'remark')
+                        },transferJson = {
+                            type: getValue($content.find('.T-addTransferCostTbody'), 'type'),
+                            count: getValue($content.find('.T-addTransferCostTbody'), 'count'),
+                            price: getValue($content.find('.T-addTransferCostTbody'), 'price'),
+                            remark: getValue($content.find('.T-addTransferCostTbody'), 'remark')
+                        }
+                        feeJson = JSON.stringify(feeJson);
+                        transferJson = JSON.stringify(transferJson);
+
+                        $.ajax({
+                            url: KingServices.build_url('account/financialTransfer','addFee'),
+                            type: 'POST',
+                            data: {
+                                id: id, 
+                                touristGroupFeeJson: feeJson,
+                                touristGroupTransferFeeJson: transferJson
+                            },
+                        })
+                        .done(function(data) {
+                            if (showDialog(data)) {
+                                layer.close(addFeeLayer);
+                                Transfer.transferCheck(args);
+                            }
+                        });
+                    })
+                }
+            });
+        })
     };
 
     Transfer.initPay = function(options){
@@ -828,10 +1043,59 @@ define(function(require, exports) {
             partnerAgencyName : options.name,
             startDate : options.startDate,
             endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+            accountStatus : options.accountStatus
         }
-        Transfer.transferClear(args); 
+        $.ajax({
+            url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args)},
+            success:function(data){
+                if(showDialog(data)){
+                    var partnerList = data.partnerAgencyNameList;
+                    if(partnerList != null && partnerList.length > 0){
+                        for(var i=0;i < partnerList.length;i++){
+                            partnerList[i].id = partnerList[i].partnerAgencyId;
+                            partnerList[i].value = partnerList[i].partnerAgencyName;
+                        }
+                    }
+                    Transfer.partnerList = partnerList;
+                    args.isAutoPay = 2;
+                    Transfer.transferClear(args);
+                }
+            }
+        });
+    };
+
+    Transfer.getPartnerList = function($tab,type){
+        var $obj = $tab.find('input[name=partnerAgencyName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : Transfer.partnerList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    partnerAgencyId : ui.item.id,
+                    partnerAgencyName : ui.item.value,
+                    startDate : $tab.find('input[name=startDate]').val(),
+                    endDate : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    Transfer.transferClear(args);
+                } else {
+                    Transfer.transferCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
     };
 
     exports.init = Transfer.initModule;

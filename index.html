@@ -266,6 +266,7 @@
 		<script src="components/ueditor/ueditor.config.js"></script>
 		<script src="components/ueditor/ueditor.all.min.js"></script>
 		<script src="components/ueditor/lang/zh-cn/zh-cn.js"></script>
+		<script src="components/clipboard/clipboard.min.js"></script>
 		
 		<!-- jquery.print scripts -->
 		
@@ -288,7 +289,7 @@
 		<script src="components/ace-admin/assets/js/ace-elements.min.js"></script>
 		<script src="components/ace-admin/assets/js/ace.min.js"></script>
 		<script src="components/ace-admin/assets/js/fuelux.tree.min.js"></script>
-		<script src="components/zeroclipboard/dist/ZeroClipboard.min.js"></script>
+		<!-- <script src="components/zeroclipboard/dist/ZeroClipboard.min.js"></script> -->
 		<script src="components/form-validate/formvalidate.js"></script>
 		<script src="js/project.js?v=1.0.0.1"></script>
 		<script src="js/template/financial/financial.js"></script>
@@ -311,10 +312,13 @@
 				});
 			});
 		</script>
-		<script src="components/pusher/pusher.min.js"></script>
 
-		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257382061'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1257382061' type='text/javascript'%3E%3C/script%3E"));</script>
-		<script src="js/analyze/cnzz.js"></script>
-		<script src="js/analyze/index.js"></script>
+		<script type="text/javascript">
+			if (location.href.indexOf('djs.huochaitou.com') >= 0) {
+				var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257382061'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1257382061' type='text/javascript'%3E%3C/script%3E"));
+				document.write('<script src="js/analyze/cnzz.js">'+ '<' +'/script>');
+				document.write('<script src="js/analyze/index.js">'+ '<' +'/script>');
+			}
+		</script>
 	</body>
 </html>

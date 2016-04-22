@@ -10,19 +10,31 @@
             <input type="hidden" name="fromPartnerAgencyId" value="{{}}">
         </div>
         <div class="form-group mar-r-10">
+            <label>游客</label>
+            <input type="text" name="contactInfo" class="form-control T-chooseTouristGroup" placeholder="联系人或联系电话" style="width:146px;" />
+            <input type="hidden" name="fromTouristGroupId" value="">
+        </div>
+        <div class="form-group mar-r-10">
             <label>出游时间</label>
             <input type="text" name="travelDate" class="datepicker T-subsectionStartTime" />
         </div>
         <div class="form-group mar-r-10">
             <label>操作人</label>
-            <input type="text" class="T-creatorUserChoose" name="creator" value="{{}}" style="width:110px;" />
+            <input type="text" class="T-creatorUserChoose w-50" name="creator" value="{{}}" />
             <input type="hidden" name="creatorId" value="{{}}" />
         </div>
         <div class="form-group mar-r-10 T-date-range">
             <label>操作日期</label>
             <input type="text" name="operationStartDate" class="datepicker T-subsectionStartTime">
-            <label>&nbsp;至&nbsp;</label>
+            <label>至</label>
             <input type="text" name="operationEndDate" class="datepicker T-subsectionEndTime">
+        </div>
+        <div class="form-group mar-r-10">
+            <label >出游日期</label>
+            <select name="order_by" id="order_by">
+                <option value="asc">升序</option>
+                <option value="desc">降序</option>
+            </select>
         </div>
         <div class="form-group">
             <button class="btn-sm search-btn T-btn-subsection-search">

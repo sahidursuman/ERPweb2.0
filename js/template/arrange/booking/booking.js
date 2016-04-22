@@ -335,13 +335,8 @@ define(function(require, exports) {
 	 * @param  {[type]} $container [description]
 	 * @return {[type]}            [description]
 	 */
-	BookingArrange.datetimepicker = function($container){
-		$container.find('.datetimepicker').datetimepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'L',
-			language: 'zh-CN'
-		});
+	BookingArrange.datetimepicker = function(){
+		Tools.setDateHSPicker($('.datetimepicker')); 
 	}
 
 	/**
@@ -414,6 +409,7 @@ define(function(require, exports) {
 	BookingArrange.CU_event = function($tab){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
+		BookingArrange.bookNumberChange($tab)
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
 			event.preventDefault();
@@ -503,8 +499,7 @@ define(function(require, exports) {
 
 			if (!$datepicker.data('datepicker')) {
 				var $datepickerTr = $datepicker.closest('tr');
-
-				if ($datepickerTr.length) {
+				if ($datepickerTr.find('[name=days]').length) {
 					var $datepickers = $datepickerTr.find('.datepicker'),
 						options = {
 							moreDay : 1
@@ -515,7 +510,17 @@ define(function(require, exports) {
 						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
 						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
 					});
-				} else {
+				} else if ($datepickerTr.find('[name=days]').length==0) {
+					var $datepickers = $datepickerTr.find('.datepicker'),
+						options = {
+							moreDay : 0
+						};
+					Tools.setDatePicker($datepickers, true,options).on('changeDate.diff.api', function(event) {
+						event.preventDefault();
+						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
+						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
+					});
+				} else{
 					Tools.setDatePicker($datepicker);
 				}
 			}
@@ -1125,6 +1130,7 @@ define(function(require, exports) {
 	BookingArrange.submitBooking = function($that, validator, tab_array){
 		var bookingOrder = {
 				id : BookingArrange.getValue($that,"id"),
+				bookingOrderNumber : BookingArrange.getValue($that,"orderNumber"),
 				partnerAgencyId : BookingArrange.getValue($that,"partnerAgencyId"),
 				contactId : BookingArrange.getValue($that,"partnerAgencyContactId"),
 				contactRealname : BookingArrange.getValue($that,"contactRealname"),
@@ -1500,6 +1506,28 @@ define(function(require, exports) {
 			}
 		})
 	};
+
+	//检查代订单号重复性
+    BookingArrange.bookNumberChange = function($tab) {
+        $tab.find('.T-bookNumberChange').on('change', function() {
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url('bookingOrder','validateOrderNumber'),
+                type: 'POST',
+                showLoading: false,
+                data: { bookingOrderNumber: $this.val()}
+            })
+            .done(function(data) {
+                if (data.success == 0) {
+                    $this.val('');
+                    layer.tips('该代订单号已存在', $this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
 
 	exports.init = BookingArrange.initModule;
 	exports.replaceDetail = BookingArrange.viewBooking;

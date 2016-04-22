@@ -2,16 +2,42 @@
     <div class="col-sm-12 T-search-area">
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group"> 
-                <label> 餐厅：{{restaurantName}}</label>
-                <label class="marginLeft-30">账期：</label>
-                <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />   
+                <label>餐厅：</label>
+                <input type="text" class="mar-r-10" name="restaurantName" value="{{restaurantName}}" />
+                <label>账期：</label>
+                <input class="date-picker T-time" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />   
                 <label>&nbsp;至&nbsp;</label>
-                <input class="date-picker" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
+                <input class="date-picker T-time mar-r-10" name="endDate" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" style="width:100px;" />   
 
-                <label class="marginLeft-30">账务类别：</label>
-                <input name="accountInfo" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
+                <label>账务类别：</label>
+                <input name="accountInfo" class="mar-r-10" placeholder="账务类别" type="text" value="{{searchParam.accountInfo}}" style="width:200px;" />
                 
-                <button class="btn-height btn-sm btn-height T-search search-btn marginLeft-30">
+                <label>对账状态：</label>
+                <div class="btn-group T-check-status mar-r-10">
+                    <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                        <span>
+                            {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                                全部
+                            {{else if searchParam.isConfirmAccount == 1}}
+                                已对账
+                            {{else}}
+                                未对账
+                            {{/if}}
+                        </span>
+                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                        <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                        <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                    </ul>
+                </div>
+                <label>对账时间：</label>
+                <input class="date-picker T-checkTime T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+                <label>&nbsp;至&nbsp;</label>
+                <input class="date-picker T-checkTime mar-r-10 T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+
+                <button class="btn-height btn-sm btn-height T-search search-btn">
                     <i class="ace-icon fa fa-search"></i>搜索
                 </button>
             </div>
@@ -29,26 +55,29 @@
             </div>
         </form>
 
-        <div class="form-inline row globalAdd T-summary" style="padding-top: 10px;">
+        <div class="form-inline row globalAdd T-summary">
             <div class="form-group mar-r-10">
                 <label class="control-label">本次付款金额合计：</label>
                 <label class="control-label">
-                    <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}">
+                    <input type="text" name="sumPayMoney" class="money F-float F-money"  value="{{sumPayMoney}}" {{if isAutoPay != "0"}}disabled{{/if}}>
                 </label>
             </div>
 
             <div class="form-group mar-r-10">
+                {{if isAutoPay == "0"}}
                 <button class="btn btn-primary T-clear-auto">
-                        <i class="ace-icon fa fa-check-circle"></i> 自动下账
-                    </button>
-                    <button class="btn btn-warning T-cancel-auto">
-                        <i class="ace-icon fa fa-times-circle"></i> 取消下账
-                    </button>
+                    <i class="ace-icon fa fa-check-circle"></i> 自动下账
+                </button>
+                {{else if isAutoPay == "1"}}
+                <button class="btn btn-warning T-cancel-auto">
+                    <i class="ace-icon fa fa-times-circle"></i> 取消下账
+                </button>
+                {{/if}}
             </div>
 
             <div class="form-group mar-r-10">
                 <label class="control-label">付款方式：</label>
-                <select class="form-control T-sumPayType" name="payType">
+                <select class="form-control T-sumPayType" name="sumPayType">
                     {{#sumPayType | getPayTypeOptions}}
                 </select>
             </div>
@@ -128,12 +157,17 @@
                 <td><span class="F-float F-count">{{rs.memberCount}}</span></td>
                 <td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
-                <td><a class="T-option T-payedDetail">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span>{{if !rs.isGuidePay || rs.isGuidePay != 1}}{{"，"}}{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span>{{/if}}</a></td>
+                <td class="align-left">
+                    <a class="T-option T-payedDetail">
+                        <span class="in-block">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></span>
+                        {{if !rs.isGuidePay || rs.isGuidePay != 1}}<span class="in-block">{{"导付："}}<span class="F-float F-money">{{rs.realGuidePayMoney}}</span></span>{{/if}}
+                    </a>
+                </td>
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-restaurantImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td><input name="payMoney" class="money F-float F-money" type="text" value="{{rs.payMoney}}" maxlength="9" data-le="{{rs.unPayedMoney}}" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}></td>
-                <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if isAutoPay != 2 && rs.unPayedMoney <= 0}} disabled {{/if}}>{{rs.payRemark}}</textarea></td>
+                <td><input name="payMoney" class="money F-float F-money" type="text" value="{{rs.payMoney}}" maxlength="9" /></td>
+                <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td>
@@ -157,7 +191,7 @@
     </div>
     <form class="form-horizontal" role="form" onsubmit="return false">
         <div class="form-group" style="text-align: center;">
-            <button class="btn btn-xs btn-primary T-close-clear">
+            <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i>关闭
             </button>
             <button class="btn btn-xs btn-primary T-saveClear marginLeft-30">

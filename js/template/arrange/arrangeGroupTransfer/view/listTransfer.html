@@ -29,7 +29,7 @@
 	</thead>
 	<tbody class="T-arrageTransfer-list">
 		{{each touristGroupList as group}}
-			<tr data-value={{group.id}} data-entity-adultCount = {{group.adultCount}}  data-entity-childCount = {{group.childCount}}>
+			<tr data-value="{{group.id}}" data-adultCount="{{group.adultCount}}"  data-childCount="{{group.childCount}}">
 			    <td><label class="pos-rel"> <input type="checkbox" class="ace T-transferCheckBox T-cheked"> <span class="lbl"></span> </label></td>
 			    <td class="h-touristGroupInfo">
 				    <p>
@@ -54,23 +54,26 @@
 				{{if !!group.contactMember}}
 				<td>{{group.contactMember.name}}</td>
 				<td>{{group.contactMember.mobileNumber}}</td>
+				{{else}}
+				<td>-</td>
+				<td>-</td>
 				{{/if}}
 				<td>{{group.adultCount}} 大 {{group.childCount}}小</td>
 				<td>{{group.areaData}}</td>
 				<td>{{group.ageData}}</td>
 				<td class="T-ctrl-tip" title="{{group.remark}}"><span style="height: 35px">{{group.remark}}</span></td>
-				<td><a class="cursor T-arrageTransfer-view T-action"> 查看 </a></td>
+				<td><a class="cursor T-list-view T-action"> 查看 </a></td>
 			</tr>
 		{{/each}}
 	</tbody>
 </table>
 <div class="text-center clearfix"> 
  	<label class="pull-left control-label no-padding-right" style="color:#D2691E; ">已选人数 <span class="T-chosenAdultAndChildCount" style="color:#D2691E;">大人 0 小孩 0 </span></label>
-	<button class="btn btn-sm btn-success T-arrageTransfer-inner R-right" data-right="1130005">
+	<button class="btn btn-sm btn-success T-inner R-right" data-right="1130005" data-type="1">
 		<i class="ace-icon fa fa-user-plus"></i>
 		内转
 	</button>
-	<button class="btn btn-sm btn-primary T-arrageTransfer-out R-right" data-right="1130003">
+	<button class="btn btn-sm btn-primary T-out R-right" data-right="1130003" data-type="2">
 		<i class="ace-icon fa fa-user-plus"></i>
 		外转
 	</button>

@@ -241,7 +241,6 @@ define(function(require, exports) {
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
 				data:"id=" + id,
-				showLoading:false,
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -323,7 +322,6 @@ define(function(require, exports) {
 			$.ajax({
 	    		url: KingServices.build_url('lineProduct', 'getLineProductById'),
 				type:"POST",
-				showLoading: false,
 				data:"id=" + id,
 				success:function(data){
 					var result = showDialog(data);
@@ -2598,7 +2596,7 @@ define(function(require, exports) {
 	ResLineProduct.addBusCompany = function($btn, validator) {
 		var busCompanyDetails = ''
 		+'<tr>'
-		+'<td><input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" /></td>'
+		+'<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td>'
 		+'<td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td>'
 		+'<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>'
 		+'<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>'
@@ -2647,9 +2645,7 @@ define(function(require, exports) {
 		} else if(trim(type) == ""){
 			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
 			return false;
-		}
-		
-		
+		}		
 
 		// 获取表单的数据
 		travelLineData.lineProduct = 
@@ -2668,7 +2664,8 @@ define(function(require, exports) {
 				shopNames: $form.find('.T-shopMultiselect').val(),
 				shopIds: ResLineProduct.jsonToString($form.find('.T-shopMultiselect').data('propover')),
 				selfPayItemNames: $form.find('.T-selfPayMultiselect').val(),
-				selfPayItemIds: ResLineProduct.jsonToString($form.find('.T-selfPayMultiselect').data('propover'))
+				selfPayItemIds: ResLineProduct.jsonToString($form.find('.T-selfPayMultiselect').data('propover')),
+				publishAuthArea: $tab.find('#publishAuthArea').val()
 			}];
 		
 		// 获取基础安排的数据

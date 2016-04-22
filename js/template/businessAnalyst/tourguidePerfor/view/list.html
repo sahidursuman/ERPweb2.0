@@ -9,11 +9,27 @@
             <input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />
         </div>
         <label class="pull-left text-right control-label no-padding-right">导游 </label>
-        <div class="col-xs-2">
-            <input type="text" name="guideName" class="col-xs-12 T-Choose-tourgSet" placeholder="导游" value="{{searchParam.guideName}}" />
+        <div class="col-xs-1">
+            <input type="text" name="guideName" class="col-xs-10 T-Choose-tourgSet" placeholder="导游" value="{{searchParam.guideName}}" />
             <input type="hidden" name="guidChooseId" value="" />
         </div>
-        <div class="col-xs-2">
+
+        <div class="col-xs-2 pull-left">
+            <label class="pull-left text-right control-label no-padding-right mar-r-10">排序</label>
+            <select name="sortType">
+                <option value="all"    {{if searchParam.order=='all'}}selected{{/if}} >购物总额</option>
+                <option value="trip"   {{if searchParam.order=='trip'}}selected{{/if}} >团均购物</option>
+                <option value="person" {{if searchParam.order=='person'}}selected{{/if}}>人均购物</option>
+            </select>
+            
+            <select name="orderBy">
+                <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+            </select>
+            
+        </div>
+
+        <div class="w100 pull-left">
             <button class=" btn-sm  T-tourguidPer-search search-btn">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
@@ -23,7 +39,7 @@
         <table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
             <colgroup>
                 <col style="width:10%;"></col>
-                <col style="width:10%;"></col>
+                <col style="width:100px;"></col>
                 <col style="width:10%;"></col>
                 <col style="width:20%;"></col>
                 <col style="width:20%;"></col>
@@ -33,7 +49,7 @@
                 <col style="width:10%;"></col>
                 <col style="width:10%;"></col>
             </colgroup>
-            <thead>
+            <thead class="T-thead">
                 <tr class="bg-blur">
                     <th class="col-sm-1">导游</th>
                     <th class="col-sm-2">手机号码</th>
@@ -50,18 +66,18 @@
             </thead>
             <tbody class="T-tourguidPer-list">
                 {{each sumListPerformance as sumL}}
-                <tr>
+                <tr data-guideId="{{sumL.id}}" data-guideName="{{sumL.guideName}}" data-mobileNumber="{{sumL.mobileNumber}}">
                     <td>{{sumL.guideName}}</td>
                     <td>{{sumL.mobileNumber}}</td>
-                    <td>{{sumL.tourCount}}</td>
-                    <td>{{sumL.tourNumber}}</td>
-                    <td>{{sumL.sumShopMoney}}</td>
-                    <td>{{sumL.maxShopMoney}}</td>
-                    <td>{{sumL.aveTeamShop}}</td>
-                    <td>{{sumL.avePeoShop}}</td>
-                    <td>{{sumL.sumSelfPayMoney}}</td>
-                    <td>{{sumL.aveSelfPayMoney}}</td>
-                    <td>{{sumL.aveSelfPay}}</td>
+                    <td class="T-tourCount cursor" style="color:#337ab7">{{sumL.tourCount}}</td>
+                    <td>{{sumL.adultCount}}大{{sumL.childCount}}小</td>
+                    <td><span class='F-float F-money'>{{sumL.sumShopMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{sumL.maxShopMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{sumL.aveTeamShop}}</span></td>
+                    <td><span class='F-float F-money'>{{sumL.avePeoShop}}</span></td>
+                    <td><span class='F-float F-money'>{{sumL.sumSelfPayMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{sumL.aveSelfPayMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{sumL.aveSelfPay}}</span></td>
                 </tr>
                 {{/each}}
             </tbody>

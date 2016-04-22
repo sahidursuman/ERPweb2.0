@@ -2,10 +2,16 @@
     <!--  -->
     <form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
         <div class="ui-sortable-handle">
-            <h5 class="">
-					<span class="badge badge-primary">1</span>
-					<label class="middle title-size">代订信息</label>
-				</h5>
+            <div class="group-info-area form-inline">
+                <div class="form-group fixed-width-1">
+                    <span class="badge badge-primary">1</span>
+                    <label class="middle title-size">代订信息</label>
+                </div>
+                <div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:865px;">
+                    <label>代订单号：</label>
+                    <input type="text" name="orderNumber" class="T-bookNumberChange" value="{{bookingOrder.orderNumber}}" style="width:160px;" placeholder="系统自动生成" >  
+                </div> 
+            </div>
             <div class="widget-body">
                 <div class="widget-main">
                     <div class="form-group">
@@ -107,19 +113,19 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-hotelList">{{each bookingOrder.bookingHotelList as hotelList}}
-                                    <tr data-entity-id="{{hotelList.id}}">
+                                    <tr data-entity-id="{{hotelList.id}}" {{if hotelList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                         <td>
                                             <div class="input-group">
-                                                <input name="enterTime" value="{{hotelList.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
+                                                <input name="enterTime" value="{{hotelList.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="input-group">
-                                                <input name="leaveTime" value="{{hotelList.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
+                                                <input name="leaveTime" value="{{hotelList.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             </div>
                                         </td>
                                         <td>
-                                            <select name="level" class="col-sm-12 T-hotelStar">
+                                            <select name="level" class="col-sm-12 T-hotelStar" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}>
                                                 <option selected="selected" value="" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}}>全部</option>
                                                 <option value="1">三星以下</option>
                                                 <option value="2" {{if hotelList.hotel.level==2 }}selected="selected" {{/if}}>三星</option>
@@ -131,21 +137,21 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input name="hotelName" value="{{if hotelList.hotel != null}}{{hotelList.hotel.name}}{{/if}}" type="text" class="col-sm-12 T-chooseHotel bind-change" />
+                                            <input name="hotelName" value="{{if hotelList.hotel != null}}{{hotelList.hotel.name}}{{/if}}" type="text" class="col-sm-12 {{if !hotelList.isConfirmAccount}}T-chooseHotel{{/if}} bind-change" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input name="hotelId" type="hidden" value="{{if hotelList.hotel != null}}{{hotelList.hotel.id}}{{/if}}" />
                                         </td>
                                         <td>
-                                            <input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 T-chooseHotelRoom bind-change" />
+                                            <input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 {{if !hotelList.isConfirmAccount}}T-chooseHotelRoom{{/if}} bind-change" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input name="hotelRoomId" type="hidden" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.id}}{{/if}}" />
                                         </td>
                                         <td>
-                                            <input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="4" readonly="readonly" />
+                                            <input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="4" readonly="readonly" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" />
+                                            <input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" style="width:55px;" maxlength="9" />
+                                            <input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" style="width:55px;" maxlength="9"{{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}} />
                                             <label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;">/天</label>
                                         </td>
                                         <td>
@@ -159,10 +165,11 @@
                                             <input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
                                         </td>
                                             <td>
-                                                <input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                                                <input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9"{{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}>
                                             </td>
-                                            <td>
+                                            <td>{{if !hotelList.isConfirmAccount}}
                                                 <a class="cursor T-action T-hotel-delete">删除</a>
+                                                {{/if}}
                                             </td>
                                     </tr>{{/each}}
                                 </tbody>
@@ -202,28 +209,28 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-scenicList">{{each bookingOrder.bookingScenicList as scenicList}}
-                                    <tr data-entity-id="{{scenicList.id}}">
+                                    <tr data-entity-id="{{scenicList.id}}" {{if scenicList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                         <td>
                                             <div class="input-group">
-                                                <input name="startTime" value="{{scenicList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
+                                                <input name="startTime" value="{{scenicList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             </div>
                                         </td>
                                         <td>
-                                            <input name="scenicName" value="{{if scenicList.scenic != null}}{{scenicList.scenic.name}}{{/if}}" type="text" class="col-sm-12 T-chooseScenic bind-change" />
+                                            <input name="scenicName" value="{{if scenicList.scenic != null}}{{scenicList.scenic.name}}{{/if}}" type="text" class="col-sm-12 {{if !scenicList.isConfirmAccount}}T-chooseScenic{{/if}} bind-change" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input name="scenicId" value="{{if scenicList.scenic != null}}{{scenicList.scenic.id}}{{/if}}" type="hidden" />
                                         </td>
                                         <td>
-                                            <input name="scenicItemName" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.name}}{{/if}}" type="text" class="col-sm-12 T-chooseScenicItem bind-change" />
+                                            <input name="scenicItemName" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.name}}{{/if}}" type="text" class="col-sm-12 {{if !scenicList.isConfirmAccount}}T-chooseScenicItem{{/if}} bind-change" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input name="scenicItemId" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.id}}{{/if}}" type="hidden" />
                                         </td>
                                         <td>
-                                            <input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="7" />
+                                            <input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="7" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}{{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}{{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                                            <input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}{{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                                            <input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12 F-float F-money" />
@@ -232,14 +239,15 @@
                                             <input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
                                         </td>
                                         <td>
-                                            <input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" />
+                                            <input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
 
                                             <td>
-                                                <input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                                                <input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}>
                                             </td>
-                                            <td>
+                                            <td>{{if !scenicList.isConfirmAccount}}
                                                 <a class="cursor T-action T-scenic-delete">删除</a>
+                                                {{/if}}
                                             </td>
                                     </tr>{{/each}}
                                 </tbody>
@@ -282,13 +290,13 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-ticketList">{{each bookingOrder.bookingTicketList as ticketList}}
-                                    <tr data-entity-id="{{ticketList.id}}">
+                                    <tr data-entity-id="{{ticketList.id}}" {{if ticketList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                         <td>
-                                            <input name="ticketName" value="{{if ticketList.ticket != null}}{{ticketList.ticket.name}}{{/if}}" type="text" class="col-sm-12 T-chooseTicket bind-change" />
+                                            <input name="ticketName" value="{{if ticketList.ticket != null}}{{ticketList.ticket.name}}{{/if}}" type="text" class="col-sm-12 {{if !ticketList.isConfirmAccount}}T-chooseTicket{{/if}} bind-change" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input name="ticketId" value="{{if ticketList.ticket != null}}{{ticketList.ticket.id}}{{/if}}" type="hidden" />
                                         </td>
                                         <td>
-                                            <select name="type">
+                                            <select name="type" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}>
                                                 <option {{if ticketList.type==1}}selected="selected" {{/if}} value="1">机票</option>
                                                 <option {{if ticketList.type==2}}selected="selected" {{/if}} value="2">汽车票</option>
                                                 <option {{if ticketList.type==3}}selected="selected" {{/if}} value="3">火车票</option>
@@ -297,33 +305,33 @@
                                         </td>
                                         <!-- <input name="type" value="{{ticketList.type}}" type="text" class="col-sm-12"/> -->
                                         <td>
-                                            <input name="startCity" value="{{ticketList.startCity}}" type="text" class="col-sm-12" maxlength="30" />
+                                            <input name="startCity" value="{{ticketList.startCity}}" type="text" class="col-sm-12" maxlength="30" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="arriveCity" value="{{ticketList.arriveCity}}" type="text" class="col-sm-12" maxlength="30" />
+                                            <input name="arriveCity" value="{{ticketList.arriveCity}}" type="text" class="col-sm-12" maxlength="30" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="shift" value="{{ticketList.shift}}" type="text" class="col-sm-12" maxlength="50" />
+                                            <input name="shift" value="{{ticketList.shift}}" type="text" class="col-sm-12" maxlength="50" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="seatLevel" value="{{ticketList.seatLevel}}" type="text" class="col-sm-12" maxlength="30" />
+                                            <input name="seatLevel" value="{{ticketList.seatLevel}}" type="text" class="col-sm-12" maxlength="30" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <div class="input-group" style="min-width: 165px;">
-                                                <input name="startTime" value="{{ticketList.startTime}}" type="text" class="datetimepicker col-sm-12" />
+                                                <input name="startTime" value="{{ticketList.startTime}}" type="text" class="datetimepicker col-sm-12" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                                 <span class="input-group-addon">
 													<i class="fa fa-clock-o"></i>
 												</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" />
+                                            <input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                                            <input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                                            <input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
@@ -332,10 +340,11 @@
                                             <input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
                                         </td>
                                             <td>
-                                                <input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                                                <input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}>
                                             </td>
-                                            <td>
+                                            <td>{{if !ticketList.isConfirmAccount}}
                                                 <a class="cursor T-action T-ticket-delete">删除</a>
+                                                {{/if}}
                                             </td>
                                     </tr>{{/each}}
                                 </tbody>
@@ -376,35 +385,35 @@
                                     </tr>
                                 </thead>
                                 <tbody class="T-busList">{{each bookingOrder.bookingBusCompanieList as busList}}
-                                    <tr data-entity-id="{{busList.id}}">
+                                    <tr data-entity-id="{{busList.id}}" {{if busList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                         <td>
                                             <div class="input-group">
-                                                <input name="startTime" value="{{busList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
+                                                <input name="startTime" value="{{busList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="input-group">
-                                                <input name="endTime" value="{{busList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
+                                                <input name="endTime" value="{{busList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             </div>
                                         </td>
                                         <td>
-                                            <input name="needSeatCount" value="{{busList.needSeatCount}}" type="text" class="col-sm-12 T-chooseSeatCount bind-change" />
+                                            <input name="needSeatCount" value="{{busList.needSeatCount}}" type="text" class="col-sm-12 {{if !busList.isConfirmAccount}}T-chooseSeatCount{{/if}} bind-change" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="needBusBrand" value="{{busList.needBusBrand}}" type="text" class="col-sm-12 bind-change T-chooseNeedBusBrand" />
+                                            <input name="needBusBrand" value="{{busList.needBusBrand}}" type="text" class="col-sm-12 bind-change {{if !busList.isConfirmAccount}}T-chooseNeedBusBrand{{/if}}" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}} />
                                         </td>
                                         <td>
-                                            <input name="busCompany" value="{{if busList.busCompany != null}}{{busList.busCompany.companyName}}{{/if}}" type="text" class="col-sm-12 bind-change T-busCompany" />
+                                            <input name="busCompany" value="{{if busList.busCompany != null}}{{busList.busCompany.companyName}}{{/if}}" type="text" class="col-sm-12 bind-change {{if !busList.isConfirmAccount}}T-busCompany{{/if}}" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input name="busCompanyId" value="{{if busList.busCompany != null}}{{busList.busCompany.id}}{{/if}}" type="hidden" />
                                         </td>
                                         <td>
-                                            <input name="roomCount" value="{{busList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" />
+                                            <input name="roomCount" value="{{busList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                                            <input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" />
+                                            <input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
@@ -413,10 +422,11 @@
                                             <input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
                                         </td>
                                             <td>
-                                                <input type="text" name="prePayMoney" value="{{busList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9">
+                                                <input type="text" name="prePayMoney" value="{{busList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}>
                                             </td>
-                                            <td>
+                                            <td>{{if !busList.isConfirmAccount}}
                                                 <a class="cursor T-action T-bus-delete">删除</a>
+                                                {{/if}}
                                             </td>
                                     </tr>{{/each}}
                                 </tbody>

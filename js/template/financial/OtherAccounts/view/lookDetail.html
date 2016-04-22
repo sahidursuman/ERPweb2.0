@@ -20,7 +20,7 @@
 			<td>{{item.businessType}}</td>
 			<td class="F-float F-money">{{item.payParty}}</td>
 			<td class="F-float F-money">{{item.payDifferenceMoney}}</td>
-			<td class="F-float F-money">{{item.payType | getPayTypeText}}</td>
+			<td class="F-float F-money">{{if item.payParty == '社付'}}{{item.payType | getPayTypeText}}{{else}}{{item.payType | getPlanPayTypeText}}{{/if}}</td>
 			<td>{{if item.accountName == null || item.accountName == ""}}-{{else}}{{item.accountName}}{{/if}}</td>
 			<td>{{item.remark}}</td> 
 			<td>{{item.checkRealname}}</td>

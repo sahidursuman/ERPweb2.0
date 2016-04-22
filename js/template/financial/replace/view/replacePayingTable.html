@@ -8,8 +8,8 @@
         <td><a class="cursor T-action T-receive-money F-float F-money">{{rs.receiveMoney}}</a></td>
         <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
         <td><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
-        <td><input type="text" class="col-xs-12 T-reciveMoney F-float F-money" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} name="payMoney" value="{{rs.payMoney}}"></td>
-        <td><textarea class="col-sm-12 hct-textarea T-remark" name="payRemark" maxlength="1000" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}}></textarea></td>
+        <td><input type="text" class="col-xs-12 T-reciveMoney F-float F-money" name="payMoney" value="{{rs.payMoney}}"></td>
+        <td><textarea class="col-sm-12 hct-textarea T-remark" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
         <td>{{rs.checkTime}}</td>
         <td>{{rs.checkUserName}}</td>
         <td>

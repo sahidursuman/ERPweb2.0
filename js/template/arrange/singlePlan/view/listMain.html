@@ -2,10 +2,10 @@
     <div class="T-plan-content tripplan-area">
         <form class="T-search-tripPlan-single" role="form" onsubmit="return false">
             <div class="form-group">
-                <button class="btn btn-sm btn-success T-btn-tripPlan-add R-right" data-right="1460002" data-type="0">
+                <button class="btn btn-sm btn-success T-btn-tripPlan-add R-right" type="button" data-right="1460002" data-type="0">
                     <i class="ace-icon fa fa-plus"></i> 新增散客计划
                 </button>
-                <button class="btn btn-sm btn-success T-singlePlan-export innerTr-export">导出游客保险名单</button>
+                <button class="btn btn-sm btn-success T-singlePlan-export innerTr-export" type="button">导出游客保险名单</button>
             </div>
             <div class="form-inline hct-search-area">
                 <div class="form-group" style="margin-left: 24px;">
@@ -22,8 +22,12 @@
                     <input class="form-control datepicker" name="endTime" placeholder="结束时间" style="width:133px;" type="text" />
                 </div>
                 <div class="form-group">
-                    <label>线路产品</label>
-                    <input type="text" name="lineProductName" class="form-control" placeholder="线路产品" style="width: 142px;">
+                    <label>收客单号</label>
+                    <input type="text" name="orderNumber" class="form-control" placeholder="收客单号">
+                </div>
+                <div class="form-group">
+                    <label>责任部门</label>
+                    <input type="text" name="businessGroupName" class="form-control" placeholder="责任部门">
                 </div>
                 <div class="form-group">
                     <label>责任计调</label>
@@ -32,8 +36,8 @@
             </div>
             <div class="form-inline hct-search-area">
                 <div class="form-group">
-                    <label>责任部门</label>
-                    <input type="text" name="businessGroupName" class="form-control" placeholder="责任部门">
+                    <label>线路产品</label>
+                    <input type="text" name="lineProductName" class="form-control" placeholder="线路产品" style="width: 142px;">
                 </div>
                 <div class="form-group">
                     <label>导游</label>
@@ -44,6 +48,10 @@
                     <input type="text" name="licenseNumber" class="form-control" placeholder="车辆">
                 </div>
                 <div class="form-group">
+                    <label>游客</label>
+                    <input type="text" name="contactInfo" class="form-control" placeholder="联系人或联系电话">
+                </div>
+                <div class="form-group" style="width: 180px;">
                     <label>状态</label>
                     <select name="tripPlanStatus" class="form-control">
                         <option value="">全部</option>
@@ -57,8 +65,17 @@
                     </select>
                 </div>
 
-                <div class="form-group mar-1-135">
-                    <button class="btn-sm search-btn T-btn-tripPlan-search" data-type="0">
+                <div class="form-group mar-l-15">
+                    <label >出游日期</label>
+                    <select name="order" id="order_by">
+                        <option value="asc">升序</option>
+                        <option value="desc">降序</option>
+                    </select>
+                    <input type="hidden" name="sortType" value="startTime">
+                </div>
+
+                <div class="form-group mar-l-10">
+                    <button class="btn-sm search-btn T-btn-tripPlan-search" type="submit" data-type="0">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>
                 </div>

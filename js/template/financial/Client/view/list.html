@@ -2,17 +2,25 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label>总社 </label>
-            <input type="text" class="form-control T-search-head-office" style="width: 110px;" value="{{searchParam.headerAgencyName || '全部'}}" maxlength="100">
+            <input type="text" class="form-control T-search-head-office" style="width: 110px;" value="{{searchParam.headerAgencyName}}" maxlength="100" placeholder="所有总社">
         </div>
         <div class="form-group mar-r-10">
             <label>客户 </label>
-            <input type="text" class="form-control T-search-customer" style="width: 110px;" value="{{searchParam.fromPartnerAgencyName || '全部'}}" maxlength="100">
+            <input type="text" class="form-control T-search-customer" style="width: 110px;" value="{{searchParam.fromPartnerAgencyName}}" maxlength="100" placeholder="所有客户">
         </div>
         <div class="form-group mar-r-10">
             <label>账期 </label>
             <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
             <label>&nbsp;至&nbsp;</label>
             <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+        </div>
+        <div class="form-group T-finance-status btn-group mar-r-10">
+            <label>客户类型</label>
+            <select name="partnerAgencyType">
+                <option value="" {{if searchParam.partnerAgencyType == ''}}selected{{/if}}>全部</option>
+                <option value="0" {{if searchParam.partnerAgencyType == 0 && searchParam.partnerAgencyType.length > 0}}selected{{/if}}>组团社</option>
+                <option value="1" {{if searchParam.partnerAgencyType == 1}}selected{{/if}}>组团社和地接社</option>
+            </select>
         </div>
         <div class="form-group T-finance-status btn-group mar-r-10">
             <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
@@ -39,7 +47,33 @@
                 </li>
             </ul>
         </div>
-        <div class="form-group ">
+        <div class="form-group T-money-status btn-group mar-r-10">
+            <button data-value="{{searchParam.unReceivedMoney}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
+                <span>
+                    {{if !searchParam.unReceivedMoney || searchParam.unReceivedMoney === ""}}
+                        全部
+                    {{else if searchParam.unReceivedMoney == 1}}
+                        未收小于零
+                    {{else}}
+                        未收大于零
+                    {{/if}}
+                </span>
+                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                <li><a data-value="0" href="javascript:void(0)">未收大于零</a></li>
+                <li><a data-value="1" href="javascript:void(0)">未收小于零</a></li>
+            </ul>
+        </div>
+
+        <div class="form-group mar-r-10">
+            <select name="orderBy">
+                <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+            </select>
+        </div>
+        <div class="form-group">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
@@ -48,7 +82,7 @@
     <div class="form-inline T-sum-area">
         <div class="form-group mar-r-20">
             <label class="control-label">总人数合计：</label>
-            <label class="control-label F-float F-count T-sumCount"></label>
+            <label class="control-label T-sumCount"></label>
         </div>
         <div class="form-group mar-r-20">
             <label class="control-label">合同金额合计：</label>
@@ -100,8 +134,10 @@
                     <td>{{if rs.checkStep == rs.allRecord}}<span style="color:#00CC00;">{{rs.checkStep}}/{{rs.allRecord}}</span>{{else}}<span style="color:#FF9900;">{{rs.checkStep}}/{{rs.allRecord}}</span>{{/if}}</td>
                     <td>{{if rs.reciveStep == rs.allRecord}}<span style="color:#00CC00;">{{rs.reciveStep}}/{{rs.allRecord}}</span>{{else}}<span style="color:#FF9900;">{{rs.reciveStep}}/{{rs.allRecord}}</span>{{/if}}</td>
                     <td>
+                        <a class="cursor T-action T-view">查看</a>
+                        <label class="cursor R-right" data-right="1280002|1280005"> | </label>
                         <a class="cursor T-action T-checking R-right" data-right="1280002|1280005">对账</a>
-                        <label class="cursor R-right" data-right="1280002|1280005"> <a class="R-right" data-right="1280003"> |</a></label>
+                        <label class="cursor R-right" data-right="1280003"> <a> | </a></label>
                         <a class="cursor T-action T-balance R-right" data-right="1280003">收款</a>
                     </td>
                 </tr>

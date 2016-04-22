@@ -11,7 +11,6 @@
 		<td>
 			{{lineProduct.type}}
 		</td>
-
 		<td>
 			{{if lineProduct.customerType==0}}
 			散客
@@ -19,6 +18,7 @@
 			团体
 			{{/if}}
 		</td>
+		<td>{{if !!lineProduct.businessGroup}}{{lineProduct.businessGroup.name}} {{/if}}</td>
 		<td>
 			<label class="choice-TravelLine-click">
 				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">

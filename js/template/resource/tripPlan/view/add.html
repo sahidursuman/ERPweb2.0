@@ -66,7 +66,7 @@
                         <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
                     </td>
                     <td><span class="fix-w-5">计划预支款:</span>
-                        <input type="text" name="guidePlanAllPreMoney" class="F-float F-money" value="{{basicInfo.guidePlanAllPreMoney}}">
+                        <span class="T-guidePlanAllPreMoney F-float F-money">{{basicInfo.guidePlanAllPreMoney}}</span>
                     </td>
                 </tr>
             </tbody>
@@ -103,8 +103,7 @@
                     <th class="th-border">收客单号</th>
                     <th class="th-border">客户</th>
                     <th class="th-border">线路产品</th>
-                    <th class="th-border">联系人</th>
-                    <th class="th-border">联系电话</th>
+                    <th class="th-border">小组联系人</th>
                     <th class="th-border">人数</th>
                     <th class="th-border">现收团款</th>
                     <th class="th-border">住宿标准</th>
@@ -119,10 +118,9 @@
                 {{if !!touristGroupList}} {{each touristGroupList as group}}
                 <tr data-id="{{group.id}}">
                     <td>{{group.orderNumber}}</td>
-                    <td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
+                    <td name="travelAgencyName" title="{{if group.partnerAgencyContact}}联系人：{{group.partnerAgencyContact.contactRealname}}，电话：{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
                     <td name="lineProductName">{{group.lineProduct.name}}</td>
-                    <td name="contactMemberName">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactRealname}}{{/if}}</td>
-                    <td name="contactMemberMobileNumber">{{if group.partnerAgencyContact}}{{group.partnerAgencyContact.contactMobileNumber}}{{/if}}</td>
+                    <td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}({{group.contactMember.mobileNumber}}){{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
                     <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
                     <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
@@ -132,7 +130,7 @@
                     <td>{{group.sendPosition}}</td>
                     <td name="remark" title={{group.mark}}>{{group.remark}}</td>
                     <td>
-                        <div class="hidden-sm hidden-xs btn-group">
+                        <div class="btn-group">
                             <a class="cursor T-action T-groupView">
                             查看
                         </a>
@@ -148,43 +146,43 @@
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
                 {{if arrangeItemsStauts.guideStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140011">
                     <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="false">导游</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.insuranceStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140012">
                     <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="true">保险</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.busStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140013">
                     <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.restaurantStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140014">
                     <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="false">餐饮</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.hotelStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140015">
                     <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="false">住宿</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.scenicStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140016">
                     <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="false">景区</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.ticketStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140017">
                     <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="false">票务</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.shopStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140018">
                     <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="false">购物</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.selfPayStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019">
                     <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="false">自费</a>
                 </li>
                 {{/if}} {{if arrangeItemsStauts.otherStatus != 0 }}
-                <li class="col-sm-1 no-padding align-center">
+                <li class="col-sm-1 no-padding align-center R-right" data-right="1140020">
                     <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="false">其它</a>
                 </li>
                 {{/if}}
@@ -227,37 +225,39 @@
                             </thead>
                             <tbody>
                                 {{each insuranceList as insurance index}} {{if insurance != "[]" || insurance != null}}
-                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{insurance.id}}{{/if}}">
+                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{insurance.id}}{{/if}}" {{if insurance.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                     <td>
                                         <div class="col-sm-12">
-                                            <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 T-chooseInsurance bind-change" />
+                                            <input type="text" name="insuranceName" maxlength="32" value="{{if insurance.insurance != null}}{{insurance.insurance.name}}{{/if}}" class="col-sm-12 T-chooseInsurance bind-change" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}} />
                                             <input type="hidden" name="insuranceId" value="{{if insurance.insurance != null}}{{insurance.insurance.id}}{{/if}}" />
+                                            {{if !insurance.isConfirmAccount}}
                                             <span class="addResourceBtn T-addInsuranceResource R-right" data-right="1080002" title="添加保险公司">
                                                 <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                             </span>
+                                            {{/if}}
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="text" name="insuranceItem" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.name}}{{/if}}" maxlength="32" class="col-sm-12 T-chooseInsuranceType" />
+                                        <input type="text" name="insuranceItem" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.name}}{{/if}}" maxlength="32" class="col-sm-12 T-chooseInsuranceType" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}} />
                                         <input type="hidden" name="insuranceItemId" value="{{if insurance.insuranceItem }}{{insurance.insuranceItem.id}}{{/if}}">
                                     </td>
                                     <td>
-                                        <input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price F-float F-money" maxlength="8" />
+                                        <input type="text" name="price" value="{{insurance.price}}" class="col-sm-12 price F-float F-money" maxlength="8" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     <td>
-                                        <input type="text" name="memberCount" value="{{if !!insurance.memberCount}}{{insurance.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" class="col-sm-12 F-float F-count" maxlength="8" />
+                                        <input type="text" name="memberCount" value="{{if !!insurance.memberCount}}{{insurance.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" class="col-sm-12 F-float F-count" maxlength="8" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     <td>
-                                        <input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12 F-float F-money" maxlength="9" />
+                                        <input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12 F-float F-money" maxlength="9" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     <td>
-                                        <input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" />
+                                        <input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     </td>
                                     <td>
-                                        <input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500" />
+                                        <input type="text" name="remark" value="{{insurance.remark}}" class="col-sm-12" maxlength="500"{{if insurance.isConfirmAccount}} disabled="disabled" {{/if}} />
                                     </td>
-                                    <td> <a class="cursor T-btn-deleteTripPlanList" data-entity-name="insurance" title="删除"> 删除 </a> </td>
+                                    <td>{{if !insurance.isConfirmAccount}} <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{insurance.financialMoney}}" data-entity-name="insurance" title="删除"> 删除 </a>{{/if}} </td>
                                 </tr>
                                 {{/if}} {{/each}}
                             </tbody>
@@ -281,9 +281,11 @@
                                 <col style="width:120px">
                                 <col style="width:100px">
                                 <col style="width:100px;">
-                                <col style="width:60px;">
-                                <col style="width:80px;">
+                                <col style="width:100px;">
+                                <col style="width:100px;">
                                 <col style="width:110px;">
+                                <col style="width:80px;">
+                                <col style="width:80px;">
                                 <col style="width:80px;">
                                 <col style="width:80px;">
                                 <col>
@@ -291,7 +293,6 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="th-border"><span class="necessary">*</span>指定报账导游</th>
                                     <th class="th-border"><span class="necessary">*</span>开始日期</th>
                                     <th class="th-border"><span class="necessary">*</span>结束日期</th>
                                     <th class="th-border">任务</th>
@@ -299,50 +300,92 @@
                                     <th class="th-border">联系电话</th>
                                     <th class="th-border">导服费</th>
                                     <th class="th-border">管理费</th>
+                                    <th class="th-border">计划预支款</th>
                                     <th class="th-border">备注</th>
                                     <th class="th-border">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{each guideList as guide}} {{if guide != "[]" || guide != null}}
+                                {{each guideList as guide index}} {{if guide != "[]" || guide != null}}
                                 <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}">
                                     <td>
-                                        <input type="radio" name='isAccountGuide' {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} checked="checked" {{/if}} {{if basicInfo.status !=0 }} disabled="disabled" {{/if}}>
+                                        {{if guide.taskJson}}
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
+                                            <input type="text" name="startTime" class="datepicker" value="{{task.sTime | dateFormat:'yyyy-MM-dd'}}">
+                                        </div>
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask" data-index="0">
+                                            <input type="text" name="startTime" class="datepicker" value="">
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
-                                        <input type="text" name="startTime" class="datepicker" value="{{guide.startTime | dateFormat:'yyyy-MM-dd'}}">
+                                        {{if guide.taskJson}}
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{/if}}" data-index="{{i}}">
+                                            <input type="text" name="endTime" class="datepicker" value="{{task.eTime | dateFormat:'yyyy-MM-dd'}}">
+                                        </div>
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask" data-index="0">
+                                            <input type="text" name="endTime" class="datepicker" value="">
+                                        </div>
+                                        {{/if}}
                                     </td>
                                     <td>
-                                        <input type="text" name="endTime" class="datepicker" value="{{guide.endTime | dateFormat:'yyyy-MM-dd'}}">
+                                        {{if guide.taskJson}}
+                                        {{each guide.taskJson as task i}}
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}}mar-t-5{{/if}}" data-index="{{i}}">
+                                        {{#task.tType | getTaskSelect}}
+                                            <label style="float:right; padding-top:0px;">
+                                                <button class="btn btn-sm btn-white {{if i == 0}}btn-success T-add{{else}}btn-danger T-del{{/if}} T-guideBtn">
+                                                    <i class="ace-icon fa {{if i == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i>
+                                                </button>
+                                            </label>
+                                        </div>
+                                        {{/each}}
+                                        {{else}}
+                                        <div class="T-guideAddTask mar-t-5" data-index="0">
+                                        {{#0 | getTaskSelect}}
+                                            <label style="float:right; padding-top:0px;">
+                                                <button class="btn btn-sm btn-white btn-success T-add T-guideBtn">
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </button>
+                                            </label>
+                                        </div>
+                                        {{/if}}
                                     </td>
-                                    <td>{{#guide.taskType | getTaskSelect}}</td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
-                                            <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="w-80 chooseGuide" />
+                                            <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="col-sm-12 chooseGuide" />
                                             <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" />
+                                            {{if !guide.isConfirmAccount}}
                                             <span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                 </span>
+                                            {{/if}}
                                         </div>
                                     </td>
-                                    <!-- <td><input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12"/></td> -->
                                     <td>
                                         <input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12" />
                                     </td>
                                     <td>
-                                        <input type="text" name="price" {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} value="{{guide.price}}" class="w-80 price F-float F-money" {{else}} class="w-80 price hidden" {{/if}} maxlength="9" />
+                                        <input type="text" name="price" value="{{guide.price}}" class="col-sm-12 F-float F-money"maxlength="9" />
                                     </td>
                                     <td>
-                                        <input type="text" name="manageFee" {{if guide.isAccountGuide==1 || basicInfo.isArranged==0 }} value="{{guide.manageFee}}" class="w-80 price F-float F-money" {{else}} class="w-80 price hidden" {{/if}} maxlength="9" />
+                                        <input type="text" name="manageFee" value="{{guide.manageFee}}" class="col-sm-12 F-float F-money" maxlength="9" />
                                     </td>
+                                    <td><input class="F-float F-money" type="text" name="guidePlanPreMoney" value="{{guide.guidePlanPreMoney}}" /></td>
                                     <td>
-                                        <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" />
+                                        <input type="text" name="remark" value="{{guide.remark}}" class="col-sm-12" maxlength="500" {{if guide.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
                                     <td>
                                         {{if (basicInfo.status != 1 || guide.isAccountGuide != 1)}}
-                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="guide" title="删除">
+                                        <a class="cursor {{if !guide.isConfirmAccount}}T-btn-deleteTripPlanList{{else}}gray{{/if}}" data-entity-name="guide" data-entity-ispayed="{{guide.financialMoney}}" title="{{if guide.isConfirmAccount}}财务已对账，不可删除{{else}}删除{{/if}}">
                                                 删除
-                                            </a> {{/if}}
+                                        </a> {{/if}}
                                     </td>
                                 </tr>
                                 {{/if}} {{/each}}
@@ -417,95 +460,104 @@
                                     </thead>
                                     <tbody>
                                         {{each busCompanyList as busCompany}} {{if busCompany != "[]" || busCompany != null}}
-                                        <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}" data-entity-busCompanyId="{{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}}" data-entity-busId="{{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}}" data-entity-offerId="{{busCompany.offerId}}">
+                                        <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}" data-entity-busCompanyId="{{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}}" data-entity-busId="{{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}}" data-entity-offerId="{{busCompany.offerId}}" {{if busCompany.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                             <td>
-                                                <input type="text" name="startTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}">
+                                                <input type="text" name="startTime" class="datepicker T-busPriceC" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}">
                                             </td>
                                             <td>
-                                                <input type="text" name="endTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}">
+                                                <input type="text" name="endTime" class="datepicker T-busPriceC" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}">
                                             </td>
-                                            <td>{{#busCompany.taskType | getTaskSelect:true}}</td>
+                                            <td>{{#busCompany.taskType | getTaskSelect:true, busCompany.isConfirmAccount}}</td>
                                             <td>
-                                                <input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12 F-float F-count" style="width: 60px;" />
+                                                <input type="text" name="needSeatCount" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12" style="width: 60px;" />
                                             </td>
                                             <td>
-                                                <input type="text" name="brand" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.brand}}" class="col-sm-12" />
+                                                <input type="text" name="brand" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.brand}}" class="col-sm-12" />
                                             </td>
                                             <td>
                                                 <div class="col-xs-12 feild-relative">
-                                                    <input type="text" name="licenseNumber" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-xs-12 T-busPriceC" />
+                                                    <input type="text" name="licenseNumber" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-xs-12 T-busPriceC" />
                                                     <input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId" />
+                                                    {{if !busCompany.isConfirmAccount}}
                                                     <span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆">
                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                         </span>
+                                                    {{/if}}
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="col-xs-12 feild-relative">
-                                                    <input type="text" name="companyName" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12" />
+                                                    <input type="text" name="companyName" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12" />
                                                     <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}">
                                                     <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}" />
+                                                    {{if !busCompany.isConfirmAccount}}
                                                     <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                         </span>
+                                                    {{/if}}
                                                 </div>
                                             </td>
                                             <td>
                                                 <input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12" />
                                             </td>
                                             <td>
-                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime}}{{/if}}" {{if busCompany.taskType==6 }}disabled{{/if}}>
+                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime }}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
                                             </td>
                                             <td>
-                                                <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.taskType==6 }}disabled{{/if}}>
+                                                <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
                                             </td>
-                                            <td><a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a></td>
+                                            <td>
+                                            {{if busCompany.isConfirmAccount}}
+                                            <span style="color:#bbb;" class="T-setUp" touristgroup = "{{busCompany.annouceTouristGroupIds}}"></span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a>{{/if}}</td>
                                             <td>
                                                 <div class="col-xs-12 feild-relative">
-                                                    <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12" />
+                                                    <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                                     <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
+                                                    {{if !busCompany.isConfirmAccount}}
                                                     <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
                                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                         </span>
+                                                    {{/if}}
                                                 </div>
                                             </td>
                                             <td>
                                                 <input type="text" name="driverMobileNumber" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-sm-12" />
                                             </td>
                                             <td>
-                                                <input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12" />
+                                                <input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
                                             <td>
-                                                <input type="text" name="price" value="{{busCompany.price}}" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;" />
+                                                <input type="text" name="price" value="{{busCompany.price}}" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;" {{if busCompany.isConfirmAccount}}disabled{{/if}} />
                                                 <input type="hidden" name="memberCount" value="1" />
                                             </td>
                                             <td>
-                                                <input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" />
+                                                <input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
                                             <td>
                                                 <input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12 F-float F-money" />
                                             </td>
                                             <td>
-                                                <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" />
+                                                <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
-                                            <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption}}
-                                                <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" />
-                                            </td>
-                                            <td>
-                                                <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" />
+                                            <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption: busCompany.isConfirmAccount}}
+                                                <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
                                             <td>
-                                                <select name="orderStatus">
+                                                <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                            </td>
+                                            <td>
+                                                <select name="orderStatus" {{if busCompany.isConfirmAccount}}disabled{{/if}}>
                                                     <option value="1" {{if busCompany.orderStatus==1 }}selected="selected" {{/if}}>未预定</option>
                                                     <option value="2" {{if busCompany.orderStatus==2 }}selected="selected" {{/if}}>预定中</option>
                                                     <option value="3" {{if busCompany.orderStatus==3 }}selected="selected" {{/if}}>已预订</option>
                                                     <option value="0" {{if busCompany.orderStatus==0 }}selected="selected" {{/if}}>无需预定</option>
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td>{{if !busCompany.isConfirmAccount}}
                                                 <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
                                                 <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
-                                                <a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a>
+                                                <a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{busCompany.financialMoney}}" title="删除" data-entity-name="busCompany">删除</a>
+                                                {{/if}}
                                             </td>
                                             {{if busCompany.offerId!=null}}
                                             <!-- <td>
@@ -568,10 +620,10 @@
                                 </thead>
                                 <tbody>
                                     {{each restaurantList as restaurant}} {{if restaurant != "[]" || restaurant != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{restaurant.id}}{{/if}}">
-                                        <td class="T-whichDaysContainer" value="{{restaurant.whichDay}}"></td>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{restaurant.id}}{{/if}}" {{if restaurant.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td class="T-whichDaysContainer" value="{{restaurant.whichDay}}" data-isconfirmaccount="{{restaurant.isConfirmAccount}}"></td>
                                         <td>
-                                            <select name="type" class="col-sm-12 T-restauranType" maxlength="9" style="width:80px;">
+                                            <select name="type" class="col-sm-12 {{if !restaurant.isConfirmAccount}}T-restauranType{{/if}}" maxlength="9" style="width:80px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}>
                                                 {{if restaurant.restaurantStandard == null}}
                                                 <option {{if restaurant.type=="早餐" }}selected="selected" {{/if}} value="早餐">早餐</option>
                                                 <option {{if restaurant.type=="午餐" }}selected="selected" {{/if}} value="午餐">午餐</option>
@@ -585,43 +637,46 @@
                                         </td>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 T-chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}" />
+                                                <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 T-chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                                 <input type="hidden" name="restaurantId" value="{{restaurant.restaurantId}}" />
                                                 <input type="hidden" name="optional" value="" />
+                                                {{if !restaurant.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                     </span>
+                                                {{/if}}
                                             </div>
                                         </td>
                                         <td>
                                             <input type="text" name="managerName" readonly="readonly" value="{{if restaurant.isChoose == 1}}-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.managerName}} {{restaurant.restaurant.mobileNumber}}{{/if}}{{/if}}" class="col-sm-12" />
                                         </td>
                                         <td>
-                                            <input type="text" name="price" value="{{restaurant.price}}" class="col-sm-12 T-typeNameChoose F-float F-money" />
+                                            <input type="text" name="price" value="{{restaurant.price}}" class="col-sm-12 {{if !restaurant.isConfirmAccount}}T-typeNameChoose{{/if}} F-float F-money" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                             <input type="hidden" name="restaurantStandardId" value="0" />
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" maxlength="8" value="{{restaurant.memberCount}}" class="col-sm-12 F-float F-count" style="width: 60px;" />
+                                            <input type="text" name="memberCount" maxlength="8" value="{{restaurant.memberCount}}" class="col-sm-12 F-float F-count" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" />
+                                            <input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12 F-float F-money" style="width: 60px;" />
                                         </td>
                                         <td>
-                                            <input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" />
+                                            <input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption}}
-                                            <input name="guidePayMoney" type="text" value="{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money" style="width: 60px;" />
-                                        </td>
-                                        <td>
-                                            <input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12" />
+                                        <td class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption: restaurant.isConfirmAccount}}
+                                            <input name="guidePayMoney" type="text" value="{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">
+                                            <input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
+                                        </td>
+                                        <td>{{if !restaurant.isConfirmAccount}}
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{restaurant.financialMoney}}" data-entity-name="restaurant" title="删除">
                                                     删除
                                                 </a>
+                                            {{/if}}
                                         </td>
                                     </tr>
                                     {{/if}} {{/each}}
@@ -650,7 +705,7 @@
                         <p class="requirementsPlan">原酒店计划要求：{{basicInfo.oldHotelRequire}}</p>{{/if}} {{if basicInfo.nowHotelRequire}}
                         <p class="requirementsPlan">现酒店计划要求：{{basicInfo.nowHotelRequire}}</p>{{/if}}
                         <div class="overflow-x min-w-1050">
-                            <table class="table table-striped table-bordered table-hover table-tripPlan-container w-1400">
+                            <table class="table table-striped table-bordered table-hover table-tripPlan-container w-1500">
                                 <colgroup>
                                     <col style="width:110px">
                                     <col style="width:90px;">
@@ -687,10 +742,10 @@
                                 </thead>
                                 <tbody>
                                     {{each hotelList as hotel}} {{if hotel != "[]" || hotel != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId="{{hotel.hotel.id}}" data-entity-roomId="{{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}} {{/if}}" data-entity-offerId="{{hotel.offerId}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}">
-                                        <td class="T-whichDaysContainer T-whichDays" value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}></td>
+                                    <tr {{if hotel.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}} data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId="{{hotel.hotel.id}}" data-entity-roomId="{{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}} {{/if}}" data-entity-offerId="{{hotel.offerId}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}">
+                                        <td class="T-whichDaysContainer T-whichDays" value="{{hotel.whichDay}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}"  data-isconfirmaccount="{{hotel.isConfirmAccount}}"></td>
                                         <td>
-                                            <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled" {{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
+                                            <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.isConfirmAccount || hotel.qouteId!=null}}disabled="disabled" {{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
                                                 {{if hotel.hotel !=null}}
                                                 <option {{if hotel.hotel.level==0 }}selected="selected" {{/if}} value="">--全部--</option>
                                                 <option {{if hotel.hotel.level==1 }}selected="selected" {{/if}} value="1">三星以下</option>
@@ -702,56 +757,59 @@
                                                 <option {{if hotel.hotel.level==7 }}selected="selected" {{/if}} value="7">五星以上</option>
                                                 {{/if}}
                                             </select>
-                                            <input type="hidden" name="id" value="{{hotel.id}}" />
+                                            <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" />
                                         </td>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="text" class="col-sm-12 T-chooseHotel" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
+                                                <input type="text" class="col-sm-12 {{if !hotel.isConfirmAccount}}T-chooseHotel{{/if}}" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}} />
                                                 <input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}">
+                                                {{if !hotel.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                     </span>
+                                                {{/if}}
                                             </div>
                                         </td>
                                         <td>
                                             <input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}} {{hotel.hotel.mobileNumber}}{{/if}}" />
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12 T-chooseHotelRoom" name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" />
+                                            <input type="text" class="col-sm-12 {{if !hotel.isConfirmAccount}}T-chooseHotelRoom{{/if}}" name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                             <input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}">
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12 price F-float F-money" name="price" maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9" />
+                                            <input type="text" class="col-sm-12 price F-float F-money" name="price" maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12 F-float F-count" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" />
+                                            <input type="text" class="col-sm-12 F-float F-count" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" />
+                                            <input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" class="col-sm-12 F-float F-money" readonly="readonly" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" />
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" />
+                                            <input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500" />
+                                        <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption: hotel.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
-                                            <select name="orderStatus">
+                                            <input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <select name="orderStatus" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}>
                                                 <option {{if hotel.orderStatus==1 }}selected="selected" {{/if}} value="1">未预定</option>
                                                 <option {{if hotel.orderStatus==2 }}selected="selected" {{/if}} value="2">预定中</option>
                                                 <option {{if hotel.orderStatus==3 }}selected="selected" {{/if}} value="3">已预订</option>
                                                 <option {{if hotel.orderStatus==0 }}selected="selected" {{/if}} value="0">无需预订</option>
                                             </select>
                                         </td>
-                                        <td>
+                                        <td>{{if !hotel.isConfirmAccount}}
                                             <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
-                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-name="hotel">删除</a>
+                                            <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{hotel.financialMoney}}" data-entity-name="hotel">删除</a>
+                                            {{/if}}
                                         </td>
                                         <!-- <td>
                                                 {{if hotel.offerId!=null}}
@@ -815,10 +873,10 @@
                                 </thead>
                                 <tbody>
                                     {{each scenicList as scenic}} {{if scenic != "[]" || scenic != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{scenic.id}}{{/if}}">
-                                        <td class="T-whichDaysContainer" value="{{scenic.whichDay}}"></td>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{scenic.id}}{{/if}}" {{if scenic.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td class="T-whichDaysContainer" value="{{scenic.whichDay}}" data-isconfirmaccount="{{scenic.isConfirmAccount}}"></td>
                                         <td>
-                                            <select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;">
+                                            <select name="tourTime" class="col-sm-12 no-padding" style="width: 75px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}>
                                                 <option {{if scenic.tourTime=="全天" }}selected="selected" {{/if}} value="全天">全天</option>
                                                 <option {{if scenic.tourTime=="上午" }}selected="selected" {{/if}} value="上午">上午</option>
                                                 <option {{if scenic.tourTime=="下午" }}selected="selected" {{/if}} value="下午">下午</option>
@@ -826,50 +884,53 @@
                                         </td>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="id" value="{{scenic.id}}" />
-                                                <input type="text" name="name" class="col-sm-12 T-chooseScenic" value="{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}" />
+                                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{scenic.id}}{{/if}}" />
+                                                <input type="text" name="name" class="col-sm-12 {{if !scenic.isConfirmAccount}}T-chooseScenic{{/if}}" value="{{if scenic.scenic !=null}}{{scenic.scenic.name}}{{/if}}" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                                 <input type="hidden" name="scenicId" value="{{if scenic.scenic !=null}}{{scenic.scenic.id}}{{/if}}" />
+                                                {{if !scenic.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addScenicResource R-right" data-right="1060002" title="添加景区">
-                                                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                                                        </span>
+                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                </span>
+                                                {{/if}}
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="chargingProjects" class="col-sm-12 T-chooseScenicItem" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}" />
+                                            <input type="text" name="chargingProjects" class="col-sm-12 {{if !scenic.isConfirmAccount}}T-chooseScenicItem{{/if}}" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.name}}{{/if}}" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input type="hidden" name="scenicItemId" value="{{if scenic.scenicItem !=null}}{{scenic.scenicItem.id}}{{/if}}" />
                                         </td>
                                         <td>
-                                            <input type="text" name="tourDuration" maxlength="3" class="col-sm-12" value="{{scenic.tourDuration}}" style="width: 60px;" />
+                                            <input type="text" name="tourDuration" maxlength="3" class="col-sm-12" value="{{scenic.tourDuration}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{scenic.price}}" style="width: 60px;" />
+                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{scenic.price}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" />
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" />
+                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="orderNumber" maxlength="20" class="col-sm-12" value="{{scenic.orderNumber}}" />
+                                            <input type="text" name="orderNumber" maxlength="20" class="col-sm-12" value="{{scenic.orderNumber}}" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{scenic.needPayMoney}}" style="width: 60px;" />
                                         </td>
                                         <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" />
+                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td class="inline-flex">
-                                            {{#scenic.payType | getPlanPayTypeOption}}
-                                            <input name="guidePayMoney" type="text" class="F-float F-money" value="{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}" maxlength="9" style="width: 60px;" />
+                                            {{#scenic.payType | getPlanPayTypeOption: scenic.isConfirmAccount}}
+                                            <input name="guidePayMoney" type="text" class="F-float F-money" value="{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}" maxlength="9" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500" />
+                                            <input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">
-                                                                                        删除
-                                                                                    </a>
+                                        <td>{{if !scenic.isConfirmAccount}}
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{scenic.financialMoney}}" data-entity-name="scenic" title="删除">
+                                                删除
+                                            </a>
+                                            {{/if}}
                                         </td>
                                     </tr>
                                     {{/if}} {{/each}}
@@ -913,16 +974,18 @@
                             </thead>
                             <tbody>
                                 {{each shopList as shop}} {{if shop != "[]" || shop != null}}
-                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}">
-                                    <td class="T-whichDaysContainer" value="{{shop.whichDay}}"></td>
+                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}" {{if shop.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                    <td class="T-whichDaysContainer" value="{{shop.whichDay}}" data-isconfirmaccount="{{shop.isConfirmAccount}}"></td>
                                     <td>
                                         <div class="col-sm-12">
-                                            <input type="hidden" name="id" value="{{shop.id}}" />
-                                            <input type="text" name="name" class="col-sm-12 T-chooseShop" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" />
+                                            <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{shop.id}}{{/if}}" />
+                                            <input type="text" name="name" class="col-sm-12 {{if !shop.isConfirmAccount}}T-chooseShop{{/if}}" value="{{if shop.shop != null}}{{shop.shop.name}}{{/if}}" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input type="hidden" name="shopId" value="{{if shop.shop != null}}{{shop.shop.id}}{{/if}}" />
+                                            {{if !shop.isConfirmAccount}}
                                             <span class="addResourceBtn T-addShopResource R-right" data-right="1050002" title="添加购物店">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                 </span>
+                                            {{/if}}
                                         </div>
                                     </td>
                                     <td>
@@ -934,31 +997,32 @@
                                     <td>
                                         {{if !!shop.shopArrangeItemSet}} {{if shop.shopArrangeItemSet.length > 0}} {{each shop.shopArrangeItemSet as rs index}}
                                         <div data-entity-id="{{rs.id}}" {{if index> 0}}class="mar-t-10"{{/if}}>
-                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" />
-                                            <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}" />
-                                            <button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.name}}{{/if}}" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}} />
+                                            <input type="hidden" name="shopPolicyId" value="{{if rs.shopPolicy != null}}{{rs.shopPolicy.id}}{{/if}}"/>
+                                            {{if !shop.isConfirmAccount}}<button class="btn {{if  index == 0}}btn-success{{else}}btn-danger{{/if}} btn-sm btn-white T-shopPolicy {{if  index == 0}}T-add{{else}}T-del{{/if}}"> <i class="ace-icon fa {{if  index == 0}}fa-plus{{else}}fa-minus{{/if}} bigger-110 icon-only"></i></button>{{/if}}
                                         </div>
                                         {{/each}} {{else}}
                                         <div data-entity-id="">
-                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input type="hidden" name="shopPolicyId" value="" />
-                                            <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                                            {{if !shop.isConfirmAccount}}<button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>{{/if}}
                                         </div>
                                         {{/if}} {{else}}
                                         <div data-entity-id="">
-                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" />
+                                            <input type="text" name="goodsPolicy" class="col-sm-9 T-chooseGoodsPolicy" value="" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                             <input type="hidden" name="shopPolicyId" value="" />
-                                            <button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>
+                                            {{if !shop.isConfirmAccount}}<button class="btn btn-success btn-sm btn-white T-shopPolicy T-add"> <i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button>{{/if}}
                                         </div>
                                         {{/if}}
                                     </td>
                                     <td>
-                                        <input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" />
+                                        <input type="text" name="remark" class="col-sm-12" value="{{shop.remark}}" maxlength="500" {{if shop.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                     </td>
-                                    <td>
-                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" title="删除">
+                                    <td>{{if !shop.isConfirmAccount}}
+                                        <a class="cursor T-btn-deleteTripPlanList" data-entity-name="shop" data-entity-ispayed="{{shop.financialMoney}}" title="删除">
                                                 删除
                                             </a>
+                                        {{/if}}
                                     </td>
                                 </tr>
                                 {{/if}} {{/each}}
@@ -1014,53 +1078,56 @@
                                 </thead>
                                 <tbody>
                                     {{each selfPayList as selfPay}} {{if selfPay != "[]" || selfPay != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{selfPay.id}}{{/if}}">
-                                        <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}"></td>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{selfPay.id}}{{/if}}" {{if selfPay.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td class="T-whichDaysContainer" value="{{selfPay.whichDay}}" data-isconfirmaccount="{{selfPay.isConfirmAccount}}"></td>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="id" value="{{selfPay.id}}" />
-                                                <input type="text" name="name" class="col-sm-12 T-chooseSelfPay" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}" />
+                                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{selfPay.id}}{{/if}}" />
+                                                <input type="text" name="name" class="col-sm-12 T-chooseSelfPay" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.name}}{{/if}}" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                                 <input type="hidden" name="selfPayId" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.id}}{{/if}}" />
+                                                {{if !selfPay.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addSelfPayResource R-right" data-right="1090002" title="添加自费商家">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                     </span>
+                                                {{/if}}
                                             </div>
                                         </td>
                                         <td>
                                             <input type="hidden" name="selfPayItemId" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.id}}{{/if}}" />
-                                            <input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" />
+                                            <input type="text" name="selfitem" class="col-sm-12 T-chooseSelfitem" value="{{if selfPay.selfPayItem !=null}}{{selfPay.selfPayItem.name}}{{/if}}" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}} {{selfPay.selfPay.mobileNumber}}{{/if}}" />
+                                            <input type="text" name="managerName" readonly="readonly" class="col-sm-12" value="{{if selfPay.selfPay != null}}{{selfPay.selfPay.managerName}} {{selfPay.selfPay.mobileNumber}}{{/if}}" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{if !!selfPay.marketPrice}}{{selfPay.marketPrice}}{{else}}{{selfPay.quotePrice}}{{/if}}" style="width: 60px;" />
+                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{if !!selfPay.marketPrice}}{{selfPay.marketPrice}}{{else}}{{selfPay.quotePrice}}{{/if}}" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}{{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="lowestPrice" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.price}}" style="width: 60px;" />
+                                            <input type="text" name="lowestPrice" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.price}}" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" />
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" />
+                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{selfPay.needPayMoney}}" style="width: 60px;" />
                                         </td>
                                         <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9" />
+                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}" maxlength="9" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" />
+                                        <td class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption: selfPay.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">
+                                            <input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>{{if !selfPay.isConfirmAccount}}
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{selfPay.financialMoney}}" data-entity-name="selfpay" title="删除">
                                                     删除
                                                 </a>
+                                            {{/if}}
                                         </td>
                                     </tr>
                                     {{/if}} {{/each}}
@@ -1121,19 +1188,21 @@
                                 </thead>
                                 <tbody>
                                     {{each ticketList as ticket}} {{if ticket != "[]" || ticket != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{ticket.id}}{{/if}}">
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{ticket.id}}{{/if}}" {{if ticket.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
                                         <td>
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="id" value="{{ticket.id}}" />
-                                                <input type="text" name="name" class="col-sm-12 T-chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" />
+                                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{ticket.id}}{{/if}}" />
+                                                <input type="text" name="name" class="col-sm-12 T-chooseTicket" value="{{if ticket.ticket != null}}{{ticket.ticket.name}}{{/if}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                                 <input type="hidden" name="ticketId" value="{{if ticket.ticket != null}}{{ticket.ticket.id}}{{/if}}">
+                                                {{if !ticket.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                     </span>
+                                                {{/if}}
                                             </div>
                                         </td>
                                         <td>
-                                            <select name="type" class="col-sm-12 no-padding" style="width:70px;">
+                                            <select name="type" class="col-sm-12 no-padding" style="width:70px;" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}>
                                                 <option {{if ticket.type=="1" }}selected="selected" {{/if}} value="1">机票</option>
                                                 <option {{if ticket.type=="2" }}selected="selected" {{/if}} value="2">汽车票</option>
                                                 <option {{if ticket.type=="3" }}selected="selected" {{/if}} value="3">火车票</option>
@@ -1141,45 +1210,46 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" name="startingCity" maxlength="32" class="col-sm-12" value="{{ticket.startingCity}}" />
+                                            <input type="text" name="startingCity" maxlength="32" class="col-sm-12" value="{{ticket.startingCity}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="arriveCity" maxlength="32" class="col-sm-12" value="{{ticket.arriveCity}}" />
+                                            <input type="text" name="arriveCity" maxlength="32" class="col-sm-12" value="{{ticket.arriveCity}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="shift" maxlength="9" class="col-sm-12" value="{{ticket.shift}}" />
+                                            <input type="text" name="shift" maxlength="9" class="col-sm-12" value="{{ticket.shift}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime}}" />
+                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime }}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="seatLevel" maxlength="32" value="{{ticket.seatLevel}}" class="col-sm-12" />
+                                            <input type="text" name="seatLevel" maxlength="32" value="{{ticket.seatLevel}}" class="col-sm-12" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="6" value="{{ticket.price}}" />
+                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="6" value="{{ticket.price}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{ticket.memberCount}}" />
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{ticket.memberCount}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.reduceMoney}}" />
+                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.reduceMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{ticket.needPayMoney}}" />
                                         </td>
                                         <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" />
+                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#ticket.payType | getPlanPayTypeOption}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500" />
+                                        <td class="inline-flex">{{#ticket.payType | getPlanPayTypeOption: ticket.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">
+                                            <input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>{{if !ticket.isConfirmAccount}}
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{ticket.financialMoney}}" data-entity-name="ticket" title="删除">
                                                     删除
                                                 </a>
+                                            {{/if}}
                                         </td>
                                     </tr>
                                     {{/if}} {{/each}}
@@ -1236,43 +1306,44 @@
                                 </thead>
                                 <tbody>
                                     {{each otherList as other}} {{if other != "[]" || other != null}}
-                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}">
-                                        <td class="T-whichDaysContainer" value="{{other.whichDay}}"></td>
+                                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}" {{if other.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td class="T-whichDaysContainer" value="{{other.whichDay}}" data-isconfirmaccount="{{other.isConfirmAccount}}"></td>
                                         <td>
-                                            <input type="hidden" name="id" value="{{other.id}}" />
-                                            <input type="text" maxlength="32" name="name" class="col-sm-12  T-other-name" value="{{other.name}}" />
+                                            <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{other.id}}{{/if}}" />
+                                            <input type="text" maxlength="32" name="name" class="col-sm-12  {{if !other.isConfirmAccount}}T-other-name{{/if}}" value="{{other.name}}" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="managerName" maxlength="332" class="col-sm-12" value="{{other.managerName}}" />
+                                            <input type="text" name="managerName" maxlength="332" class="col-sm-12" value="{{other.managerName}}" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="mobileNumber" class="col-sm-12" value="{{other.mobileNumber}}" maxlength="11" />
+                                            <input type="text" name="mobileNumber" class="col-sm-12" value="{{other.mobileNumber}}" maxlength="11"{{if other.isConfirmAccount}}disabled="disabled"{{/if}} />
                                         </td>
                                         <td>
-                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" value="{{other.price}}" maxlength="6" />
+                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" value="{{other.price}}" maxlength="6" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{other.memberCount}}" maxlength="8" />
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{other.memberCount}}" maxlength="8" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{other.reduceMoney}}" maxlength="9" />
+                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{other.reduceMoney}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{other.needPayMoney}}" maxlength="9" />
                                         </td>
                                         <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{other.prePayMoney}}" maxlength="9" />
+                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{other.prePayMoney}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
-                                        <td class="inline-flex">{{#other.payType | getPlanPayTypeOption}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}" maxlength="9" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" />
+                                        <td class="inline-flex">{{#other.payType | getPlanPayTypeOption: other.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">
+                                            <input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>{{if !other.isConfirmAccount}}
+                                            <a class="cursor T-btn-deleteTripPlanList" data-entity-ispayed="{{other.financialMoney}}" data-entity-name="other" title="删除">
                                                     删除
                                                 </a>
+                                            {{/if}}
                                         </td>
                                     </tr>
                                     {{/if}} {{/each}}

@@ -16,8 +16,8 @@
                 <tr>
                 	<td>{{index+1}}</td>
                 	<td>{{log.operationTime}}</td>
-                	<td>{{log.user.userName}}({{log.user.realName}})</td>
-                	<td>{{if log.type == 1}}保存{{else if log.type == 2}}财务{{else if log.type == 3}}计调{{else if log.type == 4}}退回计调{{else if log.type == 5}}退回导游{{else if log.type == 6}}web报账{{/if}}</td>
+                	<td>{{if !!log.user}}{{log.user.userName}}({{log.user.realName}}){{else}} -- {{/if}}</td>
+                	<td>{{log.type | getLogTypeText}}</td>
                 	<td>{{log.operateJson.info.message}}<span json="{{log.json}}"></span></td>
                 </tr>
                 {{/each}}

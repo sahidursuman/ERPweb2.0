@@ -301,6 +301,9 @@ input.datepicker:not([class^="col-"]) {
 .table tr .btn{
 	position: initial;
 }
+.busCompanyAddSubtractBtn tr .btn{
+	position: absolute;
+}
 .hct-button-right{
 	margin-top: -4px;
     float: right;
@@ -872,6 +875,13 @@ input.datepicker:not([class^="col-"]) {
 		padding-top: 49px;
 	}
 } */
+.breadcrumbs-fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: auto;
+    z-index: 1024;
+}
 /*布局全局变量*/
 .main-content-inner > .page-content{
 	padding: 0;
@@ -902,6 +912,11 @@ input.datepicker:not([class^="col-"]) {
 	width: 80px;
 }
 
+/*导游名字输入框*/
+.w-70 {
+	width: 60px;
+}
+
 /*时间input的宽度*/
 .w-100 {
 	width: 100px;
@@ -912,6 +927,9 @@ input.datepicker:not([class^="col-"]) {
 	width: 150px;
 }
 
+.w-300 {
+	width: 300px;
+}
 .min-w-200 {	
 	min-width: 200px;
 }
@@ -948,6 +966,7 @@ input.datepicker:not([class^="col-"]) {
 .main-content-inner > .page-content,
 .main-content-inner > .page-content > .tab-content{
 	height: 100%;
+	background: #F9FFF9;
 }
 #tabContent{
 	padding: 0;
@@ -961,6 +980,7 @@ input.datepicker:not([class^="col-"]) {
     height: 100%;
     overflow: auto;
 	padding: 20px 20px 15px 25px;
+	background-color: #f9fff9;
 }
 .main-content-inner > .page-content > .tab-content > .tab-pane > *:not(.ui-autocomplete){
 	min-width: 1085px;
@@ -1162,4 +1182,9 @@ input.datepicker:not([class^="col-"]) {
 	.sidebar.responsive+.main-content {
 		padding-left: 0;
 	}
+}
+
+/*字体样式*/
+.text-bold {
+	font-weight: bold;
 }

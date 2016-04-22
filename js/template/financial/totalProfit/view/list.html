@@ -1,10 +1,8 @@
  <div class="row" >
     <form class="form-inline T-search-area" role="form" onsubmit="return false">
-        <div class="form-group mar-r-10">
-            <label>开始时间 </label>
-			<input class="date-picker mar-r-10" name="startTime" value = "{{startDate}}" placeholder="开始日期" type="text" style="width:100px;" />	
-            <label >结束时间 </label>
-            <input class="date-picker mar-r-10" name="endTime" value = "{{endDate}}" placeholder="结束日期"  type="text" style="width:100px;" />	
+        <div class="mar-r-10">
+            <label>单号 </label>
+            <input type="text" class="mar-r-10" name="orderNumber" value="{{orderNumber}}" placeholder="收客单号/代订单号"  type="text" style="width:160px;" /> 
             <label>客户 </label>
             <input type="text" class="T-choosePartner mar-r-10" name="fromPartnerAgencyName" value="{{fromPartnerAgencyName}}" placeholder="客户"  type="text" style="width:100px;" /> 
             <input type="hidden" name="fromPartnerAgencyId" value="{{fromPartnerAgencyId}}" /> 
@@ -20,13 +18,19 @@
                 <option value="receiveProfit">收客利润</option>
                 <option value="booking">代订利润</option>
             </select>
+        </div>
+        <div class="mar-t-10">
+            <label>开始时间 </label>
+            <input class="date-picker mar-r-10" name="startTime" value = "{{startDate}}" placeholder="开始日期" type="text" style="width:100px;" /> 
+            <label >结束时间 </label>
+            <input class="date-picker mar-r-10" name="endTime" value = "{{endDate}}" placeholder="结束日期"  type="text" style="width:100px;" />    
             <button class="btn-height btn-sm search-btn T-search ">
                 <i class="ace-icon fa fa-search"></i>
-             	   搜索
+                   搜索
             </button>
         </div>
     </form>
-    <div class="form-group">
+    <div class="form-group mar-t-10">
         <label class="control-label mar-r-20">收入合计：<span class="income F-float F-money"></span></label>
         <label class="control-label mar-r-20">支出合计：<span class="cost F-float F-money"></span></label>
         <label class="control-label ">毛利合计：<span class="profit F-float F-money"></span></label>

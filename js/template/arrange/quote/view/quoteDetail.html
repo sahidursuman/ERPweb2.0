@@ -20,9 +20,6 @@
                         <span style="margin-left: 20px; ">出游日期：{{quote.startTime | dateFormat:'yyyy-MM-dd'}}</span>
                         <span style="margin-left: 20px; ">出游人数：<span class="F-float F-count">{{quote.adultCount}}</span>大<span class="F-float F-count">{{quote.childCount}}</span>小</span>
                     </p>
-                    <!-- <p style="margin-top: -5px;"><span>导服费：<span class="F-float F-money">￥{{guideQuote.price}}</span></span>
-                        <span style="margin-left: 20px; " class="F-float F-money">管理费：￥{{guideQuote.manageFee}}</span>
-                    </p> -->
                     <table class="whereQ whereTwo quoteTable" style="width: 100%;margin-bottom: 10px;">
                         <tr style="font-weight: bold;background-color: #F3F3F3;">
                             <td class="style-myself"></td>
@@ -46,7 +43,7 @@
                      <!-- 导游 -->
 
                     <p style="margin-left: 55px;">导游：
-                    <span>导服费￥{{guideQuote.quotePrice}}。</span>
+                    <span>导服费￥{{if !!guideQuote}}{{guideQuote.quotePrice}}{{/if}}。</span> 
                     </p>
 
                     <!-- 保险 -->
@@ -59,7 +56,7 @@
                     </div>
                     
                     <!-- 交通 -->
-                    <div style="margin-left: 55px; {{if busCompanyQuote.length == 0}}margin-top: 12px;margin-bottom: 20px;{{/if}}">交通：
+                    <div style="margin-left: 55px; {{if busCompanyQuote.length == 0}}margin-top: 25px;margin-bottom: 20px;{{/if}}">交通：
                     <p style="width: 70%;margin-left: 42px;margin-top: -18px">
                      {{each busCompanyQuote as busCompany}}
                     {{if !!busCompanyQuote}}

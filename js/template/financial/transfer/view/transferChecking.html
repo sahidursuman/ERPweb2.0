@@ -3,7 +3,8 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="search-area T-search-area">
                 <div class="form-group">
-                    <label class="control-label pull-left "> 同行地接：{{partnerAgencyName}}</label>
+                    <label class="control-label pull-left "> 同行地接：</label>
+                    <input type="text" class="mar-r-10" name="partnerAgencyName" value="{{partnerAgencyName}}" />
                     <input value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" type="hidden">
                     <label>账期：</label>
                     <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />
@@ -19,6 +20,28 @@
                     <input name="operateId" type="hidden" value="{{searchParam.operateId}}" />
                     <label>收客单号：</label>
                     <input name="orderNumber" class="mar-r-10" type="text" value="{{searchParam.orderNumber}}" style="width:100px;" />
+                    <label>游客：</label>
+                    <input name="contactInfo" class="mar-r-10" type="text" value="{{searchParam.contactInfo}}" placeholder="联系人或联系电话" style="width:110px;" />
+                    <label>对账状态：</label>
+                    <div class="btn-group T-check-status mar-r-10">
+                        <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                            <span>
+                                {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                                    全部
+                                {{else if searchParam.isConfirmAccount == 1}}
+                                    已对账
+                                {{else}}
+                                    未对账
+                                {{/if}}
+                            </span>
+                            <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                            <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                            <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                        </ul>
+                    </div>
                     <button class=" btn-sm search-btn T-search mar-r-10">
                         <i class="ace-icon fa fa-search"></i>搜索
                     </button>
@@ -63,7 +86,7 @@
             </thead>
             <tbody class="T-checkList" data-right="1300005">
                 {{each financialTransferList as rs}}
-                <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.outFeeList.length> 0}}data-trans="trans"{{/if}}>
+                <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.change}}change="true"{{/if}} {{if rs.outFeeList.length> 0}}data-trans="true"{{/if}}>
                     <td rowspan="{{rs.rowLen}}"><a class="T-option T-orderNumber" data-id="{{rs.arrangeId}}">{{rs.orderNumber}}</a></td>
                     <td rowspan="{{rs.rowLen}}">{{rs.lineProductName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}</td>
@@ -83,16 +106,16 @@
                         <span class="F-float F-money">{{tf.price}}</span> x
                         <span class="F-float F-count">{{tf.count}}</span> =
                         <span class="F-float F-money">{{tf.price * tf.count}}</span>
-                        <br> {{/each}} {{else if rs.otherFeeList.length > 0}}
+                        <br> {{/each}} {{if rs.otherFeeList.length == 0}}<a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{/if}}{{else if rs.otherFeeList.length > 0}}
                         <!-- 若无中转结算价 -->
                         {{each rs.otherFeeList as of index}} {{of.describe}}：
                         <span class="F-float F-money">{{of.price}}</span>x
                         <span class="F-float F-count">{{of.count}}</span>=
                         <span class="F-float F-money">{{of.price * of.count}}</span>
-                        <br> {{/each}} {{else}}
-                        <!-- 若无费用明细 -->- {{/if}}
+                        <br> {{/each}} <a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{else}}
+                        <!-- 若无费用明细 -->- <br><a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>{{/if}}
                     </td>
-                    <td rowspan="{{rs.rowLen}}"><a class="T-option T-payedDetail" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
+                    <td rowspan="{{rs.rowLen}}" class="align-left"><a class="T-option T-payedDetail in-block" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
                     {{if rs.outFeeList.length > 0}}
                     <!-- 若有中转结算价 -->
                     <td>
@@ -114,7 +137,7 @@
                     <td rowspan="{{rs.rowLen}}">{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                     <td rowspan="{{rs.rowLen}}">
                         <label class="pos-rel">
-                            <input type="checkbox" class="ace T-checkbox" {{if rs.isConfirmAccount==1 }}checked="checked" {{/if}} />
+                            <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked" {{/if}} />
                             <span class="lbl">对账</span>
                         </label>
                         <label>|</label>
@@ -123,12 +146,12 @@
                 </tr>
                 {{if rs.outFeeList.length > 0 && rs.otherFeeList.length > 0}}
                 <!-- 若有中转结算价 -->
-                <tr>
+                <tr {{if rs.change}}class="success"{{/if}}>
                     <td>{{each rs.otherFeeList as of}} {{of.describe}}：
                         <span class="F-float F-money">{{of.price}}</span> x
                         <span class="F-float F-count">{{of.count}}</span> =
                         <span class="F-float F-money">{{of.price * of.count}}</span>
-                        <br> {{/each}}
+                        <br> {{/each}}<a data-id="{{rs.id}}" class="cursor T-addFee R-right" data-right="1300006">[费用调整]</a>
                     </td>
                     <td>
                         <input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.punishMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}>

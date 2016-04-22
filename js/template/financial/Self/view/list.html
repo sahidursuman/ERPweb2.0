@@ -3,7 +3,7 @@
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group">
                 <label class="mar-l-10">自费商家 </label>
-                <input type="text" class="T-chooseSelfPay mar-r-10" name="selfPayName" value="{{if searchParam.selfPayName == " "}}全部{{else}}{{searchParam.selfPayName}}{{/if}}" />
+                <input type="text" class="T-chooseSelfPay mar-r-10" name="selfPayName" value="{{searchParam.selfPayName}}" placeholder="所有自费商家"/>
                 <input type="hidden" name="selfPayId" value="{{searchParam.selfPayId}}" />
                 <label >账期 </label>
                 <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
@@ -34,6 +34,10 @@
                         </li>
                     </ul>
                 </div>
+                <select name="orderBy" class="mar-r-10">
+                    <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                    <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+                </select>
                 <button class=" btn-sm search-btn  T-search "> <i class="ace-icon fa fa-search"></i> 搜索 </button>
             </div>
         </form>
@@ -78,7 +82,7 @@
                         <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
                         <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
                         <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
-                        <td class="F-float F-money"><span {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                        <td class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</td>
                         <td>{{if rs.allCheckCount != rs.checkedCount}}
                             <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}} {{if rs.allCheckCount == rs.checkedCount}}
                             <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}}

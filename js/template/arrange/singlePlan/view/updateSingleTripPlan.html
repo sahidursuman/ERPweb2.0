@@ -15,7 +15,7 @@
 			<div class="col-xs-3">
 				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
 				<div class="hct-input-group col-xs-8">
-					<input type="text" name="lineProductName" readonly class="col-xs-12" value="{{tripPlan.lineProduct.name}}">
+					<input type="text" name="lineProductName" data-entity-days="{{tripPlanDay.length}}" readonly class="col-xs-12" value="{{tripPlan.lineProduct.name}}">
 					<input type="hidden" name="lineProductId" value="{{tripPlan.lineProduct.id}}">
 				</div>
 			</div>
@@ -102,6 +102,25 @@
 				<div class="col-xs-11">
 					<textarea class="col-xs-12" name="remark" maxlength="1000">{{tripPlan.remark}}</textarea>
 				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<table class="table table-bordered">
+				    <tbody>
+				        <tr>
+				            <td>计划现收：<span class="F-float F-money">{{tripPlan.guideAllNowMoney}}</span></td>
+				            <td>计划导付：
+								{{if guideDetail.cashMoney}} 现金<span class="F-float F-money">{{guideDetail.cashMoney}}</span>{{/if}}
+								{{if guideDetail.cardMoney}} 刷卡<span class="F-float F-money">{{guideDetail.cardMoney}}</span>{{/if}}
+								{{if guideDetail.signMoney}} 签单<span class="F-float F-money">{{guideDetail.signMoney}}</span>{{/if}}
+								{{if !guideDetail.cashMoney && !guideDetail.cardMoney && !guideDetail.signMoney}}0{{/if}}
+				            </td>
+				            <td>计划预支款：<span class="F-float F-money">{{tripPlan.guidePlanAllPreMoney}}</span></td>
+				        </tr>
+				    </tbody>
+				</table>
 			</div>
 		</div>
 		
@@ -202,8 +221,8 @@
 					<tr>
 						<th class="th-border">收客单号</th>
 						<th class="th-border">外联销售</th>
-						<th class="th-border">客户</th>
 						<th class="th-border">线路产品</th>
+						<th class="th-border">客户</th>
 						<th class="th-border">联系人</th>
 						<th class="th-border">联系电话</th>
 						<th class="th-border">客源地</th>
@@ -225,8 +244,8 @@
 					<tr data-id="{{group.id}}">
 						<td>{{group.orderNumber}}</td>
 						<td name="creatorName">{{if group.outOPUser }}{{group.outOPUser.realName}}{{/if}}</td>
-						<td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td name="lineProductName">{{group.lineProduct.name}}</td>
+						<td name="travelAgencyName">{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}{{/if}}</td>
 						<td name="contactMemberMobileNumber">{{if group.contactMember}}{{group.contactMember.mobileNumber}}{{/if}}</td>
 						<td name="areaData">{{group.areaData}}</td>
@@ -242,7 +261,7 @@
 						<td>{{group.sendPosition}}</td>
 						<td name="remark">{{group.remark}}</td>
 						<td>
-							<div class="hidden-sm hidden-xs btn-group">
+							<div class="btn-group">
 							<a class="cursor T-action T-groupView">
 								查看
 							</a><a class='cursor'> </a>

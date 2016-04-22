@@ -22,13 +22,12 @@
             {{else}}-
             {{/if}}
         </td>
-        <td rowspan="{{checking.rowLen}}"><a href="javascript:void(0)" class="T-viewDetail">社付：<span class="F-float F-money">{{checking.payedMoney}}</span><br></a></td>
+        <td rowspan="{{checking.rowLen}}" class="align-left"><a href="javascript:void(0)" class="T-viewDetail in-block">社付：<span class="F-float F-money">{{checking.payedMoney}}</span><br></a></td>
         <td><span class="F-float F-money">{{checking.punishMoney}}</span></td>
         <td><span class="F-float F-money">{{checking.settlementMoney}}</span></td>
         <td rowspan="{{checking.rowLen}}"><span class="F-float F-money">{{checking.unPayedMoney}}</span></td>
-        <td rowspan="{{checking.rowLen}}"><input name="payMoney" type="text" class="money F-float F-money" value="{{checking.payMoney}}" data-le="{{checking.unPayedMoney}}" 
-        {{if !showBtnFlag && checking.unPayedMoney<= 0}} disabled {{/if}}/></td>
-        <td rowspan="{{checking.rowLen}}"><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if !showBtnFlag && checking.unPayedMoney<= 0}} disabled {{/if}}>{{checking.payRemark}}</textarea></td>
+        <td rowspan="{{checking.rowLen}}"><input name="payMoney" type="text" class="money F-float F-money" value="{{checking.payMoney}}" /></td>
+        <td rowspan="{{checking.rowLen}}"><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{checking.payRemark}}</textarea></td>
         <td rowspan="{{checking.rowLen}}">{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}{{/if}}</td>
         <td rowspan="{{checking.rowLen}}">{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkRealname == null || checking.checkRealname == ""}}-{{else}}{{checking.checkRealname}}{{/if}}{{/if}}</td>
         <td rowspan="{{checking.rowLen}}">

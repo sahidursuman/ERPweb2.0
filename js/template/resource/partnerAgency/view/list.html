@@ -43,8 +43,8 @@
 					<th>客户名称</th>
 					<th>客户类型</th>
 					<th>等级</th>
-					<th>客户所在地区</th>
 					<th>总社</th>
+					<th>所在地区</th>
 					<th>是否启用</th>
 					<th>操作</th>
 				</tr>
@@ -72,8 +72,8 @@
 							铜牌
 							{{/if}}
 						</td>
-						<td>
-							{{if partnerAgency.province != null}}
+						<td>{{if partnerAgency.partnerHeaderAgency!=null}}{{partnerAgency.partnerHeaderAgency.name}}{{/if}}</td>
+						<td>{{if partnerAgency.province != null}}
 								{{partnerAgency.province.name}}
 							{{/if}}
 							{{if partnerAgency.city != null}}
@@ -82,8 +82,7 @@
 							{{if partnerAgency.district != null}}
 								-{{partnerAgency.district.name}}
 							{{/if}}
-						</td>
-						<td>{{if partnerAgency.partnerHeaderAgency!=null}}{{partnerAgency.partnerHeaderAgency.name}}{{/if}}</td>  
+						</td>  
 						<td>{{if partnerAgency.status == 1}}
 							  <i class ="ace-icon fa fa-check green bigger-130"></i> 已启用
 							{{else}}
@@ -91,7 +90,7 @@
 							{{/if}}
 						</td>           
 						<td>
-							<div class="hidden-sm hidden-xs btn-group">
+							<div class="btn-group">
 								<a data-entiy-id="{{partnerAgency.id}}" class="cursor T-action T-partnerAgency-view">
 									查看
 								</a>

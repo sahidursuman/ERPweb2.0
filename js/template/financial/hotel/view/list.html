@@ -2,7 +2,7 @@
     <div class="form-horizontal T-search-area">
         <div class="form-group">
             <label class="mar-l-10">酒店 </label>
-            <input type="text" class="T-chooseHotel mar-r-10" name="hotelName" value="{{if searchParam.hotelName == " "}}全部{{else}}{{searchParam.hotelName}}{{/if}}" />
+            <input type="text" class="T-chooseHotel mar-r-10" name="hotelName" value="{{searchParam.hotelName}}" placeholder="所有酒店"/>
             <input type="hidden" name="hotelId" value="{{searchParam.hotelId}}" />
             <label>账期 </label>
             <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
@@ -33,6 +33,10 @@
                     </li>
                 </ul>
             </div>
+            <select name="orderBy" class="mar-r-10">
+                <option value="asc" {{if searchParam.sortType=='asc'}}selected{{/if}}>升序</option> 
+                <option value="desc" {{if searchParam.sortType=='desc'}}selected{{/if}}>降序</option> 
+            </select>
             <button class="btn-sm T-search search-btn ">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
@@ -78,7 +82,7 @@
                         <td><span class="F-float F-money">{{rs.sumNeedPayMoney}}</span></td>
                         <td><span class="F-float F-money">{{rs.sumSettlementMoney}}</span></td>
                         <td><span class="F-float F-money">{{rs.sumPayedMoney}}</span></td>
-                        <td><span class="F-float F-money">{{rs.sumUnPayedMoney}}</span></td>
+                        <td><span class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</td>
                         <td>{{if rs.allCheckCount != rs.checkedCount}}
                             <span style="color:#ff9900"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}} {{if rs.allCheckCount == rs.checkedCount}}
                             <span style="color:green"> {{rs.checkedCount}}{{"/"}}{{rs.allCheckCount}}</span> {{/if}}

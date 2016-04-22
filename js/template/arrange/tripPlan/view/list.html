@@ -5,16 +5,16 @@
             <col style="width:8%"></col>
             <col style="width:20%"></col>
             <col style="width:130px"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
-            <col style="width:50px;"></col>
+            <col style="width:50px;" class="R-right" data-right="1140011"></col>
+            <col style="width:50px;" class="R-right" data-right="1140013"></col>
+            <col style="width:50px;" class="R-right" data-right="1140012"></col>
+            <col style="width:50px;" class="R-right" data-right="1140014"></col>
+            <col style="width:50px;" class="R-right" data-right="1140015"></col>
+            <col style="width:50px;" class="R-right" data-right="1140016"></col>
+            <col style="width:50px;" class="R-right" data-right="1140017"></col>
+            <col style="width:50px;" class="R-right" data-right="1140018"></col>
+            <col style="width:50px;" class="R-right" data-right="1140019"></col>
+            <col style="width:50px;" class="R-right" data-right="1140020"></col>
             <col style="width:150px;"></col>
             <col style="width:20%;"></col>
         </colgroup>
@@ -24,16 +24,16 @@
                 <th>出游日期</th>
                 <th>客户</th>
                 <th>团队人数</th>
-                <th>导</th>
-                <th>车</th>
-                <th>险</th>
-                <th>餐</th>
-                <th>房</th>
-                <th>景</th>
-                <th>票</th>
-                <th>购</th>
-                <th>娱</th>
-                <th>它</th>
+                <th class="R-right" data-right="1140011">导</th>
+                <th class="R-right" data-right="1140013">车</th>
+                <th class="R-right" data-right="1140012">险</th>
+                <th class="R-right" data-right="1140014">餐</th>
+                <th class="R-right" data-right="1140015">房</th>
+                <th class="R-right" data-right="1140016">景</th>
+                <th class="R-right" data-right="1140017">票</th>
+                <th class="R-right" data-right="1140018">购</th>
+                <th class="R-right" data-right="1140019">娱</th>
+                <th class="R-right" data-right="1140020">它</th>
                 <th style="width:100px;">状态</th>
                 <th style="min-width:230px;">操作</th>
             </tr>
@@ -45,23 +45,27 @@
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
                     <p class="h-lineName">&lt;{{rs.lineProduct.name}}&gt;</p>
                     <p>
-                        {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}
-                        {{if !!rs.dutyOPUser && rs.dutyOPUser.realName}}<span class="h-memberName">责任计调：{{rs.dutyOPUser.realName}}</span>{{/if}}
+                        {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}&nbsp;&nbsp;
+                        {{if !!rs.dutyOPUserName}}<span class="h-memberName">责任计调：{{rs.dutyOPUserName}}</span>{{/if}}
                     </p>
                 </td>
                 <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
-                <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
+                <td style="vertical-align:middle">
+                {{if !!rs.tripPlanDetails && !!rs.tripPlanDetails[0]}}
+                {{rs.tripPlanDetails[0].travelAgencyName}}
+                {{/if}}
+                </td>
                 <td>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant"><i class="ace-icon fa {{rs.restaurantStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel"><i class="ace-icon fa {{rs.hotelStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_scenic"><i class="ace-icon fa {{rs.scenicStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_ticket"><i class="ace-icon fa {{rs.ticketStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
-                <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140011" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140013" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140012" data-target="#tripPlan_addPlan_insurance"><i class="ace-icon fa {{rs.insuranceStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140014" data-target="#tripPlan_addPlan_restaurant"><i class="ace-icon fa {{rs.restaurantStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140015" data-target="#tripPlan_addPlan_hotel"><i class="ace-icon fa {{rs.hotelStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140016" data-target="#tripPlan_addPlan_scenic"><i class="ace-icon fa {{rs.scenicStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140017" data-target="#tripPlan_addPlan_ticket"><i class="ace-icon fa {{rs.ticketStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140018" data-target="#tripPlan_addPlan_shop"><i class="ace-icon fa {{rs.shopStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140019" data-target="#tripPlan_addPlan_selfPay"><i class="ace-icon fa {{rs.selfPayStatus | getArrangeIcon }}"></i></td>
+                <td style="vertical-align:middle" class="R-right" data-right="1140020" data-target="#tripPlan_addPlan_other"><i class="ace-icon fa {{rs.otherStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle">
                     {{if rs.status == 0}}
                     <span style="color: #ff9900;">待发团</span>
@@ -81,7 +85,7 @@
                     <a class="cursor T-action T-view" title="查看">
                         查看
                     </a>
-                    <a class="cursor {{if rs.isEdit == 1 || rs.status == -1}}gray{{else}}T-action T-update{{/if}} R-right" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}编辑{{/if}}" data-right="1140003">
+                    <a class="cursor {{if rs.billStatus != -1 || rs.status == -1}}gray{{else}}T-action T-update{{/if}} R-right" title="{{if rs.billStatus == 0}}导游已报账，不可编辑{{else if rs.billStatus == 1}}计调已审，不可编辑{{else if rs.billStatus == 2}}财务已审，不可编辑{{else}}编辑{{/if}}" data-right="1140003">
                         <label class="padding-right20">|</label>
                         <span>编辑</span>
                     </a>
@@ -89,7 +93,7 @@
                         <label class="padding-right20">|</label>
                         导出
                     </a>
-                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.isEdit == 1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1140004" title="{{if rs.isEdit == 1}}财务审核后已设置不可修改数据，请联系财务{{else}}取消{{/if}}">
+                    <a billStatus="{{rs.billStatus}}" class="cursor {{if rs.billStatus != -1 || rs.status == -1 || rs.status == 2}}gray{{else}}T-action {{if rs.billStatus == -1 || rs.status != -1 && rs.status != 2}}T-cancel{{/if}}{{/if}} R-right" data-right="1140004" title="{{if rs.billStatus == 0}}导游已报账，不可取消{{else if rs.billStatus == 1}}计调已审，不可取消{{else if rs.billStatus == 2}}财务已审，不可取消{{else}}取消{{/if}}">
                         <label class="padding-right20">|</label>
                         <span>取消</span>
                     </a>

@@ -1,6 +1,6 @@
 {{each list as guide}}
-<tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}">
-    <td><p><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></p></td>
+<tr class="T-checkTr {{if guide.change}}success{{/if}}" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{if guide.change}}change="true"{{/if}}> 
+    <td><p><a class="T-action T-gid" data-id="{{guide.tripPlanId}}" data-guidearrangeid = "{{guide.guideArrangeId}}">{{guide.tripNumber}}</a></p></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
     <td>{{if guide.guideAllPreMoney == 0}}
@@ -27,7 +27,7 @@
     <td>{{guide.checkRealName}}</td>
     <td>
         <label class="pos-rel  R-right" {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}>
-            <input type="checkbox" class="ace T-checkbox" {{ if guide.isConfirmAccount }} checked="checked" {{/if}}/> 
+            <input type="checkbox" class="ace T-checkbox" {{ if (guide.change && guide.isChecked == 1) || (!guide.change && guide.isConfirmAccount == 1) }} checked="checked" {{/if}}/> 
             <span class="lbl">对账</span>
         </label>
         <label class="cursor"  {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}> <a data-right="1200003"> |</a></label>

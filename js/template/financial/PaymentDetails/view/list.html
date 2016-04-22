@@ -2,9 +2,9 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label>记账日期</label>
-            <input type="text" class="form-control datepicker T-search-time T-search-start-time" value="{{searchParam.startTime}}" style="width: 80px;">
+            <input name="startTime" type="text" class="form-control datepicker T-search-time T-search-start-time" style="width: 80px;">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control datepicker T-search-time T-search-end-time" value="{{searchParam.endTime}}" style="width: 80px;">
+            <input name="endTime" type="text" class="form-control datepicker T-search-time T-search-end-time" style="width: 80px;">
         </div>
         <div class="form-group mar-r-10">
             <label class="label-inline-60">业务类别</label>
@@ -13,23 +13,24 @@
                 <option value="0">收入</option>
                 <option value="1">支出</option>
             </select>
-        </div> 
+        </div>
+        <div class="form-group mar-r-10">
+            <label class="label-inline-30">金额</label>
+            <input name="price" type="text" class="form-control T-searchPrice" placeholder="收付款金额" style="width: 80px;">
+        </div>
         <div class="form-group mar-r-10">
             <label>对方单位</label>
-            <input type="text" class="form-control T-resourceName" name="resourceName" value="{{searchParam.resourceName}}" placeholder="对方单位" style="width: 100px;">
+            <input name="resourceName" type="text" class="form-control T-resourceName" placeholder="对方单位" style="width: 100px;">
         </div>
         <div class="form-group mar-r-10">
             <label>主营业务收支类别</label>
-            <select class="form-control T-search-category" style="width: 100px;">
+            <select name="receivableTypeId" class="form-control T-search-category" style="width: 100px;">
                 <option value="">全部</option>
-                {{each receivableTypes as rs}}
-                <option value="{{rs.id}}">{{rs.name}}</option>
-                {{/each}}                                                   
             </select>
         </div>
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
-                <i class="ace-icon fa fa-search"></i> 搜索 
+                <i class="ace-icon fa fa-search"></i> 搜索
             </button>
         </div>
         <div class="form-group">
@@ -41,47 +42,49 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group  mar-r-10">
             <label>会计科目</label>
-            <select class="form-control T-search-subject" style="width:88px">
+            <select name="subjectId" class="form-control T-search-subject" style="width:88px">
                 <option value="">全部</option>
             </select>
         </div>
         <div class="form-group mar-r-10">
             <label>凭证编号</label>
-            <input type="text" class="form-control T-search-voucher" name="voucher" value="{{searchParam.resourceName}}" placeholder="凭证编号" style="width: 150px;">
+            <input name="voucher" type="text" class="form-control T-search-voucher" name="voucher" placeholder="凭证编号" style="width: 150px;">
         </div>
-    
         <div class="form-group mar-r-10">
             <label>支付方式</label>
-            <select class="form-control T-search-payment" style="width: 100px;">
+            <select class="form-control T-search-payment" name="sumPayType" style="width: 100px;">
                 <option value="">全部</option>
-                <option value="0" {{if searchParam.payType == 0}}selected="selected"{{/if}}>现金</option>
-                <option value="1" {{if searchParam.payType == 1}}selected="selected"{{/if}}>银行转账</option>
-                <option value="3" {{if searchParam.payType == 3}}selected="selected"{{/if}}>支票</option>
-                <option value="4" {{if searchParam.payType == 4}}selected="selected"{{/if}}>其他</option>
-                <option value="5" {{if searchParam.payType == 5}}selected="selected"{{/if}}>网付</option>
+                {{#payType | getPayTypeOptions:0,1}}
             </select>
         </div>
         <div class="form-group mar-r-10 T-cash-area hidden">
             <label class="control-label">现金账号</label>
             <label class="control-label">
-                <input type="text" name="cash-number" {{if searchParam.payType == 0}}value="{{searchParam.resourceName}}"{{/if}} class="money" style="width:300px;">
-                <input type="hidden" name="cash-id" {{if searchParam.payType == 0}}value="{{searchParam.bankId}}"{{/if}}/>
+                <input type="text" name="cash-number" class="form-control T-cash-number" {{if payType == 0}}value="{{bankName}}"{{/if}} style="width:300px;">
+                <input type="hidden" name="cash-id" {{if payType == 0}}value="{{bankId}}"  data-defaultValue="{{bankId}}"{{/if}}/>
             </label>
         </div>
-        <div class="form-group mar-r-10 hidden">
+        <div class="form-group mar-r-10 T-card-area hidden">
             <label>银行账号</label>
-            <input type="text" class="form-control T-card-number" name="card-number" {{if searchParam.payType != 0}}value="{{searchParam.resourceName}}"{{/if}} style="width: 300px;">
-            <input type="hidden" name="card-id" class="T-bankId" {{if searchParam.payType != 0}}value="{{searchParam.bankId}}"{{/if}}>
-            <input type="hidden" name="beginningBalance" class="T-beginningBalance" value="{{searchParam.beginningBalance}}">
-            <input type="hidden" name="tally-date" class="datepicker" value="{{searchParam.bankId}}">
+            <input type="text" class="form-control T-card-number" name="card-number" {{if payType == 1}}value="{{bankName}}"{{/if}}  style="width: 300px;">
+            <input type="hidden" name="card-id" class="T-bankId"  {{if payType == 1}}value="{{bankId}}" data-defaultValue="{{bankId}}"{{/if}}>
+            <!-- 记账日期,冗余 -->
+            <input type="hidden" name="tally-date" class="datepicker">
         </div>
-        <div class="form-group mar-r-10">
-            <label>收款合计：</label>
-            <label class="T-incomeMoney F-float F-money">{{total.incomeMoney}}</label>
-        </div>
-        <div class="form-group mar-r-10">
-            <label>付款合计：</label>
-            <label class="T-payMoney F-float F-money">{{total.payMoney}}</label>
+        <input type="hidden" name="beginningBalance" class="T-beginningBalance" value="{{beginningBalance}}">
+        <div class="form-group T-summary-area">
+            <span>
+                <label>收款合计：</label>
+                <label class="T-incomeMoney F-float F-money">0</label>
+            </span>
+            <span>
+                <label>付款合计：</label>
+                <label class="T-payMoney F-float F-money">0</label>
+            </span>
+            <span>
+                <label>合计：</label>
+                <label class="T-sumMoney F-float F-money">0</label>
+            </span>
         </div>
     </form>
 </div>
@@ -106,12 +109,11 @@
             </tr>
         </thead>
         <tbody class="T-list">
-        
         </tbody>
     </table>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small class="T-sumItem">没有查询到相关记录</small>
+            <small class="T-sumItem"></small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">

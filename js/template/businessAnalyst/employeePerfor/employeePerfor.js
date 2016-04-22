@@ -2,369 +2,290 @@
  * 员工部门的查询&&列表的显示
  */
 define(function(require, exports) {
-	var menuKey = "business_analyst_employeePerfor",
+    var menuKey = "business_analyst_employeePerfor",
         listMainTemplate = require("./view/listMain"),
-        listDeptTemplate=require("./view/listDept"),
-        listEmployTemplate=require("./view/listEmploy"),
-        listSalePerforTemplate=require("./view/listSalePer"),
-        tabId="tab-"+menuKey+"-content";
+        listDeptTemplate = require("./view/listDept"),
+        listEmployTemplate = require("./view/listEmploy"),
+        listSalePerforTemplate = require("./view/listSalePer");
     /**
-	 * 定义产品销量管理对象
-	 * @type {Object}
-	 */
-	var employeePerforObj={
-		searchData:false,
-		$searchArea:false,
-		$tab:false,
-		$searchParam:{
-			startTime:"",
-			endTime:"",
-			type:"",
-			customerType:"",
-			partnerAgencyType:"",
-			pageNo:""
-		}
-	};
-
-	/**
-	 * 员工业绩页面初始化的方法
-	 * @return {[type]} [description]
-	 */
-	employeePerforObj.initModule=function(){
-		employeePerforObj.listemployeePerfor();
-	};
-
-	//产品销量页面list
-	employeePerforObj.listemployeePerfor=function(){
-	    var html=listMainTemplate();
-		addTab(menuKey,"员工业绩",html);
-		employeePerforObj.initJQueryDateObj();
-		//初始化页面绑定事件
-		employeePerforObj.init_event();
-		employeePerforObj.first = true;
+     * 定义产品销量管理对象
+     * @type {Object}
+     */
+    var PerformanceFun = {
+        searchData: false,
+        $searchArea: false,
+        $tab: false,
     };
 
-	/**
-	 * 初始化JQuery对象&&页面控件
-	 * @return {[type]} [description]
-	 */
-	employeePerforObj.initJQueryDateObj=function(){
-		  //初始化Jquery对象
-		  employeePerforObj.$tab=$('#' + tabId);//最大区域模块
-		  employeePerforObj.$searchArea=employeePerforObj.$tab.find('.T-search-area');//搜索模块区域
-		  //初始化页面控件
-		  employeePerforObj.datepicker(employeePerforObj.$tab);
-	};
+    /**
+     * 员工业绩页面初始化的方法
+     * @return {[type]} [description]
+     */
+    PerformanceFun.initModule = function() {
+        PerformanceFun.listemployeePerfor();
+    };
 
- 
+    //产品销量页面list
+    PerformanceFun.listemployeePerfor = function() {
+        var html = listMainTemplate();
+        Tools.addTab(menuKey, "员工业绩", html);
+        //初始化页面绑定事件
+        PerformanceFun.init_event();
+        PerformanceFun.first = true;
+    };
+
     /**
      * 初始化页面绑定事件
      * @return {[type]} [description]
      */
-    employeePerforObj.init_event=function(){
-	  
+    PerformanceFun.init_event = function() {
+        var $tab = $('#tab-' + menuKey + '-content'),
+            $searchArea = $tab.find('.T-search-area'),
+            $personType = $searchArea.find('.T-select-opUserList'),
+            $childDepartment = $searchArea.find('.T-childrenDepartment');
+        $status = $searchArea.find('.T-status');
 
-    	//搜索按钮绑定事件
-    	employeePerforObj.$tab.find('.T-employeePerfor-search').on('click', function(event) {
-    		event.preventDefault();
-    		//初始化页面后可以获取页面参数
-		   	var startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
-		   	    endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-		   	    type=employeePerforObj.$tab.find('button').attr('data-value'),
-		   	    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
-		   	    partnerAgencyType = employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value');
-		   	    opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');
-		   	    if (type==1 && opUserType==0) {
-		   	    	employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
-		   	    };
-		   	    if (type==1 && opUserType==1) {
-		   	    	employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
-		   	    };
-		   	    if (type==2) {
-		   	    	employeePerforObj.getListEmpDept(startTime,endTime,type,customerType,partnerAgencyType,0);
-		   	    };
-    	}); 	
-    	//trigger事件
-    	employeePerforObj.$tab.find('.T-employeePerfor-search').trigger('click');
+        // 初始化日期绑定
+        Tools.setDatePicker($searchArea.find('.datepicker'), true);
 
-    	//员工部门之间选项切换
-		employeePerforObj.$tab.find('.T-select-employeerDept').on('click', 'a', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $that=$(this),customerType,partnerAgencyType,opUserType,startTime,endTime;
-			$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
-			$that.closest('ul').prev().attr('data-value');
-			startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
-		   	endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			customerType = employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
-			partnerAgencyType =employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value'); //客户类型
-			if ($that.closest('ul').prev().attr('data-value')==1) {//员工
-				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
-				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
-				opUserType = employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');//责任计调
-				if (opUserType==0) { //责任计调
-				    employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				    employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-					employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,0);
-				};
-				if (opUserType==1) { //外联计调--销售业绩
-					employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				    employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
-					employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
-				};
-			} else{//部门
+        $searchArea.find('.T-select-employeerDept').on('change', function(event) {
+            event.preventDefault();
+            var index = 2;  // 默认第三个模板
 
-				console.log("customerType"+customerType)
-				employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
-				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.$tab.find('.T-select-opUserList').addClass('hide');
-				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,partnerAgencyType,0);
-			};
-		});
+            switch ($(this).val()*1) {
+                case 1: // 员工
+                    $status.add($childDepartment).addClass('hidden');
+                    $personType.removeClass('hidden');
 
-		//针对客源 
-		employeePerforObj.$tab.find('.T-select-customerType').on('click', 'a', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
-			var isEmployee = $that.closest('div').prev('div').children('button').attr('data-value')
-				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
-		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value'),
-			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').attr('data-value');
-			if (isEmployee==1) {
-				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
-				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
-				var opUserType=employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');
-				if (opUserType==0) { //责任计调
-					employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				    employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-					employeePerforObj.getListEmpDept(startTime,endTime,1,$that.data('value'),partnerAgencyType,0);
-				};
-				if (opUserType==1) { //外联计调--销售业绩
-					employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				    employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
-					employeePerforObj.getListEmpDept(startTime,endTime,3,$that.data('value'),partnerAgencyType,0);
-				};
-			}else if(isEmployee==2){//部门--无责任计调
-			    employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
-				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.$tab.find('.T-select-opUserList').addClass('hide');
-				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept(startTime,endTime,2,$that.data('value'),partnerAgencyType,0);
-			};
-			   
-		});
+                    index = 0;
+                    if ($personType.val() === '0') {
+                        index = 1;
+                    }
+                    break;
+                case 2: // 部门
+                    $status.add($childDepartment).removeClass('hidden');
+                    $personType.addClass('hidden');
+                    PerformanceFun.setChildDepartmentList($childDepartment);
+                    break;
+                case 3: // 子部门
+                    $personType.add($childDepartment).addClass('hidden');
+                    $status.removeClass('hidden');
+                    break;
+                default:
+                    break;
+            }
 
+            var $current = $tab.find('.table-area').children().addClass('hidden').eq(index).removeClass('hidden');
 
-		//客户类型
-		employeePerforObj.$tab.find('.T-select-partnerAgencyType').on('click', 'a', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
-				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
-		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			    partnerAgencyType=$that.data('value'),
-			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value'),
-			    isEmployee=employeePerforObj.$tab.find('.T-select-employeerDept').children('button').attr('data-value');
-			if (isEmployee==1) {
-				employeePerforObj.$tab.find('.T-select-opUserList').removeClass('hide');
-				employeePerforObj.$tab.find('.T-deptPerfor-list').addClass('hide');
-				var opUserType=employeePerforObj.$tab.find('.T-select-opUserList').children('button').attr('data-value');
-				if (opUserType==0) { //责任计调
-					employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				    employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-					employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,0);
-				};
-				if (opUserType==1) { //外联计调--销售业绩
-					employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				    employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
-					employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
-				};
-			}else if(isEmployee==2){//部门--无责任计调
-			    employeePerforObj.$tab.find('.T-deptPerfor-list').removeClass('hide');
-				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.$tab.find('.T-select-opUserList').addClass('hide');
-				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-				employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,partnerAgencyType,0);
-			};
-		});
+            if (index === 2 || !$current.hasClass('hasData')) {
+            	PerformanceFun.getList();
+            }
+        });
 
-		//责任计调
-		employeePerforObj.$tab.find('.T-select-opUserList').on('click', 'a', function(event) {
-			event.preventDefault();
-			/* Act on the event */
-			var $that=$(this);$that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text()),
-				startTime=employeePerforObj.$tab.find("input[name=startTime]").val(),
-		   		endTime=employeePerforObj.$tab.find('input[name=endTime]').val(),
-			    partnerAgencyType=employeePerforObj.$tab.find('.T-select-partnerAgencyType').children('button').attr('data-value'),
-			    customerType=employeePerforObj.$tab.find('.T-select-customerType').children('button').attr('data-value');
-			if ($that.data('value')==0) {//责任计调
-				employeePerforObj.$tab.find('.T-salePerfor-list').addClass('hide');
-				employeePerforObj.$tab.find('.T-employeePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,0); 
-			}else{//外联计调--销售业绩
-				employeePerforObj.$tab.find('.T-employeePerfor-list').addClass('hide');
-				employeePerforObj.$tab.find('.T-salePerfor-list').removeClass('hide');
-				employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,0);
-			};
-		});
+        PerformanceFun.$tab = $tab;
+        PerformanceFun.$form = $searchArea;
+
+        // 搜索
+        $searchArea.find('.T-search').on('click', function(event) {
+            event.preventDefault();
+            PerformanceFun.getList();
+        }).trigger('click');
     };
 
-    employeePerforObj.getListEmpDept=function(startTime,endTime,type,customerType,partnerAgencyType,page){
-    		employeePerforObj.$searchParam.startTime=startTime;
-    		employeePerforObj.$searchParam.endTime=endTime;
-    		employeePerforObj.$searchParam.type=type;
-    		employeePerforObj.$searchParam.customerType=customerType;
-    		employeePerforObj.$searchParam.partnerAgencyType=partnerAgencyType;
-    		employeePerforObj.$searchParam.pageNo=page;
-	
-	    	if (type==1) {
-	    		$.ajax({
-	    			url : KingServices.build_url("performanceOfUser","findUserPager"),
-					type : "POST",
-					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
-					success : function(data){
-						var result = showDialog(data);
-						if(result){
-						   var html=listEmployTemplate(data);
-						   employeePerforObj.$tab.find('.T-employeePerfor-list').html(html);
-						   employeePerforObj.initFindUserTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
-						   // 绑定翻页组件
-							laypage({
-							    cont: employeePerforObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-							    pages: data.searchParam.totalPage, //总页数 
-							    curr: (page + 1),
-							    jump: function(obj, first) {
-							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							    		employeePerforObj.getListEmpDept(startTime,endTime,1,customerType,partnerAgencyType,obj.curr -1);
-							    	}
-							    }
-							});
-						}
-					}
-				});
+    PerformanceFun.getList = function(page) {
+        var args = PerformanceFun.$form.serializeJson(),
+            url, template, method, index = 0, totalFun,
+            childGroupSearchMethod = 'findByChildGroup';
 
-	    	}
-	    	if(type==2){
-	    		$.ajax({
-	    			url : KingServices.build_url("performanceOfUser","findTotalByBusinessGroup"),
-					type : "POST",
-					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
-					success : function(data){
-						var result = showDialog(data);
-						if(result){
-						   var html=listDeptTemplate(data);
-						   employeePerforObj.$tab.find('.T-deptPerfor-list').html(html);
-						   employeePerforObj.initFindBusinessGroupTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
-						   // 绑定翻页组件
-							laypage({
-							    cont: employeePerforObj.$tab.find('.T-listDept-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-							    pages: data.searchParam.totalPage, //总页数 
-							    curr: (page + 1),
-							    jump: function(obj, first) {
-							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							    		employeePerforObj.getListEmpDept(startTime,endTime,2,customerType,partnerAgencyType,obj.curr -1);
-							    	}
-							    }
-							});
-						   
-						}
-					}
+        switch (args.object * 1) {
+            case 1:
+                delete args.businessGroupId;
+                delete args.billStatus;
+                method = 'findDutyOPPager';
 
-				});
-	    	};
+                template = listEmployTemplate;
+                totalFun = PerformanceFun.initFindUserTotal;
+                if (args.type == 3) { // 外联销售
+                    template = listSalePerforTemplate;
+                    totalFun = PerformanceFun.initFindTotal;
+                    method = 'findOutOPPager';
+                    index = 1;
+                }
+                break;
+            case 2:
+                if (!method) {
+                    method = 'findByBusinessGroup';
+                    if (!!args.businessGroupId) {
+                        method = childGroupSearchMethod;
+                    }
+                }
 
-	    	if(type==3){
-	    		$.ajax({
-	    			url : KingServices.build_url("performanceOfUser","findPager"),
-					type : "POST",
-					data : "searchParam="+encodeURIComponent(JSON.stringify(employeePerforObj.$searchParam)),
-					success : function(data){
-						var result = showDialog(data);
-						if(result){
-						   var html=listSalePerforTemplate(data);
-						   employeePerforObj.$tab.find('.T-salePerfor-list').html(html);
-						   employeePerforObj.initFindTotal(employeePerforObj.$searchParam, employeePerforObj.$tab);
-						   // 绑定翻页组件
-							laypage({
-							    cont: employeePerforObj.$tab.find('.T-listSalePer-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-							    pages: data.searchParam.totalPage, //总页数 
-							    curr: (page + 1),
-							    jump: function(obj, first) {
-							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							    		employeePerforObj.getListEmpDept(startTime,endTime,3,customerType,partnerAgencyType,obj.curr -1);
-							    	}
-							    }
-							});
-						   
-						}
-					}
+                template = listDeptTemplate;
+                index = 2;
+                break;
+            case 3:
+                method = childGroupSearchMethod;
+                delete args.businessGroupId;
+                template = listDeptTemplate;
+                index = 2;
+                break;
+            default:
+                return;
+        }
 
-				});
-	    	};
-    };
+        args.object;
+        args.pageNo = page || 0;
 
+        $.ajax({
+            url: KingServices.build_url('performanceOfUser', method),
+            type: 'post',
+            dataType: 'json',
+            data: {
+            	searchParam: JSON.stringify(args)
+            },
+        })
+        .done(function(data) {
+            if (showDialog(data)) {
+                data.isChildGroup = method === childGroupSearchMethod;
+                //累加数据初始化
+                data.getAdultCount=0;
+                data.getChildCount=0;
+                data.getNotDirectAdultCount=0;
+                data.getNotDirectChildCount=0;
+                data.tripCount=0;
+                data.adultCount=0;
+                data.childCount=0;
+                data.transAdultCount=0;
+                data.transChildCount=0;
+                data.innerAdultCount=0;
+                data.innerChildCount=0;
+                data.orderCount=0;
+                var $container = PerformanceFun.$tab.find('.table-area').children().addClass('hidden')
+                .eq(index).html(template(data)).removeClass('hidden').addClass('hasData');
+
+                if (!!totalFun) {
+                    totalFun(args);
+                }
+                laypage({
+                    cont: $container.find('.T-pagenation'),
+                    pages: data.searchParam.totalPage, //总页数
+                    curr: (data.searchParam.pageNo + 1),
+                    jump: function(obj, first) {
+                        if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+                            PerformanceFun.getList(obj.curr -1);
+                        }
+                    }
+                }); 
+            }
+        });
+    }
 
     //外联销售统计
-     employeePerforObj.initFindTotal=function($searchParams, $tab){
-     	$.ajax({
-     		url: KingServices.build_url("performanceOfUser","totalFindPager"),
-     		type: 'POST',
-		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
-     	})
-     	.done(function(data) {
-     		//var totalCount=data.adultCount*1+data.childCount*1;
-     		$tab.find('.T-totalCount').text(data.adultCount+"大"+data.childCount+"小");
-     	})
-     }
+    PerformanceFun.initFindTotal = function(args) {
+        $.ajax({
+                url: KingServices.build_url("performanceOfUser", "sumFindOutOP"),
+                type: 'POST',
+                showLoading: false,
+                data: "searchParam=" + encodeURIComponent(JSON.stringify(args)),
+            })
+            .done(function(data) {
+                var adultCount = data.adultCount || 0, 
+                    childCount = data.childCount || 0;
+                PerformanceFun.$tab.find('.T-totalCount').text(adultCount + "大" + childCount + "小");
+            })
+    }
 
     //员工业绩统计
-    employeePerforObj.initFindUserTotal=function($searchParams, $tab){
-     	$.ajax({
-     		url: KingServices.build_url("performanceOfUser","totalFindUserPager"),
-     		type: 'POST',
-		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
-     	})
-     	.done(function(data) {
-     		$tab.find('.T-tripTotalCount').text(data.tripCount);
-     		$tab.find('.T-adChilTotalCount').text(data.adultCount+"大"+data.childCount+"小");
-     		$tab.find('.T-transAdChilTotalCount').text(data.transAdultCount+"大"+data.transChildCount+"小");
-     		$tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount+"大"+data.innerChildCount+"小");
-     		$tab.find('.T-orderTotalCount').text(data.orderCount);
-     	})
-     }
+    PerformanceFun.initFindUserTotal = function(args) {
+        $.ajax({
+                url: KingServices.build_url("performanceOfUser", "sumFindDutyOP"),
+                type: 'POST',
+                showLoading: false,
+                data: "searchParam=" + encodeURIComponent(JSON.stringify(args)),
+            })
+            .done(function(data) {
+            	var $tab = PerformanceFun.$tab;
+                $tab.find('.T-tripTotalCount').text(data.tripCount);
+                $tab.find('.T-adChilTotalCount').text(data.adultCount + "大" + data.childCount + "小");
+                $tab.find('.T-transAdChilTotalCount').text(data.transAdultCount + "大" + data.transChildCount + "小");
+                $tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount + "大" + data.innerChildCount + "小");
+                $tab.find('.T-orderTotalCount').text(data.orderCount);
+            })
+    }
 
 
     //部门统计
-    employeePerforObj.initFindBusinessGroupTotal=function($searchParams, $tab){
-     	$.ajax({
-     		url: KingServices.build_url("performanceOfUser","totalFindTotalByBusinessGroup"),
-     		type: 'POST',
-		    data : "searchParam="+encodeURIComponent(JSON.stringify($searchParams)),
-     	})
-     	.done(function(data) {
-     		$tab.find('.T-tripTotalCount').text(data.tripCount);
-     		$tab.find('.T-tripAdChildCount').text(data.adultCount+"大"+data.childCount+"小");
-     		$tab.find('.T-sumAdultCount').text(data.getAdultCount+"大"+data.getChildCount+"小");
-     		$tab.find('.T-transAdChilTotalCount').text(data.transAdultCount+"大"+data.transChildCount+"小");
-     		$tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount+"大"+data.innerChildCount+"小");
-     		$tab.find('.T-orderTotalCount').text(data.orderCount);
-     	})
+    PerformanceFun.initFindBusinessGroupTotal = function(args) {
+    	var method = 'sumFindByChildGroup';
+
+        if (!!args.object && args.object==2 && !!args.businessGroupId) {
+            method = 'sumFindByChildGroup';
+        }else if (!!args.object && args.object==2 && !args.businessGroupId) {
+            method = 'sumFindByBusinessGroup';
+        }
+
+        $.ajax({
+                url: KingServices.build_url("performanceOfUser", method),
+                type: 'POST',
+                data: "searchParam=" + encodeURIComponent(JSON.stringify(args)),
+            })
+            .done(function(data) {
+            	var $tab = PerformanceFun.$tab;
+
+                $tab.find('.T-tripTotalCount').text(data.tripCount);
+                $tab.find('.T-tripAdChildCount').text(data.adultCount + "大" + data.childCount + "小");
+                $tab.find('.T-tripNotDirectAdChildCount').text(data.getNotDirectAdultCount + "大" + data.getNotDirectChildCount + "小");
+                $tab.find('.T-sumAdultCount').text(data.getAdultCount + "大" + data.getChildCount + "小");
+                $tab.find('.T-transAdChilTotalCount').text(data.transAdultCount + "大" + data.transChildCount + "小");
+                $tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount + "大" + data.innerChildCount + "小");
+                $tab.find('.T-orderTotalCount').text(data.orderCount);
+            })
     }
 
-	//时间控件初始化
-	employeePerforObj.datepicker = function($obj){
-		$obj.find(".datepicker").datepicker({
-			autoclose: true,
-			todayHighlight: true,
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN'
-		})
-	};
+    PerformanceFun.setChildDepartmentList = function($feild) {
+    	if (!$feild.data('ajax')) {
+    		$.ajax({
+    			url: KingServices.build_url('group', 'departmentTreeList'),
+    			type: 'post',
+    			dataType: 'json',
+    			showLoading: false
+    		})
+    		.done(function(data) {
+    			if (showDialog(data))  {
 
- 
-	exports.init = employeePerforObj.initModule;
+    				var list = JSON.parse(data.tree || false);
 
+    				if (!list)  return;
+    				$feild.data('ajax', true);
+
+    				for (var i = 0, len = list.length;i < len; i ++) {
+    					list[i].value = list[i].name;
+    				}
+
+    				list.unshift({
+    					id: '',
+    					value: '全部'
+    				});
+
+			    	$feild.autocomplete({
+			    	    minLength: 0,
+			    	    source: list,
+			    	    change :function(event, ui){
+			    	        if(ui.item == null){
+			    	            $feild.val('全部').next().val('');
+			    	        }
+			    	    },
+			    	    select :function(event, ui){
+			    	        $feild.blur().next().val(ui.item.id);
+			    	    }
+			    	}).on('click', function() {
+		    			$feild.autocomplete('search', '');
+			    	});
+    			}
+    		});
+    		
+    	}
+    }
+
+    exports.init = PerformanceFun.initModule;
 });

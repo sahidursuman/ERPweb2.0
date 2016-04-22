@@ -266,7 +266,7 @@
                                                     {{each busCompanyTemplate as rs}}
                                                     <tr data-entity-arrangeid = "{{rs.id}}">
                                                         <td>
-                                                            <input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" value="{{rs.needSeatCount}}" />
+                                                            <input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" value="{{rs.needSeatCount}}" />
                                                         </td>
                                                         <td><input type="text" class="col-xs-12 T-busBrand" name="brand" value="{{rs.brand}}"></td>
                                                         <td>
@@ -711,25 +711,25 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用包含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{lineProduct.includeFee}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12" maxLength="5000">{{lineProduct.includeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control"  name="excludeFee" class="col-sm-12">{{lineProduct.excludeFee}}</textarea>
+                                    <textarea class="form-control"  name="excludeFee" class="col-sm-12" maxLength="5000">{{lineProduct.excludeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control"  name="lineFeature" class="col-sm-12">{{lineProduct.lineFeature}}</textarea>
+                                    <textarea class="form-control"  name="lineFeature" class="col-sm-12" maxLength="5000">{{lineProduct.lineFeature}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control"  name="lineNotice" class="col-sm-12">{{lineProduct.lineNotice}}</textarea>
+                                    <textarea class="form-control"  name="lineNotice" class="col-sm-12" maxLength="5000">{{lineProduct.lineNotice}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -737,6 +737,12 @@
                 </div>
             </div>
         </div>
+        发布到: <select name="publishAuthArea" id="publishAuthArea">
+            <option value="1" {{if lineProduct.publishAuthArea == 1}}selected="selected"{{/if}}>个人</option>
+            <option value="2" {{if lineProduct.publishAuthArea == 2}}selected="selected"{{/if}}>子部门</option>
+            <option value="3" {{if lineProduct.publishAuthArea == 3}}selected="selected"{{/if}}>业务部</option>
+            <option value="4" {{if lineProduct.publishAuthArea == 4}}selected="selected"{{/if}}>公司</option>
+        </select>
         <div class="space-10"></div>
         <button class="btn btn-block btn-primary T-btn-submit guideSubmit" style="line-height: 16px !important;">
             <i class="ace-icon fa fa-check"></i> 提交信息

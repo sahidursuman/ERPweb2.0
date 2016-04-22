@@ -51,10 +51,11 @@
 										<td width="90"><input type="radio" class="ace T-function-area3" value="3" name="{{submenu.id}}"><span class="lbl"></span>业务部门</td>
 										<td width="80"><input type="radio" class="ace T-function-area4" value="4" name="{{submenu.id}}"><span class="lbl"></span>公司</td>
 									<td>
-										{{each submenu.menuFunctionShipList as func}}
+										{{each submenu.menuFunctionShipList as func}}<!-- submenu.id == 17 发团安排的权限联动控制 -->
 											<div class="pull-left" style="width:100px;margin-left:10px;text-align:left;">
-												<input type="checkbox" data-descript="{{func.functionName}}" class="ace T-function T-function-id{{func.id}}" value="{{func.id}}" /><span class="lbl"></span>
-												{{func.functionName}}
+												<input type="checkbox" data-descript="{{func.functionName}}" class="ace T-function T-function-id{{func.id}} 
+												{{if submenu.id == 17}}{{if func.id == 50}}T-arrange{{else}}T-arrgItem{{/if}}{{/if}}" value="{{func.id}}" />
+												<span class="lbl"></span>{{func.functionName}}
 											</div>
 										{{/each}}
 									</td>

@@ -7,11 +7,18 @@ var globelEditorInstants = {};
 var listwidth = parseInt($("#tabList li").eq(0).css("width"));//ul总宽度，初始化数据为“工作台”tab宽度
 // window.UEDITOR_HOME_URL = APP_ROOT + 'app/components/ueditor/';
 var modals = {};
-var $tabList = $('#tabList'), $tabContent = $("#tabContent");
+var $tabList = $('#tabList'), $tabContent = $("#tabContent"),
+	tabHistory = [];
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event', DemoData = DemoData || false;
+	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
+
+var KingSettings = {
+	// 询价服务的开关
+	pusher: false,
+};
 /**
  * 图片地址
  */
@@ -453,7 +460,6 @@ function checkLogin(fn){
 		url:""+APP_ROOT+"base.do?method=autoLogin&token="+$.cookie("token")+"&operation=self",
 		type:"POST",
 		success:function(data){
-			console.info(fn)
 			if(data.success == 1 && typeof fn === 'function'){
 				fn();
 			}
@@ -482,6 +488,8 @@ function showAutoLoginDialog(dialogObj,message){
 						success:function(data){
 							if(data.success == 1){
 								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+								//获取登陆后token
+								KingServices.token = $.cookie('token');
 							}
 							else{
 								showLogoutDialog($( "#confirm-dialog-message" ),data.message);
@@ -678,12 +686,14 @@ var modalScripts = {
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
+    'arrange_guide': 'js/template/arrange/guide/guide.js',  // 导游安排
     //-------------------------------------------业务分析模块---------------------------------------------------
     'business_analyst_saleProduct': "js/template/businessAnalyst/saleProduct/saleProduct.js", //产品销量
     'business_analyst_sourDstribution': "js/template/businessAnalyst/sourDstribution/sourDstribution.js", //客源分布
     'business_analyst_customerVolume': "js/template/businessAnalyst/customerVolume/customerVolume.js", //客户客量
     'business_analyst_employeePerfor': "js/template/businessAnalyst/employeePerfor/employeePerfor.js", //员工业绩 
     'business_analyst_tourguidePerfor': "js/template/businessAnalyst/tourguidePerfor/tourguidePerfor.js", //导游业绩
+    'business_analyst_shopStat': "js/template/businessAnalyst/shopStat/shopStat.js", //购物统计
 
     //-------------------------------------------财务管理模块--------------------------------------------------------------------
     'financial_count': "js/template/financial/count/count.js", //报账审核
@@ -715,6 +725,8 @@ var modalScripts = {
 	'financial_collectedGuests':"js/template/financial/collectedGuests/collectedGuests.js",//收客利润
 	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
 	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
+	'financial_guide_borrow_money':"js/template/financial/guideBorrow/guideBorrow.js",//导游借款
+	'financial_offsetByDetail':"js/template/financial/offsetByDetail/offsetByDetail.js",//冲抵明细
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
@@ -722,6 +734,7 @@ var modalScripts = {
     'system_department': "js/template/system/department/business.js",
 	'system_infrastructure':"js/template/system/basicSet/basicSet.js",
 	'system_companyInformation':"js/template/system/companyInfo/company.js",//公司资料
+	'accountSetting':"js/template/system/accountSetting/accountSetting.js",//账户设置
     'arrange_transfer': "js/template/arrange/arrangeTransfer/arrangeTransfer.js", //转客管理
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
@@ -920,7 +933,7 @@ function getAjaxErrorInfo (XMLHttpRequest)  {
 	try {
 		var fixedResponse = XMLHttpRequest.responseText.replace(/\\'/g, "'");
 		var jsonObj = JSON.parse(fixedResponse);
-		return jsonObj.description;
+		return jsonObj.message;
 	} catch (e) {
 		if (status > 200) {
 			switch (status) {
@@ -984,79 +997,100 @@ var _statusText = {
 		//     });
 		// }
 		//json提交要修改contentType和格式化json
-
-		if (opt.submitType == "json") {
-			opt.data = JSON.stringify(opt.data);
-			opt.contentType = "application/json";
-		}
-		//备份opt中error和success方法
-
-		var fn =
-		{
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-			},
-			success: function (data, textStatus) {
+		
+		//判断当前token与登陆时token是否相同
+		var token = $.cookie('token');
+		if (KingServices.token != token && !!token && !!KingServices.token) {
+			showConfirmDialog($( "#confirm-dialog-message" ), '当前登陆状态已失效，请重新登录', function() {
+				window.location.reload();
+			},function() {
+				return;
+			})
+		}else {
+			if (opt.submitType == "json") {
+				opt.data = JSON.stringify(opt.data);
+				opt.contentType = "application/json";
 			}
-		};
+			//备份opt中error和success方法
 
-		if (opt.error) {
-			fn.error = opt.error;
-		}
-		if (opt.success) {
-			fn.success = opt.success;
-		}
-
-		//扩展增强处理
-		opt = $.extend({}, {
-			timeout: 60000,
-			cache: false,
-			showLoading: true,
-			removeLoading: true,
-			showError: true,
-			dataType: 'json'
-		}, opt);
-		$.extend(opt, opt,
+			var fn =
 			{
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					//判断是否是当前页面的ajax请求错误
-
-					if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
-						if (opt.showError != false) {
-							var status;
-							try {
-								status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
-							} catch (e) {
-								// console.warn(e)
-								status = XMLHttpRequest.status;
-							}
-
-							showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
-
-						}
-						fn.error(XMLHttpRequest, textStatus, errorThrown);
-					}
-					else {
-						console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
-						showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
-					}
-				},
-				beforeSend:function(){
-					if (opt.showLoading)  {
-						globalLoadingLayer = openLoadingLayer();
-					}
 				},
 				success: function (data, textStatus) {
-					//若要移除loading,则移除
-
-					fn.success(data, textStatus);
-				},
-				complete: function()  {
-					if (opt.removeLoading) {
-						layer.close(globalLoadingLayer);
-					}
 				}
-			});
-		return _ajax(opt);
+			};
+
+			if (opt.error) {
+				fn.error = opt.error;
+			}
+			if (opt.success) {
+				fn.success = opt.success;
+			}
+
+			//扩展增强处理
+			opt = $.extend({}, {
+				timeout: (opt.url.indexOf('/financial/') >= 0) ? 3000000 : 60000,
+				cache: false,
+				showLoading: true,
+				removeLoading: true,
+				showError: true,
+				dataType: 'json'
+			}, opt);
+			$.extend(opt, opt,
+				{
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						//判断是否是当前页面的ajax请求错误
+
+						if (!!XMLHttpRequest && XMLHttpRequest.readyState == 4) {
+							if (opt.showError != false) {
+								var status;
+								try {
+									status = $.parseJSON(XMLHttpRequest.responseText).errorCode;
+								} catch (e) {
+									// console.warn(e)
+									status = XMLHttpRequest.status;
+								}
+
+								showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
+
+							}
+							fn.error(XMLHttpRequest, textStatus, errorThrown);
+						}
+						else {
+							console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
+							showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
+						}
+					},
+					beforeSend:function(){
+						if (opt.showLoading)  {
+							globalLoadingLayer = openLoadingLayer();
+						}
+					},
+					success: function (data, textStatus) {
+						//若要移除loading,则移除
+
+						fn.success(data, textStatus);
+					},
+					complete: function()  {			
+						// CNZZ超时记录
+						if (/^\/huochaitou\//.test(opt.url) && !!_czc && duration > 1000) {
+							var urls = opt.url.split('?'),
+								path = urls[0],
+								method = urls[1].split('&')[0].split('=')[1],
+								duration = (new Date()).getTime() - _startTime;
+
+							_czc.push( ["_trackEvent", 'AJAX', path,  method, duration, siteId]);
+						}
+
+						if (opt.removeLoading) {
+							layer.close(globalLoadingLayer);
+						}						
+					}
+				});
+			var _startTime = (new Date()).getTime();
+			return _ajax(opt);
+		}
 	};
 
 	jQuery.fn.extend({
@@ -1072,7 +1106,7 @@ var _statusText = {
 				}else{
 					if($that.hasClass('F-float')){
 						// 精度控制
-						if ($that.hasClass('F-money')) {
+						if ($that.hasClass('F-money') && value != 0) {
 							value = Tools.toFixed(value, 2);
 						} else if ($that.hasClass('F-count')) {
 							value = Tools.toFixed(value, 1, false);
@@ -1443,7 +1477,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 	// tab已经打开了
 	if ($next_li.length)  {
 		// show tab
-		$next_li.data('prev-tab',$current_li).children('a').trigger('click').children('span').text(tab_name);
+		$next_li.children('a').trigger('click').children('span').text(tab_name);	
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
@@ -1477,6 +1511,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 		if($content.length){
 			$content.addClass("active");
 			$next_li.find('span').text(tab_name);
+			Tools.processTabHistory($current_li, true);
 		}
 		else{
 			var $tab_li = $("<li class=\"tab-"+tab_id+" active\"><a data-toggle=\"tab\" href=\"#tab-"+tab_id+"-content\" aria-expanded=\"true\"><span>"+tab_name+"</span><i class=\"ace-icon fa fa-close tab-close T-close\"></i></a></li>");
@@ -1496,6 +1531,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
 										function(){  // 不保存
+											$content.trigger(CLOSE_TAB_SAVE_NO);
 											Tools.closeTab(tab_id);
 										},
 										// 取消
@@ -1505,7 +1541,9 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 				} else {
 					Tools.closeTab(tab_id);
 				}
+
 			});
+			Tools.processTabHistory($tab_li, true);
 
 			Tools.justifyTab();
 		}
@@ -1527,15 +1565,45 @@ Tools.closeTab = function(tab_id) {
 		index = $tab_li.index();
 
 	$tabContent.find('#tab-' + tab_id + '-content').remove();
-	$tab_li.remove();
 
-	index = index === 0? 0: (index-1);
-
-	if (index >= 0) {
-		$tabList.children('li').children('a').trigger('click');
+	Tools.processTabHistory($tab_li);
+	if ($tab_li.hasClass('active')) {
+		if (tabHistory.length) {
+			$tabList.find('[href="'+ tabHistory[0] + '"]').trigger('click');
+		} else {
+			$tabList.find('a').eq(0).trigger('click');
+		}
 	}
 
+	$tab_li.remove();
+
 	Tools.justifyTab();
+};
+
+/**
+ * 围护历史数据
+ * @param  {object} $obj         tab li对象
+ * @param  {Boolean} isAdd true： 添加，false:删除
+ * @return {[type]}             [description]
+ */
+Tools.processTabHistory = function($obj, isAdd) {
+	var key = $obj.children('a').attr('href');
+
+	if (!!key) {
+		var index = tabHistory.indexOf(key);
+		if (isAdd) {
+			if (index >= 0) {
+				if (index != 0) {
+					tabHistory.splice(index, 1);
+					tabHistory.unshift(key);
+				}
+			} else {
+				tabHistory.unshift(key);
+			}
+		} else if (index >= 0) {
+			tabHistory.splice(index, 1);
+		}
+	}
 };
 
 /**
@@ -1724,13 +1792,13 @@ Tools.toFixed = function(data, length, fixed) {
  * @return {object}     返回转换后的html数据
  */
 Tools.filterMoney = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-money").each(function(){
 		var $taht = $(this);
 		if(!$taht.is(':not("input")')){
 			$taht.val(Tools.toFixed($taht.val(), 2))
-		}else{
+		}else if($taht.text() != 0){
 			$taht.text(Tools.toFixed($taht.text(), 2));
 		}
 	});
@@ -1742,7 +1810,7 @@ Tools.filterMoney = function(obj){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterCount = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-count").each(function(){
 		if(!$(this).is(':not("input")')){
@@ -1766,7 +1834,7 @@ Tools.thousandPoint = function(num, length){
 	if(!!length){
 		num = Tools.toFixed(num, length);
 	}
-	num = (num + '');
+	num = (num + '').replace(/ /g, '');
 	var folatNum = num.replace(/(,|-)/g, '').replace(/(\d+)(\.\d*)?$/, '$2'),
 		intNum = num.replace(/,/g, '').replace(/(\d+)(\.\d*)?$/, '$1');
 	
@@ -1782,7 +1850,7 @@ Tools.thousandPoint = function(num, length){
  * @return {object}     返回转换后的html数据
  */
 Tools.filterUnPoint = function(obj){
-	if(!obj)return;
+	if(!obj)return '';
 	var $obj = $(obj);
 	$obj.find(".F-float").each(function(){
 		if(!$(this).is(':not("input")')){
@@ -1892,6 +1960,32 @@ Tools.delBlankJson = function(json) {
 }
 
 /**
+ * 计算相关方法
+ * @type {Object}
+ */
+Tools.Math = {};
+
+/**
+ * 浮点数比较。用于解决加减过程中精度所产生的误差
+ * @param  {string/float}  src  比较数据
+ * @param  {string/float}  dest 被比较数据
+ * @return {Boolean}      true 相等,否则不相等
+ */
+Tools.Math.isFloatEqual = function(src, dest) {
+	if (isNaN(src) || isNaN(dest)) {
+		return false;
+	}
+
+	src = src * 1,
+	dest = dest * 1;
+	if (src == dest || Math.abs(src - dest) < 0.000001) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * 绑定日期控件
  * @param {object}  $obj         绑定日期控件的元素
  * @param {Boolean} isInputRange true：设置起始控制，false：不设置
@@ -1936,6 +2030,23 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
 };
 
 /**
+ * setDateHSTimePicker 控件日期时间方法
+ */
+
+Tools.setDateHSPicker = function($className){
+	if (!$className || !$className.length) {
+        console.log('元素为空，无法绑定日期控件');
+        return;
+    }
+    $className.datetimepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'L',
+        language: 'zh-CN'
+       });  
+};
+
+/**
  * 选择日期组件组
  * @param {object} $dateObjs 日期的Jquery对象
  */
@@ -1977,12 +2088,16 @@ Tools.setDateRange = function($dateObjs) {
  *         					当天的话，返回0
  *         					开始日期或者结束日期为空，则表示今天
  */
-Tools.getDateDiff = function(startDate,endDate)  
+Tools.getDateDiff = function(startDate,endDate, isAbs)  
 {
 	var days = 0;
 
 	if (!!startDate || !!endDate)   {
-		days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		if (isAbs == 'noAbs') {
+			days = Math.floor((getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}else{
+			days = Math.floor(Math.abs(getTime(endDate) - getTime(startDate))/(1000*60*60*24));
+		}
 	}
     
     return days; 
@@ -2015,7 +2130,6 @@ Tools.addDay = function(date, days) {
 		var month = date.getMonth() + 1, day = date.getDate();
 		date = date.getFullYear()+ "-"+ (month < 10? ('0' + month) : month) + "-"+ (day < 10 ? ("0" + day) : day);
 	}
-
 	return date;
 }
 
@@ -2077,6 +2191,18 @@ KingServices.getMainList = function(key, onlyStyle) {
 	}
 
 	return res;
+}
+
+/**
+ * 购物统计总打单详情
+ * @param  {[type]} tripPlanId    团ID
+ * @param  {[type]} shopArrangeId 购物安排ID
+ * @return {[type]}               [description]
+ */
+KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId,guideArrangeId)  {
+	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
+		module.viewConsumeMoney(tripPlanId,shopArrangeId,guideArrangeId);
+	});
 }
 
 /**
@@ -2266,9 +2392,9 @@ KingServices.viewTransit = function(id){
 	});
 };
 //查看收支明细 
-KingServices.viewPayMentDetail = function(id,num){
+KingServices.viewPayMentDetail = function(args){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
-		module.init(id,num);
+		module.init(args);
 	});
 };
 //报账审核--跳转发团安排的查看页面
@@ -2344,6 +2470,12 @@ KingServices.payment = function(args,listFn){
 KingServices.paymentDetail = function(orderId){
 	seajs.use("" + ASSETS_ROOT + modalScripts.financial_guide,function(module){
 		module.paymentDetail(orderId);
+	});
+}
+
+KingServices.viewDetails = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.financial_payment_details,function(module){
+		module.viewDetails(id);
 	});
 }
 
@@ -2550,7 +2682,15 @@ KingServices.inlineTemplate = function(source, option) {
  */
 Tools.trFixed = function(obj){
 	$tabPane = $("#tabContent > .tab-pane.active");
-
+	$tabPane.on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
+		$($(e.target).attr('href')).find('.T-tr-fixed').css({
+			'transform' : 'translateY(0px)',
+			'-webkit-transform' : 'translateY(0px)',
+			'-moz-transform' : 'translateY(0px)',
+			'msTransform' : 'translateY(0px)',
+			'-o-transform' : 'translateY(0px)'
+		});
+	});
 	$tabPane.off("scroll").scroll(function(event){
 		event.preventDefault();
 		var $that = $(this),
@@ -2588,12 +2728,14 @@ Tools.trFixed = function(obj){
 
 //根据需要加载插件js
 var modulePlugin = {
-	"plugin_print":'components/jquery-print/jQuery.print.js'//加载打印插件
+	"plugin_print":'components/jquery-plugin/jQuery.print.js',//加载打印插件
+	"plugin_export":'components/jquery-plugin/jquery.table2excel.min.js',//加载导出插件
+	'plugin_pusher': 'components/pusher/pusher.min.js',
 };
 Tools.loadPluginScript = function(pluginKey){
-	if(pluginKey == 'plugin_print'){
-		$.getScript(modulePlugin.plugin_print);
-	};	
+	if (!!pluginKey && !!modulePlugin[pluginKey])  {
+		$.getScript(modulePlugin[pluginKey]);
+	}
 };
 
 window.onbeforeunload=function(e){

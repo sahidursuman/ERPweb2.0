@@ -2,13 +2,13 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label class="control-label">客户：</label>
-            <label class="control-label T-partnerAgencyName">{{partnerAgencyName}}</label>
+            <input type="text" class="control-label T-partnerAgencyName" value="{{partnerAgencyName}}" />
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">账期：</label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
+            <input type="text" class="form-control date-picker T-time  T-search-start-date" value="{{searchParam.startDate}}">
             <label class="control-label">&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+            <input type="text" class="form-control date-picker T-time T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">收客单号：</label>
@@ -21,7 +21,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">线路名称：</label>
             <input type="text" class="form-control T-search-line" data-id="{{searchParam.lineProductId}}" value="{{searchParam.lineProductName}}">
-        </div>
+        </div><br />
         <div class="form-group mar-r-10">
             <label class="control-label">录入人：</label>
             <input type="text" class="form-control T-search-enter" data-id="{{searchParam.creatorId}}" value="{{searchParam.creatorName}}">
@@ -29,6 +29,36 @@
         <div class="form-group mar-r-10">
             <label class="control-label">客户联系人：</label>
             <input type="text" class="form-control T-search-contact" placeholder="客户联系人" data-id="{{searchParam.fromPartnerAgencyContactId}}" value="{{searchParam.contactRealname}}">
+        </div>
+        <div class="form-group mar-r-10">
+            <label class="control-label">游客：</label>
+            <input type="text" class="form-control T-search-contactInfo" placeholder="联系人或联系电话" value="{{searchParam.contactInfo}}" name="contactInfo"> 
+        </div>
+        <label class="form-group">对账状态：</label>
+        <div class="form-group btn-group T-check-status mar-r-10">
+            <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                <span>
+                    {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                        全部
+                    {{else if searchParam.isConfirmAccount == 1}}
+                        已对账
+                    {{else}}
+                        未对账
+                    {{/if}}
+                </span>
+                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+            </ul>
+        </div>
+        <div class="form-group mar-r-10">
+            <label>对账时间：</label>
+            <input class="date-picker T-checkTime T-checkStartTime" placeholder="开始日期" type="text" value="{{searchParam.startCheck}}" style="width:100px;" />
+            <label>&nbsp;至&nbsp;</label>
+            <input class="date-picker T-checkTime T-checkEndTime" value="{{searchParam.endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
         </div>
         <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
@@ -72,7 +102,7 @@
         <div class="form-group mar-r-10">
             <label class="control-label">本次收款金额合计：</label>
             <label class="control-label">
-                <input type="text" name="sumPayMoney" class="F-float F-money T-sumReciveMoney money"  {{if type}}disabled {{/if}}>
+                <input type="text" name="sumPayMoney" class="F-float F-money T-sumReciveMoney money" value="{{sumPayMoney}}" {{if type}}disabled {{/if}}>
             </label>
         </div>
 
@@ -84,23 +114,28 @@
 
         <div class="form-group mar-r-10">
             <label class="control-label">收款方式：</label>
-            <select class="form-control T-sumPayType" name="payType">
-                {{getPayTypeOptions}}
+            <select class="form-control T-sumPayType" name="sumPayType">
+                {{#searchParam.sumPayType | getPayTypeOptions: searchParam.isBalance}}
             </select>
+        </div>
+
+        <div class="form-group mar-r-10 hidden">
+            <label class="control-label">预收账款余额：</label>
+            <label class="control-label T-balance">{{searchParam.balance}}</label>
         </div>
 
         <div class="form-group mar-r-10">
             <label class="control-label">现金账号：</label>
             <label class="control-label">
-                <input type="text" name="cash-number" class="money" style="width:300px;">
-                <input type="hidden" name="cash-id">
+                <input type="text" name="cash-number" class="money" {{if sumPayType == 0}}value="{{bankNumber}}"{{/if}} style="width:300px;">
+                <input type="hidden" name="cash-id" {{if sumPayType == 0}}value="{{bankId}}"{{/if}}>
             </label>
         </div>
         <div class="form-group mar-r-10">
             <label class="control-label">银行账号：</label>
             <label class="control-label">
-                <input type="text" name="card-number" class="money" style="width:300px;">
-                <input type="hidden" name="card-id">
+                <input type="text" name="card-number" class="money" {{if sumPayType != 0}}value="{{bankNumber}}"{{/if}} style="width:300px;">
+                <input type="hidden" name="card-id" {{if sumPayType != 0}}value="{{bankId}}"{{/if}}>
             </label>
         </div>
         <div class="form-group mar-r-10">
@@ -150,9 +185,9 @@
                 <th style="min-width: 100px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-list">
+        <tbody class="T-clearList">
             {{if customerAccountList != null}} 
-            {{each customerAccountList as rs index}}
+            {{each customerAccountList as rs listIndex}}
             <tr data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}">
                 <td rowspan="{{rs.rowLen}}">{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
@@ -171,16 +206,19 @@
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.contractMoney}}</span></td>
                 <td>{{if rs.detailList.transitFee.transitFeeList.length > 0}}
                     <!-- 若有中转结算价 -->
+                        <a class="T-viewFeeDetails" data-index="{{listIndex}}">
                         {{each rs.detailList.transitFee.transitFeeList as tf}}
                             {{tf.name}}：
                             <span class="F-float F-money T-touristGroupId" data-id="{{tf.touristGroupId}}" data-status="3">{{tf.price}}</span> x
                             <span class="F-float F-count">{{tf.count}}</span> =
                             <span class="F-float F-money">{{tf.price * tf.count}}</span><br>
                         {{/each}}
+                        </a>
                     {{else}}
                     <!-- 若无中转结算价 -->
-                        {{if rs.status == 5 && rs.detailList.otherFee.length > 0}}
+                        {{if rs.detailList.otherFee.length > 0}}
                         <!-- 中转，otherFee中多条数据 -->
+                            <a class="T-viewFeeDetails" data-index="{{listIndex}}">
                             {{each rs.detailList.otherFee as temp index}}
                                 {{if index == 0}}
                                     {{each temp.otherFeeList as of}}
@@ -191,21 +229,15 @@
                                     {{/each}}
                                 {{/if}}
                             {{/each}}
-                        {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
-                        <!-- 非中转，otherFee中单条数据 -->
-                            {{each rs.detailList.otherFee.otherFeeList as of}}
-                                {{of.name}}：
-                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
-                                <span class="F-float F-count">{{of.count}}</span>=
-                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                            {{/each}}
+                            </a>
                         {{else}}<!-- 若无费用明细 -->-
                         {{/if}}
                     {{/if}}
                 </td>
-                <td rowspan="{{rs.rowLen}}"><a class="cursor T-action T-receive">
-                        社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>，
-                        导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span>
+                <td rowspan="{{rs.rowLen}}" class="align-left">
+                    <a class="T-action T-receive">
+                        <span class="in-block">社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span></span>
+                        <span class="in-block">导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span></span>
                     </a>
                 </td>
                 
@@ -215,7 +247,7 @@
                     <td><span class="F-float F-money">{{rs.detailList.transitFee.settlementMoney}}</span></td>
                 {{else}}
                 <!-- 若无中转结算价 -->
-                    {{if rs.status == 5 && rs.detailList.otherFee.length > 0}}
+                    {{if rs.detailList.otherFee.length > 0}}
                     <!-- 中转，otherFee中多条数据 -->
                         {{each rs.detailList.otherFee as of index}}
                             {{if index == 0}}
@@ -223,9 +255,6 @@
                                 <td><span class="F-float F-money">{{of.settlementMoney}}</span></td>
                             {{/if}}
                         {{/each}}
-                    {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
-                        <td><span class="F-float F-money">{{rs.detailList.otherFee.backMoney}}</span></td>
-                        <td><span class="F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</span></td>
                     {{else}}
                     <!-- 若无费用明细 -->
                         <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
@@ -234,10 +263,10 @@
                 {{/if}}
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.unReceivedMoney}}</span></td>
                 <td rowspan="{{rs.rowLen}}">
-                    <input type="text" name="payMoney" data-le="{{rs.unReceivedMoney}}" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}} class="col-sm-12 T-reciveMoney money F-float F-money">
+                    <input type="text" name="payMoney" class="col-sm-12 T-reciveMoney money F-float F-money" value="{{rs.payMoney}}">
                 </td>
                 <td rowspan="{{rs.rowLen}}">
-                    <textarea class="col-sm-12 T-remark hct-textarea" {{if !type && rs.unReceivedMoney <= 0}} disabled {{/if}}></textarea>
+                    <textarea class="col-sm-12 T-remark hct-textarea" name="payRemark">{{rs.payRemark}}</textarea>
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkTime}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.checkUserName}}</td>
@@ -251,48 +280,39 @@
             </tr>
             {{if rs.detailList.transitFee.transitFeeList.length > 0}}
             <!-- 若有中转结算价 -->
-                {{if rs.status == 5 && rs.detailList.otherFee.length > 0}}
+                {{if rs.detailList.otherFee.length > 0}}
                     {{each rs.detailList.otherFee as temp}}
-                        <tr><td>{{each temp.otherFeeList as of}}
+                        <tr><td><a class="T-viewFeeDetails" data-index="{{listIndex}}">
+                                {{each temp.otherFeeList as of}}
                                     {{of.name}}：
                                     <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
                                     <span class="F-float F-count">{{of.count}}</span> =
                                     <span class="F-float F-money">{{of.price * of.count}}</span><br>
                                 {{/each}}
+                                </a>
                             </td>
                             <td><span class="F-float F-money">{{temp.backMoney}}</span></td>
                             <td><span class="F-float F-money">{{temp.settlementMoney}}</span></td>
                         </tr>
                     {{/each}}
-                {{else if rs.detailList.otherFee.otherFeeList.length > 0}}
-                    <tr><td>{{each rs.detailList.otherFee.otherFeeList as of}}
-                                {{of.name}}：
-                                <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                <span class="F-float F-count">{{of.count}}</span> =
-                                <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                            {{/each}}
-                        </td>
-                        <td><span class="F-float F-money">{{rs.detailList.otherFee.backMoney}}</span></td>
-                        <td><span class="F-float F-money">{{rs.detailList.otherFee.settlementMoney}}</span></td>
-                    </tr>
                 {{/if}}
             {{else}}
-                {{if rs.status == 5}}
-                    {{each rs.detailList.otherFee as temp index}}
-                        {{if index > 0}}
-                            <tr><td>{{each temp.otherFeeList as of}}
-                                        {{of.name}}：
-                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
-                                        <span class="F-float F-count">{{of.count}}</span> =
-                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                    {{/each}}
-                                </td>
-                                <td><span class="F-float F-money">{{temp.backMoney}}</span></td>
-                                <td><span class="F-float F-money">{{temp.settlementMoney}}</span></td>
-                            </tr>
-                        {{/if}}
-                    {{/each}}
-                {{/if}}
+                {{each rs.detailList.otherFee as temp index}}
+                    {{if index > 0}}
+                        <tr><td><a class="T-viewFeeDetails" data-index="{{listIndex}}">
+                                {{each temp.otherFeeList as of}}
+                                    {{of.name}}：
+                                    <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span> x
+                                    <span class="F-float F-count">{{of.count}}</span> =
+                                    <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                {{/each}}
+                                </a>
+                            </td>
+                            <td><span class="F-float F-money">{{temp.backMoney}}</span></td>
+                            <td><span class="F-float F-money">{{temp.settlementMoney}}</span></td>
+                        </tr>
+                    {{/if}}
+                {{/each}}
             {{/if}}
             {{/each}} 
             {{else}}

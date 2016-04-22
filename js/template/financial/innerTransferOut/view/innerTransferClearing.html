@@ -1,132 +1,146 @@
-<div class="row innerTransferChecking globalAdd">
-    <div>
-        <div class="T-search">
-            <form class="form-horizontal" role="form" onsubmit="return false">
-                <div class="form-group ">
-                    <label class="control-label pull-left" style="margin:8px 0px 0px 20px;">部门：</label>
-                    <span>{{searchParam.toBusinessGroupName}}</span>
-                    <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId">
-                    <input type="hidden" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName">
-                    <label class="control-label" style="margin-left:30px;">账期：
-                        <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startDate}}" />
-                        <span>&nbsp;至&nbsp;</span>
-                        <input type="text" style="width:100px;" class="date-picker" name="endDate" value="{{searchParam.endDate}}" />
-                    </label>
-                    <label class="control-label" style="margin-left:30px;">线路名称：
-                        <input type="text" name="lineProductName" value="{{searchParam.lineProductName}}" />
-                        <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
-                    </label>
-                    <label class="control-label" style="margin-left:30px;">收客单号：
-                        <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
-                    </label>
-                    <label class="control-label" style="margin-left:30px;">录入人：
-                        <select name="operater" style="margin-top:5px;">
-                            <option value="">全部</option>
-                            {{each operateTransUserList as operater}}
-                            <option value="{{operater.id}}" {{if searchParam.operateUserId==operater.id}}selected="selected" {{/if}}>{{operater.realname}}</option>
-                            {{/each}}
-                        </select>
-                    </label>
-                    <button class="marginLeft-30 btn-sm search-btn T-checking-search">
-                        <i class="ace-icon fa fa-search"></i> 搜索
-                    </button>
-                    <!-- <button type="button" class="btn btn-sm marginLeft-30 btn-primary btn-success btn-transferExport">
-                        <span>导出报表</span>
-                        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                    </button> -->
-                </div>
-            </form>
+<div class="innerTransferChecking globalAdd">
+    <div class="T-search">
+        <label class="control-label">部门：</label>
+        <input type="text" class="mar-r-10" name="toBusinessGroupName" value="{{searchParam.toBusinessGroupName}}" />
+        <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId">
+        <label class="control-label mar-r-10">账期：
+            <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startDate}}" />
+            <span>&nbsp;至&nbsp;</span>
+            <input type="text" style="width:100px;" class="date-picker" name="endDate" value="{{searchParam.endDate}}" />
+        </label>
+        <label class="control-label mar-r-10">线路名称：
+            <input type="text" name="lineProductName" value="{{searchParam.lineProductName}}" />
+            <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
+        </label>
+        <label class="control-label mar-r-10">收客单号：
+            <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
+        </label>
+        <label class="control-label mar-r-10">录入人：
+            <select name="operater" style="margin-top:5px;">
+                <option value="">全部</option>
+                {{each operateTransUserList as operater}}
+                <option value="{{operater.id}}" {{if searchParam.operateUserId==operater.id}}selected="selected" {{/if}}>{{operater.realname}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <label class="control-label mar-r-10">游客：
+            <input type="text" name="contactInfo" value="{{searchParam.contactInfo}}" placeholder="联系人或联系电话" />
+        </label>
+        <label>对账状态：</label>
+        <div class="btn-group T-check-status mar-r-10">
+            <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+              <span>
+                    {{if searchParam.isConfirmAccount === 0}}
+                      未对账
+                  {{else if searchParam.isConfirmAccount === 1}}
+                      已对账
+                  {{else}}
+                      全部
+                  {{/if}}
+              </span>
+              <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a data-value="" href="javascript:void(0)">全部</a></li>
+              <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+              <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+            </ul>
         </div>
-        <form class="form-horizontal T-count" role="form" onsubmit="return false">
-            <div class="form-group ">
-                <label class=" control-label pull-left" style="margin-left: 20px">总人数：<span class="F-float F-count">{{sumData.sumTransCount}}</span></label>
-                <label class=" control-label " style="margin-left:30px;">内转转出金额合计：<span class="F-float F-money">{{sumData.sumTransNeedPayMoney}}</span></label>
-                <label class=" control-label " style="margin-left:30px;">已付金额合计：<span class="F-float F-money">{{sumData.sumPayedMoney}}</span></label>
-                <label class=" control-label " style="margin-left:30px;">扣款金额合计：<span class="F-float F-money">{{sumData.sumPunishMoney}}</span></label>
-                <label class=" control-label " style="margin-left:30px;">结算金额合计：<span class="F-float F-money">{{sumData.sumSettlementMoney}}</span></label>
-                <label class=" control-label " style="margin-left:30px;">未付金额合计：<span class="F-float F-money">{{sumData.sumUnPayedMoney}}</span></label>
-                <label class=" control-label " style="margin-left:30px;">未付金额合计(已对账)：<span class="sumUnPayedMoney F-float F-money">{{sumData.sumConfirmedUnPayedMoney}}</span></label>
-            </div>
-        </form>
-        <div class="form-inline globalAdd T-summary" style="margin-left:5px">
-            <div class="form-group">
-                <label class="control-label">本次付款金额：</label>
-                <label class="control-label">
-                    <input type="text" class="F-float F-money" name="sumPayMoney" {{if showBtnFlag==true}}readonly="true" {{/if}}/>
-                </label>
-            </div>
-            {{if !showBtnFlag}}
-            <div class="form-group mar-l-10">
-                <button class="btn btn-xs btn-primary T-btn-autofill"><i class="ace-icon fa fa-check-circle"></i> 自动下账</button>
-            </div>
-            {{/if}}
-            <div class="form-group mar-l-10">
-                <label class="control-label">付款方式：</label>
-                <select class="form-control T-sumPayType" name="payType">
-                    {{getPayTypeOptions}}
-                </select>
-            </div>
-            <div class="form-group mar-l-10">
-                <label class="control-label">现金账号：</label>
-                <label class="control-label">
-                    <input type="text" name="cash-number" class="money" style="width:300px;">
-                    <input type="hidden" name="cash-id">
-                </label>
-            </div>
-            <div class="form-group mar-l-10">
-                <label class="control-label">银行账号：</label>
-                <label class="control-label">
-                    <input type="text" name="card-number" class="money" style="width:300px;">
-                    <input type="hidden" name="card-id">
-                </label>
-            </div>
-            <div class="form-group mar-l-10">
-                <label class="control-label">凭证编号：</label>
-                <label class="control-label">
-                    <input type="text" name="credentials-number">
-                </label>
-            </div>
-            <div class="form-group mar-l-10">
-                <label class="control-label">记账日期：</label>
-                <label class="control-label">
-                    <input type="text" name="tally-date"  style="width:140px;">
-                </label>
-            </div>
-        </div>
-        <div class="form-group" style="margin-left:5px">
-            <label class="control-label">备注：</label>
+        <button class="btn-sm search-btn T-checking-search">
+            <i class="ace-icon fa fa-search"></i> 搜索
+        </button>
+        <!-- <button type="button" class="btn btn-sm marginLeft-30 btn-primary btn-success btn-transferExport">
+            <span>导出报表</span>
+            <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+        </button> -->
+    </div>
+    <div class="T-count">
+        <label class=" control-label mar-r-10">总人数：<span class="F-float F-count">{{sumData.sumTransCount}}</span></label>
+        <label class=" control-label mar-r-10">内转转出金额合计：<span class="F-float F-money">{{sumData.sumTransNeedPayMoney}}</span></label>
+        <label class=" control-label mar-r-10">已付金额合计：<span class="F-float F-money">{{sumData.sumPayedMoney}}</span></label>
+        <label class=" control-label mar-r-10">扣款金额合计：<span class="F-float F-money">{{sumData.sumPunishMoney}}</span></label>
+        <label class=" control-label mar-r-10">结算金额合计：<span class="F-float F-money">{{sumData.sumSettlementMoney}}</span></label>
+        <label class=" control-label mar-r-10">未付金额合计：<span class="F-float F-money">{{sumData.sumUnPayedMoney}}</span></label>
+        <label class=" control-label">未付金额合计(已对账)：<span class="sumUnPayedMoney F-float F-money">{{sumData.sumConfirmedUnPayedMoney}}</span></label>
+    </div>
+    <div class="form-inline globalAdd T-summary">
+        <div class="form-group">
+            <label class="control-label">本次付款金额：</label>
             <label class="control-label">
-                <input type="text" name="sumRemark" style="width:900px;">
+                <input type="text" class="F-float F-money w-80" name="sumPayMoney" {{if btnSatus != 1}}value="{{sumPayMoney}}"{{/if}} {{if showBtnFlag==true}}readonly="true" {{/if}}/>
+            </label>
+        </div>
+        {{if !showBtnFlag}}
+        <div class="form-group mar-l-10">
+            <button class="btn btn-xs btn-primary T-btn-autofill"><i class="ace-icon fa fa-check-circle"></i> 自动下账</button>
+        </div>
+        {{/if}}
+        <div class="form-group mar-l-10">
+            <label class="control-label">付款方式：</label>
+            <select class="form-control T-sumPayType" name="sumPayType">
+                {{getPayTypeOptions}}
+            </select>
+        </div>
+        <div class="form-group mar-l-10">
+            <label class="control-label">现金账号：</label>
+            <label class="control-label">
+                <input type="text" name="cash-number" {{if sumPayType == 0}}value="{{bankNo}}"{{/if}} class="money" style="width:300px;">
+                <input type="hidden" name="cash-id" {{if sumPayType == 0}}value="{{bankId}}"{{/if}}>
+            </label>
+        </div>
+        <div class="form-group mar-l-10">
+            <label class="control-label">银行账号：</label>
+            <label class="control-label">
+                <input type="text" name="card-number" {{if sumPayType != 0}}value="{{bankNo}}"{{/if}} class="money" style="width:300px;">
+                <input type="hidden" name="card-id" {{if sumPayType != 0}}value="{{bankId}}"{{/if}}>
+            </label>
+        </div>
+        <div class="form-group mar-l-10">
+            <label class="control-label">凭证编号：</label>
+            <label class="control-label">
+                <input type="text" name="credentials-number">
+            </label>
+        </div>
+        <div class="form-group mar-l-10">
+            <label class="control-label">记账日期：</label>
+            <label class="control-label">
+                <input type="text" name="tally-date"  style="width:140px;">
             </label>
         </div>
     </div>
+    <div class="form-group">
+        <label class="control-label">备注：</label>
+        <label class="control-label">
+            <input type="text" name="sumRemark" style="width:900px;">
+        </label>
+    </div>
     <div class="overflow-x min-w-1050">
-    <table class="table table-striped table-bordered table-hover all hct_align_middle w-1500">
-        <thead>
-            <tr class="T-tr-fixed bg-blur">
-                <th>收客单号</th>
-                <th>线路产品</th>
-                <th>出游日期</th>
-                <th>联系人</th>
-                <th>人数</th>
-                <th>操作人</th>
-                <th>操作时间</th>
-                <th>内转转出</th>
-                <th>明细</th>
-                <th>已付金额</th>
-                <th>返款金额</th>
-                <th>结算金额</th>
-                <th>未付金额</th>
-                <th>本次付款金额</th>
-                <th>备注</th>
-                <th>对账时间</th>
-                <th>对账人</th>
-                <th style="width:100px">对账</th>
-            </tr>
-        </thead>
-        <tbody class="T-clearList" data-right="1370005">
-        </tbody>
-    </table>
+        <table class="table table-striped table-bordered table-hover all hct_align_middle w-1500">
+            <thead>
+                <tr class="T-tr-fixed bg-blur">
+                    <th>收客单号</th>
+                    <th>线路产品</th>
+                    <th>出游日期</th>
+                    <th>联系人</th>
+                    <th>人数</th>
+                    <th>操作人</th>
+                    <th>操作时间</th>
+                    <th>内转转出</th>
+                    <th>明细</th>
+                    <th>已付金额</th>
+                    <th>返款金额</th>
+                    <th>结算金额</th>
+                    <th>未付金额</th>
+                    <th>本次付款金额</th>
+                    <th>备注</th>
+                    <th>对账时间</th>
+                    <th>对账人</th>
+                    <th style="width:100px">对账</th>
+                </tr>
+            </thead>
+            <tbody class="T-clearList" data-right="1370005">
+            </tbody>
+        </table>
     </div>
     <div class="clearfix"></div>
     <div class="row pageMode" style="padding-top: 15px;">
@@ -138,14 +152,12 @@
             </div>
         </div>
     </div>
-    <form class="form-horizontal" role="form" onsubmit="return false">
-        <div class="form-group" style="text-align: center;">
-            <button class="btn btn-xs btn-primary btn-createTripPlan T-close">
-                <i class="ace-icon fa fa-times-circle"></i> 关闭
-            </button>
-            <button class="btn btn-xs btn-primary T-payMoney">
-                <i class="ace-icon fa fa-check-circle"></i> 确认付款
-            </button>
-        </div>
-    </form>
+    <div class="text-center">
+        <button class="btn btn-xs btn-primary T-btn-close">
+            <i class="ace-icon fa fa-times-circle"></i> 关闭
+        </button>
+        <button class="btn btn-xs btn-primary T-saveClear">
+            <i class="ace-icon fa fa-check-circle"></i> 确认付款
+        </button>
+    </div>
 </div>

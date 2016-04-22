@@ -1,0 +1,117 @@
+<div class="search-guideSingle">
+    <div class="clearfix T-search-area mar-b-10">
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">导游：</label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">{{if !!guide}}{{guide.guideName}}{{/if}} </label>
+        <input type="hidden" name="guideId" class="col-xs-12" value="{{guide.id}}" />
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">联系电话：</label> 
+        <label class="pull-left text-right control-label no-padding-right mar-l-10 T-mobileNumber">{{if !!guide}}{{guide.mobileNumber}}{{/if}}</label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">开始日期 </label>
+        <div class="col-xs-1">
+            <input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startTime}}" />
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">结束日期 </label>
+        <div class="col-xs-1">
+            <input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />
+        </div>
+        <div class="col-xs-2">
+            <button class=" btn-sm  T-guideSingle-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索
+            </button>
+        </div>
+    </div>
+    <div class="T-guideSinglePager-list">
+        <table class="table table-striped table-bordered table-hover table-fixed T-showHighLight">
+            <colgroup>
+                <col style="width:20%;"></col>
+                <col style="width:20%;"></col>
+                <col style="width:10%;"></col>
+                <col style="width:25%;"></col>
+                <col style="width:20%;"></col>
+                <col style="width:20%;"></col>
+                <col style="width:15%;"></col>
+                <col style="width:10%;"></col>
+                <col style="width:10%;"></col>
+                <col style="width:10%;"></col>
+                <col style="width:10%;"></col>
+                <col style="width:10%;"></col>
+                <col style="width:10%;"></col>
+            </colgroup>
+            <thead class="T-thead">
+                <tr class="bg-blur">
+                    <th class="col-sm-1">客户</th>
+                    <th class="col-sm-2">团号</th>
+                    <th class="col-sm-1">人数</th>
+                    <th class="col-sm-1">线路产品</th>
+                    <th class="col-sm-1">团期</th>
+                    <th class="col-sm-1">进店日期</th>
+                    <th class="col-sm-1">购物店</th>
+                    <th class="col-sm-2">总打单</th>
+                    <th class="col-sm-1" >人均打单</th>
+                    <th class="col-sm-1">社佣</th>
+                    <th class="col-sm-2">导佣</th>
+                    <th class="col-sm-1">总佣金</th>
+                    <th class="col-sm-2">人均返佣</th>
+                </tr>
+            </thead>
+            <tbody>
+              {{each result as resultList}}
+                <tr>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.travelAgencyName}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.tripNumber}}</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.adult}}大{{resultList.child}}小</td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}"><p style="margin:0;" class="T-ctrl-tip" title="{{resultList.lineProductName}}"> <span>{{resultList.lineProductName}}</span></p></td>
+                    <td rowspan="{{if resultList.shopList.length}}{{resultList.shopList.length}}{{else}}1{{/if}}">{{resultList.tripDate}}</td>
+                    {{if resultList.shopList.length==0}}
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    {{else if resultList.shopList.length>0}}
+                        {{each resultList.shopList as shopL index}}
+                        {{if index == 0}}
+                        <td>{{shopL.accountTime}}</td>
+                        <td>{{shopL.shopName}}</td>
+                        <td class="T-allMoney  cursor" style="color:#337ab7" data-tripPlanId="{{resultList.tripPlanId}}" data-arrangeId="{{shopL.arrangeId}}"
+                        guideArrangeId = "{{resultList.guideArrangeId}}"><span class='F-float F-money'>{{shopL.allMoney}}</span></td>
+                        <td><span class='F-float F-money'>{{shopL.avgAllMoney}}</span></td>
+                        <td><span class='F-float F-money'>{{shopL.agencyMoney}}</span></td>
+                        <td><span class='F-float F-money'>{{shopL.guideMoney}}</span></td>
+                        <td><span class='F-float F-money'>{{shopL.totalMoney}}</span></td>
+                        <td><span class='F-float F-money'>{{shopL.avgMoney}}</span></td>
+                        {{/if}}
+                        {{/each}}
+                    {{/if}}
+                </tr>
+                {{each resultList.shopList as shopL index}}
+                {{if index > 0}}
+                <tr >
+                    <td>{{shopL.accountTime}}</td>
+                    <td>{{shopL.shopName}}</td>
+                    <td class="T-allMoney cursor" style="color:#337ab7" data-tripPlanId="{{resultList.tripPlanId}}" data-arrangeId="{{shopL.arrangeId}}" 
+                     guideArrangeId = "{{resultList.guideArrangeId}}"><span class='F-float F-money'>{{shopL.allMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{shopL.avgAllMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{shopL.agencyMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{shopL.guideMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{shopL.totalMoney}}</span></td>
+                    <td><span class='F-float F-money'>{{shopL.avgMoney}}</span></td>
+                </tr>
+                {{/if}}
+                {{/each}}
+               {{/each}}
+            </tbody>
+        </table>
+        <div class="pageMode">
+            <div class="col-xs-5">
+                <small>共计 {{searchParam.totalCount}} 条记录</small>
+            </div>
+            <div class="col-xs-7">
+                <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

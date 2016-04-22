@@ -1,14 +1,15 @@
-/*TMODJS:{"debug":true,"version":80,"md5":"85ea9a8ce914172420180fae92e83cba"}*/
+/*TMODJS:{"debug":true,"version":91,"md5":"9df3500d93248a288ba0d48c0991b804"}*/
 define(function(require) {
     return require("../../../template")("financial/guide/view/guidePayingTable", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $each = $utils.$each, list = $data.list, $escape = ($data.guide, 
-            $data.$index, $utils.$escape), isPayMoney = $data.isPayMoney, isOuter = $data.isOuter, $out = "";
+            $data.$index, $utils.$escape), isPayMoney = $data.isPayMoney, $out = "";
             return $line = 1, $each(list, function(guide) {
                 $out += ' <tr class="T-checkTr" data-confirm="', $line = 2, $out += $escape(guide.isConfirmAccount), 
                 $out += '" data-id="', $line = 2, $out += $escape(guide.id), $out += '" ', $line = 2, 
                 guide.payMoney && isPayMoney && ($out += " data-change='true' ", $line = 2), $out += '> <td><a class="T-action T-gid" data-id="', 
-                $line = 3, $out += $escape(guide.tripPlanId), $out += '">', $line = 3, $out += $escape(guide.tripNumber), 
+                $line = 3, $out += $escape(guide.tripPlanId), $out += '" data-guidearrangeid = "', 
+                $line = 3, $out += $escape(guide.guideArrangeId), $out += '">', $line = 3, $out += $escape(guide.tripNumber), 
                 $out += "</a></td> <td>", $line = 4, $out += $escape(guide.lineProductName), $out += "</td> <td>", 
                 $line = 5, $out += $escape(guide.accountTime), $out += "</td> <td>", $line = 6, 
                 0 == guide.guideAllPreMoney ? ($out += ' <span class="F-float F-money T-preMoney">', 
@@ -25,16 +26,13 @@ define(function(require) {
                 $out += '</span></td> <td><span class="F-float F-money">', $line = 22, $out += $escape(guide.settlementMoney), 
                 $out += '</span></td> <td><a href="javascript:void(0);" class="T-action T-viewPayedMoney F-float F-money">', 
                 $line = 23, $out += $escape(guide.payedMoney), $out += '</a></td> <td><span class="F-float F-money">', 
-                $line = 24, $out += $escape(guide.unPayedMoney), $out += '</span></td> <td><input type="text" name="payMoney" class="F-float F-money money" ', 
-                $line = 25, isOuter || ($out += ' data-le="', $line = 25, $out += $escape(guide.unPayedMoney), 
-                $out += '" ', $line = 25, guide.unPayedMoney <= 0 && ($out += " disabled ", $line = 25), 
-                $line = 25), $out += ' value="', $line = 25, isPayMoney && 0 != guide.payMoney && ($line = 25, 
-                $out += $escape(guide.payMoney), $line = 25), $out += '" ></td> <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" ', 
-                $line = 26, !isOuter && guide.unPayedMoney <= 0 && ($out += " disabled ", $line = 26), 
-                $out += ">", $line = 26, $out += $escape(guide.payRemark), $out += "</textarea></td> <td>", 
-                $line = 27, $out += $escape(guide.checkTime), $out += "</td> <td>", $line = 28, 
-                $out += $escape(guide.checkRealName), $out += "</td> <td> ", $line = 30, guide.isConfirmAccount ? ($out += " 已对账 ", 
-                $line = 30) : ($out += " 未对账 ", $line = 30), $out += ' &nbsp; <a class="cursor T-action T-view R-right" data-right="1290003">查看</a> </td> </tr> ', 
+                $line = 24, $out += $escape(guide.unPayedMoney), $out += '</span></td> <td><input type="text" name="payMoney" class="F-float F-money money" value="', 
+                $line = 25, guide.payMoney2 ? ($line = 25, $out += $escape(guide.payMoney2), $line = 25) : isPayMoney && 0 != guide.payMoney && ($line = 25, 
+                $out += $escape(guide.payMoney), $line = 25), $out += '" ></td> <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">', 
+                $line = 26, $out += $escape(guide.payRemark), $out += "</textarea></td> <td>", $line = 27, 
+                $out += $escape(guide.checkTime), $out += "</td> <td>", $line = 28, $out += $escape(guide.checkRealName), 
+                $out += "</td> <td> ", $line = 30, guide.isConfirmAccount ? ($out += " 已对账 ", $line = 30) : ($out += " 未对账 ", 
+                $line = 30), $out += ' &nbsp; <a class="cursor T-action T-view R-right" data-right="1290003">查看</a> </td> </tr> ', 
                 $line = 34;
             }), new String($out);
         } catch (e) {
@@ -43,7 +41,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each list as guide}}\r\n<tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{ if (!!guide.payMoney) && isPayMoney }} data-change=\'true\' {{/if}}>\r\n    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>\r\n    <td>{{guide.lineProductName}}</td>\r\n    <td>{{guide.accountTime}}</td>\r\n    <td>{{if guide.guideAllPreMoney == 0}}\r\n        <span class="F-float F-money T-preMoney">{{guide.guideAllPreMoney}}</span>\r\n        {{else}}\r\n        <a class="cursor T-action T-borrow-detail">\r\n            <span class="F-float F-money T-preMoney">{{guide.guideAllPreMoney}}</span>\r\n        </a>\r\n        {{/if}}\r\n    </td>\r\n    <td><span class="F-float F-money">{{guide.guideAllNowIncomeMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.guideAllNowPayMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.price}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.manageFee}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.shoppingRebateMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.selfPayRebateMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.guideIncomeMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.zhangmiantuibu}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.settlementMoney}}</span></td>\r\n    <td><a href="javascript:void(0);" class="T-action T-viewPayedMoney F-float F-money">{{guide.payedMoney}}</a></td>\r\n    <td><span class="F-float F-money">{{guide.unPayedMoney}}</span></td>\r\n    <td><input type="text" name="payMoney" class="F-float F-money money" {{if !isOuter}} data-le="{{guide.unPayedMoney}}" {{if guide.unPayedMoney <= 0}} disabled {{/if}}{{/if}} value="{{if isPayMoney && guide.payMoney != 0}}{{guide.payMoney}}{{/if}}" ></td>\r\n    <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if !isOuter && guide.unPayedMoney <= 0}} disabled {{/if}}>{{guide.payRemark}}</textarea></td>\r\n    <td>{{guide.checkTime}}</td>\r\n    <td>{{guide.checkRealName}}</td>\r\n    <td>\r\n        {{ if guide.isConfirmAccount }} 已对账 {{else}} 未对账 {{/if}} &nbsp;\r\n        <a class="cursor T-action T-view R-right" data-right="1290003">查看</a>\r\n    </td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each list as guide}}\r\n<tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{ if (!!guide.payMoney) && isPayMoney }} data-change=\'true\' {{/if}}>\r\n    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}" data-guidearrangeid = "{{guide.guideArrangeId}}">{{guide.tripNumber}}</a></td>\r\n    <td>{{guide.lineProductName}}</td>\r\n    <td>{{guide.accountTime}}</td>\r\n    <td>{{if guide.guideAllPreMoney == 0}}\r\n        <span class="F-float F-money T-preMoney">{{guide.guideAllPreMoney}}</span>\r\n        {{else}}\r\n        <a class="cursor T-action T-borrow-detail">\r\n            <span class="F-float F-money T-preMoney">{{guide.guideAllPreMoney}}</span>\r\n        </a>\r\n        {{/if}}\r\n    </td>\r\n    <td><span class="F-float F-money">{{guide.guideAllNowIncomeMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.guideAllNowPayMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.price}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.manageFee}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.shoppingRebateMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.selfPayRebateMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.guideIncomeMoney}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.zhangmiantuibu}}</span></td>\r\n    <td><span class="F-float F-money">{{guide.settlementMoney}}</span></td>\r\n    <td><a href="javascript:void(0);" class="T-action T-viewPayedMoney F-float F-money">{{guide.payedMoney}}</a></td>\r\n    <td><span class="F-float F-money">{{guide.unPayedMoney}}</span></td>\r\n    <td><input type="text" name="payMoney" class="F-float F-money money" value="{{if guide.payMoney2}}{{guide.payMoney2}}{{else if isPayMoney && guide.payMoney != 0}}{{guide.payMoney}}{{/if}}" ></td>\r\n    <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{guide.payRemark}}</textarea></td>\r\n    <td>{{guide.checkTime}}</td>\r\n    <td>{{guide.checkRealName}}</td>\r\n    <td>\r\n        {{ if guide.isConfirmAccount }} 已对账 {{else}} 未对账 {{/if}} &nbsp;\r\n        <a class="cursor T-action T-view R-right" data-right="1290003">查看</a>\r\n    </td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

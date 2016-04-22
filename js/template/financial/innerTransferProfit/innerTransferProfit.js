@@ -64,7 +64,7 @@ define(function(require, exports) {
                         pageNo: page
                     };
                     var html = listTurnProfit(data);
-                    addTab(menuKey,"内转利润",html);
+                    Tools.addTab(menuKey,"内转利润",html);
                     innerProfit.initList();
                     // 绑定翻页组件
                     laypage({

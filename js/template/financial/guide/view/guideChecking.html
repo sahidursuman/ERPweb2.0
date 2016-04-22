@@ -3,15 +3,15 @@
     <div>
         <div class="T-search-area">
             <form class="form-inline" role="form" onsubmit="return false">
-                <div class="form-group">
+                <div class="form-group mar-r-10">
                     <label>导游：</label>
-                    <span class="T-guideName">{{guideName}}</span>
+                    <input type="text" class="T-guideName" value="{{guideName}}" />
                 </div>
                 <div class="form-group input-daterange mar-r-10">
                     <label>账期：</label>
-                    <input type="text" class="form-control datepicker T-search-start-date" style="width:100px;" value="{{startDate}}">
+                    <input type="text" class="form-control datepicker T-time T-search-start-date" style="width:100px;" value="{{startDate}}">
                     <label>&nbsp;至&nbsp;</label>
-                    <input type="text" class="form-control datepicker T-search-end-date" style="width:100px;" value="{{endDate}}">
+                    <input type="text" class="form-control datepicker T-time T-search-end-date" style="width:100px;" value="{{endDate}}">
                 </div>
                 <div class="form-group mar-r-10">
                     <label>团号：</label>
@@ -21,12 +21,39 @@
                     <label>线路产品：</label>
                     <input type="text" class="form-control T-lineProductName" style="width: 200px;" data-id="{{lineProductId}}" value="{{lineProductName}}" maxlength="100">
                 </div>
+                <label class="form-group">对账状态：</label>
+                <div class="form-group btn-group T-check-status mar-r-10">
+                    <button data-value="{{isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                        <span>
+                            {{if !isConfirmAccount || isConfirmAccount === ""}}
+                                全部
+                            {{else if isConfirmAccount == 1}}
+                                已对账
+                            {{else}}
+                                未对账
+                            {{/if}}
+                        </span>
+                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                        <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                        <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                    </ul>
+                </div>
+                <div class="form-group mar-r-10">
+                    <label>对账时间：</label>
+                    <input class="datepicker T-checkTime T-checkStartTime" placeholder="开始日期" type="text" value="{{startCheck}}" style="width:100px;" />
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="datepicker T-checkTime T-checkEndTime" value="{{endCheck}}" placeholder="结束日期" type="text" style="width:100px;" />
+                </div>
+
                 <div class="form-group mar-r-10">
                     <button class="btn-sm search-btn T-btn-search">
                         <i class="ace-icon fa fa-search"></i> 搜索
                     </button>
                 </div>
-                <div class="form-group mar-r-10">
+                <div class="form-group">
                     <button class="btn-sm search-btn T-btn-export">导出报表</button>
                 </div>
             </form>
@@ -64,8 +91,8 @@
                 <th>现付</th>
                 <th>导服费</th>
                 <th>管理费</th>
-                <th>购物导拥</th>
-                <th>自费导拥</th>
+                <th>购物导佣</th>
+                <th>自费导佣</th>
                 <th>导游收入</th>
                 <th>账面退补</th>
                 <th>结算金额</th>

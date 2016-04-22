@@ -11,22 +11,9 @@ define(function(require, exports) {
     	    	        }
 	    	        ]
 	    	    },
-	    	    {	// 联系人
-	    	    	$ele: $obj.find('input[name="managerName"]'),
-	    	    	rules: [
-							{
-								type: 'null', 
-								errMsg: '联系人不能为空'
-							}
-	    	        ]
-	    	    },
 	    	    {	// 联系人电话
 	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
 	    	    	rules: [
-							{
-								type: 'null', 
-								errMsg: '联系电话不能为空'
-							},
 	    	    	        {
 	    	    	        	type: 'mobile-phone',
 	    	    	        	errMsg: '联系电话格式不正确'
@@ -106,7 +93,7 @@ define(function(require, exports) {
 							errMsg: '旅行社价不能为空'
 						},
 				        {
-				        	type: 'int', 
+				        	type: 'float', 
 				        	errMsg: '请输入数字'
 				        }
 				    ]

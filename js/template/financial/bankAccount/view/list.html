@@ -2,7 +2,10 @@
     <label class="control-label mar-r-20">期初余额合计: <span class=" F-float F-money">{{beginningBalance}}</span></label>
     <label class="control-label mar-r-20">收入合计：<span class=" F-float F-money">{{incomeMoney}}</span></label>
     <label class="control-label mar-r-20">支出合计：<span class=" F-float F-money">{{payMoney}}</span></label>
-    <label class="control-label ">结余合计：<span class=" F-float F-money">{{balance}}</span></label>
+    <label class="control-label mar-r-20">结余合计：<span class=" F-float F-money">{{balance}}</span></label>
+	<button class="btn-sm  T-refresh search-btn">
+	    <i class="ace-ico n fa fa-refresh"></i> 刷新
+	</button>
 </div>
 <div class="row guideList guideAdd">
 	<div class="col-xs-12">
@@ -37,7 +40,7 @@
 			</thead>
 			<tbody class="T-bankAcc-list">
 				{{each newBankAccountList as rs}}
-					<tr bankid="{{rs.id}}" banknum="{{rs.bankAccountNumber}}" bankMoney="{{rs.balance}}">
+					<tr data-bankid="{{rs.id}}" data-type="{{rs.type}}">
 						<td>{{if rs.type == 0}}现金账户{{else rs.type == 1}}银行账户{{/if}}</td>
 						<td>{{rs.aliasName}}</td>
 						<td>{{if rs.type == 0}}-{{else}}{{rs.bankAccountNumber}}{{/if}}</td>
@@ -49,8 +52,8 @@
 						<td class="F-float F-money">{{rs.payMoney}}</td>
 						<td>{{rs.balance}}</td>
 						<td>
-							<div class="hidden-sm hidden-xs btn-group">
-								<a class="T-action T-view cursor">
+							<div class="btn-group">
+								<a class="T-action T-view cursor" data-desc="账户：{{rs.aliasName}},余额：{{rs.balance}},期初余额：{{rs.beginningBalance}}" data-beginningBalance="{{rs.beginningBalance}}">
 									查看
 								</a>
 							</div>

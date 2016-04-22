@@ -17,12 +17,16 @@ define(function(require, exports) {
             touristGroupId: "",
             lineProductId: "",
             lineProductName: "",
+            contactUserName: "",
+            orderNumber: "",
             businessGroupId: "",
             businessGroupName: "",
             creator: "",
             creatorName: "",
             startTime: "",
             endTime: "",
+            createStartTime :  "",
+            createEndTime :  "",
             status: "",
             first: ""
         },
@@ -58,12 +62,16 @@ define(function(require, exports) {
             type: type,
             lineProductId: getValue("lineProductId"),
             lineProductName: getValue("lineProductName"),
+            contactUserName:getValue("contactUserName"),
+            orderNumber:getValue("orderNumber"),
             businessGroupId: getValue("businessGroupId"),
             businessGroupName: getValue("businessGroupName"),
             creator: getValue("creatorId"),
             creatorName: getValue("creatorName"),
             startTime: getValue("startTime"),
             endTime: getValue("endTime"),
+            createStartTime :   getValue("createStartTime"),
+            createEndTime :  getValue("createEndTime"),
             status: $("#" + divId).find(".btn-status button").attr("data-value")
         }
     };
@@ -111,7 +119,10 @@ define(function(require, exports) {
         }, innerTransfer.getListPage);
         //初始化列表
         $innerTrsfOutObj.find(".T-transferOut-search").trigger('click');
-        $innerTrsfInObj.find(".T-transferIn-search").trigger('click');
+        $innerTrsfInObj.find(".T-transferIn-search").trigger('click');  
+        //选项卡切换数据交互
+        innerTransfer.$tab.find('.inner-TransferOut').off('click').on('click',{divId: "inner-TransferOut",btn: "btn-transferOut-search",type: "1"},innerTransfer.getListPage );
+        innerTransfer.$tab.find('.inner-TransferIn').off('click').on('click',{divId: "inner-TransferIn",btn: "btn-transferIn-search",type: "2"},innerTransfer.getListPage);
 
         //线路产品autocomplete
         innerTransfer.chooseLineProduct("inner-TransferIn");
@@ -646,10 +657,12 @@ define(function(require, exports) {
                     success: function(data) {
                         var result = showDialog(data);
                         if (result) {
-                            var divId = "inner-TransferOut",
-                                type = "1";
-                            innerTransfer.getSearchParam(divId, type);
-                            innerTransfer.innerList(divId, type, 0);
+                            showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+                                var divId = "inner-TransferOut",
+                                    type = "1";
+                                innerTransfer.getSearchParam(divId, type);
+                                innerTransfer.innerList(divId, type, 0);
+                            })
                         }
                     }
                 });
@@ -674,10 +687,12 @@ define(function(require, exports) {
         .done(function(data) {
             var result = showDialog(data);
             if (result) {
-                var divId = "inner-TransferOut",
-                    type = "1";
-                innerTransfer.getSearchParam(divId, type);
-                innerTransfer.innerList(divId, type, 0);
+                showMessageDialog($( "#confirm-dialog-message" ), '退回成功', function() {
+                    var divId = "inner-TransferOut",
+                        type = "1";
+                    innerTransfer.getSearchParam(divId, type);
+                    innerTransfer.innerList(divId, type, 0);
+                })
             }
         }); 
     };

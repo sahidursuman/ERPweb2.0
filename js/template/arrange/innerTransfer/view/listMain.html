@@ -20,17 +20,30 @@
                     <input type="text" name="businessGroupName" value="" class="T-businessGroupChoose" placeholder="全部部门" />
                     <input type="hidden" name="businessGroupId" value="" />
                 </div>
-                <div class="form-group mar-l-15">
+                <div class="form-group mar-l-10">
+                    <label>收客单号</label>
+                    <input type="text" name="orderNumber" value="" class="T-orderNumberChoose" placeholder="收客单号" />
+                </div>
+                <div class="form-group mar-l-10">
+                    <input class="form-control datepicker" name="createStartTime" placeholder="出游起始日期" style="width:100px;" type="text">
+                    <label>&nbsp;至&nbsp;</label>
+                    <input class="form-control datepicker" name="createEndTime" placeholder="出游结束日期" style="width:100px;" type="text">
+                </div>
+                <div class="form-group mar-l-10">
+                    <label>游客</label>
+                    <input type="text" placeholder="游客" name="contactUserName">
+                </div>
+                <div class="form-group mar-l-10">
                     <label>转客人</label>
                     <input type="text" name="creatorName" value="" class="T-creatorChoose" placeholder="全部转客人" />
                     <input type="hidden" name="creatorId" value="" />
                 </div>
-                <div class="form-group mar-l-15">
+                <div class="form-group mar-l-10">
                     <input class="form-control datepicker" name="startTime" placeholder="转客起始日期" style="width:100px;" type="text">
                     <label>至</label>
                     <input class="form-control datepicker" name="endTime" placeholder="转客结束日期" style="width:100px;" type="text">
                 </div>
-                <div class="form-group mar-l-15">
+                <div class="form-group mar-l-10">
                     <label class="control-label no-padding-right pull-left">状态</label>
                     <div class="btn-group btn-status" style="margin-left: 7px">
                         <button data-value="0" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
@@ -83,9 +96,17 @@
                     <input type="hidden" name="lineProductId" value="" />
                 </div>
                 <div class="form-group mar-l-10">
+                    <label>收客单号</label>
+                    <input type="text" name="orderNumber" value="" class="T-orderNumberChoose" placeholder="收客单号" />
+                </div>
+                <div class="form-group mar-l-10">
                     <input class="datepicker" name="startTime" placeholder="出游起始日期" type="text">
                     <label>至</label>
                     <input class="datepicker" name="endTime" placeholder="出游结束日期" type="text">
+                </div>
+                <div class="form-group mar-l-15">
+                    <label>游客</label>
+                    <input type="text" placeholder="游客" name="contactUserName">
                 </div>
                 <div class="form-group mar-l-10">
                     <label>部门</label>

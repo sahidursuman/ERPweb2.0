@@ -243,7 +243,7 @@ define(function(require, exports) {
 			layer.open({
 				type:2,
 				title:"线路日程详情",
-				area: ['360px', '720px'],
+				area: ['600px', '90%'],
 				scrollbar:true,
 				content: KingServices.build_url('travelLine', 'getLineProductDayDetail') + '&travelLineId='+id,
 			});

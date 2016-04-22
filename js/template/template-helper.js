@@ -148,10 +148,14 @@ template.helper("getPlanPayTypeText", function(payType) {
             return '其他';
     }
 }); 
-template.helper("getPlanPayTypeOption", function(status) {
-    var res = '';
+template.helper("getPlanPayTypeOption", function(status, isDisabled) {
+    var res = '',
+        dis = '';
+    if (isDisabled) {
+        dis = 'disabled';
+    }
     status = status || 0;
-    res += '<select name="payType"><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
+    res += '<select name="payType" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
     res += '<option value="1" '+(status == 1?'selected':'')+'>刷卡</option>';
     res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
     return res;
@@ -168,6 +172,8 @@ template.helper("getPayTypeText", function(payType) {
             return '支票';
         case 4:
             return '其他';
+        case 6:
+            return '冲抵';
         default:
             return '网付';
     }
@@ -190,7 +196,7 @@ template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
             return '';
     }
 });
-template.helper("getPayTypeOptions", function(payType) {
+template.helper("getPayTypeOptions", function(payType,isBalance, isNetPay) {
     var options = '', start = 0;
 
     options += '<option value="0" '+ (start++ == payType?'selected':'') +'>现金</option>';
@@ -199,7 +205,13 @@ template.helper("getPayTypeOptions", function(payType) {
     // options += '<option value="1" '+ (start++ == payType?'selected':'') +'>网上支付</option>';
     options += '<option value="3" '+ (start++ == payType?'selected':'') +'>支票</option>';
     options += '<option value="4" '+ (start++ == payType?'selected':'') +'>其他</option>';
-   
+    if (isNetPay) {
+        options += '<option value="5" '+ (start++ == payType?'selected':'') +'>网付</option>';
+    }
+    if (isBalance==1) {
+        options += '<option value="6" '+ (6 == payType?'selected':'') +'>冲抵</option>';
+    }
+    
     return options;
 });
 
@@ -248,8 +260,12 @@ template.helper("getTaskDesc", function(status) {
         default:     return '全程';
     }
 });
-template.helper("getTaskSelect", function(status, isCar) {
-    var str = ['<select name="taskType">'],
+template.helper("getTaskSelect", function(status, isCar, isDisabled) {
+    var dis = '';
+    if (isDisabled) {
+        dis = 'disabled';
+    }
+    var str = ['<select name="taskType" '+dis+'>'],
         desc = ['全程', '接机', '送机', '前段', '中段', '后段'];
     if (isCar) {
         desc.push('小车接客');
@@ -381,3 +397,27 @@ template.helper("getBusinessTypeText", function(businessType) {
             return '-';
     }
 });
+
+template.helper('getLogTypeText', function(type) {
+    switch(type * 1) {
+        case 1:
+            return '保存';
+        case 2:
+            return '财务';
+        case 3:
+            return '计调';
+        case 4:
+            return '退回计调';
+        case 5:
+            return '退回导游';
+        case 6:
+            return 'Web报账';
+        case 7:
+            return '导游提交报账';
+        case 8:
+            return '删除';
+        default: 
+            console.info('Other Type:' + 'type');
+            return '其他类型';
+    }
+})

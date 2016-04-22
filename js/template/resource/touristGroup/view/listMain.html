@@ -8,13 +8,6 @@
             width: 84px;
         }
 
-        .T-touristGroupSearchForm [name="quoteNumber"] {
-            min-width: 207px;
-        }
-
-        .mar-r-9 {
-            margin-right: 9px;
-        }
     </style>
 
     <div class="form-group T-search-area clearfix">
@@ -70,9 +63,16 @@
                 <input class="datepicker" name="startTime" value="{{searchParam.startTime}}" type="text" />
             </div>
 
-            <div class="form-group mar-r-9" mar-l-5>
+            <div class="form-group mar-r-9">
                 <label >报价单号</label>
                 <input type="text" class="form-control T-choose-quoteNumber" placeholder="报价单号" name="quoteNumber" value="{{searchParam.quoteNumber}}" />
+            </div> 
+            <div class="form-group">
+                <label >出游日期</label>
+                <select name="order_by" id="order_by">
+                    <option value="asc" {{if searchParam.order == 'asc'}}selected="selected" {{/if}}>升序</option>
+                    <option value="desc" {{if searchParam.order == 'desc'}}selected="selected" {{/if}}>降序</option>
+                </select>
             </div>         
         </form>
         <form class="form-inline" role="form" onsubmit="return false">
@@ -81,8 +81,8 @@
                 <input type="text" class="form-control T-choose-otaOrderNumber" placeholder="组团单号" name="otaOrderNumber" value="{{searchParam.otaOrderNumber}}" />
             </div>
             <div class="form-group mar-r-9">
-                <label>接站牌</label>
-                <input type="text" class="form-control T-choose-welcomeBoard" placeholder="接站牌" name="welcomeBoard" value="{{searchParam.welcomeBoard}}" style="width: 140px;" />
+                <label>游客</label>
+                <input type="text" class="form-control" placeholder="联系人或联系电话" name="contactInfo" value="{{searchParam.contactInfo}}" style="width: 140px;" />
             </div>
             <div class="form-group mar-r-9">
                 <label>外联销售</label>
@@ -130,6 +130,7 @@
             </label>
             <label class="control-label mar-r-20" name="statistics-needPay">应收款合计：<span class="needIncome"><span class="F-float F-money">{{statistics.needPay}}</span>元</span>
             </label>
+            <label class="control-label mar-r-20" name="statistics-needPay">预收款合计：<span class="needIncome"><span class="F-float F-money">{{statistics.sumPreIncomeMoney}}</span>元</span></label>
             <label class="control-label mar-r-20" name="statistics-payed">已收款合计：<span class="payedMoney"><span class="F-float F-money">{{statistics.payedMoney}}</span>元</span>
             </label>
             <label class="control-label mar-r-20" name="statistics-currentNeedPay">现收款合计：<span class="currentNeedPay"><span class="F-float F-money">{{statistics.currentNeedPay}}</span>元</span>

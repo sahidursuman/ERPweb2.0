@@ -1,6 +1,6 @@
 {{each list as guide}}
 <tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{ if (!!guide.payMoney) && isPayMoney }} data-change='true' {{/if}}>
-    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
+    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}" data-guidearrangeid = "{{guide.guideArrangeId}}">{{guide.tripNumber}}</a></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
     <td>{{if guide.guideAllPreMoney == 0}}
@@ -22,8 +22,8 @@
     <td><span class="F-float F-money">{{guide.settlementMoney}}</span></td>
     <td><a href="javascript:void(0);" class="T-action T-viewPayedMoney F-float F-money">{{guide.payedMoney}}</a></td>
     <td><span class="F-float F-money">{{guide.unPayedMoney}}</span></td>
-    <td><input type="text" name="payMoney" class="F-float F-money money" {{if !isOuter}} data-le="{{guide.unPayedMoney}}" {{if guide.unPayedMoney <= 0}} disabled {{/if}}{{/if}} value="{{if isPayMoney && guide.payMoney != 0}}{{guide.payMoney}}{{/if}}" ></td>
-    <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000" {{if !isOuter && guide.unPayedMoney <= 0}} disabled {{/if}}>{{guide.payRemark}}</textarea></td>
+    <td><input type="text" name="payMoney" class="F-float F-money money" value="{{if guide.payMoney2}}{{guide.payMoney2}}{{else if isPayMoney && guide.payMoney != 0}}{{guide.payMoney}}{{/if}}" ></td>
+    <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{guide.payRemark}}</textarea></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>

@@ -41,6 +41,7 @@ define(function(require, exports) {
         //搜索按钮事件
         TotalProfit.$searchArea.find('.T-search').off().on('click', function(){
             var args = {
+                orderNumber: TotalProfit.$searchArea.find("input[name=orderNumber]").val(),
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
@@ -82,11 +83,15 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("financialTotal","findPager"),
             data:args,
-            showLoading:false,
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
-                    TotalProfit.$tab.find('.T-list').html(tableTemplate(data));
+                    var html = tableTemplate(data);
+                    html = Tools.filterCount(html);
+                    html = Tools.filterMoney(html);
+                    html = Tools.filterUnPoint(html);
+
+                    TotalProfit.$tab.find('.T-list').html(html);
 
                     TotalProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
                     //点击线路产品事件
@@ -114,7 +119,6 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("financialTotal","findTotal"),
             data:args,
-            showLoading:false,
             type:'POST',
             success:function(data){
                 if(showDialog(data)){

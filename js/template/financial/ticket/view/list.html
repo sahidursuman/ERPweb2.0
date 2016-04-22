@@ -3,7 +3,8 @@
         <form class="form-inline" role="form" onsubmit="return false">
             <div class="form-group mar-r-10">
                 <label>票务商家 </label>
-                <input type="text" class="form-control T-search-name" value="{{searchParam.ticketName || " 全部 "}}" style="width: 220px;">
+                <input type="text" class="form-control T-search-name" value="{{searchParam.ticketName}}" style="width: 220px;"
+                placeholder="所有票务商家">
             </div>
             <div class="form-group mar-r-10">
                 <label>账期 </label>
@@ -75,7 +76,7 @@
                 <td class="F-float F-money">{{rs.sumNeedPayMoney}}</td>
                 <td class="F-float F-money">{{rs.sumSettlementMoney}}</td>
                 <td class="F-float F-money">{{rs.sumPayedMoney}}</td>
-                <td class="F-float F-money"><span {{if rs.sumUnPayedMoney !=0 }}style="color:#FF0000;" {{/if}}>{{rs.sumUnPayedMoney}}</span></td>
+                <td class="F-float F-money" {{if rs.sumUnPayedMoney !=0 }}style="color:red" {{/if}}>{{rs.sumUnPayedMoney}}</td>
                 <td><span style="color:#{{if rs.checkedCount == rs.allCheckCount}}00CC00{{else}}FF9900{{/if}};">{{rs.checkedCount}}/{{rs.allCheckCount}}</span></td>
                 <td><span style="color:#{{if rs.payedCount == rs.allPayCount}}00CC00{{else}}FF9900{{/if}};">{{rs.payedCount}}/{{rs.allPayCount}}</span></td>
                 <td>

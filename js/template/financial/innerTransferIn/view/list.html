@@ -2,12 +2,12 @@
     <div class="form-horizontal search-area">
         <div class="T-search-area">
             <label class="mar-l-10">部门 </label>
-            <input type="text" class="mar-r-10" name="businessGroupName" value="{{searchParam.businessGroupName}}" />
+            <input type="text" class="mar-r-10" name="businessGroupName" value="{{searchParam.businessGroupName}}" placeholder="所有部门"/>
             <input type="hidden" name="businessGroupId" value="{{searchParam.businessGroupId}}" />
             <label class="mar-r-10">账期
-                <input type="text" class="date-picker" style="width: 100px; text-align: center;" name="startDate" value="{{searchParam.startAccountTime}}" />
+                <input type="text" class="datepicker" style="width: 100px; text-align: center;" name="startDate" value="{{searchParam.startAccountTime}}" />
                 <span>&nbsp;至&nbsp;</span>
-                <input type="text" class="date-picker" style="width:100px;text-align:center" name="endDate" value="{{searchParam.endAccountTime}}" style="width:100px;text-align:center;" />
+                <input type="text" class="datepicker" style="width:100px;text-align:center" name="endDate" value="{{searchParam.endAccountTime}}" style="width:100px;text-align:center;" />
             </label>
             <div class="btn-group T-finance-status mar-r-10">
                 <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
@@ -34,7 +34,7 @@
                     </li>
                 </ul>
             </div>
-            <button class="btn-sm search-btn T-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button>
+            <button class="btn-sm search-btn T-btn-search"> <i class="ace-icon fa fa-search"></i> 搜索 </button>
         </div>
     </div>
 </div>
@@ -76,9 +76,9 @@
                     <th>操作</th>
                 </tr>
             </thead>
-            <tbody class="T-innerTransferList">
+            <tbody class="T-list">
                 {{each innerTransferIncomeList as innerTransfer}}
-                <tr accountStatus="{{searchParam.accountStatus}}" businessGroupId="{{innerTransfer.businessGroupId}}" businessGroupName="{{innerTransfer.businessGroupName}}" endDate="{{searchParam.endAccountTime}}" startDate="{{searchParam.startAccountTime}}">
+                <tr data-id="{{innerTransfer.businessGroupId}}" data-name="{{innerTransfer.businessGroupName}}">
                     <td>{{innerTransfer.businessGroupName}}</td>
                     <td>{{innerTransfer.adultCount}}大{{innerTransfer.childCount}}小</td>
                     <td>{{innerTransfer.transNeedPayMoney}}</td>
@@ -100,7 +100,7 @@
                                 对账
                         </a>
                         <label class="cursor R-right" data-right="1370001"><a class="R-right" data-right="1370002"> |</a></label>
-                        <a class="cursor T-action T-balance R-right" data-right="1370002">
+                        <a class="cursor T-action T-clear R-right" data-right="1370002">
                                 收款
                         </a>
                     </td>

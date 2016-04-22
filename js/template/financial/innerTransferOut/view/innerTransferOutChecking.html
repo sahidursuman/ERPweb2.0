@@ -1,42 +1,57 @@
-<div class="row innerTransferChecking globalAdd">
+<div class="innerTransferChecking globalAdd">
       <div>
           <div class="T-search" >
-              <form class="form-horizontal" role="form" onsubmit="return false">
-                <div > 
-                    <label  class="control-label pull-left mar-r-10">部门：</label>
-                    <span>{{searchParam.toBusinessGroupName}}</span>
-                    <input type="hidden" value="{{searchParam.toBusinessGroupId}}" name="toBusinessGroupId">
-                    <input type="hidden" value="{{searchParam.toBusinessGroupName}}" name="toBusinessGroupName"> 
-                    <label class="control-label mar-r-10">账期：
-                      <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startDate}}"/>
-                      <span>至</span>
-                      <input type="text" style="width:100px;" class="date-picker" name="endDate" value="{{searchParam.endDate}}"/>
-                    </label>
-                </div>
-                <div > 
-                    <label class="control-label mar-r-10">线路名称：
-                      <input type="text" name="lineProductName" value="{{searchParam.lineProductName}}"/>
-                      <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
-                    </label>
-                    <label class="control-label mar-r-10">收客单号：
-                        <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
-                    </label>
-                    <label class="control-label mar-r-10">录入人：
-                      
-                        <select name="operater" style="margin-top:5px;">
-                        <option value="">&nbsp;全部&nbsp;</option>
-                        {{each operateTransUserList as operater}}
-                            <option value=option"{{operater.id}}" {{if searchParam.operateUserId == operater.id}}selected="selected"{{/if}}>{{operater.realname}}</option>
-                        {{/each}} 
-                        </select>
-                    </label>
-                    <button class="mar-r-10 btn-sm search-btn T-checking-search" >
-                         <i class="ace-icon fa fa-search"></i>
-                             搜索
-                    </button>
-                    <button class="btn-sm search-btn T-btn-export mar-r-10">导出报表</button>
-                </div>
-              </form>
+              <label  class="control-label">部门：</label>
+              <input type="text" class="mar-r-10" name="toBusinessGroupName" value="{{searchParam.toBusinessGroupName}}" />
+              <label class="control-label">账期：
+                <input type="text" style="width:100px;" class="date-picker" name="startDate" value="{{searchParam.startDate}}"/>
+                <span>至</span>
+                <input type="text" style="width:100px;" class="date-picker mar-r-10" name="endDate" value="{{searchParam.endDate}}"/>
+              </label>
+          
+              <label class="control-label mar-r-10">线路名称：
+                <input type="text" name="lineProductName" value="{{searchParam.lineProductName}}"/>
+                <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
+              </label>
+              <label class="control-label mar-r-10">收客单号：
+                  <input type="text" name="orderNumber" value="{{searchParam.orderNumber}}" />
+              </label>
+              <label class="control-label mar-r-10">录入人：
+                  <select name="operater" style="margin-top:5px;">
+                  <option value="">&nbsp;全部&nbsp;</option>
+                  {{each operateTransUserList as operater}}
+                      <option value="{{operater.id}}" {{if searchParam.operateUserId == operater.id}}selected="selected"{{/if}}>{{operater.realname}}</option>
+                  {{/each}} 
+                  </select>
+              </label>
+              <label class="control-label mar-r-10">游客：
+                  <input type="text" name="contactInfo" value="{{searchParam.contactInfo}}" placeholder="联系人或联系电话" />
+              </label>
+              <label>对账状态：</label>
+              <div class="btn-group T-check-status mar-r-10">
+                  <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                      <span>
+                          {{if searchParam.isConfirmAccount === 0}}
+                              未对账
+                          {{else if searchParam.isConfirmAccount === 1}}
+                              已对账
+                          {{else}}
+                              全部
+                          {{/if}}
+                      </span>
+                      <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                      <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                      <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                      <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+                  </ul>
+              </div>
+              <button class="mar-r-10 btn-sm search-btn T-checking-search" >
+                   <i class="ace-icon fa fa-search"></i>
+                       搜索
+              </button>
+              <button class="btn-sm search-btn T-btn-export">导出报表</button>
             <input name="accountStatus" value="{{searchParam.accountStatus}}" type="hidden">
           </div>
           <form class="form-horizontal" role="form" onsubmit="return false">
@@ -94,7 +109,7 @@
         </div>
         <form class="form-horizontal" role="form" onsubmit="return false">
             <div class="form-group" style="text-align: center;">
-                <button class="btn btn-xs btn-primary btn-createTripPlan T-close">
+                <button class="btn btn-xs btn-primary T-btn-close">
                     <i class="ace-icon fa fa-times-circle"></i>
                     关闭
                 </button>

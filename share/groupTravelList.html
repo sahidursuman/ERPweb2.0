@@ -319,10 +319,10 @@
 								$(".sumCommentCount").text(data.lineProduct.sumCommentCount);
 								$(".sumShareCount").text(data.lineProduct.sumShareCount);
 								$(".sumViewCount").text(data.lineProduct.sumViewCount);
-								if(!!data.travelAgencyName){
-									$(".T-companyLogo").html('<img src="'+imgUrl + data.travelAgencyName +'" alt="'+data.companyLogo+'">');
+								if(!!data.companyLogo){
+									$(".T-companyLogo").html('<img src="'+ data.erpImgUrl + '/' + data.companyLogo +'" alt="'+data.travelAgencyName+'">');
 								}else{
-									$(".T-companyLogo").html('<h3>'+data.companyLogo+'</h3>');
+									$(".T-companyLogo").html('<h3>'+data.travelAgencyName+'</h3>');
 								}
 								
 								setShare(data.lineProduct.name);
@@ -333,11 +333,11 @@
 								if(list[i].coverImage){
 									images.push(imgUrl + list[i].coverImage);
 								}else{
-									images.push(location.origin+'/images/loading-error.png?'+list[i].id);
+									images.push(location.origin+'/images/default_youji.png?'+list[i].id);
 								}
 								var html =  '<div class="item">'+
 											'	<div class="item-img">'+
-											'		<a href="groupTravel.html?noteId='+list[i].id+'" class="load-image" url="'+(list[i].coverImage ? (imgUrl + list[i].coverImage) : location.origin+'/images/loading-error.png?'+list[i].id)+'"><span class="hct-logo-grey"><span class="hct-logo-blue"></span></span></a>'+
+											'		<a href="groupTravel.html?noteId='+list[i].id+'" class="load-image" url="'+(list[i].coverImage ? (imgUrl + list[i].coverImage) : location.origin+'/images/default_youji.png?'+list[i].id)+'"><span class="hct-logo-grey"><span class="hct-logo-blue"></span></span></a>'+
 											'	</div>'+
 											'	<a href="groupTravel.html?noteId='+list[i].id+'" class="item-title">'+list[i].title+'</a>'+
 											'	<div class="item-footer">'+
