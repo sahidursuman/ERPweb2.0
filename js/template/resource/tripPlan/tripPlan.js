@@ -3605,8 +3605,8 @@ define(function(require, exports) {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
 	                    type: "post",
-	                    async: false,
 	                    showLoading: false,
+	                    removeLoading: false,
 	                    data:"cateName=guide&cateId="+guideJson.id,
 	                    success: function(data) {
 							if(showDialog(data)){
