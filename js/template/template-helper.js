@@ -20,11 +20,31 @@ template.helper("dateFormat", function(date, fmt) {
         }
     return fmt;
 });
+/**
+ * 默认日期时间格式化
+ * @param  {string} date 日期 
+ * @param  {string} 日期格式
+ * @return {[string}  日期
+ */
+template.helper("dateTimeFormat", function(date, fmt) {
+    if (!date) return '';
+    return Tools.getDateTimeFormat(date, fmt);
+});
+ 
+/**
+ * 日期时间格式化,去掉秒
+ * @param  {string} date 日期 
+ * @param  {string} 日期格式
+ * @return {[string}  日期
+ */
+template.helper("dateTimeHSFormat", function(date) {
+    if (!date) return '';
+    return Tools.getDateTimeFormat(date, 'yyyy-MM-dd hh:mm');
+});
 
 template.helper("getDateText", function(startTime, whichDay) {
     return Tools.addDay(startTime, whichDay -1);
 });
-
 
 template.helper("encode", function(data) {
     return encodeURIComponent(data);
@@ -107,7 +127,7 @@ template.helper("getFeeItemType", function(type,isTransfer) {
 });
 template.helper("getWayTypeText", function(status) {
     var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
-    status = status || 1;
+    status = status || 1; 
     return res[status];
 });
 template.helper("checked", function(status) {

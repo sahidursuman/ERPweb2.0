@@ -3837,8 +3837,13 @@ define(function(require, exports) {
 			language: 'zh-CN'
 		})
 	};
-	quote.dateTimePicker = function(){
-		Tools.setDateHSPicker($('.T-dateTimePicker')); 
+	quote.dateTimePicker = function($container){
+		$container.find('.T-dateTimePicker').datetimepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'L',
+			language: 'zh-CN'
+		});
 	}
 	quote.jsonToString = function(jTs) {
 		if (typeof jTs != 'string') {

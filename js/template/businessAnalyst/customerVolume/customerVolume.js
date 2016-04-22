@@ -72,7 +72,7 @@ define(function(require, exports) {
 		       customerVolObj.datepicker(customerVolObj.$tab);
 
 		       //初始化页面绑定事件
-		       customerVolObj.init_event();
+		       customerVolObj.init_event(startTime,endTime);
 
 		       	// 绑定翻页组件
 				laypage({
@@ -107,12 +107,12 @@ define(function(require, exports) {
 
 
 	    	//客户客量明细Detail
-	    	customerVolObj.$tab.find('.T-customerVo-Detail').on('click',function(event) {
+	    	customerVolObj.$tab.find('.T-customerVo-Detail').off().on('click',function(event) {
 	    		event.preventDefault();
 	    		/* Act on the event */
     				var $that=$(this),
     		            id=$that.data('value');
-    		        customerVolObj.getCusDetail(id,0);
+    		        customerVolObj.getCusDetail(id,0,startTime,endTime);
 	    	});
 
 
@@ -124,13 +124,18 @@ define(function(require, exports) {
 
 
     //查询客户明细
-    customerVolObj.getCusDetail=function(id,page) {
+    customerVolObj.getCusDetail=function(id,page,startTime,endTime) {
     	// body...
     	//查询客户明细列
 		$.ajax({
 			url : KingServices.build_url("numberOfPartnerAgency","findTourist"),
 			type:"POST",
-			data : "id="+id+"&pageNo="+page,
+			data : {
+				id : id,
+				pageNo : page,
+				startTime : startTime,
+				endTime : endTime
+			},
 			success:function(data){
 	            var html=customerDelTemplate(data);
 	                customerVolObj.$tab.find('.T-customerDetail-list').html(html);
@@ -141,7 +146,7 @@ define(function(require, exports) {
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		customerVolObj.getCusDetail(id,obj.curr -1);
+					    		customerVolObj.getCusDetail(id,obj.curr -1,startTime,endTime);
 					    	}
 					    }
 					});
