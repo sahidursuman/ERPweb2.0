@@ -173,7 +173,7 @@
 	                                        </div>
 										</td>
 										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime | dateFormat:'yyyy-MM-dd hh:mm'}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}} /><input type="hidden" class="count" value="1" /></td>
@@ -220,7 +220,7 @@
 	                                        </div>
 										</td>
 										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{arriveTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" /></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{arriveTime}}" /></td>
 										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{arrivePosition}}" /></td>
 										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>
@@ -278,7 +278,7 @@
 									{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 									<tr data-entity-id="{{outHotel.id}}" {{if outHotel.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
 										<td><input type="hidden" name="serviceType" value="0" />
-										<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>
 											<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
 											<select class="tripPlanHotelStar" name="hotelLevel" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}>
@@ -365,7 +365,7 @@
 								<tbody>{{each receiveGroup.outRestaurantList as outRestaurant}}
 									{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
 									<tr data-entity-id="{{outRestaurant.id}}" {{if outRestaurant.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>
 											<div class="col-sm-12">
 												<input type="hidden" name="serviceType" value="0" />
@@ -475,7 +475,7 @@
 										</td>
 										<td><input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime | dateFormat:'yyyy-MM-dd hh:mm'}}{{/if}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
@@ -512,7 +512,7 @@
 										</td>
 										<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" type="text" /></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime}}" type="text" /></td>
 										<td><input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
@@ -568,7 +568,7 @@
 								<tbody>{{each receiveGroup.outOtherList as outOther}}
 								{{if outOther != null && outOther.name != null}}
 									<tr data-entity-id="{{outOther.id}}" {{if outOther.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>
 											<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/>
 											<input type="hidden" name="serviceType" value="0" />
@@ -676,7 +676,7 @@
                                             </div>
 										</td>
 										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime | dateFormat:'yyyy-MM-dd hh:mm'}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/><input type="hidden" class="count" value="1" /></td>
@@ -724,7 +724,7 @@
 	                                        </div>
 										</td>
 										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{leaveTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" /></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{leaveTime}}" /></td>
 										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{leavePosition}}" /></td>
 										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>
@@ -978,7 +978,7 @@
 										</td>
 										<td><input class="col-sm-12" name="ticketStartCity"  maxlength="20" value="{{outTicket.startingCity}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="ticketArriveCity"  maxlength="20" value="{{outTicket.arriveCity}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime | dateFormat:'yyyy-MM-dd hh:mm'}}{{/if}}" type="text"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}" type="text"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
 										<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
@@ -1015,7 +1015,7 @@
 										</td>
 										<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{leaveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" type="text" /></td>
+										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{leaveShiftTime}}" type="text" /></td>
 										<td><input class="col-sm-12" name="ticketShift" value="{{leaveShift}}" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
 										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
