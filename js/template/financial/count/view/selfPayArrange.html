@@ -526,7 +526,7 @@
                     {{if arrange.selfPayItem.length}}
                         {{each arrange.selfPayItem as itemSet index}}
                             {{if index >0}}
-                                <tr  badStatus = "{{itemSet.badStatus}}" whichDay = "{{arrange.whichDay}}"
+                                <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{itemSet.badStatus}}" whichDay = "{{arrange.whichDay}}"
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
                                     <td>
                                         <div class="div-h-30"></div>
