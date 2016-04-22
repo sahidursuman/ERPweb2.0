@@ -1,0 +1,27 @@
+{{each lineProductList as lineProduct}}
+	<tr data-id="{{lineProduct.id}}">
+		<td name="lineName" data-travelLine-Id="{{lineProduct.id}}">
+			{{lineProduct.name}}
+		</td>
+		<td>
+			{{lineProduct.type}}
+		</td>
+		<td>
+			{{if lineProduct.customerType==0}}
+			散客
+			{{else if lineProduct.customerType==1}}
+			团体
+			{{/if}}
+		</td>
+		<td>
+			{{lineProduct.days}}
+		</td>
+		<td>{{if !!lineProduct.businessGroup}}{{lineProduct.businessGroup.name}}{{/if}}</td>
+		<td>
+			<label class="choice-TravelLine-click">
+				<input type="radio" class="ace" name="choice-TravelLine" index="0">
+					<span class="lbl"></span>
+			</label>
+		</td>
+	</tr>
+{{/each}}

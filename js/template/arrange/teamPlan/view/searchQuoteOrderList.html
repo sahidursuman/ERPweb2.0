@@ -1,0 +1,33 @@
+{{each lineProductList as rs}}
+<!-- <tr data-quote-id="{{rs.id}}" 
+	data-line-id="{{if !!rs.lineProduct}}{{rs.lineProduct.id}}{{/if}}"> -->
+
+<tr data-quote-id='{{rs.id}}' data-quoteNumber='{{rs.quoteNumber}}' 
+	 data-line-id= '{{if !!rs.lineProduct}}{{rs.lineProduct.id}}{{/if}}' 
+	 data-adultcount='{{rs.adultCount}}' data-adultprice='{{rs.adultQuotePrice}}' data-childcount='{{rs.childCount}}' data-childprice='{{rs.childQuotePrice}}'>
+		<td name="quoteNumber">{{rs.quoteNumber}}</td>
+		<td name="lineName">{{if rs.lineProduct != null}}{{rs.lineProduct.name}}{{/if}}</td>
+		<td>{{if rs.lineProduct != null}}{{rs.lineProduct.type}}{{/if}}</td>
+		<td>
+			{{if rs.lineProduct != null}}    
+				{{if rs.lineProduct.customerType==0}}
+					  散客
+				{{else}}             
+					  团体
+				{{/if}}  
+			{{/if}}
+		</td>
+		<td><span class="F-float F-count">{{rs.adultCount}}</span>大 <span class="F-float F-count">{{rs.childCount}}</span>小</td>
+		<td>{{if rs.lineProduct !=null }}{{rs.lineProduct.days}}{{/if}}</td>
+		<td class="F-float F-count">{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+		<td>{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}<input type="hidden" name="travelAgencyName" value="{{if rs.partnerAgency !=null }}{{rs.partnerAgency.travelAgencyName}}{{/if}}"><input type="hidden" name="travelAgencyId" value="{{if rs.partnerAgency !=null }}{{rs.partnerAgency.id}}{{/if}}"></td>
+		<td>{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}<input type="hidden" name="contactRealname" value="{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.contactRealname}}{{/if}}"><input type="hidden" name="contactId" value="{{if rs.partnerAgencyContact !=null }}{{rs.partnerAgencyContact.id}}{{/if}}"></td>
+		<td>{{rs.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+		<td>
+			<label class="T-quote-line">
+				<input type="radio" class="ace" value="123" name="choice-TravelLine" index="0">
+					<span class="lbl"></span>
+			</label>
+		</td>
+	</tr>
+{{/each}}
