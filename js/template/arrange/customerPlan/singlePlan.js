@@ -1058,8 +1058,8 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class="T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1094,8 +1094,8 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1135,8 +1135,8 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1177,8 +1177,8 @@ define(function(require, exports) {
                     '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1223,8 +1223,8 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1264,8 +1264,8 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1387,8 +1387,8 @@ define(function(require, exports) {
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
                     '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentNameId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserNameId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1638,7 +1638,6 @@ define(function(require, exports) {
         $tr.fadeOut(function(){
             $that.parents('tr').remove();
         })
-        
     };
     
     // 、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
@@ -1755,17 +1754,17 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                singlePlan.busRequireListDel = [];
-                singlePlan.shopRequireListDel = [];
-                singlePlan.guideRequireListDel = [];
-                singlePlan.hotelRequireListDel = [];
-                singlePlan.otherRequireListDel = [];
-                singlePlan.ticketRequireListDel = []
-                singlePlan.scenicRequireListDel = [];
-                singlePlan.selfPayRequireListDel = [];
-                singlePlan.insuranceRequireListDel = [];
-                singlePlan.restaurantRequireListDel = [];
                 showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+                    singlePlan.busRequireListDel = [];
+                    singlePlan.shopRequireListDel = [];
+                    singlePlan.guideRequireListDel = [];
+                    singlePlan.hotelRequireListDel = [];
+                    singlePlan.otherRequireListDel = [];
+                    singlePlan.ticketRequireListDel = []
+                    singlePlan.scenicRequireListDel = [];
+                    singlePlan.selfPayRequireListDel = [];
+                    singlePlan.insuranceRequireListDel = [];
+                    singlePlan.restaurantRequireListDel = [];
                     if(!!tabArgs){
                         if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
                             singlePlan.initSigleEvent($("#tab-"+tabArgs[0]+"-content"));
