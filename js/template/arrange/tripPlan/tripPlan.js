@@ -28,18 +28,7 @@ define(function(require, exports) {
         searchData : false,
         $tab : false,
         $searchArea : false,
-        autocompleteDate : {},
-        //删除计划缓存ID
-        busRequireListDel : [],
-        guideRequireListDel : [],
-        hotelRequireListDel : [],
-        insuranceRequireListDel : [],
-        otherRequireListDel : [],
-        restaurantRequireListDel : [],
-        scenicRequireListDel : [],
-        selfPayRequireListDel : [],
-        shopRequireListDel : [],
-        ticketRequireListDel : []
+        autocompleteDate : {}
     };
 
     tripPlan.initModule = function() {
@@ -56,7 +45,7 @@ define(function(require, exports) {
 
     tripPlan.getAutocompleteData = function(type){
         $.ajax({
-            url: KingServices.build_url('v2/tripController','findSelectValue'),
+            url: KingServices.build_url('tripController','findSelectValue'),
             type : "POST",
             data : {tripPlanType : type}
         }).done(function(data){
@@ -172,7 +161,7 @@ define(function(require, exports) {
             arge.status = "";
         }
         $.ajax({
-            url : KingServices.build_url('v2/tripController', 'findPager'),
+            url : KingServices.build_url('tripController', 'findPager'),
             type : "POST",
             data : {searchParam : JSON.stringify(arge)}
         }).done(function(data){
@@ -246,7 +235,7 @@ define(function(require, exports) {
             }
         }).off('click').on('click', function() {
             $.ajax({
-                url: KingServices.build_url("v2/tripController", "selectDutyOPUser"),
+                url: KingServices.build_url("tripController", "selectDutyOPUser"),
                 type: "POST",
                 data: "businessGroupId="+$chooseObj.closest('.form-inline').find('[name=businessGroupName]').data('id'),
                 success: function(data) {
@@ -292,7 +281,7 @@ define(function(require, exports) {
                 tripNumber = $this.val(),
                 tripPlanId = $tab.find('.T-tab').data('id');
             $.ajax({
-                url: KingServices.build_url('v2/tripController','checkTripNumber'),
+                url: KingServices.build_url('tripController','checkTripNumber'),
                 type: 'POST',
                 showLoading: false,
                 data: {
@@ -449,746 +438,28 @@ define(function(require, exports) {
             event.preventDefault();
             tripPlan.savePlanData($tab, validate);
         });
-        //改动区域、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
-        $tab.find('.T-tab-content').on('click', '.T-addResource', function() {
-            var $that = $(this);
-            if ($that.hasClass('T-addInsurance')) {
-                //保险安排
-                tripPlan.addInsurance($tab);
-            }else if ($that.hasClass('T-addGuide')) {
-                //导游安排
-                tripPlan.addGuide($tab);
-            }else if ($that.hasClass('T-addBus')) {
-                //车辆安排
-                tripPlan.addBus($tab);
-            }else if ($that.hasClass('T-addRestaurant')) {
-                //餐厅安排
-                tripPlan.addRestaurant($tab);
-            }else if ($that.hasClass('T-addHotel')) {
-                //酒店安排
-                tripPlan.addHotel($tab);
-            }else if ($that.hasClass('T-addScenic')) {
-                //景区安排
-                tripPlan.addScenic($tab);
-            }else if ($that.hasClass('T-addShop')) {
-                //购物安排
-                tripPlan.addShop($tab);
-            }else if ($that.hasClass('T-addSelfPay')) {
-                //自费安排
-                tripPlan.addSelfPay($tab);
-            }else if ($that.hasClass('T-addTicket')) {
-                //票务安排
-                tripPlan.addTicket($tab);
-            }else if ($that.hasClass('T-addOther')) {
-                //其它安排
-                tripPlan.addOther($tab);
-            }
-        });
-        //部门下拉框
-        $tab.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $tab.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $tab.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $tab.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
     };
-     
-    /**
-     * 绑定部门
-     * @param  {object} $target 绑定选择的Jquery对象
-     * @return {[type]}         [description]
-     */
-    tripPlan.getBusinessList = function($target){
-        var $groupName = $target.closest('.layui-layer-content').find('[name="groupName"]'),
-            $dutyUser = $target.closest('.layui-layer-content').find('[name="dutyUserName"]');
-        return $target.autocomplete({
-            minLength:0,
-            change:function(event,ui){
-                if(ui.item == null){
-                    $target.val('').data('id', '');
-                    $groupName.val('').data('id', '');
-                    $dutyUser.val('').data('id', '');
-                }
-            },
-            select:function(event,ui){
-                var item = ui.item;
-                if(item.id != $target.data('id')){
-                    $groupName.val('').data('id', '');
-                    $dutyUser.val('').data('id', '');
-                }
-                $target.blur().data('id', item.id);
-                $target.siblings('input[name="dutyDepartmentId"]').val(item.id);
-            }
-        }).on('click', function(event) {
-            event.preventDefault();
-            /* Act on the event */
-            if ($target.data('ajax')) {
-                $target.autocomplete('search', '');
-            }else{
-                $.ajax({
-                    url: KingServices.build_url('group', 'selectBusinessGroup'),
-                    type: 'post',
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        var businessGroupList = data.businessGroupList;
-                        if (!!businessGroupList) {
-                            for (var i = 0, len = businessGroupList.length;i < len; i++) {
-                                businessGroupList[i].id = businessGroupList[i].businessGroupId;
-                                businessGroupList[i].value = businessGroupList[i].businessGroupName;
-                            }
-
-                            $target.autocomplete('option', 'source', businessGroupList).data('ajax', true);
-                            $target.autocomplete('search', '');
-                        }
-                    }
-                });
-            }
-        });
-    };
-    /**
-     * 绑定子部门
-     * @param  {object} $target 绑定选择的Jquery对象
-     * @return {[type]}         [description]
-     */
-    tripPlan.getGroupMapList = function($target){
-        var $businessName = $target.closest('.layui-layer-content').find('[name="businessName"]'),
-            $dutyUser = $target.closest('.layui-layer-content').find('[name="dutyUserName"]'),
-            $tr = $target.closest('tr');
-
-        return $target.autocomplete({
-            minLength:0,
-            change:function(event,ui){
-                if(ui.item == null){
-                    $target.val('').data('id', '');
-                    $dutyUser.val('').data('id', '');
-                }
-            },
-            select:function(event,ui){
-                var item = ui.item;
-                if(item.id != $target.data('id')){
-                    $dutyUser.val('').data('id', '');
-                }
-                $target.blur().data('id', item.id);
-            }
-        }).on('click', function(event) {
-            event.preventDefault();
-            /* Act on the event */
-            var businessNameId = $tr.find('input[name=dutyDepartmentName]').data('id');
-            if(!!businessNameId){
-                $.ajax({
-                    url: KingServices.build_url('group', 'selectGroup'),
-                    type: 'post',
-                    data: "businessGroupId=" + businessNameId,
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        var groupMapList = data.groupMapList;
-                        if (!!groupMapList) {
-                            for (var i = 0, len = groupMapList.length;i < len; i++) {
-                                groupMapList[i].id = groupMapList[i].groupId;
-                                groupMapList[i].value = groupMapList[i].groupName;
-                                $target.siblings('input[name="dutySubDepartmentId"]').val(groupMapList[i].id);
-                            }
-
-                            $target.autocomplete('option', 'source', groupMapList);
-                            $target.autocomplete('search', '');
-
-                        }
-                    }
-                });
-            }else{
-                layer.tips('请先选择部门！', $businessName, {
-                    tips: [1, '#3595CC'],
-                    time: 2000
-                });
-            }
-        });
-    }
-     /**
-     * 绑定责任计调的选择
-     * @param  {object} $target 绑定选择的Jquery对象
-     */
-    tripPlan.getDutyUserName = function($target) {
-        return $target.autocomplete({
-            minLength:0,
-            change:function(event,ui){
-                if(ui.item == null){
-                    $target.val('').data('id', '');
-                }
-            },
-            select:function(event,ui){
-                var item = ui.item;
-                $target.blur().data('id', item.id);
-            }
-        })
-        .on('click', function(event) {
-            event.preventDefault();
-            var $tr = $target.closest('tr'),$dutyDepartment = $tr.find('[name="dutySubDepartmentName"]');
-            $dutyDepartment = $dutyDepartment.length > 0 ? $dutyDepartment : $target.closest('.layui-layer-content').find('[name="groupName"]');
-            var businessGroupId = $dutyDepartment.data('id');
-            var type = 1;//$dutyDepartment.data('type');
-            var url = !!type ? KingServices.build_url('group', 'selectDutyUser') : KingServices.build_url('innerTransferOperation', 'getDutyOPUserList');
-            var data = !!type ? {"groupId" : businessGroupId} : {businessGroupId : businessGroupId};
-            if(!!businessGroupId){
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    data: data,
-                    showLoading: false,
-                })
-                .done(function(data) {
-                    if (showDialog(data)) {
-                        if(!!type){
-                            var dutyUserList = data.dutyUserList;
-                            if (!!dutyUserList) {
-                                for (var i = 0, len = dutyUserList.length;i < len; i++) {
-                                    dutyUserList[i].value = dutyUserList[i].dutyUserName;
-                                    dutyUserList[i].id = dutyUserList[i].dutyUserId;
-                                    $target.siblings('input[name="dutyUserId"]').val(dutyUserList[i].id);
-                                }
-
-                                $target.autocomplete('option', 'source', dutyUserList);
-                                $target.autocomplete('search', '');
-                            }
-                        }else{
-                            var opUserList = data.opUserList;
-                            if (!!opUserList) {
-                                for (var i = 0, len = opUserList.length;i < len; i++) {
-                                    opUserList[i].value = opUserList[i].realName;
-                                }
-
-                                $target.autocomplete('option', 'source', opUserList);
-                                $target.autocomplete('search', '');
-                            }
-                        }
-                    }
-                });
-            }else{
-                var tps = $dutyDepartment.attr('name') === "dutyDepartmentName" ? '请先选择责任部门！' : '请先选择子部门！';
-                layer.tips(tps, $dutyDepartment, {
-                    tips: [1, '#3595CC'],
-                    time: 2000
-                });
-            } 
-        });
-    };
-    /**
-     * 添加保险安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addInsurance = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input type="hidden" name="dutyDepartmentId" value=""></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input type="hidden" name="dutySubDepartmentId" value=""></td>'+
-                    '<td><input type="text" name="dutyUserName" value=""><input type="hidden" name="dutyUserId" value=""></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-insurance-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加导游安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addGuide = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class="T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class="T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-guide-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $tbody.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $tbody.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $tbody.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-    };
-    /**
-     * 添加车安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addBus = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-bus-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加餐安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addRestaurant = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-restaurant-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加酒店安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addHotel = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-hotel-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //酒店弹窗
-        $obj.find('.T-choose-hotel').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.chooseHotel($(this));
-        });
-    };
-    /**
-     * 添加景区安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addScenic = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-scenic-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加购物安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addShop = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-shop-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加自费安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addSelfPay = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-selfPay-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加票务安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addTicket = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-ticket-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 添加其他安排
-     * @param {[type]} validator [验证]
-     */
-    tripPlan.addOther = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
-                    '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
-                    '</td>'+
-                    '</tr>';
-        var $tbody = $obj.find('.T-other-plan');
-        $tbody.append(html);
-        Tools.setDatePicker($obj.find('.T-datepicker'), true);
-        //删除房
-        $obj.find('.T-del-plan').on('click', function() {
-            tripPlan.deleteArrangePlan($(this));
-        });
-        //部门下拉框
-        $obj.find('input[name="dutyDepartmentName"]').each(function(index, el) {
-            tripPlan.getBusinessList($(this));
-        });
-        //子部门下拉框
-        $obj.find('input[name="dutySubDepartmentName"]').each(function(index, el) {
-            tripPlan.getGroupMapList($(this));
-        });
-         //责任计调下拉框
-        $obj.find('input[name="dutyUserName"]').each(function(index, el) {
-            tripPlan.getDutyUserName($(this));
-        });
-        //删除保险
-        $obj.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            tripPlan.deleteArrangePlan($(this));
-        });
-    };
-    /**
-     * 删除车安排
-     * @param  {object} $obj 删除按钮
-     * @return {[type]}      [description]
-     */
-    tripPlan.deleteArrangePlan = function($obj) {
-        var $tr = $obj.closest('tr'),id = $tr.attr('entity-id'),arrangeType = $tr.attr('arrangeType');
-        console.log($obj);
-        if(arrangeType == 'bus'){
-            //车ID缓存
-            var  RequireListDelJson = {
-                id : id
-            }
-            tripPlan.busRequireListDel.push(singleDateArray);
-        }else if(arrangeType=="other"){
-            //其他ID缓存
-             var singleDateArray = {
-                    id : id
-                }
-            tripPlan.otherRequireListDel.push(singleDateArray);
-        }else if(arrangeType=="ticket"){
-            //票务ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.ticketRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="selfPay"){
-            //自费ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.selfPayRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="shop"){
-            //购物ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.shopRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="scenic"){
-            //景区ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.scenicRequireListDel.push(singleDateArray);
-        }else if(arrangeType=="hotel"){
-            //酒店ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.hotelRequireListDel.push(singleDateArray);
-        }else if(arrangeType=="restaurant"){
-            //餐ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.restaurantRequireListDel.push(singleDateArray);
-        }else if(arrangeType=="insurance"){
-            //保险ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.insuranceRequireListDel.push(singleDateArray);
-        }else if(arrangeType=="guide"){
-            //保险ID缓存
-            var singleDateArray = {
-                    id : id
-                }
-            tripPlan.guideRequireListDel.push(singleDateArray);
-        }
-        $tr.fadeOut(function(){
-            $that.parents('tr').remove();
-        })
-    };
-    // 、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
     /**
      * 团队-编辑计划
      * @param  {string} id id
      */
     tripPlan.updateGroupTripPlan = function(id){
         $.ajax({
-            url : KingServices.build_url("v2/tripPlan","editTripPlanByT"),
+            url : KingServices.build_url("tripPlan","editTripPlanByT"),
             type : "POST",
             data : {tripPlanId : id}
         }).done(function(data){
             if(showDialog(data)){
                 // 团队
                 var tabKey = menuKey + "_group_update";
-                console.log(data.touristGroup);
                 data.touristGroup = JSON.parse(data.touristGroup);
                 data.isGuest = 1;
                 data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
                 data.isGuest = 1;
                 data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
                 data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
-                //data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
-                //data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
+                data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
+                data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
                 tripPlan.processRepastDetail(data.tripPlanDayList);
                 if(Tools.addTab(tabKey, "编辑团队计划", T.updateGroupTripPlan(data))){
                     tripPlan.initEdit($("#tab-"+tabKey+"-content"));
@@ -1392,7 +663,7 @@ define(function(require, exports) {
                     var tripPlanId = $tab.find('.T-tab').data('id');
                     showConfirmDialog($('#confirm-dialog-message'), '您将删除所有计划，是否继续？', function() {
                         $.ajax({
-                            url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequireByBatch'),
+                            url: KingServices.build_url('tripPlan', 'deleteTripPlanRequireByBatch'),
                             type: 'post',
                             data: 'tripPlanId=' +  tripPlanId,
                         })
@@ -1447,7 +718,7 @@ define(function(require, exports) {
                             if(!!id){
                                 showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
                                     $.ajax({
-                                        url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequire'),
+                                        url: KingServices.build_url('tripPlan', 'deleteTripPlanRequire'),
                                         type: 'post',
                                         data: {requireId: id},
                                     })
@@ -1480,7 +751,7 @@ define(function(require, exports) {
             if (!!id) {
                 showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
                     $.ajax({
-                        url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequire'),
+                        url: KingServices.build_url('tripPlan', 'deleteTripPlanRequire'),
                         type: 'post',
                         data: {requireId: id},
                     })
@@ -1522,7 +793,7 @@ define(function(require, exports) {
                 if (!!id) {
                     showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
                         $.ajax({
-                            url: KingServices.build_url('v2/tripController', 'deletePlanDay'),
+                            url: KingServices.build_url('tripController', 'deletePlanDay'),
                             type: 'post',
                             data: {planDayId: id},
                         })
@@ -1552,47 +823,12 @@ define(function(require, exports) {
     };
 
     tripPlan.savePlanData = function($tab, validate, tabArgs){
-        var insuranceRequireList = Tools.getTableVal($tab.find('.T-insurance-plan'), 'entity-id');
-        var guideRequireList = Tools.getTableVal($tab.find('.T-guide-plan'), 'entity-id');
-        var busRequireList = Tools.getTableVal($tab.find('.T-bus-plan'), 'entity-id');
-        var restaurantRequireList = Tools.getTableVal($tab.find('.T-restaurant-plan'), 'entity-id');
-        var scenicRequireList = Tools.getTableVal($tab.find('.T-scenic-plan'), 'entity-id');
-        var hotelRequireList = Tools.getTableVal($tab.find('.T-hotel-plan'), 'entity-id');
-        var shopRequireList = Tools.getTableVal($tab.find('.T-shop-plan'), 'entity-id');
-        var selfPayRequireList = Tools.getTableVal($tab.find('.T-selfPay-plan'), 'entity-id');
-        var ticketRequireList = Tools.getTableVal($tab.find('.T-ticket-plan'), 'entity-id');
-        var otherRequireList = Tools.getTableVal($tab.find('.T-other-plan'), 'entity-id');
-        // if(!validate.form())return;
+        if(!validate.form())return;
         if (!F.judgmentTimeInterval($tab.find('[name=startTime]').val(), $tab.find('[name=endTime]').val(), $tab.find('[name=whichDayDate]'))) {
             return false;
         }
         
         var arge = $tab.find('.T-basic-info').serializeJson();
-        var requireJson = {
-            insuranceRequireList : insuranceRequireList,
-            guideRequireList : guideRequireList,
-            busRequireList : busRequireList,
-            restaurantRequireList : restaurantRequireList,
-            scenicRequireList　:　scenicRequireList,
-            hotelRequireList : hotelRequireList,
-            shopRequireList : shopRequireList,
-            shopRequireList : shopRequireList,
-            selfPayRequireList : selfPayRequireList,
-            ticketRequireList : ticketRequireList,
-            otherRequireList : otherRequireList,
-            //缓存删除id
-            busRequireListDel : tripPlan.busRequireListDel,
-            guideRequireListDel : tripPlan.guideRequireListDel,
-            hotelRequireListDel : tripPlan.hotelRequireListDel,
-            insuranceRequireListDel : tripPlan.insuranceRequireListDel,
-            otherRequireListDel : tripPlan.otherRequireListDel,
-            restaurantRequireListDel : tripPlan.restaurantRequireListDel,
-            scenicRequireListDel : tripPlan.scenicRequireListDel,
-            selfPayRequireListDel : tripPlan.selfPayRequireListDel,
-            shopRequireListDel : tripPlan.shopRequireListDel,
-            ticketRequireListDel : tripPlan.ticketRequireListDel
-        }
-        arge.requireJson = JSON.stringify(requireJson);
         var tripPlanId = $tab.find('.T-tab').data("id");
         if(tripPlanId){
             arge.tripPlanId = tripPlanId;
@@ -1698,26 +934,17 @@ define(function(require, exports) {
         }else{
             saveAjax();
         }
+
         function saveAjax() {
             $.ajax({
-                url : KingServices.build_url("v2/tripPlan","saveTripPlanByT"),
+                url : KingServices.build_url("tripPlan","saveTripPlanByT"),
                 type : "POST",
-                data : arge,
+                data : arge
             })
             .done(function(data){
                 if(showDialog(data)){
                     $tab.data('isEdited', false);
                     showMessageDialog($( "#confirm-dialog-message" ), data.message, function(){
-                        tripPlan.busRequireListDel = [];
-                        tripPlan.shopRequireListDel = [];
-                        tripPlan.guideRequireListDel = [];
-                        tripPlan.hotelRequireListDel = [];
-                        tripPlan.otherRequireListDel = [];
-                        tripPlan.ticketRequireListDel = []
-                        tripPlan.scenicRequireListDel = [];
-                        tripPlan.selfPayRequireListDel = [];
-                        tripPlan.insuranceRequireListDel = [];
-                        tripPlan.restaurantRequireListDel = [];
                         if(!!tabArgs){
                             if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
                                 tripPlan.initEdit($("#tab-"+tabArgs[0]+"-content"));
@@ -1991,7 +1218,7 @@ define(function(require, exports) {
     tripPlan.viewTripPlan = function(id, planType){
         var html = T.viewTripPlanGroup, viewMenuKey = menuKey+"_group_view";
         $.ajax({
-            url : KingServices.build_url("v2/tripController", "viewTripPlan"),
+            url : KingServices.build_url("tripController", "viewTripPlan"),
             type : "POST",
             data : {tripPlanId : id}
         })
@@ -2078,7 +1305,7 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             $.ajax({
-                url: KingServices.build_url('v2/tripPlan', 'getOPUserList'),
+                url: KingServices.build_url('tripPlan', 'getOPUserList'),
                 type: 'post',
             })
             .done(function(data) {
@@ -2178,7 +1405,7 @@ define(function(require, exports) {
         }else{
             if(statusValue==0){
                 $.ajax({
-                    url:KingServices.build_url("v2/tripPlan","confirmTripPlan"),
+                    url:KingServices.build_url("tripPlan","confirmTripPlan"),
                     data:{ tripPlanId : id + "" },
                     success: function(data) {
                         var result =showDialog(data);
@@ -2193,7 +1420,7 @@ define(function(require, exports) {
             }else{
                 showConfirmMsg($( "#confirm-dialog-message" ), "是否给导游发送短信？",function(){
                     $.ajax({
-                        url:KingServices.build_url("v2/tripPlan","noticeGuideTripPlanAfterConfirmTripPlanAgain"),
+                        url:KingServices.build_url("tripPlan","noticeGuideTripPlanAfterConfirmTripPlanAgain"),
                         data:{ id : id + "" },
                         success: function(data) {
                             var result =showDialog(data);
@@ -2406,7 +1633,7 @@ define(function(require, exports) {
                 args.quoteId = quoteId;
             }
             $.ajax({
-                url:KingServices.build_url("v2/tripPlan","getLineProductDayList"),
+                url:KingServices.build_url("tripPlan","getLineProductDayList"),
                 data:args,
                 type:"POST",
                 success: function(data) {
@@ -2544,7 +1771,7 @@ define(function(require, exports) {
     tripPlan.cancelTripPlan = function(id, $that){
         showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该发团计划信息？",function(){
             $.ajax({
-                url:KingServices.build_url("v2/tripPlan","cancelTripPlan"),
+                url:KingServices.build_url("tripPlan","cancelTripPlan"),
                 data:{ tripPlanId : id + "" },
                 success: function(data) {
                     var result =showDialog(data);

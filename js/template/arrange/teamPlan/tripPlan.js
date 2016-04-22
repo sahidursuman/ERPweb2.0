@@ -22,7 +22,9 @@ define(function(require, exports) {
         feeList : require("./view/feeList"),
         addPartnerManager : require('./view/addPartnerManager'),
         viewTripPlanGroup : require('./view/viewTripPlanGroup'),
-        batchAddTourist : require('./view/batchAddTourist')
+        batchAddTourist : require('./view/batchAddTourist'),
+        chooseHotel : require('./view/chooseHotel'),
+        chooseHotelList : require('./view/chooseHotelList')
     }
     var tripPlan = {
         searchData : false,
@@ -501,6 +503,11 @@ define(function(require, exports) {
             event.preventDefault();
             tripPlan.deleteArrangePlan($(this));
         });
+        //酒店弹窗
+        $tab.find('.T-choose-hotel').on('click', function(event) {
+            event.preventDefault();
+            tripPlan.chooseHotel($(this));
+        });
     };
      
     /**
@@ -843,18 +850,32 @@ define(function(require, exports) {
      * @param {[type]} validator [验证]
      */
     tripPlan.addHotel = function($obj) {
-        var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
-                    '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+        var html = '<tr entity-id="" arrangeType = "hotel">'+
                     '<td>'+
-                    '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
+                        '<input type="hidden" name="id" value="">'+
+                        '<input type="text" name="startTime" value="" class="T-datepicker">'+
                     '</td>'+
-                    '</tr>';
+                    '<td>'+
+                        '<input type="text" name="endTime" value="" class="T-datepicker">'+
+                    '</td>'+
+                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
+                    '<td>'+
+                        '<input type="text" name="requireContent" value="" class="col-xs-12">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" name="dutyDepartmentId" value="">'+
+                        '<input type="text" name="dutyDepartmentName" value="">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" name="dutySubDepartmentId" value="">'+
+                        '<input type="text" name="dutySubDepartmentName" value="">'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="hidden" name="dutyUserId" value="">'+
+                        '<input type="text" name="dutyUserName" value="">'+
+                    '</td>'+
+                    '<td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>'+
+                '</tr>';
         var $tbody = $obj.find('.T-hotel-plan');
         $tbody.append(html);
         Tools.setDatePicker($obj.find('.T-datepicker'), true);
@@ -1089,6 +1110,151 @@ define(function(require, exports) {
             event.preventDefault();
             tripPlan.deleteArrangePlan($(this));
         });
+    };
+    /**
+     * 自选酒店
+     * @param  {object} $that 触发对象的jQuery对象
+     */
+    tripPlan.chooseHotel = function($that){
+        var data = typeof $that.data('json') === 'object' ? $that.data('json') : JSON.parse($that.data('json') || "[]");
+        tripPlan.selectHotelCache = data;
+        layer.open({
+            type: 1,
+            title: "自选酒店",
+            skin: 'layui-layer-rim', //加上边框
+            area: '70%', //宽高
+            zIndex:1028,
+            content: T.chooseHotel(),
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+                tripPlan.getHotelList(0, $layer);
+                $layer.find('.T-btn-search').on('click', function(){
+                    tripPlan.getHotelList({
+                        pageNo : 0,
+                        name : $layer.find('.T-hotel-name').val()
+                    }, $layer);
+                });
+                $layer.find('.T-hotel-list').on('change', '.T-select', function(){
+                    var $that = $(this);
+                    if($that.is(":checked")){
+                        cacheCheckData($that, 1);
+                    }else{
+                        cacheCheckData($that, 0);
+                    }
+                });
+                $layer.find('.T-btn-save').on('click', function(){
+                    var str = "";
+                    for(var i=0, len = tripPlan.selectHotelCache.length; i<len;i++){
+                        if(i != len - 1){
+                            str = str + tripPlan.selectHotelCache[i].name + ",";
+                        }else{
+                            str += tripPlan.selectHotelCache[i].name;
+                        }
+                    }
+                    $that.data('json', JSON.stringify(tripPlan.selectHotelCache)).val(str);
+                    layer.close(index);
+                });
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
+                    layer.close(index);
+                });
+            }
+        });
+
+        return;
+        function cacheCheckData($that, operation) {
+            var $tr = $that.closest('tr'),
+                id = $tr.data('id'),
+                name = $tr.find('[name="hotelName"]').text();
+            if(tripPlan.selectHotelCache.length > 0){
+                for(var i=0, len = tripPlan.selectHotelCache.length; i<len; i++){
+                    if(operation === 1){
+                        if(tripPlan.selectHotelCache[i].id === id){
+                            break;
+                        }
+                        if(i === len - 1 && id !== tripPlan.selectHotelCache[i].id){
+                            tripPlan.selectHotelCache.push({
+                                id : id,
+                                name : name,
+                                ischeck : 1
+                            });
+                        }
+                    }else{
+                        if(tripPlan.selectHotelCache[i].id == id){
+                            tripPlan.selectHotelCache.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }else if(operation === 1){
+                tripPlan.selectHotelCache.push({
+                    id : id,
+                    name : name,
+                    ischeck : 1
+                });
+            }
+        }
+    };
+    /**
+     * 获取自选酒店列表
+     * @param  {number/object} args       请求参数
+     * @param  {object}        $layer     layer的jQuery对象
+     * @param  {number}        layerIndex layer的索引
+     */
+    tripPlan.getHotelList = function(args, $layer, layerIndex){
+        if(typeof args === "number"){
+            var page = args;
+            args = {};
+            args.pageNo = page;
+        }
+        $.ajax({
+            url : KingServices.build_url('hotel', 'selectHotel'),
+            data : args,
+            type: 'POST',
+            success : function(data){
+                if(showDialog(data)){
+                    data.hotelList = JSON.parse(data.hotelList);
+                    data.hotelList = tripPlan.getTempDate(data.hotelList, tripPlan.selectHotelCache);
+                    var html = T.chooseHotelList(data);
+                    $layer.find('.T-hotel-list').html(html);
+                    //绑定分页插件
+                    laypage({
+                        cont: $layer.find('.T-pagenation'),
+                        pages: data.totalPage,
+                        curr: (args.pageNo + 1),
+                        jump: function(obj, first) {
+                            if (!first) {
+                                args.pageNo = (obj.curr - 1);
+                                tripPlan.getHotelList(args, $layer);
+                            }
+                        }
+                    });
+                    $(document).trigger('resize');
+                }else if(!!layerIndex){
+                    layer.close(layerIndex);
+                }
+            }
+        });
+    };
+    /**
+     * 替换数据
+     * @param  {Array}  resultList  原有的数据
+     * @param  {Array}  tempJson   新数据
+     */
+    tripPlan.getTempDate = function(resultList,tempJson){
+        if(!!tempJson && tempJson.length){
+            for(var i = 0; i < tempJson.length; i++){
+                var tempId = tempJson[i].id;
+                for(var j = 0; j < resultList.length; j++){
+                    var id = resultList[j].id;
+                    if(tempId == id){
+                        resultList[j].ischeck = tempJson[i].ischeck || true;
+                    }
+                }
+            }
+        };
+        return resultList;
     };
     /**
      * 删除车安排
