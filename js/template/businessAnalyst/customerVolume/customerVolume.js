@@ -112,7 +112,8 @@ define(function(require, exports) {
 	    		/* Act on the event */
     				var $that=$(this),
     		            id=$that.data('value');
-    		        customerVolObj.getCusDetail(id,0,startTime,endTime);
+    		        customerVolObj.getCusDetail(id,0, customerVolObj.$tab.find('input[name="startTime"]').val(), 
+    		        								customerVolObj.$tab.find('input[name="endTime"]').val());
 	    	});
 
 
