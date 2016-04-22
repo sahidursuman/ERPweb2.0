@@ -18,7 +18,6 @@ define(function(require, exports) {
     //模版
     var T = {
         updateDetail : require("./view/updateDetail"),
-        addPartnerManager : require('./view/addPartnerManager'),
         viewTripPlanSingle : require('./view/view'),
     }
     var singlePlan = {
