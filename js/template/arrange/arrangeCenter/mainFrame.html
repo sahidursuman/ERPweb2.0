@@ -726,7 +726,7 @@
                             <div class="form-inline hct-search-area hidden">
                                 <div class="form-group mar-r-20">
                                     <label>责任计调</label>
-                                    <input type="text" name="dutyOPUserName" value="" class="form-control T-orderNumber" />
+                                    <input type="text" name="dutyOPUserName" value="" class="form-control" />
                                     <input type="hidden" name="dutyOPUserId">
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
@@ -749,7 +749,7 @@
                 <ul class="nav nav-tabs hct-new-tab">
                     <li class="w-80 active text-center"><a data-toggle="tab" href="#booking-bus-arrange">车</a></li>
                     <li class="w-80 text-center"><a data-toggle="tab" href="#booking-hotel-arrange">房</a></li>
-                    <li class="w-80 text-center"><a data-toggle="tab" href="#booking-scence-arrange">景</a></li>
+                    <li class="w-80 text-center"><a data-toggle="tab" href="#booking-scenic-arrange">景</a></li>
                     <li class="w-80 text-center"><a data-toggle="tab" href="#booking-ticket-arrange">票</a></li>
                 </ul>
                 <div class="tab-content no-border no-padding mar-t-20">
@@ -759,7 +759,7 @@
                             <div class="form-inline">
                                 <div class="form-group mar-r-10">
                                     <label>代订单号</label>
-                                    <input type="text" class="form-control" name="bookingNumber"/>
+                                    <input type="text" class="form-control" name="orderNumber"/>
                                 </div>
                                 <div class="form-group mar-r-10">
                                     <label>用车时间</label>
@@ -767,8 +767,8 @@
                                 </div>
                                 <div class="form-group mar-r-20">
                                     <label>外联销售</label>
-                                    <input type="text" name="salesMan" value="" class="form-control T-orderNumber" />
-                                    <input type="hidden" name="salesManId">
+                                    <input type="text" name="outOPUserName" value="" class="form-control" />
+                                    <input type="hidden" name="outOPUserId">
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
@@ -796,23 +796,23 @@
                             <div class="form-inline">
                                 <div class="form-group mar-r-10">
                                     <label>代订单号</label>
-                                    <input type="text" class="form-control" name="bookingNumber"/>
+                                    <input type="text" class="form-control" name="orderNumber"/>
                                 </div>
                                 <div class="form-group mar-r-10">
                                     <label>入住日期</label>
-                                    <input type="text" class="form-control datepicker" name="useTime"/>
+                                    <input type="text" class="form-control datepicker" name="checkInTime"/>
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>星级 </label>
-                                    <select name="level" id="">
+                                    <select name="hotelLevel">
                                         <option value="">全部</option>
                                         {{#110 | getHotelLevelOptions}}
                                     </select>
                                 </div>
                                 <div class="form-group mar-r-20">
                                     <label>外联销售</label>
-                                    <input type="text" name="salesMan" value="" class="form-control T-orderNumber" />
-                                    <input type="hidden" name="salesManId">
+                                    <input type="text" name="outOPUserName" value="" class="form-control" />
+                                    <input type="hidden" name="outOPUserId">
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
@@ -840,11 +840,11 @@
                             <div class="form-inline">
                                 <div class="form-group mar-r-10">
                                     <label>代订单号</label>
-                                    <input type="text" class="form-control" name="bookingNumber"/>
+                                    <input type="text" class="form-control" name="orderNumber"/>
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>类型 </label>
-                                    <select name="level" id="">
+                                    <select name="type">
                                         <option value="">全部</option>
                                         <option value="1">机票</option>
                                         <option value="2">汽车票</option>
@@ -854,12 +854,12 @@
                                 </div>
                                 <div class="form-group mar-r-10">
                                     <label>出发日期</label>
-                                    <input type="text" class="form-control datepicker" name="useTime"/>
+                                    <input type="text" class="form-control datepicker" name="startTime"/>
                                 </div>
                                 <div class="form-group mar-r-20">
                                     <label>外联销售</label>
-                                    <input type="text" name="salesMan" value="" class="form-control T-orderNumber" />
-                                    <input type="hidden" name="salesManId">
+                                    <input type="text" name="outOPUserName" value="" class="form-control" />
+                                    <input type="hidden" name="outOPUserId">
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>
@@ -881,21 +881,21 @@
                         <div class="T-table-area"></div>
                     </div>
                     <!-- 景区安排 -->
-                    <div id="booking-scence-arrange" class="tab-pane fade" data-target="scenic">
+                    <div id="booking-scenic-arrange" class="tab-pane fade" data-target="scenic">
                         <form class="T-search-area" role="form" onsubmit="return false">
                             <div class="form-inline">
                                 <div class="form-group mar-r-10">
                                     <label>代订单号</label>
-                                    <input type="text" class="form-control" name="bookingNumber"/>
+                                    <input type="text" class="form-control" name="orderNumber"/>
                                 </div>
                                 <div class="form-group mar-r-10">
                                     <label>出游日期</label>
-                                    <input type="text" class="form-control datepicker" name="startTime"/>
+                                    <input type="text" class="form-control datepicker" name="startDate"/>
                                 </div>
                                 <div class="form-group mar-r-20">
                                     <label>外联销售</label>
-                                    <input type="text" name="salesMan" value="" class="form-control T-orderNumber" />
-                                    <input type="hidden" name="salesManId">
+                                    <input type="text" name="outOPUserName" value="" class="form-control" />
+                                    <input type="hidden" name="outOPUserId">
                                 </div>
                                 <div class="form-group T-hotelState r-20 mar-r-20">
                                     <label>状态 </label>

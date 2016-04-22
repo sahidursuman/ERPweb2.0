@@ -1189,6 +1189,11 @@ input.datepicker:not([class^="col-"]) {
 .item-line {
 	border-top: 1px solid #ddd;
 }
+.hct-mh-required{
+    padding: 10px 5px;
+    background-color: #EFEFEF;
+    border-radius: 0;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
