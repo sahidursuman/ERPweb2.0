@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":63,"md5":"3387bfb75a64c812c2e4f360cf6a8905"}*/
+/*TMODJS:{"debug":true,"version":1,"md5":"3387bfb75a64c812c2e4f360cf6a8905"}*/
 define(function(require) {
-    return require("../../../template")("arrange/singlePlan/view/viewTripPlanSingle", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/view", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, tripPlan = $data.tripPlan, guideDetail = $data.guideDetail, $each = $utils.$each, guideArrange = $data.guideArrange, $string = ($data.guide, 
             $data.$index, $data.task, $data.i, $utils.$string), insuranceArrange = $data.insuranceArrange, busCompanyArrange = ($data.insuranceList, 
