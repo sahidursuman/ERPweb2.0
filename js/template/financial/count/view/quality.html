@@ -33,7 +33,7 @@
             <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.bus == null}}-{{else}}{{tripPlan.bus.licenseNumber}}{{/if}}</td>
             <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.driver == null}}-{{else}}{{tripPlan.driver.name}}{{/if}}</td>
             <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{if tripPlan.user == null}}-{{else}}{{tripPlan.user.realName}}{{/if}}</td>
-            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
+            <td style="vertical-align:middle" rowspan="{{tripPlan.tripPlanDetails.length}}">{{tripPlan.createTime | dateTimeFormat}}</td>
         </tr>
         {{each tripPlan.tripPlanDetails as detail index}}
         {{if index > 0}}

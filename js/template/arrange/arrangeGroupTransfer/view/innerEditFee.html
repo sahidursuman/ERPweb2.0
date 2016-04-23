@@ -69,8 +69,8 @@
 									<!--初始化游客小组费用start--> 
 									{{each touristGroupFeeList as transferList}} 
 
-									{{if touristGroup.operateCalculteOut==0}}
-											{{if transferList.type!=3}}    
+									{{if touristGroup.operateCalculteOut==0 && touristGroup.pid!=null}}
+											{{if transferList.type!=3}}  
 												<tr  data-entity-id="{{transferList.id}}">
 													<td>
 														 <select name="type" class="col-sm-10 col-sm-offset-1">

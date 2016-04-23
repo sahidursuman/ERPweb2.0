@@ -101,6 +101,9 @@ input {
     padding-right: 5px;
 }
 
+.div-h-30 {
+    height:30px;
+}
 
 /**
  * 设置自定义popover的样式
@@ -292,10 +295,22 @@ table tr td {
 }
 
 .th-border {
-    border: 1px solid #ececec!important;
+    /*border: 1px solid #ececec!important;*/
     background: #f7f8f8!important;
 }
 
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>td {
+    border-top: 1px solid #ddd;
+}
+
+.table>thead>tr>th:last-child {
+    border-right-color: #ddd;
+}
 .pitch {
     margin-left: 25px
 }
@@ -434,13 +449,19 @@ table tr td {
     margin: 0;
 }
 
+.mar-t-5 {
+    margin-top: 5px;
+}
+
 .mar-t-20 {
     margin-top: 20px;
 }
 .mar-t-50{
     margin-top: 50px;
 }
-
+.mar-t-30 {
+    margin-top: 30px;
+}
 .mar-t-10 {
     margin-top: 10px;
 }
@@ -482,6 +503,9 @@ table tr td {
     margin-right: 20px!important;
 }
 
+.mar-b-0 {
+    margin-bottom: 0px;
+}
 .mar-b-10 {
     margin-bottom: 10px;
 }
@@ -720,7 +744,6 @@ table tr td {
     border: 2px solid #5d5d5d;
     text-align: right;
 }
-
 
 /*restaurant时间宽度*/
 
@@ -2684,6 +2707,51 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 .table-inner-list li:first-child{
     border:none;
 }
+
+}
+.w-150{
+    width: 150px
+}
+/*中转安排*/
+.hct-tab .hct-new-tab{
+    height: 40px;
+    background: #e9fbfe;
+    border-bottom: none;
+}    
+.hct-tab .hct-new-tab li{
+    width: 65px;
+    height: 40px;
+    margin-top: 0px;
+    
+}
+.hct-tab .hct-new-tab li a{
+    margin-top: 0px;
+    height: inherit!important;
+    background: none;
+    border:none;
+    box-shadow: none!important;
+    line-height: 25px;
+}
+
+.hct-tab .nav-tabs>li.active>a,.hct-tab .nav-tabs>li.active>a:hover, .hct-tab .nav-tabs>li.active>a:focus{
+    color:#fff;
+    border: none;
+    background: #51b0c2;
+    line-height: 25px;
+
+}
+.hct-max-model .tab-content{
+    border: none;
+    padding:14px 0px;
+}
+.T-hide{
+    display: none;
+}
+.hct-max-model .nav-tabs .hct-box{
+    width: 150px;
+    /*height: 30px;*/
+}
+
 /*打印时的样式*/
 @media print{
     h5{

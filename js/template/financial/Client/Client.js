@@ -203,7 +203,7 @@ define(function(require, exports) {
         Client.checkPageNo = args.pageNo = pageNo || 0;
 
         $.ajax({
-            url : KingServices.build_url('financial/customerAccount', 'listCheckCustomerAcccount'),
+            url : KingServices.build_url('financial/customerAccount', 'listCustomerAcccount'),
             type : "POST",
             data : args
         }).done(function(data){
@@ -234,6 +234,12 @@ define(function(require, exports) {
                     if(Client.checkTemp && Client.checkTemp.length > 0){
                         $tab.data('isEdited',true);
                     }
+                    if($tab.data("total")){
+                        Client.loadSumData($tab);
+                    } else {
+                        Client.getCheckSumData(args,$tab);
+                    }
+                    
                     Client.initCheck($tab,args);
                     Client.viewFeeDetails($tab,resultList);
                 } else {
@@ -280,6 +286,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             Client.checkTemp = false;
+            $tab.data("total","");
             Client.ClientCheck(Client.$checkTab.data("next").pageNo,Client.$checkTab.data("next"));
         })
         // 监听保存，并切换tab
@@ -297,6 +304,7 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE_NO, function(event) {
             event.preventDefault();
             Client.checkTemp = false;
+            $tab.data("total","");
         });
 
         // 初始化jQuery 对象 
@@ -321,11 +329,13 @@ define(function(require, exports) {
             var $this = $(this);
             // 设置选择的效果
             $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            $tab.data("total","");
             Client.ClientCheck(0, false, $tab, $(this).closest('.T-search-area').data('isview'));
         });
         //搜索按钮事件
         Client.$checkSearchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
+            $tab.data("total","");
             Client.ClientCheck(0, false, $tab, $(this).closest('.T-search-area').data('isview'));
         });
 
@@ -514,7 +524,7 @@ define(function(require, exports) {
         args.sortType = 'startTime';
         args.order='asc';
         $.ajax({
-            url:KingServices.build_url("financial/customerAccount","listReciveCustomerAcccount"),
+            url:KingServices.build_url("financial/customerAccount","listCustomerAcccount"),
             type:"POST",
             data:args,
         }).done(function(data){
@@ -546,6 +556,11 @@ define(function(require, exports) {
                     }
                     if(args.isAutoPay){
                         Client.setAutoFillEdit($tab,true);
+                    }
+                    if($tab.data("total")){
+                        Client.loadSumData($tab);
+                    } else {
+                        Client.getCheckSumData(args,$tab);
                     }
                     Client.initClear($tab,args);
                     Client.viewFeeDetails($tab,resultList);  
@@ -586,6 +601,7 @@ define(function(require, exports) {
         $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
             event.preventDefault();
             Client.clearDataArray = false;
+            $tab.data("total","");
             Client.ClientClear(Client.$clearTab.data("next").pageNo,Client.$clearTab.data("next"));
         })
         // 监听保存，并切换tab
@@ -605,6 +621,7 @@ define(function(require, exports) {
         .on(CLOSE_TAB_SAVE_NO, function(event) {
                 event.preventDefault();
                 Client.clearDataArray = false;
+                $tab.data("total","");
             });
 
         Tools.setDatePicker(Client.$clearSearchArea.find(".T-time"), true);
@@ -617,6 +634,7 @@ define(function(require, exports) {
         Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'),args);
         //搜索事件
         Client.$clearSearchArea.find(".T-btn-search").click(function(){
+            $tab.data("total","");
             Client.ClientClear(0, false, $tab);
         });
         //搜索下拉事件
@@ -625,6 +643,7 @@ define(function(require, exports) {
             var $this = $(this);
             // 设置选择的效果
             $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            $tab.data("total","");
             Client.ClientClear(0, false, $tab);
         });
 
@@ -659,6 +678,7 @@ define(function(require, exports) {
                 }
             } else {
                 Client.clearDataArray = false;
+                $tab.data("total","");
                 $tab.data('isEdited', false);
                 Client.setAutoFillEdit($tab, false);
             }
@@ -794,6 +814,7 @@ define(function(require, exports) {
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         $tab.data('isEdited', false);
                         Client.checkTemp = false;
+                        $tab.data("total","");
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
                             Client.listClient(Client.listPage);
@@ -838,6 +859,7 @@ define(function(require, exports) {
                     showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                         $tab.data('isEdited', false);
                         Client.clearDataArray = false;
+                        $tab.data("total","");
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_clearing");
                             Client.listClient(Client.listPage);
@@ -1140,6 +1162,31 @@ define(function(require, exports) {
                 scrollbar: false
             });
         });
+    };
+
+    /* 获取合计数据 */
+    Client.getCheckSumData = function(args,$tab){
+        $.ajax({
+            url: KingServices.build_url('financial/customerAccount', 'listCustomerAcccountTotal'),
+            type: 'POST',
+            data: args,
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                $tab.data("total",data);
+                Client.loadSumData($tab);
+            }
+        });
+    };
+    Client.loadSumData = function($tab){
+        var total = $tab.data("total");
+        $tab.find(".T-sumCount").text(total.sumCount);
+        $tab.find(".T-sumContractMoney").text(total.sumContractMoney);
+        $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
+        $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
+        $tab.find(".T-sumSettlementMoney").text(total.sumSettlementMoney);
+        $tab.find(".T-sumUnReceivedMoney").text(total.sumUnReceivedMoney);
+        $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
     };
 
     exports.init = Client.initModule;

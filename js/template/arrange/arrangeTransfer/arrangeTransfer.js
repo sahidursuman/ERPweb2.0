@@ -78,12 +78,9 @@ define(function(require, exports) {
 
 						var html=listMainTemplate(transfer.allData);
 						Tools.addTab(menuKey,"外转管理",html);
-
-				    	transfer.$tab=$('#'+ tabId);
-				    	//初始化时间插件
-				    	transfer.datePicker(transfer.$tab);
+				    	transfer.$tab=$("#tab-"+menuKey+"-content");
 				    	//初始化事件的绑定
-				    	transfer.init_event(); 	
+				    	transfer.init_event(transfer.$tab); 	
 					}
 			    }
 	    	})
@@ -93,14 +90,14 @@ define(function(require, exports) {
 	     * [init_event listMain搜索域数据查询事件绑定]
 	     * @return {[type]} [description]
 	     */
-	    transfer.init_event=function(){
-	    	transfer.$divIdInObj=$('#Transfer-In');
-	    	transfer.$divIdOutObj=$('#Transfer-Out');
+	    transfer.init_event=function($tab){
+            Tools.setDatePicker($tab.find('.datepicker'), false);
+	    	transfer.$divIdInObj=$tab.find('#Transfer-In');
+	    	transfer.$divIdOutObj=$tab.find('#Transfer-Out');
 	    	transfer.chooseLineProduct(transfer.$divIdInObj);
 	    	transfer.choosePartnerAgency(transfer.$divIdInObj,2);
 	    	transfer.choosePartnerAgency(transfer.$divIdOutObj,1);
 	    	transfer.chooseUserList(transfer.$divIdOutObj,1);
-
 	    	/**
 	    	 * type 1 我社转出 2他部转入
 	    	 * @type {String}
@@ -273,19 +270,6 @@ define(function(require, exports) {
 					}
 				})
 		};
-		/**
-		 * 时间控件初始化
-		 * @param  {[type]} $obj [description]
-		 * @return {[type]}      [description]
-		 */
-		transfer.datePicker = function($obj){
-			$obj.find(".datepicker").datepicker({
-				autoclose: true,
-				todayHighlight: true,
-				format: 'yyyy-mm-dd',
-				language: 'zh-CN'
-			})
-		};
 
 	    /**
 	     * 获取查询参数并将其封装成$searchParam对象
@@ -370,19 +354,14 @@ define(function(require, exports) {
 	    			var result = showDialog(data);
 	    			if (result) {
 	    				data.result=JSON.parse(data.result);
-	    				var html;
-						if (type == 1) {
-							html = outListTemplate(data);
-						}else{
+	    				var html= outListTemplate(data);
+						if (type == 2) {
 							html = inListTemplate(data);
 						}
-						html = filterUnAuth(html);
 						//模板页面追加
-						$("#"+divId ).find(".transferList").html(html);
-
+						$("#"+divId ).find(".transferList").html(filterUnAuth(html));
 						//模板数据Action事件
 						transfer.initActionEvent(divId,type);
-
 						// 绑定翻页组件
 						laypage({
 						    cont: $('#' + divId).find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -731,10 +710,8 @@ define(function(require, exports) {
 					var id = $tr.attr("data-entity-id");
 					transfer.delTransferData(id,$tr,$tab);
 				});
-
 		    }
 		};
-
 
 		/**
 		 * [newAddFee 给新增费用绑定事件]
@@ -758,10 +735,8 @@ define(function(require, exports) {
 			    $tbody.append(html);
 			var $count=$tbody.find('.count');
 			Tools.inputCtrolFloat($count);
-			
 			// 更新表单验证的事件绑定
 			rule.update(validator);   
-			
 			//绑定删除分团转客信息
 			$tab.find(".T-updateTransfer-delete").off().on("click",function(){
 				var $that=$(this),
@@ -1019,75 +994,52 @@ define(function(require, exports) {
 			}
 		};
 
-		/**
-		 * 查看同行转入信息
-		 * @param  {[type]} id [description]
-		 * @return {[type]}    [description]
-		 */
-		transfer.viewTransferIn=function(id){
-			$.ajax({
-				url:KingServices.build_url("transfer","findMember"),
-				type:"POST",
-				data:"id="+id+"",
-				success:function(data){
-					var result = showDialog(data);
-					if(result){
-						data.lineProduct = JSON.parse(data.lineProduct);
-						data.touristGroup =JSON.parse(data.touristGroup);
-						data.partnerAgency=JSON.parse(data.partnerAgency);
-						var html = viewTransferInTemplate(data);
-						Tools.addTab(menuKey+"-viewTransferIn","查看同行转入",html);
-					}
+	/**
+	 * 查看同行转入信息
+	 * @param  {[type]} id [description]
+	 * @return {[type]}    [description]
+	 */
+	transfer.viewTransferIn=function(id){
+		$.ajax({
+			url:KingServices.build_url("transfer","findMember"),
+			type:"POST",
+			data:"id="+id+"",
+			success:function(data){
+				var result = showDialog(data);
+				if(result){
+					data.lineProduct = JSON.parse(data.lineProduct);
+					data.touristGroup =JSON.parse(data.touristGroup);
+					data.partnerAgency=JSON.parse(data.partnerAgency);
+					var html = viewTransferInTemplate(data);
+					Tools.addTab(menuKey+"-viewTransferIn","查看同行转入",html);
 				}
-			});	
-		};
+			}
+		});	
+	};
 
-		/**
-		 * 拒绝同行转入
-		 * @param  {[type]} id [description]
-		 * @return {[type]}    [description]
-		 */
-		transfer.deleteTransferIn=function(id){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "否",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "是",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$.ajax({
-								url:KingServices.build_url("transfer","refuse"),
-								type:"POST",
-								data:"id="+id + "&isDelete=1",
-								success:function(data){
-									var type="2";
-									    divId="Transfer-In";
-									transfer.getSearchParam(divId,type);
-									transfer.findPager(divId,type,0);
-									
-								}
-							});
-							$( this ).dialog( "close" );
-						}
+    /**
+     * [deleteTransferIn 拒绝同行转入
+     * @param  {[type]} id 数据记录ID
+     * @return {[type]}
+     */
+	transfer.deleteTransferIn = function(id){
+		if(!!id){
+			showNndoConfirmDialog($("#confirm-dialog-message"),"是否拒收？",function(){
+				$.ajax({
+					url:KingServices.build_url("transfer","refuse"),
+					type:"POST",
+					data:"id="+id + "&isDelete=1",
+				})
+				.done(function(data) {
+					if(showDialog(data)){
+						showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+							transfer.$tab.find('.T-transferIn-search').trigger('click');
+						})
 					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("是否拒收？");
-				}
+				})
 			});
-		};
-
+		}
+	};
 
 	/**
 	 * [transitMessage description]
@@ -1105,7 +1057,6 @@ define(function(require, exports) {
 		    //跳转游客小组新增页面
 			KingServices.updateTransfer(touristGroupId,id);
 		})
-
 	};
 
 	/**
@@ -1126,91 +1077,6 @@ define(function(require, exports) {
 			});
 		 });
 	};
-
-
-		/**
-		 * 调用线路产品Layer层
-		 * @param  {[type]} init              是否打开线路layer
-		 * @param  {[type]} page               分页参数
-		 * @param  {[type]} name               线路名称
-		 * @param  {[type]} searchLineProLayer [description]
-		 * @param  {[type]} $editTrsferInObj   编辑同行线路
-		 * @return {[type]}                    [description]
-		 */
-		transfer.searchLineProList=function(init,page,name,searchLineProLayer,$editTrsferInObj){
-				$.ajax({
-					url:KingServices.build_url("lineProduct","findAll"),
-					data:"pageNo="+page+"&name="+name,
-					success: function(data) {
-						var result =showDialog(data);
-						var dataD = data;
-						if(result){
-							var lineProductInfo = JSON.parse(data.lineProductList);
-							data.lineProductList = lineProductInfo;								
-							
-							if(lineProductInfo != null && lineProductInfo.length > 0){
-								for(var i=0;i<lineProductInfo.length;i++){
-									lineProductInfo[i].value = lineProductInfo[i].name;
-								}
-							}
-							var html =searchLineProTrsInTemplate(data);
-							if(init){
-								searchLineProLayer =layer.open({
-									type: 1,
-									title:"选择路线",
-									skin: 'layui-layer-rim', //加上边框
-									area: '85%', //宽高
-									zIndex:1029,
-									content: html,
-									scrollbar: false,
-									success: function(data) {
-									}
-								});
-							}
-							else{
-								$("#layui-layer"+searchLineProLayer+"").find(".layui-layer-content").html(html);
-							}
-							//搜索按钮事件
-							var $chooseLineProduct=$('#chooseLineProduct-container');
-							$chooseLineProduct.find(".T-lineProduct-search").click(function(){
-								var name = $chooseLineProduct.find("input[name=lineProduct_name]").val();
-								transfer.searchLineProList(false,obj.curr -1, name,searchLineProLayer,$editTrsferInObj);
-							});
-
-							// 绑定翻页组件   
-							laypage({
-							    cont: $chooseLineProduct.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-							    pages: data.totalPage, //总页数
-							    curr: (data.pageNo + 1),
-							    jump: function(obj, first) {
-							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-							    		var name=$chooseLineProduct.find('input[name=lineProduct_name]').val();
-							    		transfer.searchLineProList(false,obj.curr -1, name,searchLineProLayer,$editTrsferInObj);
-							    	}
-							    }
-							});	
-							
-							//选择线路产品/提交事件绑定
-							var travelLineName="",travelLineId="";
-							$(".T-submit-searchtravelLine").click(function(){
-								var trSearchtravelLine =$(".T-travelLineList-table tbody tr");
-								for(var i=0;i<trSearchtravelLine.length;i++){
-									if(trSearchtravelLine.eq(i).find("input[name=choice-TravelLine]").is(":checked")==true){
-										travelLineName =trSearchtravelLine.eq(i).find("td[name=travelLine-select]").text();
-										travelLineId =trSearchtravelLine.eq(i).find("td[name=travelLine-select]").attr("data-travelLine-Id");
-										layer.close(searchLineProLayer);
-									}
-									else{
-									}
-								}
-								$editTrsferInObj.find("input[name=lineProductNameId]").val(travelLineName);
-								$editTrsferInObj.find("input[name=lineProductId]").val(travelLineId);
-								$editTrsferInObj.find("input[name=lineProductIdName]").val(travelLineName);
-							});
-						}
-					}
-			    })
-		};
     exports.init = transfer.initModule;
     exports.getListPage = transfer.getListPage;
 	exports.viewTransferOut	= transfer.viewTransferOut;

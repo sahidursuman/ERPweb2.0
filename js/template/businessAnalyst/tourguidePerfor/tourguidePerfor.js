@@ -73,7 +73,7 @@ define(function(require, exports) {
 				       //初始化页面控件
 				       Tools.setDatePicker(tourguidPerObj.$tab.find('.datepicker'), true);
 				       //初始化页面绑定事件
-				       tourguidPerObj.init_event();
+				       tourguidPerObj.init_event(startTime,endTime);
 				       //autocomplete数据
 				       tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
 			       	// 绑定翻页组件
@@ -105,7 +105,7 @@ define(function(require, exports) {
 	};
 
     //初始化页面绑定事件
-    tourguidPerObj.init_event=function(){
+    tourguidPerObj.init_event=function(startTime,endTime){
     	//搜索按钮绑定事件
     	tourguidPerObj.$tab.find('.T-tourguidPer-search').on('click', function(event) {
     		event.preventDefault();
@@ -118,7 +118,7 @@ define(function(require, exports) {
     		event.preventDefault();
     		var $that=$(this),$tr=$that.closest('tr'),guideId=$tr.attr('data-guideId');
     		/* Act on the event */
-    		tourguidPerObj.guidePlayList(0,guideId,"","","");
+    		tourguidPerObj.guidePlayList(0,guideId,startTime,endTime);
     	});
     };
     
@@ -205,8 +205,11 @@ define(function(require, exports) {
 		$tab.find('.T-allMoney').off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			var $that=$(this),tripPlanId=$that.attr('data-tripPlanId'),shopArrangeId=$that.attr('data-arrangeId');
-			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId);
+			var $that=$(this),
+				tripPlanId=$that.attr('data-tripPlanId'),
+				shopArrangeId=$that.attr('data-arrangeId'),
+				guideArrangeId = $that.attr('guideArrangeId');
+			KingServices.viewConsumeMoney(tripPlanId,shopArrangeId,guideArrangeId);
 		});;
 	};
 	//获取控件中的值
