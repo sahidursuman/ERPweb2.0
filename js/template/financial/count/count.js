@@ -3828,10 +3828,11 @@ define(function(require, exports){
 				var sum = Count.changeTwoDecimal($(this).val());
 				sumCount += sum
 			});
-			if(sumCount != 0){
-				$tr.find('input[name=realCount]').val(sumCount);
-				$tr.find('.realCount').text(sumCount);
-			};
+
+			// 为0是也记录
+			$tr.find('input[name=realCount]').val(sumCount);
+			$tr.find('.realCount').text(sumCount);
+
 			realCount = $tr.find('input[name=realCount]').val(); 
 			sumPay = parseFloat(realCount*price-reduceMoney);
 			if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0 || isConfirmAccount == undefined)){

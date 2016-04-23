@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":248,"md5":"fbeac96de5d81964ea8fe246d4003498"}*/
+/*TMODJS:{"debug":true,"version":1,"md5":"fbeac96de5d81964ea8fe246d4003498"}*/
 define(function(require) {
-    return require("../../../template")("arrange/singlePlan/view/singleList", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/list", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $each = $utils.$each, result = $data.result, $escape = ($data.rs, 
             $data.$index, $utils.$escape), searchParam = ($data.tripPlanDetails, $data.index, 
