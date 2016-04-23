@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":136,"md5":"313e64815d7175d820ec305c4e23a5d9"}*/
+/*TMODJS:{"debug":true,"version":1,"md5":"313e64815d7175d820ec305c4e23a5d9"}*/
 define(function(require) {
-    return require("../../../template")("arrange/singlePlan/view/addSingleTripPlan", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/add", function($data, $filename) {
         try {
             var $utils = this, $line = ($utils.$helpers, 0), $escape = $utils.$escape, args = $data.args, groupIds = $data.groupIds, id = $data.id, lineProName = $data.lineProName, startTime = $data.startTime, endTime = $data.endTime, $out = "";
             return $out += '<div class="container-fulid hct-editor-plan T-tab globalAdd">  <form class="T-basic-info" role="form" onsubmit="return false"> <div class="row"> <div class="col-xs-12 hd"> <h3 class="pull-left">基本信息</h3> <div class="pull-right" style="width:280px;"> <label class="col-xs-4 control-label text-right par-r-15">团号</label> <input type="text" class="col-xs-8 T-tripNumberChange" name="tripNumber" placeholder="系统自动生成"> <input type="hidden" data-val="', 
