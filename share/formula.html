@@ -13,44 +13,15 @@
     <script src="../components/ace-admin/assets/js/ace-elements.min.js"></script>
     <script src="../components/ace-admin/assets/js/ace.min.js"></script>
 <style type="text/css">
-    .shareFormula {
-        width: 1000px;
-        height: 135px;
-        padding-bottom: 70px;
-        background-color: #FFF;
-        /* background-color: #F00; */
-        margin: auto;
-        font-family: '微软雅黑';
-        color: #444
+    *html #menuList {
+        position: absolute;
+        bottom: auto;
+        top: expression(100+((e=document.documentElement.scrollTop)?e:document.body.scrollTop)+'px');
     }
+
     li {
-            list-style: none;
-        }
-    .share-formula-offer {
-        width: 1000px;
-        height: auto;
-        /* border: 1px solid #666; */
-        padding-top: 10px; 
+        list-style: none;
     }
-    .formula-title-style {
-        width: 1000px;
-        height: 135px;
-        background-color: #48A2D2;
-    }
-    .formula-item{
-        width: 1000px;
-        height: auto;
-        padding-bottom: 10px;
-        border-top: 1px solid #DFDFDF;
-        /* border-bottom: 1px solid #F00; */
-        margin-top: 30px;
-    }
-    .title-weight {
-        font-weight: bold;
-        background-color: #F3F3F3;
-    }
-    
-    
     body {
         background-color:#fff;
         font-family: '微软雅黑';
@@ -82,14 +53,41 @@
         color: #fff;
         background: #0088bb;
     }
-
-    *html #menuList {
-        position: absolute;
-        bottom: auto;
-        top: expression(100+((e=document.documentElement.scrollTop)?e:document.body.scrollTop)+'px');
+    .shareFormula {
+        width: 1000px;
+        height: 135px;
+        padding-bottom: 70px;
+        background-color: #FFF;
+        /* background-color: #F00; */
+        margin: auto;
+        font-family: '微软雅黑';
+        color: #444
     }
-
-        
+    
+    .share-formula-offer {
+        width: 1000px;
+        height: auto;
+        /* border: 1px solid #666; */
+        padding-top: 10px; 
+    }
+    .formula-title-style {
+        width: 1000px;
+        height: 135px;
+        background-color: #48A2D2;
+    }
+    .formula-item{
+        width: 1000px;
+        height: auto;
+        padding-bottom: 10px;
+        border-top: 1px solid #DFDFDF;
+        /* border-bottom: 1px solid #F00; */
+        margin-top: 30px;
+    }
+    .title-weight {
+        font-weight: bold;
+        background-color: #F3F3F3;
+    }
+      
 </style>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -582,7 +580,7 @@
                                         应付
                                     </td>
                                     <td>
-                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;人数&nbsp;-&nbsp;优惠
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;间数&nbsp;-&nbsp;优惠
                                     </td>
                                     <td>
                                         -
@@ -590,10 +588,10 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        人数合计
+                                        间数合计
                                     </td>
                                     <td>
-                                        人数合计&nbsp;=&nbsp;导游实销中人数之和
+                                        间数合计&nbsp;=&nbsp;导游实销中间数之和
                                     </td>
                                     <td>
                                         -
