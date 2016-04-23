@@ -245,7 +245,6 @@ define(function(require, exports) {
                 } else {
                     if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                         data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
-                        data.totalList.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
                     };
                     
                     data.name = args.shopName;
@@ -267,6 +266,9 @@ define(function(require, exports) {
                         FinShop.$checkingTab = $theTab;
                         if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                             FinShop.$checkingTab.data('isEdited',true);
+                            var total = $theTab.data('total');
+                            total.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
+                            $theTab.data('total',total);
                         };
                         //取消对账权限过滤
                         checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
