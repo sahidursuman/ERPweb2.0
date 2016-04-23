@@ -345,7 +345,7 @@
                                     <td>
                                         {{if guide.taskJson}}
                                         {{each guide.taskJson as task i}}
-                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}}mar-t-5{{/if}}" data-index="{{i}}">
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}mar-t-5{{/if}}" data-index="{{i}}">
                                         {{#task.tType | getTaskSelect}}
                                             <label style="float:right; padding-top:0px;">
                                                 <button class="btn btn-sm btn-white {{if i == 0}}btn-success T-add{{else}}btn-danger T-del{{/if}} T-guideBtn">
