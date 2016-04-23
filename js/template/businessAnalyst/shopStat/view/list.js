@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":9,"md5":"b5a84622f007e07cff24436873b60258"}*/
+/*TMODJS:{"debug":true,"version":11,"md5":"b5a84622f007e07cff24436873b60258"}*/
 define(function(require) {
     return require("../../../template")("businessAnalyst/shopStat/view/list", function($data, $filename) {
         try {
