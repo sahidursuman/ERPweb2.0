@@ -231,9 +231,9 @@ define(function(require, exports) {
                 }else {
                     data.view = '';
                     tab_id = 'financial_Client_checking';
-                    if(Client.checkTemp && Client.checkTemp.length > 0){
+                    if(Client.checkTemp && Client.checkTemp.length > 0 && !!$tab){
                         data.customerAccountList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
-                        var total = $tab.data("total");
+                        var total = $tab.data("total") || {};
                         total.sumBackMoney = Client.checkTemp.sumBackMoney;
                         total.sumSettlementMoney = Client.checkTemp.sumSettlementMoney;
                         total.sumUnReceivedMoney = Client.checkTemp.sumUnReceivedMoney;
