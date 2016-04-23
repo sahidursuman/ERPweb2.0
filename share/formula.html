@@ -23,6 +23,15 @@
         font-family: '微软雅黑';
         color: #444
     }
+    li {
+            list-style: none;
+        }
+    .share-formula-offer {
+        width: 1000px;
+        height: auto;
+        /* border: 1px solid #666; */
+        padding-top: 10px; 
+    }
     .formula-title-style {
         width: 1000px;
         height: 135px;
@@ -40,42 +49,93 @@
         font-weight: bold;
         background-color: #F3F3F3;
     }
-    .text-del {
-        font-weight: bold;
-        text-align: left;
-        margin-left: 5px;
-    }
-    .taoba {
-        display: block;
-        background: #C2C2C2;
-        width: 30px;
-        height: 30px;
-        margin-bottom: 4px;
-        text-align: center;
-        color: #FFF;
-        line-height: 30px;
-        overflow: hidden;
-        cursor: pointer;
-    }
-    .share-formula-anchor-ul{
-        width: 50px;
-        /* background-color: #F00; */
-        margin-top: -4px;
-    }
+    
+    
     body {
         background-color:#fff;
         font-family: '微软雅黑';
     }
+    #menuList {
+        position: fixed;
+        top: 250px;
+        left: 54%;
+        margin-left: 400px;
+        width: 50px;
+    }
+
+    #menuList ul li a {
+        display: block;
+        /* margin: 5px 0; */
+        font-size: 14px;
+        font-weight: bold;
+        color: #ccc;
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-decoration: none;
+        text-align: center;
+       /*  background-color: #EAEAEA; */
+    }
+
+    #menuList ul li a:hover,
+    #menuList ul li a.current {
+        color: #fff;
+        background: #0088bb;
+    }
+
+    *html #menuList {
+        position: absolute;
+        bottom: auto;
+        top: expression(100+((e=document.documentElement.scrollTop)?e:document.body.scrollTop)+'px');
+    }
+
+        
 </style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(window).scroll(function(){
+            var items = $('.share-formulaMain').find('.share-formula-offer');
+            var menuList = $('#menuList');
+            var top = $(document).scrollTop();
+            var itemId = '';
+            items.each(function(){
+                var i = $(this);
+                if(top>i.offset().top - 180){
+                   itemId = '#'+i.attr('id'); 
+                }else{
+                    return;
+                }
+            });
+            var currentLink = menuList.find(".current");
+            if (currentLink && itemId != currentLink.attr("href")) {
+                currentLink.removeClass("current");
+                menuList.find("[href=" + itemId + "]").addClass("current");
+            }
+        });
+    });
+</script>
 </head>
 <body>
+    <div id="menuList">
+        <ul>
+            <li><a href="#top">顶部</a></li>
+            <li><a href="#shop">购物</a></li>
+            <li><a href="#self">自费</a></li>
+            <li><a href="#otherIn">其他收入</a></li>
+            <li><a href="#bus">车费</a></li>
+            <li><a href="#rest">餐费</a></li>
+            <li><a href="#hotel">房费</a></li>
+            <li><a href="#scenic">景区</a></li>
+            <li><a href="#ticket">票务</a></li>
+        </ul>
+    </div>
     <div id="top">
         <div class="shareFormula">
             <div class="formula-title-style"> 
                 <h5 class="share-title-h5">报账审核--计算公式</h5> 
             </div>
             <div class="share-formulaMain" style="margin-bottom:50px;">
-                <div class="share-quote-offer" id="">
+                <div class="share-formula-offer" id="remark">
                     <p style="font-size: 14px;color: #ff6511;">
                         <span>所有模块</span> 
                     </p>
@@ -96,7 +156,7 @@
                     </p>
                 </div>
 
-                <div class="share-quote-offer" id = 'tripCost'>
+                <div class="share-formula-offer" id = 'tripCost'>
                     <div class="formula-item">
                         <p class="share-dividing">团款</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -131,7 +191,7 @@
                     </div><!-- 团款 -->
                 </div>
                     
-                <div class="share-quote-offer" id = 'shop'>
+                <div class="share-formula-offer" id = 'shop'>
                     <div class="formula-item">
                         <p class="share-dividing">购物</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -251,7 +311,7 @@
                     </div><!-- 购物 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'self'>
+                <div class="share-formula-offer" id = 'self'>
                     <div class="formula-item">
                         <p class="share-dividing">自费</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -361,7 +421,7 @@
                     </div><!-- 购物 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'otherIn'>
+                <div class="share-formula-offer" id = 'otherIn'>
                     <div class="formula-item">
                         <p class="share-dividing">其他收入</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -404,7 +464,7 @@
                     </div><!-- 其他收入 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'bus'>
+                <div class="share-formula-offer" id = 'bus'>
                     <div class="formula-item">
                         <p class="share-dividing">车费</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -447,9 +507,63 @@
                     </div><!-- 车费 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'rest'>
+                <div class="share-formula-offer" id = 'rest'>
                     <div class="formula-item">
                         <p class="share-dividing">餐费</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;人数&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        人数合计
+                                    </td>
+                                    <td>
+                                        人数合计&nbsp;=&nbsp;导游实销中人数之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        餐费费用
+                                    </td>
+                                    <td>
+                                        餐费费用&nbsp;=&nbsp;餐费应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 房费 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'hotel'>
+                    <div class="formula-item">
+                        <p class="share-dividing">房费</p>
                         <table class="whereQ whereTwo quoteTable">
                             <tbody>
                                 <tr class="title-weight">
@@ -501,7 +615,7 @@
                     </div><!-- 房费 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'scenic'>
+                <div class="share-formula-offer" id = 'scenic'>
                     <div class="formula-item">
                         <p class="share-dividing">景区</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -555,7 +669,7 @@
                     </div><!-- 景区 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'ticket'>
+                <div class="share-formula-offer" id = 'ticket'>
                     <div class="formula-item">
                         <p class="share-dividing">票务</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -609,7 +723,7 @@
                     </div><!-- 票务 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'otherOut'>
+                <div class="share-formula-offer" id = 'otherOut'>
                     <div class="formula-item">
                         <p class="share-dividing">其他支出</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -663,7 +777,7 @@
                     </div><!-- 其他支出 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'insurance'>
+                <div class="share-formula-offer" id = 'insurance'>
                     <div class="formula-item">
                         <p class="share-dividing">保险</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -707,7 +821,7 @@
                     </div><!-- 保险 -->
                 </div>
 
-                <div class="share-quote-offer" id = 'guide'>
+                <div class="share-formula-offer" id = 'guide'>
                     <div class="formula-item" >
                         <p class="share-dividing">导游</p>
                         <table class="whereQ whereTwo quoteTable">
@@ -750,7 +864,7 @@
                         </table>
                     </div><!-- 保险 -->
                 </div>
-                
+               
             </div>
         </div>
     </div>  

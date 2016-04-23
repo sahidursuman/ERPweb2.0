@@ -307,8 +307,9 @@ define(function(require, exports){
 
 		//显示隐藏
 		Count.showOrhideList($obj);
+		//显示计算公式
 		$obj.find('.T-formula').on('click',function(){
-			Count.showFormula($obj);
+			window.open('../share/formula.html');
 		});
 		var $listObj = $obj.find('.T-list');
 		
@@ -516,14 +517,10 @@ define(function(require, exports){
 		
 		//显示隐藏
 		Count.showOrhideList($obj);
-		/*//显示计算公式
-		$obj.find('.T-formula').on('click',function(){
-			var html = formulaTemplate();
-			Tools.addTab(menuKey+'formula','计算公式',html);
-		});*/
+		
 		//显示计算公式
 		$obj.find('.T-formula').on('click',function(){
-			Count.showFormula($obj);
+			window.open('../share/formula.html');
 		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
@@ -984,7 +981,7 @@ define(function(require, exports){
 		Count.showOrhideList($obj);
 		//显示计算公式
 		$obj.find('.T-formula').on('click',function(){
-			Count.showFormula($obj);
+			window.open('../share/formula.html');
 		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
@@ -6745,7 +6742,7 @@ define(function(require, exports){
 	//显示隐藏列表
 	Count.showOrhideList = function($obj){
 		$obj.find('.T-toggle-List').off('click.toggle').on('click.toggle', function() {
-			var $this = $(this), $tbody = $this.closest('h5').next();/*$tab.find('.T-tripPlanDayList-tbody')*/;
+			var $this = $(this), $tbody = $this.closest('h5').next();
 			if ($this.hasClass('T-show')) {
 				$this.addClass('T-hide');
 				$tbody.hide();
