@@ -196,11 +196,9 @@
        <col style="width:80px;">
        <col style="width:80px;">
        <col>
-       <col style="width:50px;">
      </colgroup>
     <thead>
     <tr>
-        <th class="th-border">指定报账导游</th>
         <th class="th-border">开始日期</th>
         <th class="th-border">结束日期</th>
         <th class="th-border">任务</th>
@@ -208,6 +206,7 @@
         <th class="th-border">联系电话</th>
         <th class="th-border">导服费</th>
         <th class="th-border">管理费</th>
+        <th class="th-border">计划预支</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -215,14 +214,14 @@
         {{each guideList as guide}}
         {{if guide != "[]" || guide != null}}
             <tr data-entity-arrangeid={{guide.id}} >
-                <td><input type="radio" name='isAccountGuide' disabled="disabled"  {{if guide.isAccountGuide == 1}} checked="checked" {{/if}}></td>
-                <td>{{guide.startTime | dateFormat:'yyyy-MM-dd'}}</td>
-                <td>{{guide.endTime | dateFormat:'yyyy-MM-dd'}}</td>
-                <td>{{#guide.taskType | getTaskDesc}}</td>
+                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.sTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
+                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{task.eTime | dateFormat:'yyyy-MM-dd'}}</p>{{/each}}</td>
+                <td>{{each guide.taskJson as task i}}<p {{if i == guide.taskJson.length-1}}class="mar-b-0"{{/if}}>{{#task.tType | getTaskDesc}}{{/each}}</p></td>
                 <td>{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}</td>
                 <td>{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}</td>
                 <td class="F-float F-money">{{guide.price}}</td>
                 <td class="F-float F-money">{{guide.manageFee}}</td>
+                <td class="F-float F-money">{{guide.guidePlanPreMoney}}</td>
                 <td>{{guide.remark}}</td>
             </tr>
         {{/if}}
@@ -251,6 +250,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
+        <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
@@ -274,7 +274,8 @@
 				<td class="F-float F-money">{{busCompany.reduceMoney}}</td>
 				<td class="F-float F-money">{{busCompany.needPayMoney}}</td>
 				<td class="F-float F-money">{{busCompany.prePayMoney}}</td>
-				<td class="T-guidePayFeild" data-type={{busCompany.payType}}>{{busCompany.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span></td>
+                <td>{{busCompany.payType | getPlanPayTypeText}}</td>
+				<td class="T-guidePayFeild" data-type={{busCompany.payType}}><span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span></td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}
@@ -296,6 +297,7 @@
         <col style="width:60px;"> 
         <col style="width:60px;"> 
         <col style="width:60px;">
+        <col style="width:60px;">
         <col style="width:80px;">
         <col style="width:90px;">
         <col> 
@@ -312,6 +314,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
+        <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
@@ -330,7 +333,8 @@
                 <td class="F-float F-money">{{restaurant.reduceMoney}}</td>
                 <td class="F-float F-money">{{restaurant.needPayMoney}}</td>
                 <td class="F-float F-money">{{restaurant.prePayMoney}}</td>
-                <td class="T-guidePayFeild" data-type={{restaurant.payType}}>{{restaurant.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}</span></td>
+                <td>{{restaurant.payType | getPlanPayTypeText}}</td>
+                <td class="T-guidePayFeild" data-type={{restaurant.payType}}><span class="F-float F-money">{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}</span></td>
                 <td>{{restaurant.remark}}</td>
             </tr>
             {{/if}}
@@ -354,6 +358,7 @@
         <col style="width:60px;">
         <col style="width:60px;">
         <col style="width:60px;">
+        <col style="width:70px;">
         <col style="width:90px;">
         <col>
         <col style="width:80px;"> 
@@ -371,6 +376,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
+        <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
         <th class="th-border">状态</th>
@@ -391,7 +397,8 @@
                 <td class="F-float F-money">{{hotel.reduceMoney}}</td>
                 <td class="F-float F-money">{{hotel.needPayMoney}}</td>         
                 <td class="F-float F-money">{{hotel.prePayMoney}}</td>
-                <td class="T-guidePayFeild" data-type={{hotel.payType}}>{{hotel.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}</span></td>
+                <td>{{hotel.payType | getPlanPayTypeText}}</td>
+                <td class="T-guidePayFeild" data-type={{hotel.payType}}><span class="F-float F-money">{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}</span></td>
                 <td>{{hotel.remark}}</td>
                 <td>{{hotel.orderStatus | getOrderStatusDesc}}</td>
             </tr>
@@ -415,6 +422,7 @@
        <col style="width:60px;"> 
        <col style="width:110px;">
        <col style="width:60px;">
+       <col style="width:60px;">
        <col style="width:90px;">
        <col style="width:60px;">
        <col>
@@ -432,6 +440,7 @@
         <th class="th-border">订单号</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
+        <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
@@ -453,7 +462,8 @@
                 
                 <td class="F-float F-money">{{scenic.needPayMoney}}</td>
                 <td class="F-float F-money">{{scenic.prePayMoney}}</td>
-                <td class="T-guidePayFeild" data-type={{scenic.payType}}>{{scenic.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}</span></td>
+                <td>{{scenic.payType | getPlanPayTypeText}}</td>
+                <td class="T-guidePayFeild" data-type={{scenic.payType}}><span class="F-float F-money">{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}</span></td>
                 <td>{{scenic.remark}}</td>
             </tr>
             {{/if}}
@@ -542,6 +552,7 @@
         <th>优惠</th>
         <th>应付</th>
         <th>预付款</th>
+        <th>支付类型</th>
         <th>计划导付</th>
         <th>备注</th>
     </tr>
@@ -561,7 +572,8 @@
                 <td class="F-float F-money">{{selfPay.reduceMoney}}</td>
                 <td class="F-float F-money">{{selfPay.needPayMoney}}</td>
                 <td class="F-float F-money">{{selfPay.prePayMoney}}</td>
-                <td class="T-guidePayFeild" data-type={{selfPay.payType}}>{{selfPay.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}</span></td>
+                <td>{{selfPay.payType | getPlanPayTypeText}}</td>
+                <td class="T-guidePayFeild" data-type={{selfPay.payType}}><span class="F-float F-money">{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}</span></td>
                 <td>{{selfPay.remark}}</td>
             </tr>
         {{/if}}
@@ -586,6 +598,7 @@
         <col style="width:80px">
         <col style="width:80px">
         <col style="width:80px">
+        <col style="width:80px">
         <col style="width:90px"> 
         <col>
     </colgroup>  
@@ -603,6 +616,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
+        <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
@@ -616,14 +630,15 @@
                 <td>{{ticket.startingCity}}</td>
                 <td>{{ticket.arriveCity}}</td>
                 <td>{{ticket.shift}}</td>
-                <td>{{ticket.startTime}}</td>
+                <td>{{ticket.startTime | dateTimeHSFormat}}</td>
                 <td>{{ticket.seatLevel}}</td>
                 <td class="F-float F-money">{{ticket.price}}</td>
                 <td class="F-float F-count">{{ticket.memberCount}}</td>
                 <td class="F-float F-money">{{ticket.reduceMoney}}</td>
                 <td class="F-float F-money">{{ticket.needPayMoney}}</td>
                 <td class="F-float F-money">{{ticket.prePayMoney}}</td>
-                <td class="T-guidePayFeild" data-type={{ticket.payType}}>{{ticket.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}</span></td>
+                <td>{{ticket.payType | getPlanPayTypeText}}</td>
+                <td class="T-guidePayFeild" data-type={{ticket.payType}}><span class="F-float F-money">{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}</span></td>
                 <td>{{ticket.remark}}</td>
             </tr>
             {{/if}}
@@ -659,6 +674,7 @@
         <th class="th-border">优惠</th>
         <th class="th-border">应付</th>
         <th class="th-border">预付款</th>
+        <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
         <th class="th-border">备注</th>
     </tr>
@@ -676,7 +692,8 @@
                 <td class="F-float F-money">{{other.reduceMoney}}</td>
                 <td class="F-float F-money">{{other.needPayMoney}}</td>
                 <td class="F-float F-money">{{other.prePayMoney}}</td>
-                <td class="T-guidePayFeild" data-type={{other.payType}}>{{other.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}</span></td>
+                <td>{{other.payType | getPlanPayTypeText}}</td>
+                <td class="T-guidePayFeild" data-type={{other.payType}}><span class="F-float F-money">{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}</span></td>
                 <td>{{other.remark}}</td>
             </tr>
             {{/if}}

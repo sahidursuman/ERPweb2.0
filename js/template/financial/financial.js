@@ -14,6 +14,7 @@ FinancialService.initPayEvent = function($container,rule)  {
         format:'L',
         language:'zh-CN'
     });
+    // Tools.setDateHSPicker($("input[name='tally-date']")); 
 
     var $cash = $container.find('input[name=cash-number]'),
         $card = $container.find('input[name=card-number]'),
@@ -30,24 +31,22 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val == 1 || val == 5){
             var check =  new FinRule(5).check($container.find('.T-accountNumber').closest('div'));
         }
-        $cash.closest('div').toggleClass('hidden', val !== "0");
-        $card.closest('div').toggleClass('hidden', val != 1);
-        if(val == 5){
-            $card.closest('div').removeClass('hidden');
+
+        if(val != ''){
+            $cash.closest('div').toggleClass('hidden', val != 0);
+            $card.closest('div').toggleClass('hidden', val  != 1 && val != 5);
+            if(val !=0){
+               $container.find('input[name=cash-id]').val('');
+            };
+            if(val !=1 && val!=5){
+                $container.find('input[name=card-id]').val('');
+                $card.val('');
+            };            
         };
-        if(val == 6){
-            $balance.closest('div').removeClass('hidden');
-        }else {
-            $balance.closest('div').addClass('hidden');
-        }
-        if(val !=0){
-           $container.find('input[name=cash-id]').val('');
-        };
-        if(val !=1 && val!=5){
-            $container.find('input[name=card-id]').val('');
-            $card.val('');
-        };
-        $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
+
+        $balance.closest('div').toggleClass('hidden', val != 6);
+        
+        // $(this).closest(".T-search-area").find('input[name=beginningBalance]').val('').trigger('change');
     }).trigger('change');
 };
 
@@ -80,8 +79,9 @@ function getBankList($obj,payType){
             showLoading:false,
             success:function(data){
                 if(showDialog(data)){
-                    var cardNumberJson = [];
-                    var bankList = data.bankList;
+                    var cardNumberJson = [],
+                        bankList = data.bankList;
+                        
                     if(bankList && bankList.length > 0){
                         for(var i=0, tmp; i < bankList.length; i++){
                             if (!!bankList[i].accountName && bankList[i].accountName != 'NULL') {
@@ -95,10 +95,12 @@ function getBankList($obj,payType){
                                 id: bankList[i].id,
                                 beginningBalance: bankList[i].beginningBalance
                             }
+
                             cardNumberJson.push(seatCount);
                         }
+
                         $that.autocomplete('option','source', cardNumberJson).data('ajax', true);
-                        $that.autocomplete('search', '');
+                        $that.autocomplete('search', '');                            
                     }else{
                         layer.tips('没有内容', $that, {
                             tips: [1, '#3595CC'],

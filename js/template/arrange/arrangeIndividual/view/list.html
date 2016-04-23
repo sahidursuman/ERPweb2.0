@@ -29,14 +29,16 @@
     </thead>
     <tbody class="T-arrageVisitor-list">
         {{each touristGroupList as touristGroupL}}
-        <tr data-value="{{touristGroupL.id}}" data-entity-id="{{touristGroupL.lineProductId}}" 
+        <tr data-value="{{touristGroupL.id}}" data-id="{{touristGroupL.lineProductId}}" 
          data-entity-partnerAgency="{{touristGroupL.partnerAgencyName}}"
-         data-entity-name="{{touristGroupL.lineProductName}}" 
-         data-entity-type="{{touristGroupL.lineProductType}}"
-         data-entity-days="{{touristGroupL.lineProductDays}}" 
-         data-entity-startTime="{{touristGroupL.startTime}}" 
-         data-entity-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}" 
-         class="tr-{{touristGroupL.lineProductId}}-{{touristGroupL.startTime}}" data-entity-adultCount="{{touristGroupL.adultCount}}" data-entity-childCount="{{touristGroupL.childCount}}">
+         data-name="{{touristGroupL.lineProductName}}" 
+         data-type="{{touristGroupL.lineProductType}}"
+         data-days="{{touristGroupL.lineProductDays}}"
+         data-startTime="{{touristGroupL.startTime}}" 
+         data-memberCount="{{touristGroupL.adultCount +touristGroupL.childCount}}"
+         class="tr-{{touristGroupL.lineProductId}}-{{touristGroupL.startTime}}" 
+         data-adultCount="{{touristGroupL.adultCount}}"
+         data-childCount="{{touristGroupL.childCount}}">
             <td style="vertical-align:middle;padding: 5px;">
                 <label class="pos-rel">
                     <input type="checkbox" class="ace T-touristGroupMergeCheckBox T-cheked"> <span class="lbl"></span> </label>
@@ -61,14 +63,14 @@
             <td class="T-ctrl-tip" title="{{touristGroupL.remark}}" style="vertical-align:middle"><span style="height: 35px">{{touristGroupL.remark}}</span></td>
             <td class="h-touristGroupInfo">
                 {{if !!touristGroupL.reiveHotelName}}
-                <p class="h-orderNumber T-ctrl-tip" title="{{touristGroupL.reiveHotelName}}">接团酒店：{{touristGroupL.reiveHotelName}}</p>
+                <p class="h-orderNumber T-ctrl-tip" title="{{touristGroupL.reiveHotelName}}"><span>接团酒店：{{touristGroupL.reiveHotelName}}</span></p>
                 {{/if}}
-                {{if !!touristGroupL.destination}}<p class="h-orderNumber T-ctrl-tip" title="{{touristGroupL.destination}}">送达地点：{{touristGroupL.destination}}</p>
+                {{if !!touristGroupL.destination}}<p class="h-orderNumber T-ctrl-tip" title="{{touristGroupL.destination}}"><span>送达地点：{{touristGroupL.destination}}</span></p>
                 {{/if}}
             </td>
             <td class="h-touristGroupInfo">
-               {{if !!touristGroupL.sendHotelName}}<p class="h-orderNumber T-ctrl-tip"  title="{{touristGroupL.sendHotelName}}">送团酒店：{{touristGroupL.sendHotelName}}</p>{{/if}}
-               {{if !!touristGroupL.boardLocation}}<p class="h-orderNumber T-ctrl-tip" title="{{touristGroupL.boardLocation}}">上车地点：{{touristGroupL.boardLocation}}</p>{{/if}}
+               {{if !!touristGroupL.sendHotelName}}<p class="h-orderNumber T-ctrl-tip"  title="{{touristGroupL.sendHotelName}}"><span>送团酒店：{{touristGroupL.sendHotelName}}</span></p>{{/if}}
+               {{if !!touristGroupL.boardLocation}}<p class="h-orderNumber T-ctrl-tip" title="{{touristGroupL.boardLocation}}"><span>上车地点：{{touristGroupL.boardLocation}}</span></p>{{/if}}
             </td>
             <td style="vertical-align:middle"><a class="cursor T-arrageVisitor-view T-action"> 查看 </a></td>
         </tr>

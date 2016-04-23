@@ -84,7 +84,7 @@
 													<td>{{outBus.brand}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
+													<td>{{if outBus.useTime != null}}{{outBus.useTime | dateTimeHSFormat}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
 													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
 													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
@@ -128,7 +128,7 @@
 											<tbody>{{each receiveGroup.outHotelList as outHotel}}
 													{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 												<tr>
-													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime}}{{/if}}</td>
 													<td>{{if outHotel.hotel.level == 1}}
 														三星以下
 														{{else if outHotel.hotel.level == 2}}
@@ -204,7 +204,7 @@
 													</td>
 													<td>{{outTicket.startingCity}}</td>
 													<td>{{outTicket.arriveCity}}</td>
-													<td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
+													<td>{{if outTicket.startTime != null}}{{outTicket.startTime | dateTimeHSFormat}}{{/if}}</td>
 													<td>{{outTicket.shift}}</td>
 													<td>{{outTicket.seatLevel}}</td>
 													<td><span class=" F-float F-money">{{outTicket.price}}</span></td>
@@ -354,7 +354,7 @@
 													<td>{{outBus.brand}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}</td>
 													<td>{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}</td>
-													<td>{{if outBus.useTime != null}}{{outBus.useTime}}{{/if}}</td>
+													<td>{{if outBus.useTime != null}}{{outBus.useTime | dateTimeHSFormat}}{{/if}}</td>
 													<td>{{outBus.boardLocation}}</td>
 													<td><span class=" F-float F-money">{{outBus.fee}}</span></td>
 													<td><span class=" F-float F-money">{{outBus.reduceMoney}}</span></td>
@@ -398,7 +398,7 @@
 											<tbody>{{each sendGroup.outHotelList as outHotel}}
 												{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 												<tr>
-													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+													<td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime}}{{/if}}</td>
 													<td>{{if outHotel.hotel.level == 1}}
 														三星以下
 														{{else if outHotel.hotel.level == 2}}
@@ -474,7 +474,7 @@
 													</td>
 													<td>{{outTicket.startingCity}}</td>
 													<td>{{outTicket.arriveCity}}</td>
-													<td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
+													<td>{{if outTicket.startTime != null}}{{outTicket.startTime | dateTimeHSFormat}}{{/if}}</td>
 													<td>{{outTicket.shift}}</td>
 													<td>{{outTicket.seatLevel}}</td>
 													<td><span class=" F-float F-money">{{outTicket.price}}</span></td>

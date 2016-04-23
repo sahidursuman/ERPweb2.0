@@ -665,7 +665,7 @@ define(function(require, exports) {
 							//内部价格
 							$tr.find('.T-marketPrice').eq(index).val(marketVal);
 					};
-			} else if ($that.hasClass('T-contractPrice')) {
+			} else if ($that.hasClass('T-contractPrice') && false) {
 				// 内部价格改变时
 				var contractVal = $tr.find('.T-contractPrice').eq(index).val(),
 					customerVal = $tr.find('.T-customerRebateMoney').eq(0).val();

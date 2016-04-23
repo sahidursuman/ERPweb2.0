@@ -1,117 +1,120 @@
 <div class="row col-sm-12">
-    <form class="form-horizontal T-form" role="form" style="margin-top:10px" onsubmit="return false">
-        <div class="form-group">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">旅行社名称：</label>
-                    <label class="col-sm-6" style="padding-top:2px;">{{name}}</label>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">旅行社类型：</label>
-                    <div class="col-sm-6 radio">
-                        <label>
-                            <input name="type" type="radio" value="0" {{if type==0 }}checked{{/if}} class="ace" />
-                            <span class="lbl">国际社</span>
-                        </label>
-                        <label style="margin-left:100px;">
-                            <input name="type" type="radio" value="1" {{if type==1 }}checked{{/if}} class="ace" />
-                            <span class="lbl">国内社</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">所在地区：</label>
-                    <div class="col-sm-6">
-                        <select name="provinceId" style="margin-right:3px;height:30px !important;">
-                            <option selected="selected" value="">未选择</option>
-                        </select>
-                        <select name="cityId" style="margin-right:3px;height:30px !important;">
-                            <option selected="selected" value="">未选择</option>
-                        </select>
-                        <select name="districtId" style="height:30px !important;">
-                            <option selected="selected" value="">未选择</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">联系人：</label>
-                    <div class="col-sm-6">
-                        <input type="text" name="contacts" value="{{contacts}}" class="col-sm-12" style="height:30px !important;" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">联系电话：</label>
-                    <div class="col-sm-6">
-                        <input type="text" name="contactNumber" value="{{contactNumber}}" class="col-sm-12" style="height:30px !important;" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">座机电话：</label>
-                    <div class="col-sm-6">
-                        <input type="text" name="telephoneNumber" value="{{telephoneNumber}}" class="col-sm-12" style="height:30px !important;" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">传真电话：</label>
-                    <div class="col-sm-6">
-                        <input type="text" name="faxNumber" value="{{faxNumber}}" class="col-sm-12" style="height:30px !important;" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">专注业务：</label>
-                    <div class="col-sm-6">
-                        <input type="text" name="businessDetail" value="{{businessDetail}}" class="col-sm-12" style="height:30px !important;" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label no-padding-right">专注线路：</label>
-                    <div class="col-sm-6">
-                        <input type="text" name="lineDetail" value="{{lineDetail}}" class="col-sm-12" style="height:30px !important;" />
-                    </div>
-                </div>
-                <form class="form-horizontal" role="form" onsubmit="return false">
-                    <div class="form-group" style="text-align: center;">
-                        <button class="btn btn-xs btn-primary T-close-company">
-                            <i class="ace-icon fa fa-times-circle"></i>关闭
-                        </button>
-                        <button class="btn btn-xs btn-primary T-save-company" style="margin-left:60px;">
-                            <i class="ace-icon fa fa-check-circle"></i>保存
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group T-imgContainer" data-id="companyLogo">
-                    <label class="col-sm-4 control-label no-padding-right">公司LOGO：</label>
-                    <label class="col-sm-8 ace-file-input" style="height:170px;">
-                        <input type="file" name="companyLogo" id="companyLogo" class="T-upimg" /> {{if companyLogo != null && companyLogo != ""}}
-                        <div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
-                            <img class="middle" src="{{companyLogo}}" style="max-height:120px;max-width:185px;" />
-                        </div>
-                        {{/if}}
-                    </label>
-                </div>
-                <div class="form-group T-imgContainer" data-id="companySeal">
-                    <label class="col-sm-4 control-label no-padding-right">公司业务章：</label>
-                    <label class="col-sm-8 ace-file-input" style="height:170px;">
-                        <input type="file" class="T-upimg" name="companySeal" id="companySeal" /> {{if companySeal != null && companySeal != ""}}
-                        <div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
-                            <img class="middle" src="{{companySeal}}" style="max-height:120px;max-width:185px;" />
-                        </div>
-                        {{/if}}
-                    </label>
-                </div>
-                <div class="form-group T-imgContainer" data-id="financialSeal">
-                    <label class="col-sm-4 control-label no-padding-right">公司财务章：</label>
-                    <label class="col-sm-8 ace-file-input" style="height:170px;">
-                        <input type="file" class="T-upimg" name="financialSeal" id="financialSeal" /> {{if financialSeal != null && financialSeal != ""}}
-                        <div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
-                            <img class="middle" src="{{financialSeal}}" style="max-height:120px;max-width:185px;" />
-                        </div>
-                        {{/if}}
-                    </label>
-                </div>
-            </div>
-        </div>
-    </form>
+	<form class="form-horizontal T-form" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">旅行社名称：</label>
+					<label class="col-sm-6" style="padding-top:2px;">{{name}}</label>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">旅行社类型：</label>
+					<div class="col-sm-6 radio">
+						<label>
+							<input name="type" type="radio" value="0" {{if type == 0}}checked{{/if}} class="ace" />
+							<span class="lbl">国际社</span>
+						</label>
+						<label style="margin-left:100px;">
+							<input name="type" type="radio" value="1" {{if type == 1}}checked{{/if}} class="ace" />
+							<span class="lbl">国内社</span>
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">所在地区：</label>
+					<div class="col-sm-9">
+						<select name="provinceId" style="margin-right:3px;height:30px !important;">
+							<option selected="selected" value="">未选择</option>
+						</select>
+						<select name="cityId" style="margin-right:3px;height:30px !important;">
+							<option selected="selected" value="">未选择</option>
+						</select>
+						<select name="districtId" style="height:30px !important;">
+							<option selected="selected" value="">未选择</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">联系人：</label>
+					<div class="col-sm-6">
+						<input type="text" name="contacts" value="{{contacts}}" class="col-sm-12" style="height:30px !important;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">联系电话：</label>
+					<div class="col-sm-6">
+						<input type="text" name="contactNumber" value="{{contactNumber}}" class="col-sm-12" style="height:30px !important;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">座机电话：</label>
+					<div class="col-sm-6">
+						<input type="text" name="telephoneNumber" value="{{telephoneNumber}}" class="col-sm-12" style="height:30px !important;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">传真电话：</label>
+					<div class="col-sm-6">
+						<input type="text" name="faxNumber" value="{{faxNumber}}" class="col-sm-12" style="height:30px !important;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">专注业务：</label>
+					<div class="col-sm-6">
+						<input type="text" name="businessDetail" value="{{businessDetail}}" class="col-sm-12" style="height:30px !important;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right">专注线路：</label>
+					<div class="col-sm-6">
+						<input type="text" name="lineDetail" value="{{lineDetail}}" class="col-sm-12" style="height:30px !important;" />
+					</div>
+				</div>
+				<form class="form-horizontal" role="form" onsubmit="return false">
+			        <div class="form-group" style="text-align: center;">
+			            <button class="btn btn-xs btn-primary T-close-company">
+			                <i class="ace-icon fa fa-times-circle"></i>关闭
+			            </button>
+			            <button class="btn btn-xs btn-primary T-save-company" style="margin-left:60px;">
+			                <i class="ace-icon fa fa-check-circle"></i>保存
+			            </button>
+			        </div>
+			    </form>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group T-imgContainer" data-id="companyLogo">
+					<label class="col-sm-4 control-label no-padding-right">公司LOGO：</label>
+					<label class="col-sm-6 ace-file-input" style="height:170px;">
+						<input type="file" name="companyLogo" id="companyLogo" class="T-upimg" />
+						{{if companyLogo != null && companyLogo != ""}}
+							<div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
+								<img class="middle" src="{{companyLogo}}" style="max-height:120px;max-width:185px;" />
+							</div>
+						{{/if}}
+					</label>
+				</div>
+				<div class="form-group T-imgContainer" data-id="companySeal">
+					<label class="col-sm-4 control-label no-padding-right">公司业务章：</label>
+					<label class="col-sm-6 ace-file-input" style="height:170px;">
+						<input type="file" class="T-upimg" name="companySeal" id="companySeal" />
+						{{if companySeal != null && companySeal != ""}}
+							<div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
+								<img class="middle" src="{{companySeal}}" style="max-height:120px;max-width:185px;" />
+							</div>
+						{{/if}}
+					</label>
+				</div>
+				<div class="form-group T-imgContainer" data-id="financialSeal">
+					<label class="col-sm-4 control-label no-padding-right">公司财务章：</label>
+					<label class="col-sm-6 ace-file-input" style="height:170px;">
+						<input type="file" class="T-upimg" name="financialSeal" id="financialSeal" />
+						{{if financialSeal != null && financialSeal != ""}}
+							<div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
+								<img class="middle" src="{{financialSeal}}" style="max-height:120px;max-width:185px;" />
+							</div>
+						{{/if}}
+					</label>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>

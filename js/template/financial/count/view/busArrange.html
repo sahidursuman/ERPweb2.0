@@ -1,157 +1,348 @@
-<div class="ui-sortable-handle widget-container-col">
-    <h5 class="title-size">
-        <i class="ace-icon fa fa-medkit"></i> 车费
-        <a href="javascript:void(0)" class="T-buspay-add">
-            <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
-                <i class="ace-icon fa fa-plus"></i>
-                新增
-            </button>
-        </a>
-    </h5>
-</div>
+{{if editStatus != 2}}
+    <div class="ui-sortable-handle widget-container-col">
+        <h5 class="title-size">
+            <i class="ace-icon fa fa-medkit"></i> 车费
+            <a href="javascript:void(0)" class="T-buspay-add">
+                <button class="btn btn-sm btn-success T-add" style="margin-left: 20px">
+                    <i class="ace-icon fa fa-plus"></i>
+                    新增
+                </button>
+            </a>
+        </h5>
+    </div>
+{{/if}}
 <div class="overflow-x min-w-1050">
     <table class="table overflow-table  table-striped table-bordered table-hover w-1500">
         <thead>
-        <tr>
-            <th class="th-border"><span class="necessary">*</span>开始时间</th>
-            <th class="th-border"><span class="necessary">*</span>结束时间</th>
-            <th class="th-border"><span class="necessary">*</span>任务</th>
-            <th class="th-border"><span class="necessary">*</span>所属车队</th>
-            <th class="th-border">车牌号</th>
-            <th class="th-border">座位数</th>
-            <th class="th-border"><span class="necessary">*</span>车费</th>
-            <th class="th-border">优惠</th>
-            <th class="th-border">应付</th>
-            <th class="th-border">已付</th>
-            <th class="th-border">导付</th>
-            <th class="th-border">单据</th>
-            <th class="th-border">导游报账备注</th>
-            <th class="th-border" rowspan="2">是否对账</th>
-    
+        <tr class="bg-blur">
+            <th rowspan="2"><span class="necessary">*</span>开始时间</th>
+            <th rowspan="2"><span class="necessary">*</span>结束时间</th>
+            <th rowspan="2"><span class="necessary">*</span>任务</th>
+            <th rowspan="2"><span class="necessary">*</span>所属车队</th>
+            <th rowspan="2">车牌号</th>
+            <th rowspan="2">座位数</th>
+            <th rowspan="2"><span class="necessary">*</span>车费</th>
+            <th rowspan="2">优惠</th>
+            <th rowspan="2">应付</th>
+            <th rowspan="2">社付</th>
+            <th colspan="5">导游实销</th>
+            <th rowspan="2">操作</th>
+        </tr>
+        <tr class="bg-blur">
+            <th>导游</th>
+            <th>金额</th>
+            <th>付款方式</th>
+            <th>单据</th>
+            <th>导游报账备注</th>
         </tr>
         </thead>
         <tbody class="T-count-bus">
-        {{each busCompanyArrange as busCompany}}
-        {{if busCompany != null}}
-        <tr busCompanyArrangeId="{{busCompany.id}}" badStatus = "{{busCompany.badStatus}}"
-        isConfirmAccount="{{busCompany.isConfirmAccount}}">
-            <td>{{if busCompany.busCompany != null}}{{busCompany.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+        {{if busCompanyArranges != null}}
+            {{if busCompanyArranges.listMap.length}}
+                {{each busCompanyArranges.listMap as arrange index}}
+                    <tr busArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}"
+                    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="busArrange">
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{arrange.startTime | dateFormat: 'yyyy-MM-dd'}}
+                        </td><!-- 开始时间 -->
 
-            <td>{{if busCompany.busCompany != null}}{{busCompany.endTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{arrange.endTime | dateFormat: 'yyyy-MM-dd'}}
+                        </td><!-- 结束时间 -->
 
-            <td>{{if busCompany.busCompany != null}}
-                {{ if busCompany.taskType == 0}}
-                        全程
-                    {{else if busCompany.taskType == 1}}
-                        接机
-                    {{else if busCompany.taskType == 2}}
-                        送机
-                    {{else if busCompany.taskType == 3}}
-                        前段
-                    {{else if busCompany.taskType == 4}}
-                        中段
-                    {{else if busCompany.taskType == 5}}
-                        后段
-                {{/if}}
-            {{/if}}</td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{ if arrange.taskType == 0}}
+                                    全程
+                                {{else if arrange.taskType == 1}}
+                                    接机
+                                {{else if arrange.taskType == 2}}
+                                    送机
+                                {{else if arrange.taskType == 3}}
+                                    前段
+                                {{else if arrange.taskType == 4}}
+                                    中段
+                                {{else if arrange.taskType == 5}}
+                                    后段
+                            {{/if}}
+                        </td><!-- 任务 -->
 
-            <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            <span class="companyName">{{arrange.companyName}}</span>
+                        </td><!-- 车队 -->
 
-            <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{arrange.licenseNumber}}
+                        </td><!-- 车牌号 -->
 
-            <td>{{if busCompany.bus != null}}<span calss="F-float F-count">{{busCompany.bus.seatCount}}</span>{{/if}}</td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            <span calss="F-float F-count">{{arrange.seatCount}}</span>
+                        </td>
 
-            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money">{{busCompany.realPrice}}</span>{{else}}<input type="text" name="price" value="{{busCompany.realPrice}}" class="w-80 F-float F-money" 
-            {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}<input type="hidden" name="price" value="{{busCompany.realPrice}}" /><input type="hidden" name="realPrice" value="{{busCompany.realPrice}}" /><input type="hidden" name="realCount" value="1" /></td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{if arrange.badStatus == 1}}
+                                <span class="F-float F-money realPrice">{{arrange.realPrice}}</span>
+                                <input type="hidden" name="price" value="{{arrange.realPrice}}" />
+                            {{else}}
+                                {{if editStatus == 2}}
+                                    <span class="F-float F-money realPrice">{{arrange.realPrice}}</span>
+                                    <input type="hidden" name="price" value="{{arrange.realPrice}}" />
+                                {{else}}
+                                    <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80 F-float F-money" 
+                                    {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                {{/if}}
+                            {{/if}}
+                            
+                        </td><!-- 车费 -->
 
-            <td>{{if busCompany.badStatus == 1}}<span class="F-float F-money"> {{busCompany.realReduceMoney}}</span>{{else}}<input type="text" class="w-80 F-float F-money" name="realReduceMoney" value="{{busCompany.realReduceMoney}}" old="{{busCompany.realReduceMoney}}"{{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>{{/if}}</td>
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{if arrange.badStatus == 1}}
+                                <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
+                            {{else}}
+                                {{if editStatus == 2}}
+                                    <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
+                                    <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" />
+                                {{else}}
+                                    <input type="text" class="w-80 F-float F-money" name="realReduceMoney" value="{{arrange.realReduceMoney}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                                {{/if}}
+                                
+                            {{/if}}
+                        </td><!-- 优惠 -->
 
-            <td>
-            {{if busCompany.badStatus == 1}}
-                <span class="BusneedPayMoney F-float F-money">
-                    {{busCompany.payedMoney+busCompany.realGuidePayMoney}}
-                </span>
-            {{else}}
-                {{if busCompany.isConfirmAccount == 1}}
-                    <span class="BusneedPayMoney F-float F-money">{{busCompany.tempSettlementMoney}}</span>
-                {{else}}
-                    <span class="BusneedPayMoney F-float F-money"></span>
-                {{/if}}
+                        <td>
+                            <div class="div-h-30"></div>
+                            {{if arrange.badStatus == 1}}
+                                <span class="BusneedPayMoney F-float F-money">
+                                    {{arrange.realNeedPayMoney}}
+                                </span>
+                            {{else}}
+                                {{if arrange.isConfirmAccount == 1}}
+                                    <span class="BusneedPayMoney F-float F-money">{{arrange.realNeedPayMoney}}</span>
+                                {{else}}
+                                    <span class="BusneedPayMoney F-float F-money"></span>
+                                {{/if}}
+                            {{/if}}
+                            <input type="hidden" name="needPayMoney" value="{{arrange.realNeedPayMoney}}"/>
+                        </td><!-- 应付 -->
+
+                        <td>
+                            <div class="div-h-30"></div>
+                            <span class="F-float F-money">{{arrange.payedMoney}}</span>
+                        </td><!-- 社付 -->
+                        
+                        <td name="guideName">
+                            <div class="div-h-30">
+                                {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                                    <button class="btn btn-success btn-sm btn-white T-addGuide pull-right"> 
+                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                    </button>
+                                    <!-- <a href="#" class="T-addGuide pull-right">增加</a> --><!-- 增加导游 -->
+                                {{/if}}
+                            </div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}" guideId = "{{rs.id}}">
+                                        {{if editStatus == 2}}
+                                            <span class="guideName">{{rs.guideName}}</span>
+                                        {{else}}
+                                            {{if rs.guideName == '' || rs.guideName == null}}
+                                                {{if guideCount > 1}}
+                                                    <input name="guideArrangeId" type="hidden" />
+                                                    <input name="guideName"  type="text" class="w-80" 
+                                                    {{if arrange.isConfirmAccount==1 }}disabled="disabled" {{/if}}/>
+                                                {{else}}
+                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                {{/if}}
+                                            {{else}}
+                                                <span class="guideName">{{rs.guideName}}</span>
+                                                <input name="guideId" value="{{rs.id}}" type="hidden" />
+                                                <input name="guideName" value="{{rs.guideName}}" type="hidden" />
+                                                <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
+                                            {{/if}}
+                                            {{if guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                                                <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
+                                                    <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                </button>
+                                            {{/if}}
+                                            <!-- 删除导游 -->
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
+                                {{else}}
+                                    <div class="div-h-30 mar-t-5" index="1">
+                                        {{if editStatus == 2}}
+                                            -
+                                        {{else}}
+                                            {{if guideCount > 1}}
+                                                {{if arrange.isConfirmAccount !=1}}
+                                                    <button class="btn btn-danger btn-sm btn-white T-delGuide pull-right"> 
+                                                        <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
+                                                    </button>
+                                                {{/if}}
+                                                <input name="guideArrangeId" type="hidden" />
+                                                <input name="guideName"  type="text" class="w-80" 
+                                                {{if arrange.isConfirmAccount==1 }}disabled="disabled" {{/if}}/>
+                                            {{else}}
+                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                            {{/if}}
+                                            <!-- <a href="#" class="T-delGuide pull-right">删除</a> -->
+                                            <!-- 删除导游 -->
+                                        {{/if}}
+                                    </div>
+                            {{/if}}
+                            
+                        </td><!-- 导游 -->
+                        
+                        
+                        
+                        <td name="guidePayedMoney">
+                            <div class="div-h-30"></div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
+                                        {{if editStatus == 2}}
+                                            <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
+                                            <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
+                                        {{else}}
+                                            <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
+                                            class="F-float F-money w-80" 
+                                            {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                
+                                <div class="div-h-30 mar-t-5" index="1">
+                                    {{if editStatus == 2}}
+                                       0
+                                    {{else}}
+                                        <input name="guidePayedMoney" type="text" class="w-80" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
+                        </td><!-- 金额 -->
+
+                        <td name="payType">
+                            <div class="div-h-30"></div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
+                                        {{if editStatus == 2}}
+                                            {{if rs.realPayType == 0}}
+                                                现金
+                                            {{else if rs.realPayType == 1}}
+                                                刷卡
+                                            {{else if rs.realPayType == 2}}
+                                                签单
+                                            {{/if}}
+                                        {{else}}
+                                            <select name="payType" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
+                                                <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
+                                                <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
+                                                <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                            </select>
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                <div class="div-h-30 mar-t-5" index="1" {{if arrange.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
+                                    {{if editStatus == 2}}
+                                        -
+                                    {{else}}
+                                        <select name="payType">
+                                            <option value="0" >现金</option>
+                                            <option value="1" >刷卡</option>
+                                            <option value="2" >签单</option>
+                                        </select>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
+                        </td><!-- 付款方式 -->
+                        
+                        <td name="billImage">
+                            <div class="div-h-30"></div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
+                                       {{if rs.billImage != null && rs.billImage != ""}}
+                                        <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                    {{else}}
+                                        <span style="color:#bbb;">查看</span>
+                                    {{/if}}
+                                    </div>
+                                {{/each}}
+                            {{else}}
+
+                                <div class="div-h-30 mar-t-5" index="1">
+                                    {{if editStatus == 2}}
+                                        -
+                                    {{else}}
+                                        <span style="color:#bbb;">查看</span>
+                                    {{/if}}
+                                </div>
+                                
+                            {{/if}}
+                        </td><!-- 单据 -->
+                        
+                        <td name="billRemark">
+                            <div class="div-h-30"></div>
+                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
+                                {{each arrange.guideDetails as rs index}}
+                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
+                                        {{if editStatus == 2}}
+                                            <span>{{rs.billRemark}}</span>
+                                        {{else}}
+                                            <input name="billRemark" value="{{rs.billRemark}}"
+                                            {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                <div class="div-h-30 mar-t-5" index="1">
+                                    {{if editStatus == 2}}
+                                        -
+                                    {{else}}
+                                        <input name="billRemark" {{if arrange.isConfirmAccount==1 }}readOnly="readOnly" {{/if}}/>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
+                        </td><!-- 备注 -->
+
+                        <td>
+                            {{if arrange.isConfirmAccount == 0}}
+                                未对账
+                            {{else}}
+                                已对账
+                            {{/if}}
+                            {{if editStatus != 2}}
+                                &nbsp;&nbsp;
+                                {{if arrange.payedMoney == 0 &&　arrange.isConfirmAccount == 0}}
+                                    <a href="javascript:void(0)" class="T-busArrDel">删除</a>
+                                {{else}}
+                                    <span style="color:#bbb;">删除</span>
+                                {{/if}}
+                            {{/if}}
+                        </td>
+                    </tr>
+                {{/each}}
             {{/if}}
-            <input type="hidden" name="needPayMoney" value="{{busCompany.needPayMoney}}"/></td>
-
-            <td><span class="F-float F-money">{{busCompany.payedMoney}}</span></td>
-            
-            <td><div class="inline-flex">
-    
-            {{if busCompany.badStatus == 1}}
-            <span>
-                {{if busCompany.realPayType == 0}}
-                    现金
-                    {{else if busCompany.realPayType == 1}}
-                    刷卡
-                    {{else if busCompany.realPayType == 2}}
-                    签单
-                {{/if}}
-            </span>
-            &nbsp;
-            <span class="F-float F-money">
-                {{if busCompany.realPayType == 2}}{{busCompany.realSignMoney}}{{else}}{{busCompany.realGuidePayMoney}}{{/if}}
-            </span>
-            {{else}}
-            <select name="payType" {{if busCompany.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
-                <option value="0" {{if busCompany.realPayType == 0}}selected="selected"{{/if}}>现金</option>
-                <option value="1" {{if busCompany.realPayType == 1}}selected="selected"{{/if}}>刷卡</option>
-                <option value="2" {{if busCompany.realPayType == 2}}selected="selected"{{/if}}>签单</option>
-            </select>
-            &nbsp;
-            <input class="F-float F-money w-80" type="text" name="realGuidePayMoney" 
-            {{if busCompany.realPayType==2 }}
-                value="{{busCompany.realSignMoney}}" 
-            {{else}}
-                {{if !!busCompany.billUpdateTime}} 
-                    value="{{busCompany.realGuidePayMoney}}" 
-                {{else}}
-                    value="{{busCompany.guidePayMoney}}" 
-                {{/if}} 
-            {{/if}}
-            old="{{busCompany.realGuidePayMoney}}" maxlength="11" {{if busCompany.isConfirmAccount == 1}} readOnly="readOnly" {{/if}}/>{{/if}}
-                <input type="hidden" name="payedMoney" value="{{busCompany.payedMoney}}" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-                <input type="hidden" name="guidePayMoney" value="{{busCompany.guidePayMoney}}" /></div></td>
-
-             <td>{{if busCompany.billImage != null && busCompany.billImage != ""}}
-                    <a href="javascript:void(0);" url="{{busCompany.billImage}}" class="btn-view">查看</a>
-                {{else}}
-                    <span style="color:#bbb;">查看</span>
-                {{/if}}
-            </td>
-
-
-            <td><input value="{{busCompany.billRemark}}" name="billRemark" type="text" {{if busCompany.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/></td>
-
-            <td>
-                {{if busCompany.isConfirmAccount == 0 }}
-                    未对账
-                {{else}}
-                    已对账
-                {{/if}}
-                &nbsp;&nbsp;
-                {{if busCompany.payedMoney == 0 && busCompany.isConfirmAccount == 0}}
-                    <a href="javascript:void(0)" class="T-busArrDel">删除</a>
-                {{else}}
-                    <span style="color:#bbb;">删除</span>
-                {{/if}}
-            </td>
-        </tr>
         {{/if}}
-        {{/each}}
         </tbody>
     </table>
 </div>
 
 {{if tripPlan.billStatus > -1}}
     <div style="width:60%;">
-        <div> 
+        <div arrangeType="bus"> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
             <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].opCheckRemark}}{{/if}}" />
         
