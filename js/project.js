@@ -2041,7 +2041,7 @@ Tools.setDateHSPicker = function($className){
     $className.datetimepicker({
         autoclose: true,
         todayHighlight: true,
-        format: 'L',
+        format: 'YYYY-MM-DD HH:mm',
         language: 'zh-CN'
        });  
 };
@@ -2132,6 +2132,17 @@ Tools.addDay = function(date, days) {
 	}
 	return date;
 }
+
+/**
+ * 格式化日期时间
+ * @param  {string} date 时间、日期
+ * @param  {string} fmt  需要输出的格式
+ * @return {string}      格式化之后的日期/时间
+ */
+Tools.getDateTimeFormat = function(date, fmt) {
+	fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+	return (new Date(date)).Format(fmt);
+};
 
 /**
  * 获取记录描述信息
