@@ -212,6 +212,7 @@ define(function(require, exports) {
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
                 //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+                var resultList = data.customerAccountList;
 
                 //费用明细处理
                 var title = '客户对账', tab_id;
