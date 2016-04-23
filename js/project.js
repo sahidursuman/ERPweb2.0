@@ -748,21 +748,29 @@ var modalScripts = {
 
 
 function listMenu(menuTemplate){
-	function callBack(data){
-		var result = showDialog(data);
-		if(result){
-			var menuList = data.menuList;
-			menuList = JSON.parse(menuList);
-			data.menuList = menuList;
-			var html = template("menu-template",data);
-			$("#sidebar .nav-list").html(html);
-			//绑定系统旅行社
-			$("#sidebar .nav-list .system_travelAgency").click(function(){
-				$("#sidebar .nav-list li").removeClass("active");
-				$(this).addClass("active");
-				$(this).parent().parent().addClass("active");
-				seajs.use("" + ASSETS_ROOT +"js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
-					TravelAgency.listTravelAgency();
+	$.ajax({
+		url:""+APP_ROOT+"back/user.do?method=listMenu&token="+$.cookie("token")+"&operation=self",
+		type:"POST",
+		dataType:"json",
+		success:function(data){
+			var result = showDialog(data);
+			if(result){
+				var menuList = data.menuList;
+				menuList = JSON.parse(menuList);
+				data.menuList = menuList;
+				var html = template("menu-template",data);
+				$("#sidebar .nav-list").html(html);
+
+				//获取登陆后token
+				KingServices.token = $.cookie('token');
+				//绑定系统旅行社
+				$("#sidebar .nav-list .system_travelAgency").click(function(){
+					$("#sidebar .nav-list li").removeClass("active");
+					$(this).addClass("active");
+					$(this).parent().parent().addClass("active");
+					seajs.use("" + ASSETS_ROOT +"js/template/system/travelAgency/travelAgency.js",function(TravelAgency){
+						TravelAgency.listTravelAgency();
+					});
 				});
 
 				//绑定其他支出菜单功能
