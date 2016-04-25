@@ -480,13 +480,17 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer._mergeArrangeBus = function() {
-
+            for(var i = 0; i<Transfer.busArrangeIdArray.length; i++){
+                if(!Transfer.busArrangeIdArray[i].outRemarkId){
+                    Transfer.busArrangeIdArray.splice(i, 1);
+                }
+            }
             var outRemarkList = JSON.stringify(Transfer.busArrangeIdArray);
 
             $.ajax({
                 url: KingServices.build_url(service_name, "outBusUnifyArrange"),
                 type: "POST",
-                data: { outRemarkList: outRemarkList },
+                data:{outRemarkList:outRemarkList},
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
