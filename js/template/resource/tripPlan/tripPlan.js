@@ -3619,7 +3619,7 @@ define(function(require, exports) {
 					$startTimes = $tds.eq(0).find('input[name="startTime"]');
 					$endTimes = $tds.eq(1).find('input[name="endTime"]');
 					$tasks = $tds.eq(2).find('select[name="taskType"]');
-				for (var j = 0, len = $tasks.length, $temp; j < len; j++) {
+				for (var j = 0, lenj = $tasks.length, $temp; j < lenj; j++) {
 				    guideJson.taskJson.push({
 				        sTime: $startTimes.eq(j).val(),
 				        eTime: $endTimes.eq(j).val(),
