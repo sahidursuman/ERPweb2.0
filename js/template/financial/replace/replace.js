@@ -195,6 +195,11 @@ define(function(require, exports) {
 				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
 				args.projects = Replace.$checkingTab.find(".T-search-project").val();
 				args.isConfirmAccount = Replace.$checkingTab.find(".T-check-status").find("button").data("value");
+
+                args.busCompanyOrderStatus = '';
+                args.hotelOrderStatus = '';
+                args.scenicOrderStatus = '';
+                args.ticketOrderStatus = '';
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
