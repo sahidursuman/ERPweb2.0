@@ -949,6 +949,10 @@ input.datepicker:not([class^="col-"]) {
 	min-width: 200px;
 }
 
+.w-1200 {
+	min-width: 1200px;
+}
+
 /*自费table的宽度*/
 .w-1400 {
 	min-width: 1400px;
