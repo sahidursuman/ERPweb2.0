@@ -1786,7 +1786,7 @@ define(function(require, exports) {
                     }else{
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                         if(!!singlePlan.$tab){
-                            singlePlan.$tab.find('.T-search-tripPlan-single .T-btn-tripPlan-search').trigger('click');
+                            singlePlan.listMainTripPlan();
                         }
                     }
 
