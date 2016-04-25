@@ -2533,7 +2533,7 @@ define(function(require, exports) {
             };
             //$innerTurn = $that.find('.T-inner-turn'),
             //$outerTurn = $that.find('.T-outer-turn');
-            joinTripData.lineNeedPayMoneyDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
+            joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
                 joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
