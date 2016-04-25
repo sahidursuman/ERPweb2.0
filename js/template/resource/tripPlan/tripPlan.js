@@ -3640,18 +3640,19 @@ define(function(require, exports) {
 	                    }
 	                });
 				}
-				var divLen = $this.find('[name=taskType]').length;
-				for (var j = 0; j < divLen; j++) {
-					var $thisDiv = $this.find('.T-guideAddTask').filter(function(index) {
-						return $(this).data('index') == j;
-					});
-					var json = {
-						sTime: $thisDiv.find('[name=startTime]').val(),
-						eTime: $thisDiv.find('[name=endTime]').val(),
-						tType: $thisDiv.find('[name=taskType]').val()
-					}
-					guideJson.taskJson.push(json);
+
+				var $tds = $this.children('td'),
+					$startTimes = $tds.eq(0).find('input[name="startTime"]');
+					$endTimes = $tds.eq(1).find('input[name="endTime"]');
+					$tasks = $tds.eq(2).find('select[name="taskType"]');
+				for (var j = 0, len = $tasks.length, $temp; j < len; j++) {
+				    guideJson.taskJson.push({
+				        sTime: $startTimes.eq(j).val(),
+				        eTime: $endTimes.eq(j).val(),
+				        tType: $tasks.eq(j).val()
+				    });
 				}
+				
 				guideArrangeList.push(guideJson);
 			}
 		}else if ($tab.find('.T-status').text() == 1) {
@@ -3688,6 +3689,8 @@ define(function(require, exports) {
 				arrangeStatus[$that.prop('name')] = $that.is(':checked')?1:0;
 			}
 		})
+
+		console.info(tripPlanJson)
 
 		var tripPlanId = $(this).attr('data-entiy-id');
 		$.ajax({

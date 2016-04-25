@@ -104,7 +104,7 @@
 						</a>
 					</h5>
 					<div class="form-group">
-						<label>接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
+						<label>接团日期：{{arriveTime | dateTimeHSFormat}}</label>
 						<label class="mar-l-15">上车地点：{{arrivePosition}}</label>
 					</div>
                     {{if !!receiveGroup.oldBusRequire}}<p class="requirementsPlan">原车辆要求：{{receiveGroup.oldBusRequire}}</p>{{/if}}
@@ -422,7 +422,7 @@
 						</a>
 					</h5>
 					<div class="form-group">
-						<label>票务时间：{{arriveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
+						<label>票务时间：{{arriveShiftTime | dateTimeHSFormat}}</label>
 						<label class="mar-l-15">票务班次：{{arriveShift}}</label>
 					</div>
                     {{if !!receiveGroup.oldTicketRequire}}<p class="requirementsPlan">原票务要求：{{receiveGroup.oldTicketRequire}}</p>{{/if}}
@@ -607,7 +607,7 @@
 						</a>
 					</h5>
 					<div class="form-group">
-						<label>送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
+						<label>送团日期：{{leaveTime | dateTimeHSFormat}}</label>
 						<label class="mar-l-15">上车地点：{{leavePosition}}</label>
 					</div>
                     {{if !!sendGroup.oldBusRequire}}<p class="requirementsPlan">原车辆要求：{{sendGroup.oldBusRequire}}</p>{{/if}}
@@ -925,7 +925,7 @@
 						</a>
 					</h5>
 					<div class="form-group">
-						<label>票务时间：{{leaveShiftTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</label>
+						<label>票务时间：{{leaveShiftTime | dateTimeHSFormat}}</label>
 						<label class="mar-l-15">票务班次：{{leaveShift}}</label>
 					</div>
                     {{if !!sendGroup.oldTicketRequire}}<p class="requirementsPlan">原票务要求：{{sendGroup.oldTicketRequire}}</p>{{/if}}

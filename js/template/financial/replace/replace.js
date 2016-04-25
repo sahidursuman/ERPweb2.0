@@ -229,8 +229,10 @@ define(function(require, exports) {
 				}
 				if(Replace.checkTemp && Replace.checkTemp.length > 0){
                     data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
-                    data.totalList.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
-                    data.totalList.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                    var total = $tab.data("total");
+                    total.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
+                    total.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                    $tab.data('total', total);
                 }
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
@@ -264,7 +266,7 @@ define(function(require, exports) {
                                 Replace.checkTemp = temp;
                                 Replace.$checkingTab.data('isEdited',false);
 					    		args.pageNo = obj.curr -1;
-					    		Replace.checkingList(args);
+					    		Replace.checkingList(args,Replace.$checkingTab);
                             }
 				    	}
 				    }
