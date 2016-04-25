@@ -97,6 +97,9 @@
         <div style="float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="T-tripPlanArrange">安排预算表</a>
         </div>
+        <div style="margin-top:5px;float:left;width:90px;text-align:center;">
+            <a href="#" class="T-formula">计算公式</a> 
+        </div> 
         {{if tripPlan.billStatus > -1}}
             <div style="float:left;width:90px;text-align:center;">
                 <a href="javascript:void(0);" class="T-guideAccount">导游报账表</a>
@@ -594,12 +597,8 @@
                                                                     </div>
                                                                 {{/each}}
                                                             {{else}}
-                                                                <div class="mar-t-5 div-h-30" index = "1">
-                                                                    {{if index > 1}}
-                                                                        <span class="billRemark">{{rs.billRemark}}</span>
-                                                                    {{else}}
-                                                                        -
-                                                                    {{/if}}
+                                                                <div class="mar-t-5 div-h-30" index="{{index+1}}">
+                                                                    -
                                                                 </div>
                                                             {{/if}}
                                                         </td><!-- 打单备注 -->
@@ -686,13 +685,7 @@
             </div>
             <!-- 自费 -->
             <div id="financial-count-tripdetail-selfpay" class="tab-pane fade">
-                <div class="ui-sortable-handle widget-container-col">
-                    <h5 class="title-size">
-                        <span>
-                            <a href="#" class="T-formula">计算公式</a> 
-                        </span>
-                    </h5>
-                </div>
+                
                 <div class="T-formula-List hide">
                     <table class="table overflow-table table-striped table-bordered table-hover">
                         <thead>

@@ -231,11 +231,13 @@ define(function(require, exports) {
                 }else {
                     data.view = '';
                     tab_id = 'financial_Client_checking';
-                    if(Client.checkTemp && Client.checkTemp.length > 0){
+                    if(Client.checkTemp && Client.checkTemp.length > 0 && !!$tab){
                         data.customerAccountList = FinancialService.getCheckTempData_checking(resultList,Client.checkTemp);
-                        data.totalList.sumBackMoney = Client.checkTemp.sumBackMoney;
-                        data.totalList.sumSettlementMoney = Client.checkTemp.sumSettlementMoney;
-                        data.totalList.sumUnReceivedMoney = Client.checkTemp.sumUnReceivedMoney;
+                        var total = $tab.data("total") || {};
+                        total.sumBackMoney = Client.checkTemp.sumBackMoney;
+                        total.sumSettlementMoney = Client.checkTemp.sumSettlementMoney;
+                        total.sumUnReceivedMoney = Client.checkTemp.sumUnReceivedMoney;
+                        $tab.data("total",total);
                     }
                 }
                 if (Tools.addTab(tab_id, title, ClientCheckingTemplate(data))) {
