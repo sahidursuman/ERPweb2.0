@@ -1085,9 +1085,9 @@ define(function(require, exports) {
             data.lineData = lineData;
             data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
             data.needPayMoney = receivable.currentNeedPayMoney || 0;
-            moneyData.lineFeeDel = JSON.stringify(moneyData.lineFeeDel || []);
+            moneyData.lineFeeDel = JSON.stringify(moneyData.lineFeeDel || null);
         }else{
-            moneyData.touristGroupFeeJsonDel = JSON.stringify(moneyData.touristGroupFeeJsonDel || []);
+            moneyData.touristGroupFeeJsonDel = JSON.stringify(moneyData.touristGroupFeeJsonDel || null);
         }
         data.groupType = groupType;
         $.extend(data, moneyData);
@@ -1547,10 +1547,11 @@ define(function(require, exports) {
             if($this.hasClass('T-delete')){
                 if(!!id){
                     var delJson = $this.closest('.T-fee-list').data('del-json');
-                    if(typeof delJson !== "object"){
+
+                    if(typeof delJson !== "object" || !delJson){
                         delJson = JSON.parse(delJson || "[]");
-                    };
-                    console.log(delJson)
+                    }
+
                     delJson.push({
                         id : id
                     });
@@ -1717,7 +1718,7 @@ define(function(require, exports) {
      * @param  {object} $that 触发对象的jQuery对象
      */
     touristGroup.chooseHotel = function($that){
-        var data = typeof $that.data('json') === 'object' ? $that.data('json') : JSON.parse($that.data('json') || "[]");
+        var data = typeof $that.data('json') !== 'object' || !$that.data('json') ? JSON.parse($that.data('json') || "[]") : $that.data('json');
         touristGroup.selectHotelCache = data;
         layer.open({
             type: 1,
@@ -2398,7 +2399,7 @@ define(function(require, exports) {
             guestDetails = $baseInfo.find('[name="guestDetails"]').data('json') || "{}";
 
         //转换客人信息并且删除
-        if(typeof guestDetails !== "object"){
+        if(typeof guestDetails !== "object" || !guestDetails){
             guestDetails = JSON.parse(guestDetails);
         }
         if(!$.isEmptyObject(guestDetails)){
@@ -2532,7 +2533,7 @@ define(function(require, exports) {
             };
             //$innerTurn = $that.find('.T-inner-turn'),
             //$outerTurn = $that.find('.T-outer-turn');
-            joinTripData.lineNeedPayMoneyDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
+            joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
                 joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
@@ -2812,7 +2813,7 @@ define(function(require, exports) {
             
             moneyData.touristGroupFeeJsonDel = $tab.find('.T-fee-list').data('del-json');
             if(typeof moneyData.touristGroupFeeJsonDel !== "object"){
-                moneyData.touristGroupFeeJsonDel = JSON.parse(moneyData.touristGroupFeeJsonDel || "[]");
+                moneyData.touristGroupFeeJsonDel = JSON.parse(moneyData.touristGroupFeeJsonDel || null);
             }
             return moneyData;
         },
