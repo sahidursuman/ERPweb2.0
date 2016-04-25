@@ -1271,7 +1271,6 @@ define(function(require, exports) {
      */
     tripPlan.deleteArrangePlan = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.attr('entity-id'),arrangeType = $tr.attr('arrangeType');
-        console.log($obj);
         if(arrangeType == 'bus'){
             //车ID缓存
             var  RequireListDelJson = {
@@ -1337,7 +1336,7 @@ define(function(require, exports) {
             tripPlan.guideRequireListDel.push(singleDateArray);
         }
         $tr.fadeOut(function(){
-            $that.parents('tr').remove();
+            $obj.parents('tr').remove();
         })
     };
     // 、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//

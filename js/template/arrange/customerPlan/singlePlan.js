@@ -817,9 +817,7 @@ define(function(require, exports) {
         });
         //删除保险
         $tab.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            var  $that = $(this);
-            singlePlan.deleteArrangePlan($that);
+            singlePlan.deleteArrangePlan($(this));
         });
         //酒店弹窗
         $tab.find('.T-choose-hotel').on('click', function(event) {
@@ -1593,7 +1591,6 @@ define(function(require, exports) {
      */
     singlePlan.deleteArrangePlan = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.attr('entity-id'),arrangeType = $tr.attr('arrangeType');
-        console.log($obj);
         if(arrangeType == 'bus'){
             //车ID缓存
             var  RequireListDelJson = {
@@ -1612,22 +1609,19 @@ define(function(require, exports) {
                     id : id
                 }
             singlePlan.ticketRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="selfPay"){
+        }else if(arrangeType=="selfPay"){
             //自费ID缓存
             var singleDateArray = {
                     id : id
                 }
             singlePlan.selfPayRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="shop"){
+        }else if(arrangeType=="shop"){
             //购物ID缓存
             var singleDateArray = {
                     id : id
                 }
             singlePlan.shopRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="scenic"){
+        }else if(arrangeType=="scenic"){
             //景区ID缓存
             var singleDateArray = {
                     id : id
@@ -1659,7 +1653,7 @@ define(function(require, exports) {
             singlePlan.guideRequireListDel.push(singleDateArray);
         }
         $tr.fadeOut(function(){
-            $that.parents('tr').remove();
+            $obj.parents('tr').remove();
         })
     };
     
