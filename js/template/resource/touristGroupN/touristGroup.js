@@ -364,7 +364,7 @@ define(function(require, exports) {
                             }else if(isTransfer == 2){
                                 str = "外转　" + joinTrip[i].lineInfo.transferPartnerAgency + "　";
                             }
-                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney, 2);
+                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney || 0, 2);
                             joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
                             joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         }
@@ -491,7 +491,7 @@ define(function(require, exports) {
                             }else if(isTransfer == 2){
                                 str = "外转　" + joinTrip[i].lineInfo.transferPartnerAgency + "　";
                             }
-                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney, 2);
+                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney || 0, 2);
                             joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
                             joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         }
