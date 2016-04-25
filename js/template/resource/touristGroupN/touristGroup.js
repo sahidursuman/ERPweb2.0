@@ -1330,7 +1330,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require;
+                        var str = baseInfo.hotelName || baseInfo.require.requireContent;
                         str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
