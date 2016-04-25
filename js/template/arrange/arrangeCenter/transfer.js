@@ -31,6 +31,7 @@ define(function(require, exports) {
             delBusTransferId : [],
             delHotelTransferId : [],
             deleteOutBusIds : [],
+            deleteOutHotelIds : [],
             deleteOutOtherIds : [],//删除其他缓存id
             deleteOutRestaurantIds : [],//删除餐id
             deleteOutTicketIds : [],//删除票务
@@ -1454,7 +1455,8 @@ define(function(require, exports) {
                 outHotelList: outHotelList,
                 outRemarkList: outRemarkList,
                 deleteOutRemarkList : JSON.stringify(Transfer.delHotelTransferId),
-                shuttleType: shuttleType
+                shuttleType: shuttleType,
+                deleteOutHotelIds :  Transfer.deleteOutHotelIds.join(','),
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1992,6 +1994,18 @@ define(function(require, exports) {
             $obj.parents('tr').remove()
         })
         Transfer.deleteOutBusIds.push(id);
+    };
+    /**
+     * 删除房安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+    Transfer.deleteArrange = function($obj) {
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $obj.parents('tr').remove()
+        })
+        Transfer.deleteOutHotelIds.push(id);
     };
     /**
      * 删除餐安排
