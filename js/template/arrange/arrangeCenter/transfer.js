@@ -1989,7 +1989,7 @@ define(function(require, exports) {
     Transfer.deleteArrange = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
-            $that.parents('tr').remove()
+            $obj.parents('tr').remove()
         })
         Transfer.deleteOutBusIds.push(id);
     };
@@ -2001,7 +2001,7 @@ define(function(require, exports) {
     Transfer.deleteRestaurant = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
-            $that.parents('tr').remove()
+            $obj.parents('tr').remove()
         })
         Transfer.deleteOutRestaurantIds.push(id);
     };
@@ -2013,7 +2013,7 @@ define(function(require, exports) {
     Transfer.deleteTicket = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
-            $that.parents('tr').remove()
+            $obj.parents('tr').remove()
         })
         Transfer.deleteOutTicketIds.push(id);
     };
@@ -2025,7 +2025,7 @@ define(function(require, exports) {
     Transfer.deleteOther = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
-            $that.parents('tr').remove()
+            $obj.parents('tr').remove()
         })
         Transfer.deleteOutOtherIds.push(id);
     };
