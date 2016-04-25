@@ -40,12 +40,16 @@
                 <label class="control-label">客人信息</label>
                 <input type="text" class="form-control" placeholder="名字、电话" name="guestDetails" />
             </div>
-            <div class="form-group mar-r-10">
-                <label>团散界定</label>
-                <select name="customerType" style="width: 51px;">
+            <div class="form-group">
+                <label>状态</label>
+                <select class="T-select-status" style="width: 62px;">
                     <option value="">全部</option>
-                    <option value="0">散客</option>
-                    <option value="1">团体</option>
+                    <option value="0">已发团</option>
+                    <option value="1" selected>未分团</option>
+                    <option value="2">已分团</option>
+                    <option value="3">已外转</option>
+                    <option value="5">已分段</option>
+                    <option value="6">已内转</option>
                 </select>
             </div>
             <div class="form-group pull-right">
@@ -69,16 +73,12 @@
                 <label class="control-label">外联销售</label>
                 <input type="text" class="form-control T-choose-outUserList" placeholder="外联销售" name="realName" style="width: 148px;" />
             </div>
-            <div class="form-group">
-                <label>状态</label>
-                <select class="T-select-status" style="width: 62px;">
+            <div class="form-group mar-r-10">
+                <label>团散界定</label>
+                <select name="customerType" style="width: 51px;">
                     <option value="">全部</option>
-                    <option value="0">已发团</option>
-                    <option value="1">未分团</option>
-                    <option value="2">已分团</option>
-                    <option value="3">已外转</option>
-                    <option value="5">已分段</option>
-                    <option value="6">已内转</option>
+                    <option value="0">散客</option>
+                    <option value="1">团体</option>
                 </select>
             </div>
 		</div>
