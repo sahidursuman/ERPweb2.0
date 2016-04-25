@@ -18,6 +18,12 @@ define(function(require, exports) {
      */
     GroupArrange.getList = function($form, page) {
         var args = $form.serializeJson();
+        var assign = $form.find('.T-assign-check').is(':checked');
+        if(assign){
+           args.assign = 1;
+        }else{
+           args.assign = 0; 
+        }
 
         args.item = $form.parent().data('item');
         args.pageNo = page || 0;

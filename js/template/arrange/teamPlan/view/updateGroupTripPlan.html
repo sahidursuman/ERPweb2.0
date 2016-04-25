@@ -456,7 +456,7 @@
                                     {{each requireJson.insuranceRequireList as insurance}}
                                     <tr entity-id="{{insurance.id}}" arrangeType="insurance">
                                         <td>
-                                            <input type="hidden" name="dutySubDepartmentId" value="{{insurance.id}}">
+                                            <input type="hidden" name="id" value="{{insurance.id}}">
                                             <input type="text" name="startTime" value="{{insurance.startTime | dateFormat: 'yyyy.MM.dd'}}" class="T-datepicker">
                                         </td>
                                         <td>
