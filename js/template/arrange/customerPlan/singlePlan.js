@@ -817,9 +817,7 @@ define(function(require, exports) {
         });
         //删除保险
         $tab.find('.T-del-plan').on('click', function(event) {
-            event.preventDefault();
-            var  $that = $(this);
-            singlePlan.deleteArrangePlan($that);
+            singlePlan.deleteArrangePlan($(this));
         });
         //酒店弹窗
         $tab.find('.T-choose-hotel').on('click', function(event) {
@@ -845,13 +843,16 @@ define(function(require, exports) {
                 }
             },
             select:function(event,ui){
-                var item = ui.item;
-                if(item.id != $target.data('id')){
-                    $groupName.val('').data('id', '');
-                    $dutyUser.val('').data('id', '');
+                var item = ui.item,
+                    $tr = $target.closest('tr');
+                if(item != null){
+                    $tr.find('input[name=dutySubDepartmentName]').val('');
+                    $tr.find('input[name=dutySubDepartmentId]').val('');
+                    $tr.find('input[name=dutyUserName]').val('');
+                    $tr.find('input[name=dutyUserId]').val('');
+                    $target.siblings('input[name="dutyDepartmentId"]').val(item.id);
                 }
-                $target.blur().data('id', item.id);
-                $target.siblings('input[name="dutyDepartmentId"]').val(item.id);
+                
             }
         }).on('click', function(event) {
             event.preventDefault();
@@ -889,26 +890,29 @@ define(function(require, exports) {
         var $businessName = $target.closest('.layui-layer-content').find('[name="businessName"]'),
             $dutyUser = $target.closest('.layui-layer-content').find('[name="dutyUserName"]'),
             $tr = $target.closest('tr');
-
+            
         return $target.autocomplete({
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
                     $target.val('').data('id', '');
                     $dutyUser.val('').data('id', '');
+
                 }
             },
             select:function(event,ui){
-                var item = ui.item;
-                if(item.id != $target.data('id')){
-                    $dutyUser.val('').data('id', '');
+                var item = ui.item,
+                    $tr = $target.closest('tr');
+                if(item != null){
+                    $tr.find('input[name=dutyUserName]').val('');
+                    $tr.find('input[name=dutyUserId]').val('');
+                    $tr.find('input[name=dutySubDepartmentId]').val(item.id);
                 }
-                $target.blur().data('id', item.id);
             }
         }).on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var businessNameId = $tr.find('input[name=dutyDepartmentName]').data('id');
+            var businessNameId = $tr.find('input[name=dutyDepartmentId]').val();
             if(!!businessNameId){
                 $.ajax({
                     url: KingServices.build_url('group', 'selectGroup'),
@@ -922,11 +926,11 @@ define(function(require, exports) {
                             for (var i = 0, len = groupMapList.length;i < len; i++) {
                                 groupMapList[i].id = groupMapList[i].groupId;
                                 groupMapList[i].value = groupMapList[i].groupName;
-                                $target.siblings('input[name="dutySubDepartmentId"]').val(groupMapList[i].id);
                             }
 
                             $target.autocomplete('option', 'source', groupMapList);
                             $target.autocomplete('search', '');
+
 
                         }
                     }
@@ -953,14 +957,18 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data('id', item.id);
+                    $tr = $target.closest('tr');
+                if(item != null){
+                    $tr.find('input[name=dutyUserId]').val(item.id);
+                }
+                
             }
         })
         .on('click', function(event) {
             event.preventDefault();
             var $tr = $target.closest('tr'),$dutyDepartment = $tr.find('[name="dutySubDepartmentName"]');
             $dutyDepartment = $dutyDepartment.length > 0 ? $dutyDepartment : $target.closest('.layui-layer-content').find('[name="groupName"]');
-            var businessGroupId = $dutyDepartment.data('id');
+            var businessGroupId = $tr.find('input[name=dutySubDepartmentId]').val();
             var type = 1;//$dutyDepartment.data('type');
             var url = !!type ? KingServices.build_url('group', 'selectDutyUser') : KingServices.build_url('innerTransferOperation', 'getDutyOPUserList');
             var data = !!type ? {"groupId" : businessGroupId} : {businessGroupId : businessGroupId};
@@ -979,7 +987,6 @@ define(function(require, exports) {
                                 for (var i = 0, len = dutyUserList.length;i < len; i++) {
                                     dutyUserList[i].value = dutyUserList[i].dutyUserName;
                                     dutyUserList[i].id = dutyUserList[i].dutyUserId;
-                                    $target.siblings('input[name="dutyUserId"]').val(dutyUserList[i].id);
                                 }
 
                                 $target.autocomplete('option', 'source', dutyUserList);
@@ -1179,7 +1186,7 @@ define(function(require, exports) {
                     '<td>'+
                         '<input type="text" name="endTime" value="" class="T-datepicker">'+
                     '</td>'+
-                    '<td><input type="text" class="T-choose-hotel col-xs-12" readonly="readonly"></td>'+
+                    '<td><input type="text" class="T-choose-hotel col-xs-12" name="hotel" readonly="readonly"></td>'+
                     '<td>'+
                         '<input type="text" name="requireContent" value="" class="col-xs-12">'+
                     '</td>'+
@@ -1318,9 +1325,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1359,9 +1366,9 @@ define(function(require, exports) {
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"></td>'+
-                    '<td><input type="text" name="dutyUserName"></td>'+
+                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
+                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1584,7 +1591,6 @@ define(function(require, exports) {
      */
     singlePlan.deleteArrangePlan = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.attr('entity-id'),arrangeType = $tr.attr('arrangeType');
-        console.log($obj);
         if(arrangeType == 'bus'){
             //车ID缓存
             var  RequireListDelJson = {
@@ -1603,22 +1609,19 @@ define(function(require, exports) {
                     id : id
                 }
             singlePlan.ticketRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="selfPay"){
+        }else if(arrangeType=="selfPay"){
             //自费ID缓存
             var singleDateArray = {
                     id : id
                 }
             singlePlan.selfPayRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="shop"){
+        }else if(arrangeType=="shop"){
             //购物ID缓存
             var singleDateArray = {
                     id : id
                 }
             singlePlan.shopRequireListDel.push(singleDateArray);
-        }
-        else if(arrangeType=="scenic"){
+        }else if(arrangeType=="scenic"){
             //景区ID缓存
             var singleDateArray = {
                     id : id
@@ -1650,7 +1653,7 @@ define(function(require, exports) {
             singlePlan.guideRequireListDel.push(singleDateArray);
         }
         $tr.fadeOut(function(){
-            $that.parents('tr').remove();
+            $obj.parents('tr').remove();
         })
     };
     
@@ -2017,7 +2020,7 @@ define(function(require, exports) {
 
         if(lineProductId.length > 0 && startTime.length > 0){
             $.ajax({
-                url:KingServices.build_url("v2/tripPlan","findTouristGroupInfo"),
+                url:KingServices.build_url("tripPlan","findTouristGroupInfo"),
                 type:"POST",
                 data:{
                     lineProductId : lineProductId,
