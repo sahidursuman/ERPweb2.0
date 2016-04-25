@@ -3587,32 +3587,15 @@ define(function(require, exports) {
 		var guide = $tab.find('#tripPlan_addPlan_guide').find('tbody tr'), guideArrangeList = [];
 		if (guide.length > 0) {
 			for (var i = 0,len = guide.length; i < len; i++) {
-				var $this = guide.eq(i),isAccountGuide = 0,oldguideid = $this.data('oldguideid');
-				if ($this.find('[name=isAccountGuide]').is(':checked')) {
-					isAccountGuide = 1;
-				}
+				var $this = guide.eq(i);
 				var guideJson = {
 					id: $this.data('entity-arrangeid'),
 					guideId: $this.find('[name=guideId]').val(),
 					price: $this.find('[name=price]').val(),
 					manageFee: $this.find('[name=manageFee]').val(),
 					guidePlanPreMoney: $this.find('[name=guidePlanPreMoney]').val(),
-					isAccountGuide: isAccountGuide,
 					remark: $this.find('[name=remark]').val(),
 					taskJson: []
-				}
-				if (!!oldguideid && !!guideJson.guideId && oldguideid != guideJson.guideId) {
-					$.ajax({
-						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
-	                    type: "post",
-	                    showLoading: false,
-	                    removeLoading: false,
-	                    data:"cateName=guide&cateId="+guideJson.id,
-	                    success: function(data) {
-							if(showDialog(data)){
-							}
-	                    }
-	                });
 				}
 
 				var $tds = $this.children('td'),

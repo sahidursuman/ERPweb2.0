@@ -315,7 +315,7 @@
                             </thead>
                             <tbody>
                                 {{each guideList as guide index}} {{if guide != "[]" || guide != null}}
-                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}" data-oldguideid="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}">
+                                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{guide.id}}{{/if}}">
                                     <td>
                                         {{if guide.taskJson}}
                                         {{each guide.taskJson as task i}}
