@@ -25,7 +25,13 @@ define(function(require, exports) {
         },
 
         tabKey = 'booking_arrange_part',
-        BookingArrange = {},
+        BookingArrange = {
+            $searchArea : false,
+            busPageNo : 0,
+            hotelPageNo : 0,
+            ticketPageNo : 0,
+            scenicPageNo : 0
+        },
         service = 'v2/singleItemArrange/bookingOrderArrange';
 
     /**
@@ -33,7 +39,7 @@ define(function(require, exports) {
      * @param  {object} $searchForm 搜索区域
      * @return {[type]}             [description]
      */
-    BookingArrange.getList = function($form, page) {
+    BookingArrange.getList = function($form, page, item) {
         if (!$form || !$form.length)  {
             console.info('未找到搜索区域');
             return;
@@ -43,7 +49,12 @@ define(function(require, exports) {
         args.item = $form.parent().data('target');
         args.pageNo = page || 0;
         var temp = args.item + "List";
-
+        if(!!item && args.item != item){
+            $form = $("#booking-"+item+"-arrange").find('.T-search-area');
+            args = $form.serializeJson();
+            args.item = item;
+            args.pageNo = page || 0;
+        }
         $.ajax({
                 url: KingServices.build_url(service, 'listBookingOrder'),
                 type: 'post',
@@ -52,7 +63,23 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     var $container = $form.next().html(ListTemplate[temp](data));
-
+                    BookingArrange.$searchArea = $form;
+                    switch (args.item) {
+                        case 'bus':
+                            BookingArrange.busPageNo = args.pageNo;
+                            break;
+                        case 'hotel':
+                            BookingArrange.hotelPageNo = args.pageNo;
+                            break;
+                        case 'scenic':
+                            BookingArrange.scenicPageNo = args.pageNo;
+                            break;
+                        case 'ticket':
+                            BookingArrange.ticketPageNo = args.pageNo;
+                            break;
+                        default:
+                            break;
+                    }
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -89,7 +116,7 @@ define(function(require, exports) {
             type: 'post',
         }).done(function(data){
             if (showDialog(data)) {
-                var tab_key = tabKey + '_' + target;
+                var tab_key = tabKey + '_' + target + '_edit';
 
                 if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
                     BookingArrange.init_arrange_event($('#tab-' + tab_key + '-content'), target);
@@ -105,6 +132,12 @@ define(function(require, exports) {
      * @return {[type]}        [description]
      */
     BookingArrange.init_arrange_event = function($tab, target){
+        //绑定日期事件
+        Tools.setDatePicker($tab.find('.datepicker'));
+        //绑定取消事件
+        $tab.find('.T-cancel').on('click', function(){
+            Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+        });
         switch (target) {
             // 中转部分
             case 'bus':
@@ -132,7 +165,6 @@ define(function(require, exports) {
      */
     BookingArrange._initBusEvent = function($tab){
         BookingArrange.bindBusCompanyChoose($tab);
-        Tools.setDatePicker($tab.find('.datepicker'));
         $tab.find('.T-busList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), $tr = $that.closest('tr');
@@ -144,9 +176,6 @@ define(function(require, exports) {
         });
         $tab.find('.T-bus-add').on('click', function(){
             addBus();
-        });
-        $tab.find('.T-cancel').on('click', function(){
-            Tools.closeTab(Tools.getTabKey($tab.prop('id')));
         });
         $tab.find('.T-hotel-save').on('click', function(){
             BookingArrange.saveBusData($tab);
@@ -170,9 +199,155 @@ define(function(require, exports) {
         }
     };
 
+    /**
+     * 初始化房安排事件
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
     BookingArrange._initHotelEvent = function($tab){
         BookingArrange.bindHotelChoose($tab);
-        Tools.setDatePicker($tab.find('.datepicker'));
+        $tab.find('.T-hotelList').on('change', '.T-action-blur', function(event){
+            event.preventDefault();
+            var $that = $(this), 
+                $tr = $that.closest('tr');
+            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+        });
+        $tab.find('.T-hotelList').on('click', '.T-hotel-delete', function(event){
+            var $tr = $(this).closest('tr');
+            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        });
+        $tab.find('.T-hotel-add').on('click', function(){
+            addHotel();
+        });
+        $tab.find('.T-hotel-save').on('click', function(){
+            BookingArrange.saveHotelData($tab);
+        });
+        return this;
+        function addHotel(){
+            var html =  '<tr><td><input name="enterTime" type="text" class="datepicker" /></td>'+
+                        '<td><input name="leaveTime" type="text" class="datepicker" /></td>'+
+                        '<td><select name="hotelLevel" class="col-sm-12">'+
+                        '    <option selected="selected" value="">--全部--</option>'+
+                        '    <option value="1">三星以下</option>'+
+                        '    <option value="2">三星</option>'+
+                        '    <option value="3">准四星</option>'+
+                        '    <option value="4">四星</option>'+
+                        '    <option value="5">准五星</option>'+
+                        '    <option value="6">五星</option>'+
+                        '    <option value="7">五星以上</option>'+
+                        '    </select></td>'+
+                        '<td><input name="hotelName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><input name="hotelRoomType" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
+                        '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly /></td>'+
+                        '<td><input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" /></td>'+
+                        '<td><input type="text" name="remark" class="col-sm-12"></td>'+
+                        '<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
+            $tab.find('.T-hotelList').append(html);
+            BookingArrange.bindHotelChoose($tab);
+            Tools.setDatePicker($tab.find('.datepicker'));
+        }
+    };
+
+    /**
+     * 初始化景区安排事件
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    BookingArrange._initScenicEvent = function($tab){
+        BookingArrange.bindScenicChoose($tab);
+        $tab.find('.T-scenicList').on('change', '.T-action-blur', function(event){
+            event.preventDefault();
+            var $that = $(this), 
+                $tr = $that.closest('tr');
+            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+        });
+        $tab.find('.T-scenicList').on('click', '.T-scenic-delete', function(event){
+            var $tr = $(this).closest('tr');
+            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        });
+        $tab.find('.T-scenic-add').on('click', function(){
+            addScenic();
+        });
+        $tab.find('.T-scenic-save').on('click', function(){
+            BookingArrange.saveScenicData($tab);
+        });
+        return this;
+        function addHotel(){
+            var html =  '<tr><td><input name="startTime" type="text" class="datepicker" /></td>'+
+                        '<td><select name="tourTime" class="col-sm-12">'+
+                        '    <option selected="selected" value="全天">全天</option> '+
+                        '        <option value="上午">上午</option> '+
+                        '        <option value="下午">下午</option> '+
+                        '    </select></td>'+
+                        '<td><input name="scenicName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><input name="scenicItemName" type="text" class="col-sm-12"/></td>'+
+                        '<td><input name="tourDuration" type="text" class="col-sm-12" /></td>'+
+                        '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
+                        '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="orderNumber" type="text" class="col-sm-12" maxlength="50" /></td>'+
+                        '<td><input type="text" name="sumCostMoney" readonly class="col-sm-12 F-float F-money"></td>'+
+                        '<td><input type="text" name="prePayMoney" class="col-sm-12 F-float F-money"></td>'+
+                        '<td><input type="text" name="remark" class="col-sm-12"></td>'+
+                        '<td><a class="cursor T-action T-scenic-delete">删除</a></td></tr>';
+            $tab.find('.T-scenicList').append(html);
+            BookingArrange.bindScenicChoose($tab);
+            Tools.setDatePicker($tab.find('.datepicker'));
+        }
+    };
+
+    /**
+     * 初始化票安排事件
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    BookingArrange._initTicketEvent = function($tab){
+        BookingArrange.setDateTimePicker($tab.find('.datetimepicker'));
+        BookingArrange.bindTicketChoose($tab);
+        $tab.find('.T-ticketList').on('change', '.T-action-blur', function(event){
+            event.preventDefault();
+            var $that = $(this), 
+                $tr = $that.closest('tr');
+            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+        });
+        $tab.find('.T-ticketList').on('click', '.T-ticket-delete', function(event){
+            var $tr = $(this).closest('tr');
+            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        });
+        $tab.find('.T-ticket-add').on('click', function(){
+            addTicket();
+        });
+        $tab.find('.T-ticket-save').on('click', function(){
+            BookingArrange.saveTicketData($tab);
+        });
+        return this;
+        function addTicket(){
+            var html =  '<tr><td><input name="ticketName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><select name="type">'+
+                        '        <option value="1">机票</option>'+
+                        '        <option value="2">汽车票</option>'+
+                        '        <option value="3">火车票</option>'+
+                        '        <option value="4">轮船票</option>'+
+                        '    </select></td>'+
+                        '<td><input name="startCity" type="text" class="col-sm-12" maxlength="30" /></td>'+
+                        '<td><input name="arriveCity" type="text" class="col-sm-12" maxlength="30" /></td>'+
+                        '<td><input name="shift" type="text" class="col-sm-12" maxlength="50" /></td>'+
+                        '<td><input name="startTime" type="text" class="col-sm-12 datepicker" /></td>'+
+                        '<td><input name="seatLevel" type="text" class="col-sm-12" maxlength="30" /></td>'+
+                        '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly /></td>'+
+                        '<td><input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" /></td>'+
+                        '<td><input name="remark" type="text" class="col-sm-12" /></td>'+
+                        '<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
+            $tab.find('.T-ticketList').append(html);
+            BookingArrange.bindTicketChoose($tab);
+            Tools.setDatePicker($tab.find('.datepicker'));
+        }
     };
 
     /**
@@ -213,6 +388,140 @@ define(function(require, exports) {
             data.arrangeList = JSON.stringify(busList);
         }
         
+        BookingArrange.submitDataToServer($tab, data);
+    };
+    /**
+     * 保存房安排
+     * @param  {[type]} $tab     [description]
+     * @param  {[type]} validate [description]
+     * @return {[type]}          [description]
+     */
+    BookingArrange.saveHotelData = function($tab, validate){
+        var data = {
+                id : $tab.find('.base-info').data('id'),
+                item : 'hotel',
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+            },
+            $tr = $tab.find('.T-hotelList tr'), 
+            hotelList = [];
+        $tr.each(function(){
+            var $that = $(this),
+                id = $that.data('id'),
+                hotelJson = {
+                    enterTime : $that.find('[name="enterTime"]').val(),
+                    leaveTime : $that.find('[name="leaveTime"]').val(),
+                    hotelLevel : $that.find('[name="hotelLevel"]').val(),
+                    hotelId : $that.find('[name="hotelName"]').data('id'),
+                    hotelRoomId : $that.find('[name="hotelRoomType"]').data('id'),
+                    costPrice : $that.find('[name="costPrice"]').val(),
+                    roomCount : $that.find('[name="roomCount"]').val(),
+                    reduceMoney : $that.find('[name="reduceMoney"]').val(),
+                    sumCostMoney : $that.find('[name="sumCostMoney"]').val(),
+                    prePayMoney : $that.find('[name="prePayMoney"]').val(),
+                    remark : $that.find('[name="remark"]').val()
+                };
+            if(!!id){
+                hotelJson.id = id;
+            }
+            hotelList.push(hotelJson);
+        });
+        if(hotelList.length > 0){
+            data.arrangeList = JSON.stringify(hotelList);
+        }
+        BookingArrange.submitDataToServer($tab, data);
+    };
+    /**
+     * 保存景区安排
+     * @param  {[type]} $tab     [description]
+     * @param  {[type]} validate [description]
+     * @return {[type]}          [description]
+     */
+    BookingArrange.saveScenicData = function($tab, validate){
+        var data = {
+                id : $tab.find('.base-info').data('id'),
+                item : 'scenic',
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+            },
+            $tr = $tab.find('.T-scenicList tr'), 
+            scenicList = [];
+        $tr.each(function(){
+            var $that = $(this),
+                id = $that.data('id'),
+                scenicJson = {
+                    startTime : $that.find('[name="startTime"]').val(),
+                    tourTime : $that.find('[name="tourTime"]').val(),
+                    scenicId : $that.find('[name="scenicName"]').data('id'),
+                    scenicItemId : $that.find('[name="scenicItemName"]').data('id'),
+                    tourDuration : $that.find('[name="tourDuration"]').val(),
+                    costPrice : $that.find('[name="costPrice"]').val(),
+                    roomCount : $that.find('[name="roomCount"]').val(),
+                    reduceMoney : $that.find('[name="reduceMoney"]').val(),
+                    orderNumber : $that.find('[name="orderNumber"]').val(),
+                    sumCostMoney : $that.find('[name="sumCostMoney"]').val(),
+                    prePayMoney : $that.find('[name="prePayMoney"]').val(),
+                    remark : $that.find('[name="remark"]').val()
+                };
+            if(!!id){
+                scenicJson.id = id;
+            }
+            scenicList.push(scenicJson);
+        });
+        if(scenicList.length > 0){
+            data.arrangeList = JSON.stringify(scenicList);
+        }
+        BookingArrange.submitDataToServer($tab, data);
+    };
+    /**
+     * 保存票安排
+     * @param  {[type]} $tab     [description]
+     * @param  {[type]} validate [description]
+     * @return {[type]}          [description]
+     */
+    BookingArrange.saveTicketData = function($tab, validate){
+        var data = {
+                id : $tab.find('.base-info').data('id'),
+                item : 'ticket',
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+            },
+            $tr = $tab.find('.T-ticketList tr'), 
+            ticketList = [];
+        $tr.each(function(){
+            var $that = $(this),
+                id = $that.data('id'),
+                ticketJson = {
+                    ticketId : $that.find('[name="ticketName"]').data('id'),
+                    type : $that.find('[name="type"]').val(),
+                    startCity : $that.find('[name="startCity"]').val(),
+                    arriveCity : $that.find('[name="arriveCity"]').val(),
+                    shift : $that.find('[name="shift"]').val(),
+                    startTime : $that.find('[name="startTime"]').val(),
+                    seatLevel : $that.find('[name="seatLevel"]').val(),
+                    costPrice : $that.find('[name="costPrice"]').val(),
+                    roomCount : $that.find('[name="roomCount"]').val(),
+                    reduceMoney : $that.find('[name="reduceMoney"]').val(),
+                    sumCostMoney : $that.find('[name="sumCostMoney"]').val(),
+                    prePayMoney : $that.find('[name="prePayMoney"]').val(),
+                    remark : $that.find('[name="remark"]').val()
+                };
+            if(!!id){
+                ticketJson.id = id;
+            }
+            ticketList.push(ticketJson);
+        });
+        if(ticketList.length > 0){
+            data.arrangeList = JSON.stringify(ticketList);
+        }
+        BookingArrange.submitDataToServer($tab, data);
+    };
+
+    /**
+     * 提交数据到后台
+     * @param  {[type]} $tab [description]
+     * @param  {[type]} data [description]
+     * @return {[type]}      [description]
+     */
+    BookingArrange.submitDataToServer = function($tab, data){
+        var item = data.item;
         $.ajax({
             url : KingServices.build_url(service, 'saveBookingOrder'),
             data: data,
@@ -221,11 +530,28 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 showMessageDialog($("#confirm-dialog-message"), data.message, function() {
                     Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-                    BookingArrange.getList($tab.find('.T-search-area'));
+                    var pageNo = 0;
+                    switch (item) {
+                        case 'bus':
+                            pageNo = BookingArrange.busPageNo;
+                            break;
+                        case 'hotel':
+                            pageNo = BookingArrange.hotelPageNo;
+                            break;
+                        case 'scenic':
+                            pageNo = BookingArrange.scenicPageNo;
+                            break;
+                        case 'ticket':
+                            pageNo = BookingArrange.ticketPageNo;
+                            break;
+                        default:
+                            break;
+                    }
+                    BookingArrange.getList(BookingArrange.$searchArea, pageNo, item);
                 });
             }
         });
-    };
+    }
 
     /**
      * 删除安排
@@ -257,7 +583,30 @@ define(function(require, exports) {
     BookingArrange.view = function($view) {
         var target = $view.closest('.tab-pane').data('target'),
             title = $view.closest('.tabable').find('.nav').find('.active').text(),
-            template = viewTemplate[target + 'View'];
+            html = viewTemplate[target + 'View'],
+            id = $view.closest('tr').data('id');
+        
+        if(!id || !target){
+            console.info('信息有误，请检查传递的参数!');
+            return false;
+        }
+
+        $.ajax({
+            url : KingServices.build_url(service, 'getBookingOrder'),
+            data: {id : id, item : target},
+            type: 'post',
+        }).done(function(data){
+            if (showDialog(data)) {
+                var tab_key = tabKey + '_' + target + '_view';
+
+                if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
+                    var $tab = $('#tab-' + tab_key + '-content');
+                    $tab.find('.T-btn-close').on('click', function(){
+                        Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+                    });
+                }
+            }
+        });
     };
 
     /**
@@ -425,8 +774,8 @@ define(function(require, exports) {
 
         $hotelStar.off().on("change", function(){
             var $this = $(this), $parents = $this.closest('tr');
-            $parents.find("input[name=hotelName]").val("").data('id', '');
-            $parents.find("input[name=hotelRoomType]").val("").data('id', '');
+            $parents.find('[name="hotelName"]').val("").data('id', '');
+            $parents.find('[name="hotelRoomType"]').val("").data('id', '');
         });
         
         $hotelChoose.autocomplete({
@@ -434,18 +783,16 @@ define(function(require, exports) {
             change: function(event,ui){
                 if(ui.item == null){
                     var $this = $(this), $parents = $this.closest("tr");
-                    $this.val("");
-                    $parents.find("input[name=hotelId]").val("");
-                    $parents.find("input[name=hotelRoom]").val("");
-                    $parents.find("input[name=hotelRoomId]").val("");
-                    $parents.find("input[name=mobileNumber]").val("");
-                    $parents.find("input[name=managerName]").val("");
-                    $parents.find("input[name=price]").val("");
+                    $this.val("").data('id', '');
+                    $parents.find('[name="hotelRoomType"]').val("").data('id', '');
                 }
             },
             select: function(event,ui){
-                var $this = $(this), $parents = $this.closest('tr');
-                $parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
+                var $this = $(this), 
+                    $parents = $this.closest('tr');
+                if(ui.item.id == $this.data('id'))return;
+                $this.data('id', ui.item.id).trigger('change');
+                $parents.find('[name="hotelRoomType"]').val("").data('id', '');
                 $.ajax({
                     url: KingServices.build_url('hotel','getHotelById'),
                     type: 'POST',
@@ -453,25 +800,19 @@ define(function(require, exports) {
                     data: "id=" + ui.item.id,
                     success: function(data) {
                         if(showDialog(data)){
-                            var number = data.hotel.telNumber ? data.hotel.telNumber : data.hotel.mobileNumber;
-                            $parents.find("input[name=managerName]").val(data.hotel.managerName +' '+ number);
-                            $parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
-                            $parents.find("input[name=hotelRoom]").val("");
-                            $parents.find("input[name=hotelRoomId]").val("");
-                            $parents.find("input[name=price]").val("");
+                            $parents.find('[name="hotelLevel"]').val(data.hotel.level);
                         }
                     }
                 });
             }
         }).off("click").on("click", function(){
             var $this = $(this),
-                hotelStarValue = $(this).closest('tr').find('.T-tripPlanHotelStar').val();
+                hotelStarValue = $(this).closest('tr').find('[name="hotelLevel"]').val();
             $.ajax({
                 url: KingServices.build_url('hotel','findHotelListByLevel'),
                 showLoading:false,
                 data:{
-                    level:hotelStarValue,
-                    menuKey:menuKey
+                    level : hotelStarValue
                 },
                 success: function(data) {
                     if(showDialog(data)){
@@ -493,54 +834,111 @@ define(function(require, exports) {
             });
         });
 
-        var chooseHotelRoom = $tab.find(".T-chooseHotelRoom");
+        var chooseHotelRoom = $tab.find('[name="hotelRoomType"]');
         chooseHotelRoom.autocomplete({
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
                     var $this = $(this), $parents = $this.closest('tr');
-                    $this.val("");
-                    $parents.find("input[name=hotelRoomId]").val("");
-                    $parents.find("input[name=price]").val("");
+                    $this.val("").data('id', '');
                 }
             },
             select:function(event,ui){
-                var $this = $(this), $parents = $this.closest('tr'),
-                    whichDay = $parents.find("select[name=whichDay]").val(),
-                    enterTime = $parents.find(".T-whichDaysContainer").find('option:selected').text();
-                $parents.find("input[name=hotelRoomId]").val(ui.item.id).trigger('change');
+                var $this = $(this), 
+                    $parents = $this.closest('tr'),
+                    enterTime = $parents.find('[name="enterTime"]').val();
+                    //enterTime = $parents.find('[name="leaveTime"]').val();
+                $(this).data('id', ui.item.id).trigger('change');
+                if(!enterTime)return;
                 $.ajax({
                     url: KingServices.build_url('hotel','getHotelRoomPrice'),
                     type: 'POST',
                     showLoading:false,
                     data: {
                         id: ui.item.id,
-                        whichDay: whichDay,
-                        enterTime: enterTime,
-                        menuKey:menuKey
+                        enterTime: enterTime
                     },
                     success: function(data) {
                         if(showDialog(data)){
-                            $parents.find("input[name=price]").val(data.price).trigger('change');
+                            if(!!data.price){
+                                $parents.find("input[name=price]").val(data.price).trigger('change');
+                            }
                         }
                     }
                 });
             }
         }).off("click").on("click", function(){
-            var $this = $(this),$parents = $this.closest('tr'),
-                id = $parents.find("input[name=hotelId]").val();
-            $.ajax({
-                url: KingServices.build_url('hotel','findTypeByHotelId'),
-                showLoading: false,
-                data: "id=" + id,
-                success: function(data) {
-                    if(showDialog(data)) {
-                        var hotelRommList = JSON.parse(data.hotelRommList);
-                        if(hotelRommList && hotelRommList.length > 0){
-                            for(var i=0; i < hotelRommList.length; i++){
-                                hotelRommList[i].value = hotelRommList[i].type;
+            var $this = $(this),
+                $parents = $this.closest('tr'),
+                $hotelName = $parents.find("input[name=hotelName]")
+                id = $hotelName.data('id');
+            if(!!id){
+                $.ajax({
+                    url: KingServices.build_url('hotel','findTypeByHotelId'),
+                    showLoading: false,
+                    data: "id=" + id,
+                    success: function(data) {
+                        if(showDialog(data)) {
+                            var hotelRommList = JSON.parse(data.hotelRommList);
+                            if(hotelRommList && hotelRommList.length > 0){
+                                for(var i=0; i < hotelRommList.length; i++){
+                                    hotelRommList[i].value = hotelRommList[i].type;
+                                }
+                                $this.autocomplete('option','source', hotelRommList);
+                                $this.autocomplete('search', '');
+                            }else{
+                                layer.tips('没有内容。', $this, {
+                                    tips: [1, '#3595CC'],
+                                    time: 2000
+                                });
                             }
-                            $this.autocomplete('option','source', hotelRommList);
+                        }
+                    }
+                });
+            }else{
+                layer.tips('请先选择酒店！', $hotelName, {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+            }
+        });
+    };
+
+    /**
+     * 绑定景区选择事件
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    BookingArrange.bindScenicChoose = function($tab){
+        var scenicChoose = $tab.find('[name="scenicName"]');
+        scenicChoose.autocomplete({
+            minLength: 0,
+            change: function(event,ui){
+                if(ui.item == null){
+                    var $this = $(this), $parents = $this.closest('tr');
+                    $this.val("").data('id', '');
+                    $parents.find('[name="scenicItemName"]').val("").data("id", "");
+                }
+            },
+            select: function(event,ui){
+                var $this = $(this), $parents = $this.closest('tr');
+                $this.data('id', ui.item.id).trigger('change');
+                $parents.find('[name="scenicItemName"]').val("").data("id", "");
+            }
+        }).off("click").on("click", function(){
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url('scenic','findAll'),
+                type: 'POST',
+                showLoading: false,
+                success: function(data) {
+                    if(showDialog(data)){
+                        var scenicList = JSON.parse(data.scenicList);
+                        if(scenicList && scenicList.length > 0){
+                            for(var i=0; i < scenicList.length; i++){
+                                scenicList[i].value = scenicList[i].name;
+                            }
+                            $this.autocomplete('option','source', scenicList);
                             $this.autocomplete('search', '');
                         }else{
                             layer.tips('没有内容。', $this, {
@@ -551,6 +949,127 @@ define(function(require, exports) {
                     }
                 }
             });
+        });
+        
+        var chooseChargingProject = $tab.find('[name="scenicItemName"]');
+        chooseChargingProject.autocomplete({
+            minLength: 0,
+            select: function(event, ui){
+                var $this = $(this), $parents = $this.closest('tr'),
+                    startTime = $parents.find('[name="startTime"]').val();
+
+                $this.data('id', ui.item.id).trigger('change');
+                $.ajax({
+                    url: KingServices.build_url('scenic','getScenicItemPrice'),
+                    type: 'POST',
+                    showLoading:false,
+                    data: {
+                        id: ui.item.id,
+                        startTime: startTime
+                    },
+                    success: function(data) {
+                        if(showDialog(data)) {
+                            if(!!data.price){
+                                $parents.find("input[name=price]").val(data.price);
+                            }
+                        }
+                    }
+                });
+            },
+            change: function(event, ui){
+                if(ui.item == null){
+                    var $this = $(this), $parents = $this.closest('tr');
+                    $this.val("").data('id', '');
+                }
+            }
+        }).off("click").on("click", function(){
+            var $this = $(this), $parents = $this.closest('tr'),
+                $scenicName = $parents.find('[name="scenicName"]'),
+                id = $scenicName.data('id');
+            if(!!id){
+                $.ajax({
+                    url: KingServices.build_url('scenic','findItemByScenicId'),
+                    type: 'POST',
+                    showLoading:false,
+                    data: "id="+id,
+                    success: function(data) {
+                        if(showDialog(data)) {
+                            var scenicItemList = JSON.parse(data.scenicItemList);
+                            if(scenicItemList && scenicItemList.length > 0){
+                                for(var i=0; i < scenicItemList.length; i++){
+                                    scenicItemList[i].value = scenicItemList[i].name;
+                                }
+                                $this.autocomplete('option','source', scenicItemList);
+                                $this.autocomplete('search', '');
+                            }else{
+                                layer.tips('没有内容。', $this, {
+                                    tips: [1, '#3595CC'],
+                                    time: 2000
+                                });
+                            }
+                        }
+                    }
+                });
+            }else{
+                layer.tips('请先选择景区！', $scenicName, {
+                    tips: [1, '#3595CC'],
+                    time: 2000
+                });
+            }
+            
+        });
+    };
+
+    /**
+     * 绑定票务选择事件
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    BookingArrange.bindTicketChoose = function($tab){
+        var ticketChoose = $tab.find('[name="ticketName"]');
+        ticketChoose.autocomplete({
+            minLength: 0,
+            select: function(event, ui){
+                var $this = $(this).data('id', ui.item.id).trigger('change');
+            },
+            change: function(event, ui){
+                if(ui.item == null){
+                    $(this).val("").data('id', '').trigger('change');
+                }
+            }
+        }).off("click").on("click", function(){
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url('ticket','findAll'),
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    if(showDialog(data)) {
+                        var ticketList = JSON.parse(data.ticketList);
+                        if(ticketList && ticketList.length > 0){
+                            for(var i=0; i < ticketList.length; i++){
+                                ticketList[i].value = ticketList[i].name;
+                            }
+                            $this.autocomplete('option','source', ticketList);
+                            $this.autocomplete('search', '');
+                        }else{
+                            layer.tips('没有内容。', $this, {
+                                tips: [1, '#3595CC'],
+                                time: 2000
+                            });
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    BookingArrange.setDateTimePicker = function($obj){
+        $obj.datetimepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'YYYY-MM-DD HH:mm',
+            language: 'zh-CN'
         });
     };
 

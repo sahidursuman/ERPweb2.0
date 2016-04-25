@@ -831,6 +831,9 @@ define(function(require, exports, module) {
                 hotelJson.id = hotelId;
             }
         }
+        if($hotel.data('clear') == "1" && !!hotelId){
+            bookingOrderJson.delHotelInfoId = hotelId;
+        }
         bookingOrderJson.hotel = hotelJson;
 
         var $ticket = $baseInfo.find('.T-ticket'),
@@ -842,6 +845,9 @@ define(function(require, exports, module) {
         }
         if(!$.isEmptyObject(ticketJson)){
             ticketJson.deleteFeeIds = F.assemblyFeeDelIds(ticketJson.feeDel);
+        }
+        if($ticket.data('clear') == "1" && !!ticketId){
+            bookingOrderJson.delTicketInfoId = ticketId;
         }
         bookingOrderJson.ticket = ticketJson;
 
@@ -855,6 +861,9 @@ define(function(require, exports, module) {
         if(!$.isEmptyObject(scenicJson)){
             scenicJson.deleteFeeIds = F.assemblyFeeDelIds(scenicJson.feeDel);
         }
+        if($scenic.data('clear') == "1" && !!scenicId){
+            bookingOrderJson.delScenicInfoId = scenicId;
+        }
         bookingOrderJson.scenic = scenicJson;
 
         var $bus = $baseInfo.find('.T-bus'),
@@ -867,6 +876,9 @@ define(function(require, exports, module) {
         }
         if(!!busJson && !$.isEmptyObject(busJson)){
             busJson.deleteFeeIds = F.assemblyFeeDelIds(busJson.feeDel);
+        }
+        if($bus.data('clear') == "1" && !!busId){
+            bookingOrderJson.delBusInfoId = busId;
         }
         bookingOrderJson.bus = busJson;
 

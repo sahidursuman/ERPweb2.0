@@ -1,0 +1,83 @@
+<div class="base-info" data-id="{{bookingOrder.id}}">
+    代订单号：<span class="mar-r-20">{{bookingOrder.orderNumber}}</span> 客人信息：
+    <span class="mar-r-20">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</span> 外联销售：{{bookingOrder.outOPUserName}}
+</div>
+<div class=" ui-sortable-handle">
+    <h5 class="">
+        <label class="middle title-size">酒店代订</label>
+    </h5>
+    
+    <p class="panel hct-mh-required">现酒店计划要求：{{required}}</p>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                <thead>
+                    <tr>
+                        <th class="th-border" width="110"><span class="necessary">*</span>入住日期</th>
+                        <th class="th-border" width="110"><span class="necessary">*</span>离店日期</th>
+                        <th class="th-border">星级</th>
+                        <th class="th-border"><span class="necessary">*</span>酒店</th>
+                        <th class="th-border"><span class="necessary">*</span>房型</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border" width="110">优惠</th>
+                        <th class="th-border" width="110">应收</th>
+                        <th class="th-border">预付款</th>
+                        <th class="th-border">备注</th>
+                    </tr>
+                </thead>
+                <tbody class="T-hotelList">
+                {{if !!arrangeList && arrangeList.length > 0}}
+                {{each arrangeList as rs}}
+                    <tr>
+                        <td>
+                            {{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}
+                        </td>
+                        <td>
+                            {{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}
+                        </td>
+                        <td>
+                            {{#rs.hotelLevel | getHotelLevelDesc}}
+                        </td>
+                        <td>
+                            {{rs.hotelName}}
+                        </td>
+                        <td>
+                            {{rs.hotelRoomType}}
+                        </td>
+                        <td>
+                            {{rs.costPrice}}
+                        </td>
+                        <td>
+                            {{rs.roomCount}}
+                        </td>
+                        <td>
+                            {{rs.reduceMoney}}
+                        </td>
+                        <td>
+                            {{rs.sumCostMoney}}
+                        </td>
+                        <td>
+                            {{rs.prePayMoney}}
+                        </td>
+                        <td>
+                            {{rs.remark}}
+                        </td>
+                    </tr>
+                {{/each}}
+                {{/if}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mar-t-20">
+    <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
+        <button class="btn btn-xs btn-default T-btn-close btn-primary w100 mar-r-20"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+        <label>
+            <input name="status" type="checkbox" class="ace T-finishedArrange" disabled {{if status == 1}}checked{{/if}}>
+            <span class="lbl font-w"> 酒店安排完成</span>
+        </label>
+    </span>
+</div>
