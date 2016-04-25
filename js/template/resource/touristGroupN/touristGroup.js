@@ -358,13 +358,13 @@ define(function(require, exports) {
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
                             joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
-                            var str = "", isCurrent = joinTrip[i].lineInfo.isCurrent;
-                            if(isCurrent == 1){
+                            var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
+                            if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
-                            }else if(isCurrent == 2){
+                            }else if(isTransfer == 2){
                                 str = "外转　" + joinTrip[i].lineInfo.transferPartnerAgency + "　";
                             }
-                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney, 2);
+                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney || 0, 2);
                             joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
                             joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         }
@@ -485,14 +485,14 @@ define(function(require, exports) {
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
                             joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
-                            var str = joinTrip[i].lineInfo.needPayAllMoney;
-                            if(joinTrip[i].isTransfer === 1){
-                                str = "内转　" + joinTrip[i].dutyDepartmentName + "　" + joinTrip[i].needPayAllMoney;
-                            }else if(joinTrip[i].isTransfer === 2){
-                                str = "外转　" + joinTrip[i].transferPartnerAgency + "　" + joinTrip[i].needPayAllMoney;;
+                            var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
+                            if(isTransfer == 1){
+                                str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
+                            }else if(isTransfer == 2){
+                                str = "外转　" + joinTrip[i].lineInfo.transferPartnerAgency + "　";
                             }
-                            joinTrip[i].lineNeedPayAllMoney = str;
-
+                            joinTrip[i].lineNeedPayAllMoney = str + Tools.thousandPoint(joinTrip[i].lineInfo.needPayAllMoney || 0, 2);
+                            joinTrip[i].lineInfoId = joinTrip[i].lineInfo.id;
                             joinTrip[i].lineInfo = JSON.stringify(joinTrip[i].lineInfo || {});
                         }
                         if(joinTrip[i].hotelInfo){
@@ -1330,7 +1330,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require;
+                        var str = baseInfo.hotelName || baseInfo.require.requireContent;
                         str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
@@ -2425,7 +2425,7 @@ define(function(require, exports) {
         };
         if(typeof data.baseInfo.touristGroupFee.touristGroupFeeJsonDel !== "object"){
             data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || null);
-        }else if(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel.length === 0){
+        }else if(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel && data.baseInfo.touristGroupFee.touristGroupFeeJsonDel.length === 0){
             data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = null;
         }
         var receiveDateArr = [];
