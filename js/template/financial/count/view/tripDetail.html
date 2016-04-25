@@ -597,12 +597,8 @@
                                                                     </div>
                                                                 {{/each}}
                                                             {{else}}
-                                                                <div class="mar-t-5 div-h-30" index = "1">
-                                                                    {{if index > 1}}
-                                                                        <span class="billRemark">{{rs.billRemark}}</span>
-                                                                    {{else}}
-                                                                        -
-                                                                    {{/if}}
+                                                                <div class="mar-t-5 div-h-30" index="{{index+1}}">
+                                                                    -
                                                                 </div>
                                                             {{/if}}
                                                         </td><!-- 打单备注 -->

@@ -33,7 +33,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	shopStat.listMain_init = function() {
-		Tools.addTab(menuKey, '购物统计', listMainTemplate());
+		Tools.addTab(menuKey, '购物统计', listMainTemplate(FinancialService.getInitDate()));
 		shopStat.$tab = $('#tab-business_analyst_shopStat-content');
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
 		//shopStat.datepicker(shopStat.$searchArea)
@@ -87,7 +87,7 @@ define(function(require, exports) {
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
 		       		//翻页不请求合计数据
-		       		if(shopStat.totalData){
+		       		if(searchData.pageNo > 0){
 		       			shopStat.loadSumHtml();
 		       		} else{
 		       			shopStat.getSumData(searchData);
