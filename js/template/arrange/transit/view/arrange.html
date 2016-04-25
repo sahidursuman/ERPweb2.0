@@ -278,7 +278,7 @@
 									{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
 									<tr data-entity-id="{{outHotel.id}}" {{if outHotel.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
 										<td><input type="hidden" name="serviceType" value="0" />
-										<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>
 											<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
 											<select class="tripPlanHotelStar" name="hotelLevel" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}>
@@ -365,7 +365,7 @@
 								<tbody>{{each receiveGroup.outRestaurantList as outRestaurant}}
 									{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
 									<tr data-entity-id="{{outRestaurant.id}}" {{if outRestaurant.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>
 											<div class="col-sm-12">
 												<input type="hidden" name="serviceType" value="0" />
@@ -568,7 +568,7 @@
 								<tbody>{{each receiveGroup.outOtherList as outOther}}
 								{{if outOther != null && outOther.name != null}}
 									<tr data-entity-id="{{outOther.id}}" {{if outOther.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>
 											<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/>
 											<input type="hidden" name="serviceType" value="0" />
