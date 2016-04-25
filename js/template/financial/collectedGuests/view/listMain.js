@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":154,"md5":"e6b188a544d048ca4cd1c9c7c05d26d6"}*/
+/*TMODJS:{"debug":true,"version":155,"md5":"e6b188a544d048ca4cd1c9c7c05d26d6"}*/
 define(function(require) {
     return require("../../../template")("financial/collectedGuests/view/listMain", function($data, $filename) {
         try {
