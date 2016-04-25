@@ -530,7 +530,7 @@ define(function(require, exports) {
             });
             //删除车
             $busplanId.find('.T-arrange-delete').on('click', function() {
-                Transfer.deleteArrange($(this));
+                Transfer.deleteBusArrange($(this));
             });
             //添加中转数据
             $busplanId.find('.T-add-BusTransfersId').on('click', function() {
@@ -1247,7 +1247,7 @@ define(function(require, exports) {
             });
             //删除房
             $hotelplanId.find('.T-arrange-delete').on('click', function() {
-                Transfer.deleteArrange($(this));
+                Transfer.deleteHotelArrange($(this));
             });
             // 新增游客
             $hotelplanId.find('.T-add-HotelTransfersId').on('click', function() {
@@ -1817,7 +1817,7 @@ define(function(require, exports) {
         Transfer.setDate($obj); //时间控件
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
-            Transfer.deleteArrange($(this));
+            Transfer.deleteBusArrange($(this));
         });
     };
     //添加房安排
@@ -1852,7 +1852,7 @@ define(function(require, exports) {
         Transfer.setDate($obj); //时间控件
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
-            Transfer.deleteArrange($(this));
+            Transfer.deleteHotelArrange($(this));
         });
     };
 
@@ -1988,11 +1988,12 @@ define(function(require, exports) {
      * @param  {object} $obj 删除按钮
      * @return {[type]}      [description]
      */
-    Transfer.deleteArrange = function($obj) {
+    Transfer.deleteBusArrange = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
             $obj.parents('tr').remove()
         })
+        console.log(id)
         Transfer.deleteOutBusIds.push(id);
     };
     /**
@@ -2000,7 +2001,7 @@ define(function(require, exports) {
      * @param  {object} $obj 删除按钮
      * @return {[type]}      [description]
      */
-    Transfer.deleteArrange = function($obj) {
+    Transfer.deleteHotelArrange = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
             $obj.parents('tr').remove()
