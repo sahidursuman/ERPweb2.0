@@ -1786,7 +1786,7 @@ define(function(require, exports) {
                     }else{
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                         if(!!singlePlan.$tab){
-                            singlePlan.$tab.find('.T-search-tripPlan-single .T-btn-tripPlan-search').trigger('click');
+                            singlePlan.listMainTripPlan();
                         }
                     }
 
@@ -2345,7 +2345,7 @@ define(function(require, exports) {
      */
     singlePlan.getLineProductList = function($dialog, type, isSingle, page, $tab, name) {
         page = page || 0;
-        var url = KingServices.build_url('v2/lineProduct', 'findAll'),
+        var url = KingServices.build_url('lineProduct', 'findAll'),
             $tbody = $dialog.find('.T-normal-list'),
             args = {
                 pageNo: page,
@@ -2353,7 +2353,7 @@ define(function(require, exports) {
                 name : name 
             };
         if(isSingle){
-            delete args.customerType;
+            args.customerType = 0;
         }
         if (type) {
             url = KingServices.build_url('v2/lineProduct', 'listQuoteLinePorduct');
