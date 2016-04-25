@@ -204,34 +204,21 @@
                 <td rowspan="{{rs.rowLen}}">{{rs.creatorName}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateTimeFormat}}</td>
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.contractMoney}}</span></td>
-                <td>{{if rs.detailList.transitFee.transitFeeList.length > 0}}
-                    <!-- 若有中转结算价 -->
+                <td>{{if rs.detailList.otherFee.length > 0}}
+                    <!-- 中转，otherFee中多条数据 -->
                         <a class="T-viewFeeDetails" data-index="{{listIndex}}">
-                        {{each rs.detailList.transitFee.transitFeeList as tf}}
-                            {{tf.name}}：
-                            <span class="F-float F-money T-touristGroupId" data-id="{{tf.touristGroupId}}" data-status="3">{{tf.price}}</span> x
-                            <span class="F-float F-count">{{tf.count}}</span> =
-                            <span class="F-float F-money">{{tf.price * tf.count}}</span><br>
+                        {{each rs.detailList.otherFee as temp index}}
+                            {{if index == 0}}
+                                {{each temp.otherFeeList as of}}
+                                    {{of.name}}：
+                                    <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
+                                    <span class="F-float F-count">{{of.count}}</span>=
+                                    <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                {{/each}}
+                            {{/if}}
                         {{/each}}
                         </a>
-                    {{else}}
-                    <!-- 若无中转结算价 -->
-                        {{if rs.detailList.otherFee.length > 0}}
-                        <!-- 中转，otherFee中多条数据 -->
-                            <a class="T-viewFeeDetails" data-index="{{listIndex}}">
-                            {{each rs.detailList.otherFee as temp index}}
-                                {{if index == 0}}
-                                    {{each temp.otherFeeList as of}}
-                                        {{of.name}}：
-                                        <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
-                                        <span class="F-float F-count">{{of.count}}</span>=
-                                        <span class="F-float F-money">{{of.price * of.count}}</span><br>
-                                    {{/each}}
-                                {{/if}}
-                            {{/each}}
-                            </a>
-                        {{else}}<!-- 若无费用明细 -->-
-                        {{/if}}
+                    {{else}}<!-- 若无费用明细 -->-
                     {{/if}}
                 </td>
                 <td rowspan="{{rs.rowLen}}" class="align-left">
@@ -240,20 +227,8 @@
                         <span class="in-block">导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span></span>
                     </a>
                 </td>
-                <!-- 若无中转结算价 -->
-                    {{if rs.detailList.otherFee.length > 0}}
-                    <!-- 中转，otherFee中多条数据 -->
-                        {{each rs.detailList.otherFee as of index}}
-                            {{if index == 0}}
-                                <td><span class="F-float F-money">{{of.backMoney}}</span></td>
-                                <td><span class="F-float F-money">{{of.settlementMoney}}</span></td>
-                            {{/if}}
-                        {{/each}}
-                    {{else}}
-                    <!-- 若无费用明细 -->
-                        <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
-                        <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
-                    {{/if}}
+                <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.unReceivedMoney}}</span></td>
                 <td>
                     <input type="text" name="payMoney" class="col-sm-12 T-reciveMoney money F-float F-money" value="{{rs.payMoney}}">
