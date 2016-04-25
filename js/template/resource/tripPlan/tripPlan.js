@@ -2554,6 +2554,12 @@ define(function(require, exports) {
 			var $this = $(this), parents = $this.closest('tr');
 			var id = parents.find("input[name=restaurantId]").val();
 			var type = parents.find('select[name=type]').val();
+			if (!id || id <= 0) {
+				console.info('餐厅自选，不能填充价格');
+				$this.autocomplete('option','source', []);
+				return;
+			}
+
 			$.ajax({
 				url: KingServices.build_url('restaurant','getRestaurantStandardByType'),
                 showLoading:false,
