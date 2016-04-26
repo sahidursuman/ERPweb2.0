@@ -3382,7 +3382,7 @@ define(function(require, exports) {
 	        var $that = $(this),
 	            name = $that.prop('name');
 
-	        if (_feilds.indexOf(name) > 0) {
+	        if (_feilds.indexOf(name) >= 0) {
 	            var $tr = $that.closest('tr'),
 	                $feilds = {},
 	                price, count, reduce, prePay, type, needPay;
