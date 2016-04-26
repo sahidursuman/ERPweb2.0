@@ -10,8 +10,8 @@
             </tr>
         </thead>
         <tbody>
-            {{if transitFeeList.length > 0}}
-                {{each transitFeeList as rs}}
+            {{each otherFee as of}}
+                {{each of.otherFeeList as rs}}
                 <tr><td>{{rs.name}}</td>
                     <td>{{rs.count}}</td>
                     <td><span class="F-float F-money">{{rs.price}}</span></td>
@@ -19,19 +19,7 @@
                     <td>{{rs.remark}}</td>
                 </tr>
                 {{/each}}
-            {{/if}}
-            {{if otherFee.length > 0}}
-                {{each otherFee as of}}
-                    {{each of.otherFeeList as rs}}
-                    <tr><td>{{rs.name}}</td>
-                        <td>{{rs.count}}</td>
-                        <td><span class="F-float F-money">{{rs.price}}</span></td>
-                        <td><span class="F-float F-money">{{rs.count * rs.price}}</span></td>
-                        <td>{{rs.remark}}</td>
-                    </tr>
-                    {{/each}}
-                {{/each}}
-            {{/if}}
+            {{/each}}
         </tbody>
     </table>
 </div> 
