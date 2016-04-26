@@ -113,8 +113,8 @@
                     <th class="th-border">小组联系人</th>
                     <th class="th-border">人数</th>
                     <th class="th-border">现收团款</th>
-                    <th class="th-border">住宿标准</th>
-                    <th class="th-border">包含自费</th>
+                    <!-- <th class="th-border">住宿标准</th>
+                    <th class="th-border">包含自费</th> -->
                     <th class="th-border">接站牌</th>
                     <th class="th-border">送客地点</th>
                     <th class="th-border">备注</th>
@@ -129,9 +129,9 @@
                     <td name="lineProductName">{{group.lineProduct.name}}</td>
                     <td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}({{group.contactMember.mobileNumber}}){{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
-                    <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
+                    <!-- <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
                     <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
-                    </td>
+                    </td> -->
                     <td name="includeSelfPay">{{group.includeSelfPay}}</td>
                     <td>{{group.welcomeBoard}}</td>
                     <td>{{group.sendPosition}}</td>

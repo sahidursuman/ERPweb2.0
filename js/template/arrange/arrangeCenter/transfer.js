@@ -594,7 +594,6 @@ define(function(require, exports) {
 
                 // 绑定事件
                 var $frame = $('#transfer-bus-arrange-frame');
-
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
@@ -749,7 +748,7 @@ define(function(require, exports) {
                             }
                         }
                     }
-
+                    Transfer.setDate($searchFrom);
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
@@ -1312,7 +1311,7 @@ define(function(require, exports) {
 
                 // 绑定事件
                 var $frame = $('#transfer-hotel-arrange-frame');
-
+                Transfer.setDate($frame);
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
@@ -1467,7 +1466,8 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         Transfer.hotelArrangeIdArray = [];
                         Transfer._refreshList('hotel');
-                        Tools.closeTab(hotelplanId)
+                        Tools.closeTab(hotelplanId);
+                        Transfer.deleteOutHotelIds = [];
                     });
                 }
 
@@ -1491,7 +1491,7 @@ define(function(require, exports) {
             parentObj.find("input[name=hotelRoomId]").val("");
             parentObj.find("input[name=hotelMobileNumber]").val("");
             parentObj.find("input[name=hotelManagerName]").val("");
-            parentObj.find("input[name=hotelPrice]").val("");
+            parentObj.find("input[name=price]").val("");
         });
         //酒店选择
         hotelChoose.autocomplete({
@@ -1505,7 +1505,7 @@ define(function(require, exports) {
                     parents.find("input[name=hotelRoomId]").val("");
                     parents.find("input[name=hotelMobileNumber]").val("");
                     parents.find("input[name=hotelManagerName]").val("");
-                    parents.find("input[name=hotelPrice]").val("");
+                    parents.find("input[name=price]").val("");
                 }
             },
             select: function(event, ui) {
@@ -1562,7 +1562,7 @@ define(function(require, exports) {
                     $(this).val("");
                     var objParent = $(this).closest('tr');
                     objParent.find("input[name=hotelRoomId]").val("");
-                    objParent.find("input[name=hotelPrice]").val("");
+                    objParent.find("input[name=price]").val("");
                 }
             },
             select: function(event, ui) {
@@ -1576,7 +1576,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if (showDialog(data)) {
                             var hotelRoom = JSON.parse(data.hotelRoom);
-                            $thisRoom.find("input[name=hotelPrice]").val(hotelRoom.normalInnerPrice).trigger('change');
+                            $thisRoom.find("input[name=price]").val(hotelRoom.normalInnerPrice).trigger('change');
                         }
                     }
                 })
