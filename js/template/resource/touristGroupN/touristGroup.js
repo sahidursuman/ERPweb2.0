@@ -67,7 +67,8 @@ define(function(require, exports) {
         touristGroup.getSearchAreaData();
     	args = args || {};
     	args.pageNo = page || 0;
-    	args.type = args.type || 0;
+        args.type = args.type || 0;
+        args.statusSearch = args.statusSearch || 1;
         if(!!$tab){
             $tab.html(T.list());
             touristGroup.init_events($tab);
