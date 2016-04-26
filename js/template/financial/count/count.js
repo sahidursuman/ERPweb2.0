@@ -308,8 +308,11 @@ define(function(require, exports){
 		//显示隐藏
 		Count.showOrhideList($obj);
 		//显示计算公式
-		$obj.find('.T-formula').on('click',function(){
+		/*$obj.find('.T-formula').on('click',function(){
 			window.open('../share/formula.html');
+		});*/
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
 		});
 		var $listObj = $obj.find('.T-list');
 		
@@ -519,9 +522,12 @@ define(function(require, exports){
 		Count.showOrhideList($obj);
 		
 		//显示计算公式
-		$obj.find('.T-formula').on('click',function(){
+		/*$obj.find('.T-formula').on('click',function(){
 			window.open('../share/formula.html');
-		});
+		});*/	
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
+		});	
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -980,8 +986,11 @@ define(function(require, exports){
 		//显示隐藏
 		Count.showOrhideList($obj);
 		//显示计算公式
-		$obj.find('.T-formula').on('click',function(){
+		/*$obj.find('.T-formula').on('click',function(){
 			window.open('../share/formula.html');
+		});*/
+		$obj.find('.T-formula').on('click',function(){
+			Count.showFormula($obj);
 		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
@@ -1195,10 +1204,10 @@ define(function(require, exports){
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
 		$hotelObj.off('change').on('change','input',function(){
-			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
+			var nameFlag = $(this).attr('name');
+			if(scenicNoneAutoFields.indexOf(nameFlag)<0){
 				Count.calculateCost($(this));
-				Count.autoHotelSum($(this),$obj);
+				Count.autoScenicSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
 			

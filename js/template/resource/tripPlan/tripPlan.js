@@ -1825,9 +1825,15 @@ define(function(require, exports) {
 	                    data:"cateName="+$name+"&cateId="+id,
 	                    success: function(data) {
 							if(showDialog(data)){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message,function() {
-									removeItem();
-								})
+								if ($name === 'guide') {
+									// 删除导游前，缓存Id
+									var $container = $this.closest('#tripPlan_addPlan_guide'),
+										delJson = $container.data('delJson') || [];
+
+									delJson.push({id: id});
+									$container.data('delJson', delJson);
+								}								
+								removeItem();								
 							}
 	                    }
 	                });
@@ -2554,6 +2560,12 @@ define(function(require, exports) {
 			var $this = $(this), parents = $this.closest('tr');
 			var id = parents.find("input[name=restaurantId]").val();
 			var type = parents.find('select[name=type]').val();
+			if (!id || id <= 0) {
+				console.info('餐厅自选，不能填充价格');
+				$this.autocomplete('option','source', []);
+				return;
+			}
+
 			$.ajax({
 				url: KingServices.build_url('restaurant','getRestaurantStandardByType'),
                 showLoading:false,
@@ -2745,7 +2757,7 @@ define(function(require, exports) {
 				$parents.find("input[name=price]").val("");
 				$parents.find("input[name=orderNumber]").val("");
 				$parents.find("input[name=price]").val(0);
-				tripPlan.calculatePrice($tab);
+				tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this);
@@ -2796,7 +2808,7 @@ define(function(require, exports) {
                     success: function(data) {
 						if(showDialog(data)) {
 							$parents.find("input[name=price]").val(data.price);
-							tripPlan.calculatePrice($tab);
+							tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 						}
                     }
                 });
@@ -3584,10 +3596,12 @@ define(function(require, exports) {
 			}
 		}
 		//导游安排数据
-		var guide = $tab.find('#tripPlan_addPlan_guide').find('tbody tr'), guideArrangeList = [];
-		if (guide.length > 0) {
-			for (var i = 0,len = guide.length; i < len; i++) {
-				var $this = guide.eq(i);
+		var $guideArea = $tab.find('#tripPlan_addPlan_guide'),
+			$guideTr = $guideArea.find('tbody').children('tr'),
+			guideArrangeList = [];
+		if ($guideTr.length) {
+			for (var i = 0,len = $guideTr.length; i < len; i++) {
+				var $this = $guideTr.eq(i);
 				var guideJson = {
 					id: $this.data('entity-arrangeid'),
 					guideId: $this.find('[name=guideId]').val(),
@@ -3626,6 +3640,7 @@ define(function(require, exports) {
 		},
 		tripPlanJson = {  // 安排数据
 			guideList : guideArrangeList,
+			delGuideList: $guideArea.data('delJson') || [],
 			//busCompanyList : Tools.getTableVal($tab.find('#tripPlan_addPlan_bus').find('tbody'), 'entity-arrangeid'),
 			busCompanyList: busCompanyArrange,
 			hotelList : Tools.getTableVal($tab.find('#tripPlan_addPlan_hotel').find('tbody'), 'entity-arrangeid'),

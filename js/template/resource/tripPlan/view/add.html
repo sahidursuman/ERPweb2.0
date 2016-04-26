@@ -1,3 +1,4 @@
+
 <div class="globalAdd">
     <div class="baseinfo">
         <!-- 缓存数据 -->
@@ -646,7 +647,7 @@
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 T-chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
-                                                <input type="hidden" name="restaurantId" value="{{restaurant.restaurantId}}" />
+                                                <input type="hidden" name="restaurantId" value="{{if restaurant.isChoose == 1}}-1{{else}}{{restaurant.restaurantId}}{{/if}}" />
                                                 <input type="hidden" name="optional" value="" />
                                                 {{if !restaurant.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
