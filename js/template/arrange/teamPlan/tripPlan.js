@@ -2902,6 +2902,6 @@ define(function(require, exports) {
     exports.init = tripPlan.initModule;
     exports.addTripPlan = tripPlan.addTripPlan;
     exports.listTripPlanGroup = tripPlan.listTripPlanGroup;
-
+    exports.viewTripPlan = tripPlan.viewTripPlan;
     exports.addVisotorMore = F.batchAddTourists;
 });
