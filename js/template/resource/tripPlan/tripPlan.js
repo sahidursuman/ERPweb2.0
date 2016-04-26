@@ -1825,9 +1825,15 @@ define(function(require, exports) {
 	                    data:"cateName="+$name+"&cateId="+id,
 	                    success: function(data) {
 							if(showDialog(data)){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message,function() {
-									removeItem();
-								})
+								if ($name === 'guide') {
+									// 删除导游前，缓存Id
+									var $container = $this.closest('#tripPlan_addPlan_guide'),
+										delJson = $container.data('delJson') || [];
+
+									delJson.push({id: id});
+									$container.data('delJson', delJson);
+								}								
+								removeItem();								
 							}
 	                    }
 	                });
@@ -3590,10 +3596,12 @@ define(function(require, exports) {
 			}
 		}
 		//导游安排数据
-		var guide = $tab.find('#tripPlan_addPlan_guide').find('tbody tr'), guideArrangeList = [];
-		if (guide.length > 0) {
-			for (var i = 0,len = guide.length; i < len; i++) {
-				var $this = guide.eq(i);
+		var $guideArea = $tab.find('#tripPlan_addPlan_guide'),
+			$guideTr = $guideArea.find('tbody').children('tr'),
+			guideArrangeList = [];
+		if ($guideTr.length) {
+			for (var i = 0,len = $guideTr.length; i < len; i++) {
+				var $this = $guideTr.eq(i);
 				var guideJson = {
 					id: $this.data('entity-arrangeid'),
 					guideId: $this.find('[name=guideId]').val(),
@@ -3632,6 +3640,7 @@ define(function(require, exports) {
 		},
 		tripPlanJson = {  // 安排数据
 			guideList : guideArrangeList,
+			delGuideList: $guideArea.data('delJson') || [],
 			//busCompanyList : Tools.getTableVal($tab.find('#tripPlan_addPlan_bus').find('tbody'), 'entity-arrangeid'),
 			busCompanyList: busCompanyArrange,
 			hotelList : Tools.getTableVal($tab.find('#tripPlan_addPlan_hotel').find('tbody'), 'entity-arrangeid'),
