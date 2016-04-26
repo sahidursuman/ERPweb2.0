@@ -113,6 +113,14 @@ define(function(require, exports) {
                     errMsg: '请输入正确的全陪电话'
                 }]
 			},
+            {
+                //本段团款
+                $ele: $obj.find('[name="subNeedPayMoney"]'),
+                rules : [{
+                    type: 'float',
+                    errMsg: '本段团款必须为数字'
+                }]
+            },
 			{
 				//本段现收团款
 				$ele: $obj.find('[name="operateCurrentNeedPayMoney"]'),
@@ -216,6 +224,26 @@ define(function(require, exports) {
                 ]
             },
             { 
+                //入住日期
+                $ele: $obj.find('input[name="checkInTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '入住日期不能为空'
+                    }
+                ]
+            },
+            { 
+                //离店日期
+                $ele: $obj.find('input[name="checkOutTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '离店日期不能为空'
+                    }
+                ]
+            },
+            { 
                 //消费日期
                 $ele: $obj.find('input[name="consumeTime"]'),
                 rules : [
@@ -230,8 +258,92 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="roomCount"]'),
                 rules : [
                     {
+                        type: 'null',
+                        errMsg: '房间数不能为空'
+                    },
+                    {
                         type: 'nonnegative-float',
                         errMsg: '房间数必须为正整数'
+                    }
+                ]
+            },
+            { 
+                //出发时间
+                $ele: $obj.find('input[name="startTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '出发时间不能为空'
+                    }
+                ]
+            },
+            { 
+                //出发城市
+                $ele: $obj.find('input[name="startingCity"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '出发城市不能为空'
+                    }
+                ]
+            },
+            { 
+                //到达城市
+                $ele: $obj.find('input[name="arriveCity"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '到达城市不能为空'
+                    }
+                ]
+            },
+            { 
+                //出游日期
+                $ele: $obj.find('input[name="startDate"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '出游日期不能为空'
+                    }
+                ]
+            },
+            { 
+                //景区
+                $ele: $obj.find('input[name="scenic"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '景区不能为空'
+                    }
+                ]
+            },
+            { 
+                //门票数量
+                $ele: $obj.find('input[name="memberCount"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '门票数量不能为空'
+                    }
+                ]
+            },
+            { 
+                //开始用车时间
+                $ele: $obj.find('input[name="startUseTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '开始用车时间不能为空'
+                    }
+                ]
+            },
+            { 
+                //结束用车时间
+                $ele: $obj.find('input[name="endUseTime"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '结束用车时间不能为空'
                     }
                 ]
             },
@@ -300,12 +412,22 @@ define(function(require, exports) {
                     ]
                 });
                 settings.push({
-                    //责任计调
-                    $ele: $obj.find('input[name="dutyUserName"]'),
+                    //部门
+                    $ele: $obj.find('input[name="businessName"]'),
                     rules : [
                         {
                             type: 'null',
-                            errMsg: '责任计调不能为空'
+                            errMsg: '部门不能为空'
+                        }
+                    ]
+                });
+                settings.push({
+                    //子部门
+                    $ele: $obj.find('input[name="groupName"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '子部门不能为空'
                         }
                     ]
                 });
@@ -371,7 +493,34 @@ define(function(require, exports) {
 	        }
 
 	        return validator;
-	    }
+	    },
+        bookingEditor : function($obj){
+            var settings = [{ 
+                //客户
+                $ele: $obj.find('input[name="fromPartnerAgency"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '客户不能为空'
+                    }
+                ]
+            },
+            { 
+                //客人信息
+                $ele: $obj.find('input[name="guestDetails"]'),
+                rules : [
+                    {
+                        type: 'null',
+                        errMsg: '客人信息不能为空'
+                    }
+                ]
+            }];
+            return settings;
+        },
+        bookingCheck : function($container){
+            this.$bookingCheckContainer = $container;
+            return $container.formValidate(this.bookingEditor($container));
+        }
 	};
 	return rule;
 });
