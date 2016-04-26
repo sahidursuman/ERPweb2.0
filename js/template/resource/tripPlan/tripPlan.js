@@ -3421,6 +3421,54 @@ define(function(require, exports) {
 	    });
 	};
 
+	//计算 应付 计划导付
+	tripPlan.calculatePrice = function($tab, isFirst){
+		return;
+		$tab.find("input[name=guidePayMoney]").off("blur").on("blur", function() {
+			tripPlan.calcSummary($tab);
+		});
+		var table = $tab.find(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
+		table.each(function(){
+			var $this = $(this), $parents = $this.closest('tr');
+			$this.find("input[name=price], input[name=prePayMoney], input[name=reduceMoney], input[name=lowestPrice], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
+				tripPlan.plusPrice($(this), $tab);
+			});
+			$this.find("select[name=payType]").off("change").on("change", function(){
+				tripPlan.plusPrice($(this), $tab);
+			});
+			if (isFirst) {
+				//加载时自动计算
+				tripPlan.plusPrice($this.find('input[name=price], input[name=memberCount], input[name=reduceMoney], input[name=prePayMoney]'), $tab ,isFirst);
+			}else{
+				tripPlan.plusPrice($(this), $tab);
+			}
+		});
+	};
+	tripPlan.plusPrice = function($this, $tab , isCalc){
+		var $parents = $this.closest('tr');
+		var payType = $parents.find("select[name=payType]").val(),
+			prePayMoney = $parents.find("input[name=prePayMoney]").val(),
+			prePayMoney = isNaN(prePayMoney) ? 0 : prePayMoney,
+			price = parseFloat($parents.find("input[name=price]").val()),
+			lowestPrice = $parents.find("input[name=lowestPrice]").val();
+
+		if (lowestPrice != undefined) { // 处理底价问题
+			price = lowestPrice*1;
+		}
+		price = isNaN(price) ? 0 : price;
+		num = parseFloat($parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
+		num = isNaN(num) ? 0 : num;
+		reduceMoney = parseFloat($parents.find("input[name=reduceMoney]").val());
+		reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
+
+		$parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
+		
+		if (!!isCalc == false) {
+			$parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-prePayMoney);
+		}
+		tripPlan.calcSummary($tab);
+	};
+
 	/**
 	 * 计算合计
 	 * @param  {object} $tab 顶层元素
