@@ -1144,7 +1144,6 @@ define(function(require, exports) {
         $tab.find('.T-viewFeeDetails').off().on("click",function(){
             var index = $(this).data("index"),
                 viewData = {
-                    transitFeeList : resultList[index].detailList.transitFee.transitFeeList,
                     otherFee : resultList[index].detailList.otherFee
                 };
             layer.open({
