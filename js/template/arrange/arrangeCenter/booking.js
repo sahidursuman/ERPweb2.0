@@ -32,6 +32,7 @@ define(function(require, exports) {
             ticketPageNo : 0,
             scenicPageNo : 0
         },
+        rule = require('./rule'),
         service = 'v2/singleItemArrange/bookingOrderArrange';
 
     /**
@@ -164,11 +165,13 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initBusEvent = function($tab){
+        var validate = rule.busCheck($tab);
         BookingArrange.bindBusCompanyChoose($tab);
         $tab.find('.T-busList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
-            var $that = $(this), $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="fee"]').val() - $tr.find('[name="reduceMoney"]').val())
+            var $that = $(this), $tr = $that.closest('tr'),
+            sumCostMoney = ($tr.find('[name="fee"]').val() || 0) - ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
         $tab.find('.T-busList').on('click', '.T-bus-delete', function(event){
             var $tr = $(this).closest('tr');
@@ -178,6 +181,7 @@ define(function(require, exports) {
             addBus();
         });
         $tab.find('.T-hotel-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveBusData($tab);
         });
         return this;
@@ -196,6 +200,7 @@ define(function(require, exports) {
             $tab.find('.T-busList').append(html);
             BookingArrange.bindBusCompanyChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.busUpdate(validate);
         }
     };
 
@@ -205,12 +210,16 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initHotelEvent = function($tab){
+        var validate = rule.hotelCheck($tab);
         BookingArrange.bindHotelChoose($tab);
         $tab.find('.T-hotelList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), 
-                $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                                ($tr.find('[name="roomCount"]').val() || 0) - 
+                                ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
         $tab.find('.T-hotelList').on('click', '.T-hotel-delete', function(event){
             var $tr = $(this).closest('tr');
@@ -220,6 +229,7 @@ define(function(require, exports) {
             addHotel();
         });
         $tab.find('.T-hotel-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveHotelData($tab);
         });
         return this;
@@ -248,6 +258,7 @@ define(function(require, exports) {
             $tab.find('.T-hotelList').append(html);
             BookingArrange.bindHotelChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.hotelUpdate(validate);
         }
     };
 
@@ -257,12 +268,16 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initScenicEvent = function($tab){
+        var validate = rule.scenicCheck($tab);
         BookingArrange.bindScenicChoose($tab);
         $tab.find('.T-scenicList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), 
-                $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                                ($tr.find('[name="roomCount"]').val() || 0) - 
+                                ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
         $tab.find('.T-scenicList').on('click', '.T-scenic-delete', function(event){
             var $tr = $(this).closest('tr');
@@ -272,10 +287,11 @@ define(function(require, exports) {
             addScenic();
         });
         $tab.find('.T-scenic-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveScenicData($tab);
         });
         return this;
-        function addHotel(){
+        function addScenic(){
             var html =  '<tr><td><input name="startTime" type="text" class="datepicker" /></td>'+
                         '<td><select name="tourTime" class="col-sm-12">'+
                         '    <option selected="selected" value="全天">全天</option> '+
@@ -296,6 +312,7 @@ define(function(require, exports) {
             $tab.find('.T-scenicList').append(html);
             BookingArrange.bindScenicChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.scenicUpdate(validate);
         }
     };
 
@@ -305,13 +322,17 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initTicketEvent = function($tab){
+        var validate = rule.ticketCheck($tab);
         BookingArrange.setDateTimePicker($tab.find('.datetimepicker'));
         BookingArrange.bindTicketChoose($tab);
         $tab.find('.T-ticketList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), 
-                $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                                ($tr.find('[name="roomCount"]').val() || 0) - 
+                                ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
         $tab.find('.T-ticketList').on('click', '.T-ticket-delete', function(event){
             var $tr = $(this).closest('tr');
@@ -321,6 +342,7 @@ define(function(require, exports) {
             addTicket();
         });
         $tab.find('.T-ticket-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveTicketData($tab);
         });
         return this;
@@ -338,7 +360,7 @@ define(function(require, exports) {
                         '<td><input name="startTime" type="text" class="col-sm-12 datepicker" /></td>'+
                         '<td><input name="seatLevel" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
-                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
                         '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly /></td>'+
                         '<td><input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" /></td>'+
@@ -347,6 +369,7 @@ define(function(require, exports) {
             $tab.find('.T-ticketList').append(html);
             BookingArrange.bindTicketChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.ticketUpdate(validate);
         }
     };
 
