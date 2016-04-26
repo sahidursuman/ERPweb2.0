@@ -2751,7 +2751,7 @@ define(function(require, exports) {
 				$parents.find("input[name=price]").val("");
 				$parents.find("input[name=orderNumber]").val("");
 				$parents.find("input[name=price]").val(0);
-				tripPlan.calculatePrice($tab);
+				tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this);
@@ -2802,7 +2802,7 @@ define(function(require, exports) {
                     success: function(data) {
 						if(showDialog(data)) {
 							$parents.find("input[name=price]").val(data.price);
-							tripPlan.calculatePrice($tab);
+							tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 						}
                     }
                 });
