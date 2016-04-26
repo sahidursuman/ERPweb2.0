@@ -15,6 +15,7 @@ define(function(require, exports) {
 		addPartnerManagerTemplate = require("./view/addPartnerManager"),
 		listFinancialTemplate = require("./view/listFinancial"),
 		financialNoticeTemplate = require("./view/financiaNoticeBook"),
+		viewSettlementTemplate = require("./view/viewSettlement"),
 		tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 定义项目代订对象
@@ -1273,6 +1274,10 @@ define(function(require, exports) {
 			$(".updateBooking .T-bookingBtn").on('click', function(){
 				BookingArrange.exportBooking(id);
 		 	});
+		 	//导出查看项目代订按钮事件
+			$(".updateBooking .T-viewSettle").on('click', function(){
+				BookingArrange.viewSettlement(id);
+		 	});
 		});
 	};
 	/**
@@ -1384,6 +1389,27 @@ define(function(require, exports) {
 	BookingArrange.exportBooking = function(id){
 		var url = APP_ROOT+"back/export.do?method=exportBookingOrder&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=view"+"&id="+id;
 		exportXLS(url);
+	};
+	/**
+	 * 代订结算单
+	 * 
+	 */
+	BookingArrange.viewSettlement = function(id){
+		$.ajax({
+			url:KingServices.build_url('bookingOrder','viewBookingSettlement'),
+			type:'POST',
+			data:{
+				id:id
+			},
+			success:function(data){
+				if(showDialog(data)){
+					var html = viewSettlementTemplate();
+					
+					data.bookingOrder = JSON.parse(data.bookingOrder); 
+					console.log(data);
+				}
+			}
+		});
 	};
 	/**
 	 * 获取Value

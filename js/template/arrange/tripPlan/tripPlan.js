@@ -830,6 +830,7 @@ define(function(require, exports) {
         
         var arge = $tab.find('.T-basic-info').serializeJson();
         var tripPlanId = $tab.find('.T-tab').data("id");
+
         if(tripPlanId){
             arge.tripPlanId = tripPlanId;
         }
@@ -838,6 +839,7 @@ define(function(require, exports) {
         
         //游客成员json包
         arge.touristGroupMemberJson = [];
+        arge.tgRemark = $tab.find('textarea[name=touristGroupRemark]').val();
         if($tab.find('.T-tourists-list tr').length === 0){
             showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
             return ;
@@ -872,7 +874,7 @@ define(function(require, exports) {
                 idCardType : $that.find('[name="idCardType"]').val(),
                 isContactUser : $that.find('[name="isContactUser"]').is(":checked") ? 1 : 0,
                 mobileNumber : $that.find('[name="mobileNumber"]').val(),
-                name : $that.find('[name="name"]').val()
+                name : $that.find('[name="name"]').val(),
             });
         });
         if(!isMobileNumber){
@@ -883,7 +885,7 @@ define(function(require, exports) {
             showMessageDialog($( "#confirm-dialog-message" ), "至少选择一个联系人。");
             return ;
 
-        }
+        };
         //团计划要求json包
         arge.tripPlanRequireJson = tripPlan.getTripPlanRequest($tab);
         
