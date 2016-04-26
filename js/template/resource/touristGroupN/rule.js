@@ -412,12 +412,22 @@ define(function(require, exports) {
                     ]
                 });
                 settings.push({
-                    //责任计调
-                    $ele: $obj.find('input[name="dutyUserName"]'),
+                    //部门
+                    $ele: $obj.find('input[name="businessName"]'),
                     rules : [
                         {
                             type: 'null',
-                            errMsg: '责任计调不能为空'
+                            errMsg: '部门不能为空'
+                        }
+                    ]
+                });
+                settings.push({
+                    //子部门
+                    $ele: $obj.find('input[name="groupName"]'),
+                    rules : [
+                        {
+                            type: 'null',
+                            errMsg: '子部门不能为空'
                         }
                     ]
                 });
