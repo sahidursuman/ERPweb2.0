@@ -1312,7 +1312,7 @@ define(function(require, exports) {
 
                 // 绑定事件
                 var $frame = $('#transfer-hotel-arrange-frame');
-
+                Transfer.setDate($frame);
                 // search
                 $frame.find('.T-search').on('click', function(event) {
                     event.preventDefault();
