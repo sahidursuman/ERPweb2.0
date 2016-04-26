@@ -1087,6 +1087,53 @@ define(function(require, exports) {
         });
     }
 
+    /**
+     * 选择外联销售
+     * @param  {[type]} $target [description]
+     * @return {[type]}         [description]
+     */
+    BookingArrange.getOPUserList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data('id', '');
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur()
+                .data('id', item.id);
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+                return false;
+            }
+            $.ajax({
+                url: KingServices.build_url('tripPlan', 'getOPUserList'),
+                type: 'post',
+                showLoading: false,
+            })
+            .done(function(data) {
+                if (showDialog(data)) {                    
+                    var userList = JSON.parse(data.userList || false);
+                    if (!!userList) {
+                        for (var i = 0, len = userList.length;i < len; i++) {
+                            userList[i].value = userList[i].realName;
+                        }
+
+                        $target.autocomplete('option', 'source', userList).data('ajax', true);
+                        $target.autocomplete('search', '');
+                    }
+                }
+            });
+        });
+    }
+
     BookingArrange.setDateTimePicker = function($obj){
         $obj.datetimepicker({
             autoclose: true,
