@@ -2096,7 +2096,7 @@ define(function(require, exports) {
     singlePlan.getTouristGroup = function(args, $tab){
         $.ajax({
             //url:KingServices.build_url("tripPlan","findTouristGroupInfo"),
-            url:KingServices.build_url("v2/touristGroup","getTouristGroupByIdsForTransit"),
+            url:KingServices.build_url("touristGroup","getTouristGroupByIdsForTransit"),
             type:"POST",
             data:{
                 ids : JSON.stringify(args.mergeTouristGroupIdJson)

@@ -31,6 +31,7 @@ define(function(require, exports) {
             delBusTransferId : [],
             delHotelTransferId : [],
             deleteOutBusIds : [],
+            deleteOutHotelIds : [],
             deleteOutOtherIds : [],//删除其他缓存id
             deleteOutRestaurantIds : [],//删除餐id
             deleteOutTicketIds : [],//删除票务
@@ -479,13 +480,17 @@ define(function(require, exports) {
      * @return {[type]}          [description]
      */
     Transfer._mergeArrangeBus = function() {
-
+            for(var i = 0; i<Transfer.busArrangeIdArray.length; i++){
+                if(!Transfer.busArrangeIdArray[i].outRemarkId){
+                    Transfer.busArrangeIdArray.splice(i, 1);
+                }
+            }
             var outRemarkList = JSON.stringify(Transfer.busArrangeIdArray);
 
             $.ajax({
                 url: KingServices.build_url(service_name, "outBusUnifyArrange"),
                 type: "POST",
-                data: { outRemarkList: outRemarkList },
+                data:{outRemarkList:outRemarkList},
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
@@ -529,7 +534,7 @@ define(function(require, exports) {
             });
             //删除车
             $busplanId.find('.T-arrange-delete').on('click', function() {
-                Transfer.deleteArrange($(this));
+                Transfer.deleteBusArrange($(this));
             });
             //添加中转数据
             $busplanId.find('.T-add-BusTransfersId').on('click', function() {
@@ -1246,7 +1251,7 @@ define(function(require, exports) {
             });
             //删除房
             $hotelplanId.find('.T-arrange-delete').on('click', function() {
-                Transfer.deleteArrange($(this));
+                Transfer.deleteHotelArrange($(this));
             });
             // 新增游客
             $hotelplanId.find('.T-add-HotelTransfersId').on('click', function() {
@@ -1454,7 +1459,8 @@ define(function(require, exports) {
                 outHotelList: outHotelList,
                 outRemarkList: outRemarkList,
                 deleteOutRemarkList : JSON.stringify(Transfer.delHotelTransferId),
-                shuttleType: shuttleType
+                shuttleType: shuttleType,
+                deleteOutHotelIds :  Transfer.deleteOutHotelIds.join(','),
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1815,7 +1821,7 @@ define(function(require, exports) {
         Transfer.setDate($obj); //时间控件
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
-            Transfer.deleteArrange($(this));
+            Transfer.deleteBusArrange($(this));
         });
     };
     //添加房安排
@@ -1850,7 +1856,7 @@ define(function(require, exports) {
         Transfer.setDate($obj); //时间控件
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
-            Transfer.deleteArrange($(this));
+            Transfer.deleteHotelArrange($(this));
         });
     };
 
@@ -1986,12 +1992,25 @@ define(function(require, exports) {
      * @param  {object} $obj 删除按钮
      * @return {[type]}      [description]
      */
-    Transfer.deleteArrange = function($obj) {
+    Transfer.deleteBusArrange = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
         $tr.fadeOut(function(){
             $obj.parents('tr').remove()
         })
+        console.log(id)
         Transfer.deleteOutBusIds.push(id);
+    };
+    /**
+     * 删除房安排
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+    Transfer.deleteHotelArrange = function($obj) {
+        var $tr = $obj.closest('tr'),id = $tr.data('entity-id');
+        $tr.fadeOut(function(){
+            $obj.parents('tr').remove()
+        })
+        Transfer.deleteOutHotelIds.push(id);
     };
     /**
      * 删除餐安排
