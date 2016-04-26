@@ -461,6 +461,7 @@ define(function(require, exports) {
                 data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
                 data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
                 tripPlan.processRepastDetail(data.tripPlanDayList);
+                console.log(data.touristGroup);
                 if(Tools.addTab(tabKey, "编辑团队计划", T.updateGroupTripPlan(data))){
                     tripPlan.initEdit($("#tab-"+tabKey+"-content"));
                 };
