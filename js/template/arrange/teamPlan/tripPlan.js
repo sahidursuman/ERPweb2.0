@@ -486,6 +486,8 @@ define(function(require, exports) {
                 tripPlan.addOther($tab);
             }
         });
+        // 时间控件
+        Tools.setDatePicker($tab.find('.T-datepicker'), true);
         //部门下拉框
         $tab.find('input[name="dutyDepartmentName"]').each(function(index, el) {
             tripPlan.getBusinessList($(this));
