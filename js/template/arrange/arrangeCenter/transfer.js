@@ -1467,7 +1467,8 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                         Transfer.hotelArrangeIdArray = [];
                         Transfer._refreshList('hotel');
-                        Tools.closeTab(hotelplanId)
+                        Tools.closeTab(hotelplanId);
+                        Transfer.deleteOutHotelIds = [];
                     });
                 }
 
