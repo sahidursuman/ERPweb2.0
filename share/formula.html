@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报账审核--计算公式</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../components/ace-admin/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../components/ace-admin/assets/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../components/ace-admin/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
+    <link rel="stylesheet" href="../css/manner.css">
+    <script src="../components/ace-admin/assets/js/jquery.1.11.1.min.js"></script>
+    <script src="../components/ace-admin/assets/js/bootstrap.min.js"></script>
+    <script src="../components/ace-admin/assets/js/ace-elements.min.js"></script>
+    <script src="../components/ace-admin/assets/js/ace.min.js"></script>
+<style type="text/css">
+    *html #menuList {
+        position: absolute;
+        bottom: auto;
+        top: expression(100+((e=document.documentElement.scrollTop)?e:document.body.scrollTop)+'px');
+    }
+
+    li {
+        list-style: none;
+    }
+    body {
+        background-color:#fff;
+        font-family: '微软雅黑';
+    }
+    #menuList {
+        position: fixed;
+        top: 250px;
+        left: 54%;
+        margin-left: 400px;
+        width: 50px;
+    }
+
+    #menuList ul li a {
+        display: block;
+        /* margin: 5px 0; */
+        font-size: 14px;
+        font-weight: bold;
+        color: #ccc;
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-decoration: none;
+        text-align: center;
+       /*  background-color: #EAEAEA; */
+    }
+
+    #menuList ul li a:hover,
+    #menuList ul li a.current {
+        color: #fff;
+        background: #0088bb;
+    }
+    .shareFormula {
+        width: 1000px;
+        height: 135px;
+        padding-bottom: 70px;
+        background-color: #FFF;
+        /* background-color: #F00; */
+        margin: auto;
+        font-family: '微软雅黑';
+        color: #444
+    }
+    
+    .share-formula-offer {
+        width: 1000px;
+        height: auto;
+        /* border: 1px solid #666; */
+        padding-top: 10px; 
+    }
+    .formula-title-style {
+        width: 1000px;
+        height: 135px;
+        background-color: #48A2D2;
+    }
+    .formula-item{
+        width: 1000px;
+        height: auto;
+        padding-bottom: 10px;
+        border-top: 1px solid #DFDFDF;
+        /* border-bottom: 1px solid #F00; */
+        margin-top: 30px;
+    }
+    .title-weight {
+        font-weight: bold;
+        background-color: #F3F3F3;
+    }
+      
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(window).scroll(function(){
+            var items = $('.share-formulaMain').find('.share-formula-offer');
+            var menuList = $('#menuList');
+            var top = $(document).scrollTop();
+            var itemId = '';
+            items.each(function(){
+                var i = $(this);
+                if(top>i.offset().top - 180){
+                   itemId = '#'+i.attr('id'); 
+                }else{
+                    return;
+                }
+            });
+            var currentLink = menuList.find(".current");
+            if (currentLink && itemId != currentLink.attr("href")) {
+                currentLink.removeClass("current");
+                menuList.find("[href=" + itemId + "]").addClass("current");
+            }
+        });
+    });
+</script>
+</head>
+<body>
+    <div id="menuList">
+        <ul>
+            <li><a href="#top">顶部</a></li>
+            <li><a href="#shop">购物</a></li>
+            <li><a href="#self">自费</a></li>
+            <li><a href="#otherIn">其他收入</a></li>
+            <li><a href="#bus">车费</a></li>
+            <li><a href="#rest">餐费</a></li>
+            <li><a href="#hotel">房费</a></li>
+            <li><a href="#scenic">景区</a></li>
+            <li><a href="#ticket">票务</a></li>
+        </ul>
+    </div>
+    <div id="top">
+        <div class="shareFormula">
+            <div class="formula-title-style"> 
+                <h5 class="share-title-h5">报账审核--计算公式</h5> 
+            </div>
+            <div class="share-formulaMain" style="margin-bottom:50px;">
+                <div class="share-formula-offer" id="remark">
+                    <p style="font-size: 14px;color: #ff6511;">
+                        <span>所有模块</span> 
+                    </p>
+                    <p style="font-size: 14px;color: #ff6511;">
+                        <span>
+                            删除：已对账、坏账以及产生了收支明细的数据不能删除
+                        </span> 
+                    </p>
+                    <p style="font-size: 14px;color: #ff6511;">
+                        <span>
+                            坏账：发团安排中删除了安排，报账审核中展示安排数据，并且不能更改可输入框的数据
+                        </span> 
+                    </p>
+                    <p style="font-size: 14px;color: #ff6511;">
+                        <span>
+                            单价/底价：团的审核状态不为待报账状态，可以更改单价、底价
+                        </span> 
+                    </p>
+                </div>
+
+                <div class="share-formula-offer" id = 'tripCost'>
+                    <div class="formula-item">
+                        <p class="share-dividing">团款</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>
+                                        团款现收
+                                    </td>
+                                    <td>
+                                        多导：选择导游，默认团款现收状态为已收到
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>
+                                        费用调整
+                                    </td>
+                                    <td>
+                                        调整该组游客的费用价格
+                                    </td>
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                    </div><!-- 团款 -->
+                </div>
+                    
+                <div class="share-formula-offer" id = 'shop'>
+                    <div class="formula-item">
+                        <p class="share-dividing">购物</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>
+                                        导佣
+                                    </td>
+                                    <td>
+                                        导佣&nbsp;=&nbsp;打单金额&nbsp;x&nbsp;导佣比例
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        社佣
+                                    </td>
+                                    <td>
+                                        社佣&nbsp;=&nbsp;打单金额&nbsp;x&nbsp;社佣比例
+                                    </td>
+                                    <td>
+                                        多导：社佣&nbsp;=&nbsp;金额小计&nbsp;x&nbsp;社佣比例
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        人数返佣
+                                    </td>
+                                    <td>
+                                        人数返佣&nbsp;=&nbsp;金额小计&nbsp;x&nbsp;团队人数(大人)
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        停车返佣
+                                    </td>
+                                    <td>
+                                        停车返佣&nbsp;=&nbsp;金额小计&nbsp;x&nbsp;车辆数
+                                    </td>
+                                    <td>
+                                        当发团时没有安排车辆，停车返佣为0，当安排了多辆车，按一辆车计算停车返佣
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        购物小计
+                                    </td>
+                                    <td>
+                                        购物小计&nbsp;=&nbsp;该购物店所有商品打单金额之和
+                                    </td>
+                                    <td>
+                                        该购物店的人数返佣、停车返佣不计算在内
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        导佣小计
+                                    </td>
+                                    <td>
+                                        导佣小计&nbsp;=&nbsp;该购物店所有导游返佣金额之和
+                                    </td>
+                                    <td>
+                                        该购物店的人数返佣、停车返佣不计算在内
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        社佣小计
+                                    </td>
+                                    <td>
+                                        社佣小计&nbsp;=&nbsp;该购物店所有社佣金额之和
+                                    </td>
+                                    <td>
+                                        该购物店的人数返佣、停车返佣不计算在内
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        购物收入
+                                    </td>
+                                    <td>
+                                        购物收入&nbsp;=&nbsp;导游返佣&nbsp;+&nbsp;社佣
+                                    </td>
+                                    <td>
+                                        该购物店的人数返佣、停车返佣参与计算
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        导游购物返佣
+                                    </td>
+                                    <td>
+                                        导游购物返佣&nbsp;=&nbsp;导游返佣之和
+                                    </td>
+                                    <td>
+                                        该购物店的人数返佣、停车返佣不计算在内
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 购物 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'self'>
+                    <div class="formula-item">
+                        <p class="share-dividing">自费</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应收
+                                    </td>
+                                    <td>
+                                        应收&nbsp;=&nbsp;现收
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应收优惠
+                                    </td>
+                                    <td>
+                                        应收优惠&nbsp;=&nbsp;(单价&nbsp;x&nbsp;应收数量)&nbsp;-&nbsp;现收
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;(底价&nbsp;x&nbsp;应付数量)&nbsp;-&nbsp;应付优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        导佣
+                                    </td>
+                                    <td>
+                                        导佣&nbsp;=&nbsp;(现收&nbsp;-&nbsp;(底价&nbsp;x&nbsp;应收数量))&nbsp;x&nbsp;导佣比例
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        社佣
+                                    </td>
+                                    <td>
+                                        社佣&nbsp;=&nbsp;(现收&nbsp;-&nbsp;(底价&nbsp;x&nbsp;应收数量))&nbsp;x&nbsp;社佣比例
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        自费收入
+                                    </td>
+                                    <td>
+                                        自费收入&nbsp;=&nbsp;自费项目的应收之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        自费费用
+                                    </td>
+                                    <td>
+                                        自费费用&nbsp;=&nbsp;自费项目的应付之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        导佣自费返佣
+                                    </td>
+                                    <td>
+                                        导佣自费返佣&nbsp;=&nbsp;自费项目的导游佣金之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 购物 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'otherIn'>
+                    <div class="formula-item">
+                        <p class="share-dividing">其他收入</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td >
+                                        金额
+                                    </td>
+                                    <td>
+                                        金额&nbsp;=&nbsp;单价&nbsp;x&nbsp;数量
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td >
+                                        金额
+                                    </td>
+                                    <td>
+                                        金额&nbsp;=&nbsp;单价&nbsp;x&nbsp;数量
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 其他收入 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'bus'>
+                    <div class="formula-item">
+                        <p class="share-dividing">车费</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        车费应付
+                                    </td>
+                                    <td>
+                                        车费应付&nbsp;=&nbsp;车费&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        车费费用
+                                    </td>
+                                    <td>
+                                        车费费用&nbsp;=&nbsp;车费应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 车费 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'rest'>
+                    <div class="formula-item">
+                        <p class="share-dividing">餐费</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;人数&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        人数合计
+                                    </td>
+                                    <td>
+                                        人数合计&nbsp;=&nbsp;导游实销中人数之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        餐费费用
+                                    </td>
+                                    <td>
+                                        餐费费用&nbsp;=&nbsp;餐费应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 房费 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'hotel'>
+                    <div class="formula-item">
+                        <p class="share-dividing">房费</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;间数&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        间数合计
+                                    </td>
+                                    <td>
+                                        间数合计&nbsp;=&nbsp;导游实销中间数之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        房费费用
+                                    </td>
+                                    <td>
+                                        房费费用&nbsp;=&nbsp;房费应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 房费 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'scenic'>
+                    <div class="formula-item">
+                        <p class="share-dividing">景区</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;数量&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        数量合计
+                                    </td>
+                                    <td>
+                                        数量合计&nbsp;=&nbsp;导游实销中数量之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        景区费用
+                                    </td>
+                                    <td>
+                                        景区费用&nbsp;=&nbsp;景区应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 景区 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'ticket'>
+                    <div class="formula-item">
+                        <p class="share-dividing">票务</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;数量&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        数量合计
+                                    </td>
+                                    <td>
+                                        数量合计&nbsp;=&nbsp;导游实销中数量之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        票务费用
+                                    </td>
+                                    <td>
+                                        票务费用&nbsp;=&nbsp;票务应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 票务 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'otherOut'>
+                    <div class="formula-item">
+                        <p class="share-dividing">其他支出</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;数量&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        数量合计
+                                    </td>
+                                    <td>
+                                        数量合计&nbsp;=&nbsp;导游实销中数量之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        其他费用
+                                    </td>
+                                    <td>
+                                        其他费用&nbsp;=&nbsp;其他支出应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 其他支出 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'insurance'>
+                    <div class="formula-item">
+                        <p class="share-dividing">保险</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        应付
+                                    </td>
+                                    <td>
+                                        应付&nbsp;=&nbsp;金额&nbsp;x&nbsp;数量&nbsp;-&nbsp;优惠
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        保险费用
+                                    </td>
+                                    <td>
+                                        保险费用&nbsp;=&nbsp;保险费用应付列之和
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 保险 -->
+                </div>
+
+                <div class="share-formula-offer" id = 'guide'>
+                    <div class="formula-item" >
+                        <p class="share-dividing">导游</p>
+                        <table class="whereQ whereTwo quoteTable">
+                            <tbody>
+                                <tr class="title-weight">
+                                    <td >
+                                        项目
+                                    </td>
+                                    <td>
+                                        公式
+                                    </td>
+                                    <td>
+                                        备注
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        导服费
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                    <td>
+                                        导服费&nbsp;=&nbsp;导服费列之和
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        导服管理费
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                    <td>
+                                        导服管理费&nbsp;=&nbsp;管理费列之和
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- 保险 -->
+                </div>
+               
+            </div>
+        </div>
+    </div>  
+</body>
+</html>

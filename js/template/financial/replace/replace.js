@@ -195,6 +195,11 @@ define(function(require, exports) {
 				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
 				args.projects = Replace.$checkingTab.find(".T-search-project").val();
 				args.isConfirmAccount = Replace.$checkingTab.find(".T-check-status").find("button").data("value");
+
+                args.busCompanyOrderStatus = '';
+                args.hotelOrderStatus = '';
+                args.scenicOrderStatus = '';
+                args.ticketOrderStatus = '';
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
 					if(project[i] == "车队"){
@@ -212,7 +217,7 @@ define(function(require, exports) {
 		args.sortType = 'startTime';
         args.order='asc';
 		$.ajax({
-			url : KingServices.build_url('financial/bookingAccount', 'listCheckBookingAcccount'),
+			url : KingServices.build_url('financial/bookingAccount', 'listBookingAcccount'),
 			type: 'post',
 			data: args
 		}).done(function(data){
@@ -229,14 +234,21 @@ define(function(require, exports) {
 				}
 				if(Replace.checkTemp && Replace.checkTemp.length > 0){
                     data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
-                    data.totalList.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
-                    data.totalList.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                    var total = $tab.data("total");
+                    total.sumSettlementMoney = Replace.checkTemp.sumSttlementMoney;
+                    total.sumUnReceiveMoney = Replace.checkTemp.sumUnPayedMoney;
+                    $tab.data('total', total);
                 }
 				
 				if(Tools.addTab(checkMenuKey, "代订对账", replaceChecking(data))){
 					Replace.$checkingTab = $('#tab-' + checkMenuKey + '-content');
 					if(Replace.checkTemp && Replace.checkTemp.length > 0){
                         Replace.$checkingTab.data('isEdited',true);
+                    }
+                    if(Replace.$checkingTab.data("total")){
+                        Replace.loadSumData(Replace.$checkingTab);
+                    } else {
+                        Replace.getCheckSumData(args,Replace.$checkingTab);
                     }
                     //取消对账权限过滤
                     checkDisabled(data.bookinAccountList,Replace.$checkingTab.find(".T-checkTr"),Replace.$checkingTab.find(".T-checkList").data("right"));
@@ -259,7 +271,7 @@ define(function(require, exports) {
                                 Replace.checkTemp = temp;
                                 Replace.$checkingTab.data('isEdited',false);
 					    		args.pageNo = obj.curr -1;
-					    		Replace.checkingList(args);
+					    		Replace.checkingList(args,Replace.$checkingTab);
                             }
 				    	}
 				    }
@@ -296,6 +308,7 @@ define(function(require, exports) {
             	Replace.checkTemp = false;
             	Replace.checkingList($tab.data('next'));
             }
+            $tab.data("total","");
         })
         .on(CLOSE_TAB_SAVE, function(event) {
             event.preventDefault();
@@ -313,6 +326,7 @@ define(function(require, exports) {
             } else {
             	Replace.checkTemp = false;
             }
+            $tab.data("total","");
         });
 		//搜索
 		var $searchArea = $tab.find('.T-search-area'),
@@ -327,6 +341,7 @@ define(function(require, exports) {
             var $this = $(this);
             // 设置选择的效果
             $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            $tab.data("total","");
             args.pageNo = 0;
 			if(isCheck){
 				Replace.checkingList(args,$tab);
@@ -336,6 +351,7 @@ define(function(require, exports) {
         });
 		$searchArea.find('.T-btn-search').off().on('click', function(event){
 			event.preventDefault();
+			$tab.data("total","");
 			args.pageNo = 0;
 			if(isCheck){
 				Replace.checkingList(args,$tab);
@@ -698,6 +714,7 @@ define(function(require, exports) {
                     showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                     	$tab.data('isEdited', false);
                     	Replace.checkTemp = false;
+                    	$tab.data("total","");
                         if (argLen === 1) {
                         	Tools.closeTab(checkMenuKey);
                             Replace.getList(Replace.listPageNo);
@@ -744,7 +761,8 @@ define(function(require, exports) {
 				startDate : $tab.find(".T-search-start-date").val(),
 				endDate : $tab.find(".T-search-end-date").val(),
 				projects : $tab.find(".T-search-project").val(),
-				isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+				isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+				accountStatus : $tab.find('input[name=accountStatus]').val()
 			};
 			if(project.length > 0){
 				for(var i=0; i<project.length; i++){
@@ -763,7 +781,7 @@ define(function(require, exports) {
 		args.sortType = 'startTime';
         args.order='asc';
 		$.ajax({
-			url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
+			url : KingServices.build_url('financial/bookingAccount', 'listBookingAcccount'),
 			type : "POST",
 			data : args
 		}).done(function(data){
@@ -783,6 +801,11 @@ define(function(require, exports) {
 					Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');
 					html = payingTableTemplate(data);
 					Replace.$balanceTab.find('.T-clearList').html(html);
+					if(Replace.$balanceTab.data("total")){
+                        Replace.loadSumData(Replace.$balanceTab);
+                    } else {
+                        Replace.getCheckSumData(args,Replace.$balanceTab);
+                    }
 					Replace.CM_event(Replace.$balanceTab,args,false);
 					var payingCheck = new FinRule(2).check(Replace.$balanceTab);
 				} else {
@@ -833,6 +856,7 @@ define(function(require, exports) {
         .done(function(data) {
             $tab.data('isEdited', false);
             Replace.payingJson = false;
+            $tab.data("total","");
             showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                 if (argLen === 1) {
                 	Tools.closeTab(blanceMenuKey);
@@ -874,6 +898,35 @@ define(function(require, exports) {
             $obj.autocomplete('search','');
         });
 	};
+
+	/* 获取合计数据 */
+    Replace.getCheckSumData = function(args,$tab){
+        $.ajax({
+            url: KingServices.build_url('financial/bookingAccount', 'listBookingAcccountTotal'),
+            type: 'POST',
+            data: args,
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                $tab.data("total",data);
+                Replace.loadSumData($tab);
+            }
+        });
+    };
+    Replace.loadSumData = function($tab){
+        var total = $tab.data("total");
+        $tab.find(".T-sumBookingMoney").text(total.sumBookingMoney);
+        $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
+        $tab.find(".T-stMoney").text(total.sumSettlementMoney);
+        if($tab.find('.T-checkedUnPayedMoney').length > 0){
+        	$tab.find(".T-unpayMoney").text(total.sumUnReceiveMoney);
+        	$tab.find(".T-checkedUnPayedMoney").text(total.checkedUnPayedMoney);
+        } else {
+        	$tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
+        	$tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);
+        }
+    };
+
 	exports.init = Replace.initModule;
 	exports.initIncome = Replace.initIncome;
 });

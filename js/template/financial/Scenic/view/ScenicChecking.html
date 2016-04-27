@@ -107,7 +107,7 @@
 				<td ><input type="text" name="settlementMoney" class="col-sm-12 F-float F-money" value="{{rs.settlementMoney}}" class="money" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}></td>
                 <td name="unPayedMoney">{{rs.unPayedMoney}}</td>
                 <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}>{{rs.checkRemark}}</textarea></td>
-				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td>
 				    <label class="pos-rel R-right" {{if rs.isConfirmAccount}} data-right="1250005"{{else}}data-right="1250002"{{/if}}>
