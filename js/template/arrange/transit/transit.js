@@ -666,6 +666,7 @@ define(function(require, exports) {
 		'<td><input class="col-sm-12 T-number discount F-float F-count" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
+		'<td><input class="col-sm-12 F-float F-money" name="collection" type="text" value="" maxlength="9" /></td>'+
 		'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 		'<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>'+
 		'</tr>';
@@ -706,6 +707,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
+			'<td><input class="col-sm-12 F-float F-money" name="collection" type="text" value="" maxlength="9" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
 			'</tr>';
 		html  = filterUnAuth(html);
@@ -713,7 +715,6 @@ define(function(require, exports) {
 		    $tbody.append(html);
 		//Input控件位数的输入
 		Tools.inputCtrolFloat($tbody.find('.F-float'));
-
 		//表单验证
 		rule.update(validator);
 		//时间控件
@@ -1671,6 +1672,7 @@ define(function(require, exports) {
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"busReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"busNeedPayMoney"),
 				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
+				collection :  transit.getArrangeTrValue(obj.eq(i),"collection"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(busJson.busCompanyId != "" && busJson.busCompanyId.length>0){
@@ -1693,6 +1695,7 @@ define(function(require, exports) {
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"hotelReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"hotelNeedPayMoney"),
 				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
+				collection :  transit.getArrangeTrValue(obj.eq(i),"collection"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(hotelJson.hotelId != "" && hotelJson.hotelId.length>0){
