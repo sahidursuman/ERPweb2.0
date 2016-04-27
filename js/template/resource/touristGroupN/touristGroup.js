@@ -933,6 +933,7 @@ define(function(require, exports) {
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
         $tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');
+        $tab.find('.T-offered').removeClass('hidden');
     };
 
     /**
@@ -1221,10 +1222,7 @@ define(function(require, exports) {
                 $layer.find('.T-btn-save').on('click', function(){
                     if(!validate.form())return;
                     var baseInfo = {
-                            require : {
-                                id : $layer.find('[name="requireContent"]').data("id"),
-                                requireContent : $layer.find('[name="requireContent"]').val()
-                            }
+                            require : $layer.find('[name="requireContent"]').val()
                         },
                         moneyData = F.assemblyMoneyData($layer);
                     if($layer.find('.T-abversion').val() == "2"){
@@ -1301,10 +1299,7 @@ define(function(require, exports) {
                             intakeTime : $layer.find('[name="intakeTime"]').val(),
                             level : $layer.find('[name="level"]').val(),
                             roomCount : $layer.find('[name="roomCount"]').val(),
-                            require : {
-                                id : $layer.find('[name="requireContent"]').data("id"),
-                                requireContent : $layer.find('[name="requireContent"]').val()
-                            },
+                            require : $layer.find('[name="requireContent"]').val(),
                             hotel : typeof hotelJson !== "object" ? JSON.parse(hotelJson || "[]") : hotelJson,
                             hotelName : $layer.find('[name="hotel"]').val(),
                             hotelIds : ""
@@ -1409,16 +1404,10 @@ define(function(require, exports) {
                         },
                         moneyData = F.assemblyMoneyData($layer);
                     if($layer.find('[name="isRestaurantRequired"]').is(":checked")){
-                        var $rest = $layer.find('[name="restaurantRequired"]'), 
-                            id = $rest.data('id');
+                        var $rest = $layer.find('[name="restaurantRequired"]');
 
                         baseInfo.isRestaurantRequired = 1;
-                        baseInfo.restaurantRequired = {
-                            requireContent : $rest.val()
-                        };
-                        if(!!id){
-                            baseInfo.restaurantRequired.id = id;
-                        }
+                        baseInfo.restaurantRequired = $rest.val();
                     }
                     if($layer.find('.T-abversion').val() == "2"){
                         baseInfo.isTransfer = 2;
@@ -1436,28 +1425,16 @@ define(function(require, exports) {
                         baseInfo.isTransfer = 0;
                     }
                     if($layer.find('[name="isTicketRequired"]').is(":checked")){
-                        var $ticket = $layer.find('[name="ticketRequired"]'), 
-                            id = $ticket.data('id');
+                        var $ticket = $layer.find('[name="ticketRequired"]');
 
                         baseInfo.isTicketRequired = 1;
-                        baseInfo.ticketRequired = {
-                            requireContent : $ticket.val()
-                        };
-                        if(!!id){
-                            baseInfo.ticketRequired.id = id;
-                        }
+                        baseInfo.ticketRequired = $ticket.val();
                     }
                     if($layer.find('[name="isOtherRequired"]').is(":checked")){
-                        var $other = $layer.find('[name="otherRequired"]'), 
-                            id = $other.data('id');
+                        var $other = $layer.find('[name="otherRequired"]');
 
                         baseInfo.isOtherRequired = 1;
-                        baseInfo.otherRequired = {
-                            requireContent : $other.val()
-                        };
-                        if(!!id){
-                            baseInfo.otherRequired.id = id;
-                        }
+                        baseInfo.otherRequired = $other.val();
                     }
                     moneyData.otherFee = moneyData.touristGroupFeeJsonAdd;
                     moneyData.otherFeeDel = moneyData.touristGroupFeeJsonDel;
