@@ -1276,6 +1276,8 @@ define(function(require, exports) {
 		 	});
 		 	//导出查看项目代订按钮事件
 			$(".updateBooking .T-viewSettle").on('click', function(){
+				var pluginKey = 'plugin_print';
+                    Tools.loadPluginScript(pluginKey);
 				BookingArrange.viewSettlement(id);
 		 	});
 		});
@@ -1403,14 +1405,35 @@ define(function(require, exports) {
 			},
 			success:function(data){
 				if(showDialog(data)){
-					var html = viewSettlementTemplate();
-					
-					data.bookingOrder = JSON.parse(data.bookingOrder); 
-					console.log(data);
+					var html = viewSettlementTemplate(data);
+					var viewSettlementLayer = layer.open({
+                        type: 1,
+                        title:"代订结算单",
+                        skin: 'layui-layer-rim',
+                        area: '750px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false,
+                        success:function(){
+                        	//打印结算单页面
+		                    var $outAccountsTab = $("#T-viewSettlement");
+		                    $outAccountsTab.off('click').on('click','.T-printBooking',function(){
+		                    	console.log(123);
+		                        BookingArrange.exportsOutAccounts($outAccountsTab);
+		                    });
+	                    }
+                    });
+	                   
 				}
 			}
 		});
 	};
+	//打印页面
+    BookingArrange.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
+    };
 	/**
 	 * 获取Value
 	 * @param  {object} $obj DOM容器。只jquery对象;
