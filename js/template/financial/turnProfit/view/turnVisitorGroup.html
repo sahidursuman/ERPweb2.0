@@ -13,8 +13,8 @@
 		<tbody>
 		{{each pay as detail}}
 			<tr>
-				<td>{{detail.receivableType.name}}</td>
-				<td>{{detail.businessType.name}}</td>
+				<td>{{if detail.receivableType}}{{detail.receivableType.name}}{{/if}}</td>
+				<td>{{if detail.businessType}}{{detail.businessType.name}}{{/if}}</td>
 				<td><span class="F-float F-money">{{detail.payMoney}}</span></td>
 				<td>{{detail.remark}}</td>
 				<td>{{detail.user.realName}}</td>

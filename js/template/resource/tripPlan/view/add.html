@@ -1,3 +1,4 @@
+
 <div class="globalAdd">
     <div class="baseinfo">
         <!-- 缓存数据 -->
@@ -74,8 +75,15 @@
     </div>
     <div class="trip-arrange">
         <h5 class="base-title">行程安排<a class="T-toggle-List T-show" style="font-size: 12px; color: #999; display: inline-block; margin-left: 15px; font-weight: 100;">收起</a></h5>
-        <table class="table table-bordered">
+        <table class="table table-bordered table-fixed">
             <tbody class="T-tripPlanDayList-tbody">
+                <colgroup>
+                    <col style="width:100px;"></col>
+                    <col style="width:600px;"></col>
+                    <col style="width:230px;"></col>
+                    <col></col>
+                    <col style="width:400px;"></col>
+                </colgroup>
                 <tr>
                     <th>日期</th>
                     <th>行程简要</th>
@@ -86,10 +94,10 @@
                 {{each tripPlanDayList as day}}
                 <tr>
                     <td>{{basicInfo.startTime | getDateText : day.whichDay}}</td>
-                    <td>{{day.title}}</td>
+                    <td class="T-ctrl-tip" title="{{day.title}}"><span>{{day.title}}</span></td>
                     <td>{{#day.repastDetail | getRestaurantDesc}}</td>
-                    <td>{{day.restPosition}}</td>
-                    <td>{{day.scenicItemNames}}</td>
+                    <td class="T-ctrl-tip" title="{{day.restPosition}}" data-placement="left"><span>{{day.restPosition}}</span></td>
+                    <td class="T-ctrl-tip" title="{{day.scenicItemNames}}" data-placement="left"><span>{{day.scenicItemNames}}</span></td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -273,6 +281,7 @@
                                 <i class="ace-icon fa fa-plus"></i>
                                 新增
                             </button>
+                            <span style="color: #D45A5A;font-weight: 100;padding-left: 30px;font-size: 6px;">* 删除或切换导游将删除该导游的实销报账数据</span>
                         </h5> {{if basicInfo.oldGuideRequire}}
                         <p class="requirementsPlan">原导游计划要求：{{basicInfo.oldGuideRequire}}</p>{{/if}} {{if basicInfo.nowGuideRequire}}
                         <p class="requirementsPlan">现导游计划要求：{{basicInfo.nowGuideRequire}}</p>{{/if}}
@@ -337,7 +346,7 @@
                                     <td>
                                         {{if guide.taskJson}}
                                         {{each guide.taskJson as task i}}
-                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}}mar-t-5{{/if}}" data-index="{{i}}">
+                                        <div class="T-guideAddTask {{if i > 0}}mar-t-10{{else}}mar-t-5{{/if}}" data-index="{{i}}">
                                         {{#task.tType | getTaskSelect}}
                                             <label style="float:right; padding-top:0px;">
                                                 <button class="btn btn-sm btn-white {{if i == 0}}btn-success T-add{{else}}btn-danger T-del{{/if}} T-guideBtn">
@@ -359,7 +368,7 @@
                                     </td>
                                     <td>
                                         <div class="col-sm-12 feild-relative">
-                                            <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="w-80 chooseGuide" />
+                                            <input type="text" name="guideName" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.realname}}{{/if}}" {{if guide.isConfirmAccount || guide.isAccountGuide==1 && basicInfo.status !=0 }} readonly="readonly" {{/if}} class="col-sm-12 chooseGuide" />
                                             <input type="hidden" name="guideId" value="{{if guide.guide != null}}{{guide.guide.id}}{{/if}}" />
                                             {{if !guide.isConfirmAccount}}
                                             <span class="addResourceBtn T-addGuideResource R-right" data-right="1010002" title="添加导游">
@@ -372,10 +381,10 @@
                                         <input type="text" name="mobileNumber" maxlength="32" value="{{if guide.guide != null}}{{guide.guide.mobileNumber}}{{/if}}" readonly="readonly" class="col-sm-12" />
                                     </td>
                                     <td>
-                                        <input type="text" name="price" value="{{guide.price}}" class="w-80 F-float F-money"maxlength="9" />
+                                        <input type="text" name="price" value="{{guide.price}}" class="col-sm-12 F-float F-money"maxlength="9" />
                                     </td>
                                     <td>
-                                        <input type="text" name="manageFee" value="{{guide.manageFee}}" class="w-80 F-float F-money" maxlength="9" />
+                                        <input type="text" name="manageFee" value="{{guide.manageFee}}" class="col-sm-12 F-float F-money" maxlength="9" />
                                     </td>
                                     <td><input class="F-float F-money" type="text" name="guidePlanPreMoney" value="{{guide.guidePlanPreMoney}}" /></td>
                                     <td>
@@ -500,8 +509,8 @@
                                             <td>
                                                 <input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12" />
                                             </td>
-                                            <td>
-                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
+                                            <td> 
+                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime | dateTimeHSFormat}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
                                             </td>
                                             <td>
                                                 <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
@@ -638,7 +647,7 @@
                                         <td>
                                             <div class="col-sm-12">
                                                 <input type="text" name="restaurantName" maxlength="32" value="{{if restaurant.isChoose == 1}}-导游任选-{{else}}{{if restaurant.restaurant != null}}{{restaurant.restaurant.name}}{{/if}}{{/if}}" class="col-sm-12 T-chooseRestaurant" data-propover="{{restaurant.restaurantChooseArrangeList | stringify}}" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
-                                                <input type="hidden" name="restaurantId" value="{{restaurant.restaurantId}}" />
+                                                <input type="hidden" name="restaurantId" value="{{if restaurant.isChoose == 1}}-1{{else}}{{restaurant.restaurantId}}{{/if}}" />
                                                 <input type="hidden" name="optional" value="" />
                                                 {{if !restaurant.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
@@ -1219,7 +1228,7 @@
                                             <input type="text" name="shift" maxlength="9" class="col-sm-12" value="{{ticket.shift}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime | dateTimeHSFormat}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="seatLevel" maxlength="32" value="{{ticket.seatLevel}}" class="col-sm-12" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>

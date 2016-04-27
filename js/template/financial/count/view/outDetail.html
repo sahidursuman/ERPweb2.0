@@ -376,7 +376,7 @@
                                                         {{each tripIncomeMap.guideIncomeMap.guideIncomeMapList as item}}
                                                             <tr class="view-accountsPrint">
                                                                 <td>
-                                                                    {{if item.taskJson.length}}
+                                                                    {{if item.taskJson && item.taskJson.length > 0 }}
                                                                         {{each item.taskJson as rs i}}
                                                                             <div>
                                                                                 {{rs.sTime}}
@@ -387,7 +387,7 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                    {{if item.taskJson.length}}
+                                                                    {{if item.taskJson && item.taskJson.length > 0}}
                                                                         {{each item.taskJson as rs i}}
                                                                             <div>
                                                                                 {{rs.eTime}}
@@ -398,7 +398,7 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                {{if item.taskJson.length}}
+                                                                {{if item.taskJson && item.taskJson.length > 0}}
                                                                     {{each item.taskJson as rs i}}
                                                                         <div>
                                                                             {{if rs.tType == 0}}
@@ -1278,7 +1278,7 @@
                                                         {{each tripPayMap.guidePayMap.guidePayMapList as item}}
                                                             <tr class="view-accountsPrint">
                                                                 <td>
-                                                                    {{if item.taskJson.length}}
+                                                                    {{if item.taskJson && item.taskJson.length > 0}}
                                                                         {{each item.taskJson as rs i}}
                                                                             <div>
                                                                                 {{rs.sTime}}
@@ -1289,7 +1289,7 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                    {{if item.taskJson.length}}
+                                                                    {{if item.taskJson && item.taskJson.length > 0}}
                                                                         {{each item.taskJson as rs i}}
                                                                             <div>
                                                                                 {{rs.eTime}}
@@ -1300,7 +1300,7 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                {{if item.taskJson.length}}
+                                                                {{if item.taskJson && item.taskJson.length > 0}}
                                                                     {{each item.taskJson as rs i}}
                                                                         <div>
                                                                             {{if rs.tType == 0}}

@@ -91,12 +91,14 @@
             {{/if}}
         </td>
            <td style="vertical-align:middle">
-            <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor T-action T-update T-audit">
-                审核
-                <label style="padding-left:10px;">|</label>
-            </a>
+            
             <a data-entity-id="{{financialTripPlan.id}}" class="T-action T-detail cursor">
                 明细
+
+            </a>
+            <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor T-action T-update T-audit">
+            <label class="padding-right20">|</label>
+            审核
             </a>
             {{if financialTripPlan.tripPlan.billStatus == -1}}
             <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor T-action T-account R-right" data-right="1190004">
