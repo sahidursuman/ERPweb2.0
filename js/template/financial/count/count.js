@@ -7,7 +7,6 @@ define(function(require, exports){
 		arrangeDetailTempLate = require("./view/arrangeDetail"),
 		
 		qualityTempLate = require("./view/quality"),
-		billImageTempLate = require("./view/billImage"),
 		outDetailTempLate = require("./view/outDetail"),
 		tripDetailTempLate = require("./view/tripDetail"),
 		
@@ -445,11 +444,9 @@ define(function(require, exports){
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
-			var $that = $(this);
-			var url = $that.attr("url");
-			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-			var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
-			Count.viewImages(url,bigImg,smallImg);
+			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val(),
+				smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+			FinancialService.viewBillImage(this,bigImg,smallImg);
 		});
 		//查看操作记录事件
 		$obj.find('.btn-financialLog').off('click').on('click',function(){
@@ -881,11 +878,9 @@ define(function(require, exports){
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
-			var $that = $(this);
-			var url = $that.attr("url");
-			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-			var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
-			Count.viewImages(url,bigImg,smallImg);
+			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val(),
+			smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+			FinancialService.viewBillImage(this,bigImg,smallImg);
 		});
 		//查看操作记录事件
 		$obj.find('.btn-financialLog').off('click').on('click',function(){
@@ -1370,11 +1365,9 @@ define(function(require, exports){
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
-			var $that = $(this);
-			var url = $that.attr("url");
-			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-			var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
-			Count.viewImages(url,bigImg,smallImg);
+			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val(),
+				smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+			FinancialService.viewBillImage(this,bigImg,smallImg);
 		});
 		//查看操作记录事件
 		$obj.find('.btn-financialLog').off('click').on('click',function(){
@@ -1482,44 +1475,6 @@ define(function(require, exports){
 			}
 
 		});
-	};
-	//查看单据事件
-	Count.viewImages = function(url,bigImg,smallImg){
-
-			var data = {
-    			"images":[]
-	    	};
-	    	var strs = url.split(",");
-	        for(var i = 0; i < strs.length; i ++) {
-	            var s = strs[i];
-	            if(s != null && s != "" && s.length > 0) {
-	                var image = {
-	                    "WEB_IMG_URL_BIG":imgUrl+s,
-	                    "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-	                }
-	                data.images.push(image);
-	            }
-	        }
-	    	if(data.images.length == 0) {
-	    		showMessageDialog($( "#confirm-dialog-message" ), "没有回传单据", function(){});
-	    		return;
-	    	}
-	    	var html = billImageTempLate(data); 
-	    	layer.open({
-				type : 1,
-				title : "单据图片",
-				skin : 'layui-layer-rim', // 加上边框
-				area : '500px', // 宽高
-				zIndex : 1028,
-				content : html,
-                scrollbar: false, // 推荐禁用浏览器外部滚动条
-				success : function() {
-
-					$('.billImageDowebok').viewer({
-						url: 'data-original',
-					});
-				}
-			});
 	};
 	//审核通过事件
 	Count.accountCheck = function(id, billStatus, financialTripPlanId,$obj){
@@ -1679,11 +1634,9 @@ define(function(require, exports){
 					});
 					//查看图片事件
 					$outDetailTab.find('.btn-view').off('click').on('click',function(){
-						var $that = $(this);
-						var url = $that.attr("url");
-						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val();
-						var smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
-						Count.viewImages(url,bigImg,smallImg);
+						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val(),
+							smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
+						FinancialService.viewBillImage(this,bigImg,smallImg);
 					});
 				}
 				
