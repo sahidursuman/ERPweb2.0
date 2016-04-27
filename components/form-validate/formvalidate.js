@@ -42,7 +42,7 @@
 
 		if (!$formStyle.length)  {
 			$('body').append('<style id="form-style">'
-				+ '.feild-error-tip {position:absolute;  color: #d25b47; cursor:pointer;}'
+				+ '.feild-error-tip {position:absolute;  color: #d25b47; cursor:pointer; z-index: +1;}'
 				+ '.input-error {    padding-right: 20px; border-color: #d25b47 !important; }'
 				+ '.input-success {    padding-right: 4px;}'
 				+ ' #form-validation-tip-area > .tooltip > .tooltip-inner { background-color: #d25b47;}   #form-validation-tip-area > .tooltip > .tooltip-arrow{border-top-color: #d25b47;}'
@@ -360,7 +360,7 @@
 					data = tmp.$valObj.eq(j).val();
 				}
 				
-				if ((this.validateHiddenObject || (!this.validateHiddenObject && $jTmp.is(':visible')))
+				if (((this.validateHiddenObject && $jTmp.closest('body').length) || (!this.validateHiddenObject && $jTmp.is(':visible')))
 				  && this.task(data, tmp.rules, $jTmp) !== true) {
 					/**
 					 * visible,用于排除被删除或者被隐藏的元素

@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":26,"md5":"95650e4b9882d0887591e984634c8e93"}*/
+define(function(require) {
+    return require("../../../template")("system/accountSetting/view/solution", '<div class="account-solutionMain" id="T-account-solutionMain"> <p style="color: #888;">验证码发送至你的注册手机号</p> <p>1、请确认当前是否使用的该注册手机号码</p> <p>2、请检查短信是否被手机安全软件拦截</p> <p>3、若注册手机号已停用，请联系客服咨询</p> <p>4、获取更多帮助，请拔打客服电话400-966-1800</p> <button class="btn btn-block btn-primary T-closeSolution" style="width:290px;margin-left:10px;height: 36px !important;line-height: 10px;"> <i class="ace-icon fa fa-check"></i> 知道了 </button> </div>');
+});

@@ -1,6 +1,6 @@
 define(function(require, exports) {
     var menuKey = "financial_turnProfit",
-    listTurnProfit = require("./view/list"),
+    listTemplate = require("./view/list"),
     tabId = "tab-"+menuKey+"-content",
     checkTabId = menuKey+"-checking",
     viewTemplate = require("./view/visitorGroup"),
@@ -16,7 +16,7 @@ define(function(require, exports) {
     };
 
     TurnProfit.initModule = function() {
-    	console.log('modal');
+        var dateJson = FinancialService.getInitDate();
         TurnProfit.searchParam = {
             pageNo: 0,
             lineProductId : "",
@@ -25,15 +25,21 @@ define(function(require, exports) {
             partnerAgencyName : "",
             toBusinessGroupId : "",
             toBusinessGroupName : "",
-            startTime : "",
-            endTime : "",
+            orderNumber : "",
+            startTime : dateJson.startDate,
+            endTime : dateJson.endDate,
+            type : 1,
             sortType: 'auto' 
         };
-        TurnProfit.listTurnProfit(0,"","","","","","","","");
+        TurnProfit.listTurnProfit(0,"","","","","","",dateJson.startDate,dateJson.endDate,1);
     };
 
-    TurnProfit.listTurnProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,startTime,endTime) {
+    TurnProfit.listTurnProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,orderNumber,startTime,endTime,type) {
         if (TurnProfit.$searchArea && arguments.length === 1) {
+            type = 1;
+            if(!TurnProfit.$tab.find(".T-checkTurn").is(":checked")){
+                type = 0;
+            }
         	TurnProfit.searchParam = {
 	        	pageNo: page,
 	        	lineProductId : TurnProfit.$searchArea.find("input[name=lineProductId]").val(),
@@ -42,23 +48,25 @@ define(function(require, exports) {
 	        	partnerAgencyName : TurnProfit.$searchArea.find("input[name=partnerAgencyName]").val(),
 	        	toBusinessGroupId : TurnProfit.$searchArea.find("input[name=toBusinessGroupId]").val(),
 	        	toBusinessGroupName : TurnProfit.$searchArea.find("input[name=toBusinessGroupName]").val(),
+                orderNumber : TurnProfit.$searchArea.find("input[name=orderNumber]").val(),
 	        	startTime : TurnProfit.$searchArea.find("input[name=startTime]").val(),
 	        	endTime : TurnProfit.$searchArea.find("input[name=endTime]").val(),
+                type : type,
 	        	sortType: 'auto' 
 	        }
         }
         // 修正页码
         page = page || 0;
         $.ajax({
-            url:TurnProfit.url("profitTransfer","listProfitTransfer"),
+            url:KingServices.build_url("profitTransfer","listProfitTransfer"),
             type: "POST",
             data: TurnProfit.searchParam,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
                 	data.searchParam = TurnProfit.searchParam;
-                    var html = listTurnProfit(data);
-                    addTab(menuKey,"外转利润",html);
+                    var html = listTemplate(data);
+                    Tools.addTab(menuKey,"外转利润",html);
                     TurnProfit.searchParam.pageNo = page;
                     
                     TurnProfit.initList();
@@ -79,21 +87,20 @@ define(function(require, exports) {
     };
 
     TurnProfit.initList = function(){
-    	console.log("init");
         // 初始化jQuery 对象
         TurnProfit.$tab = $('#' + tabId);
         TurnProfit.$searchArea = TurnProfit.$tab.find('.T-search-area');
 
         TurnProfit.searchAreaList();
-        $("#" + tabId + " .date-picker").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd',
-            language: 'zh-CN'
-        });
+        Tools.setDatePicker(TurnProfit.$tab.find(".date-picker"), true);
         //搜索按钮事件
         TurnProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
+            TurnProfit.listTurnProfit(0);
+        });
+
+        //核算中转
+        TurnProfit.$tab.find(".T-checkTurn").on("click",function(){
             TurnProfit.listTurnProfit(0);
         });
 
@@ -131,7 +138,7 @@ define(function(require, exports) {
         var $method = TurnProfit.clickFlag == 2?'findIncome':'viewTransferTouristGroupDetails';
         var $title = TurnProfit.clickFlag == 2?'团款应收明细':'查看小组';
 		$.ajax({
-			url:TurnProfit.url($path,$method),
+			url:KingServices.build_url($path,$method),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -141,7 +148,6 @@ define(function(require, exports) {
 				if(result){
                     if(TurnProfit.clickFlag == 2){
                         data.income = JSON.parse(data.income);
-                        console.log(data);
                         var html = visitorGroupMainInfo(data);
                         layer.open({
                             type : 1,
@@ -177,7 +183,7 @@ define(function(require, exports) {
 
 	TurnProfit.viewTransit = function(id){
 		$.ajax({
-			url:TurnProfit.url("profitTransfer","findOut"),
+			url:KingServices.build_url("profitTransfer","findOut"),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -204,7 +210,7 @@ define(function(require, exports) {
 	TurnProfit.viewTransfer = function(obj){
 		var id = $(obj).data("id");
 		$.ajax({
-			url:TurnProfit.url("profitTransfer","findPay"),
+			url:KingServices.build_url("profitTransfer","findPay"),
 			type:"POST",
 			data:{
 				id : id + ""
@@ -230,10 +236,9 @@ define(function(require, exports) {
 	};
 
     TurnProfit.searchAreaList = function(){
-    	console.log("searchAreaList");
     	//获取搜索框数据
         $.ajax({
-            url:TurnProfit.url("profitTransfer","searchParam"),
+            url:KingServices.build_url("profitTransfer","searchParam"),
             type:"POST",
             data:"",
             success:function(data){
@@ -249,21 +254,29 @@ define(function(require, exports) {
 
                     if(lineProductNameList !=null && lineProductNameList.length>0){
                         for(var i = 0;i<lineProductNameList.length;i++){
-                            lineProductNameList[i].value = lineProductNameList[i].lineProductName
+                            lineProductNameList[i].value = lineProductNameList[i].name
                         }
                     }
 
                     if(partnerAgencyNameList !=null && partnerAgencyNameList.length>0){
                         for(var i = 0;i<partnerAgencyNameList.length;i++){
-                            partnerAgencyNameList[i].value = partnerAgencyNameList[i].partnerAgencyName
+                            partnerAgencyNameList[i].value = partnerAgencyNameList[i].name
                         }
                     }
 
                     if(partnerLocalAgencyNameList !=null && partnerLocalAgencyNameList.length>0){
                         for(var i = 0;i<partnerLocalAgencyNameList.length;i++){
-                            partnerLocalAgencyNameList[i].value = partnerLocalAgencyNameList[i].partnerLocalAgencyName
+                            partnerLocalAgencyNameList[i].value = partnerLocalAgencyNameList[i].name
                         }
                     }
+                    var all = {
+                        id : "",
+                        value : "全部"
+                    };
+                    lineProductNameList.unshift(all);
+                    partnerAgencyNameList.unshift(all);
+                    partnerLocalAgencyNameList.unshift(all);
+
                     //线路产品   
                     lineProducts.autocomplete({
                         minLength:0,
@@ -273,9 +286,8 @@ define(function(require, exports) {
                             }
                         },
                         select:function(event,ui){
-                        	//console.log(ui);
                             $(this).blur();
-                            $(this).next().val(ui.item.lineProductId);
+                            $(this).next().val(ui.item.id);
                         }
                     }).off("click").on("click", function(){
                         var Obj = lineProducts;
@@ -293,11 +305,11 @@ define(function(require, exports) {
                         },
                         select:function(evevt,ui){
                             $(this).blur();
-                            $(this).next().val(ui.item.partnerAgencyId);
+                            $(this).next().val(ui.item.id);
                         }
                     }).off("click").on("click",function(){
                         var Obj = groupCollective;
-                        $(Obj).autocomplete("option","source",partnerAgencyNameList);
+                        $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
                         $(Obj).autocomplete('search','');
                     });
 
@@ -311,22 +323,17 @@ define(function(require, exports) {
                         },
                         select:function(evevt,ui){
                             $(this).blur();
-                            $(this).next().val(ui.item.partnerLocalAgencyId);
+                            $(this).next().val(ui.item.id);
                         }
                     }).off("click").on("click",function(){
                         var Obj = partner;
-                        $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
+                        $(Obj).autocomplete("option","source",partnerAgencyNameList);
                         $(Obj).autocomplete('search','');
                     });
                 }
             }
         });            
 	};
-
-    TurnProfit.url = function(path,method){
-        var url = ''+APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';
-        return url;
-    };
 
     exports.init = TurnProfit.initModule;
 });

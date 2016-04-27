@@ -31,13 +31,16 @@
 					 <!-- -->
 					<!--</div>-->
 					<div class="form-group guideInterval">
-					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
+					    <label class="col-sm-2 control-label no-padding-right">联系人:</label>
 						<div class="col-sm-4">
 							<input type="text" name="managerName" class="col-sm-12" value="{{hotel.managerName}}"  maxlength="32">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
+						<label class="col-sm-1 control-label no-padding-right">联系电话:</label>
 						<div class="col-sm-3">
 							<input type="text" name="mobileNumber" class="col-sm-12" value="{{hotel.mobileNumber}}" maxlength="11">
+							<label class="feild-label feild-error-tip" style="top:4px;right:78px;">
+								<i title="该手机号码将接收短信" class="fa fa-info blue"></i>
+							</label>
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -98,9 +101,8 @@
 					</div>
 
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">酒店最低价:</label>
 						<div class="col-sm-4">
-							<input class="form-control" name="lowestPrice" value="{{hotel.lowestPrice}}" maxlength="9" class="col-sm-12" />
+							<input class="form-control F-float F-money col-sm-12 T-lowestPrice" type="hidden" name="lowestPrice" value="{{hotel.lowestPrice}}" maxlength="9" />
 						</div>
 					</div>
 				</div>
@@ -128,8 +130,8 @@
 								<tr>
 									<th class="table-border" width="80"><span class="necessary">*</span>房型</th>
 									<th class="table-border"style="width:300px;"><span class="necessary">*</span>时间范围</th>
-									<th class="table-border" style="width:100px"><span class="necessary">*</span>市场价(元)</th>
-									<th class="table-border" style="width:110px"><span class="necessary">*</span>协议价(元)</th>
+									<th class="table-border" style="width:100px">市场价(元)</th>
+									<th class="table-border" style="width:110px">协议价(元)</th>
 									<th class="table-border" style="width: 75px">早餐</th>
 									<th class="table-border" width="70">午餐</th>
 									<th class="table-border" width="70">晚餐</th>
@@ -167,21 +169,21 @@
 										</td>
 										<td> 
 											<div class="clearfix" style="margin-top:1px">
-												<input name="normalMarketPrice" type="text" class="col-sm-12" value="{{room.normalMarketPrice}}" maxlength="9" />
+												<input name="normalMarketPrice" type="text" class="col-sm-12 F-float F-money" value="{{room.normalMarketPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix T-marketPrice marketPrice-{{i+1}}" style="margin-top:7px">
-												<input name="marketPrice" type="text" class="col-sm-12" value="{{price.marketPrice}}" maxlength="9" />
+												<input name="marketPrice" type="text" class="col-sm-12 F-float F-money" value="{{price.marketPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>
 										<td>
 											<div class="clearfix" style="margin-top:1px">
-												<input name="normalInnerPrice" type="text" class="col-sm-12" value="{{room.normalInnerPrice}}" maxlength="9" />
+												<input name="normalInnerPrice" type="text" class="col-sm-12 F-float F-money T-minPrice" value="{{room.normalInnerPrice}}" maxlength="9" />
 											</div>
 											{{each room.priceList as price i}}
 											<div data-index="{{i+1}}" class="clearfix T-contractPrice contractPrice-{{i+1}}" style="margin-top:7px">
-												<input name="contractPrice" type="text" class="col-sm-12" value="{{price.contractPrice}}" maxlength="9" />
+												<input name="contractPrice" type="text" class="col-sm-12 F-float F-money T-minPrice" value="{{price.contractPrice}}" maxlength="9" />
 											</div>
 											{{/each}}
 										</td>

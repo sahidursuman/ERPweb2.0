@@ -1,297 +1,336 @@
 <div class="col-xs-12  T-updateLineProductContainer">
-	<form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class=" ui-sortable-handle">
-				<h5 class=" pull-left " >
+    <form class="form-horizontal T-mainForm" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class=" ui-sortable-handle">
+            <h5 class=" pull-left ">
 					<i class="ace-icon fa fa-info-circle title-size"></i>
 					<label class="middle title-size">线路产品主体信息</label>
 				</h5>
-			<div class="pull-right line-bluer line-separated"></div>
-			<div style="clear: both"></div>
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">基础线路名称:</label>
-						<div class="col-sm-3">
-							<input type="hidden" name="travellineId" value="{{travelLine.id}}"> 
-							<input type="text" readonly="readonly" class="col-sm-12" value="{{travelLine.name}}">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品名称:</label>
-						<div class="col-sm-3">
-							<input type="text" name="name" class="col-sm-12 bind-change" placeholder="请输入线路产品名称" maxlength="80">  
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">线路天数:</label>
-						<div class="col-sm-3">
-							<input type="text" class="col-sm-12" readonly="readonly" name="days" value="{{travelLine.days}}">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路类型:</label>
-						<div class="col-sm-3">
-							<input type="text" name="type" class="col-sm-12" maxlength="80">
-						</div>
-						
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">针对客源:</label>
-						<div class="col-sm-3">
-							<select name="customerType">
-								<option value="0" selected="selected">散客</option>
-								<option value="1">团体</option>
-							</select>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">是否启用:</label>
-						<div class="col-sm-2 checkbox" style="margin-left:-10px;padding-top: 0px">
-							<label>
-								<input checked="checked" type="checkbox" class="ace busCompany-status" name="status" value="1">
-								<span class="lbl">
+            <div class="pull-right line-bluer line-separated"></div>
+            <div style="clear: both"></div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路产品名称:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="name" class="col-sm-12 bind-change" placeholder="请输入线路产品名称" maxlength="80">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="col-sm-12 F-float F-count" readonly="readonly" name="days" value="{{travelLine.days}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">线路模板:</label>
+                        <div class="col-sm-2">
+                            <input type="hidden" name="travellineId" value="{{travelLine.id}}">
+                            <input type="text" readonly="readonly" class="col-sm-12" value="{{travelLine.name}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">是否启用:</label>
+                        <div class="col-sm-2 checkbox" style="margin-left:-10px;padding-top: 0px">
+                            <label>
+                                <input checked="checked" type="checkbox" class="ace busCompany-status" name="status" value="1">
+                                <span class="lbl">
 									启用
 								</span>
-							</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">线路产品备注:</label>
-						<div class="col-sm-8">
-							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>       
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-	
-	
-	<form class="form-horizontal T-middleForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class=" ui-sortable-handle">
-						<h5 class="pull-left title-size">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路类型:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="type" class="col-sm-12" maxlength="80">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>针对客源:</label>
+                        <div class="col-sm-2">
+                            <select name="customerType">
+                                <option value="0" selected="selected">散客</option>
+                                <option value="1">团体</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" name="" maxlength="80">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" name="" maxlength="80">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">备注:</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form class="form-horizontal T-guideService-form" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class=" ui-sortable-handle">
+            <h5 class="widget-title">
+                <h5 class="pull-left title-size">
+                    <i class="ace-icon fa fa-calendar-minus-o"></i>
+                    <label class="middle title-size">导游服务标准</label>
+                </h5>
+            <div class="pull-right line-bluer  line-separatedT"></div>
+            <div style="clear: both"></div>
+            <h5 class="" style="color: #666!important;font-size: 14px!important;">
+                    <a href="javascript:void(0)" class="T-add T-add-service">
+                        <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                            <i class="ace-icon fa fa-plus"></i>
+                            新增
+                        </button>
+                    </a>
+                </h5>
+            </h5>
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <table class="table table-striped table-bordered table-hover lineDayList" style="border: 1px solid #ddd;">
+                        <thead>
+                            <tr>
+                                <th class="th-border">服务标准</th>
+                                <th class="th-border">服务内容</th>
+                                <th class="th-border">服务要求</th>
+                                <th class="th-border">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="T-service-list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form class="form-horizontal T-middleForm" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class="form-group globalAdd">
+            <div class="col-xs-12 col-sm-12 widget-container-col">
+                <div class=" ui-sortable-handle">
+                    <h5 class="pull-left title-size">
 							<i class="ace-icon fa fa-calendar-minus-o"></i>
 							<label class="middle title-size">基础安排模板</label>
 						</h5>
-					<div class="pull-right line-bluer line-separatedT"></div>
-					<div style="clear: both"></div>
-					<div class="widget-body">
-						<div class="widget-main">
-								<div class="clearfix"></div>
-								<div class="col-xs-12 col-sm-12 widget-container-col">
-									<div class=" ui-sortable-handle">
-											<h5 class="" style="color: #666!important;font-size: 14px!important;">
+                    <div class="pull-right line-bluer line-separatedT"></div>
+                    <div style="clear: both"></div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="clearfix"></div>
+                            <div class="col-xs-12 col-sm-12 widget-container-col">
+                                <div class="ui-sortable-handle T-baseArrange">
+                                    <h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addInsurance">
+                                                    <button class="btn btn-sm btn-success btn-guide-add" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
-										<div class="widget-body">
-											<div class="widget-main">
-												<table class="table table-striped table-bordered table-hover arrangeInsuranceList">
-													<thead>
-														<tr>
-															<th class="th-border">公司名称</th>  
-															<th class="th-border">保险类型</th>
-															<th class="th-border">保险价格</th>
-															<th class="th-border">公司电话</th>
-															<th class="th-border">联系人姓名</th>
-															<th class="th-border">联系电话</th>
-															<th class="th-border">备注</th>
-														</tr>
-													</thead>
-													<tbody class="T-insuranceForm">
-														<tr>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <table class="table table-striped table-bordered table-hover arrangeInsuranceList">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="th-border">公司名称</th>
+                                                        <th class="th-border">险种</th>
+                                                        <th class="th-border">单价</th>
+                                                        <th class="th-border">联系人</th>
+                                                        <th class="th-border">联系电话</th>
+                                                        <th class="th-border">座机电话</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border" style="width:10%;">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="T-insuranceForm">
+                                                    <!-- <tr>
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text"/><input type="hidden" name="insuranceId"/></td>
 															<td>
 																<input class="col-xs-12 T-chooseInsuranceItem" name="type" type="text" maxlength="100" />
 																<input type="hidden" name="typeId" value="">
 															</td>
-															<td><input class="col-xs-12" name="price" type="text" maxlength="6" /></td>
-															<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>
+															<td><input class="col-xs-12 F-float F-money" name="price" type="text" maxlength="6" /></td>
 															<td><input class="col-xs-12" name="managerName" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
+															<td><input class="col-xs-12" name="telNumber" type="text" readonly="readonly"/></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="clearfix"></div>
-								<div class="col-xs-12 col-sm-12 widget-container-col">
-									<div class=" ui-sortable-handle">
-											<h5 class="" style="color: #666!important;font-size: 14px!important;">
+															<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>
+														</tr> -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-xs-12 col-sm-12 widget-container-col">
+                                <div class="ui-sortable-handle T-baseArrange">
+                                    <h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
-												<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+												<label class="middle mar-r-20" style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addBusCompany">
+                                                    <button class="btn btn-sm btn-success btn-guide-add">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
-										<div class="widget-body">
-											<div class="widget-main">
-												<table class="table table-striped table-bordered table-hover arrangeBusCompanyList">
-													<thead>
-														<tr>
-															<th class="th-border">需求座位数</th>
-															<th class="th-border">车队名称</th>
-															<th class="th-border">车辆牌照</th>
-															<th class="th-border">座位价</th>
-															<th class="th-border">实际座位数</th>
-															<th class="th-border">联系电话</th>
-															<th class="th-border">包车价</th>
-															<th class="th-border">备注</th>
-														</tr>
-													</thead>
-													<tbody class="T-busCompanyForm">
-														<tr>
-															<td><input class="col-xs-12 bind-change T-needSeatCount" name="needSeatCount" type="text" maxlength="2" /></td>  
-															<td><input name="companyName" class="T-buscompany-name col-xs-12 bind-change" type="text"/><input type="hidden" name="busCompanyId"></td>
-															<td><input name="licenseNumber" class="T-licenseNumber col-xs-12 bind-change" type="text"/><input type="hidden" name="busLicenseNumberId"></td>
-															<td><input class="col-xs-12" name="seatPrice" type="text" maxlength="6" /></td>
-															<td><input class="col-xs-12" name="seatCount" type="text" readonly="readonly"/></td>   
-															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly"/></td>
-															<td><input class="col-xs-12" name="charteredPrice" type="text" readonly="readonly" maxlength="9" /></td>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <table class="table table-striped table-bordered table-hover arrangeBusCompanyList">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="th-border">需求座位数</th>
+                                                        <th class="th-border">车辆品牌</th>
+                                                        <th class="th-border">备注</th>
+                                                        <th class="th-border">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="T-busCompanyForm">
+                                                    <!-- <tr>
+															<td><input class="col-xs-12 bind-change T-needSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" /></td> 
+															<td><input type="text" class="col-xs-12 T-busBrand" name="brand"></td> 
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" /></td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="clearfix"></div>					
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group lineDayArrangeTemplate">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class=" ui-sortable-handle widgetSchedule">
-						<h5 class="pull-left title-size">
+															<td><a class="cursor T-delete deleteAllother T-delTr">删除</a></td>
+														</tr> -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group lineDayArrangeTemplate">
+            <div class="col-xs-12 col-sm-12 widget-container-col">
+                <div class=" ui-sortable-handle widgetSchedule">
+                    <h5 class="pull-left title-size">
 							<i class="ace-icon fa fa-paper-plane"></i>
 							<label class="middle title-size">行程安排模板</label>
 						</h5>
-					<div class="pull-right line-bluer  line-separatedT"></div>
-					<div style="clear: both"></div>
-					<div class="widget-body">
-						<div class="widget-main">
-							<div class="tabbable">
-								<ul class="nav nav-tabs" id="myTab">
-									{{each travelLine.travelLineDayList as travelLineDay i}}
-									<li {{if i == 0}}class="active"{{/if}}>
-										<a aria-expanded="true" data-toggle="tab" href="#dayList-{{i}}" style="text-align:center;width:140px;">
+                    <div class="pull-right line-bluer  line-separatedT"></div>
+                    <div style="clear: both"></div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs" id="myTab">
+                                    {{each travelLine.travelLineDayList as travelLineDay i}}
+                                    <li {{if i==0 }}class="active" {{/if}}>
+                                        <a aria-expanded="true" data-toggle="tab" href="#dayList-{{i}}" style="text-align:center;width:140px;">
 											第{{i+1}}天
 										</a>
-									</li>
-									{{/each}}
-								</ul> 
-								<div class="tab-content T-daylist" style="position:relative;top: -2px;border: 1px solid #ececec">
-									{{each travelLine.travelLineDayList as travelLineDay i}}
-									<div id="dayList-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
-										<div class="col-xs-12 col-sm-12 widget-container-col travelLineDayList">
-											<div class="ui-sortable-handle T-dailyArrangeList">
-													<h5 class="">
-														<label class="title-size">行程标题：{{travelLineDay.title}}</label>
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                                <div class="tab-content T-daylist" style="position:relative;top: -2px;border: 1px solid #ececec">
+                                    {{each travelLine.travelLineDayList as travelLineDay i}}
+                                    <div id="dayList-{{i}}" class="tab-pane fade {{if i == 0}}active in{{/if}}">
+                                        <div class="col-xs-12 col-sm-12 widget-container-col travelLineDayList">
+                                            <div class="ui-sortable-handle T-dailyArrangeList">
+                                                <h5 class="">
+														<label class="title-size">简要行程：{{travelLineDay.title}}</label>
 													</h5>
-														<div style="margin-top:10px;margin-bottom:10px">
-															<button class="btn btn-app  btn-xs  T-add T-addRestaurant" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																餐饮
-															</button>
-															<button class="btn btn-app   btn-xs  T-add T-addHotel" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																酒店
-															</button>
-															<button class="btn btn-app   btn-xs  T-add T-addScenic" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																景区
-															</button>
-															<button class="btn btn-app   btn-xs  T-add T-addShop" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																购物
-															</button>
-															<button class="btn btn-app   btn-xs T-add T-addSelfPay" style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>  
-																自费
-															</button>
-															<button class="btn btn-app   btn-xs T-add T-addTraffic " style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																交通
-															</button>
-															<button class="btn btn-app   btn-xs T-add T-addOther " style="background: #1fade0!important;">
-																<i class="ace-icon fa fa-plus bigger-160"></i>
-																其它
-															</button>
-														</div>
-
-														<div id="timeline-1">
-															<div class="row">
-																<div class="col-xs-12 col-sm-12">
-																	<div class="timeline-container" style="overflow: auto;">
-																		<div class="timeline-items scheduleListContainer T-timeline-detail-container">
-
-																		</div><!-- /.timeline-items -->
-																	</div><!-- /.timeline-container -->
-																</div>
-															</div>
-														</div>
-												<div class="widget-body">
-													<div class="scheduleContainer">
-														<h5 class="header">行程详情：</h5>
-														<script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
-															{{#travelLineDay.detail}}
-														</script>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="clearfix"></div>
-									</div>
-									{{/each}}
-									<div style="clear:both;height:0px;line-height:0px;"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group driverList">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
+                                                <div style="margin-top:10px;margin-bottom:10px">
+                                                    <button class="btn btn-app  btn-xs  T-add T-addRestaurant" style="background: #1fade0!important;">
+                                                        <i class="ace-icon fa fa-plus bigger-160"></i> 餐饮
+                                                    </button>
+                                                    <button class="btn btn-app   btn-xs  T-add T-addHotel" style="background: #1fade0!important;">
+                                                        <i class="ace-icon fa fa-plus bigger-160"></i> 酒店
+                                                    </button>
+                                                    <button class="btn btn-app   btn-xs  T-add T-addScenic" style="background: #1fade0!important;">
+                                                        <i class="ace-icon fa fa-plus bigger-160"></i> 景区
+                                                    </button>
+                                                    <button class="btn btn-app   btn-xs T-add T-addTraffic " style="background: #1fade0!important;">
+                                                        <i class="ace-icon fa fa-plus bigger-160"></i> 交通
+                                                    </button>
+                                                    <button class="btn btn-app   btn-xs T-add T-addOther " style="background: #1fade0!important;">
+                                                        <i class="ace-icon fa fa-plus bigger-160"></i> 其它
+                                                    </button>
+                                                </div>
+                                                <div id="timeline-1">
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-sm-12">
+                                                            <div class="timeline-container" style="overflow: auto;">
+                                                                <div class="timeline-items scheduleListContainer T-timeline-detail-container">
+                                                                </div>
+                                                                <!-- /.timeline-items -->
+                                                            </div>
+                                                            <!-- /.timeline-container -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="scheduleContainer">
+                                                        <h5 class="header">行程详情：</h5>
+                                                        <script id="{{editorName}}-{{i}}" class="T-editor" type="text/plain" style="width:100%">
+                                                            {{if travelLineDay.detail != null}}{{#travelLineDay.detail | decode}}{{/if}}
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    {{/each}}
+                                    <div style="clear:both;height:0px;line-height:0px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group driverList">
+            <div class="col-xs-12 col-sm-12 widget-container-col">
+                <div class=" ui-sortable-handle">
+                    <h5 class="">
 							<label class="title-size">特别说明</label>
 						</h5>
-					<div class="widget-body">
-						<div class="widget-main">
-							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">费用包含:</label>
-								<div class="col-sm-8">
-									<textarea class="form-control" name="includeFee" class="col-sm-12">{{travelLine.includeFee}}</textarea>   
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">费用不含:</label>
-								<div class="col-sm-8">
-									<textarea class="form-control"  name="excludeFee" class="col-sm-12">{{travelLine.excludeFee}}</textarea>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">行程特色:</label>
-								<div class="col-sm-8">
-									<textarea class="form-control" name="lineFeature" class="col-sm-12">{{travelLine.lineFeature}}</textarea>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label no-padding-right">行程须知:</label>
-								<div class="col-sm-8">
-									<textarea class="form-control"  name="lineNotice" class="col-sm-12">{{travelLine.lineNotice}}</textarea>
-								</div>   
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="space-10"></div>
-		<button class="btn btn-block btn-primary T-btn-submit guideSubmit">
-			<i class="ace-icon fa fa-check"></i>
-			提交信息
-		</button>
-		<div class="space-20"></div>
-	</form>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right">费用包含:</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12" maxLength="5000">{{travelLine.includeFee}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right">费用不含:</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" name="excludeFee" class="col-sm-12" maxLength="5000">{{travelLine.excludeFee}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right">行程特色:</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" name="lineFeature" class="col-sm-12" maxLength="5000">{{travelLine.lineFeature}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right">行程须知:</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" name="lineNotice" class="col-sm-12" maxLength="5000">{{travelLine.lineNotice}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        发布到: <select name="publishAuthArea" id="publishAuthArea">
+            <option value="1">个人</option>
+            <option value="2">子部门</option>
+            <option value="3">业务部</option>
+            <option value="4" selected="selected">公司</option>
+        </select>
+        <div class="space-10"></div>
+        <button class="btn btn-block btn-primary T-btn-submit guideSubmit">
+            <i class="ace-icon fa fa-check"></i> 提交信息
+        </button>
+        <div class="space-20"></div>
+    </form>
 </div>

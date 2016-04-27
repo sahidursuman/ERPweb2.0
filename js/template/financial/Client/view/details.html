@@ -2,12 +2,12 @@
 	<table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <td>应收类别</td>
-                <td>发生业务</td>
-                <td>结算金额</td>
-                <td>备注</td>
-                <td>操作人</td>
-                <td>操作时间</td>
+                <th>应收类别</th>
+                <th>发生业务</th>
+                <th>结算金额</th>
+                <th>备注</th>
+                <th>操作人</th>
+                <th>操作时间</th>
             </tr>
         </thead>
         <tbody>
@@ -15,7 +15,7 @@
             <tr>
                 <td>{{item.resourceType}}</td>
                 <td>{{item.businessType}}</td>
-                <td>{{item.settlementMoney}}</td>
+                <td><span class="F-float F-money">{{item.settlementMoney}}</span></td>
                 <td>{{item.remark}}</td>
                 <td>{{item.creatorName}}</td>
                 <td>{{item.createTime}}</td>

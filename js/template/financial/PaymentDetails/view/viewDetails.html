@@ -1,0 +1,20 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+	<table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>团号/收客单号</th>
+                <th>金额</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{each detailList as rs}}
+            <tr>
+                <td>{{rs.number}}</td>
+                <td>{{rs.money}}</td>
+                <td>{{rs.remark}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

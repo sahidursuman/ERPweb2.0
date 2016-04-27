@@ -6,7 +6,7 @@
 		<tr>
 			<td class="style-myself">车队名称：</td>
 			<td class="styleOne-self">{{busCompany.companyName}}</td>
-			<td class="style-myself">车类类型：</td>
+			<td class="style-myself">车队类型：</td>
 			<td class="styleOne-self">{{if busCompany.type == 0}}
 				个人
 				{{else}}
@@ -49,10 +49,7 @@
 		</tr>
 		<tr>
 			<td class="style-myself">车队简介：</td>
-			<td class="styleOne-self">{{busCompany.remark}}</td>
-
-			<td class="style-myself">车队最低价：</td>
-			<td class="styleOne-self">{{busCompany.lowestPrice}}</td>
+			<td class="styleOne-self" colspan="4">{{busCompany.remark}}</td>
 		</tr>
 	</table>
 </form>
@@ -75,7 +72,7 @@
 		<tr>
 			<td class="style-myself">{{bus.licenseNumber}}</td>
 			<td class="styleOne-self">{{bus.brand}}</td>
-			<td class="style-myself">{{bus.seatCount}}</td>
+			<td class="style-myself"><span class="F-float F-count">{{bus.seatCount}}</span></td>
 			<td class="styleOne-self">{{if bus.buyTime == null || bus.buyTime == ""}}-{{else}}{{bus.buyTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
 			<td class="styleOne-self">{{if bus.isChartered == 0}}
 				否
@@ -92,7 +89,7 @@
 				</div>
 				{{/each}}</td>
 			<td class="styleOne-self">{{each bus.priceList as price}}
-				<div>
+				<div class="F-float F-money">
 					{{if bus.isChartered == 0}}
 					-
 					{{else}}
@@ -127,7 +124,7 @@
 				女
 				{{/if}}</td>
 			<td class="style-myself">{{driver.mobileNumber}}</td>
-			<td class="styleOne-self">{{driver.driveYears}}</td>
+			<td class="styleOne-self F-float F-count">{{driver.driveYears}}</td>
 			<td class="styleOne-self">{{driver.licenseId}}</td>
 			<td class="styleOne-self">{{if driver.status == 0}}
 				已停用

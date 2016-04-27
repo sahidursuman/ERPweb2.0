@@ -1,26 +1,33 @@
 {{each list as guide}}
-<tr class="T-checkTr" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}">
-    <td><a class="T-action T-gid" data-id="{{guide.tripPlanId}}">{{guide.tripNumber}}</a></td>
+<tr class="T-checkTr {{if guide.change}}success{{/if}}" data-confirm="{{guide.isConfirmAccount}}" data-id="{{guide.id}}" {{if guide.change}}change="true"{{/if}}> 
+    <td><p><a class="T-action T-gid" data-id="{{guide.tripPlanId}}" data-guidearrangeid = "{{guide.guideArrangeId}}">{{guide.tripNumber}}</a></p></td>
     <td>{{guide.lineProductName}}</td>
     <td>{{guide.accountTime}}</td>
-    <td>{{guide.guideAllPreMoney}}</td>
-    <td>{{guide.guideAllNowIncomeMoney}}</td>
-    <td>{{guide.guideAllNowPayMoney}}</td>
-    <td>{{guide.price}}</td>
-    <td>{{guide.manageFee}}</td>
-    <td>{{guide.shoppingRebateMoney}}</td>
-    <td>{{guide.selfPayRebateMoney}}</td>
-    <td>{{guide.guideIncomeMoney}}</td>
-    <td>{{guide.zhangmiantuibu}}</td>
-    <td><input name="settlementMoney" type="text" class="money T-settlementMoney" value="{{guide.settlementMoney}}" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}> </td>
-    <td class="T-payedDetail" data-money="{{guide.payedMoney}}"><a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a></td>
-    <td name="unPayedMoney">{{guide.unPayedMoney}}</td>
-    <td><input type="text" class="T-checkRemark" name="checkRemark" value="{{guide.checkRemark}}"  {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+    <td>{{if guide.guideAllPreMoney == 0}}
+        <span class="F-float F-money T-preMoney">{{guide.guideAllPreMoney}}</span>
+        {{else}}
+        <a class="cursor T-action T-borrow-detail">
+            <span class="F-float F-money T-preMoney">{{guide.guideAllPreMoney}}</span>
+        </a>
+        {{/if}}
+    </td>
+    <td><span class="F-float F-money">{{guide.guideAllNowIncomeMoney}}</span></span></td>
+    <td><span class="F-float F-money">{{guide.guideAllNowPayMoney}}</span></td>
+    <td><span class="F-float F-money">{{guide.price}}</span></td>
+    <td><span class="F-float F-money">{{guide.manageFee}}</span></td>
+    <td><span class="F-float F-money">{{guide.shoppingRebateMoney}}</span></td>
+    <td><span class="F-float F-money">{{guide.selfPayRebateMoney}}</span></td>
+    <td><span class="F-float F-money">{{guide.guideIncomeMoney}}</span></td>
+    <td><span class="F-float F-money">{{guide.zhangmiantuibu}}</span></td>
+    <td><input name="settlementMoney" type="text" class="money T-settlementMoney F-float F-money" value="{{guide.settlementMoney}}" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}> </td>
+    <td class="T-payedDetail F-float F-money" data-money="{{guide.payedMoney}}"><a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a></td>
+    <td name="unPayedMoney"><span class="F-float F-money">{{guide.unPayedMoney}}</span></td>
+    <td><textarea class="col-sm-12 hct-textarea T-checkRemark" name="checkRemark" maxlength="1000" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}>{{guide.checkRemark}}</textarea></td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>
         <label class="pos-rel  R-right" {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}>
-            <input type="checkbox" class="ace T-checkbox" {{ if guide.isConfirmAccount }} checked="checked" {{/if}}/> 
+            <input type="checkbox" class="ace T-checkbox" {{ if (guide.change && guide.isChecked == 1) || (!guide.change && guide.isConfirmAccount == 1) }} checked="checked" {{/if}}/> 
             <span class="lbl">对账</span>
         </label>
         <label class="cursor"  {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}> <a data-right="1200003"> |</a></label>

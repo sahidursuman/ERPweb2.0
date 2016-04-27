@@ -29,6 +29,9 @@
 					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 					<div class="col-sm-3">
 						<input type="text" name="mobileNumber" class="col-sm-12" maxlength="11">
+						<label class="feild-label feild-error-tip" style="top:4px;right:2px;">
+							<i title="该手机号码将接收短信" class="fa fa-info blue"></i>
+						</label>
 					</div>
 				</div>
 				<div class="form-group guideInterval">
@@ -44,11 +47,11 @@
 				<div class="form-group guideInterval">
 					<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
 					<div class="col-sm-3">
-						<input type="text" name="customerRebateMoney" class="col-sm-12" maxlength="9">
+						<input type="text" name="customerRebateMoney" class="col-sm-12 F-float F-money " maxlength="9">
 					</div>
 					<label class="col-sm-2 control-label no-padding-right" style="padding-left: 0px!important;">停车返佣(元/辆):</label>
 					<div class="col-sm-3">
-						<input type="text" name="parkingRebateMoney" class="col-sm-12" maxlength="9">
+						<input type="text" name="parkingRebateMoney" class="col-sm-12 F-float F-money  " maxlength="9">
 					</div>
 				</div>
 				<div class="form-group guideInterval">
@@ -98,7 +101,7 @@
 								<thead>
 									<tr>
 										<th class="table-border"><span class="necessary">*</span>商品名称</th>
-										<th class="table-border" width="100"><span class="necessary">*</span>针对客源</th>
+										<th class="table-border hidden" width="100"><span class="necessary">*</span>针对客源</th>
 										<th class="table-border"width="80">购物政策</th>
 										<th class="table-border">备注</th>
 										<th class="table-border" width="60">操作</th>

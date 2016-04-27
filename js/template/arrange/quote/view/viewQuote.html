@@ -7,7 +7,7 @@
 				</h5>
             <div class="pull-right line-bluer line-separated"></div>
             <div style="clear: both"></div>
-            <div class="widget-body" style="border: 1px solid #DDD;line-height:30px;width: 98%;margin: auto;padding-top: 6px;height:45px;">
+            <div class="widget-body" style="border: 1px solid #DDD;line-height:24px;width: 98%;margin: auto;padding-top: 12px;">
                 <div class="widget-main">
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">线路产品名称:</label>
@@ -28,10 +28,24 @@
                         <div class="col-sm-1">
                             <label class="control-label">{{quoteDetailJson.lineProduct.type}}</label>
                         </div>
-                        <label class="col-sm-1 control-label no-padding-right">应用范围:</label>
+                        <label class="col-sm-1 control-label no-padding-right">针对客源:</label>
                         <div class="col-sm-1">
                             <label class="control-label"> {{if quoteDetailJson.lineProduct.customerType == 1}} 团体 {{else}} 散客 {{/if}}</label>
                         </div>
+                    </div>
+                    <div class="form-group">
+                    {{if !!quoteDetailJson.shopNames}}
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label" style="text-align: left">{{quoteDetailJson.shopNames}}</label>
+                        </div>
+                    {{/if}}
+                    {{if !!quoteDetailJson.selfPayItemNames}}
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <label class="control-label" style="text-align: left">{{quoteDetailJson.selfPayItemNames}}</label>
+                        </div>
+                    {{/if}}
                     </div>
                 </div>
             </div>
@@ -58,7 +72,7 @@
                         </div>
                         
                         <div class="col-sm-2 viewQuoteInformation">
-                        <label class="col-sm-5 control-label no-padding-right">客户来源:</label>
+                        <label class="col-sm-5 control-label no-padding-right">客户:</label>
                             <label class="control-label" name="days" value="">{{quoteDetailJson.partnerAgency.travelAgencyName}}</label>
                         </div>
                         
@@ -89,23 +103,24 @@
         <div class="form-group T-isChooseService">
             <div style="width: 500px;margin-left: 13px;">
                 <label style="padding-right: 50px;">
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeSelfpay"{{if quoteDetailJson.isContainGuideFee==1}}checked="checked"{{/if}}>
+                    <span class="lbl">
+                        含导服费
+                    </span>
+                </label>
+                <label style="padding-right: 50px;">
                     <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="childNeedBed" {{if quoteDetailJson.isChildNeedRoom==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						小孩占床
 					</span>
                 </label>
-                <label style="padding-right: 50px;">
-                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeSelfpay"{{if quoteDetailJson.isContainGuideFee==1}}checked="checked"{{/if}}>
+                <label>
+                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeGuideFee"{{if quoteDetailJson.isContainSelfPay==1}}checked="checked"{{/if}}>
                     <span class="lbl">
 						包含自费
 					</span>
                 </label>
-                <label>
-                    <input  type="checkbox" disabled="true" class="ace T-changeQuote" value="1" name="includeGuideFee"{{if quoteDetailJson.isContainSelfPay==1}}checked="checked"{{/if}}>
-                    <span class="lbl">
-						含导服费
-					</span>
-                </label>
+                <label>按床位计算单房差，默认2人/间房（不论房型）</label>
             </div>
         </div>
         <div class="col-xs-12">
@@ -149,7 +164,7 @@
         	</p>
         	</div>
         </div>
-	  <div class="col-xs-12" style="border: 1px solid #DDD;line-height:30px;margin: auto;padding-top: 4px;height:auto;margin: 20px 0px 20px;">备注：</div>
+	  <div class="col-xs-12" style="border: 1px solid #DDD;line-height:30px;margin: auto;padding-top: 4px;height:auto;margin: 20px 0px 20px;">备注：{{quoteDetailJson.remark}}</div>
     </form>
 
     <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
@@ -176,18 +191,17 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="220" class="th-border">导服费(成本价)</th>
-                                                        <th class="th-border">市场价</th>
+                                                        <th width="220" class="th-border">市场价</th>
                                                         <th class="th-border">备注</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        {{if guideArrange != null}}
-                                                        <td>{{guideArrange.price}}</td>
-                                                        <td>212</td>
-                                                        <td>{{guideArrange.remark}}</td>
+                                                        {{if guideQuote != null}}
+                                                        <td>{{guideQuote.price}}</td>
+                                                        <td>{{guideQuote.quotePrice}}</td>
+                                                        <td>{{guideQuote.remark}}</td>
                                                         {{else}}
-                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         {{/if}}
@@ -212,21 +226,21 @@
                                                     <tr>
                                                         <th class="th-border">保险公司</th>
                                                         <th class="th-border">险种</th>
-                                                        <th class="th-border">市场价</th>
                                                         <th class="th-border">成本价</th>
+                                                        <th class="th-border">市场价</th>
                                                         <th class="th-border">备注</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    {{each insuranceQuote as rs}}
                                                     <tr>
-                                                        {{if insuranceArrange != null}}
-                                                        <td>{{insuranceArrange.insurance.name}}</td>
-                                                        <td>{{insuranceArrange.type}}</td>
-                                                        <td>{{insuranceArrange.quotePrice}}</td>
-                                                        <td>{{insuranceArrange.price}}</td>
-                                                        <td>{{insuranceArrange.remark}}</td>
-                                                        {{/if}}
+                                                        <td>{{rs.insurance.name}}</td>
+                                                        <td>{{if !!rs.insuranceItem}}{{rs.insuranceItem.name}}{{/if}}</td>
+                                                        <td>{{rs.price}}</td>
+                                                        <td>{{rs.quotePrice}}</td>
+                                                        <td>{{rs.remark}}</td>
                                                     </tr>
+                                                    {{/each}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -256,27 +270,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    {{each busCompanyQuote as rs}}
                                                     <tr>
-                                                        {{if busCompanyArrange != null}}
-                                                        <td>{{busCompanyArrange.bus.seatCount}}</td>
-                                                        <td>{{busCompanyArrange.bus.brand}}</td>
-                                                        <td>{{busCompanyArrange.busCompany.companyName}}</td>
-                                                        <td>{{busCompanyArrange.busCompany.managerName}}</td>
-                                                        <td>{{busCompanyArrange.busCompany.mobileNumber}}</td>
-                                                        <td>{{busCompanyArrange.price}}</td>
-                                                        <td>{{busCompanyArrange.quotePrice}}</td>
-                                                        <td>{{busCompanyArrange.remark}}</td>
-                                                        {{else}}
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        {{/if}}
+                                                        <td>{{rs.needSeatCount}}</td>
+                                                        <td>{{rs.brand}}</td>
+                                                        <td>{{rs.busCompany.companyName}}</td>
+                                                        <td>{{rs.busCompany.managerName}}</td>
+                                                        <td>{{rs.busCompany.mobileNumber}}</td>
+                                                        <td>{{rs.price}}</td>
+                                                        <td>{{rs.quotePrice}}</td>
+                                                        <td>{{rs.remark}}</td>
                                                     </tr>
+                                                    {{/each}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -316,7 +321,7 @@
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList">
                                             <div class="ui-sortable-handle">
                                                 <h5 class="">
-														<label class="title-size">行程标题：{{viewQuoteDaysList.lineProductDay.title}}</label>
+														<label class="title-size">简要行程：{{viewQuoteDaysList.lineProductDay.title}}</label>
 													</h5>
                                                 <div id="timeline-1">
                                                     <div class="row">
@@ -324,7 +329,7 @@
                                                             <div class="timeline-container T-timeline-container">
                                                                 <div class="timeline-items T-timeline-detail-container">
                                                                     <!-- /.餐饮列表 -->
-                                                                    {{each viewQuoteDaysList.restaurantArrange as restaurantList}}
+                                                                    {{each viewQuoteDaysList.restaurantQuote as restaurantList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-RestaurantList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -339,8 +344,8 @@
                                                                                                 <th class="th-border">餐厅名称</th>
                                                                                                 <th class="th-border">餐厅电话</th>
                                                                                                 <th class="th-border">用餐类型</th>
-                                                                                                <th class="th-border">市场价<span style="font-size:12px;">(元/人)</span></th>
                                                                                                 <th class="th-border">成本价<span style="font-size:12px;">(元/人)</span></th>
+                                                                                                <th class="th-border">市场价<span style="font-size:12px;">(元/人)</span></th>
                                                                                                 <th class="th-border">菜单</th>
                                                                                                 <th class="th-border">备注</th>
                                                                                             </tr>
@@ -349,10 +354,10 @@
                                                                                             <tr>
                                                                                                 <td>{{restaurantList.restaurant.name}}</td>
                                                                                                 <td>{{restaurantList.restaurant.mobileNumber}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.type}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.quotePrice}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.price}}</td>
-                                                                                                <td>{{restaurantList.restaurantStandard.menuList}}</td>
+                                                                                                <td>{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.type}}{{/if}}</td>
+                                                                                                <td>{{restaurantList.price}}</td>
+                                                                                                <td>{{restaurantList.quotePrice}}</td>
+                                                                                                <td>{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}</td>
                                                                                                 <td>{{restaurantList.remark}}</td>
                                                                                             </tr>
                                                                                         </tbody>
@@ -363,7 +368,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.酒店 -->
-                                                                    {{each viewQuoteDaysList.hotelArrange as hotelList}}
+                                                                    {{if viewQuoteDaysList.hotelQuote.length > 0}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -378,39 +383,39 @@
                                                                                                 <th class="th-border">酒店星级</th>
                                                                                                 <th class="th-border">酒店名称</th>
                                                                                                 <th class="th-border">房型</th>
-                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">成本价</th>
-                                                                                                <th class="th-border">数量</th>
-                                                                                                <th class="th-border">早餐</th>
+                                                                                                <th class="th-border">市场价</th>
+                                                                                                <th class="th-border">含餐</th>
                                                                                                 <th class="th-border">电话</th>
                                                                                                 <th class="th-border">备注</th>
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
+                                                                                            {{each viewQuoteDaysList.hotelQuote as hotelList}}
                                                                                             <tr>
                                                                                                 <td>
                                                                                                     {{if hotelList.hotel.level == 1}} 三星以下 {{else if hotelList.hotel.level == 2}} 三星 {{else if hotelList.hotel.level == 3}} 准四星 {{else if hotelList.hotel.level == 4}} 四星 {{else if hotelList.hotel.level == 5}} 准五星 {{else if hotelList.hotel.level == 6}} 五星 {{else}} 五星以上 {{/if}}
                                                                                                 </td>
                                                                                                 <td>{{hotelList.hotel.name}}</td>
                                                                                                 <td>{{hotelList.hotelRoom.type}}</td>
-                                                                                                <td>{{hotelList.quotePrice}}</td>
                                                                                                 <td>{{hotelList.price}}</td>
-                                                                                                <td>{{hotelList.memberCount}}</td>
+                                                                                                <td>{{hotelList.quotePrice}}</td>
                                                                                                 <td>
-                                                                                                    {{if hotelList.hotelRoom.containBreakfast==1}}含早餐{{/if}} {{if hotelList.hotelRoom.containLunch==1}}含午餐{{/if}} {{if hotelList.hotelRoom.containDinner==1}}含晚餐{{/if}}
+                                                                                                    {{if hotelList.hotelRoom.containBreakfast==1}}含早餐、{{/if}}{{if hotelList.hotelRoom.containLunch==1}}含午餐、{{/if}}{{if hotelList.hotelRoom.containDinner==1}}含晚餐、{{/if}}
                                                                                                 </td>
                                                                                                 <td>{{hotelList.hotel.mobileNumber}}</td>
                                                                                                 <td>{{hotelList.remark}}</td>
                                                                                             </tr>
+                                                                                            {{/each}}
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    {{/each}}
+                                                                    {{/if}}
                                                                     <!-- /.景区 -->
-                                                                    {{each viewQuoteDaysList.scenicArrange as scenicList}}
+                                                                    {{each viewQuoteDaysList.scenicQuote as scenicList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -424,8 +429,8 @@
                                                                                             <tr>
                                                                                                 <th class="th-border">景区名称</th>
                                                                                                 <th class="th-border">收费项目</th>
-                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">成本价</th>
+                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">联系电话</th>
                                                                                                 <th class="th-border">备注</th>
                                                                                             </tr>
@@ -434,8 +439,8 @@
                                                                                             <tr>
                                                                                                 <td>{{scenicList.scenic.name}}</td>
                                                                                                 <td>{{scenicList.scenicItem.name}}</td>
-                                                                                                <td>{{scenicList.quotePrice}}</td>
                                                                                                 <td>{{scenicList.price}}</td>
+                                                                                                <td>{{scenicList.quotePrice}}</td>
                                                                                                 <td>{{scenicList.scenic.mobileNumber}}</td>
                                                                                                 <td>{{scenicList.remark}}</td>
                                                                                             </tr>
@@ -447,7 +452,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.购物 -->
-                                                                    {{each viewQuoteDaysList.shopArrange as shopList}}
+                                                                    {{each viewQuoteDaysList.shopQuote as shopList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceShoppingList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -484,7 +489,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.自费 -->
-                                                                    {{each viewQuoteDaysList.selfPayArrange as selfPayList}}
+                                                                    {{each viewQuoteDaysList.selfPayQuote as selfPayList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceSelfPayList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -499,8 +504,8 @@
                                                                                                 <th class="th-border">公司名称</th>
                                                                                                 <th class="th-border">项目名称</th>
                                                                                                 <th class="th-border">联系电话</th>
-                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">成本价</th>
+                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">负责人</th>
                                                                                                 <th class="th-border">备注</th>
                                                                                             </tr>
@@ -511,8 +516,8 @@
                                                                                                 <td>{{selfPayList.selfPayItem.name}}</td>
                                                                                                 <td>{{selfPayList.selfPay.mobileNumber}}</td>
                                                                                                     
-                                                                                                <td>{{selfPayList.quotePrice}}</td>
                                                                                                 <td>{{selfPayList.price}}</td>
+                                                                                                <td>{{selfPayList.quotePrice}}</td>
                                                                                                 <td>{{selfPayList.selfPay.managerName}}</td>
                                                                                                 <td>{{selfPayList.remark}}</td>
                                                                                             </tr>
@@ -524,7 +529,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.交通 -->
-                                                                    {{each viewQuoteDaysList.ticketArrange as ticketList}}
+                                                                    {{each viewQuoteDaysList.ticketQuote as ticketList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceTicketList ui-sortable-handle" data-entity-index="">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -538,8 +543,8 @@
                                                                                             <tr>
                                                                                                 <th class="th-border">票务公司名称</th>
                                                                                                 <th class="th-border">类型</th>
-                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">成本价</th>
+                                                                                                <th class="th-border">市场价</th>
                                                                                                 <th class="th-border">联系人</th>
                                                                                                 <th class="th-border">联系电话</th>
                                                                                                 <th class="th-border">公司电话</th>
@@ -552,8 +557,8 @@
                                                                                                 <td>
                                                                                                     {{if ticketList.type == 1 }}机票 {{ else if ticketList.type == 2}} 汽车票 {{ else if ticketList.type == 3 }} 火车票 {{ else if ticketList.type == 4}} 轮船票 {{ /if }}
                                                                                                 </td>
-                                                                                                <td>{{ticketList.quotePrice}}</td>
                                                                                                 <td>{{ticketList.price}}</td>
+                                                                                                <td>{{ticketList.quotePrice}}</td>
                                                                                                 <td>王二</td>
                                                                                                 <td>1323234342</td>
                                                                                                 <td>0280987678</td>
@@ -567,7 +572,7 @@
                                                                     </div>
                                                                     {{/each}}
                                                                     <!-- /.其它 -->
-                                                                    {{each viewQuoteDaysList.otherArrange as otherList}}
+                                                                    {{each viewQuoteDaysList.otherQuote as otherList}}
                                                                     <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
                                                                         <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                             <i class="ace-icon fa fa-circle"></i>
@@ -593,8 +598,8 @@
                                                                                                 <td>{{otherList.managerName}}</td>
                                                                                                 <td>{{otherList.mobileNumber}}</td>
                                                                                                 <td>{{otherList.price}}</td>
-                                                                                                <td>324</td>
-                                                                                                <td>{{otherList.remark}}" /></td>
+                                                                                                <td>{{otherList.quotePrice}}</td>
+                                                                                                <td>{{otherList.remark}}</td>
                                                                                             </tr>
                                                                                         </tbody>
                                                                                     </table>

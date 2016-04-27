@@ -1,81 +1,67 @@
 <div class="search-tripPlanContainer">
-	<div class="row form-horizontal T-search-area search-area" style="padding-left:5px; ">
-
-
-        <label class="pull-left text-right control-label no-padding-right">开始日期:</label>
-		<div class="col-xs-1">
-			<input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startTime}}" />
-		</div>
-	
-        <label class="pull-left text-right control-label no-padding-right">结束日期:</label>
-		<div class="col-xs-1">
-			<input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />
-		</div>
-
-        <label class="pull-left text-right control-label no-padding-right">客户:</label>
+    <div class="row form-horizontal T-search-area search-area" style="padding-left:5px; ">
+        <label class="pull-left text-right control-label no-padding-right">开始日期</label>
+        <div class="col-xs-1">
+            <input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startTime}}" />
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">结束日期</label>
+        <div class="col-xs-1">
+            <input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">客户</label>
         <div class="col-xs-2">
-			<input type="text" name="customerName" class="col-xs-12 T-customerVo-linPro" placeholder="客户" value="{{searchParam.customerName}}" />
-			<input type="hidden" name="customerId" value="{{searchParam.customerId}}" />
-		</div>
-
-
+            <input type="text" name="customerName" class="col-xs-12 T-customerVo-linPro" placeholder="客户" value="{{searchParam.customerName}}" />
+            <input type="hidden" name="customerId" value="{{searchParam.customerId}}" />
+        </div>
         <div class="col-xs-2">
-			<button class=" btn-sm  T-saleProduct-search search-btn">
-				<i class="ace-icon fa fa-search"></i> 搜索
-			</button>
-		</div>
-	</div>
-
-	<div class="row T-saleProductPager-list">	
-		<div class="form-horizontal col-xs-12">
-	        <div class="col-xs-6 ">
-				<table class="table table-striped table-bordered table-hover  table-fixed" width="120%">
-					<colgroup>
-		            	<col style="width:10%;"></col>
-		            	<col style="width:10%;"></col>
-		            </colgroup>
-					<thead>
-						<tr class="bg-blur">
-							<th width="35%">客户</th>
-							<th width="35%">所在地区</th>
-							<th width="15%">总客量</th>
-							<th width="15%">操作</th>
-						</tr>
-					</thead>
-					<tbody class="T-customVo-list">
-					{{each resultList as rs}}
-						<tr>
-							<td>{{rs.name}}</td>
-							<td>{{rs.district}}</td>   
-							<td>{{rs.sumMember}}</td>
-							<td  data-value={{rs.id}} class="T-customerVo-Detail">
-							    <div class="hidden-sm hidden-xs btn-group"> <a data-entiy-id="50" class="cursor btn-partnerAgency-view"> 查看 </a>
-							</td>
-						</tr>	
-					{{/each}}
-					</tbody>
-				</table>
-
-			  <!--分页条数-->
-				<div class="row pageMode">
-					<div class="col-xs-4">
-						<small>共计{{searchParam.totalCount}}条记录</small>
-					</div>
-					<div style="width:320px; float:right;">
-						<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-						</div>  
-					</div>
-				</div>
-			   <!--分页条数-->
-			</div>
-
-
-			<div class="col-xs-6 pull-left  T-customerDetail-list">
-
-			</div>
-	
-
-	
-
-	<div>
+            <button class=" btn-sm  T-saleProduct-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索
+            </button>
+        </div>
+    </div>
+    <div class="T-saleProductPager-list">
+        <div class="form-horizontal row">
+            <div class="col-xs-7">
+                <table class="table table-striped table-bordered table-hover  table-fixed" width="120%">
+                    <colgroup>
+                        <col style="width:10%;"></col>
+                        <col style="width:10%;"></col>
+                    </colgroup>
+                    <thead>
+                        <tr class="bg-blur">
+                            <th width="35%">客户</th>
+                            <th width="35%">所在地区</th>
+                            <th width="15%">总客量</th>
+                            <th width="15%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="T-customVo-list">
+                        {{each resultList as rs}}
+                        <tr>
+                            <td>{{rs.name}}</td>
+                            <td>{{rs.district}}</td>
+                            <td>{{rs.sumMember}}</td>
+                            <td data-value={{rs.id}} class="T-customerVo-Detail">
+                                <div class="btn-group"> <a data-entiy-id="50" class="cursor btn-partnerAgency-view"> 查看 </a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <!--分页条数-->
+                <div class="row pageMode">
+                    <div class="col-xs-4">
+                        <small>共计{{searchParam.totalCount}}条记录</small>
+                    </div>
+                    <div style="width:320px; float:right;">
+                        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+                        </div>
+                    </div>
+                </div>
+                <!--分页条数-->
+            </div>
+            <div class="col-xs-5 T-customerDetail-list">
+            </div>
+        <div>
+    </div>
 </div>

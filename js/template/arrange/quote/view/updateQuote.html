@@ -7,31 +7,41 @@
 				</h5>
 			<div class="pull-right line-bluer line-separated"></div>
 			<div style="clear: both"></div>
-			<div class="widget-body" style="border: 1px solid #DDD;line-height:30px;width: 98%;margin: auto;padding-top: 6px;height:45px;">
+			<div class="widget-body" style="border: 1px solid #DDD;line-height:24px;width: 98%;margin: auto;padding-top: 12px;">
                 <div class="widget-main">
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right quoteInprodactName">线路产品名称:</label>
                         <div class="col-sm-2">
-                            <label class="control-label T-lineProductName"style="position: absolute;">{{quoteDetailJson.lineProduct.name}}</label>
-                            <input type="hidden" value="{{quoteDetailJson.lineProduct.id}}" name="lineProductId">
-							<input type="hidden" value="{{if isCopy != '1'}}{{quoteDetailJson.id}}{{/if}}" name="quoteId">
+                            <label class="control-label T-lineProductName"style="text-align: left">{{quote.lineProduct.name}}</label>
+                            <input type="hidden" value="{{quote.lineProduct.id}}" name="lineProductId">
+							<input type="hidden" value="{{if isCopy != '1'}}{{quote.id}}{{/if}}" name="quoteId">
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">售卖标注:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductStatus" data-entity-status="{{quoteDetailJson.lineProduct.status}}">{{if quoteDetailJson.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
+                            <label class="control-label T-lineProductStatus" data-entity-status="{{quote.lineProduct.status}}">{{if quote.lineProduct.status == 1}}售卖中{{else}}未售卖{{/if}}</label>
                         </div>
                     
                         <label class="col-sm-1 control-label no-padding-right">线路天数:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductDays" name="days" data-entity-days="{{quoteDetailJson.lineProduct.days}}" value="">{{quoteDetailJson.lineProduct.days}}天</label>
+                            <label class="control-label T-lineProductDays F-float F-count" name="days" data-entity-days="{{quote.lineProduct.days}}" value="">{{quote.lineProduct.days}}天</label>
                         </div>
                         <label class="col-sm-1 control-label no-padding-right">类别:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductType">{{quoteDetailJson.lineProduct.type}}</label>
+                            <label class="control-label T-lineProductType">{{quote.lineProduct.type}}</label>
                         </div>
-                        <label class="col-sm-1 control-label no-padding-right">应用范围:</label>
+                        <label class="col-sm-1 control-label no-padding-right">针对客源:</label>
                         <div class="col-sm-1">
-                            <label class="control-label T-lineProductCusType"> {{if quoteDetailJson.lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
+                            <label class="control-label T-lineProductCusType"> {{if quote.lineProduct.customerType == 1}}团体{{else}}散客{{/if}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">购物商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-shopMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.shopNames}}" name="" maxlength="80" data-propover='{{quote.shopIds}}'>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">自费商家:</label>
+                        <div class="col-sm-2">
+                            <input class="T-multiselect T-selfPayMultiselect col-sm-12" readonly="readonly" type="text" value="{{quote.selfPayItemNames}}" name="" maxlength="80" data-propover='{{quote.selfPayItemIds}}'>
                         </div>
                     </div>
                 </div>
@@ -51,61 +61,61 @@
 					<div class="form-group">
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>出游日期：</label>
-							<input type="text" name="startTime" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="col-sm-4 datepicker {{if isCopy == '1'}}T-startTime T-datePicker{{/if}}" maxlength="20"value="{{quoteDetailJson.startTime | dateFormat: 'yyyy-MM-dd'}}">
+							<input type="text" name="startTime" {{if isCopy != '1'}}readonly="readonly"{{/if}} class="col-sm-4 datepicker {{if isCopy == '1'}}T-startTime T-datePicker{{/if}}" maxlength="20"value="{{quote.startTime | dateFormat: 'yyyy-MM-dd'}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>人数：</label>
-							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.adultCount}}">
+							<input type="text" name="adultCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quote.adultCount}}">
 							<label class="control-label">大人</label> 
-							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quoteDetailJson.childCount}}">
+							<input type="text" name="childCount" class="T-changeQuote" maxlength="5" style="width:50px;" value="{{quote.childCount}}">
 							<label class="control-label">小孩</label>
 						</div>
 						
 						<div class="col-sm-1 addQuoteInformation">
 						<label class="col-sm-8 control-label no-padding-right">单房差数：</label>
-							<input type="text" name="singleRoomCount" class="col-sm-4" maxlength="10" value="{{quoteDetailJson.singleRoomCount}}">
+							<input type="text" name="singleRoomCount" class="col-sm-4 F-float F-count" maxlength="10" value="{{quote.singleRoomCount}}">
 						</div>
 					
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-3 control-label no-padding-right"><span class="necessary">*</span>客户：</label>
-							<input type="text" name="partnerAgencyName" class="col-sm-7 T-choosePartnerAgency" value="{{quoteDetailJson.partnerAgency.travelAgencyName}}">
-							<input type="hidden" name="partnerAgencyId" value="{{quoteDetailJson.partnerAgency.id}}" >
+							<input type="text" name="partnerAgencyName" class="col-sm-7 T-choosePartnerAgency" value="{{quote.partnerAgency.travelAgencyName}}">
+							<input type="hidden" name="partnerAgencyId" value="{{quote.partnerAgency.id}}" >
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系人：</label>
-							<input type="text" name="managerName" class="col-sm-4 T-chooseManager" value="{{quoteDetailJson.partnerAgencyContact.contactRealname}}">
-							<input type="hidden" name="managerId" value="{{quoteDetailJson.partnerAgencyContact.id}}">
+							<input type="text" name="managerName" class="col-sm-4 T-chooseManager" value="{{quote.partnerAgencyContact.contactRealname}}">
+							<input type="hidden" name="managerId" value="{{quote.partnerAgencyContact.id}}">
 						</div>
 						
 						<div class="col-sm-2 addQuoteInformation">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>联系电话：</label>
-							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5" value="{{quoteDetailJson.partnerAgencyContact.contactMobileNumber}}">
+							<input type="text" name="mobileNumber" readonly="readonly" class="col-sm-5" value="{{quote.partnerAgencyContact.contactMobileNumber}}">
 						</div>
 
 						<div class="col-sm-2 addQuoteInformation" style="padding-top: 10px;">
 						<label class="col-sm-4 control-label no-padding-right"><span class="necessary">*</span>报价单号：</label>
-							<input type="text" name="quoteNumber" readonly="readonly" class="col-sm-8" value="{{if isCopy != '1'}}{{quoteDetailJson.quoteNumber}}{{/if}}" placeholder="系统自动生成">
+							<input type="text" name="quoteNumber" readonly="readonly" class="col-sm-8" value="{{if isCopy != '1'}}{{quote.quoteNumber}}{{/if}}" placeholder="系统自动生成">
 						</div>
 					</div>
 					<div class="form-group T-isChooseService">
 						<div style="margin-left: 25px">
 							<label style="padding-right: 50px;">
-								<input type="checkbox" class="ace T-changeQuote" {{if quoteDetailJson.isContainGuideFee == 1}}checked="checked"{{/if}} value="1" name="includeGuideFee">
+								<input type="checkbox" class="ace T-changeQuote" {{if quote.isContainGuideFee == 1}}checked="checked"{{/if}} value="1" name="includeGuideFee">
 								<span class="lbl">
 									含导服费
 								</span>
 							</label>
 							<label style="padding-right: 50px;">
-								<input type="checkbox" class="ace T-changeQuote" {{if quoteDetailJson.isChildNeedRoom == 1}}checked="checked"{{/if}} value="1" name="childNeedBed">
+								<input type="checkbox" class="ace T-changeQuote" {{if quote.isChildNeedRoom == 1}}checked="checked"{{/if}} value="1" name="childNeedBed">
 								<span class="lbl">
 									小孩占床
 								</span>
 							</label>
 							<label style="padding-right: 50px;">
-								<input type="checkbox" class="ace T-changeQuote" {{if quoteDetailJson.isContainSelfPay == 1}}checked="checked"{{/if}} value="1" name="includeSelfpay">
+								<input type="checkbox" class="ace T-changeQuote" {{if quote.isContainSelfPay == 1}}checked="checked"{{/if}} value="1" name="includeSelfpay">
 								<span class="lbl">
 									包含自费
 								</span>
@@ -122,45 +132,45 @@
 			        </div>
 		        	<div class="col-xs-2 viewQuoteFdiv">
 		        	<p style="height: 30px;margin-top: 10px">
-		        	<span>大人成本价</span><input readonly="readonly" class="T-adultCost" type="text" style="width:80px;margin-left:9px;" value="{{quoteDetailJson.adultCostPrice}}"/>
+		        	<span>大人成本价</span><input readonly="readonly" class="T-adultCost F-float F-money" type="text" style="width:80px;margin-left:9px;" value="{{quote.adultCostPrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>大人报价</span> <input readonly="readonly" class="T-adultQuote" type="text" style="width:80px;margin-left:18px;" value="{{quoteDetailJson.adultQuotePrice}}" />
+		        	<p style="height: 30px"><span>大人报价</span> <input readonly="readonly " class="T-adultQuote F-float F-money" type="text" style="width:80px;margin-left:18px;" value="{{quote.adultQuotePrice}}" />
 		        	</p>
-		        	<p style="height: 30px"><span>大人毛利预估</span><span class="T-adultGrossProfit" style="width:80px;margin-left:9px;">{{quoteDetailJson.adultQuotePrice - quoteDetailJson.adultCostPrice | toFixed}}</span>
+		        	<p style="height: 30px"><span>大人毛利预估</span><span class="T-adultGrossProfit F-float F-money" style="width:80px;margin-left:9px;">{{quote.adultQuotePrice - quote.adultCostPrice | toFixed}}</span>
 		        	</p>
 		        	<p></p>
 		        	<p></p>
 		        	</div> 
 
 		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input class="T-childCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quoteDetailJson.childCostPrice}}"/>
+		        	<p style="height: 30px;margin-top: 10px"><span>小孩成本价</span> <input class="T-childCost F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.childCostPrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>小孩报价</span> <input class="T-childQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quoteDetailJson.childQuotePrice}}"/>
+		        	<p style="height: 30px"><span>小孩报价</span> <input class="T-childQuote F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.childQuotePrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;" class="T-childGrossProfit">{{quoteDetailJson.childQuotePrice - quoteDetailJson.childCostPrice | toFixed}}</span>
-		        	</p>
-		        	</div>
-		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input class="T-oneRoomCost" readonly="readonly" type="text"style="width:80px;margin-left:9px;" value="{{quoteDetailJson.singleRoomCostPrice}}" />
-		        	</p>
-		        	<p style="height: 30px"><span>单房差报价</span> <input class="T-oneRoomQuote" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quoteDetailJson.singleRoomQuotePrice}}"/>
-		        	</p>
-		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  class="T-oneRoomGrossProfit" style="width:80px;margin-left:9px;">{{quoteDetailJson.singleRoomQuotePrice - quoteDetailJson.singleRoomCostPrice | toFixed}}</span>
+		        	<p style="height: 30px"><span>小孩毛利预估</span><span  style="width:80px;margin-left:9px;" class="T-childGrossProfit F-float F-money">{{quote.childQuotePrice - quote.childCostPrice | toFixed}}</span>
 		        	</p>
 		        	</div>
 		        	<div class="col-xs-2 addQuoteDiv">
-		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input class="T-allCost" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quoteDetailJson.sumCostFee}}" />
+		        	<p style="height: 30px;margin-top: 10px"><span>单房差成本价</span> <input class="T-oneRoomCost F-float F-money" readonly="readonly" type="text"style="width:80px;margin-left:9px;" value="{{quote.singleRoomCostPrice}}" />
 		        	</p>
-		        	<p style="height: 30px"><span>总报价</span> <input type="text" class="T-allQuote" style="width:80px;margin-left:22px;"value="{{quoteDetailJson.sumQuoteFee}}"/>
+		        	<p style="height: 30px"><span>单房差报价</span> <input class="T-oneRoomQuote F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:22px;" value="{{quote.singleRoomQuotePrice}}"/>
 		        	</p>
-		        	<p style="height: 30px"><span>毛利预估</span> <span class="T-allGrossProfit" style="width:80px;margin-left:9px;">{{quoteDetailJson.sumQuoteFee - quoteDetailJson.sumCostFee | toFixed}}</span>
+		        	<p style="height: 30px"><span>单房差毛利预估</span> <span  class="T-oneRoomGrossProfit F-float F-money" style="width:80px;margin-left:9px;">{{quote.singleRoomQuotePrice - quote.singleRoomCostPrice | toFixed}}</span>
+		        	</p>
+		        	</div>
+		        	<div class="col-xs-2 addQuoteDiv">
+		        	<p style="height: 30px;margin-top: 10px"><span>总成本价</span> <input class="T-allCost F-float F-money" readonly="readonly" type="text" style="width:80px;margin-left:9px;" value="{{quote.sumCostFee}}" />
+		        	</p>
+		        	<p style="height: 30px"><span>总报价</span> <input type="text" class="T-allQuote F-float F-money" style="width:80px;margin-left:22px;"value="{{quote.sumQuoteFee}}"/>
+		        	</p>
+		        	<p style="height: 30px"><span>毛利预估</span> <span class="T-allGrossProfit F-float F-money" style="width:80px;margin-left:9px;">{{quote.sumQuoteFee - quote.sumCostFee | toFixed}}</span>
 		        	</p>
 		        	</div>
         	</div>
 				<div class="form-group">
 				<div class="col-xs-12" style="margin-top: 14px;">
 				<label class="col-sm-1 control-label no-padding-right addQuoteRemerk" >备注:</label>
-				<textarea class="col-xs-10" name="" rows="1" id="" style="margin-left: 8px;">{{quoteDetailJson.remark}}</textarea>
+				<textarea class="col-xs-11" name="quoteRemark" rows="1" id="" style="margin-left: 8px;">{{quote.remark}}</textarea>
 				</div>
 				</div>
 	</form>
@@ -187,22 +197,27 @@
 												<table class="table table-striped table-bordered table-hover T-arrangeGuideList">
 													<thead>
 														<tr>
-															<th width="220" class="th-border">导服费</th>
+															<th width="220" class="th-border">导服费（成本价）</th>
+															<th width="220" class="th-border">市场价</th>
 															<th class="th-border">备注</th>
 														</tr>
 													</thead>  
 													<tbody>
-														{{if guideArrange != null}}
-														<tr data-entity-id="{{guideArrange.id}}">
+														{{if guideQuote != null}}
+														<tr data-entity-id="{{guideQuote.id}}">
 															<td>
-																<input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="{{guideArrange.price}}" />
-																<input type="hidden" name="arrangeId" value="{{guideArrange.id}}">
+																<input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
+																<input type="hidden" name="arrangeId" value="{{guideQuote.id}}">
 															</td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideArrange.remark}}" /></td>
+															<td>
+																<input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value="{{guideQuote.quotePrice}}" />
+															</td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideQuote.remark}}" /></td>
 														</tr>
 														{{else}}
 														<tr data-entity-id="">
-															<td><input class="col-xs-12 T-changeQuote" name="guideFee" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value="" /></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
 														</tr>
 														{{/if}}
@@ -214,10 +229,16 @@
 								</div>
 								<div class="clearfix"></div>
 								<div class="col-xs-12 col-sm-12 widget-container-col">
-									<div class=" ui-sortable-handle">
+									<div class="ui-sortable-handle T-baseArrange">
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">保险安排</label>
+                                                <a href="javascript:void(0)" class="T-add T-addInsurance">
+                                                    <button class="btn btn-sm btn-success" style="margin-left: 20px">
+                                                        <i class="ace-icon fa fa-plus"></i>
+                                                        新增
+                                                    </button>
+                                                </a>
 											</h5>
 										<div class="widget-body">
 											<div class="widget-main">
@@ -229,27 +250,42 @@
 															<th class="th-border">成本价</th>
 															<th class="th-border">市场价</th>
 															<th class="th-border">备注</th>
+															<th class="th-border">操作</th>
 														</tr>
 													</thead>
-													<tbody>{{if insuranceArrange != null}}
-														<tr>
+													<tbody class="T-insuranceForm">
+														{{if insuranceQuote.length > 0}}
+														{{each insuranceQuote as rs}}
+														<tr data-entity-id="{{rs.id}}">
 															<td>
-																<input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{insuranceArrange.insurance.name}}" />
-																<input class="col-xs-12" type="hidden" name="insuranceId" value="{{insuranceArrange.insurance.id}}" />
-																<input type="hidden" name="arrangeId" value="{{insuranceArrange.id}}">
+																<input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="{{rs.insurance.name}}" />
+																<input class="col-xs-12" type="hidden" name="insuranceId" value="{{rs.insurance.id}}" />
+																<input type="hidden" name="arrangeId" value="{{rs.id}}">
 															</td>
-															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{insuranceArrange.type}}" /><input type="hidden" name="insuranceItemId" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="{{insuranceArrange.price}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value="{{insuranceArrange.quotePrice}}"></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{insuranceArrange.remark}}" /></td>
-														</tr>{{else}}
-														<tr>
+															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="{{if !!rs.insuranceItem}}{{rs.insuranceItem.name}}{{/if}}" /><input type="hidden" name="insuranceItemId" value="{{rs.insuranceItem.id}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="price" type="text" maxlength="6" value="{{rs.price}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" maxlength="6" type="text" value="{{rs.quotePrice}}"></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
+	                                                        <td>
+	                                                            <a data-entity-id="{{rs.id}}" data-entity-type="2" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+	                                                                删除
+	                                                            </a>
+	                                                        </td>
+														</tr>
+														{{/each}}
+														{{else}}
+														<!-- <tr>
 															<td><input class="T-insurance-name col-xs-12 bind-change" name="insuranceName" type="text" value="" /><input type="hidden" name="insuranceId" value="" /></td>
 															<td><input class="T-insurance-item col-xs-12" name="type" type="text" maxlength="100" value="" /><input type="hidden" name="insuranceItemId" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="price" type="text" maxlength="6" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" maxlength="6" type="text" value=""></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="price" type="text" maxlength="6" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" maxlength="6" type="text" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
-														</tr>
+															                                                        <td>
+															                                                            <a data-entity-id="" data-entity-type="2" data-entity-name="insuranceTemplate" class="cursor T-delete T-delTr">
+															                                                                删除
+															                                                            </a>
+															                                                        </td>
+														</tr> -->
 														{{/if}}
 													</tbody>
 												</table>
@@ -259,10 +295,16 @@
 								</div>
 								<div class="clearfix"></div>
 								<div class="col-xs-12 col-sm-12 widget-container-col">
-									<div class=" ui-sortable-handle">
+									<div class="ui-sortable-handle T-baseArrange">
 											<h5 class="" style="color: #666!important;font-size: 14px!important;">
 												<i class="ace-icon fa fa-circle " style="font-size: 10px!important;"></i>
 												<label class="middle " style="font-weight: bold!important;margin-top: 5px">车队安排</label>
+	                                            <a href="javascript:void(0)" class="T-add T-addBusCompany">
+	                                                <button class="btn btn-sm btn-success" style="margin-left: 20px">
+	                                                    <i class="ace-icon fa fa-plus"></i>
+	                                                    新增
+	                                                </button>
+	                                            </a>
 												<button class="btn btn-sm btn-success T-car" style="float: right;"> <i class="ace-icon fa fa-plus"></i> 车辆询价 </button>
 											</h5>
 										<div class="widget-body">
@@ -278,34 +320,46 @@
 															<th class="th-border">座位价(成本价)</th>
 															<th class="th-border">市场价</th>
 															<th class="th-border">备注</th>
+															<th class="th-border" style="width: 6%">操作</th>
 														</tr>
 													</thead>
-													<tbody>{{if busCompanyArrange != null}}
-														<tr data-entity-id="{{busCompanyArrange.id}}">
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="{{busCompanyArrange.bus.seatCount}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
-															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{busCompanyArrange.brand}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
+													<tbody class="T-busCompanyForm">{{if busCompanyQuote.length > 0}}
+													{{each busCompanyQuote as rs}}
+														<tr data-entity-id="{{rs.id}}">
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" value="{{rs.needSeatCount}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>  
+															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="{{rs.brand}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
 															<td>
-																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{busCompanyArrange.busCompany.companyName}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
-																<input type="hidden" name="busCompanyId" value="{{busCompanyArrange.busCompany.id}}">
-																<input type="hidden" name="arrangeId" value="{{busCompanyArrange.id}}">
-																<input type="hidden" name="offerId" value="{{busCompanyArrange.offerId}}">
+																<input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="{{rs.busCompany.companyName}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
+																<input type="hidden" name="busCompanyId" value="{{rs.busCompany.id}}">
+																<input type="hidden" name="arrangeId" value="{{rs.id}}">
+																<input type="hidden" name="offerId" value="{{rs.offerId}}">
 															</td>
-															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.managerName}}" /></td>   
-															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{busCompanyArrange.busCompany.mobileNumber}}" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="{{busCompanyArrange.price}}" {{if isCopy != '1'}}{{if busCompanyArrange.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value="{{busCompanyArrange.quotePrice}}"></td>
-															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{busCompanyArrange.remark}}" /></td>
-														</tr>{{else}}
-														<tr>
-															<td><input class="col-xs-12 bind-change T-chooseSeatCount" name="needSeatCount" type="text" maxlength="2" value="" /></td>  
+															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="{{rs.busCompany.managerName}}" /></td>   
+															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="{{rs.busCompany.mobileNumber}}" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="seatcountPrice" type="text" maxlength="9" value="{{rs.price}}" {{if isCopy != '1'}}{{if rs.offerId != null}}disabled='disabled'{{/if}}{{/if}} /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value="{{rs.quotePrice}}"></td>
+															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{rs.remark}}" /></td>
+	                                                        <td>
+	                                                            <a data-entity-id="{{rs.id}}" data-entity-type="3" data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+	                                                                删除
+	                                                            </a>
+	                                                        </td>
+														</tr>{{/each}}{{else}}
+														<!-- <tr>
+															<td><input class="col-xs-12 bind-change T-chooseSeatCount F-float F-count" name="needSeatCount" type="text" maxlength="2" value="" /></td>  
 															<td><input name="brand" class="col-xs-12 bind-change T-chooseBrand" type="text" value="" /></td>
 															<td><input name="companyName" class="T-chooseBusCompany col-xs-12 bind-change" type="text" value="" /><input type="hidden" name="busCompanyId" value=""></td>
 															<td><input class="col-xs-12" name="manager" type="text" readonly="readonly" value="" /></td>   
 															<td><input class="col-xs-12" name="mobileNumber" type="text" readonly="readonly" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
-															<td><input class="col-xs-12 T-changeQuote" name="marketPrice" type="text" maxlength="9" value=""></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="seatcountPrice" type="text" maxlength="9" value="" /></td>
+															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" type="text" maxlength="9" value=""></td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="" /></td>
-														</tr>
+															                                                        <td>
+															                                                            <a data-entity-id=""  data-entity-type="3"data-entity-name="busCompanyTemplate" class="cursor T-delete T-delTr">
+															                                                                删除
+															                                                            </a>
+															                                                        </td>
+														</tr> -->
 														{{/if}}
 													</tbody>
 												</table>
@@ -346,7 +400,7 @@
                                         <div class="col-xs-12 col-sm-12 widget-container-col T-dailyArrangeList" data-entity-whichday="{{i+1}}">
                                             <div class=" ui-sortable-handle">
                                                 <h5 class="globalAdd">
-														<label class="title-size">行程标题：{{lineProductDaysList.lineProductDay.title}}</label>
+														<label class="title-size">简要行程：{{lineProductDaysList.lineProductDay.title}}</label>
 														<button class="btn btn-sm btn-success T-hotel" style="float: right;"> <i class="ace-icon fa fa-plus"></i> 酒店询价 </button>
 												</h5>
 
@@ -360,9 +414,6 @@
                                                             </button>
                                                             <button class="btn btn-app btn-inverse btn-xs T-add T-addScenic" style="background: #1fade0!important;">
                                                                 <i class="ace-icon fa fa-plus bigger-160"></i> 景区
-                                                            </button>
-                                                            <button class="btn btn-app btn-inverse btn-xs T-add T-addShop" style="background: #1fade0!important;">
-                                                                <i class="ace-icon fa fa-plus bigger-160"></i> 购物
                                                             </button>
                                                             <button class="btn btn-app btn-inverse btn-xs T-add T-addSelfPay" style="background: #1fade0!important;">
                                                                 <i class="ace-icon fa fa-plus bigger-160"></i> 自费
@@ -382,7 +433,7 @@
                                                                     <div class="timeline-container T-timeline-container">
                                                                         <div class="timeline-items T-timeline-detail-container">
                                                                             <!-- /.餐饮列表 -->
-                                                                            {{each lineProductDaysList.restaurantArrange as restaurantList}}
+                                                                            {{each lineProductDaysList.restaurantQuote as restaurantList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-RestaurantList ui-sortable-handle" data-entity-index="{{restaurantList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -419,12 +470,12 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote" value="{{restaurantList.price}}" />
-                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard.id}}{{restaurantList.restaurantStandard.id}}{{else}}{{0}}{{/if}}" />
+                                                                                                            <input type="text" name="price" class="T-choose-restaurantStandardsName col-xs-12 bind-change T-changeQuote F-float F-money" value="{{restaurantList.price}}" />
+                                                                                                            <input type="hidden" name="standardId" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.id}}{{/if}}" />
                                                                                                         </td>
-                                                                                                        <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote" maxlength="9" value="{{restaurantList.quotePrice}}"></td>
+                                                                                                        <td><input type="text" name="marketPrice" class="col-sxs-12 T-changeQuote F-float F-money" maxlength="9" value="{{restaurantList.quotePrice}}"></td>
                                                                                                         <td>
-                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{restaurantList.restaurantStandard.menuList}}" />
+                                                                                                            <input class="col-xs-12" type="text" readonly="readonly" name="menuList" value="{{if !!restaurantList.restaurantStandard}}{{restaurantList.restaurantStandard.menuList}}{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input class="col-xs-12" type="text" readonly="readonly" name="mobileNumber" value="{{restaurantList.restaurant.mobileNumber}}" />
@@ -446,8 +497,8 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.酒店 -->
-                                                                            {{each lineProductDaysList.hotelArrange as hotelList}}
-                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="{{hotelList.orderIndex}}">
+                                                                            {{if lineProductDaysList.hotelQuote.length > 0}}
+                                                                            <div class="T-timeline-item timeline-item clearfix T-resourceHotelList ui-sortable-handle" data-entity-index="{{each lineProductDaysList.hotelTemplate as hotelList index}}{{if index == 0}}{{hotelList.orderIndex}}{{/if}}{{/each}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
                                                                                     <span>酒店</span>
@@ -469,6 +520,7 @@
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
+                                                                            						{{each lineProductDaysList.hotelQuote as hotelList}}
                                                                                                     <tr>
                                                                                                         <td>{{if hotelList.offerId != null}}<input type='hidden' name='offerId' value='{{hotelList.offerId}}' />{{/if}}
                                                                                                             <select class="col-xs-12 T-choose-hotelStarLevel" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}}>
@@ -493,32 +545,33 @@
                                                                                                             <input type="hidden" name="hotelRoomId" value="{{hotelList.hotelRoom.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="contractPrice" value="{{hotelList.price}}" style="width:70px;" {{if isCopy != '1'}}{{if hotelList.offerId != null}}disabled='disabled'{{/if}}{{/if}} />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{hotelList.quotePrice}}" style="width:70px;" maxlength="9" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{hotelList.quotePrice}}" style="width:70px;" maxlength="9" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐 {{/if}}{{if hotelList.hotelRoom.containLunch==1}}-含午餐{{/if}}{{if hotelList.hotelRoom.containDinner==1}}-含晚餐{{/if}}" />
+                                                                                                            <input type="text" class="col-xs-12" readonly="readonly" name="containBreakfast" value="{{if hotelList.hotelRoom.containBreakfast==1}}含早餐、{{/if}}{{if hotelList.hotelRoom.containLunch==1}}含午餐、{{/if}}{{if hotelList.hotelRoom.containDinner==1}}含晚餐、{{/if}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="remark" value="{{hotelList.remark}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-type="8" class="cursor btn-restaurant-delete T-delete">
+                                                                                                            <a data-entity-id="{{hotelList.id}}" data-entity-type="8" data-entity-name="hotelTemplate" class="cursor btn-restaurant-delete T-delete T-delTr">
 																												删除
 																											</a>
                                                                                                         </td>
                                                                                                     </tr>
+                                                                            						{{/each}}
                                                                                                 </tbody>
                                                                                             </table>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            {{/each}}
+                                                                            {{/if}}
                                                                             <!-- /.景区 -->
-                                                                            {{each lineProductDaysList.scenicArrange as scenicList}}
+                                                                            {{each lineProductDaysList.scenicQuote as scenicList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceScenicList ui-sortable-handle" data-entity-index="{{scenicList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -551,10 +604,10 @@
                                                                                                             <input type="hidden" name="chargingId" value="{{scenicList.scenicItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{scenicList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{scenicList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{scenicList.quotePrice}}" maxlength="9" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{scenicList.quotePrice}}" maxlength="9" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{scenicList.scenic.mobileNumber}}" />
@@ -576,7 +629,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.购物 -->
-                                                                            {{each lineProductDaysList.shopArrange as shopList}}
+                                                                            {{each lineProductDaysList.shopQuote as shopList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceShoppingList ui-sortable-handle" data-entity-index="{{shopList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -609,10 +662,10 @@
                                                                                                             <input type="hidden" name="shopPolicyId" value="{{shopList.shopPolicy.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="parkingRebateMoney" value="{{shopList.shop.parkingRebateMoney || 0}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
+                                                                                                            <input type="text" class="col-xs-12 F-float F-money" name="customerRebateMoney" value="{{shopList.shop.customerRebateMoney || 0}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="mobileNumber" value="{{shopList.shop.mobileNumber}}" />
@@ -634,7 +687,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.自费 -->
-                                                                            {{each lineProductDaysList.selfPayArrange as selfPayList}}
+                                                                            {{each lineProductDaysList.selfPayQuote as selfPayList}}
                                                                             <div  class="T-timeline-item timeline-item clearfix T-resourceSelfPayList ui-sortable-handle" data-entity-index="{{selfPayList.orderIndex}}" >
                                                                                       <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                          <i class="ace-icon fa fa-circle"></i>
@@ -668,10 +721,10 @@
                                                                                                             <input type="hidden" name="selfPayItemId" value="{{selfPayList.selfPayItem.id}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" readonly="readonly" name="contractPrice" value="{{selfPayList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{selfPayList.quotePrice}}" maxlength="9" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{selfPayList.quotePrice}}" maxlength="9" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" readonly="readonly" name="managerName" value="{{selfPayList.selfPay.managerName}}" />
@@ -696,7 +749,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.交通 -->
-                                                                            {{each lineProductDaysList.ticketArrange as ticketList}}
+                                                                            {{each lineProductDaysList.ticketQuote as ticketList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceTicketList ui-sortable-handle" data-entity-index="{{ticketList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -734,10 +787,10 @@
                                                                                                             </select>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{ticketList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{ticketList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{ticketList.quotePrice}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{ticketList.quotePrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="managerName" readonly="readonly" value="{{ticketList.ticket.managerName}}" />
@@ -762,7 +815,7 @@
                                                                             </div>
                                                                             {{/each}}
                                                                             <!-- /.其它 -->
-                                                                            {{each lineProductDaysList.otherArrange as otherList}}
+                                                                            {{each lineProductDaysList.otherQuote as otherList}}
                                                                             <div class="T-timeline-item timeline-item clearfix T-resourceOtherList ui-sortable-handle" data-entity-index="{{otherList.orderIndex}}">
                                                                                 <div class="timeline-info" style="color:#1fade0;margin-left: 4px">
                                                                                     <i class="ace-icon fa fa-circle"></i>
@@ -790,10 +843,10 @@
 																											<input type="hidden" name="arrangeId" value="{{otherList.id}}">
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="price" value="{{otherList.price}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="price" value="{{otherList.price}}" />
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <input type="text" class="col-xs-12 T-changeQuote" name="marketPrice" value="{{otherList.quotePrice}}" />
+                                                                                                            <input type="text" class="col-xs-12 T-changeQuote F-float F-money" name="marketPrice" value="{{otherList.quotePrice}}" />
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <input type="text" class="col-xs-12" name="managerName" value="{{otherList.managerName}}" />
@@ -857,25 +910,25 @@
 							<div class="form-group">
 								<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
 								<div class="col-sm-8">
-                                    <textarea class="form-control" name="includeFee" class="col-sm-12">{{quoteDetailJson.includeFee}}</textarea>
+                                    <textarea class="form-control" name="includeFee" class="col-sm-12" maxLength="5000">{{quote.includeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">费用不含:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="excludeFee" class="col-sm-12">{{quoteDetailJson.excludeFee}}</textarea>
+                                    <textarea class="form-control" name="excludeFee" class="col-sm-12" maxLength="5000">{{quote.excludeFee}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="lineFeature" class="col-sm-12">{{quoteDetailJson.lineFeature}}</textarea>
+                                    <textarea class="form-control" name="lineFeature" class="col-sm-12" maxLength="5000">{{quote.lineFeature}}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                                 <div class="col-sm-8">
-                                    <textarea class="form-control" name="lineNotice" class="col-sm-12">{{quoteDetailJson.lineNotice}}</textarea>
+                                    <textarea class="form-control" name="lineNotice" class="col-sm-12" maxLength="5000">{{quote.lineNotice}}</textarea>
 								</div>   
 							</div>
 						</div>

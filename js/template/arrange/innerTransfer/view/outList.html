@@ -2,41 +2,52 @@
 	<thead>
 		<tr class="bg-blur">
 		    <th>接收部门</th>
+		    <th>出游日期</th>
 			<th>游客</th>
 			<th>联系电话</th>
 			<th>人数</th>
 			<th>应付款</th>
-			<th>已付款</th>
 			<th>转客人</th>
 			<th>转客时间</th>
 			<th>对方状态</th>
-			<th width="143">操作</th>
+			<th>操作</th>
 		</tr>
 	</thead>
 	<tbody class="T-transferOut-list">{{each resultList as list}}
 		<tr data-value="{{list.id}}">
 			<td>{{list.toBusinessGroup.name}}</td>
+			<td>{{if !!list.touristGroup}}{{list.touristGroup.startTime | dateFormat: 'yyyy-MM-dd' }}{{/if}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.name}}{{/if}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.mobileNumber}}{{/if}}</td>
-			<td>{{list.touristGroup.adultCount}}大{{list.touristGroup.childCount}}小</td>
-			<td>{{list.transNeedPayMoney}}</td>
-			<td>{{list.transPayedMoney}}</td>
-			<td>{{list.user.realName}}</td>
+			<td><span class=" F-float F-count">{{list.touristGroup.adultCount}}</span>大<span class=" F-float F-money">{{list.touristGroup.childCount}}</span>小</td>
+			<td><span class=" F-float F-money">{{list.transNeedPayMoney}}</span></td>
+            <td>{{list.user.realName}}</td>
 			<td>{{list.createTime}}</td>
-			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{else if list.status == 2}}<span style="color: red;">已拒收</span>{{/if}}</td>
 			<td>
-				<div class="hidden-sm hidden-xs btn-group">
-					<a class="cursor {{if list.status != 1}}T-TransferOut-edit{{/if}} R-right T-action" data-right="1340002" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+			{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>
+			{{else if list.status == 1}}<span style="color: green;">已确认</span>
+			{{else if list.status == 2}}<span style="color: red;">已拒收</span>
+			{{else if list.status == 4}}<span style="color: red;">已退回</span>
+			{{/if}}</td>
+			<td>
+				<div class="btn-group">
+					<a class="cursor {{if list.status != 1  && list.status != 4 && list.status!=2}}T-TransferOut-edit{{/if}} R-right T-action" data-right="1340002" {{if list.status == 1 || list.status == 2 || list.status == 4}}style="color:#bbb"{{/if}}>
 						编辑
 						<label style="padding-left:10px;">|</label>
 					</a>
 					<a class="cursor  T-TransferOut-view T-action">
 						查看
 					</a>
-					<a class="cursor {{if list.status != 1}}T-TransferOut-delete{{/if}} R-right T-action" data-right="1340003" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+					<a class="cursor {{if list.status != 1 && list.status != 4}}T-TransferOut-delete{{/if}} R-right T-action" data-right="1340003" {{if list.status == 1 || list.status == 4}}style="color:#bbb"{{/if}}>
 						<label class="padding-right20">|</label>
 						撤销
 					</a>
+
+					<a class="cursor {{if list.status== 4}}T-returnTransferOut-delete{{/if}} R-right T-action" data-right="1340003" {{if list.status != 4}}style="color:#bbb"{{/if}}>
+						<label class="padding-right20">|</label>
+						确认退回
+					</a>
+
 				</div>  
 			</td>
 		</tr>

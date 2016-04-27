@@ -6,40 +6,46 @@
 			<th>出游日期</th>
 			<th>游客</th>
 			<th>人数</th>
-			<th>来源部门</th>
+			<th>客户部门</th>
 			<th>联系人</th>
-			<th>联系电话</th>
 			<th>应收</th>
-			<th>已收</th>
 			<th>我方状态</th>
-			<th width="143">操作</th>
+			<th width="15%">操作</th>
 		</tr>
 	</thead>
 	<tbody class="T-transferIn-list">{{each resultList as list}}
 		<tr data-value="{{list.id}}">
-			<td>{{list.lineProduct.name}}</td>
-			<td>{{list.lineProduct.days}}天</td>
+			<td>{{if !!list.lineProduct}}{{list.lineProduct.name}}{{/if}}</td>
+			<td><span class=" F-float F-count">{{if !!list.lineProduct}}{{list.lineProduct.days}}{{/if}}</span>天</td>
 			<td>{{list.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 			<td>{{if list.touristGroup.contactMember != null}}{{list.touristGroup.contactMember.name}}{{/if}}</td>
-			<td>{{list.touristGroup.adultCount}}大{{list.touristGroup.childCount}}小</td>
+			<td><span class=" F-float F-count">{{list.touristGroup.adultCount}}</span>大<span class=" F-float F-count">{{list.touristGroup.childCount}}</span>小</td>
 			<td>{{list.fromBusinessGroup.name}}</td>
-			<td>{{list.user.realName}}</td>
-			<td>{{list.user.mobileNumber}}</td>
-			<td>{{list.transNeedPayMoney}}</td>
-			<td>{{list.transPayedMoney}}</td>
-			<td>{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if list.status == 1}}<span style="color: green;">已确认</span>{{/if}}</td>
+			<td>{{list.user.realName}} {{list.user.mobileNumber}}</td>
+			<td><span class=" F-float F-money">{{list.transNeedPayMoney}}</span></td>
 			<td>
-				<div class="hidden-sm hidden-xs btn-group">
-					<a class="cursor  {{if list.status != 1}}T-TransferIn-save{{/if}} R-right T-action" data-right="1340004" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+			{{if list.status == 0}}<span style="color:#D2691E;">未确认</span>
+			{{else if list.status == 1}}<span style="color: green;">已确认</span>
+			{{else if list.status == 4}}<span style="color: red;">已退回</span>
+			{{/if}}
+			</td>
+			<td>
+				<div class="btn-group">
+					<a class="cursor  {{if list.status != 1 && list.status != 4}}T-TransferIn-save{{/if}} R-right T-action" data-right="1340004" {{if list.status == 1 || list.status == 4}}style="color:#bbb"{{/if}}>
 						确认
 						<label style="padding-left:10px;">|</label>
 					</a>
 					<a class="cursor T-TransferIn-view T-action">
 						查看
 					</a>
-					<a class="cursor {{if list.status != 1}}T-TransferIn-refuse{{/if}} R-right T-action" data-right="1340005" {{if list.status == 1}}style="color:#bbb"{{/if}}>
+					<a class="cursor {{if list.status != 1 && list.status != 4}}T-TransferIn-refuse{{/if}} R-right T-action" data-right="1340005" {{if list.status == 1 || list.status == 4}}style="color:#bbb"{{/if}}>
 						<label class="padding-right20">|</label>
 						拒绝
+					</a>
+
+					<a class="cursor {{if list.status == 1}}T-returnTransferIn-refuse{{/if}} R-right T-action" data-right="1340005" {{if list.status != 1}}style="color:#bbb"{{/if}}>
+						<label class="padding-right20">|</label>
+						退回
 					</a>
 
 				</div>  

@@ -1,0 +1,35 @@
+<table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">
+	<colgroup>
+		<col style="width:50%;"></col>
+		<col style="width:50%;"></col>
+	</colgroup>
+	<thead>
+		<tr class="bg-blur">
+			<th class="col-sm-1">员工</th>
+			<th class="col-sm-2">收客量</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{each result as salePerL}}
+		   <tr>
+	   		    <td>{{salePerL.name}}</td>
+	   			<td>{{salePerL.adultCount}}大{{salePerL.childCount}}小</td>
+	   		</tr>
+	   	{{/each}}
+
+	   	<tr style="background-color:#effef4">
+	   		<td class="text-bold">合计</td>
+	   		<td class="T-totalCount"></td>
+	   	</tr>
+
+	</tbody>
+</table>
+<div class="row pageMode">
+	<div class="col-xs-5">
+		<small>共计 {{searchParam.totalCount}} 条记录</small>
+	</div>
+	<div class="col-xs-7">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
+</div>

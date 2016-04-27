@@ -1,317 +1,304 @@
-<div class="col-xs-12 inner-edit ">
-	<form class="form-horizontal" role="form" style="margin-top:10px">
-		<div class=" ui-sortable-handle">
-			<h5 class="">
-				<span class="badge badge-primary">1</span>
-				 <label class="middle title-size">内转信息</label>
-			</h5>
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-					    <input type="hidden" name="id" value="{{innerTransfer.id}}" />
-						<!--<label class="col-sm-1 control-label no-padding-right">来源部门：</label>
-						<div class="col-sm-2">
-							<input value="{{innerTransfer.fromBusinessGroup.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-						</div>-->
-						<label class="col-sm-1 control-label no-padding-right">接收部门：</label>
-						<div class="col-sm-2">
-							{{each businessGroup as rs}}
-								{{if innerTransfer.toBusinessGroup!=null}}
-									{{if innerTransfer.toBusinessGroup.id==rs.id}}
-										<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" {{if innerTransfer.status!=2}}readonly="readonly"{{/if}}/>
-									{{/if}}
+<form class="inner-edit form-horizontal" role="form" style="margin-top:10px">
+	<div class=" ui-sortable-handle">
+		<h5 class="">
+			<span class="badge badge-primary">1</span>
+			 <label class="middle title-size">内转信息</label>
+		</h5>
+		<div class="widget-body">
+			<div class="widget-main">
+				<div class="form-group">
+				    <input type="hidden" name="id" value="{{innerTransfer.id}}" />
+					<!--<label class="col-sm-1 control-label no-padding-right">客户部门：</label>
+					<div class="col-sm-2">
+						<input value="{{innerTransfer.fromBusinessGroup.name}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
+					</div>-->
+					<label class="col-sm-1 control-label no-padding-right">接收部门：</label>
+					<div class="col-sm-2">
+						{{each businessGroup as rs}}
+							{{if innerTransfer.toBusinessGroup!=null}}
+								{{if innerTransfer.toBusinessGroup.id==rs.id}}
+									<input  value="{{rs.name}}" data-group-id="{{rs.id}}" type="text" name="businessGroup_id" class="col-xs-12" {{if innerTransfer.status!=2}}readonly="readonly"{{/if}}/>
 								{{/if}}
-							{{/each}}
-						</div>
+							{{/if}}
+						{{/each}}
 					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">内转备注:</label>
-						<div class="col-sm-5">
-							<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="500" />
-						</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-1 control-label no-padding-right">内转备注:</label>
+					<div class="col-sm-5">
+						<input value="{{innerTransfer.transRemark}}" type="text" name="transRemark" class="date-picker col-xs-12" maxlength="500" />
 					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">应付：</label>
-						<div class="col-sm-2">
-							<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12" />
-						</div>
-
-						<label class="col-sm-1 control-label no-padding-right">已付：</label>
-						<div class="col-sm-2">
-							<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" readonly="readonly" maxlength="9" type="text" class="date-picker col-xs-12" />
-						</div>
-
-                        <label>
-							<input  type="checkbox" class="ace" checked="{{if cashFlag==1}}checked{{/if}}" disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
-							<span class="lbl">
-							</span>
-						</label>
-						<label class="control-label no-padding-right">对方现收</label>
-
+				</div>
+				<div class="form-group">
+					<label class="col-xs-1 control-label no-padding-right">应付：</label>
+					<div class="col-xs-1">
+						<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12 F-float F-money" />
 					</div>
+
+					<label class="col-xs-1 control-label no-padding-right">计划现收：</label>
+					<div class="col-xs-1">
+					    {{if cashFlag==1}}
+							<input name="currentNeedPayMoney" value="{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}" readonly="readonly" maxlength="9" type="text" class=" col-xs-12 F-float F-money" />
+							{{else}}
+							<input name="currentNeedPayMoney" value="0" readonly="readonly" maxlength="9" type="text" class=" col-xs-12 F-float F-money" />
+					    {{/if}}
+					</div>
+
+                    <label>
+						<input  type="checkbox" class="ace" {{if cashFlag==1}}checked="checked"{{/if}} disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
+						<span class="lbl">
+						</span>
+					</label>
+					<label class="control-label no-padding-right">对方现收</label>
+
+					<div class="col-xs-1">
+						<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" readonly="readonly" maxlength="9" type="hidden" class="col-xs-12 F-float F-money" />
+					</div>
+
 				</div>
 			</div>
 		</div>
-	</form>
-</div>
-<div class="form-group col-sm-12 globalAdd">
-	 <div class="search-area">       
-		<!-- 新增费用项目 -->
-		<div class="col-sm-8">
-			<button class="btn btn-sm btn-success T-transfer-addCost pull-left">
-				<i class="ace-icon fa fa-plus"></i> 新增费用项
-			</button>
-		</div>
-	 </div>
+	</div>
+</form>
+<div class="globalAdd">
+	<button class="btn btn-sm btn-success T-transfer-addCost mar-b-10">
+		<i class="ace-icon fa fa-plus"></i> 新增费用项
+	</button>
 </div>
 	
-<!-- 转客列表编辑start -->		
+<!-- 转客列表编辑start -->	
+
 <table class="table table-striped table-bordered table-hover addTransferCostTable">
 	<thead>
 		<tr>   
-			<th class="th-border">类型</th>
+			<th class="th-border" width="20%">费用项</th>
+			<th class="th-border"><span class="necessary pull-left col-sm-2">*</span>数量</th>
+			<th class="th-border"><span class="necessary pull-left col-sm-2">*</span>单价</th>
+			<th class="th-border">金额</th>
 			<th class="th-border">说明</th>
-			<th class="th-border">数量</th>
-			<th class="th-border">内转单价</th>
 			<th class="th-border">操作</th>
 		</tr>
 	</thead>
-  <tbody class="addTransferCost">        
-		<tr>
-			<td>内转价</td>
-			<td>大人</td>
-			<td><input type="text" name="adultCount"  value="{{innerTransfer.transAdultCount}}" readonly="readonly" class="col-sm-10 count"/></td>
-			<td><span class="necessary pull-left col-sm-2">*</span><input type="text" name="transAdultPrice" maxlength="9"  value="{{innerTransfer.transAdultPrice}}"  class="col-sm-10 price"/></td>
-			<td></td>	
-		</tr>
-		
-		<tr>
-			<td>内转价</td>      
-			<td>小孩</td>
-			<td><input type="text" name="transChildCount" value="{{innerTransfer.transChildCount}}" readonly="readonly" class="col-sm-10 count"/></td>
-			<td><span class="necessary  pull-left col-sm-2"></span><input type="text" name="transChildPrice" maxlength="9" value="{{innerTransfer.transChildPrice}}"  class="col-sm-10 price"/></td>	
-			<td></td>
-		</tr>
-
-
-		<!-- 其他费用 -->
-		{{each innerTransfer.innerTransferFeeSet as rs}}
-			<tr data-entity-id={{rs.id}}>
-				<td>其他费用</td>
-				<td><input  name="discribe" type="text" class="col-sm-10  no-padding-right" maxlength="100" value="{{rs.discribe}}" /></td>
-				<td><input  name="count" type="text" class="col-sm-10  no-padding-right count" maxlength="6" value="{{rs.count}}" /></td>
-				<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10  no-padding-right price" value="{{rs.price}}" /></td>
-				<td><a class="cursor T-edittransfer-delete">删除</a></td>
-			</tr>
-		{{/each}}
-
+  <tbody class="addTransferCost">
+		{{if isParent==1}}
+		    <!-- 其他费用中转分段显示值灰 -->
+			{{each innerTransfer.innerTransferFeeSet as rs}}
+				<tr data-entity-id={{rs.id}}>
+					<td>	
+					  <select name="type" class="col-sm-10 col-sm-offset-1" {{if rs.type==3}}disabled{{/if}}>
+					       {{#rs.type | getFeeItemType: true}}
+					  </select>
+					</td>
+					<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}" {{if rs.type==3}}disabled{{/if}} /></td>
+					<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" {{if rs.type==3}}disabled{{/if}} /></td>
+					<td>
+						<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
+					</td>
+					<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}" {{if rs.type==3}}disabled{{/if}} /></td>
+					<td><a class="cursor T-edittransfer-delete" {{if rs.type==3}}disabled{{/if}}>删除</a></td>
+				</tr>
+			{{/each}}
+			<!-- 其他费用中转分段显示值灰 -->
+			{{else}}
+			
+			{{each innerTransfer.innerTransferFeeSet as rs}}
+			{{if rs.type!=3}}
+				<tr data-entity-id={{rs.id}}>
+					<td>	
+					  <select name="type" class="col-sm-10 col-sm-offset-1">
+					       {{#rs.type | getFeeItemType: false}}
+					  </select>
+					</td>
+					<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}"/></td>
+					<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" /></td>
+					<td>
+						<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
+					</td>
+					<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}"/></td>
+					<td><a class="cursor T-edittransfer-delete">删除</a></td>
+				</tr>
+			{{/if}}
+			{{/each}}
+		{{/if}}
 	</tbody>
  </table>
  <!-- 转客列表编辑end -->	
-<div class="col-xs-12">
-	<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class=" ui-sortable-handle">
-				<h5 class="">
-					<span class="badge badge-primary">2</span>
-					<label class="middle title-size">线路产品信息</label>
+<form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
+	<div class=" ui-sortable-handle">
+			<h5 class="">
+				<span class="badge badge-primary">2</span>
+				<label class="middle title-size">线路产品信息</label>
+			</h5>
+		<div class="widget-body">
+			<div class="widget-main clearfix">
+				<div class="form-group col-sm-12">
+					<div class="search-area">
+						<label class="col-sm-1 control-label no-padding-right">线路产品: </label>
+						<div class="col-sm-2">
+							<input value="{{if innerTransfer.lineProduct!=null}} {{innerTransfer.lineProduct.name}}{{/if}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">出游日期:</label>
+						<div class="col-sm-2">
+							<input value="{{innerTransfer.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}" name="tourGroupTime" type="text" readonly="readonly" class="date-picker col-xs-12" />
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group col-sm-12">
+					<div class="search-area">
+						<label class="col-sm-1 control-label no-padding-right">客户: </label>
+						<div class="col-sm-2">
+							<input value="{{innerTransfer.touristGroup.partnerAgency.travelAgencyName}}" type="text" readonly="readonly" class="col-xs-12" />
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">客户联系人:</label>
+
+						<div class="col-sm-2">
+							<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
+						</div>
+
+						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
+						<div class="col-sm-2">
+							<select name="getType" class="col-sm-12" disabled="disabled">
+								<option{{if innerTransfer.touristGroup.getType==1 }} selected="selected" {{/if}} value="1">旅行社系统</option>
+								<option{{if innerTransfer.touristGroup.getType==2 }} selected="selected" {{/if}} value="2">传真</option>
+								<option{{if innerTransfer.touristGroup.getType==3 }} selected="selected" {{/if}} value="3">短信</option>
+								<option{{if innerTransfer.touristGroup.getType==4 }} selected="selected" {{/if}} value="4">电话</option>
+								<option{{if innerTransfer.touristGroup.getType==5 }} selected="selected" {{/if}} value="5">QQ</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="search-area col-sm-12">
+					<label class="pull-left control-label no-padding-right">收客备注：</label>
+				    <div class="col-sm-10">
+					    <textarea class="form-control col-sm-12" name="remark" value="{{innerTransfer.touristGroup.remark}}" readonly="readonly" maxlength="1000">{{innerTransfer.touristGroup.remark}}</textarea> 
+				    </div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</form>
+
+<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+	<div class="form-group">
+		<div class="col-xs-12 col-sm-12 widget-container-col" style="margin-top:-15px">
+			<div class=" ui-sortable-handle">
+				<h5 class="widget-title">
+					<span class="badge badge-primary">3</span>
+					<label class="middle title-size">收客信息</label>
 				</h5>
-			<div class="widget-body">
-				<div class="widget-main clearfix">
-					<div class="form-group col-sm-12">
-						<div class="search-area">
-							<label class="col-sm-1 control-label no-padding-right">线路产品: </label>
-							<div class="col-sm-2">
-								<input value="{{if innerTransfer.lineProduct!=null}} {{innerTransfer.lineProduct.name}}{{/if}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-							</div>
 
-							<label class="col-sm-1 control-label no-padding-right">出游日期:</label>
-							<div class="col-sm-2">
-								<input value="{{innerTransfer.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}" name="tourGroupTime" type="text" readonly="readonly" class="date-picker col-xs-12" />
-							</div>
-						</div>
+
+				 
+		    	<div class="search-area col-sm-12">
+				    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+					<div class="col-sm-1">
+						<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 					</div>
 
-					<div class="form-group col-sm-12">
-						<div class="search-area">
-							<label class="col-sm-1 control-label no-padding-right">客户来源: </label>
-							<div class="col-sm-2">
-								<input value="{{innerTransfer.touristGroup.partnerAgency.travelAgencyName}}" type="text" readonly="readonly" class="col-xs-12" />
-							</div>
+					<label class="col-sm-1 control-label no-padding-right">已收：</label>
+					<div class="col-sm-1">
+						<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
+	  				</div>
 
-							<label class="col-sm-1 control-label no-padding-right">同行联系人:</label>
-
-							<div class="col-sm-2">
-								<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
-							</div>
-
-							<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
-							<div class="col-sm-2">
-								<select name="getType" class="col-sm-12" disabled="disabled">
-									<option{{if innerTransfer.touristGroup.getType==1 }} selected="selected" {{/if}} value="1">旅行社系统</option>
-									<option{{if innerTransfer.touristGroup.getType==2 }} selected="selected" {{/if}} value="2">传真</option>
-									<option{{if innerTransfer.touristGroup.getType==3 }} selected="selected" {{/if}} value="3">短信</option>
-									<option{{if innerTransfer.touristGroup.getType==4 }} selected="selected" {{/if}} value="4">电话</option>
-									<option{{if innerTransfer.touristGroup.getType==5 }} selected="selected" {{/if}} value="5">QQ</option>
-								</select>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</form>
-</div>
-
-<div class="col-xs-12">
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col" style="margin-top:-15px">
-				<div class=" ui-sortable-handle">
-					<h5 class="widget-title">
-						<span class="badge badge-primary">3</span>
-						<label class="middle title-size">收客信息</label>
-					</h5>
-
-
-					    {{if isParent==1}}
-					    	<div class="search-area col-sm-12">
-							    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
-								<div class="col-sm-1">
-									<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
-								</div>
-
-								<label class="col-sm-1 control-label no-padding-right">已收：</label>
-								<div class="col-sm-1">
-									<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
-				  				</div>
-
-								<label class="col-sm-1 control-label no-padding-right">现收：</label>
-								<div class="col-sm-1">
-									<input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12"/>
-				  				</div>
-				  			</div>
-						  
-						   {{else}}
-							<div class="search-area col-sm-12">
-								<label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
-								<div class="col-sm-1">
-									<input name="needPayAllMoney" value="{{innerTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12" />
-								</div>
-
-								<label class="col-sm-1 control-label no-padding-right">已收：</label>
-								<div class="col-sm-1">
-									<input name="payedMoney" value="{{innerTransfer.touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12" />
-								</div>
-
-								<label class="col-sm-1 control-label no-padding-right">现收：</label>
-								<div class="col-sm-1">
-									<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" />
-								</div>
-							</div>
+					<label class="col-sm-1 control-label no-padding-right">现收：</label>
+					<div class="col-sm-1">
+						{{if cashFlag==1}}
+							<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
+							{{else}}
+							<input name="currentNeedPayMoney" value="0" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
 						{{/if}}
+	  				</div>
+	  			</div>
 
-					
-					<div class="search-area col-sm-12">
-						<label class="pull-left control-label no-padding-right">收客时的备注：</label>
-						<div class="col-sm-5">
-							<input name="remark" value="{{innerTransfer.touristGroup.remark}}" type="text" class="col-xs-12" readonly="readonly" />
-						</div>
-					</div>
-					<div class="widget-body TransferTable">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
-								<thead>
-									<tr>
-										<th class="th-border">类型</th>
-										<th class="th-border">说明</th>
-										<th class="th-border">数量</th>
-										<th class="th-border">收客单价</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>结算价</td>
-										<td>大人</td>
-										<td>{{innerTransfer.touristGroup.adultCount}}</td>
-										<td>{{innerTransfer.touristGroup.adultPrice}}</td>
-									</tr>
+				
+				
+				<div class="widget-body TransferTable">
+					<div class="widget-main no-padding">
+						<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
+							<thead>
+								<tr>
+									<th class="th-border">费用项</th>
+									<th class="th-border">数量</th>
+									<th class="th-border">单价</th>
+									<th class="th-border">金额</th>
+									<th class="th-border">说明</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
+								<tr>
+									<td>  
+									  <input value="{{rs.name}}" readonly="readonly" type="text" name="type" class="col-sm-12">
+			                        </td>
+									<td><span class=" F-float F-count">{{rs.count}}</span></td>
+									<td><span class=" F-float F-money">{{rs.price}}</span></td>
+									<td><span class=" F-float F-money">{{rs.count*rs.price}}</span></td>
+									<td>{{rs.remark}}</td>
+								
+								</tr>
+								{{/each}}
 
-									<tr>
-										<td>结算价</td>
-										<td>小孩</td>
-										<td>{{innerTransfer.touristGroup.childCount}}</td>
-										<td>{{innerTransfer.touristGroup.childPrice}}</td>
-									</tr>
-
-									{{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
-									<tr>
-										<td>其他费用</td>
-										<td>{{rs.describeInfo}}</td>
-										<td>{{rs.count}}</td>
-										<td>{{rs.price}}</td>
-									</tr>
-									{{/each}}
-
-								</tbody>
-							</table>
-						</div>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
-</div>
+	</div>
+</form>
 <!-- 收客信息end -->
-<div class="col-xs-12">
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
-							<span class="badge badge-primary">4</span>
-							<label class="middle title-size">游客小组信息</label>
-						</h5>
-					<div class="widget-body TransferTable">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
-								<thead>
-									<tr>
-										<th class="th-border">序号</th>
-										<th class="th-border">姓名</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border">证件类型</th>
-										<th class="th-border">证件号</th>
-										<th class="th-border">联系人</th>
-									</tr>
-								</thead>
-								<tbody>
-									{{each innerTransfer.touristGroup.touristGroupMemberList as result i}}
-									<tr>
-										<td>{{i+1}}</td>
-										<td>{{result.name}}</td>
-										<td>{{result.mobileNumber}}</td>
-										<td>身份证</td>
-										<td>{{result.idCardNumber}}</td>
-										<td>{{if result.isContactUser == 0}}否{{else}}是{{/if}}</td>
-									</tr>
-									{{/each}} 
-								</tbody>
-							</table>
-						</div>
+<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+	<div class="form-group">
+		<div class="col-xs-12 col-sm-12 widget-container-col">
+			<div class=" ui-sortable-handle">
+					<h5 class="">
+						<span class="badge badge-primary">4</span>
+						<label class="middle title-size">游客小组信息</label>
+					</h5>
+				<div class="widget-body TransferTable">
+					<div class="widget-main no-padding">
+						<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
+							<thead>
+								<tr>
+									<th class="th-border">序号</th>
+									<th class="th-border">姓名</th>
+									<th class="th-border">联系电话</th>
+									<th class="th-border">证件类型</th>
+									<th class="th-border">证件号</th>
+									<th class="th-border">联系人</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{each innerTransfer.touristGroup.touristGroupMemberList as result i}}
+								<tr>
+									<td>{{i+1}}</td>
+									<td>{{result.name}}</td>
+									<td>{{result.mobileNumber}}</td>
+									<td>身份证</td>
+									<td>{{result.idCardNumber}}</td>
+									<td>{{if result.isContactUser == 0}}否{{else}}是{{/if}}</td>
+								</tr>
+								{{/each}} 
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
-	<form class="form-horizontal globalAdd" role="form" onsubmit="return false"> 
-		<div class="form-group" style="text-align: center;">
-		    <button class="btn btn-danger T-cancelTransfer">
-				<i class="ace-icon fa fa-times"></i> 取消
-			</button> 
-			<button class="btn btn-primary T-saveTransoutInfo">
-			    <i class="ace-icon fa fa-check"></i> 保存 
-			</button> 
-		</div> 
-	</form>
-</div>
+	</div>
+</form>
+<form class="form-horizontal globalAdd" role="form" onsubmit="return false"> 
+	<div class="form-group" style="text-align: center;">
+	    <button class="btn btn-danger T-cancelTransfer">
+			<i class="ace-icon fa fa-times"></i> 取消
+		</button> 
+		<button class="btn btn-primary T-saveTransoutInfo">
+		    <i class="ace-icon fa fa-check"></i> 保存 
+		</button> 
+	</div> 
+</form>

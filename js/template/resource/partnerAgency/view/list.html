@@ -1,5 +1,5 @@
 <div class="T-search-area search-area globalAdd">
-	<input name="partnerAgency_travelAgencyName" class="col-xs-2 input-default-height T-partnerAgencyName guideInputList" value="{{searchParam.travelAgencyName}}" placeholder="请输入客户名称关键字"/>&nbsp;
+	<input name="partnerAgency_travelAgencyName" class="col-xs-2 input-default-height T-partnerAgencyName guideInputListAging" value="{{searchParam.travelAgencyName}}" placeholder="请输入客户名称、联系人或联系电话关键词"/>&nbsp;
 	<button class="btn-sm btn-partnerAgency-search search-btn T-partnerAgency-search" style="margin-left: -8px">
 		<i class="ace-icon fa fa-search"></i>
 		搜索
@@ -32,7 +32,7 @@
 	</div>
 	<button class="btn btn-sm btn-success btn-partnerAgency-add R-right T-partnerAgency-add" data-right="1150002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
-		新增同行
+		新增客户
 	</button>
 </div>
 <div class="row partnerAgencyList">	
@@ -43,8 +43,8 @@
 					<th>客户名称</th>
 					<th>客户类型</th>
 					<th>等级</th>
-					<th>客户所在地区</th>
 					<th>总社</th>
+					<th>所在地区</th>
 					<th>是否启用</th>
 					<th>操作</th>
 				</tr>
@@ -72,8 +72,8 @@
 							铜牌
 							{{/if}}
 						</td>
-						<td>
-							{{if partnerAgency.province != null}}
+						<td>{{if partnerAgency.partnerHeaderAgency!=null}}{{partnerAgency.partnerHeaderAgency.name}}{{/if}}</td>
+						<td>{{if partnerAgency.province != null}}
 								{{partnerAgency.province.name}}
 							{{/if}}
 							{{if partnerAgency.city != null}}
@@ -82,8 +82,7 @@
 							{{if partnerAgency.district != null}}
 								-{{partnerAgency.district.name}}
 							{{/if}}
-						</td>
-						<td>{{if partnerAgency.partnerHeaderAgency!=null}}{{partnerAgency.partnerHeaderAgency.name}}{{/if}}</td>  
+						</td>  
 						<td>{{if partnerAgency.status == 1}}
 							  <i class ="ace-icon fa fa-check green bigger-130"></i> 已启用
 							{{else}}
@@ -91,7 +90,7 @@
 							{{/if}}
 						</td>           
 						<td>
-							<div class="hidden-sm hidden-xs btn-group">
+							<div class="btn-group">
 								<a data-entiy-id="{{partnerAgency.id}}" class="cursor T-action T-partnerAgency-view">
 									查看
 								</a>

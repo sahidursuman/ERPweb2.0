@@ -4,40 +4,46 @@
 		<col style="width:10%;"></col>
 		<col style="width:10%;"></col>
 		<col style="width:20%;"></col>
-		<col style="width:20%;"></col>
 		<col style="width:15%;"></col>
 		<col style="width:15%;"></col>
 	</colgroup>
 	<thead>
 		<tr class="bg-blur">
 			<th class="col-sm-1">员工</th>
-			<th class="col-sm-2">收客量</th>
 			<th class="col-sm-1">发团量</th>
-			<th class="col-sm-1">发客量</th>
+			<th class="col-sm-2">发客量</th>
 			<th class="col-sm-1">外转客量</th>
-			<th class="col-sm-1">内转客量</th>
+			<th class="col-sm-1">内转转出量</th>
 			<th class="col-sm-2">代订单量</th>
 		</tr>
 	</thead>
 	<tbody>
-		{{each resultList as empL}}
+		{{each result as empL}}
 		   <tr>
 	   		    <td>{{empL.name}}</td>
-	   			<td>{{empL.getCount}}</td>
-	   			<td>{{empL.tripPlanCount}}</td>
-	   			<td>{{empL.tripPlanMemberCount}}</td>
-	   			<td>{{empL.transCount}}</td>
-	   			<td>{{empL.innerCount}}</td>
-	   			<td>{{empL.orderCount}}</td>		
+	   		    <td>{{empL.tripCount}}</td>
+	   			<td>{{empL.adultCount}}大{{empL.childCount}}小</td>
+	   			<td>{{empL.transAdultCount}}大{{empL.transChildCount}}小</td>
+	   		    <td>{{empL.innerAdultCount}}大{{empL.innerChildCount}}小</td>
+	   			<td>{{empL.orderCount}}</td>	
 		   	</tr>
 		{{/each}}
+
+		<tr style="background-color:#effef4">
+			<td class="text-bold">合计</td>
+			<td class="T-tripTotalCount">0</td>
+			<td class="T-adChilTotalCount">0</td>
+			<td class="T-transAdChilTotalCount">0</td>
+			<td class="T-innerAdChilTotalCount">0</td>
+			<td class="T-orderTotalCount">0</td>
+		</tr>
 	</tbody>
 </table>
 <div class="row pageMode">
-	<div class="col-xs-6">
+	<div class="col-xs-5">
 		<small>共计 {{searchParam.totalCount}} 条记录</small>
 	</div>
-	<div class="col-xs-6">
+	<div class="col-xs-7">
 		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
 		</div>
 	</div>

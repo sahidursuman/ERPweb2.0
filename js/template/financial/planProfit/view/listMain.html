@@ -1,123 +1,78 @@
 <div class="row">
-	<div class="T-search-area" style="margin:0px;">  
-		<div class="form-horizontal">      
-	      	<label>团号：</label>
-	    	<input type="text" style="width: 160px" placeholder="团号" name="tripNumber" value="{{searchParam.tripNumber}}" />
-
-			<label style="margin-left: 15px">线路产品：</label>
-	    	<input type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
-			<input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}"/>
-
-			<label style="margin-left: 15px">导游：</label>
-	    	<input type="text" style="width: 100px" placeholder="导游" name="guideName" value="{{searchParam.guideName}}"/>
-			<input type="hidden" name="guideId" value="{{searchParam.guideId}}"/>
-			<div class="financial-search-planProfit">
-			<label>开始日期：</label>
-	    	<input class="date-picker" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.start}}" style="width:100px;" />	
-			<label style="margin-left: 15px">结束日期：</label>
-	    	<input class="date-picker" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.end}}" style="width:100px;" />	
-			<label style="margin-left: 15px">状态：</label>
-	    	<div class="btn-group T-status">
-				<button data-toggle="dropdown" data-value="{{searchParam.billStatus}}" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
-					<span>
-						{{if searchParam.billStatus == ""}}
-							全部
-						{{else if searchParam.billStatus == -1}}
-							待报账
-						{{else if searchParam.billStatus == 0}}
-							待审核
-						{{else if searchParam.billStatus == 1}}
-							计调已审
-						{{else if searchParam.billStatus == 2}}
-							财务已审
-						{{/if}}	
-					</span>
-					<i class="ace-icon fa fa-angle-down icon-on-right" ></i>
-				</button>
-				<ul class="dropdown-menu">
-					<li>
-						<a data-value="" href="javascript:void(0)">全部</a>
-					</li>
-					<li>
-						<a data-value="-1" href="javascript:void(0)">待报账</a>
-					</li>
-					<li>
-						<a data-value="0" href="javascript:void(0)">待审核</a>
-					</li> 
-					<li>
-						<a data-value="1" href="javascript:void(0)">计调已审</a>
-					</li>
-					<li>
-						<a data-value="2" href="javascript:void(0)">财务已审</a>
-					</li>  
-				</ul>		
-			</div>
-	        <button class="btn-sm marginLeft-30 search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button> 
-	    </div>
-
-	    <div style="margin:8px 0px;">
-            <label>收入合计：<span class="T-totalIncome"></span></label>
-            <label class="marginLeft-30">发团成本合计：<span class="T-totalTrip"></span></label>
-            <label class="marginLeft-30">中转成本合计：<span class="T-totalOut"></span></label>
-            <label class="marginLeft-30">毛利：<span class="T-profit"></span></label>
-            <label class="marginLeft-30">人均毛利：<span class="T-perCapitaProfit"></span></label>
-            <label class="marginLeft-30">人数：<span class="T-personCount"></span></label>
-            <label class="marginLeft-30">团数：<span class="T-tripCount"></span></label>
+    <div class="T-search-area">
+        <div class="form-horizontal form-group">
+            <label>团号 </label>
+            <input type="text" style="width: 160px" placeholder="团号" class="mar-r-10" name="tripNumber" value="{{searchParam.tripNumber}}" />
+            <label>线路产品 </label>
+            <input type="text" style="width: 220px" class="mar-r-10" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+            <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
+            <label>导游 </label>
+            <input type="text" style="width: 100px" class="mar-r-10" placeholder="导游" name="guideName" value="{{searchParam.guideName}}" />
+            <input type="hidden" name="guideId" value="{{searchParam.guideId}}" />
+            <label>针对客源 </label>
+            <select name="tripPlanType" class="mar-r-10">
+                <option value="" {{if searchParam.tripPlanType=="" || !searchParam.tripPlanType}}selected{{/if}}>全部</option>
+                <option value="0" {{if searchParam.tripPlanType=="0" }}selected{{/if}}>散客</option>
+                <option value="1" {{if searchParam.tripPlanType=="1" }}selected{{/if}}>团队</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>开始日期 </label>
+            <input class="date-picker mar-r-10" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.start}}" style="width:100px;" />
+            <label>结束日期 </label>
+            <input class="date-picker mar-r-10" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.end}}" style="width:100px;" />
+            <label>状态 </label>
+            <div class="btn-group T-status mar-r-10">
+                <button data-toggle="dropdown" data-value="{{searchParam.billStatus}}" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false" style="height:24px;padding:0px 10px;line-height:24px;">
+                    <span>
+                        {{if searchParam.billStatus == ""}}
+                            全部
+                        {{else if searchParam.billStatus == -1}}
+                            待报账
+                        {{else if searchParam.billStatus == 0}}
+                            待审核
+                        {{else if searchParam.billStatus == 1}}
+                            计调已审
+                        {{else if searchParam.billStatus == 2}}
+                            财务已审
+                        {{/if}} 
+                    </span>
+                    <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a data-value="" href="javascript:void(0)">全部</a>
+                    </li>
+                    <li>
+                        <a data-value="-1" href="javascript:void(0)">待报账</a>
+                    </li>
+                    <li>
+                        <a data-value="0" href="javascript:void(0)">待审核</a>
+                    </li>
+                    <li>
+                        <a data-value="1" href="javascript:void(0)">计调已审</a>
+                    </li>
+                    <li>
+                        <a data-value="2" href="javascript:void(0)">财务已审</a>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn-sm  search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button>
+            <label class="pos-rel pull-right">
+                <input type="checkbox" class="ace T-checkTurn" {{if searchParam.operateCalculteOut==1 }}checked="checked" {{/if}}/>
+                <span class="lbl"> 核算中转</span>
+            </label>
         </div>
     </div>
-    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight">
-		<thead>
-			<tr class="bg-blur">
-				<th rowspan="2">团号</th>
-				<th rowspan="2">线路产品</th>
-				<th rowspan="2">出游日期</th>
-				<th rowspan="2">人数</th>
-				<th rowspan="2">导游</th>
-				<th rowspan="2">责任计调</th>
-				<th rowspan="2">状态</th>
-				<th colspan="5">收入</th>
-				<th colspan="10">发团成本</th>
-				<th colspan="5">中转成本</th>
-				<th rowspan="2">收入小计</th>
-				<th rowspan="2">发团成本小计</th>
-				<th rowspan="2">中转成本小计</th>
-				<th rowspan="2">毛利</th>
-				<th rowspan="2">人均毛利</th>
-			</tr>
-			<tr class="bg-blur">
-				<th >团款</th>
-				<th >购物佣金</th>
-				<th >自费</th>
-				<th >其他收入</th>
-				<th >导游管理费</th>
-				<th >导服费</th>
-				<th >保险</th>
-				<th >车费</th>
-				<th >餐费</th>
-				<th >房费</th>
-				<th >景区</th>
-				<th >票务</th>
-				<th >其他支出</th>
-				<th >购物导佣</th>
-				<th >自费导佣</th>
-				<th >车费</th>
-				<th >餐费</th>
-				<th >房费</th>
-				<th >票务</th>
-				<th >其他</th>
-			</tr>
-		</thead>
-		<tbody class="T-planProfit-list">
-		</tbody>
-	</table>
+    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight T-planProfit-list hct_align_middle" style="margin-top:15px;">
+    </table>
 </div>
-
 <div class="row pageMode">
-	<div class="col-xs-6">
-		<small class="T-totalSize">没有查询到相关记录</small>
-	</div>
-	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-		</div>
-	</div>
+    <div class="col-xs-6">
+        <small class="T-totalSize">没有查询到相关记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
 </div>

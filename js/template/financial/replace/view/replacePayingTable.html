@@ -3,13 +3,13 @@
         <td>{{rs.orderNumber}}</td>
         <td>{{rs.startTime}}</td>
         <td>{{rs.projectName}}</td>
-        <td class="T-ctrl-tip">{{rs.newDetail}}</td>
-        <td>{{rs.bookingMoney}}</td>
-        <td><a class="cursor T-action T-receive-money">{{rs.receiveMoney}}</a></td>
-        <td>{{rs.settlementMoney}}</td>
-        <td>{{rs.unReceiveMoney}}</td>
-        <td><input type="text" class="col-xs-12 T-reciveMoney" data-le="{{rs.unReceiveMoney}}" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} name="payMoney" value="{{rs.payMoney}}"></td>
-        <td><input type="text" class="col-xs-12 T-remark" {{if !source && rs.unReceiveMoney <= 0}} disabled {{/if}} name="payRemark"></td>
+        <td class="T-ctrl-tip" title="{{rs.newDetail}}" ><span style="height:35px;">{{rs.newDetail}}</span></td>
+        <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
+        <td><a class="cursor T-action T-receive-money F-float F-money">{{rs.receiveMoney}}</a></td>
+        <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
+        <td><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
+        <td><input type="text" class="col-xs-12 T-reciveMoney F-float F-money" name="payMoney" value="{{rs.payMoney}}"></td>
+        <td><textarea class="col-sm-12 hct-textarea T-remark" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
         <td>{{rs.checkTime}}</td>
         <td>{{rs.checkUserName}}</td>
         <td>

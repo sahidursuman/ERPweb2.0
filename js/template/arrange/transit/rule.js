@@ -177,6 +177,16 @@ define(function(require, exports) {
 					});*/
 
 					settings.push({
+						$ele: $that.find('input[name="ticketName"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '票务公司不能为空'
+							}
+						]
+					});
+
+					settings.push({
 						$ele: $that.find('input[name="ticketStartTime"]'),
 						rules: [
 							{
@@ -276,16 +286,6 @@ define(function(require, exports) {
 					});
 
 					settings.push({
-						$ele: $that.find('input[name="memberCount"]'),
-						rules: [
-							{
-								type: 'NoNumber',
-								errMsg: '数据格式不正确'
-							}
-						]
-					});
-
-					settings.push({
 						$ele: $that.find('input[name="restaurant"]'),
 						rules: [
 							{
@@ -322,7 +322,7 @@ define(function(require, exports) {
 						$ele: $that.find('input[name="memberCount"]'),
 						rules: [
 							{
-								type: 'int',
+								type: 'float',
 								errMsg: '数字格式不正确'
 							}
 						]

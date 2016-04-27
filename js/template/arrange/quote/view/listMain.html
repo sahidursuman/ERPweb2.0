@@ -1,48 +1,44 @@
-<div class="search-area T-quoteSearchForm globalAdd">
-	 <div class="form-horizontal clearfix">
-		<label class="pull-left text-right control-label no-padding-right">产品名称:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-sm-12 T-chooseLineProduct width110" placeholder="全部产品" name="lineProductName" value=""/>
-			<input type="hidden" name="lineProductId" value="">
-		</div>
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">组团社:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-sm-12 T-chooseLineProduct width110" placeholder="全部" name="partnerName" value="" />
-			<input type="hidden" name="partnerId" value="">
-		</div> 
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">询价人:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-xs-12 T-creatorUserChoose width110" placeholder="询价人" name="inquiryUserName" value=""/>
-			<input type="hidden" name="inquiryUserId" value="" />
-		</div>
-		<label class="pull-left text-right control-label no-padding-right subsectionWords">报价人:</label>
-		<div class="col-sm-1">
-			<input type="text" class="col-xs-12 T-quoteUserChoose width110" placeholder="报价人" name="quoteUserName" value=""/>
-			<input type="hidden" name="quoteUserId" value="" />
-		</div>
-		<div class="col-sm-3">
-			<label class="col-xs-2 text-right control-label no-padding-right">报价日期:</label>
-			<div class="col-xs-10 marginLeft-Right7">
-				<div class="input-group">
-					<input class="col-xs-5 date-picker" name="quoteStartTime" placeholder="开始时间" value="" type="text">
-					<lable class="col-xs-2" style="text-align:center;padding:0;padding-top:2px;">&nbsp;至&nbsp;</lable>
-					<input class="col-xs-5 date-picker" name="quoteEndTime" placeholder="结束时间" value="" type="text">
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-1" style="width:100px;margin-left: 20px;">
-			<button class=" btn-sm  T-btn-quote-search search-btn">
-				<i class="ace-icon fa fa-search"></i>
-				 搜索
-			</button>
-		</div>
-        <div class="col-sm-1 pull-left timeStartMore" style="margin-left: 5px">
-            <button class="btn btn-sm btn-success T-quote-add">
-                <i class="ace-icon fa fa-plus"></i> 新增报价
-            </button>
+<div class="mar-b-10 clearfix T-quoteSearchForm globalAdd">
+	<label class="pull-left line-h-2">产品名称&nbsp;</label>
+	<div class="pull-left mar-r-10">
+		<input type="text" class="col-sm-12 T-chooseLineProduct width110" placeholder="全部产品" name="lineProductName" value=""/>
+		<input type="hidden" name="lineProductId" value="">
+	</div>
+	<label class="pull-left line-h-2">客户&nbsp;</label>
+	<div class="pull-left mar-r-10">
+		<input type="text" class="col-sm-12 T-chooseLineProduct width110" placeholder="全部" name="partnerName" value="" />
+		<input type="hidden" name="partnerId" value="">
+	</div> 
+	<label class="pull-left line-h-2">联系人&nbsp;</label>
+	<div class="pull-left mar-r-10">
+		<input type="text" class="col-xs-12 T-creatorUserChoose width110" placeholder="询价人" name="inquiryUserName" value=""/>
+		<input type="hidden" name="inquiryUserId" value="" />
+	</div>
+	<label class="pull-left line-h-2">报价人&nbsp;</label>
+	<div class="pull-left mar-r-10">
+		<input type="text" class="col-xs-12 T-quoteUserChoose width110" placeholder="报价人" name="quoteUserName" value=""/>
+		<input type="hidden" name="quoteUserId" value="" />
+	</div>
+	<div class="pull-left mar-r-10" style="width: 254px;">
+	    <label class="pull-left line-h-2">报价日期&nbsp;</label>
+        <div class="input-group">
+            <input class="pull-left datepicker date-picker" name="quoteStartTime" placeholder="开始时间" value="" type="text">
+            <label class="pull-left">&nbsp;至&nbsp;</label>
+            <input class="pull-left datepicker date-picker" name="quoteEndTime" placeholder="结束时间" value="" type="text"> 
         </div>
 	</div>
+	<div class="pull-left mar-r-10">
+		<button class=" btn-sm  T-btn-quote-search search-btn">
+			<i class="ace-icon fa fa-search"></i>
+			 搜索
+		</button>
+	</div>
+    <div class="pull-left">
+        <button class="btn btn-sm btn-success T-quote-add">
+            <i class="ace-icon fa fa-plus"></i> 新增报价
+        </button>
+    </div>
 </div>
-<div class="row T-quoteList">
+<div class="T-quoteList">
 
 </div>

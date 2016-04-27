@@ -7,6 +7,7 @@
 				<th class="th-border">收款方</th>
 				<th class="th-border">金额</th>
 				<th class="th-border">收款方式</th>
+				<th class="th-border">账户名称</th>
 				<th class="th-border">备注</th>
 				<th class="th-border">操作人</th>
 				<th class="th-border">操作时间</th>
@@ -18,7 +19,7 @@
 				<td>{{income.resourceType}}</td>
 				<td>{{income.businessType}}</td>
 				<td>{{income.incomeOrPayParty}}</td>
-				<td>{{income.incomeMoney}}</td>
+				<td><span class="F-float F-money">{{income.incomeMoney}}</span></td>
 				<td>
 				{{if income.payType == 0}}
 					现金
@@ -31,7 +32,8 @@
 				{{else if income.payType == 4}}
 					其他
 				{{/if}}</td>
-				<td>{{income.remark}}</td>
+				<td>{{if income.accountName == null || income.accountName == ""}}-{{else}}{{income.accountName}}{{/if}}</td>
+                <td>{{income.remark}}</td>
 				<td>{{income.creatorName}}</td>
 				<td>{{income.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
 			</tr>

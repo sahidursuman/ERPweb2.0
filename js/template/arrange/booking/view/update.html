@@ -1,75 +1,90 @@
-<div class="col-xs-12 T-updateBooking globalAdd bookingFormOneList"><!--  -->
-	<form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="ui-sortable-handle">
-				<h5 class="">
-					<span class="badge badge-primary">1</span>
-					<label class="middle title-size">代订信息</label>
-				</h5>
-			<div class="widget-body">
-				<div class="widget-main">
-					<div class="form-group">
-						<input name="id" type="hidden" value="{{bookingOrder.id}}" />
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行客户:</label>
-						<div class="col-sm-2">
-							<input type="text" name="partnerAgencyName" class="col-sm-12 T-choosePartnerAgency" value="{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.travelAgencyName}}{{/if}}">
-							<input type="hidden" name="partnerAgencyId" value="{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.id}}{{/if}}">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>联系人:</label>
-						<div class="col-sm-2">
-							<div class="input-group">
-								<input type="text" name="contactRealname" class="col-sm-12 T-choosePartnerManager" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactRealname}}{{/if}}">
-								<input type="hidden" name="partnerAgencyContactId" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.id}}{{/if}}" />
-								<span class="input-group-addon T-addPartnerManager addManagerRight" title="为组团社新添加联系人">
+<div class="T-updateBooking globalAdd bookingFormOneList">
+    <!--  -->
+    <form class="form-horizontal bookingMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class="ui-sortable-handle">
+            <div class="group-info-area form-inline">
+                <div class="form-group fixed-width-1">
+                    <span class="badge badge-primary">1</span>
+                    <label class="middle title-size">代订信息</label>
+                </div>
+                <div class="form-group fixed-width-1" style="dispaly:inline-block; margin-left:865px;">
+                    <label>代订单号：</label>
+                    <input type="text" name="orderNumber" class="T-bookNumberChange" value="{{bookingOrder.orderNumber}}" style="width:160px;" placeholder="系统自动生成" >  
+                </div> 
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="form-group">
+                        <input name="id" type="hidden" value="{{bookingOrder.id}}" />
+                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行客户:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="partnerAgencyName" class="col-sm-12 T-choosePartnerAgency" value="{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.travelAgencyName}}{{/if}}">
+                            <input type="hidden" name="partnerAgencyId" value="{{if bookingOrder.partnerAgency != null}}{{bookingOrder.partnerAgency.id}}{{/if}}">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>联系人:</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <input type="text" name="contactRealname" class="col-sm-12 T-choosePartnerManager" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactRealname}}{{/if}}">
+                                <input type="hidden" name="partnerAgencyContactId" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.id}}{{/if}}" />
+                                <span class="input-group-addon T-addPartnerManager addManagerRight" title="为组团社新添加联系人">
 									<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 								</span>
-							</div>
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">联系电话:</label>
-						<div class="col-sm-2">
-							<input type="text" name="contactMobileNumber" class="col-sm-12" readonly="readonly" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactMobileNumber}}{{/if}}" maxlength="11">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">游客:</label>
-						<div class="col-sm-2">
-							<input type="text" name="touristRealname" class="col-sm-12" value="{{bookingOrder.touristRealname}}" maxlength="25">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right">游客电话:</label>
-						<div class="col-sm-2">
-							<input type="text" name="touristMobileNumber" class="col-sm-12" value="{{bookingOrder.touristMobileNumber}}" maxlength="11">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-1 control-label no-padding-right">备注:</label>
-						<div class="col-sm-8">
-							<!-- <input type="text" name="remark" class="col-sm-12" value="{{bookingOrder.remark}}" maxlength="500"> -->
-						<textarea name="remark"  value="{{bookingOrder.remark}}" class="col-sm-12" maxlength="500"></textarea>
-						</div>
-					</div>
-					<div class="form-group" style="border-top:1px dotted #ccc;padding-top:20px;">
-						<label class="col-sm-1  control-label no-padding-right"><span class="necessary">*</span>总应收:</label>
-						<div class="col-sm-2">
-							<input type="text" name="sumNeedGetMoney" class="col-sm-12 sumNeedGetMoney" value="{{bookingOrder.sumNeedGetMoney}}" readonly="readonly">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>总成本:</label>
-						<div class="col-sm-2">
-							<input type="text" name="sumCostMoney" class="col-sm-12 sumCostMoney" value="{{bookingOrder.sumCostMoney}}" readonly="readonly">
-						</div>
-						<label class="col-sm-1 control-label no-padding-right hidden">预付款:</label>
-						<div class="col-sm-2 hidden">
-							<input type="text" name="prePayMoney" class="col-sm-12 sumPrePayMoney price" readonly="readonly" value="{{bookingOrder.prePayMoney}}" maxlength="9" />
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col T-bookingHotelList">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
+                            </div>
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">联系电话:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="contactMobileNumber" class="col-sm-12" readonly="readonly" value="{{if bookingOrder.partnerAgencyContact != null}}{{bookingOrder.partnerAgencyContact.contactMobileNumber}}{{/if}}" maxlength="11">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">游客:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="touristRealname" class="col-sm-12" value="{{bookingOrder.touristRealname}}" maxlength="25">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">游客电话:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="touristMobileNumber" class="col-sm-12" value="{{bookingOrder.touristMobileNumber}}" maxlength="11">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">外联销售:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="outOPUserName" class="col-sm-12 T-outOPUserName" value="{{if bookingOrder.outOPUser}}{{bookingOrder.outOPUser.realName}}{{/if}}" maxlength="11">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right">备注:</label>
+                        <div class="col-sm-8">
+                            <!-- <input type="text" name="remark" class="col-sm-12" value="{{bookingOrder.remark}}" maxlength="500"> -->
+                            <textarea name="remark" class="col-sm-12" maxlength="500">{{bookingOrder.remark}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" style="border-top:1px dotted #ccc;padding-top:20px;">
+                        <label class="col-sm-1  control-label no-padding-right"><span class="necessary">*</span>总应收:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="sumNeedGetMoney" class="col-sm-12 sumNeedGetMoney F-float F-money" value="{{bookingOrder.sumNeedGetMoney}}" readonly="readonly">
+                        </div>
+                        <label class="col-sm-1 control-label no-padding-right">预收款:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="preIncomeMoney" class="col-sm-12 price F-float F-money" value="{{bookingOrder.preIncomeMoney}}" maxlength="9" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>总成本:</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="sumCostMoney" class="col-sm-12 sumCostMoney F-float F-money" value="{{bookingOrder.sumCostMoney}}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <a href="javascript:void(0)" hidden="hidden" class="T-btn-financial" style="right: 25px;position: absolute;z-index:1001;">
+        <button class="btn btn-sm  btn-success" style="margin-left: 20px"> 通知财务 </button>
+    </a>
+    <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 widget-container-col T-bookingHotelList">
+                <div class=" ui-sortable-handle">
+                    <h5 class="">
 							<span class="badge badge-primary">2</span>
 							<label class="middle title-size">酒店代订</label>
 							<button class="btn btn-sm btn-success T-hotel-add T-action" style="margin-left: 20px">
@@ -77,86 +92,97 @@
 								新增
 							</button>
 						</h5>
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
-								<thead>
-									<tr>
-										<th class="th-border" width="50"><span class="necessary">*</span>入住日期</th>
-										<th class="th-border" width="50"><span class="necessary">*</span>离店日期</th>
-										<th class="th-border"><span class="necessary">*</span>星级</th>
-										<th class="th-border"><span class="necessary">*</span>酒店</th>
-										<th class="th-border"><span class="necessary">*</span>房型</th>
-										<th class="th-border">天数</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border" width="110"> 成本单价</th>
-										<th class="th-border" width="110"> 销售单价</th>
-										<th class="th-border">成本</th>
-										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody class="T-hotelList">{{each bookingOrder.bookingHotelList as hotelList}}
-									<tr data-entity-id="{{hotelList.id}}">
-										<td>
-											<div class="input-group">
-												<input name="enterTime" value="{{hotelList.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker"/>
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</td>
-										<td>
-											<div class="input-group">
-												<input name="leaveTime" value="{{hotelList.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker"/>
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</td>
-										<td>
-											<select name="level" class="col-sm-12 T-hotelStar">
-											<option selected="selected" value="" {{if hotelList.hotel.level == 0}}selected="selected"{{/if}}>全部</option>
-												<option value="1">三星以下</option>
-												<option value="2" {{if hotelList.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
-												<option value="3" {{if hotelList.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
-												<option value="4" {{if hotelList.hotel.level == 4}}selected="selected"{{/if}}>四星</option>
-												<option value="5" {{if hotelList.hotel.level == 5}}selected="selected"{{/if}}>准五星</option>
-												<option value="6" {{if hotelList.hotel.level == 6}}selected="selected"{{/if}}>五星</option>
-												<option value="7" {{if hotelList.hotel.level == 7}}selected="selected"{{/if}}>五星以上</option>
-											</select>
-										</td>
-										<td>
-											<input name="hotelName" value="{{if hotelList.hotel != null}}{{hotelList.hotel.name}}{{/if}}" type="text" class="col-sm-12 T-chooseHotel bind-change"/>
-											<input name="hotelId" type="hidden" value="{{if hotelList.hotel != null}}{{hotelList.hotel.id}}{{/if}}" />
-										</td>
-										<td>
-											<input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/>
-											<input name="hotelRoomId" type="hidden" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.id}}{{/if}}" />
-										</td>
-										<td><input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur" maxlength="4" readonly="readonly" /></td>
-										<td><input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
-										<td><input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" style="width:55px;" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>
-										<td><input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td  class="hidden"><input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
-										<td>
-											<a class="cursor T-action T-hotel-delete">删除</a>
-										</td>
-									</tr>{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col T-bookingScenicList">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border" width="50"><span class="necessary">*</span>入住日期</th>
+                                        <th class="th-border" width="50"><span class="necessary">*</span>离店日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>星级</th>
+                                        <th class="th-border"><span class="necessary">*</span>酒店</th>
+                                        <th class="th-border"><span class="necessary">*</span>房型</th>
+                                        <th class="th-border">天数</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border" width="110"> 成本单价</th>
+                                        <th class="th-border" width="110"> 销售单价</th>
+                                        <th class="th-border">成本</th>
+                                        <th class="th-border">应收</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-hotelList">{{each bookingOrder.bookingHotelList as hotelList}}
+                                    <tr data-entity-id="{{hotelList.id}}" {{if hotelList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td>
+                                            <div class="input-group">
+                                                <input name="enterTime" value="{{hotelList.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input name="leaveTime" value="{{hotelList.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <select name="level" class="col-sm-12 T-hotelStar" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}>
+                                                <option selected="selected" value="" {{if hotelList.hotel.level==0 }}selected="selected" {{/if}}>全部</option>
+                                                <option value="1">三星以下</option>
+                                                <option value="2" {{if hotelList.hotel.level==2 }}selected="selected" {{/if}}>三星</option>
+                                                <option value="3" {{if hotelList.hotel.level==3 }}selected="selected" {{/if}}>准四星</option>
+                                                <option value="4" {{if hotelList.hotel.level==4 }}selected="selected" {{/if}}>四星</option>
+                                                <option value="5" {{if hotelList.hotel.level==5 }}selected="selected" {{/if}}>准五星</option>
+                                                <option value="6" {{if hotelList.hotel.level==6 }}selected="selected" {{/if}}>五星</option>
+                                                <option value="7" {{if hotelList.hotel.level==7 }}selected="selected" {{/if}}>五星以上</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input name="hotelName" value="{{if hotelList.hotel != null}}{{hotelList.hotel.name}}{{/if}}" type="text" class="col-sm-12 {{if !hotelList.isConfirmAccount}}T-chooseHotel{{/if}} bind-change" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="hotelId" type="hidden" value="{{if hotelList.hotel != null}}{{hotelList.hotel.id}}{{/if}}" />
+                                        </td>
+                                        <td>
+                                            <input name="hotelRoom" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.type}}{{/if}}" type="text" class="col-sm-12 {{if !hotelList.isConfirmAccount}}T-chooseHotelRoom{{/if}} bind-change" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="hotelRoomId" type="hidden" value="{{if hotelList.hotelRoom != null}}{{hotelList.hotelRoom.id}}{{/if}}" />
+                                        </td>
+                                        <td>
+                                            <input name="days" value="{{hotelList.days}}" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="4" readonly="readonly" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="roomCount" value="{{hotelList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" {{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="costPrice" value="{{hotelList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" style="width:55px;" maxlength="9"{{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}} />
+                                            <label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;">/天</label>
+                                        </td>
+                                        <td>
+                                            <input name="salePrice" value="{{hotelList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" style="width:55px;" maxlength="9" />
+                                            <label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;">/天</label>
+                                        </td>
+                                        <td>
+                                            <input name="sumCostMoney" value="{{hotelList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                        <td>
+                                            <input name="sumNeedGetMoney" value="{{hotelList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                            <td>
+                                                <input type="text" name="prePayMoney" value="{{hotelList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9"{{if hotelList.isConfirmAccount}}disabled="disabled"{{/if}}>
+                                            </td>
+                                            <td>{{if !hotelList.isConfirmAccount}}
+                                                <a class="cursor T-action T-hotel-delete">删除</a>
+                                                {{/if}}
+                                            </td>
+                                    </tr>{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 widget-container-col T-bookingScenicList">
+                <div class=" ui-sortable-handle">
+                    <h5 class="">
 							<span class="badge badge-primary">3</span>
 							<label class="middle title-size">景区项目代订</label>
 							<button class="btn btn-sm btn-success T-action T-scenic-add" style="margin-left: 20px">
@@ -164,64 +190,77 @@
 								新增
 							</button>
 						</h5>
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover margin-top"  style="border: 1px solid #ccc">
-								<thead>
-									<tr>
-										<th class="th-border" width="50"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>景区</th>
-										<th class="th-border"><span class="necessary">*</span>收费项</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">成本单价</th>
-										<th class="th-border">销售单价</th>
-										<th class="th-border">成本</th>
-										<th class="th-border">应收</th>
-										<th class="th-border">订单号</th>
-										<th class="th-border hidden">预付款</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody class="T-scenicList">{{each bookingOrder.bookingScenicList as scenicList}}
-									<tr data-entity-id="{{scenicList.id}}">
-										<td>
-											<div class="input-group">
-												<input name="startTime" value="{{scenicList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker"/>
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</td>
-										<td>
-											<input name="scenicName" value="{{if scenicList.scenic != null}}{{scenicList.scenic.name}}{{/if}}" type="text"  class="col-sm-12 T-chooseScenic bind-change" />
-											<input name="scenicId" value="{{if scenicList.scenic != null}}{{scenicList.scenic.id}}{{/if}}" type="hidden" />
-										</td>
-										<td>
-											<input name="scenicItemName" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.name}}{{/if}}" type="text"  class="col-sm-12 T-chooseScenicItem bind-change" />
-											<input name="scenicItemId" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.id}}{{/if}}" type="hidden" />
-										</td>
-										<td><input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
-										<td><input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12"/></td>
-										<td><input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" /></td>
-										<td  class="hidden"><input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
-										<td>
-											<a class="cursor T-action T-scenic-delete">删除</a>
-										</td>
-									</tr>{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col T-bookingTicketList">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border" width="50"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>景区</th>
+                                        <th class="th-border"><span class="necessary">*</span>收费项</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">成本单价</th>
+                                        <th class="th-border">销售单价</th>
+                                        <th class="th-border">成本</th>
+                                        <th class="th-border">应收</th>
+                                        <th class="th-border">订单号</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-scenicList">{{each bookingOrder.bookingScenicList as scenicList}}
+                                    <tr data-entity-id="{{scenicList.id}}" {{if scenicList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td>
+                                            <div class="input-group">
+                                                <input name="startTime" value="{{scenicList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input name="scenicName" value="{{if scenicList.scenic != null}}{{scenicList.scenic.name}}{{/if}}" type="text" class="col-sm-12 {{if !scenicList.isConfirmAccount}}T-chooseScenic{{/if}} bind-change" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="scenicId" value="{{if scenicList.scenic != null}}{{scenicList.scenic.id}}{{/if}}" type="hidden" />
+                                        </td>
+                                        <td>
+                                            <input name="scenicItemName" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.name}}{{/if}}" type="text" class="col-sm-12 {{if !scenicList.isConfirmAccount}}T-chooseScenicItem{{/if}} bind-change" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="scenicItemId" value="{{if scenicList.scenicItem != null}}{{scenicList.scenicItem.id}}{{/if}}" type="hidden" />
+                                        </td>
+                                        <td>
+                                            <input name="roomCount" value="{{scenicList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="7" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}{{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}{{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="costPrice" value="{{scenicList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}{{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="salePrice" value="{{scenicList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="sumCostMoney" value="{{scenicList.sumCostMoney}}" type="text" readonly="readonly" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                        <td>
+                                            <input name="sumNeedGetMoney" value="{{scenicList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                        <td>
+                                            <input name="orderNumber" value="{{scenicList.orderNumber}}" type="text" class="col-sm-12" maxlength="50" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+
+                                            <td>
+                                                <input type="text" name="prePayMoney" value="{{scenicList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9" {{if scenicList.isConfirmAccount}}disabled="disabled"{{/if}}>
+                                            </td>
+                                            <td>{{if !scenicList.isConfirmAccount}}
+                                                <a class="cursor T-action T-scenic-delete">删除</a>
+                                                {{/if}}
+                                            </td>
+                                    </tr>{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 widget-container-col T-bookingTicketList">
+                <div class=" ui-sortable-handle">
+                    <h5 class="">
 							<span class="badge badge-primary">4</span>
 							<label class="middle title-size">票务代订</label>
 							<button class="btn btn-sm  btn-success T-action T-ticket-add"  style="margin-left: 20px">
@@ -229,75 +268,96 @@
 								新增
 							</button>
 						</h5>
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc" >
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>票务公司</th>
-										<th class="th-border"><span class="necessary">*</span>类型</th>
-										<th class="th-border">出发城市</th>
-										<th class="th-border">到达城市</th>
-										<th class="th-border"><span class="necessary">*</span>班次</th>
-										<th class="th-border"><span class="necessary">*</span>座位级别</th>
-										<th class="th-border" width="50"><span class="necessary">*</span>时间</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">成本单价</th>
-										<th class="th-border">销售单价</th>
-										<th class="th-border">成本</th>
-										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody class="T-ticketList">{{each bookingOrder.bookingTicketList as ticketList}}
-									<tr data-entity-id="{{ticketList.id}}">
-										<td>
-											<input name="ticketName" value="{{if ticketList.ticket != null}}{{ticketList.ticket.name}}{{/if}}" type="text" class="col-sm-12 T-chooseTicket bind-change"/>
-											<input name="ticketId" value="{{if ticketList.ticket != null}}{{ticketList.ticket.id}}{{/if}}" type="hidden" />
-										</td>
-										<td>
-											<select name="type">
-												<option {{if ticketList.type==1}}selected="selected"{{/if}} value="1">机票</option>
-												<option {{if ticketList.type==2}}selected="selected"{{/if}} value="2">汽车票</option>
-												<option {{if ticketList.type==3}}selected="selected"{{/if}} value="3">火车票</option>
-												<option {{if ticketList.type==4}}selected="selected"{{/if}} value="4">轮船票</option>
-											</select>
-										</td>
-										<!-- <input name="type" value="{{ticketList.type}}" type="text" class="col-sm-12"/> -->
-										<td><input name="startCity" value="{{ticketList.startCity}}" type="text" class="col-sm-12" maxlength="30" /></td>
-										<td><input name="arriveCity" value="{{ticketList.arriveCity}}" type="text" class="col-sm-12" maxlength="30" /></td>
-										<td><input name="shift" value="{{ticketList.shift}}" type="text" class="col-sm-12" maxlength="50" /></td>
-										<td><input name="seatLevel" value="{{ticketList.seatLevel}}" type="text" class="col-sm-12" maxlength="30" /></td>
-										<td>
-											<div class="input-group" style="min-width: 165px;">
-												<input name="startTime" value="{{ticketList.startTime}}" type="text" class="datetimepicker col-sm-12" />
-												<span class="input-group-addon">
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>票务公司</th>
+                                        <th class="th-border"><span class="necessary">*</span>类型</th>
+                                        <th class="th-border">出发城市</th>
+                                        <th class="th-border">到达城市</th>
+                                        <th class="th-border"><span class="necessary">*</span>班次</th>
+                                        <th class="th-border"><span class="necessary">*</span>座位级别</th>
+                                        <th class="th-border" width="50"><span class="necessary">*</span>时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">成本单价</th>
+                                        <th class="th-border">销售单价</th>
+                                        <th class="th-border">成本</th>
+                                        <th class="th-border">应收</th>
+                                        <th class="th-border ">预付款</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-ticketList">{{each bookingOrder.bookingTicketList as ticketList}}
+                                    <tr data-entity-id="{{ticketList.id}}" {{if ticketList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td>
+                                            <input name="ticketName" value="{{if ticketList.ticket != null}}{{ticketList.ticket.name}}{{/if}}" type="text" class="col-sm-12 {{if !ticketList.isConfirmAccount}}T-chooseTicket{{/if}} bind-change" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="ticketId" value="{{if ticketList.ticket != null}}{{ticketList.ticket.id}}{{/if}}" type="hidden" />
+                                        </td>
+                                        <td>
+                                            <select name="type" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}>
+                                                <option {{if ticketList.type==1}}selected="selected" {{/if}} value="1">机票</option>
+                                                <option {{if ticketList.type==2}}selected="selected" {{/if}} value="2">汽车票</option>
+                                                <option {{if ticketList.type==3}}selected="selected" {{/if}} value="3">火车票</option>
+                                                <option {{if ticketList.type==4}}selected="selected" {{/if}} value="4">轮船票</option>
+                                            </select>
+                                        </td>
+                                        <!-- <input name="type" value="{{ticketList.type}}" type="text" class="col-sm-12"/> -->
+                                        <td>
+                                            <input name="startCity" value="{{ticketList.startCity}}" type="text" class="col-sm-12" maxlength="30" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="arriveCity" value="{{ticketList.arriveCity}}" type="text" class="col-sm-12" maxlength="30" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="shift" value="{{ticketList.shift}}" type="text" class="col-sm-12" maxlength="50" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="seatLevel" value="{{ticketList.seatLevel}}" type="text" class="col-sm-12" maxlength="30" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <div class="input-group" style="min-width: 165px;">
+                                                <input name="startTime" value="{{ticketList.startTime}}" type="text" class="datetimepicker col-sm-12" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                                <span class="input-group-addon">
 													<i class="fa fa-clock-o"></i>
 												</span>
-											</div>
-										</td>
-										<td><input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
-										<td><input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td  class="hidden"><input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
-										<td>
-											<a class="cursor T-action T-ticket-delete">删除</a>
-										</td>
-									</tr>{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-xs-12 col-sm-12 widget-container-col T-bookingBusList">
-				<div class=" ui-sortable-handle">
-						<h5 class="">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input name="roomCount" value="{{ticketList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="costPrice" value="{{ticketList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="salePrice" value="{{ticketList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="sumCostMoney" value="{{ticketList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                        <td>
+                                            <input name="sumNeedGetMoney" value="{{ticketList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                            <td>
+                                                <input type="text" name="prePayMoney" value="{{ticketList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9" {{if ticketList.isConfirmAccount}}disabled="disabled"{{/if}}>
+                                            </td>
+                                            <td>{{if !ticketList.isConfirmAccount}}
+                                                <a class="cursor T-action T-ticket-delete">删除</a>
+                                                {{/if}}
+                                            </td>
+                                    </tr>{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 widget-container-col T-bookingBusList">
+                <div class=" ui-sortable-handle">
+                    <h5 class="">
 							<span class="badge badge-primary">5</span>
 							<label class="middle title-size">旅游车代订</label>
 							<button class="btn btn-sm  btn-success T-action T-bus-add"  style="margin-left: 20px">
@@ -305,74 +365,82 @@
 								新增
 							</button>
 						</h5>
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover margin-top"  style="border: 1px solid #ccc">
-								<thead>
-									<tr>
-										<th class="th-border" width="50"><span class="necessary">*</span>开始日期</th>
-										<th class="th-border" width="50"><span class="necessary">*</span>结束日期</th>
-										<th class="th-border"><span class="necessary">*</span>车座数</th>
-										<th class="th-border">车辆品牌</th>
-										<th class="th-border"><span class="necessary">*</span>所属车队</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">成本单价</th>
-										<th class="th-border"> 销售单价</th>
-										<th class="th-border">成本</th>
-										<th class="th-border">应收</th>
-										<th class="th-border hidden">预付款</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody class="T-busList">{{each bookingOrder.bookingBusCompanieList as busList}}
-									<tr data-entity-id="{{busList.id}}">
-										<td>
-											<div class="input-group">
-												<input name="startTime" value="{{busList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</td>
-										<td>
-											<div class="input-group">
-												<input name="endTime" value="{{busList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" />
-												<span class="input-group-addon">
-													<i class="fa fa-calendar"></i>
-												</span>
-											</div>
-										</td>
-										<td>
-											<input name="needSeatCount" value="{{busList.needSeatCount}}" type="text" class="col-sm-12 T-chooseSeatCount bind-change" />
-										</td>
-										<td><input name="needBusBrand" value="{{busList.needBusBrand}}" type="text" class="col-sm-12 bind-change T-chooseNeedBusBrand" /></td>
-										<td>
-											<input name="busCompany" value="{{if busList.busCompany != null}}{{busList.busCompany.companyName}}{{/if}}" type="text" class="col-sm-12 bind-change T-busCompany" />
-											<input name="busCompanyId" value="{{if busList.busCompany != null}}{{busList.busCompany.id}}{{/if}}" type="hidden" />
-										</td>
-										<td><input name="roomCount" value="{{busList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>
-										<td><input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
-										<td><input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price" maxlength="9" /></td>
-										<td><input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td><input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12"/></td>
-										<td  class="hidden"><input type="text" name="prePayMoney" value="{{busList.prePayMoney}}" class="col-sm-12 T-action-blur" maxlength="9"></td>
-										<td>
-											<a class="cursor T-action T-bus-delete">删除</a>
-										</td>
-									</tr>{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="space-10"></div>
-		<div class="space-20"></div>
-		<button class="btn btn-block btn-primary T-submit-booking guideSubmit">
-			<i class="ace-icon fa fa-check"></i>
-			提交信息
-		</button>
-		<div class="space-20"></div>
-	</form>
-</div>
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border" width="50"><span class="necessary">*</span>开始日期</th>
+                                        <th class="th-border" width="50"><span class="necessary">*</span>结束日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>车座数</th>
+                                        <th class="th-border">车辆品牌</th>
+                                        <th class="th-border"><span class="necessary">*</span>所属车队</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">成本单价</th>
+                                        <th class="th-border"> 销售单价</th>
+                                        <th class="th-border">成本</th>
+                                        <th class="th-border">应收</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="T-busList">{{each bookingOrder.bookingBusCompanieList as busList}}
+                                    <tr data-entity-id="{{busList.id}}" {{if busList.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
+                                        <td>
+                                            <div class="input-group">
+                                                <input name="startTime" value="{{busList.startTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input name="endTime" value="{{busList.endTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input name="needSeatCount" value="{{busList.needSeatCount}}" type="text" class="col-sm-12 {{if !busList.isConfirmAccount}}T-chooseSeatCount{{/if}} bind-change" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="needBusBrand" value="{{busList.needBusBrand}}" type="text" class="col-sm-12 bind-change {{if !busList.isConfirmAccount}}T-chooseNeedBusBrand{{/if}}" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}} />
+                                        </td>
+                                        <td>
+                                            <input name="busCompany" value="{{if busList.busCompany != null}}{{busList.busCompany.companyName}}{{/if}}" type="text" class="col-sm-12 bind-change {{if !busList.isConfirmAccount}}T-busCompany{{/if}}" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="busCompanyId" value="{{if busList.busCompany != null}}{{busList.busCompany.id}}{{/if}}" type="hidden" />
+                                        </td>
+                                        <td>
+                                            <input name="roomCount" value="{{busList.roomCount}}" type="text" class="col-sm-12 T-action-blur" maxlength="5" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="costPrice" value="{{busList.costPrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="salePrice" value="{{busList.salePrice}}" type="text" class="col-sm-12 T-action-blur  price F-float F-money" maxlength="9" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input name="sumCostMoney" value="{{busList.sumCostMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                        <td>
+                                            <input name="sumNeedGetMoney" value="{{busList.sumNeedGetMoney}}" readonly="readonly" type="text" class="col-sm-12 F-float F-money" />
+                                        </td>
+                                            <td>
+                                                <input type="text" name="prePayMoney" value="{{busList.prePayMoney}}" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money" maxlength="9" {{if busList.isConfirmAccount}}disabled="disabled"{{/if}}>
+                                            </td>
+                                            <td>{{if !busList.isConfirmAccount}}
+                                                <a class="cursor T-action T-bus-delete">删除</a>
+                                                {{/if}}
+                                            </td>
+                                    </tr>{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space-10"></div>
+        <div class="space-20"></div>
+        <button class="btn btn-block btn-primary T-submit-booking guideSubmit">
+            <i class="ace-icon fa fa-check"></i> 提交信息
+        </button>
+        <div class="space-20"></div>
+    </form>
+    </div>

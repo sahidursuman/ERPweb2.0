@@ -1,3 +1,8 @@
+/*common*/
+.w100 {
+    width: 100px;
+}
+
 .table-special {
     padding: 0!important;
     width: 100%;
@@ -13,11 +18,19 @@
 
 
 /*table溢出*/
-
+.overflow-table {
+    width: 100%;
+}
 .overflow-table tr td,
 .overflow-table tr th {
     padding-left: 0px!important;
     padding-right: 0px!important;
+}
+
+.overflow-table tr .h-touristGroupInfo, .h-touristGroupInfo {
+    text-align: left;
+    padding-left: 10px !important;
+    margin-left: 20px;
 }
 
 .table-special {
@@ -50,7 +63,7 @@
 }
 
 .search-btn:hover {
-    background: #359fb2!important;
+    background: #359fb2;
 }
 
 
@@ -60,6 +73,8 @@
     white-space: nowrap!important;
     overflow: auto!important;
     height: auto!important;
+    width: auto!important;
+    max-width: 500px;
     z-index: 9999;
 }
 
@@ -82,6 +97,9 @@ input {
     padding-right: 5px;
 }
 
+.div-h-30 {
+    height:30px;
+}
 
 /**
  * 设置自定义popover的样式
@@ -94,6 +112,9 @@ input {
     overflow-y: auto;
 }
 
+#desc-tooltip-containter2 .popover {
+    max-width: 600px;
+}
 
 /**
  * 重写翻页插件的样式
@@ -101,6 +122,11 @@ input {
 
 .laypageskin_molv a {
     background-color: #ddd;
+}
+
+
+.tab-text_align{
+    text-align: center;
 }
 
 .laypage_skip {
@@ -131,8 +157,8 @@ label {
 .block-up {
     background: #ffffff!important;
     border: 1px solid #83bbd6!important;
-    "
- font-size: 12px;
+    font-size: 12px;
+    height: 24px!important;
 }
 
 .cursor {
@@ -263,10 +289,22 @@ table tr td {
 }
 
 .th-border {
-    border: 1px solid #ececec!important;
+    /*border: 1px solid #ececec!important;*/
     background: #f7f8f8!important;
 }
 
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>th,
+.table>thead:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td,
+.table>thead:first-child>tr:first-child>td {
+    border-top: 1px solid #ddd;
+}
+
+.table>thead>tr>th:last-child {
+    border-right-color: #ddd;
+}
 .pitch {
     margin-left: 25px
 }
@@ -401,16 +439,109 @@ table tr td {
     margin-left: 25px!important;
 }
 
+.mar-0 {
+    margin: 0;
+}
+
+.mar-t-5 {
+    margin-top: 5px;
+}
+
+.mar-t-20 {
+    margin-top: 20px;
+}
+.mar-t-30 {
+    margin-top: 30px;
+}
+.mar-t-10 {
+    margin-top: 10px;
+}
+.mar-t-15 {
+    margin-top: 15px;
+}
+.mar-l-5 {
+    margin-left: 5px;
+}
+.textaR-paL{
+    text-align: left !important;
+    padding-left:25px !important;
+}
+.textaR-paR{
+    text-align: right !important;
+    padding-right:15px !important;
+}
+.mar-l-3{
+    margin-left: 3px;
+}
+.mar-l-8{
+    margin-left: 8px;
+}
 .mar-l-10 {
     margin-left: 10px;
 }
-
+.mar-l-23{
+    margin-left: 23px;
+}
+.mar-l-f5{
+    margin-left: -5px;
+}
 .mar-l-15 {
     margin-left: 15px;
+}
+.mar-l-90 {
+    margin-left: 90px;
+}
+.mar-1-135{
+    margin-left: 135px;
+}
+
+.mar-r-9 {
+    margin-right: 9px;
+}
+
+.mar-r-10 {
+    margin-right: 10px;
+}
+.mar-r-20 {
+    margin-right: 20px!important;
+}
+
+.mar-b-0 {
+    margin-bottom: 0px;
+}
+.mar-b-10 {
+    margin-bottom: 10px;
+}
+
+.mar-b-20 {
+    margin-bottom: 20px;
+}
+
+.pad-0 {
+    padding: 0;
+}
+
+.pad-0-I {
+    padding: 0 !important;
 }
 
 .pad-l-5 {
     padding-left: 5px;
+}
+.pad-b-30{
+    padding-bottom: 30px;
+}
+.pad-b-20{
+    padding-bottom: 20px;
+}
+.line-h-2 {
+    line-height: 1.9em;    
+}
+.text-a-l{
+    text-align: left !important;
+}
+.font-w-bold{
+    font-weight: bold;
 }
 
 .label-inline-60 {
@@ -520,14 +651,6 @@ table tr td {
     margin-top: -4px !important;
 }
 
-
-/*评论*/
-
-.font-bold: {
-    font-weight: bold;
-}
-
-
 /*发团安排*/
 
 .tipPlan-gap {
@@ -566,7 +689,10 @@ table tr td {
     border: 1px solid #ececec;
     padding: 7px 0px 7px 0px;
 }
-
+#T-touristGroupViewAccount .whereQ td {
+    border: 1px solid #E2E2E2;
+    padding: 7px 0px 7px 0px;
+}
 .whereQ .style-myself {
     width: 90px !important;
     /*border: 2px solid #5d5d5d;*/
@@ -629,7 +755,6 @@ table tr td {
     border: 2px solid #5d5d5d;
     text-align: right;
 }
-
 
 /*restaurant时间宽度*/
 
@@ -804,7 +929,11 @@ select {
     font-size: 12px;
     padding: 0px 0px 0px 10px;
 }
-
+.guideInputListAging {
+    width: 250px !important;
+    font-size: 12px;
+    padding: 0px 0px 0px 10px;
+}
 .globalAdd .guideInterval {
     margin-bottom: 10px !important;
 }
@@ -812,11 +941,6 @@ select {
 .globalAdd .editFeeMainForm input {
     padding: 0px 0px 0px 10px;
 }
-
-.checkbox {
-    line-height: 12px;
-}
-
 .addressMinute {
     width: 612px !important;
 }
@@ -953,7 +1077,10 @@ select {
     line-height: 10px;
     padding-top: 3px;
 }
-
+.nav-tabs >li >a.pad-lr-30{
+    padding-right: 30px;
+    padding-left: 30px;
+}
 
 /**
  * public style
@@ -1033,14 +1160,13 @@ select {
 
 /*项目代订导出按钮*/
 
-.bookingBtn {
+.export-Btn {
     height: 24px;
     line-height: 9px;
     position: absolute;
     right: 14px;
     top: 0px;
 }
-
 .addManagerRight {
     cursor: pointer;
     left: -38px;
@@ -1151,12 +1277,16 @@ select {
     width: 260px;
 }
 
+.font-w{
+     color: #576373;
+    font-weight: bold !important;
+}
 
 /*中转分段*/
 
-.subsection-width-time {
-    width: 145px;
-}
+.width110 {
+        width: 110px !important;
+    }
 
 .marginLeftTourist-38 {
     margin-left: 15px;
@@ -1398,27 +1528,28 @@ select {
     height: auto;
     padding-bottom: 70px;
     background-color: #FFFFFF;
+    /*background-color: red;*/
     margin: auto;
     font-family: '微软雅黑';
     color: #444;
 }
 
 .quote-title-style {
-    width: 1000px;
+    width:1000px;
     height: 135px;
     background-color: #48A2D2;
 }
 
 .share-quote-offer {
     width: 1000px;
-    height: 420px;
+    height: auto;
     /*border: 1px solid #666;*/
     margin-top: 40px;
 }
 
 .share-quote-offerdetails {
     width: 1000px;
-    height: 260px;
+    height: auto;
     border-top: 1px solid #DFDFDF;
     margin-top: 30px;
 }
@@ -1476,7 +1607,9 @@ select {
     color: #444;
     margin-left: 490px;
 }
-
+.share-agency-times{
+   margin-left:560px;color: #444;margin-top: -5px;
+}
 .share-dividing {
     color: #48a2d2;
     font-size: 18px;
@@ -1503,7 +1636,9 @@ select {
     /*overflow:scroll;*/
     /*background-color: red;*/
 }
-
+.share-detailedContent-div{
+    width: 960px;margin: auto;overflow: scroll;
+}
 .share-startTime-divid {
     display: block;
     width: 90px;
@@ -1524,6 +1659,13 @@ select {
     border-top: 1px solid #DFDFDF;
     /*border-bottom: 1px solid red;*/
     margin-top: 30px;
+}
+.share-anchor{
+     width: 30px;height: 170px;
+     background-color: #eaeaea;
+     position: fixed;top: 340px;
+     border-radius: 20px;
+     margin-left: -45px;
 }
 .share-anchor-ul{
     width: 20px;
@@ -1612,7 +1754,10 @@ p#back-top a span {
     border: 0!important;
     padding-right: 6px;
 }
-
+.quoteTable-arrange {
+        width:100%;
+       margin-bottom: 30px;
+    }
 .quoteTable-arrange td {
     padding-left: 17px;
 }
@@ -1630,8 +1775,225 @@ p#back-top a span {
 .TransferTable .widget-main.no-padding .table {
     border-width: 1px;
 }
+.quoteUl li{
+    list-style-type: none;
+    float: left;
+    margin-left: 10px;
+}
+.group-info .form-group {
+    margin-right: 25px;
+}
+.requirementsPlan{
+     font-weight:bold;
+     color: #576373;
+     background-color:#EFEFEF;
+     padding: 8px 5px 8px 5px;width: auto; 
+     border-radius: 3px;
+}
+.userAuthWidth{
+    width:150px;height: auto;
+    position: fixed;
+    top:142px;left: 1080px; 
+    border:1px solid #ddd;
+    margin-top: 45px;
+}
+.userUpdate-auth ul{
+    margin-left: 0px;
+}
+.userUpdate-auth .btn{
+    padding: 4px 3px;
+}
+.saveAuth-user{
+    margin-left: -1px;
+    width: 150px;
+    }
+.userAuth li{
+    list-style-type: none;
+    width: 150px;
+    height: 43px;
+    padding: 8px 0px 8px 0px;
+    text-align: center;
+}
+.userAuth li:hover{
+    background-color: #E8E8E8;
+    text-align: center;
+}
+.userAuth li a{
+    /*margin-left: 46px;*/
+    line-height: 35px;
+    color: #000;
+    text-align: center;
+}
+.userAuth li:hover{
+    cursor: pointer;
+}
 
+.h-touristGroupInfo p{
+    text-align: left;
+    margin: 0px;
+}
+.h-touristGroupInfo p.center{
+    text-align: center;
+    margin: 0px;
+}
+.h-touristGroupInfo p span{
+    margin-right: 10px;
+}
+/*账户设置样式*/
+.application input{
+    margin-left: 40px;
+}
+.wizard-steps{
+    list-style: none;
+    display: table;
+    width: 98%;
+    padding: 0;
+    margin: auto;
+    position: relative;
+}
+.wizard-steps li {
+    display: table-cell;
+    /*text-align: center;*/
+    width: 1%;
+}
+.wizard-steps li:before {
+    display: block;
+    content: "";
+    width: 100%;
+    height: 1px;
+    font-size: 0;
+    overflow: hidden;
+    border-top: 4px solid #CED1D6;
+    position: relative;
+    top: 21px;
+    z-index: 1;
+}
+.wizard-steps li.active .step, .wizard-steps li.complete .step {
+    border-color: #5293c4;
+}
+.wizard-steps li .step {
+    border: 5px solid #ced1d6;
+    color: #546474;
+    font-size: 15px;
+    border-radius: 100%;
+    background-color: #FFF;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 30px;
+    text-align: center;
+}
+.wizard-steps li .title {
+    display: block;
+    margin-top: 4px;
+    max-width: 100%;
+    color: #949ea7;
+    font-size: 14px;
+    z-index: 104;
+    /*text-align: center;*/
+    table-layout: fixed;
+    word-wrap: break-word;
+}
 
+.apply-information label{
+    font-size: 14px !important;
+    color: #333;
+}
+.apply-information input{
+    height: 30px !important;
+    width: 250px !important;
+}
+.account-solutionMain{
+    margin-top: 15px;
+    margin-left: 20px;
+}
+.account-solutionMain p{
+    color: #999999;
+    font-size: 14px;
+    font-family: '宋体';
+    text-align: left;
+}
+#shopFormCol-x12 .col-sm-12{
+    float: none;
+}
+.graySearch-btn{
+    background-color: gray;
+    border: 2px solid gray !important;
+}
+.graySearch-btn:hover{
+    background-color: gray;
+    border: 2px solid gray !important;
+}
+.accountApply-status{
+   height: 30px !important;
+   width: 250px !important;
+   margin-top: 5px;
+}
+.apply-qualification{
+   margin-top: 25px;
+   width: 90%;margin-left: 10px;
+}
+.apply-details{
+   margin-left: -32px;height: 30px !important;
+}
+.apply-baseInfo{
+    margin-left: -20px;
+    height: 30px !important;
+}
+.apply-remark{
+    margin-left: -5px;
+    height: 30px !important;
+}
+.addPhone-prompt{
+    margin-left: 40px;
+    font-family: '宋体';
+    color: #666666;
+    margin-top: 10px;
+}
+.applicationBtn{
+    width: 120px;
+    height: 40px !important;
+    margin-left: 6px !important;
+}
+.newPhoneStyle{
+    width: 370px;height: 40px !important;
+}
+.Verification-code{
+    width: 240px;height: 40px !important;
+}
+.application-style{
+    margin-left: 40px;
+    font-family: '宋体';
+    font-weight: bold;
+}
+.fixedPhone{
+    margin-left: 46px;
+    margin-top: 11px;
+    position: absolute;
+    font-size: 12px;
+}
+.application-newPhone{
+    width: 370px;height: 40px !important;
+    padding-left:60px !important;
+}
+
+/*游客小组查看结算单样式*/
+.touristGroupViewAccount{
+    font-family: '微软雅黑';
+}
+.viewAccountsMain{
+    width: 650px;
+    margin: auto;
+    /*background-color: red;*/
+    font-size: 12px;
+}
+.view-accountsPrint th{
+    border: 1px solid #E2E2E2 !important;
+    font-weight: normal !important;
+    color: #393939 !important;
+}
 /*媒体查询-不同分辨率*/
 
 @media screen and (max-width:1703px) {
@@ -1668,6 +2030,14 @@ p#back-top a span {
         border-left: 2px solid #ddd;
         border-right: 2px solid #ddd;
     }
+    /*账户设置样式*/
+    .apply-details{
+        margin-left: -4px;height: 30px !important;
+    }
+    .apply-baseInfo{
+        margin-left: 8px;
+        height: 30px !important;
+    }
 }
 
 
@@ -1682,11 +2052,12 @@ p#back-top a span {
         right: 8px;
     }
     .width110 {
-        width: 110px
+        width: 110px !important;
     }
     .subsectionStartTime {
         width: 100px;
     }
+
     .marginLeftTourist-38 {
         margin-left: 54px;
     }
@@ -1797,7 +2168,7 @@ p#back-top a span {
         margin-left: 20px !important;
     }
     .width110 {
-        width: 110px;
+        width: 110px !important;
     }
     .trans-PayedMoney {
         width: 280px;
@@ -1932,8 +2303,44 @@ p#back-top a span {
     .quoteInprodactName {
         width: 95px !important;
     }
+    .listQuote{
+        width: 75px;
+    }
+    .marginLeft-bigM {
+        margin-left: 75px;
+        margin-top: -20px;
+    }
+    .timeStartMore {
+        margin-left: -20px !important;
+    }
+     /*分并转团*/
+    .arrangeEndtime{
+        margin-left: 15px;
+    }
+    .arrangetype{
+        margin-left: 25px;
+    }
+    .orderManagerTime{
+        width: 270px;
+    }
+    .orderManagerOption{
+        width: 230px;
+        margin-left: 60px;
+        margin-top: -20px;
+    }
+    
 }
 
+@media screen and (max-width:1440px) {
+ .userAuthWidth{
+        width:160px;height: auto;
+        position: fixed;
+        top:142px;left: 1030px; 
+        border:1px solid #ddd;
+        margin-top: 45px;
+    }
+
+}
 
 /*媒体查询 1366*/
 
@@ -1990,8 +2397,11 @@ p#back-top a span {
         left: -18px;
     }
     /*中转分段*/
-    .subsection-width-time {
+  /*  .subsection-width-time {
         width: 120px;
+    }*/
+    .marginLeftSub{
+        margin-left: 15px;
     }
     .marginLeftTourist-38 {
         margin-left: 38px;
@@ -2000,9 +2410,195 @@ p#back-top a span {
     .busQuoteWidth {
         width: 140px;
     }
+    /*报价管理*/
+    .listQuote{
+        width: 75px;
+    }
+    .marginLeft-bigM {
+        margin-left: 75px;
+        margin-top: -20px;
+    }
+    .timeStartMore {
+        margin-left: -25px !important;
+    }
+
+    .group-info .form-group{
+        margin-right: 15px;
+    }
+    .orderStatus{
+        margin-top: 25px;
+        margin-left: -27px;
+    }
+    .searchOrder{
+        margin-left: 5px;
+        margin-top: 25px;
+    }
+
+    
+}
+@media screen and (max-width:1280px) {
+
+    .busCompanyNameWidth{
+        width: 130px;
+    }
+    .hotelNameWidth{
+        width: 130px; 
+    }
+    .orderManagerTime{
+        margin-top: 10px;
+        margin-left: -23px;
+    }
+    .linproductName{
+        width: 93px;
+    }
+    .timeStartMore {
+        margin-left: -22px !important;
+        margin-top: 10px;
+    }
+    .addQuoteDiv{
+        margin-left: 20px;
+    }
+    .viewQuoteFdiv{
+        margin-left: 20px;
+    }
+    .mar-ort-10{
+        margin-top: 10px;
+    } 
+}
+/*//分享报价手机自适应*/
+@media screen and (max-width:1080px) {
+    .share-anchor{
+         width: 30px;height: 170px;
+         background-color: #eaeaea;
+         position: fixed;top: 340px;
+         border-radius: 20px;
+         margin-left: -36px;
+    } 
 }
 
 
+@media screen and (max-width:720px) {
+   .shareQuoteS{
+        width: 100%;
+        height: auto;
+        padding-bottom: 70px;
+        background-color: #FFFFFF;
+        /*background-color: red;*/
+        margin: auto;
+        font-family: '微软雅黑';
+        color: #444;
+    }
+   .quote-title-style {
+        width: 100%;
+        height: 135px;
+        background-color: #48A2D2;
+    }
+
+    .share-quote-offer {
+        width: 94%;
+        height: auto;
+        /*border: 1px solid #666;*/
+        margin:40px auto 0px;
+    }
+
+    .share-quote-offerdetails {
+        width: 94%;
+        height: auto;
+        border-top: 1px solid #DFDFDF;
+        margin-top: 30px;
+    }
+
+    .share-quote-arrange {
+       width: 94%;
+        height: auto;
+        padding-bottom: 10px;
+        border-top: 1px solid #DFDFDF;
+        /*border-bottom: 1px solid red;*/
+        margin-top: 30px;
+    }
+
+    .share-quote-schedule {
+        width: 94%;
+        height: auto;
+        padding-bottom: 20px;
+        border-top: 1px solid #DFDFDF;
+        /*border-bottom: 1px solid #666;*/
+        margin-top: 30px;
+    }
+    .share-detailedContent {
+        width: 97%;
+        height: auto;
+        margin: auto;
+        /*overflow:scroll;*/
+        /*background-color: red;*/
+    }
+    .share-detailedContent-div{
+        width: 97%;margin: auto;
+        overflow: scroll;
+    }
+    .quoteTable-arrange {
+        width: 94%;
+       margin-bottom: 30px;
+    }
+    .share-quote-origin {
+        width: 94%;
+        height: auto;
+        border-bottom: 1px solid #DFDFDF;
+        padding-bottom: 20px;
+        margin: 20px auto 0px;
+    }
+    .share-needing-attention {
+        width: 94%;
+        height: auto;
+        padding-bottom: 20px;
+        border-top: 1px solid #DFDFDF;
+        /*border-bottom: 1px solid red;*/
+        margin:30px auto 0px;
+    }
+    .share-dividing {
+        color: #48a2d2;
+        font-size: 18px;
+        width: 110px;
+        height: 40px;
+        background-color: #fff;
+        margin-top: -15px;
+        margin-left:42%;
+        text-align: center;
+    }
+    .share-agency-name {
+        font-size: 14px;
+        color: #444;
+        margin-left: 62%;
+    }
+    .share-agency-times{
+       margin-left:75%;
+       color: #444;
+       margin-top: -5px;
+    }
+    .share-title-h5 {
+        font-size: 27px;
+        font-family: '宋体';
+        color: #fff;
+        text-align: center;
+        line-height: 135px;
+        height: 40px;
+    }
+    p#back-top {
+        position: fixed;
+        bottom: 100px;
+        margin-left: 85%;
+    }
+    .share-anchor{
+         width: 30px;height: 170px;
+         background-color: #eaeaea;
+         position: fixed;top: 60%;
+         border-radius: 20px;
+         margin-left: 0px;
+    }
+    .share-anchor ul li a{
+        color:#FF8B19; 
+    }
+}
 /* 控制宽度*/
 .group-info {
     min-width: 1116px;
@@ -2021,9 +2617,6 @@ p#back-top a span {
 
 .group-info > .form-inline {
     height: 40px;
-}
-.group-info .form-group {
-    margin-right: 25px;
 }
 
 .group-info .search-btn {
@@ -2051,3 +2644,189 @@ p#back-top a span {
 .group-info .form-inline .fa-plus {
     cursor: pointer;
 }
+
+/*发团中icon的颜色*/
+.tripplan-area .fa-minus {
+    color: #000;
+}
+
+.tripplan-area .fa-question {
+    color: #888;
+    cursor: pointer;
+}
+.tripplan-area .fa-exclamation {
+    color: red;
+    cursor: pointer;
+}
+.tripplan-area .fa-check {
+    color: green;
+    cursor: pointer;
+}
+.tripplan-area .fa-times {
+    color: red;
+    cursor: pointer;
+}
+
+.tripplan-area .warning-text {
+    color: #FF9900;
+    text-align: center;
+}
+
+.tripplan-area .success-text {
+    color: #009900;
+    text-align: center;
+}
+
+.tripplan-area .error-text {
+    color: #ff0000;
+    text-align: center;
+}
+
+.info > .row {
+    margin-top: 10px;
+}
+
+.base-title {
+    margin: 0;
+    border-bottom: 1px solid #f4f4f4;
+    color: #428bca;
+    font-weight: bold;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+.fix-w-4 {
+    display: inline-block;
+    margin-right: 5px;
+    width: 57px;
+    text-align: right;
+}
+
+.fix-w-5 {
+    display: inline-block;
+    margin-right: 5px;
+    width: 70px;
+    text-align: right; 
+}
+
+a.gray span, .gray, .gray:hover, .gray:focus{
+    color:#bbb;
+}
+
+/*列表内部小列表*/
+.table-inner-list{
+    list-style-type: none;
+}
+.table-inner-list li{
+    border-top: 1px #ddd solid;
+    padding: 5px;
+}
+.table-inner-list li:first-child{
+    border:none;
+}
+/*打印时的样式*/
+@media print{
+    h5{
+        font-size: 12px !important;
+    }
+    .table tbody tr td,.table thead tr th{
+        border: 1px solid #000 !important;
+    }
+
+    .T-noprint{
+        display: none;
+    }
+    .T-print{
+        display: block!important;
+        visibility: visible!important;
+        opacity: 1;
+    }
+    .T-printCenter{
+        text-align: center;
+    }
+    .P-tdFontSize{
+        font-size: 4px!important;
+    }
+    .countUpdate-print{
+        margin-top: -40px !important;
+    }
+    .P-trFontSize{
+        font-size: 8px!important;
+        background-color: green;
+    }
+    .tab-content {
+        border: 0;
+        padding: 0; 
+    }
+
+    html, body, .main-container {
+        height: auto !important;
+        width: auto !important;
+        overflow: auto;
+    }
+
+    #tab-financial_count-outDetail-content {
+        width: auto !important;
+        padding: 40px !important;
+    }
+
+    .view-TranAccountsPrint th,td{
+        font-family: '微软雅黑';
+        font-size: 12px !important;
+        font-weight: normal !important;
+        color: #707070 !important;
+        padding: 7px 4px 7px 4px !important;
+    }
+    .view-accountsPrint th,td{
+        font-family: '微软雅黑';
+        font-size: 12px !important;
+        font-weight: normal !important;
+        color: #707070 !important;
+        line-height: 12px !important;
+        padding: 2px 2px 2px 2px !important;
+    }
+    .AccountingTable-print td{
+        font-size: 10px !important;
+        font-weight:100 !important;
+        line-height: 12px !important;
+        padding: 2px 2px 2px 2px !important;
+    }
+    /*.outDetailPrint-group{
+        margin-top: 10px;
+    }*/
+    .print-mar-t-F30{
+        margin-top: -30px;
+    }
+    .print-mar-t-F20{
+        margin-top: -20px;
+    }
+    .print-mar-t-F16{
+        margin-top: -16px !important;
+    }
+    .print-h5{
+        margin-bottom: 0px !important;
+        width: 30px;
+        height: auto;
+        position: absolute;
+        margin-left: -25px !important;
+        margin-top: -5px !important;
+    }
+    .print-Mh5{
+        margin-bottom: 0px !important;
+        width: 40px !important;
+        height: auto;
+        position: absolute;
+        margin-top: -5px !important;
+        margin-left: -40px !important;
+    }
+    .print-mar-t-5{
+        margin-top: 10px;
+    }
+    .print-mar-l-10 label{
+        margin-left: 10px !important;
+    }
+    
+}
+
+/* 财务已收样式 */
+.in-block{display: inline-block;white-space:nowrap;}

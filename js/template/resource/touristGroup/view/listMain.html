@@ -1,132 +1,143 @@
 <div class="search-area T-touristGroupSearchForm clearfix globalAdd">
-    <div class="form-horizontal T-search-area" >
-        <div class="col-sm-2 tourist-partnerAid">
-            <select class="T-choosePorB col-sm-3">
-                <option value='0' {{if searchParam.type == 0}}selected="selected"{{/if}}>全部</option>
-                <option value='1' {{if searchParam.type == 1}}selected="selected"{{/if}}>组团社</option>
-                <option value='2' {{if searchParam.type == 2}}selected="selected"{{/if}}>业务部</option>
-            </select>
-            <input type="text" class="col-sm-8 T-choosePAB marginLeft-Right7" placeholder="全部来源" style="float: right;{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
-            <input type="text" class="col-sm-8 T-choosePartnerAgency marginLeft-Right7 T-PorB" placeholder="来源" name="fromPartnerAgencyName" style="float: right;{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
-            <input type="text" class="col-sm-8 T-chooseBussinessGroup marginLeft-Right7 T-PorB" placeholder="来源" name="fromBussinessGroupName" style="float: right;{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == ""}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
-            <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
-            <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
-        </div> 
-        <label class="pull-left text-right control-label no-padding-right lineRoad-tourist">线路:</label>
-        <div class="col-sm-1 marginLeft-Right7">
-            <input type="text" class="col-sm-12 T-chooseLineProduct tourist-LineProduct" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
-            <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}">
-        </div>
-        <label class="pull-left text-right control-label no-padding-right margin-left60">出游时间:</label>
-        <div class="col-sm-1 marginLeft-Right7">
-            <div class="input-group">
-                <input class="col-xs-12 datepicker width110" name="startTime" value="{{searchParam.startTime}}" type="text" />
-                <span class="input-group-addon">
-					<i class="fa fa-calendar"></i>
-				</span>
+    <style>
+        .T-touristGroupSearchForm .form-control {
+            width: 114px;
+        }
+
+        .T-touristGroupSearchForm .datepicker  {
+            width: 84px;
+        }
+
+    </style>
+
+    <div class="form-group T-search-area clearfix">
+        <form class="form-inline" role="form" onsubmit="return false">
+            <div class="form-group  mar-r-9">
+                <button class="btn btn-sm btn-success T-touristGroup-add R-right" data-right="1120002">
+                    <i class="ace-icon fa fa-plus"></i> 新增小组
+                </button>
             </div>
-        </div>
-        <label class="pull-left text-right control-label no-padding-right margin-left60">录入人:</label>
-        <div class="col-sm-1 marginLeft-Right7">
-            <input type="text" class="col-xs-12 T-creatorUserChoose tourist-userChoose" placeholder="录入人" name="creatorName" value="{{searchParam.creatorName}}"/>
-            <input type="hidden" name="creatorId" value="{{searchParam.creatorId}}" />
-        </div>
-        <label class="pull-left text-right control-label no-padding-right">录入日期:</label>
-        <div class="col-sm-1 marginLeft-Right7">
-            <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker width110" name="createTimeStart" value="{{if !!searchParam.createTimeStart}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}" type="text" />
-                <span class="input-group-addon">
-					<i class="fa fa-calendar"></i>
-				</span>
+            <div class="form-group">
+                <button class="btn btn-sm btn-success T-export">导出游客保险名单</button>
             </div>
-        </div>
-        <label class="pull-left text-right control-label no-padding-right marginLeftTourist-30">--</label>
-        <div class="col-sm-1">
-            <div class="input-group col-sm-12">
-                <input class="col-sm-12 datepicker width110" name="createTimeEnd" value="{{if !!searchParam.createTimeEnd}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}"type="text" />
-                <span class="input-group-addon">
-					<i class="fa fa-calendar"></i>
-				</span>
+        </form>        
+        <form class="form-inline" role="form" onsubmit="return false">
+            <div class="form-group mar-r-9">
+                <label>收客单号</label>
+                <input type="text" class="form-control" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
             </div>
+
+
+            <div class="form-group">
+                <select class="T-choosePorB" style="width: 63px;">
+                    <option value='0' {{if searchParam.type==0 }}selected="selected" {{/if}}>全部</option>
+                    <option value='1' {{if searchParam.type==1 }}selected="selected" {{/if}}>组团社</option>
+                    <option value='2' {{if searchParam.type==2 }}selected="selected" {{/if}}>业务部</option>
+                </select>
+            </div>
+            <div class="form-group mar-r-9">
+                <input type="text" class="T-choosePAB form-control" placeholder="全部客户" style="{{if searchParam.type != 0}}display: none{{/if}}" readonly="readonly" />
+                <input type="text" class="T-choosePartnerAgency T-PorB form-control" placeholder="客户" name="fromPartnerAgencyName" style="{{if searchParam.type != 1 || searchParam.type == null}}display: none{{/if}}" value="{{if searchParam.fromPartnerAgencyName==''}}全部{{else}}{{searchParam.fromPartnerAgencyName}}{{/if}}" />
+                <input type="text" class="T-chooseBussinessGroup T-PorB form-control" placeholder="客户" name="fromBussinessGroupName" style="{{if searchParam.type != 2 || searchParam.type == null}}display: none;{{/if}}" value="{{if searchParam.fromBussinessGroupName == " "}}全部{{else}}{{searchParam.fromBussinessGroupName}}{{/if}}" />
+                <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
+                <input type="hidden" name="fromBussinessGroupId" value="{{searchParam.fromBussinessGroupId}}" />
+            </div>
+
+            <div class="form-group mar-r-9">
+                <label>线路产品</label>
+                <input type="text" class="form-control T-chooseLineProduct tourist-LineProduct" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+                <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}">
+            </div>
+
+            <div class="form-group mar-r-9">
+                <label>针对客源</label>
+                <select name="customerType" style="width: 51px;">
+                    <option value="" {{if searchParam.customerType=="" }}selected="selected" {{/if}}>全部</option>
+                    <option value="0" {{if searchParam.customerType=="0" }}selected="selected" {{/if}}>散客</option>
+                    <option value="1" {{if searchParam.customerType=="1" }}selected="selected" {{/if}}>团体</option>
+                </select>
+            </div>
+
+            <div class="form-group mar-r-10">
+                <label>出游时间</label>
+                <input class="datepicker" name="startTime" value="{{searchParam.startTime}}" type="text" />
+            </div>
+
+            <div class="form-group mar-r-9">
+                <label >报价单号</label>
+                <input type="text" class="form-control T-choose-quoteNumber" placeholder="报价单号" name="quoteNumber" value="{{searchParam.quoteNumber}}" />
+            </div> 
+            <div class="form-group">
+                <label >出游日期</label>
+                <select name="order_by" id="order_by">
+                    <option value="asc" {{if searchParam.order == 'asc'}}selected="selected" {{/if}}>升序</option>
+                    <option value="desc" {{if searchParam.order == 'desc'}}selected="selected" {{/if}}>降序</option>
+                </select>
+            </div>         
+        </form>
+        <form class="form-inline" role="form" onsubmit="return false">
+            <div class="form-group mar-r-9">
+                <label >组团单号</label>
+                <input type="text" class="form-control T-choose-otaOrderNumber" placeholder="组团单号" name="otaOrderNumber" value="{{searchParam.otaOrderNumber}}" />
+            </div>
+            <div class="form-group mar-r-9">
+                <label>游客</label>
+                <input type="text" class="form-control" placeholder="联系人或联系电话" name="contactInfo" value="{{searchParam.contactInfo}}" style="width: 140px;" />
+            </div>
+            <div class="form-group mar-r-9">
+                <label>外联销售</label>
+                <input type="text" class="form-control T-choose-outUserList" placeholder="外联销售" name="realName" value="{{searchParam.realName}}" />
+            </div>
+            <div class="form-group mar-r-9">
+                <label>客源类型</label>
+                <select name="memberType" style="width: 51px;">
+                    <option value="" {{if searchParam.memberType=="" }}selected="selected" {{/if}}>全部</option>
+                    <option value="0" {{if searchParam.memberType=="0" }}selected="selected" {{/if}}>内宾</option>
+                    <option value="1" {{if searchParam.memberType=="1" }}selected="selected" {{/if}}>外宾</option>
+                </select>
+            </div>
+            
+            
+            <div class="form-group mar-r-9">
+                <label>录入日期</label>
+                <input type="text" name="createTimeStart" class="datepicker" value="{{if !!searchParam.createTimeStart}}{{searchParam.createTimeStart  | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}">
+                <label>至</label>
+                <input type="text" name="createTimeEnd" class="datepicker" value="{{if !!searchParam.createTimeEnd}}{{searchParam.createTimeEnd | dateFormat: 'yyyy-MM-dd'}}{{else}}{{/if}}">
+            </div>
+
+            <div class="form-group">
+                <label>状态</label>
+                <select class="T-select-status" style="width: 62px;">
+                    <option value="">全部</option>
+                    <option value="0"  {{if searchParam.status=="0" }}selected="selected" {{/if}}>已发团</option>
+                    <option value="1"  {{if searchParam.status=="1" }}selected="selected" {{/if}}>未分团</option>
+                    <option value="2"  {{if searchParam.status=="2" }}selected="selected" {{/if}}>已分团</option>
+                    <option value="3"  {{if searchParam.status=="3" }}selected="selected" {{/if}}>已外转</option>
+                    <option value="5"  {{if searchParam.status=="5" }}selected="selected" {{/if}}>已分段</option>
+                    <option value="6"  {{if searchParam.status=="6" }}selected="selected" {{/if}}>已内转</option>
+                </select>
+            </div>
+
+             <div class="form-group mar-r-9">
+                <button class=" btn-sm  T-touristGroupList-search search-btn">
+                    <i class="ace-icon fa fa-search"></i> 搜索
+                </button>
+            </div>
+            
+        </form>
+        <div class="form-horizontal T-countData">
+            <label class="control-label pull-left mar-r-20" name="statistics-count">人数合计：<span class="allPerson"><span class="F-float F-count">{{statistics.adultCount}}</span>大<span class="F-float F-count">{{statistics.childCount}}</span>小</span>
+            </label>
+            <label class="control-label mar-r-20" name="statistics-needPay">应收款合计：<span class="needIncome"><span class="F-float F-money">{{statistics.needPay}}</span>元</span>
+            </label>
+            <label class="control-label mar-r-20" name="statistics-needPay">预收款合计：<span class="needIncome"><span class="F-float F-money">{{statistics.sumPreIncomeMoney}}</span>元</span></label>
+            <label class="control-label mar-r-20" name="statistics-payed">已收款合计：<span class="payedMoney"><span class="F-float F-money">{{statistics.payedMoney}}</span>元</span>
+            </label>
+            <label class="control-label mar-r-20" name="statistics-currentNeedPay">现收款合计：<span class="currentNeedPay"><span class="F-float F-money">{{statistics.currentNeedPay}}</span>元</span>
+            </label>
+            <label class="control-label mar-r-20" name="statistics-unIncome">未收款合计：<span class="unIncome"><span class="F-float F-money">{{statistics.unIncomeMoney}}</span>元</span>
+            </label>
         </div>
-        <div class="tourist-newline">
-        <label class="pull-left text-right control-label no-padding-right">针对客源:</label>
-        <div class="col-sm-1 marginLeft-Right7 rangeTime">
-            <select name="customerType" class="col-xs-12">
-                <option value="" {{if searchParam.customerType=="" }}selected="selected" {{/if}}>全部</option>
-                <option value="0" {{if searchParam.customerType=="0" }}selected="selected" {{/if}}>散客</option>
-                <option value="1" {{if searchParam.customerType=="1" }}selected="selected" {{/if}}>团体</option>
-            </select>
-        </div>
-        <label class="pull-left text-right control-label no-padding-right margin-left33">状态:</label>
-        <div class="pull-left btn-group btn-status btn-touristStatus T-select-status">
-            <button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm dropdown-toggle block-up" aria-expanded="false">
-                <span>
-				   {{if searchParam.status == null || searchParam.status == ""}}
-						全部
-					{{else if searchParam.status==0 }}
-						已发团
-					{{else if searchParam.status==1 }}
-						未分团
-					{{else if searchParam.status==2 }}
-						已分团
-					{{else if searchParam.status==3 }}
-						已外转
-					{{else if searchParam.status==5 }}
-						已分段
-                    {{else if searchParam.status==6 }}
-                        已内转
-					{{/if}}
-				</span>
-                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a data-value="" href="javascript:void(0)">全部</a>
-                </li>
-                <li>
-                    <a data-value="0" href="javascript:void(0)">已发团</a>
-                </li>
-                <li>
-                    <a data-value="1" href="javascript:void(0)">未分团</a>
-                </li>
-                <li>
-                    <a data-value="2" href="javascript:void(0)">已分团</a>
-                </li>
-                <li>
-                    <a data-value="3" href="javascript:void(0)">已外转</a>
-                </li>
-                <li>
-                    <a data-value="5" href="javascript:void(0)">已分段</a>
-                </li>
-                <li>
-                    <a data-value="6" href="javascript:void(0)">已内转</a>
-                </li>
-            </ul>
-        </div>
-        <div class="pull-left Touristsearch-btn">
-            <button class=" btn-sm  T-touristGroupList-search search-btn">
-                <i class="ace-icon fa fa-search"></i> 搜索
-            </button>
-        </div>
-        <div class="col-sm-1 pull-left timeStartMore" style="margin-left: 5px">
-            <button class="btn btn-sm btn-success T-touristGroup-add R-right" data-right="1120002">
-                <i class="ace-icon fa fa-plus"></i> 新增小组
-            </button>
-        </div>
-        </div>
-        <div style="clear: both;height: 0px;line-height: 0px;"></div>
     </div>
-    <div style="clear: both;margin-top:20px;border-top:1px dotted #ccc;padding-top:15px;">
-        <div style="clear: both;height: 0px;line-height: 0px;"></div>
+    <div id="touristGroup-listMain">
     </div>
-    <div class="form-horizontal T-countData">
-        <label class="control-label pull-left" name="statistics-count">人数合计：<span class="allPerson">{{statistics.adultCount}}大{{statistics.childCount}}小</span></label>
-        <label class="control-label col-sm-2" name="statistics-needPay">应收款合计：<span class="needIncome">{{statistics.needPay | toFixed}}元</span></label>
-        <label class="control-label col-sm-2" name="statistics-payed">已收款合计：<span class="payedMoney">{{statistics.payedMoney | toFixed}}元</span></label>
-        <label class="control-label col-sm-2" name="statistics-currentNeedPay">现收款合计：<span class="currentNeedPay">{{statistics.currentNeedPay | toFixed}}元</span></label>
-        <label class="control-label col-sm-2" name="statistics-unIncome">未收款合计：<span class="unIncome">{{statistics.unIncomeMoney | toFixed}}元</span></label>
-    </div>
-</div>
-<div id="touristGroup-listMain" class="col-sm-12 clearfix">
-</div>

@@ -56,7 +56,7 @@
 		</tr>
 		<tr>
 			<td class="style-myself">项目名称</td>
-			<td class="style-myself">针对客源</td>
+			<td class="style-myself hidden">针对客源</td>
 			<td class="style-myself">时间范围</td>
 			<td class="style-myself">市场价格（元）</td>
 			<td class="style-myself">人数返佣（人/元）</td>
@@ -70,7 +70,7 @@
 			<td>
 				{{shopPolicy.name}}
 			</td>
-			<td>
+			<td class="hidden">
 				{{if shopPolicy.customerType == 0}}
 				散客
 				{{else}}
@@ -90,24 +90,24 @@
 			
 
 			<td class="no-padding">
-				{{shopPolicy.normalMarketPrice}}<br>
+				<span class='F-float F-money'>{{shopPolicy.normalMarketPrice}}</span><br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea i}}
-					{{hopTimeArea.marketPrice}}<br>
+					<span class='F-float F-money'>{{hopTimeArea.marketPrice}}</span><br>
 				{{/each}}
 			</td>
 
 
 			<td>
-			    {{shopPolicy.customerRebateMoney}}<br>
+			    <span class='F-float F-money'>{{shopPolicy.customerRebateMoney}}</span><br>
 				{{each shopPolicy.SelfPayRebateList as customer}}
-					{{customer.customerRebateMoney}}<br>
+					<span class='F-float F-money'>{{customer.customerRebateMoney}}</span><br>
 				{{/each}}
 			</td>
 
 			<td class="no-padding">
-				{{shopPolicy.normalInnerPrice}}<br>
+				<span class='F-float F-money'>{{shopPolicy.normalInnerPrice}}</span><br>
 				{{each shopPolicy.SelfPayRebateList as hopTimeArea}}
-					{{hopTimeArea.price}}<br>
+					<span class='F-float F-money'>{{hopTimeArea.price}}</span><br>
 				{{/each}}
 			</td>
 

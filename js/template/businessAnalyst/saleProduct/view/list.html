@@ -1,93 +1,79 @@
 <div class="search-area search-tripPlanContainer">
-	<div class="row form-horizontal T-search-area" style="padding-left:5px; ">
-        <label class="pull-left text-right control-label no-padding-right">开始日期:</label>
-		<div class="col-xs-1">
-			<input type="text" name="startDate" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startDate}}" />
-		</div>
-	
-        <label class="pull-left text-right control-label no-padding-right">结束日期:</label>
-		<div class="col-xs-1">
-			<input type="text" name="endDate" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endDate}}" />
-		</div>
-
-
-		<label class="pull-left text-right control-label no-padding-right">应用范围:</label>
-        <div class="col-sm-1 marginLeft-Right7">
+    <div class="row T-search-area">
+        <label class="pull-left text-right control-label no-padding-right">开始日期 </label>
+        <div class="col-xs-1">
+            <input type="text" name="startDate" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startDate}}" />
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">结束日期 </label>
+        <div class="col-xs-1">
+            <input type="text" name="endDate" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endDate}}" />
+        </div>
+        <label class="pull-left text-right control-label no-padding-right">针对客源 </label>
+        <div class="col-sm-1 ">
             <select name="customerType" class="col-xs-12">
-                <option value=""  {{if searchParam.customerType !='0' && searchParam.customerType !='1'}}selected="selected"{{/if}}>全部</option>
-                <option value="0" {{if searchParam.customerType=="0"}}selected="selected" {{/if}}>散客</option>
-                <option value="1" {{if searchParam.customerType=="1"}}selected="selected" {{/if}}>团体</option>
+                <option value="" {{if searchParam.customerType !='0' && searchParam.customerType !='1' }}selected="selected" {{/if}}>全部</option>
+                <option value="0" {{if searchParam.customerType=="0" }}selected="selected" {{/if}}>散客</option>
+                <option value="1" {{if searchParam.customerType=="1" }}selected="selected" {{/if}}>团体</option>
             </select>
         </div>
-
-
         <div class="col-xs-2">
-			<button class=" btn-sm  T-saleProduct-search search-btn">
-				<i class="ace-icon fa fa-search"></i> 搜索
-			</button>
-		</div>
-	</div>
-
-	<div class="col-xs-12 saleProduct-toTal" style="padding-bottom: 15px; margin-top:15px;">
-		<div class="saleProduct-toTal-Cost">
-			<label style="min-width:10%; display:inline-block;" class="peopleCount">游客合计 : {{searchParam.sumTourist}}人</label>
-		    <label style="min-width:10%; display:inline-block;" class="needPayMoney">发团合计:{{searchParam.sumTouristStart}}人</label>
-		    <label style="min-width:10%; display:inline-block;" class="payedMoney">外转合计:{{searchParam.sumOuterTransfer}}人</label>
-		    <label style="min-width:10%; display:inline-block;" class="pMoney">内转合计:{{searchParam.sumInnerTransfer}}人</label>
-		</div>
-	</div>
-
-	<div class="row">	
-		<div class="col-xs-12">
-			<table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">
-				<colgroup>
-	            	<col style="width:25%;"></col>
-	            	<col style="width:10%;"></col>
-	            	<col style="width:10%;"></col>
-	            	<col style="width:10%;"></col>
-	            	<col style="width:15%;"></col>
-	            	<col style="width:15%;"></col>
-	            	<col style="width:15%;"></col>
-	            </colgroup>
-				<thead>
-					<tr class="bg-blur">
-						<th class="col-sm-2">线路产品</th>
-						<th class="col-sm-2">天数</th>
-						<th class="col-sm-1">类别</th>
-						<th class="col-sm-1">应用范围</th>
-						<th class="col-sm-1">游客量</th>
-						<th class="col-sm-1">发团客量</th>
-						<th class="col-sm-1">内转客量</th>
-						<th class="col-sm-1">外转客量</th>
-					</tr>
-				</thead>
-				<tbody class="T-scenic-list">
-					{{each lineProductSalesList as lineProL}}
-					<tr>
-					   <td>{{lineProL.lineProductName}}</td>
-					   <td>{{lineProL.days}}</td>
-					   <td>{{lineProL.type}}</td>
-					   <td>{{lineProL.customerType}}</td>
-					   <td>{{lineProL.tourist}}</td>
-					   <td>{{lineProL.touristStart}}</td>
-					   <td>{{lineProL.innerTransfer}}</td>
-					   <td>{{lineProL.outerTransfer}}</td>
-					</tr>
-					{{/each}}
-				</tbody>
-			</table>
-
-
-		<div class="row pageMode">
-			<div class="col-xs-6">
-				<small>共计 {{recordSize}} 条记录</small>
-			</div>
-			<div class="col-xs-6">
-				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-				</div>
-			</div>
-		</div>
-
-		</div>
-	<div>
+            <button class=" btn-sm  T-saleProduct-search search-btn">
+                <i class="ace-icon fa fa-search"></i> 搜索
+            </button>
+        </div>
+    </div>
+    <div class="saleProduct-toTal" style="padding-bottom: 15px; margin-top:15px;">
+        <div class="saleProduct-toTal-Cost">
+            <label class="peopleCount mar-r-20">游客合计 : {{searchParam.sumAdult}}大{{searchParam.sumChild}}小</label>
+            <label class="needPayMoney mar-r-20">发团合计:{{searchParam.sumInnerAdult}}大{{searchParam.sumInnerAdult}}小</label>
+            <label class="payedMoney mar-r-20">外转合计:{{searchParam.sumTouristAdult}}大{{searchParam.sumTouristChild}}小</label>
+            <label class="pMoney">内转合计:{{searchParam.sumTransferAdult}}大{{searchParam.sumTransferChild}}小</label>
+        </div>
+    </div>
+    <table class="table table-striped table-bordered table-hover T-showHighLight table-fixed">
+        <colgroup>
+            <col style="width:25%;"></col>
+            <col style="width:10%;"></col>
+            <col style="width:10%;"></col>
+            <col style="width:10%;"></col>
+            <col style="width:15%;"></col>
+            <col style="width:15%;"></col>
+            <col style="width:15%;"></col>
+        </colgroup>
+        <thead>
+            <tr class="bg-blur">
+                <th class="col-sm-2">线路产品</th>
+                <th class="col-sm-2">天数</th>
+                <th class="col-sm-1">类别</th>
+                <th class="col-sm-1">针对客源</th>
+                <th class="col-sm-1">游客量</th>
+                <th class="col-sm-1">发团客量</th>
+                <th class="col-sm-1">内转客量</th>
+                <th class="col-sm-1">外转客量</th>
+            </tr>
+        </thead>
+        <tbody class="T-scenic-list">
+            {{each lineProductSalesList as lineProL}}
+            <tr>
+                <td>{{lineProL.lineProductName}}</td>
+                <td>{{lineProL.days}}</td>
+                <td>{{lineProL.type}}</td>
+                <td>{{lineProL.customerType}}</td>
+                <td>{{lineProL.tourist}}</td>
+                <td>{{lineProL.touristStart}}</td>
+                <td>{{lineProL.innerTransfer}}</td>
+                <td>{{lineProL.outerTransfer}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="row pageMode">
+        <div class="col-xs-6">
+            <small>共计 {{recordSize}} 条记录</small>
+        </div>
+        <div class="col-xs-6">
+            <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+            </div>
+        </div>
+    </div>
 </div>

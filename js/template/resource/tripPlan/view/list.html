@@ -1,177 +1,171 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight tripPlanViewList">
-	<thead>
-		<tr class="bg-blur">
-			<th>团号</th>
-			<th>出团日期</th>
-			<th>完团日期</th>
-			<th>线路产品</th>
-			<th>人数</th>
-			<th>团队人数</th>
-			<th>导游</th>
-			<th>车牌号</th>
-			<th>险</th>
-			<th>餐</th>
-			<th>房</th>
-			<th>景</th>
-			<th>购</th>
-			<th>娱</th>
-			<th>票</th>
-			<th>状态</th>
-			<th class="col-sm-2">操作</th>
-		</tr>
-	</thead>
-	<tbody>
-		{{each tripPlanList as tripPlan}}
-		<tr data-entity-id="{{tripPlan.id}}">
-			<td style="vertical-align:middle">{{tripPlan.tripNumber}}</td>
-
-			<td style="padding-left:0;padding-right:0">
-				<table class="table-special">
-				    {{if tripPlan.tripPlanDetails.length!=0}}
-						{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-								<tr><td>{{tripPlanDetails.startTime | dateFormat: 'yyyy-MM-dd'}}</td><tr>
-							
-						{{/each}}
-						{{else}}
-						 {{tripPlan.startTime | dateFormat: 'yyyy-MM-dd'}}
-					{{/if}}
-				</table>	
-			</td>
-
-			<td style="padding-left:0;padding-right:0">
-				<table class="table-special">
-				    {{if tripPlan.tripPlanDetails.length!=0}}
-						{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-							<tr><td>{{tripPlanDetails.endTime | dateFormat: 'yyyy-MM-dd'}}</td><tr>
-						{{/each}}
-						{{else}}
-						 {{tripPlan.endTime | dateFormat: 'yyyy-MM-dd'}}
-					{{/if}}
-				</table>
-			</td>
-
-
-			<td style="padding-left:0;padding-right:0">
-				<table class="table-special">
-				    {{if tripPlan.tripPlanDetails.length!=0}}
-						{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-							<tr><td>{{tripPlanDetails.lineProductName}}</td><tr>
-						{{/each}}
-						{{else}}
-						 {{tripPlan.lineProduct.name}}
-					{{/if}}
-				</table>	
-			</td>
-
-			<td style="padding-left:0;padding-right:0">
-				<table class="table-special">
-				    {{if tripPlan.tripPlanDetails.length!=0}}
-						{{each tripPlan.tripPlanDetails as tripPlanDetails index}}
-								<tr><td>{{tripPlanDetails.sumMemberCount}}</td><tr>
-							
-						{{/each}}
-						{{else}}
-						 {{tripPlan.planTouristCount}}
-					{{/if}}
-				</table>	
-			</td>
-
-			<td style="vertical-align:middle">{{tripPlan.touristAdultCount+tripPlan.touristChildCount}}</td>
-			<td style="vertical-align:middle">{{if tripPlan.guide != null}}{{tripPlan.guide.realname}}{{/if}}</td>
-			<td style="vertical-align:middle">{{if tripPlan.bus != null}} {{tripPlan.bus.licenseNumber}} {{/if}}</td>
-			<td style="vertical-align:middle">{{if tripPlan.insuranceStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle">{{if tripPlan.restaurantStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle">{{if tripPlan.hotelStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle">{{if tripPlan.scenicStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle">{{if tripPlan.shopStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle">{{if tripPlan.selfPayStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle">{{if tripPlan.ticketStatus == 0}}
-			        <i class="ace-icon fa fa-times red"></i>
-			    {{else}}
-			        <i class="ace-icon fa fa-check green"></i>
-			    {{/if}}
-			</td>
-			<td style="vertical-align:middle;width:80px;">
-				{{if tripPlan.status == 0}}
-				<i class="ace-icon fa fa-question yellow bigger-130"></i>
-				待确认
-				{{else if tripPlan.status == 1}}
-				<i class="ace-icon fa fa-check green bigger-130"></i>
-				已发团
-				{{else if tripPlan.status == -1}}
-				<i class="ace-icon fa fa-times red bigger-125"></i>
-				已取消
-				{{else if tripPlan.status == 2}}
-				<i class="ace-icon fa fa-clock-o red bigger-125"></i>
-				已过期
-				{{/if}}
-			</td>
-			<td style="vertical-align:middle;width:200px">
-
-				<!-- <a data-entity-qouteId="{{tripPlan.qouteId}}" class="cursor T-action {{if tripPlan.qouteId!=null}}T-sendOrder{{/if}}  R-right"  data-right="1450001" title="下单" style="{{if tripPlan.qouteId==null}}color:#bbb;{{/if}}">
-					下单
-					<label style="padding-left:10px;">|</label>
-				</a> -->
-
-
-				<a class="cursor T-action {{if tripPlan.status != -1 && tripPlan.status != 2}}T-send{{/if}} R-right" data-right="1140010" title="通知" {{if tripPlan.status == -1 || tripPlan.status == 2}}style="color:#bbb;"{{/if}}>
+<colgroup >
+    <col width="300px"></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+    <col></col>
+</colgroup>
+   <thead>
+        <tr class="bg-blur T-tr-fixed">
+            <th>团信息</th>
+            <th>出游日期</th>
+            <th>团队人数</th>
+            <th class="R-right" data-right="1140011">导</th>
+            <th class="R-right" data-right="1140013">车</th>
+            <th class="R-right" data-right="1140012">险</th>
+            <th class="R-right" data-right="1140014">餐</th>
+            <th class="R-right" data-right="1140015">房</th>
+            <th class="R-right" data-right="1140016">景</th>
+            <th class="R-right" data-right="1140017">票</th>
+            <th class="R-right" data-right="1140018">购</th>
+            <th class="R-right" data-right="1140019">娱</th>
+            <th class="R-right" data-right="1140020">它</th>
+            <th>责任部门</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <input type="hidden" name="travelAgencyName" value="{{travelAgencyName}}"> {{each tripPlanList as tripPlan}}
+        <tr data-entity-id="{{tripPlan.id}}">
+            <td class="h-touristGroupInfo">
+                <p class="h-orderNumber">{{tripPlan.tripNumber}}</p>
+                <p class="hct-absolute-group h-lineName">
+                    <span class="hct-span-left">
+                {{if tripPlan.tripPlanDetails.length !=0}}
+                    {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
+                        {{if index == 0}}
+                            {{tripPlanDetails.lineProductName}}
+                        {{/if}}
+                    {{/each}}
+                {{else}}
+                    {{if tripPlan.lineProduct}}
+                        {{tripPlan.lineProduct.name}}
+                    {{/if}}
+                {{/if}}
+				</span> {{if tripPlan.tripPlanDetails.length > 1}}
+                    <label class="T-action T-showLineInfo hct-button-right">
+                        <button class="btn btn-success btn-sm btn-white show" index="0">
+                            <i class="fa fa-plus bigger-110 icon-only"></i>
+                        </button>
+                    </label>
+                    {{/if}}
+                </p>
+                <p class="h-memberName">
+                    {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
+                        {{if index == 0}}
+                            导游：{{tripPlanDetails.guideNames}}&nbsp;&nbsp;
+                            责任计调：{{tripPlanDetails.dutyOPUserName}}
+                        {{/if}}
+                    {{/each}}
+                </p>
+            </td>
+            <td class="h-touristGroupInfo">
+                <p class="center">{{tripPlan.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                <p class="center">-</p>
+                <p class="center">{{tripPlan.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
+            </td>
+            <td>{{tripPlan.touristAdultCount}}大{{tripPlan.touristChildCount}}小</td>
+            <!-- 导 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_guide" class="guideStatus R-right" data-right="1140011" data-status="{{tripPlan.guideStatus}}"><i class="ace-icon fa {{tripPlan.guideStatus | getArrangeIcon }}"></i></td>
+            <!-- 车 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_bus" class="busStatus R-right" data-right="1140013" data-status="{{tripPlan.busStatus}}"><i class="ace-icon fa {{tripPlan.busStatus | getArrangeIcon }}"></i></td>
+            <!-- 险 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_insurance" class="R-right" data-right="1140012"><i class="ace-icon fa {{tripPlan.insuranceStatus | getArrangeIcon }}"></i></td>
+            <!-- 餐 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_restaurant" class="restaurantStatus R-right" data-right="1140014" data-status="{{tripPlan.restaurantStatus}}"><i class="ace-icon fa {{tripPlan.restaurantStatus | getArrangeIcon }}"></i></td>
+            <!-- 房 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_hotel" class="hotelStatus R-right" data-right="1140015" data-status="{{tripPlan.hotelStatus}}"><i class="ace-icon fa {{tripPlan.hotelStatus | getArrangeIcon }}"></i></td>
+            <!-- 景 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_scenic" class="R-right" data-right="1140016"><i class="ace-icon fa {{tripPlan.scenicStatus | getArrangeIcon }}"></i></td>
+            <!-- 票 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_ticket" class="R-right" data-right="1140017"><i class="ace-icon fa {{tripPlan.ticketStatus | getArrangeIcon }}"></i></td>
+            <!-- 购 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_shop" class="shopStatus R-right" data-right="1140018" data-status="{{tripPlan.shopStatus}}"><i class="ace-icon fa {{tripPlan.shopStatus | getArrangeIcon }}"></i></td>
+            <!-- 娱 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_selfPay" class="selfPayStatus R-right" data-right="1140019" data-status="{{tripPlan.selfPayStatus}}"><i class="ace-icon fa {{tripPlan.selfPayStatus | getArrangeIcon }}"></i></td>
+            <!-- 它 -->
+            <td style="vertical-align:middle" data-target="#tripPlan_addPlan_other" class="R-right" data-right="1140020"><i class="ace-icon fa {{tripPlan.otherStatus | getArrangeIcon }}"></i></td>
+            <td>{{if tripPlan.businessGroup}}{{tripPlan.businessGroup.name}}{{/if}}</td>
+            {{if tripPlan.status == 0}}
+            <td class="warning-text">待发团</td>
+            {{else if tripPlan.status == 1}}
+            <td class="success-text">已发团</td>
+            {{else if tripPlan.status == -1}}
+            <td>已取消</td>
+            {{else if tripPlan.status == 2}}
+            <td class="error-text">已过期</td>
+            {{/if}}
+            <td style="vertical-align:middle;width:200px">
+                <a class="cursor T-action {{if tripPlan.status != -1 && tripPlan.status != 2}}T-send{{/if}} R-right" data-right="1140010" title="通知" {{if tripPlan.status==- 1 || tripPlan.status==2 }}style="color:#bbb;" {{/if}}>
 					通知
 					<label style="padding-left:10px;">|</label>
 				</a>
-				<a class="cursor T-action T-view" title="查看">
+                <a class="cursor T-action T-view" title="查看">
 					查看
 				</a>
-				<a billStatus="{{tripPlan.billStatus}}" class="cursor T-action {{if tripPlan.status != -1 && tripPlan.status != 2}}T-plan{{/if}} R-right" data-right="1140007" title="安排" {{if tripPlan.status == -1 || tripPlan.status == 2}}style="color:#bbb;"{{/if}}>
-					<label class="padding-right20">|</label>
-					安排
-				</a>
-                <a title="导出安排" class="cursor T-action T-export R-right" data-right="1140008">
-					<label class="padding-right20">|</label>
-					导出
-				</a>
-			</td>
-		</tr>
-		
-		{{/each}}
-	</tbody>
+                <a billStatus="{{tripPlan.billStatus}}" class="cursor T-action {{if tripPlan.status != 2}}T-plan{{/if}} R-right" data-right="1140007" title="安排" {{if tripPlan.status==2 }}style="color:#bbb;" {{/if}}>
+                    <label class="padding-right20">|</label>
+                    安排
+                </a>
+            </td>
+        </tr>
+        {{if tripPlan.tripPlanDetails.length>0}} 
+        {{each tripPlan.tripPlanDetails as tripPlanDetails index}}
+            {{if index>0}}
+            <tr class="hidden">
+                <td class="h-touristGroupInfo">
+                    <p>{{tripPlanDetails.lineProductName}}</p>
+                    <p>{{tripPlanDetails.travelAgencyName}}</p>
+                </td>
+                <td class="h-touristGroupInfo">
+                    <p class="center">{{tripPlanDetails.startTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                    <p class="center">-</p>
+                    <p class="center">{{tripPlanDetails.endTime | dateFormat: 'yyyy.MM.dd'}}</p>
+                </td>
+                <td>{{tripPlanDetails.adultCount}}大{{tripPlanDetails.childCount}}小<br>
+                    {{tripPlanDetails.contactUser}}
+                </td>
+                    {{if index == 1}}
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140011"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140013"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140012"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140014"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140015"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140016"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140017"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140018"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140019"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}" class="R-right" data-right="1140020"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}"></td>
+                    <td rowspan="{{tripPlan.tripPlanDetails.length-1}}"></td>
+                    {{/if}}
+            </tr>
+            {{/if}}
+        {{/each}} 
+        {{/if}} 
+        {{/each}}
+    </tbody>
 </table>
-		
 <div class="row pageMode">
-	<div class="col-xs-6">
-		<small>共计 {{recordSize}} 条记录</small>
-	</div>
-	<div class="col-xs-6">
-		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-		</div>
-	</div>
+    <div class="col-xs-6">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
 </div>

@@ -1,316 +1,372 @@
-<div class="newAddTripPlan clearfix triPlanInput">
-	<div class="col-xs-12 T-plan-container globalAdd">
-		<form class="form-horizontal T-editPlan-form formOneList" role="form" style="margin-top:10px" onsubmit="return false">
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class=" ui-sortable-handle">
-						<h5 class="">
-							<span class="badge badge-primary">1</span>
-							<label class="middle title-size">基本信息</label>
-						</h5>
-						<div class="widget-body">
-							<div class="T-baseinfo-container">
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>线路名称：</label>
-									<div class="col-sm-2 search-banner T-search-line">
-										<input class="col-sm-8 triplanName" readonly="readonly" style="width: 155px" type="text" name="name" id="" value="" />
-										<input type="hidden" name="lineProductId" value="" /> 
-										<input type="hidden" name="quoteId" />
-										<button class="  btn-sm search-btn">
-											<i class="ace-icon fa fa-search "></i>搜索
-										</button>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>出团日期：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12 datepicker" type="text" name="startTime" id="" value="" />
-									</div>
-									<label class="col-sm-1 control-label no-padding-right"> <span class="necessary">*</span>计划人数：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="planTouristCount" id="" value=""  maxlength="6"/>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">团队编号：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" readonly="readonly" type="text" name="" id="" value="" placeholder="系统自动生成" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">车座数：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12 T-chooseSeatCount bind-change" type="text" name="seatCount" id="" value="" />
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">车辆品牌：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12 T-chooseBusBrand bind-change" type="text" name="needBusBrand" id="" value="" />
-										<input type="hidden" name="busBrandId" value="" />
-									</div> 
-									<label class="col-sm-1 control-label no-padding-right"> 车牌号：</label>
-									<div class="col-sm-2">
-										<div class="col-sm-12 no-padding">
-											<input class="col-sm-12 T-chooseLicenseNumber bind-change" type="text" name="LicenseNumber" id="" value="" />
-											<input type="hidden" name="busLicenseNumberId" value="" />
-											<span class="addResourceBtnTripPlan T-addBusResource R-right" data-right="1020003" title="添加车辆">
-                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                            </span>
-                                        </div>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">所属车队：</label>
-									<div class="col-sm-2">
-										<div class="col-sm-12 no-padding">
-											<input class="col-sm-12 bind-change" type="text" name="busCompany" readonly="readonly" id="" value="" />
-											<input type="hidden" name="busCompanyId" value="" />
-											<span class="addResourceBtnTripPlan T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
-                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                            </span>
-                                        </div>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right"> 导游：</label>
-									<div class="col-sm-2">
-										<div class="col-sm-12 no-padding">
-											<input class="col-sm-12 T-chooseGuide bind-change" type="text" name="AddTPchooseGuide" id="" value="" />
-											<input type="hidden" name="AddTPchooseGuideId" value="" />
-											<span class="addResourceBtnTripPlan T-addGuideResource R-right" data-right="1010002" title="添加导游">
-                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                            </span>
-                                        </div>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">导游电话：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" readonly="readonly" type="text" name="GmobileNumber" id="" value="" />
-									</div>
-									<label class="col-sm-1 control-label no-padding-right"> 司机：</label>
-									<div class="col-sm-2">
-										<div class="col-sm-12 no-padding">
-											<input class="col-sm-12 T-chooseDriver bind-change" type="text" name="driverName" id="" value="" />
-											<input type="hidden" name="driverId" value="" />
-											<span class="addResourceBtnTripPlan T-addDriverResource R-right" data-right="1020003" title="添加司机">
-                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                            </span>
-                                        </div>
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">司机电话：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" readonly="readonly" type="text" name="DmobileNumber" id="" value="" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">全陪：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="accompanyGuideName" id="" value="" maxlength="32" />
-									</div>							
-									<label class="col-sm-1 control-label no-padding-right">全陪电话：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="accompanyGuideMobile" id="" value="" maxlength="50" />
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">集合地点：</label>
-									<div class="col-sm-2">
-										<input class="col-sm-12" type="text" name="setPlacePosition" id="" value="" maxlength="100" />
-									</div>
-									<label class="col-sm-1 control-label no-padding-right">集合时间：</label>
-									<div class="col-sm-2">
-										<input class="form-control col-sm-12 datetimepicker" type="text" name="setPlaceTime" value="" />
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">备注:</label>
-									<div class="col-sm-10">
-									 <textarea class="form-control col-sm-12" name="remark" maxlength="1000"></textarea>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+<div class="container-fulid hct-editor-plan globalAdd T-tab">
+	<form class="T-basic-info" role="form" onsubmit="return false">
+		<div class="row">
+			<div class="col-xs-12 hd">
+				<h3 class="pull-left">基本信息</h3>
+				<div class="pull-left mar-l-15">
+					<button class="btn btn-sm btn-success T-search-team"> <i class="ace-icon fa fa-plus"></i> 选择游客小组 </button>
+				</div>
+				<div class="pull-right" style="width:280px;">
+					<label class="col-xs-4 control-label text-right par-r-15">团号</label>
+					<input type="text" class="col-xs-8 T-tripNumberChange" name="tripNumber" placeholder="系统自动生成">
 				</div>
 			</div>
-		</form>
-
-		<div class="form-horizontal col-sm-12 T-timeArea">
-			<div class="pull-left  no-padding-right">
-				<label class="control-label no-padding-right">确认发团后游客短信设置:</label>
-
-				立即发送
-				<label style="padding-left:0px;">
-					<input  type="radio" class="ace buyInsurance-status T-ImmSend" checked="checked" value="0" name="executeTimeType">
-					<span class="lbl">
-					</span>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">报价单号</label>
+				<div class="hct-input-group col-xs-8 T-search-quote-order">
+					<input type="text" name="quoteOrderName" readonly class="col-xs-12">
+					<span class="hct-group-search cursor">[搜索]</span>
+					<input type="hidden" name="quoteId">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>线路产品</label>
+				<div class="hct-input-group col-xs-8 T-search-line">
+					<input type="text" name="lineProductName" readonly class="col-xs-12">
+					<span class="hct-group-search cursor">[搜索]</span>
+					<input type="hidden" name="lineProductId">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>人数</label>
+				<div class="col-xs-8">
+					<input type="text" name="adultCount"  style="width: 40px;">
+					<label class="control-label">大人</label>
+					<input type="text" name="childCount"  style="width: 40px;">
+					<label class="control-label">小孩</label>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">收客单号</label>
+				<div class="col-xs-8">
+					<input type="text" readonly class="col-xs-12" name="partnerAgencyName">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>出游日期</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12 datepicker" data-add="true" name="startTime">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>完团日期</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12 datepicker" name="endTime">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right"><span class="necessary">*</span>客户</label>
+				<div class="hct-input-group col-xs-8">
+					<input type="text" class="col-xs-12" name="travelAgencyName">
+					<input type="hidden" name="fromPartnerAgencyId">
+					<span class="hct-group-add cursor T-addPartner">[新增]</span>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">客户联系人</label>
+				<div class="hct-input-group col-xs-8">
+					<input type="text" class="col-xs-12" name="contactRealname">
+					<input type="hidden" name="fromPartnerAgencyContactId">
+					<span class="hct-group-add cursor T-addPartnerManager">[新增]</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">全陪</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="accompanyGuideName">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">全陪电话</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="accompanyGuideMobile">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">获得方式</label>
+				<div class="col-xs-8">
+					<select class="col-xs-12" name="getType">
+						<option value="1">旅行社系统</option>
+						<option value="2">传真</option>
+						<option value="3">短信</option>
+						<option value="4">电话</option>
+						<option value="5">QQ </option>
+						<option value="6">微信</option>
+						<option value="7">线上渠道</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">组团单号</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="otaOrderNumber">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">外联销售</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="outOPUserName">
+					<input type="hidden" name="outOPUserId">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">客源类型</label>
+				<div class="col-xs-8">
+					<select class="col-xs-12" name="memberType">
+						<option value="0">内宾</option>
+						<option value="1">外宾</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">责任计调</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="dutyOPUserName">
+					<input type="hidden" name="dutyOPUserId" >
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">责任部门</label>
+				<div class="col-xs-8">
+					<input type="text" readonly class="col-xs-12" name="dutyOPDepartment">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">购物商家</label>
+				<div class="col-xs-8">
+					<input type="text" name="shopNames" readonly class="col-xs-12 T-shopNames">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">自费商家</label>
+				<div class="col-xs-8">
+					<input type="text" name="selfPayItemNames" readonly class="col-xs-12 T-selfPayItemNames">
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">包含自费</label>
+				<div class="col-xs-2">
+					<input type="checkbox" class="ace" name="isContainSelfPay">
+					<label class="lbl"></label>
+				</div>
+				<label class="col-xs-4 control-label text-right">是否购买保险</label>
+				<div class="col-xs-2">
+					<input type="checkbox" class="ace" name="buyInsurance">
+					<label class="lbl"></label>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">接站牌</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="welcomeBoard">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3">
+				<label class="col-xs-4 control-label text-right">送客地点</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="sendPosition">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<label class="col-xs-1 control-label text-right">备注</label>
+				<div class="col-xs-11">
+					<textarea class="col-xs-12" name="remark" maxlength="1000"></textarea>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="row">
+			<div class="col-xs-6 T-executeTime">
+				<label class="control-label">确认发团后游客短信设置</label>
+				<label>
+					<input type="radio" class="ace" name="executeTimeType" checked>
+					<span class="lbl">立即发送</span>
 				</label>
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				定时发送
-				<label style="padding-left:0px;">
-					<input  type="radio" class="ace buyInsurance-status T-execTime" value="1" name="executeTimeType">
-					<span class="lbl">
-					</span>
+				<label>
+					<input type="radio" class="ace T-timed" name="executeTimeType">
+					<span class="lbl">定时发送</span>
+				</label>
+				<input type="text" class="datetimepicker hidden" name="executeTime">
+			</div>
+			<div class="col-xs-6">
+				<label class="col-xs-4 control-label text-right">短信签名</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12" name="travelAgencyTag">
+				</div>
+			</div>
+		</div> -->
+	</form>
+	<div class="row">
+		<div class="col-xs-12 hd">
+			<h3 class="pull-left">行程安排</h3>
+			<div class="pull-left mar-l-15">
+				<button class="btn btn-sm btn-success T-add-days"> <i class="ace-icon fa fa-plus"></i> 新增 </button>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="th-border">日期</th>
+						<th class="th-border">简要行程</th>
+						<th class="th-border">含餐情况</th>
+						<th class="th-border">住宿地点</th>
+						<th class="th-border">景点</th>
+						<th class="th-border">操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-days">
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 hd">
+			<h3 class="pull-left">游客名单</h3>
+			<div class="pull-left mar-l-15">
+				<button class="btn btn-sm btn-success T-add-tourists"> <i class="ace-icon fa fa-plus"></i> 添加成员 </button>
+				<button class="btn btn-sm btn-success T-add-tourists-batch"> <i class="ace-icon fa fa-plus"></i> 批量添加 </button>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="th-border">序号</th>
+						<th class="th-border">姓名</th>
+						<th class="th-border">手机号码</th>
+						<th class="th-border">证件类型</th>
+						<th class="th-border">证件号</th>
+						<th class="th-border">设为联系人</th>
+						<th class="th-border">操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-tourists-list"></tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 hd">
+			<h3 class="pull-left">操作计划</h3>
+			<div class="pull-left mar-l-15 T-action-plan">
+				<label data-type="insurance" class="control-label T-add-action">
+					<input type="checkbox" class="ace">
+					<span class="lbl">保险</span>
+				</label>
+				<label data-type="guide" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">导游</span>
+				</label>
+				<label data-type="bus" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">车辆</span>
+				</label>
+				<label data-type="restaurant" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">餐饮</span>
+				</label>
+				<label data-type="hotel" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">酒店</span>
+				</label>
+				<label data-type="scenic" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">景区</span>
+				</label>
+				<label data-type="ticket" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">票务</span>
+				</label>
+				<label data-type="shop" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">购物</span>
+				</label>
+				<label data-type="selfPay" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">自费</span>
+				</label>
+				<label data-type="other" class="control-label T-add-action mar-l-10">
+					<input type="checkbox" class="ace">
+					<span class="lbl">其它</span>
+				</label>
+				<label data-type="all" class="control-label T-add-all mar-l-15">
+					<input type="checkbox" class="ace">
+					<span class="lbl">全选</span>
 				</label>
 			</div>
-			<div class="col-sm-2 newAddTripTimer">
-				<input class="form-control col-sm-4 datetimepicker T-timeArea-input" type="text" name="executeTime" value="" />
+		</div>
+		<div class="col-xs-12 T-action-plan-list">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 hd">
+			<h3 class="pull-left">账单</h3>
+			<div class="pull-left mar-l-15">
+				<button class="btn btn-sm btn-success T-add-fee"> <i class="ace-icon fa fa-plus"></i> 新增费用项 </button>
 			</div>
-        </div>
-		<form class="form-horizontal" role="form" onsubmit="return false">
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class=" ui-sortable-handle">
-							<h5 class="">
-								<span class="badge badge-primary">2</span>
-								<label class="middle title-size">游客名单</label>
-								<button class="btn btn-sm btn-success  T-addTouristGroup">
-									<i class="ace-icon fa fa-plus"></i>
-									添加游客小组
-								</button>
-							</h5>
-						<div style="display: inline-block;padding-left: 30px;">总人数：<span class="T-groupMemberCount"></span></div>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<div class="col-xs-12">
-										<table class="table table-striped table-bordered table-hover">
-											<thead>
-												<tr>
-													<th class="th-border">小组</th>
-													<th class="th-border">外联销售</th>
-													<th class="th-border">线路产品</th>
-													<th class="th-border">来源</th>
-													<th class="th-border">联系人</th>
-													<th class="th-border">联系电话</th>
-													<th class="th-border">客源地</th>
-													<th class="th-border">年龄</th>
-													<th class="th-border">人数</th>
-													<th class="th-border">现收团款</th>
-													<th class="th-border">住宿标准</th>
-													<th class="th-border">包含自费</th>
-													<th class="th-border">备注</th>
-													<th class="th-border" width="90">操作</th>
-												</tr>
-											</thead>
-											<tbody class="T-tourist-list">
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="col-xs-2">
+				<label class="col-xs-4 text-right">应收</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12 F-float F-money" name="needPayAllMoney" readonly>
 				</div>
 			</div>
-		</form>
-		<form class="form-horizontal formOneList" role="form" onsubmit="return false">
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class=" ui-sortable-handle">
-							<h5 class="">
-								<span class="badge badge-primary">3</span>
-								<label class="middle title-size">线路</label>
-							</h5>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<div class="col-xs-12">
-										<div class="form-group">
-											<label class="col-sm-1 control-label no-padding-right">类别：</label>
-											<div class="col-sm-2">
-												<input class="col-sm-12" readonly="readonly" type="text" name="type" id="" value="" />
-											</div>
-											<label class="col-sm-1 control-label no-padding-right">应用范围：</label>
-											<div class="col-sm-2">
-												<input class="col-sm-12" readonly="readonly" type="text" name="customerType" id="" value="" />
-											</div>
-											<label class="col-sm-1 control-label no-padding-right">天数：</label>
-											<div class="col-sm-2">
-												<input class="col-sm-12" readonly="readonly" type="text" name="days" id="" value="" />
-											</div>				
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+			<div class="col-xs-2">
+				<label class="col-xs-4 text-right">预收款</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12 F-float F-money" name="preIncomeMoney">
 				</div>
 			</div>
-		</form>
-		<form class="form-horizontal" role="form" onsubmit="return false">
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-12 widget-container-col">
-					<div class=" ui-sortable-handle">
-							<h5 class="widget-title">
-								<span class="badge badge-primary">4</span>
-								<label class="middle title-size">日程</label>
-							</h5>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<div class="col-xs-12">
-										<div class="form-group">
-											<table class="table table-striped table-bordered table-hover">
-												<thead>
-													<tr>
-														<th class="th-border">日期</th>
-														<th class="th-border">含餐情况</th>
-														<th class="th-border">酒店星级</th>
-														<th class="th-border">简要行程</th>
-													</tr>
-												</thead>
-												<tbody class="T-days">
-													<tr>
-														<td></td>
-														<td></td>
-														<td>
-														</td>
-														<td class="col-xs-6"></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">费用包含:</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" class="col-sm-12" readonly="readonly" name="includeFee"></textarea>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">费用不含:</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" class="col-sm-12" readonly="readonly" name="excludeFee"></textarea>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">行程特色:</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" class="col-sm-12" readonly="readonly" name="lineFeature"></textarea>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 control-label no-padding-right">行程须知:</label>
-									<div class="col-sm-8">
-										<textarea class="form-control" class="col-sm-12" readonly="readonly" name="lineNotice"></textarea>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+			<div class="col-xs-2">
+				<label class="col-xs-4 text-right">计划现收</label>
+				<div class="col-xs-8">
+					<input type="text" class="col-xs-12 F-float F-money" name="currentNeedPayMoney">
 				</div>
 			</div>
-		</form>
-		<form class="form-horizontal" role="form" onsubmit="return false">
-			<div class="form-group" style="text-align: center;">
-				<button class="btn btn-sm btn-danger T-cancelPlan otherButton">
-					<i class="ace-icon fa fa-times"></i>
-					取消
-				</button>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="th-border">费用项</th>
+						<th class="th-border">数量</th>
+						<th class="th-border">单价</th>
+						<th class="th-border">金额</th>
+						<th class="th-border">说明</th>
+						<th class="th-border">操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-fee-list">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group" style="text-align: center;">
+			<button class="btn btn-sm btn-danger T-cancelPlan otherButton">
+				<i class="ace-icon fa fa-times"></i>
+				取消
+			</button>
 
-				<button class="btn btn-sm  btn-primary T-savePlan otherButton" style="margin-left: 30px">
-					<i class="ace-icon fa fa-check"></i>
-					保存
-				</button>
-			</div>
-		</form>
+			<button class="btn btn-sm  btn-primary T-savePlan otherButton marginLeft-30">
+				<i class="ace-icon fa fa-check"></i>
+				保存
+			</button>
+		</div>
 	</div>
 </div>

@@ -1,4 +1,5 @@
 <div class="col-xs-12">
+<button class="btn btn-sm btn-success export-Btn T-statementsBtn ">结算单</button>
 	<form class="form-horizontal touristGroupMainForm T-touristGroupMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class=" ui-sortable-handle">
 				<h5 class="">
@@ -11,8 +12,11 @@
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.quote != null}}{{touristGroupDetail.quote.quoteNumber}}{{/if}}</td>
 						<td class="style-myself">线路产品</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.lineProduct != null}}{{touristGroupDetail.lineProduct.name}}{{/if}}</td>
-						<td class="style-myself">出游日期</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+
+						<td class="style-myself">人数</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-count">{{touristGroupDetail.adultCount}}</span>大人 <span class="F-float F-count">{{touristGroupDetail.childCount}}</span>小孩</td>
+
+						
 						<td width="80px">是否购买保险</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.buyInsurance == 0}}
 							否
@@ -20,11 +24,9 @@
 							是
 							{{/if}}
 						</td>
-						
-
 					</tr>
 					<tr>
-						<td class="style-myself">客户来源</td>
+						<td class="style-myself">客户</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.partnerAgency != null}}{{touristGroupDetail.partnerAgency.travelAgencyName}}{{/if}}</td>
 						<td class="style-myself">{{if touristGroupDetail.isInnerTransferConfirm == 1}}部门联系人{{else}}同行联系人{{/if}}</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px">{{if touristGroupDetail.partnerAgencyContact != null}}{{touristGroupDetail.partnerAgencyContact.contactRealname}} -[{{touristGroupDetail.partnerAgencyContact.contactMobileNumber}}]{{/if}}</td>
@@ -39,6 +41,10 @@
 							电话
 							{{else if touristGroupDetail.getType == 5}}
 							QQ
+							{{else if touristGroupDetail.getType == 6}}
+							微信
+							{{else if touristGroupDetail.getType == 7}}
+							线上渠道
 							{{/if}}</td>
 					    <td class="style-myself">组团单号:</td>
 						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.otaOrderNumber}}</td>
@@ -47,74 +53,107 @@
 					</tr>
 
 					<tr>
-						<td class="style-myself">应收</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.needPayAllMoney}}</td>
-						<td class="style-myself">现收</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.currentNeedPayMoney}}</td>
-						<td class="style-myself">未收</td>
-						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.unIncomeMoney}}</td>
-						<td></td>
-						<td></td>
+						<td class="style-myself">外联销售</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{if !!touristGroupDetail.outOPUser}}{{touristGroupDetail.outOPUser.realName}}{{/if}}</td>
+						<td class="style-myself">客源类型</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">
+							{{if touristGroupDetail.memberType == 0}}内宾
+								{{else}}外宾
+							{{/if}}
+						</td>
+						<td class="style-myself">接站牌</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;">{{touristGroupDetail.welcomeBoard}}</td>
+						<td class="style-myself">出游日期</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						</tr>
+					<tr>
+						<td class="style-myself">完团日期</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" >{{touristGroupDetail.endTime | dateFormat: 'yyyy-MM-dd'}}
+						</td>
+
+						<td class="style-myself">针对客源</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">
+						{{if touristGroupDetail.customerType == 0}}散客{{/if}}{{if touristGroupDetail.customerType == 1}}团体{{/if}}
+						</td>
+
+						<td class="style-myself">送客地点</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">
+						{{touristGroupDetail.sendPosition}}
+						</td>
+					</tr>
+					<tr>
+						<td class="style-myself">全陪</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" >{{touristGroupDetail.accompanyGuideName}}</td>
+						<td class="style-myself">全陪电话</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupDetail.accompanyGuideMobile}}</td>
+						<td class="style-myself">收客单号</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">
+						    {{touristGroupDetail.orderNumber}}
+						</td>
+					</tr>
+
+
+					<tr>
+						<td class="style-myself">备注</td>
+						<td style="text-align: left;padding: 0px 0px 0px 10px" colspan="7">{{touristGroupDetail.remark}}</td>
+					</tr>
 				</table>
+
+				<div class="group-info-area">
+					<h5>
+						<label class="middle title-size">账单</label>
+					</h5>
+				</div>
+
+			    <div class="widget-body">
+					<table class="whereQ whereTwo" style="width: 100%;margin-bottom: 20px">
+						<tr>
+							<td class="style-myself">应收：</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-money">{{touristGroupDetail.needPayAllMoney}}</span></td>
+							<td class="style-myself">预收款：</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-money">{{touristGroupDetail.preIncomeMoney}}</span></td>
+							<td class="style-myself">计划现收：</td>
+							<td style="text-align: left;padding: 0px 0px 0px 10px;width: 20%;"><span class="F-float F-money">{{touristGroupDetail.currentNeedPayMoney}}</span></td>
+							<td></td>
+						    <td></td>
+
+						</tr>
+					</table>
+				</div>
 				<div class="form-group">
 					<div class="col-sm-12">
 						<table class="table table-striped table-bordered table-hover addCostList"> 
 							<thead>
 								<tr>
-									<th class="th-border">类型</th>
-									<th class="th-border">说明</th>
+									<th class="th-border">费用项</th>
 									<th class="th-border">数量</th>
 									<th class="th-border">单价</th>
+									<th class="th-border">金额</th>
+									<th class="th-border">说明</th>
 								</tr>
 							</thead>
 							<tbody class="addCostTbody">
-								<tr>
-									<td>
-										结算价
-									</td>
-									<td>
-										大人
-									</td>
-									<td>
-										<label class="control-label">{{touristGroupDetail.adultCount}}</label>
-									</td>
-									<td>
-										<label class="control-label">{{touristGroupDetail.adultPrice}}</label>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										结算价
-									</td>
-									<td>
-										小孩
-									</td>
-									<td>
-										<label class="control-label">{{touristGroupDetail.childCount}}</label>
-									</td>
-									<td>
-										<label class="control-label">{{touristGroupDetail.childPrice}}</label>
-									</td>
-								</tr>{{each touristGroupDetail.touristGroupFeeList as touristGroup}}
-								<tr data-entity-id="{{touristGroup.id}}">
-									<td>
-										其他费用
-										<!-- <select name="addOrReduceSelect" class="col-sm-12 addOrReduceSelect">
-											<option selected="selected" value="0">增加费用</option>
-											<option value="1">减少费用</option>
-										</select> -->
-									</td>
-									<td>
-										{{touristGroup.describeInfo}}
-									</td>
-									<td>
-										{{touristGroup.count}}
-									</td>
-									<td>
-										{{touristGroup.price}}
-									</td>
-								</tr>{{/each}}
+								{{each touristGroupDetail.touristGroupFeeList as touristGroup}}
+									<tr data-entity-id="{{touristGroup.id}}">
+										<td>
+											{{touristGroup.name}}
+										</td>
+										<td>
+											<span class="F-float F-count">{{touristGroup.count}}</span>
+										</td>
+										<td>
+											<span class="F-float F-money">{{touristGroup.price}}</span>
+										</td>
+
+										<td>
+											<span class="F-float F-money">{{touristGroup.price*touristGroup.count}}</span>
+										</td>
+										<td>
+											{{touristGroup.remark}}
+										</td>
+
+									</tr>
+								{{/each}}
 							</tbody>
 						</table>
 					</div>
@@ -162,26 +201,7 @@
 									<label class="control-label" style="text-align: left">{{touristGroupDetail.includeSelfPay}}</label>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="col-sm-1 control-label no-padding-right">备注：</label>
-								<div class="col-sm-9">
-									<label class="control-label" style="text-align: left">{{touristGroupDetail.remark}}</label>
-								</div>
-							</div>
-							<!-- <div class="form-group">
-								<div class="col-sm-2"></div>
-								<div class="col-sm-8">
-									<button class="btn btn-sm btn-success btn-add-tourist" style="float:left;">
-										<i class="ace-icon fa fa-plus"></i>
-										添加成员
-									</button>
-									<div style="height:5px;width:25px;float:left;"></div>
-									<button class="btn btn-sm btn-success btn-add-tourist-more" style="float:left;">
-										<i class="ace-icon fa fa-plus"></i>
-										批量添加
-									</button>
-								</div>
-							</div> -->
+							
 							<div class="form-group">
 								<div class="col-sm-12">
 									<table class="table table-striped table-bordered table-hover addTouristList">
@@ -231,6 +251,9 @@
 			</div>
 		</div>
 	</form>
+
+
+	{{if type!='inner'}}
 	<form class="form-horizontal touristGroupMainForm T-touristGroupMainFormRS" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group">
 			<div class="col-xs-12 col-sm-12 widget-container-col">
@@ -238,105 +261,235 @@
 						<h5 class="">
 							<label class="middle title-size">中转</label>
 						</h5>
-					<div class="widget-body">
-						<div class="widget-main">
-							<div class="form-group"> 
-								
-								<div class="col-sm-3">
-									<label class="col-sm-2 control-label no-padding-right">接：</label>
-									<div class="clo-sm-5 ">
-										<label>
-											<input type="checkbox" disabled="true" {{if touristGroupDetail.isNeedArriveService==1 && touristGroupDetail.outRemarkArrange !=null}}checked="checked"{{/if}} class="ace reception-check" value="0" name="touristReception">
-											<span class="lbl">
-												 
-											</span>
-										</label>
-									</div>
-									<div class="col-sm-12 T-reception-div" style="padding-top:25px;">
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right time">接待日期:</label>
-											<div class="col-sm-9">
-												<div class="input-group">
-													<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange !=null}}{{touristGroupDetail.outRemarkArrange.arriveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}</label>
-												</div>
-											</div>
+			       <div class="form-inline col-sm-12">
+					    <!--接团start-->
+					    {{if touristGroupDetail.outRemarkArrange!=null}}
+					          <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
+						            <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
+						        	<label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.receiveBusStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">车辆</span>
+						            </label>
+						            <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.receiveHotelStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">酒店</span>
+						            </label>
+						            <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace"  {{if touristGroupDetail.outRemarkArrange.receiveRestaurantStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">餐饮</span>
+						            </label>
+						            <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.receiveTicketStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">票务</span>
+						            </label>
+						            <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace"  {{if touristGroupDetail.outRemarkArrange.receiveOtherStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">其他</span>
+						            </label>
+						            <div class="col-xs-12 T-action-require-list T-receive-list">
+						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
+							            <div class="require-commons">
+										    <div class="form-inline" style="padding:14px 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>时间：</label>
+										            <input type="text" name="arriveTime" value="{{touristGroupDetail.outRemarkArrange.arriveTime}}" class="form-control date-picker datetimepicker" disabled/>
+										        </div>
+										    </div>
+										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>地点：</label>
+										            <input type="text" name="arrivePosition" value="{{touristGroupDetail.outRemarkArrange.arrivePosition}}" class="form-control" disabled/>
+										        </div>
+										    </div>
+										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>票务班次：</label>
+										            <input type="text" name="arriveShift" value="{{touristGroupDetail.outRemarkArrange.arriveShift}}" class="form-control" disabled/>
+										        </div>
+										    </div>
+										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>票务时间：</label>
+										            <input type="text" name="arriveShiftTime" value="{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}" class="form-control date-picker datetimepicker" disabled/>
+										        </div>
+										    </div>
 										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">地点：</label>
-											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange !=null}}{{touristGroupDetail.outRemarkArrange.arrivePosition}}{{/if}}{{/if}}</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次：</label>
-											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}
-												{{touristGroupDetail.outRemarkArrange.arriveShift}}{{/if}}{{/if}}</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
-											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedArriveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.arriveShiftTime}}{{/if}}{{/if}}</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								
-								<div class="col-sm-3">
-									<label class="col-sm-3 control-label no-padding-right">小车：</label>
-									<div class="clo-sm-5 ">
-										<label>
-											<input type="checkbox" disabled="true" {{if touristGroupDetail.isNeedBus==1}}checked="checked"{{/if}} class="ace smallCar" value="0" name="smallCar">
-											<span class="lbl">
-												 
-											</span>
-										</label>
-									</div>
-								</div>
+									 {{each touristGroupDetail.outTransferRequire.reciveTrip as recive}}
+	                                    {{if recive.requireType =='receiveBus'}}
+		                                 <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">车辆要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}" disabled></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveHotel'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">酒店要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}" disabled></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveRestaurant'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">餐饮要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}" disabled></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveTicket'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">票务要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}" disabled></div>
+					                    </div>
+					                    {{else if recive.requireType =='receiveOther'}}
+					                    <div class="col-xs-10 hct-plan-ask" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
+						                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">其他要求：</div>
+						                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{recive.requireContent}}" disabled></div>
+					                    </div>
+					                    {{/if}}
+								     {{/each}}
+								     {{/if}}
+						            </div>
+						    </div>
+						    {{else}}
+						    <div class="form-group fixed-width T-recive col-sm-6" style="margin-left:25px;">
+						        <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">接团</div>
+						         <label data-type="receiveBus" class="control-label T-add-action" style="margin-left:25px;">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">车辆</span>
+						        </label>
+						        <label data-type="receiveHotel" class="control-label T-add-action mar-l-10">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">酒店</span>
+						        </label>
+						        <label data-type="receiveRestaurant" class="control-label T-add-action mar-l-10">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">餐饮</span>
+						        </label>
+						        <label data-type="receiveTicket" class="control-label T-add-action mar-l-10">
+						            <input type="checkbox" class="ace" disabled>
+						            <span class="lbl">票务</span>
+						        </label>
+						        <label data-type="receiveOther" class="control-label T-add-action mar-l-10">
+						        <input type="checkbox" class="ace" disabled> 
+						        <span class="lbl">其他</span>
+						        </label>
+						    </div>
+					    {{/if}}
+					    <!--接团end-->
 
-								<div class="col-sm-3">
-									<label class="col-sm-2 control-label no-padding-right">送：</label>
-									<div class="clo-sm-5 ">
-										<label>
-											<input type="checkbox" disabled="true" {{if touristGroupDetail.isNeedLeaveService==1 && touristGroupDetail.outRemarkArrange != null}}checked="checked"{{/if}} class="ace send-check" value="0" name="touristSend">
-											<span class="lbl">
-												 
-											</span>
-										</label>
-									</div>
-									<div class="col-sm-12 T-send-div" style="padding-top:25px;">
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">送离日期:</label>
-											<div class="col-sm-9">
-												<div class="input-group">
-													<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}{{/if}}</label>
-												</div>
-											</div>
+
+						<!--送团start-->
+					    {{if touristGroupDetail.outRemarkArrange!=null}}
+					          <div class="form-group fixed-width T-send col-sm-6">
+						            <div class="col-sm-12 T-send-title" style="padding-bottom:10px;">送团</div>
+						     		<label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendBusStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">车辆</span>
+						            </label>
+						            <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendHotelStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">酒店</span>
+						            </label>
+						            <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendRestaurantStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">餐饮</span>
+						            </label>
+						            <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendTicketStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">票务</span>
+						            </label>
+
+						            
+						            <label data-type="sendOther" class="control-label T-add-action mar-l-10">
+						                <input type="checkbox" class="ace" {{if touristGroupDetail.outRemarkArrange.sendOtherStatus!=0}}checked{{/if}} disabled>
+						                <span class="lbl">其他</span>
+						            </label>
+
+						            <div class="col-xs-12 T-action-require-list T-leave-list">
+						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
+								       <div class="require-commons">
+										    <div class="form-inline" style="padding:14px 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>时间：</label>
+										            <input type="text" name="leaveTime" value="{{touristGroupDetail.outRemarkArrange.leaveTime}}"  class="form-control date-picker datetimepicker" disabled />
+										        </div>
+										    </div>
+										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>地点：</label>
+										            <input type="text" name="leavePosition" class="form-control"  value="{{touristGroupDetail.outRemarkArrange.leavePosition}}" disabled/>
+										        </div>
+										    </div>
+										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>票务班次：</label>
+										            <input type="text" name="leaveShift" class="form-control" value="{{touristGroupDetail.outRemarkArrange.leaveShift}}" disabled/>
+										        </div>
+										    </div>
+										    <div class="form-inline" style="padding:0 0 7px 14px;">
+										        <div class="fixed-width">
+										            <label>票务时间：</label>
+										            <input type="text" name="leaveShiftTime" class="form-control date-picker datetimepicker" value="{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}" disabled/>
+										        </div>
+										    </div>
 										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">地点：</label>
-											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leavePosition}}{{/if}}{{/if}}</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次：</label>
-											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShift}}{{/if}}{{/if}}</label>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right">班次时间：</label>
-											<div class="col-sm-9">
-												<label class="control-label">{{if touristGroupDetail.isNeedLeaveService==1}}{{if touristGroupDetail.outRemarkArrange != null}}{{touristGroupDetail.outRemarkArrange.leaveShiftTime}}{{/if}}{{/if}}</label>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+
+									      {{each touristGroupDetail.outTransferRequire.sendTrip as send}}
+		                                    {{if send.requireType =='sendBus'}}
+			                                 <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">车辆要求：</div>
+							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}" disabled></div>
+						                    </div>
+						                    {{else if send.requireType =='sendHotel'}}
+						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">酒店要求：</div>
+							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}" disabled></div>
+						                    </div>
+						                    {{else if send.requireType =='sendRestaurant'}}
+						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">餐饮要求：</div>
+							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}" disabled></div>
+						                    </div>
+						                    {{else if send.requireType =='sendTicket'}}
+						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">票务要求：</div>
+							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}" disabled></div>
+						                    </div>
+						                    {{else if send.requireType =='sendOther'}}
+						                    <div class="col-xs-10 hct-plan-ask" data-id="{{send.id}}" data-type="{{send.requireType}}">
+							                    <div class="pull-left hct-plan-ask-title  mar-l-10" style="width:auto;">其他要求：</div>
+							                    <div class="pull-left hct-plan-ask-input" style="padding-left:65px;"><input type="text" class="col-xs-8" name="requireContent" value="{{send.requireContent}}" disabled></div>
+						                    </div>
+						                    {{/if}}
+									    {{/each}}
+									    {{/if}}
+						            </div>
+						        </div>
+						        {{else}}
+						    	<div class="form-group fixed-width T-recive col-sm-6">
+						    	    <div class="col-sm-12 T-recive-title" style="padding-bottom:10px;">送团</div>
+						    	     <label data-type="sendBus" class="control-label T-add-action" style="margin-left:25px;">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">车辆</span>
+						    	    </label>
+						    	    <label data-type="sendHotel" class="control-label T-add-action mar-l-10">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">酒店</span>
+						    	    </label>
+						    	    <label data-type="sendRestaurant" class="control-label T-add-action mar-l-10">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">餐饮</span>
+						    	    </label>
+						    	    <label data-type="sendTicket" class="control-label T-add-action mar-l-10">
+						    	        <input type="checkbox" class="ace" disabled>
+						    	        <span class="lbl">票务</span>
+						    	    </label>
+						    	    <label data-type="sendOther" class="control-label T-add-action mar-l-10">
+						    	    <input type="checkbox" class="ace" disabled> 
+						    	    <span class="lbl">其他</span>
+						    	    </label>
+						    	</div>
+					    {{/if}}
+					    <!--送团end-->
+				    </div> 
+				
+
+
 				</div>
 			</div>
 		</div>
@@ -347,6 +500,7 @@
 		</button>
 		<div class="space-20"></div> -->
 	</form>
+    {{/if}}
 	
 	
 	

@@ -7,7 +7,7 @@
 		</li>
 		<li>
 			<a data-toggle="tab" href="#basicSet-bankAccount" class="T-basicSet-bankAccount" aria-expanded="true" data-value="2">
-				<i class="fa fa-hourglass"></i> 银行账户设置
+				<i class="fa fa-hourglass"></i> 资金账户设置
 			</a>
 		</li>
 	</ul>
@@ -24,33 +24,56 @@
 				<thead>
 					<tr class="bg-blur">
 						<th>科目编号</th>
+						<th>业务类别</th>
 						<th>科目名称</th>
 						<th>启用标志</th>
 					</tr>
 				</thead>
 				<tbody class="T-accObjList">
-					<tr> 
+					<tr>
 						<td>1</td>
+						<td>收入</td>
 						<td>主营业务收入</td>
-						<td>启用</td>
+						<td>已启用</td>
 					</tr>
 					<tr>
 						<td>2</td>
+						<td>支出</td>
 						<td>主营业务支出</td>
-						<td>启用</td>
+						<td>已启用</td>
+					</tr>
+
+					<tr> 
+						<td>3</td>
+						<td>收入</td>
+						<td>预收账款</td>
+						<td>已启用</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>支出</td>
+						<td>预付账款</td>
+						<td>已启用</td>
 					</tr>
 					
 					{{each newSubjectAccountList as rs index}}
-						<tr id="{{rs.id}}">
+						<tr id="{{rs.id}}" title = "{{rs.subjectName}}" status="{{rs.status}}" type="{{rs.type}}">
 							<td>{{rs.number}}</td>
+							<td><span class="T-type">
+									{{if rs.type == 0}}收入
+									{{else if rs.type == 1}}支出
+									{{else if rs.type == 2}}转账
+									{{/if}}
+								</span>
+							</td>
 							<td><span class="title">{{rs.subjectName}}</span><a href="javascript:void(0)" class="T-edit"><span>
 							<i title="编辑" style="float:right;font-size:16px;" class="ace-icon fa fa-edit treeIcon"></i></span></a></td>
 							<td>
 							<span class="status">
 								{{if rs.status == 1}}
-									启用
+									已启用
 								{{else}}
-									停用
+									已停用
 								{{/if}}
 							</span>
 							</td>

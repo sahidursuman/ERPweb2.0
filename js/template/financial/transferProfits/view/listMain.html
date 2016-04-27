@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="T-search-area">
+        <div class="form-horizontal form-group ">
+            <label>线路产品 </label>
+            <input class="mar-r-10" type="text" style="width: 220px" placeholder="线路产品" name="lineProductName" value="{{searchParam.lineProductName}}" />
+            <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
+            <label>客户 </label>
+            <input class="mar-r-10" type="text" style="width: 100px" placeholder="客户" name="fromPartnerAgencyName" value="{{searchParam.fromPartnerAgencyName}}" />
+            <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}" />
+            <label>针对客源 </label>
+            <select name="customerType" class="mar-r-10">
+                <option value="" {{if searchParam.customerType=="" || !searchParam.customerType}}selected{{/if}}>全部</option>
+                <option value="0" {{if searchParam.customerType==0 }}selected{{/if}}>散客</option>
+                <option value="1" {{if searchParam.customerType==1 }}selected{{/if}}>团队</option>
+            </select>
+            <label>收客单号 </label>
+            <input class="mar-r-10" type="text" style="width: 100px" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
+        </div>
+        <div class="form-group">
+            <label>开始日期 </label>
+            <input class="date-picker mar-r-10" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
+            <label>结束日期 </label>
+            <input class="date-picker mar-r-10" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endTime}}" style="width:100px;" />
+            <button class="btn-sm search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button>
+        </div>
+        <div>
+            <label class="mar-r-20">总人数：<span class="T-totalCount"></span></label>
+            <label class="mar-r-20">中转应收合计：<span class="F-float F-money T-totalNeed"></span></label>
+            <label class="mar-r-20">中转成本合计：<span class="F-float F-money T-totalCost"></span></label>
+            <label class="mar-r-20 T-turn">毛利合计：<span class="F-float F-money T-totalProfit"></span></label>
+            <label>人均毛利合计：<span class="F-float F-money T-perProfit"></span></label>
+        </div>
+    </div>
+    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight">
+        <thead>
+            <tr class="bg-blur T-tr-fixed">
+                <th>收客单号</th>
+                <th>线路产品</th>
+                <th>针对客源</th>
+                <th>出游日期</th>
+                <th>游客</th>
+                <th>人数</th>
+                <th>客户</th>
+                <th>中转应收</th>
+                <th>中转</th>
+                <th>中转成本</th>
+                <th>毛利</th>
+                <th>人均毛利</th>
+            </tr>
+        </thead>
+        <tbody class="T-transfer-list">
+        </tbody>
+    </table>
+</div>
+<div class="row pageMode">
+    <div class="col-xs-6">
+        <small class="T-totalSize">没有查询到相关记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>

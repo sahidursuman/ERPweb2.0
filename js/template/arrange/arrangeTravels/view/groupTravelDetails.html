@@ -1,0 +1,194 @@
+<div class="container-fluid globalAdd hct-min-width hct-mar-auto">
+	<div class="row hct-top-header">
+		<div class="col-xs-12 yj-title">
+			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
+			<label class="control-label mar-l-10">{{note.title}}</label>
+			<a class="hct-top-share T-action T-share" data-title="{{note.title}}" data-id="{{note.id}}" data-type="groupTravel"><i class="fa fa-share-alt"></i>分享</a>
+		</div>
+	</div>
+	<div class="row hct-note">
+		<div class="col-xs-12">
+			<div class="pull-left cursor T-action T-view-user" data-id="{{note.id}}">
+				<div class="caption-user-header pull-left{{if !note.guideInfo.photo}} default-img{{/if}}">
+					{{if note.guideInfo.photo}}<img src="{{imgUrl + note.guideInfo.photo}}">{{/if}}
+				</div>
+				<div class="note-guide-info pull-left">
+					<p>{{note.guideInfo.name}}</p>
+					<p class="starLevel">{{#note.guideInfo.guideSatisfaction | getScoreStar}}</p>
+				</div>
+			</div>
+			<div class="pull-right note-date">
+				<p>
+					<label class="control-label">出行日期：{{note.startTime}}</label>
+	        		<label class="control-label mar-l-10">出游天数：{{note.days}}天</label>
+	        	</p>
+			</div>
+		</div>
+		<div class="col-xs-12 score-body">
+			<div class="pull-left note-score">
+				<p class="scoreCount">{{note.tripSatisfaction}}%</p>
+				<p class="starLevel">{{#note.tripSatisfaction | getScoreStar}}</p>
+			</div>
+			<div class="pull-left note-line-score">
+				<p>此线路产品跟团游客满意度为{{note.tripSatisfaction}}%</p>
+				<p>已有{{note.scoreCount}}人评分</p>
+			</div>
+			<div class="pull-right p-no-mar">
+				<p>&nbsp;</p>
+				<p class="comment-info">
+					<label class="control-label"><i class="fa fa-heart"></i>{{note.likeCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-comment"></i>{{note.commentCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-share-alt"></i>{{note.shareCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-eye"></i>{{note.viewCount}}</label>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="row note-days-list">
+		{{each tripPLanDayList as rs}}
+		<div class="note-days-item">
+			<div class="note-days-header">
+				<div class="pull-left note-days">D{{rs.whichDay}}</div>
+				<div class="pull-left note-address">{{rs.title}}</div>
+				<div class="pull-left note-date">{{rs.time}}</div>
+			</div>
+			<div class="note-details-container">
+				{{if rs.playItemList.length > 0}}
+				<div class="note-details-item">
+					<div class="note-details-header">
+						<h3>游玩</h3>
+					</div>
+					{{each rs.playItemList as play}}
+					<div class="note-details-list">
+						<div class="note-details-body">
+							<div class="note-db-img">
+								{{if !!play.itemImage}}<img src="{{imgUrl + play.itemImage}}">{{/if}}
+							</div>
+							<div class="note-db-itemText">
+								{{#play.itemText}}
+							</div>
+						</div>
+						<div class="note-details-footer">
+							<div class="pull-left note-df-dateTime">{{play.createTime}}</div>
+							<div class="pull-right comment-info">
+								<label class="control-label"><i class="fa fa-heart"></i>{{play.likeCount}}</label>
+		        				<label class="control-label mar-l-10 cursor T-action T-single-comment" data-id="{{play.id}}"><i class="fa fa-comment"></i>{{play.commentCount}}</label>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+				{{/if}}
+
+				{{if rs.traficItemList.length > 0}}
+				<div class="note-details-item">
+					<div class="note-details-header">
+						<h3>交通</h3>
+					</div>
+					{{each rs.traficItemList as bus}}
+					<div class="note-details-list">
+						<div class="note-details-body">
+							<div class="note-db-img">
+								{{if !!bus.itemImage}}<img src="{{imgUrl + bus.itemImage}}">{{/if}}
+							</div>
+							<div class="note-db-itemText">
+								{{#bus.itemText}}
+							</div>
+						</div>
+						<div class="note-details-footer">
+							<div class="pull-left note-df-dateTime">{{bus.createTime}}</div>
+							<div class="pull-right comment-info">
+								<label class="control-label"><i class="fa fa-heart"></i>{{bus.likeCount}}</label>
+		        				<label class="control-label mar-l-10 cursor T-action T-single-comment" data-id="{{bus.id}}"><i class="fa fa-comment"></i>{{bus.commentCount}}</label>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+				{{/if}}
+				
+				{{if rs.hotelItemList.length > 0}}
+				<div class="note-details-item">
+					<div class="note-details-header">
+						<h3>住宿</h3>
+					</div>
+					{{each rs.hotelItemList as hotel}}
+					<div class="note-details-list">
+						<div class="note-details-body">
+							<div class="note-db-img">
+								{{if !!hotel.itemImage}}<img src="{{imgUrl + hotel.itemImage}}">{{/if}}
+							</div>
+							<div class="note-db-itemText">
+								{{#hotel.itemText}}
+							</div>
+						</div>
+						<div class="note-details-footer">
+							<div class="pull-left note-df-dateTime">{{hotel.createTime}}</div>
+							<div class="pull-right comment-info">
+								<label class="control-label"><i class="fa fa-heart"></i>{{hotel.likeCount}}</label>
+		        				<label class="control-label mar-l-10 cursor T-action T-single-comment" data-id="{{hotel.id}}"><i class="fa fa-comment"></i>{{hotel.commentCount}}</label>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+				{{/if}}
+
+				{{if rs.noteItemList.length > 0}}
+				<div class="note-details-item">
+					<div class="note-details-header">
+						<h3>笔记</h3>
+					</div>
+					{{each rs.noteItemList as noteList}}
+					<div class="note-details-list">
+						<div class="note-details-body">
+							<div class="note-db-img">
+								{{if !!noteList.itemImage}}<img src="{{imgUrl + noteList.itemImage}}">{{/if}}
+							</div>
+							<div class="note-db-itemText">
+								{{#noteList.itemText}}
+							</div>
+						</div>
+						<div class="note-details-footer">
+							<div class="pull-left note-df-dateTime">{{noteList.createTime}}</div>
+							<div class="pull-right comment-info">
+								<label class="control-label"><i class="fa fa-heart"></i>{{noteList.likeCount}}</label>
+		        				<label class="control-label mar-l-10 cursor T-action T-single-comment" data-id="{{noteList.id}}"><i class="fa fa-comment"></i>{{noteList.commentCount}}</label>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+				{{/if}}
+
+				{{if rs.lineItemList.length > 0}}
+				<div class="note-details-item">
+					<div class="note-details-header">
+						<h3>线路简介</h3>
+					</div>
+					{{each rs.lineItemList as line}}
+					<div class="note-details-list">
+						<div class="note-details-body">
+							<div class="note-db-img">
+								{{if !!line.itemImage}}<img src="{{imgUrl + line.itemImage}}">{{/if}}
+							</div>
+							<div class="note-db-itemText">
+								{{#line.itemText}}
+							</div>
+						</div>
+						<div class="note-details-footer">
+							<div class="pull-left note-df-dateTime">{{line.createTime}}</div>
+							<div class="pull-right comment-info">
+								<label class="control-label"><i class="fa fa-heart"></i>{{line.likeCount}}</label>
+		        				<label class="control-label mar-l-10 cursor T-action T-single-comment" data-id="{{line.id}}"><i class="fa fa-comment"></i>{{line.commentCount}}</label>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				</div>
+				{{/if}}
+			</div>
+		</div>
+		{{/each}}
+	</div>
+</div>

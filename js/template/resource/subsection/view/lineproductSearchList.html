@@ -1,0 +1,24 @@
+{{each lineProductList as lineProduct}}
+	<tr data-id="{{lineProduct.id}}" data-name="{{lineProduct.name}}" 
+	data-customerType="{{if lineProduct.customerType==0}}散客{{else if lineProduct.customerType==1}}团体{{/if}}" data-days="{{lineProduct.days}}">
+		<td>
+			{{lineProduct.name}}
+		</td>
+		<td>
+			{{if lineProduct.customerType==0}}
+			散客
+			{{else if lineProduct.customerType==1}}
+			团体
+			{{/if}}
+		</td>
+		<td>
+			{{lineProduct.days}}
+		</td>
+		<td>{{lineProduct.businessGroupName}}</td>
+		<td>
+			<label class="choice-TravelLine-click">
+			  <input type="radio" class="ace T-choice-ProLine" name="choice-TravelLine-click" index="0"> <span class="lbl"></span>
+			</label> 
+		</td>
+	</tr>
+{{/each}}

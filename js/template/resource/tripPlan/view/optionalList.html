@@ -15,7 +15,7 @@
 			{{each restaurant.restaurantStandardList as standard index}}
 			{{if index == 0}}
 			<td>{{standard.type}}</td>
-			<td>{{standard.price}}<input type="hidden" name="restaurantStandardId" value="{{standard.id}}" /></td>
+			<td class="F-float F-money">{{standard.price}}<input type="hidden" name="restaurantStandardId" value="{{standard.id}}" /></td>
 			<td>{{standard.menuList}}</td>
 			{{/if}}
 			{{/each}}

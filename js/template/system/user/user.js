@@ -11,8 +11,7 @@ define(function(require, exports) {
 	var user = {
 		$tab : false,
 		$searchArea : false,
-		$addUserLayer :false,
-		$updateAuth : false
+		$addUserLayer :false
 	};
 
 	user.initModule = function() {
@@ -158,7 +157,11 @@ define(function(require, exports) {
 		if($(".T-addUser-form .T-open-meter").is(":checked") == true){
 			isOpenOP = 1;
 		}
-		var form = $form.serialize()+"&status="+status;
+		var financialMessage = 0;
+		if($(".T-addUser-form .T-financialMessage").is(":checked")){
+			financialMessage = 1;
+		}
+		var form = $form.serialize()+"&status="+status+"&financialMessage="+financialMessage;
 		
 		$.ajax({
 			url:KingServices.build_url("user","addUser"),
@@ -231,25 +234,16 @@ define(function(require, exports) {
 					data.listUserFunctionShip = JSON.parse(data.listUserFunctionShip),
 					data.user = JSON.parse(data.user);
 					var html = authTemplate(data);
-					user.$updateAuth = layer.open({
-					    type: 1,
-					    title:"编辑权限",
-					    skin: 'layui-layer-rim',
-					    area: '1080px', 
-					    zIndex:1028,
-					    content: html,
-					    scrollbar: false,
-					    success:function(){
-					    	user.initAuth(data,isNew);					    	
-					    }
-					});
+						Tools.addTab(tabId,"编辑授权",html);
+					    user.initAuth(data,isNew);
 				}
 			}
 		});
 	};
 
 	user.initAuth = function(data,isNew){
-		var $container = $(".T-update-auth");
+		var $tab = $('#tab-tab-system_user-content-content'), 
+			$container = $tab.find(".T-update-auth");
     	//初始化选择框
     	if(isNew){
     		$container.find("input").prop("checked",true);
@@ -270,6 +264,12 @@ define(function(require, exports) {
 	    		$(".T-function-id"+functionId).prop("checked",true);
 	    	}
     	}
+    	//编辑授权右侧列功能
+    	$container.find(".meun").click(function(){
+    		var toId = $(this).data('toid'),
+    			top = $container.find('#'+toId).offset().top - 180 + $tab.scrollTop();
+	       		$tab.animate({scrollTop: top},150);
+		});
 
     	//主菜单是否勾选
     	$('.T-menu-check').each(function(){
@@ -313,9 +313,26 @@ define(function(require, exports) {
     			index = funcs.index($this);
     		
     		if($this.is(":checked")){
+    			if($this.hasClass('T-arrange')){
+    				tr.find('.T-arrgItem').prop("checked",true);
+    			}else if($this.hasClass('T-arrgItem')){
+    				tr.find('.T-arrange').prop("checked",true);
+    			}
     			tr.find('.T-submenu-check').prop("checked",true);
     			user.checkAuth(tr);
     			user.checkMenu(this);
+    		} else {
+    			if($this.hasClass('T-arrange')){
+    				tr.find('.T-arrgItem').prop("checked",false);
+    			} else if($this.hasClass('T-arrgItem')){
+    				var check = false;
+    				tr.find('.T-arrgItem').each(function(index, el) {
+    					if($(this).is(":checked")){
+    						check = true;
+    					}
+    				});
+    				tr.find('.T-arrange').prop("checked",check);
+    			}
     		}
     	});
     	$container.find(".T-submenu input[type=radio]").on("click",function(){
@@ -379,6 +396,7 @@ define(function(require, exports) {
     		if(!$(this).data("click")){
     			$(this).data("click",true);
     			user.saveAuth(data.user.id,data.user.userName);
+
     		}
     	});
 	};
@@ -420,8 +438,10 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					layer.close(user.$updateAuth);
+					// layer.close(user.$updateAuth);
+					
 					showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+						Tools.closeTab(tabId);
 						user.listUser(0, "", 1);	
 						if (IndexData.userInfo.userName === username) {
 							user.updateLoginInfo();
@@ -470,7 +490,12 @@ define(function(require, exports) {
 								if($(".T-updateUser-form .T-open-meter").is(":checked") == true){
 									isOpenOP = 1;
 								}
-								var form = "id="+id+"&"+$form.serialize()+"&status="+status;
+
+								var financialMessage = 0;
+								if($(".T-updateUser-form .T-financialMessage").is(":checked")){
+									financialMessage = 1;
+								}
+								var form = "id="+id+"&"+$form.serialize()+"&status="+status+"&financialMessage="+financialMessage;
 								$.ajax({
 									url:KingServices.build_url("user","updateUser"),
 									type:"POST",
@@ -579,6 +604,15 @@ define(function(require, exports) {
 			}
 		}
 	};
+
 	
+
+    // $(".meun").toggle(function(){
+    //     $('#D-{{menu.id}}').animate({top:'130px'},"fast");
+    // });
+
+   
+
+
 	exports.init = user.initModule;
 });

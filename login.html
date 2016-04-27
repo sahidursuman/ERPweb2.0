@@ -88,6 +88,9 @@
 				height: 45px;
 			}
 
+			#cnzz_stat_icon_1257382061 {
+				display: none;
+			}
 
 		</style>
 		<meta name="description" content="User login page" />
@@ -121,12 +124,15 @@
 		<script src="components/ace-admin/assets/js/html5shiv.min.js"></script>
 		<script src="components/ace-admin/assets/js/respond.min.js"></script>
 		<![endif]-->
+
+		<script>
+			//声明_czc对象:
+			var _czc = _czc || [],
+					siteId = '1257382061';
+			//绑定siteid，请用您的siteid替换下方"XXXXXXXX"部分
+			_czc.push(["_setAccount", siteId]);
+		</script>
 	</head>
-
-
-
-
-
 	<body style="background: url('components/ace-admin/assets/css/images/bg.png');width: 100%;height: 100%;" >
 		<!--<div class="row">-->
 			<div class=" max-content" >
@@ -237,6 +243,13 @@
 				$("input[name=userName]").val($.cookie("userName"));
 			}
 		});
+		</script>
+
+		<script type="text/javascript">
+			if (location.href.indexOf('djs.huochaitou.com') >= 0) {
+				var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257382061'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1257382061' type='text/javascript'%3E%3C/script%3E"));
+				document.write('<script src="js/analyze/cnzz.js">'+ '<' +'/script>');
+			}
 		</script>
 	</body>
 </html>

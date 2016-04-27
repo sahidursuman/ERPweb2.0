@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":10,"md5":"c83330031115a8aee8a52a6da554ed7b"}*/
+/*TMODJS:{"debug":true,"version":12,"md5":"4e351bb2315bbcab2c9166d79a3489ff"}*/
 define(function(require) {
     return require("../../../template")("financial/transfer/view/viewNeedPayDetail", function($data, $filename) {
         try {
@@ -10,9 +10,9 @@ define(function(require) {
                 $line = 22, null == rs.receivableType || "" == rs.receivableType ? ($out += "-", 
                 $line = 22) : ($line = 22, $out += $escape(rs.receivableType), $line = 22), $out += "</td> <td>", 
                 $line = 23, null == rs.businessType || "" == rs.businessType ? ($out += "-", $line = 23) : ($line = 23, 
-                $out += $escape(rs.businessType), $line = 23), $out += "</td> <td>", $line = 24, 
-                $out += $escape(rs.payDifferenceMoney), $out += "</td> <td>", $line = 25, $out += $escape(rs.remark), 
-                $out += "</td> <td>", $line = 26, null == rs.checkRealname || "" == rs.checkRealname ? ($out += "-", 
+                $out += $escape(rs.businessType), $line = 23), $out += '</td> <td><span class="F-float F-money">', 
+                $line = 24, $out += $escape(rs.payDifferenceMoney), $out += "</span></td> <td>", 
+                $line = 25, $out += $escape(rs.remark), $out += "</td> <td>", $line = 26, null == rs.checkRealname || "" == rs.checkRealname ? ($out += "-", 
                 $line = 26) : ($line = 26, $out += $escape(rs.checkRealname), $line = 26), $out += "</td> <td>", 
                 $line = 27, null == rs.checkTime || "" == rs.checkTime ? ($out += "-", $line = 27) : ($line = 27, 
                 $out += $escape($helpers.dateFormat(rs.checkTime, "yyyy-MM-dd hh:mm:ss")), $line = 27), 
@@ -25,7 +25,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '<div class="col-xs-12">\r\n	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<div class="form-group">\r\n			<div class="col-xs-12 col-sm-12 widget-container-col">\r\n				<div class=" ui-sortable-handle">\r\n					<div class="widget-body">\r\n						<div class="widget-main">\r\n							<table class="table table-striped table-bordered table-hover">\r\n								<thead>\r\n									<tr>\r\n										<th class="th-border">应付类别</th>\r\n										<th class="th-border">发生业务</th>\r\n										<th class="th-border">金额</th>\r\n										<th class="th-border">备注</th>\r\n										<th class="th-border">操作人</th>\r\n										<th class="th-border">操作时间</th>\r\n									</tr>\r\n								</thead>\r\n								<tbody>\r\n									{{each needPayDetailList as rs}}\r\n									<tr data-id="{{rs.id}}">\r\n										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>\r\n										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>\r\n										<td>{{rs.payDifferenceMoney}}</td>\r\n										<td>{{rs.remark}}</td>\r\n										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>\r\n										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:\'yyyy-MM-dd hh:mm:ss\'}}{{/if}}</td>\r\n									</tr>\r\n									{{/each}}\r\n								</tbody>\r\n							</table>\r\n						</div>\r\n					</div>\r\n				</div>\r\n			</div>\r\n		</div>\r\n	</form>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '<div class="col-xs-12">\r\n	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">\r\n		<div class="form-group">\r\n			<div class="col-xs-12 col-sm-12 widget-container-col">\r\n				<div class=" ui-sortable-handle">\r\n					<div class="widget-body">\r\n						<div class="widget-main">\r\n							<table class="table table-striped table-bordered table-hover">\r\n								<thead>\r\n									<tr>\r\n										<th class="th-border">应付类别</th>\r\n										<th class="th-border">发生业务</th>\r\n										<th class="th-border">金额</th>\r\n										<th class="th-border">备注</th>\r\n										<th class="th-border">操作人</th>\r\n										<th class="th-border">操作时间</th>\r\n									</tr>\r\n								</thead>\r\n								<tbody>\r\n									{{each needPayDetailList as rs}}\r\n									<tr data-id="{{rs.id}}">\r\n										<td>{{if rs.receivableType == null || rs.receivableType == ""}}-{{else}}{{rs.receivableType}}{{/if}}</td>\r\n										<td>{{if rs.businessType == null || rs.businessType == ""}}-{{else}}{{rs.businessType}}{{/if}}</td>\r\n										<td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>\r\n										<td>{{rs.remark}}</td>\r\n										<td>{{if rs.checkRealname == null || rs.checkRealname == ""}}-{{else}}{{rs.checkRealname}}{{/if}}</td>\r\n										<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:\'yyyy-MM-dd hh:mm:ss\'}}{{/if}}</td>\r\n									</tr>\r\n									{{/each}}\r\n								</tbody>\r\n							</table>\r\n						</div>\r\n					</div>\r\n				</div>\r\n			</div>\r\n		</div>\r\n	</form>\r\n</div>'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });

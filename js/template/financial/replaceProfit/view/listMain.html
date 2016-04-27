@@ -1,66 +1,77 @@
 <div class="row">
-	<div class="col-xs-12">
-		<div class="T-search-area" style="margin-top:-20px;">
-			<label>客户：</label> 
-            <input type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" placeholder="客户" />
+    <div class="col-xs-12 T-search-area">
+        <div class="">
+            <label>客户 </label>
+            <input class="mar-r-10" type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" placeholder="客户" />
             <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
-            <label style="margin-left:20px;">酒店：</label>
-            <input type="text" value = "{{searchParam.hotelName}}" name="hotelName" placeholder="酒店" />
+            <label>外联销售 </label>
+            <input class="mar-r-10" type="text" value="{{searchParam.outOPUserName}}" name="outOPUserName" placeholder="外联销售" />
+            <label>部门 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="businessName" placeholder="部门" />
+            <label>子部门 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="groupName" placeholder="子部门" />
+            <label>酒店 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.hotelName}}" name="hotelName" placeholder="酒店" />
             <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
-            <label style="margin-left:20px;">景区：</label>
-            <input type="text" value = "{{searchParam.scenicName}}" name="scenicName" placeholder="景区" />
-            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" />
-            <label style="margin-left:20px;">票务：</label>
-            <select name="ticketType" style="margin-top:20px;">
-				<option value="" {{if searchParam.ticketType == ""}}selected="selected"{{/if}}>全部</option>
-				<option value="1" {{if searchParam.ticketType == 1}}selected="selected"{{/if}}>飞机票</option>
-				<option value="2" {{if searchParam.ticketType == 2}}selected="selected"{{/if}}>汽车票</option>
-				<option value="3" {{if searchParam.ticketType == 3}}selected="selected"{{/if}}>火车票</option>
-				<option value="4" {{if searchParam.ticketType == 4}}selected="selected"{{/if}}>轮船票</option>
-			</select>
-			<label style="margin-left:20px;">旅游车：</label>
-			<input type="text" value="{{searchParam.needSeatCount}}" name="seatCount" placeholder="旅游车" />
-			<label style="margin-left:20px;">开始日期：</label>
-			<input class="date-picker" name="startDate" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" style="width:100px;" />	
-			<label style="margin-left:20px;">结束日期：</label>
-			<input class="date-picker" name="endDate" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" style="width:100px;" />			
-			<button class="search-btn btn-sm btn-height T-search" style="margin-left:20px;">
-				<i class="ace-icon fa fa-search"></i>搜索
-			</button>
-		</div>
-		<div style="margin:8px 0px;">
-            <label>应收合计：<span class="T-sumNeedGetMoney"></span></label>
-            <label style="margin-left:30px;">成本合计：<span class="T-sumCostMoney"></span></label>
-            <label style="margin-left:30px;">毛利合计：<span class="T-sumGrossProfit"></span></label>
-		</div>
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr class="bg-blur">
-					<th rowspan="2">代订单号</th>
-					<th rowspan="2">客户</th>
-					<th colspan="4">项目</th>
-					<th rowspan="2">应收</th>
-					<th rowspan="2">成本</th>
-					<th rowspan="2">毛利</th>
-				</tr>
-				<tr class="bg-blur">
-					<th>酒店</th>
-					<th>票务</th>
-					<th>景区</th>
-					<th>旅游车</th>
-				</tr>
-			</thead>
-			<tbody class="T-list">
-			</tbody>
-		</table>
-		<div class="row pageMode">
-			<div class="col-xs-6">
-				<small class="T-totalSize">没有查询到相关记录</small>
-			</div>
-			<div class="col-xs-6">
-				<div class="dataTables_paginate paging_simple_numbers T-pagenation">
-				</div>
-			</div>
-		</div>
-	</div>
+          
+        </div>
+        <div class="mar-t-10">
+            <label>景区 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.scenicName}}" name="scenicName" placeholder="景区" />
+            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" /> 
+        	<label>票务 </label>
+            <select name="ticketType" class="mar-r-10">
+                <option value="" {{if searchParam.ticketType=="" }}selected="selected" {{/if}}>全部</option>
+                <option value="1" {{if searchParam.ticketType==1 }}selected="selected" {{/if}}>飞机票</option>
+                <option value="2" {{if searchParam.ticketType==2 }}selected="selected" {{/if}}>汽车票</option>
+                <option value="3" {{if searchParam.ticketType==3 }}selected="selected" {{/if}}>火车票</option>
+                <option value="4" {{if searchParam.ticketType==4 }}selected="selected" {{/if}}>轮船票</option>
+            </select>
+            <label>旅游车 </label>
+            <input type="text" class="mar-r-10" value="{{searchParam.needSeatCount}}" name="seatCount" placeholder="旅游车" />
+            <label>开始日期 </label>
+            <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" style="width:100px;" />
+            <label>结束日期 </label>
+            <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" style="width:100px;" />
+            <button class="search-btn btn-sm btn-height T-search">
+                <i class="ace-icon fa fa-search"></i>搜索
+            </button>
+        </div>
+        <div style="margin:8px 0px;">
+            <label class="mar-r-20">应收合计：<span class="T-sumNeedGetMoney F-float F-money"></span></label>
+            <label class="mar-r-20">成本合计：<span class="T-sumCostMoney F-float F-money"></span></label>
+            <label>毛利合计：<span class="T-sumGrossProfit F-float F-money"></span></label>
+        </div>
+        <table class="table table-striped table-bordered table-hover T-showHighLight">
+            <thead>
+                <tr class="bg-blur">
+                    <th rowspan="2">代订单号</th>
+                    <th rowspan="2">客户</th>
+                    <th rowspan="2">外联销售</th>
+                    <th rowspan="2">部门</th>
+                    <th colspan="4">项目</th>
+                    <th rowspan="2">应收</th>
+                    <th rowspan="2">成本</th>
+                    <th rowspan="2">毛利</th>
+                </tr>
+                <tr class="bg-blur">
+                    <th>酒店</th>
+                    <th>票务</th>
+                    <th>景区</th>
+                    <th>旅游车</th>
+                </tr>
+            </thead>
+            <tbody class="T-list">
+            </tbody>
+        </table>
+        <div class="row pageMode">
+            <div class="col-xs-6">
+                <small class="T-totalSize">没有查询到相关记录</small>
+            </div>
+            <div class="col-xs-6">
+                <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

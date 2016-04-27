@@ -1,4 +1,4 @@
- <div class="col-xs-12 T-updateBusCompanyContainer globalAdd">
+ <div class="col-xs-12 T-updateBusCompanyContainer busCompanyAddSubtractBtn globalAdd">
 	<form class="form-horizontal T-busCompanyMainForm formOneList" role="form" style="margin-top:10px" onsubmit="return false">
 		<input name="id" type="hidden" value="{{busCompany.id}}"/>
 		<div class=" ui-sortable-handle">
@@ -32,6 +32,9 @@
 				    	<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
 						<div class="col-sm-3">
 							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" maxlength="11" />
+							<label class="feild-label feild-error-tip" style="top:4px;right:80px;">
+								<i title="该手机号码将接收短信" class="fa fa-info blue"></i>
+							</label>
 						</div>
 					</div>
 					<div class="form-group guideInterval">
@@ -82,9 +85,8 @@
 					</div>
 
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">车队最低价:</label>
 						<div class="col-sm-4">
-							<input class="form-control" name="lowestPrice" value="{{busCompany.lowestPrice}}" class="col-sm-12" maxlength="9" />
+							<input class="form-control F-float F-money T-lowestPrice" type="hidden" name="lowestPrice" value="{{busCompany.lowestPrice}}" class="col-sm-12" maxlength="9" />
 						</div>
 					</div>
 
@@ -122,7 +124,7 @@
 										<th class="table-border" width="60">操作</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody class="T-busTbody-list">
 									{{each busCompany.busList as bus}}
 										<tr data-entity-id="{{bus.id}}">
 											<td><input  name="licenseNumber" type="text" class="col-sm-12" value="{{bus.licenseNumber}}" maxlength="10" /></td>
@@ -139,7 +141,7 @@
 												{{if bus.isChartered == 1}} 
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" data-entity-id="{{price.id}}" class="clearfix {{if i > 0}}T-appendDiv{{/if}} div-{{i+1}}" style="margin-top:2px">
-														<input name="startTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="datepicker" style="width:100px" value="{{if bus.isChartered == 1}}{{price.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="datepicker" style="width:100px" value="{{if bus.isChartered == 1}}{{price.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/>
+														<input name="startTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="datepicker T-startTime T-calc" style="width:100px" value="{{if bus.isChartered == 1}}{{price.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="datepicker T-endTime T-calc" style="width:100px" value="{{if bus.isChartered == 1}}{{price.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}"/>
 														{{if i == 0}}
 														<label class="timeArea {{if bus.isChartered == 0}}hide{{/if}}" style="float:right">
 															<button class="btn btn-success btn-sm btn-white T-add">
@@ -157,7 +159,7 @@
 													{{/each}}
 												{{else}}
 													<div data-index="1" data-entity-id="" class="clearfix T-appendDiv div-1" style="margin-top:2px">
-														<input name="startTime" type="text" readonly="readonly" class="datepicker" style="width:100px" value=""/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" readonly="readonly" class="datepicker" style="width:100px" value=""/>
+														<input name="startTime" type="text" readonly="readonly" class="datepicker T-startTime T-calc" style="width:100px" value=""/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" readonly="readonly" class="datepicker T-endTime T-calc" style="width:100px" value=""/>
 														<label class="timeArea hide" style="float:right">
 															<button class="btn btn-success btn-sm btn-white T-add">
 																<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
@@ -170,12 +172,12 @@
 												{{if bus.isChartered == 1}}
 													{{each bus.priceList as price i}}
 													<div data-index="{{i+1}}" class="clearfix T-appendDiv div-{{i+1}}" style="margin-top:3px;margin-bottom:7px;">
-														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} value="{{price.contractPrice}}"/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" {{if bus.isChartered == 0}}readonly="readonly"{{/if}} class="F-float F-money T-calc T-minPrice" value="{{price.contractPrice}}"/><label>&nbsp;元</label>
 													</div>
 													{{/each}}
 												{{else}}
 													<div data-index="1" class="clearfix T-appendDiv div-1" style="margin-top:3px;margin-bottom:7px;">
-														<input style="width:100px;" name="contractPrice" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
+														<input style="width:100px;" name="contractPrice" class="F-float F-money T-calc T-minPrice" maxlength="9" type="text" readonly="readonly" value=""/><label>&nbsp;元</label>
 													</div>
 												{{/if}}
 											</td>

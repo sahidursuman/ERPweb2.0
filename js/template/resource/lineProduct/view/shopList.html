@@ -1,0 +1,31 @@
+<table class="table table-striped table-bordered table-hover T-showHighLight">
+	<thead>
+		<tr>
+			<th class="th-border">商家名称</th>
+			<th class="th-border">商品列表</th>
+			<th class="th-border">操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{each shopList as rs}}
+		<tr data-entity-id="{{rs.id}}" data-entity-name="{{rs.name}}" data-entity-item="{{each rs.shopPolicyList as item index}}{{if index == rs.shopPolicyList.length - 1}}{{item.name}}{{else}}{{item.name}}、{{/if}}{{/each}}">
+			<td>{{rs.name}}</td>
+			<td>
+				{{each rs.shopPolicyList as item index}}
+					{{if index == rs.shopPolicyList.length - 1}}{{item.name}}{{else}}{{item.name}}、{{/if}}
+				{{/each}}
+			</td>
+			<td><label class="pos-rel"><input type="checkbox" class="ace T-add"> <span class="lbl"></span></label></td>
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
+<div class="row pageMode">
+	<div class="col-xs-6">
+		<small>共计 {{recordSize}} 条记录</small>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation">
+		</div>
+	</div>
+</div>

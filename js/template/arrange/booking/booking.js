@@ -13,6 +13,8 @@ define(function(require, exports) {
 		listTemplate = require("./view/list"),
 		listTableTemplate = require("./view/listTable"),
 		addPartnerManagerTemplate = require("./view/addPartnerManager"),
+		listFinancialTemplate = require("./view/listFinancial"),
+		financialNoticeTemplate = require("./view/financiaNoticeBook"),
 		tabId = "tab-"+menuKey+"-content";
 	/**
 	 * 定义项目代订对象
@@ -23,7 +25,9 @@ define(function(require, exports) {
 		searchData : false,
 		$tab : false,
 		autocompleteDate : {},
-		edited : {}
+		edited : {},
+		// isPrePayMoney : false,
+		receiveUserIdList : []
 	}
 
 	// 临时存放数据
@@ -69,12 +73,130 @@ define(function(require, exports) {
 		BookingArrange.getQueryTerms();		
 	};
 
+	/**
+		 * /通知财务勾选列表
+		 * @return {[type]} [description]
+		 */
+ 		BookingArrange.chooseFinancial = function(){
+		var title = '财务列表',data={};
+		var addFinancialLayer = layer.open({
+			type: 1,
+			title: title,
+			skin: 'layui-layer-rim', //加上边框
+			area: '860px', //宽高
+			zIndex:1028,
+			content: listFinancialTemplate(data),
+			success:function(){
+				
+				var $container = $(".T-optional-financial");
+				// 初始化list列表
+				BookingArrange.listBookFinancial(0,$container);
+				 //给提交按钮绑定事件
+                //$container.find(".T-btn-sureSubmit").on('click' , saveScenicOptional);
+				// 取消按钮绑定事件
+				$container.find(".T-btn-sureSubmit").click(function() {
+                   layer.close(addFinancialLayer);
+                });
+
+			}
+		})
+
+	};
+
+	BookingArrange.listBookFinancial = function(page,$container){
+		var $container = $(".T-optional-financial");
+		  // 修正页码
+        var args = {
+			pageNo: (page || 0)
+		}
+		if (!!BookingArrange.$tab) {
+			args = {
+				pageNo: (page || 0),
+				realName: $container.find('.T-financial-name').val()
+			}
+		}
+			$.ajax({
+					url: KingServices.build_url('touristGroup', 'getReceiveUserList'),
+					type: 'POST',
+					// data: "pageNo="+page,
+					data: args,
+					success:function(data){
+					    if(showDialog(data)){
+					    	data.userList=JSON.parse(data.userList);
+					    	var html = financialNoticeTemplate(data);
+					    	$container.find('.T-bookingF-content').html(html);
+					    	// 关键字搜索事件
+							$container.find('.T-financial-name').on('click',function(e){
+								if(e.which == 13 && !window.forbiddenError){
+									BookingArrange.listBookFinancial();
+								}
+							});
+							$container.find('.T-btn-search').on('click', function(event) {
+									event.preventDefault();
+									BookingArrange.listBookFinancial();
+							});
+					    	// 让对话框居中
+								$(window).trigger('resize');
+
+							// 勾选记录
+							$container.find('.T-add').on('click',BookingArrange.addFinancialBook);
+
+							//分页自动勾选
+							var $tr = $container.find('tr');
+						   for (var i = 0; i < BookingArrange.receiveUserIdList.length; i++) {
+						   	$tr.each(function(j) {
+						    	var id = $tr.eq(j).attr('data-value');
+						    	if (BookingArrange.receiveUserIdList[i].receiveUserId == id ) {
+						    		$tr.eq(j).find('.T-add').prop('checked',true);
+						    	}
+						    })
+						   };
+					    	// 绑定翻页组件
+							laypage({
+							    cont: $container.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+							    pages: data.totalPage, //总页数
+							    curr: (page + 1),
+							    jump: function(obj, first) {
+							    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+							    		BookingArrange.listBookFinancial(obj.curr -1,$container);
+							    	}
+							    }
+							});
+			    }
+
+	        }
+       });
+	}
+
+	/**
+	 * 分页勾选状态
+	 */
+	 BookingArrange.addFinancialBook = function(){
+	 	var $that=$(this),
+		    $tr=$that.closest('tr'),
+		    id= $tr.attr('data-value');
+	    if ($that.is(':checked')) {
+	    	var receiveUserIdArray = {
+	    		receiveUserId : id
+	    	};
+	    	BookingArrange.receiveUserIdList.push(receiveUserIdArray);
+	    } else {
+	    	for (var i = 0; i < BookingArrange.receiveUserIdList.length; i++) {
+	    		if ( !!BookingArrange.receiveUserIdList[i].receiveUserId &&  id == BookingArrange.receiveUserIdList[i].receiveUserId ) {
+	    			tranBookingArrangesit.receiveUserIdList.splice(i,1);
+	    		}
+	    	}
+	    }
+	 }
+
 
 	/**
 	 * 绑定页内事件
 	 */
-	BookingArrange.init_event = function(){		
-		//时间时间
+	BookingArrange.init_event = function($tab){		
+		// var $this = $that.closest('.T-updateBooking');
+		// var $container = $this.find(".T-hotelList");
+		//时间事件
 		Tools.setDatePicker(BookingArrange.$searchArea.find('.datepicker'), true);
 		
 		//搜索按钮事件
@@ -107,7 +229,6 @@ define(function(require, exports) {
 		//搜索操作人查询
 		BookingArrange.choose(BookingArrange.$searchArea.find('.T-operateUserChoose'),function(obj){
 			var operationUserList = BookingArrange.autocompleteDate.operationUserList;
-			console.log(operationUserList);
 			if(operationUserList && operationUserList.length > 0){
 				for(var i=0; i < operationUserList.length; i++){
 					operationUserList[i].value = operationUserList[i].realName
@@ -140,6 +261,7 @@ define(function(require, exports) {
 				BookingArrange.deleteBooking(id, $that);
 			}
 		});
+		 BookingArrange.financialChanged($tab);
 	};
 
 	/**
@@ -292,6 +414,7 @@ define(function(require, exports) {
 	BookingArrange.CU_event = function($tab){
 		//表单代订信息验证
 		var validator = rule.checkAddBooking($tab);
+		BookingArrange.bookNumberChange($tab)
 		$tab.off('change').off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE)
 		.on('change', function(event){
 			event.preventDefault();
@@ -342,6 +465,15 @@ define(function(require, exports) {
     		event.preventDefault();
     		BookingArrange.save($tab, validator);
     	});
+    	//外联销售下拉
+		BookingArrange.getOPUserList($tab.find(".T-outOPUserName")).trigger('click');
+    	// 通知财务初始化
+		$tab.find('.T-btn-financial').on('click', function(event) {
+			event.preventDefault();
+			BookingArrange.chooseFinancial();
+		});
+		//判定预付款是否发生改变
+		BookingArrange.financialChanged($tab);
 	};
 
 	/**
@@ -372,15 +504,28 @@ define(function(require, exports) {
 
 			if (!$datepicker.data('datepicker')) {
 				var $datepickerTr = $datepicker.closest('tr');
+				if ($datepickerTr.find('[name=days]').length) {
+					var $datepickers = $datepickerTr.find('.datepicker'),
+						options = {
+							moreDay : 1
+						};
 
-				if ($datepickerTr.length) {
-					var $datepickers = $datepickerTr.find('.datepicker');
-
-					Tools.setDatePicker($datepickers, true).on('changeDate.diff.api', function(event) {
+					Tools.setDatePicker($datepickers, true,options).on('changeDate.diff.api', function(event) {
 						event.preventDefault();
 						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
+						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
 					});
-				} else {
+				} else if ($datepickerTr.find('[name=days]').length==0) {
+					var $datepickers = $datepickerTr.find('.datepicker'),
+						options = {
+							moreDay : 0
+						};
+					Tools.setDatePicker($datepickers, true,options).on('changeDate.diff.api', function(event) {
+						event.preventDefault();
+						$datepickerTr.find('input[name="days"]').val(Tools.getDateDiff($datepickers.eq(0).val(), $datepickers.eq(1).val()));
+						BookingArrange.calculation($datepicker.parents('[class*="Booking"]'));
+					});
+				} else{
 					Tools.setDatePicker($datepicker);
 				}
 			}
@@ -420,6 +565,20 @@ define(function(require, exports) {
 				parents.find("input[name=hotelId]").val(ui.item.id).trigger('change');
 				parents.find("input[name=hotelRoom]").val("");
 				parents.find("input[name=hotelRoomId]").val("");
+				parents.find("input[name=costPrice]").val(0);
+				parents.find("input[name=salePrice]").val(0);
+				$.ajax({
+					url: KingServices.build_url('hotel','getHotelById'),
+					type: 'POST',
+	                showLoading: false,
+	                data: "id=" + ui.item.id,
+	                success: function(data) {
+						if(showDialog(data)){
+							parents.find(".T-hotelStar").val(data.hotel.level);
+						}
+	                }
+				});
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 		}, function(obj, ui){
 			var parents = $(obj).closest('tr');
 			parents.find("input[name=hotelId]").val("");
@@ -458,6 +617,7 @@ define(function(require, exports) {
 			var enterTime = parents.find("input[name=enterTime]").val();
 			BookingArrange.ajax({'url' : 'hotel', 'method' : 'getHotelRoomPrice', 'menuKey' : 'resource_hotel', 'operation' : 'view', 'id' : ui.item.id, 'enterTime' : enterTime}, function(data){
 				parents.find("input[name=costPrice]").val(data.price);
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 			});
 		}, function(obj, ui){
 			var $parent = $(obj).closest('tr');
@@ -503,6 +663,7 @@ define(function(require, exports) {
 			$parent.find("input[name=scenicItemId]").val(nameUiId).trigger('change');
 			BookingArrange.ajax({'url' : 'scenic', 'method' : 'getScenicItemPrice', 'menuKey' : 'resource_scenic', 'operation' : 'view', 'id' : nameUiId, 'startTime' : startTime}, function(data){
 				$parent.find("input[name=costPrice]").val(data.price);
+				BookingArrange.calculation($(obj).parents('[class*="Booking"]'));
 			});
 		}, function(obj, ui){
 			var $parent = $(obj).closest('tr');
@@ -672,20 +833,20 @@ define(function(require, exports) {
 	//添加酒店代订列表
 	BookingArrange.addHotelList = function($that){
 		var html = '<tr>'+
-			'<td><div class="input-group"><input name="enterTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
-			'<td><div class="input-group"><input name="leaveTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
+			'<td><div class="input-group"><input name="enterTime" value="" type="text" class="datepicker"/></div></td>'+
+			'<td><div class="input-group"><input name="leaveTime" value="" type="text" class="datepicker"/></div></td>'+
 			'<td><select name="level" class="col-sm-12 T-hotelStar"><option selected="selected" value="" {{if hotelList.hotel.level == 0}}selected="selected"{{/if}}>全部</option>'+
 			'<option value="1">三星以下</option>'+
 			'<option value="2">三星</option><option value="3">准四星</option><option value="4">四星</option><option value="5">准五星</option><option value="6">五星</option><option value="7">五星以上</option></select></td>'+
 			'<td><input name="hotelName" value="" type="text" class="col-sm-12 T-chooseHotel bind-change"/><input name="hotelId" type="hidden" value="" /></td>'+
 			'<td><input name="hotelRoom" value="" type="text" class="col-sm-12 T-chooseHotelRoom bind-change"/><input name="hotelRoomId" type="hidden" value="" /></td>'+
-			'<td><input name="days" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" readonly="readonly" /></td>'+
+			'<td><input name="days" value="" type="text" class="col-sm-12 T-action-blur F-float F-count" maxlength="5" readonly="readonly" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
-			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12"/></td>'+
-			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" style="width: 55px" maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money"  style="width: 55px"  maxlength="9" /><label class="col-sm-4 control-label" style="padding: 7px 0 0 0;width:25px;" >/天</label></td>'+
+			'<td><input name="sumCostMoney" readonly="readonly" value="" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="sumNeedGetMoney" readonly="readonly" value="" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money"/></td>'+
 			'<td><a class="cursor T-action T-hotel-delete">删除</a></td></tr>';
 		var $this = $that.closest('.T-bookingHotelList');
 		var $container = $this.find(".T-hotelList");
@@ -693,6 +854,8 @@ define(function(require, exports) {
 		var $price= $container.find('.price');
 		Tools.inputCtrolFloat($price);
 		BookingArrange.BL_event($this.find(".T-hotelList"));
+		//判定预付款是否发生改变 
+		BookingArrange.financialChanged($container);
 		
 	};
 
@@ -700,22 +863,25 @@ define(function(require, exports) {
 	BookingArrange.addScenicList = function($that){
 		var $this = $that.closest(".T-bookingScenicList");
 		var html = '<tr>'+
-			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker"/><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
+			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker"/></div></td>'+
 			'<td><input name="scenicName" value="" type="text" class="col-sm-12 T-chooseScenic bind-change" /><input name="scenicId" value="" type="hidden" /></td>'+
 			'<td><input name="scenicItemName" value="" type="text"  class="col-sm-12 T-chooseScenicItem bind-change" /><input name="scenicItemId" value="" type="hidden" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur"  maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
-			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
+			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
 			'<td><input name="orderNumber" value="" type="text" class="col-sm-12" maxlength="50" /></td>'+
-			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money"/></td>'+
 			'<td><a class="cursor T-action T-scenic-delete">删除</a></td></tr>';
 		var $container=	$this.find('.T-scenicList');
 		    $container.append(html);
 		var $price=$container.find('.price')
 		Tools.inputCtrolFloat($price);
 		BookingArrange.BL_event($this.find(".T-scenicList"));
+
+		//判定预付款是否发生改变 
+		BookingArrange.financialChanged($container);
 	};
 
 	//新增票务代订列表
@@ -730,40 +896,46 @@ define(function(require, exports) {
 			'<td><input name="seatLevel" value="" type="text" class="col-sm-12" maxlength="30" /></td>'+
 			'<td><div class="input-group" style="min-width: 165px;"><input name="startTime" value="" type="text" class="datetimepicker col-sm-12"/><span class="input-group-addon"><i class="fa fa-clock-o"></i></span></div></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
-			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
+			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money"/></td>'+
 			'<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
 		var $container=$this.find(".T-ticketList");
 		    $container.append(html);
         var $price=$container.find('.price')
 			Tools.inputCtrolFloat($price);
 		BookingArrange.BL_event($this.find(".T-ticketList"));
+
+		//判定预付款是否发生改变 
+		BookingArrange.financialChanged($container);
 	};
 
 	//新增旅游车代订列表
 	BookingArrange.addBusList = function($that){
 		var $this = $that.closest('.T-bookingBusList');
 		var html = '<tr>'+
-			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker" /><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
-			'<td><div class="input-group"><input name="endTime" value="" type="text" class="datepicker" /><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div></td>'+
+			'<td><div class="input-group"><input name="startTime" value="" type="text" class="datepicker" /></div></td>'+
+			'<td><div class="input-group"><input name="endTime" value="" type="text" class="datepicker" /></div></td>'+
 			'<td><input name="needSeatCount" value="" type="text" class="col-sm-12 T-chooseSeatCount bind-change" /></td>'+
 			'<td><input name="needBusBrand" value="" type="text" class="col-sm-12 bind-change T-chooseNeedBusBrand" /></td>'+
 			'<td><input name="busCompany" value="" type="text" class="col-sm-12 bind-change T-busCompany" /><input name="busCompanyId" value="" type="hidden" /></td>'+
 			'<td><input name="roomCount" value="" type="text" class="col-sm-12 T-action-blur" maxlength="5" /></td>'+
-			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
-			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price" maxlength="9" /></td>'+
-			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12"/></td>'+
-			'<td class="hidden"><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur"/></td>'+
+			'<td><input name="costPrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
+			'<td><input name="salePrice" value="" type="text" class="col-sm-12 T-action-blur price F-float F-money" maxlength="9" /></td>'+
+			'<td><input name="sumCostMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="sumNeedGetMoney" value="" readonly="readonly" type="text" class="col-sm-12 F-float F-money"/></td>'+
+			'<td><input name="prePayMoney" value="" type="text" class="col-sm-12 T-action-blur T-prePayMoney F-float F-money"/></td>'+
 			'<td><a class="cursor T-action T-bus-delete">删除</a></td></tr>';
 		var $container = $this.find(".T-busList");
 		$container.append(html);	
 		var $price=$container.find('.price')
 		Tools.inputCtrolFloat($price);	
 		BookingArrange.BL_event($this.find(".T-busList"));
+
+		//判定预付款是否发生改变 
+		BookingArrange.financialChanged($container);
 	};
 	/**
 	 * 同行客户联系人下拉
@@ -923,7 +1095,7 @@ define(function(require, exports) {
 				costS = Tr.eq(i).find("[name=sumCostMoney]"),
 				saleS = Tr.eq(i).find("[name=sumNeedGetMoney]"),
 				days = Tr.eq(i).find("[name=days]").val() || 1,
-				payed = Tr.eq(i).find("[name=payedMoney]").val()-0 || 0;
+				payed = Tr.eq(i).find("[name=prePayMoney]").val()-0 || 0;
 			
 			if(count*cost*days - 900000000 >0){
 				showMessageDialog($( "#confirm-dialog-message" ),"计算成本值过大，请确认数据是否有误");
@@ -963,20 +1135,24 @@ define(function(require, exports) {
 	BookingArrange.submitBooking = function($that, validator, tab_array){
 		var bookingOrder = {
 				id : BookingArrange.getValue($that,"id"),
+				bookingOrderNumber : BookingArrange.getValue($that,"orderNumber"),
 				partnerAgencyId : BookingArrange.getValue($that,"partnerAgencyId"),
 				contactId : BookingArrange.getValue($that,"partnerAgencyContactId"),
 				contactRealname : BookingArrange.getValue($that,"contactRealname"),
 			    contactMobileNumber : BookingArrange.getValue($that,"contactMobileNumber"),
 			    touristRealname : BookingArrange.getValue($that,"touristRealname"),
 			    touristMobileNumber : BookingArrange.getValue($that,"touristMobileNumber"),
+			    outOPUserName : BookingArrange.getValue($that,"outOPUserName"),
+			    outOPUserId : $that.find('[name="outOPUserName"]').data('id'),
 			    sumNeedGetMoney : BookingArrange.getValue($that,"sumNeedGetMoney"),
+			    preIncomeMoney : BookingArrange.getValue($that,"preIncomeMoney"), 
 			    sumCostMoney : BookingArrange.getValue($that,"sumCostMoney"),
-			    // payedMoney : BookingArrange.getValue($that,"payedMoney"),
 			    remark : BookingArrange.getValue($that,"remark"),
 			    bookingHotelList : [],
 			    bookingScenicList : [],
 			    bookingTicketList : [],
-			    bookingBusCompanieList : []
+			    bookingBusCompanieList : [],
+			    receiveUserIdList : []
 		    };
 		var hotelListTr = $that.find(".T-hotelList tr");
 		hotelListTr.each(function(i){
@@ -992,7 +1168,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(hotelListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(hotelListTr.eq(i),"sumNeedGetMoney"),
-				// payedMoney : BookingArrange.getValue(hotelListTr.eq(i),"payedMoney"),
+				prePayMoney : BookingArrange.getValue(hotelListTr.eq(i),"prePayMoney"),
 			}
 			if(hotelJson.hotelId){
 				bookingOrder.bookingHotelList.push(hotelJson);
@@ -1011,7 +1187,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(scenicListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(scenicListTr.eq(i),"sumNeedGetMoney"),
-				// payedMoney : BookingArrange.getValue(scenicListTr.eq(i),"payedMoney"),
+				prePayMoney : BookingArrange.getValue(scenicListTr.eq(i),"prePayMoney"),
 			}
 			if(scenicJson.scenicId){
 				bookingOrder.bookingScenicList.push(scenicJson);
@@ -1033,7 +1209,7 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(ticketListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(ticketListTr.eq(i),"sumNeedGetMoney"),
-				// payedMoney : BookingArrange.getValue(ticketListTr.eq(i),"payedMoney"),
+				prePayMoney : BookingArrange.getValue(ticketListTr.eq(i),"prePayMoney"),
 			}
 			if(ticketJson.ticketId){
 				bookingOrder.bookingTicketList.push(ticketJson);
@@ -1053,15 +1229,23 @@ define(function(require, exports) {
 				salePrice : BookingArrange.getValue(busListTr.eq(i),"salePrice"),
 				sumCostMoney : BookingArrange.getValue(busListTr.eq(i),"sumCostMoney"),
 				sumNeedGetMoney : BookingArrange.getValue(busListTr.eq(i),"sumNeedGetMoney"),
-				// payedMoney : BookingArrange.getValue(busListTr.eq(i),"payedMoney"),
+				prePayMoney : BookingArrange.getValue(busListTr.eq(i),"prePayMoney"),
+				payType : BookingArrange.getValue(busListTr.eq(i),"payType")
 			}
 			if(busJson.busCompanyId){
 				bookingOrder.bookingBusCompanieList.push(busJson);
 			}
 		})
-		console.log(bookingOrder)
+
+		//通知财务Id
+		bookingOrder.receiveUserIdList = BookingArrange.receiveUserIdList;
 		bookingOrder = JSON.stringify(bookingOrder);
 		var operation = $that.children().hasClass('T-addBooking') ? 'add' : 'update';
+		// 预付款发生改变，请通知财务
+		// if(BookingArrange.isPrePayMoney==true && BookingArrange.receiveUserIdList.length == 0){
+		// 	showMessageDialog($( "#confirm-dialog-message" ),"预付款发生改变，请通知财务！");
+		// 	return;
+		// }
 		BookingArrange.ajax({
 			'url' : 'bookingOrder', 
 			'method' : 'saveBookingOrder', 
@@ -1086,7 +1270,7 @@ define(function(require, exports) {
 	 * 查看项目代订
 	 */
 	BookingArrange.viewBooking = function(id){
-		BookingArrange.ajax({'url' : 'bookingOrder', 'method' : 'findBookingOrderById', 'menuKey' : menuKey, 'operation' : 'view', 'id' : id}, function(data){
+		BookingArrange.ajax({'url' : 'bookingOrder', 'method' : 'getBookingOrder', 'menuKey' : menuKey, 'operation' : 'view', 'id' : id}, function(data){
 			data.bookingOrder = JSON.parse(data.bookingOrder);
 			var html = viewTemplate(data);
 			Tools.addTab(menuKey+"-view","查看项目代订",html);
@@ -1103,7 +1287,7 @@ define(function(require, exports) {
 		if(!!id){
 			BookingArrange.ajax({
 				'url' : 'bookingOrder', 
-				'method' : 'findBookingOrderById', 
+				'method' : 'getBookingOrder', 
 				'menuKey' : menuKey, 
 				'operation' : 'view', 
 				'id' : id
@@ -1118,12 +1302,22 @@ define(function(require, exports) {
 			});
 		}
 	};
+
+	/**
+	 * 判断预付款是否发生改变
+	 */
+	 BookingArrange.financialChanged = function($tab){
+	 	BookingArrange.$tab.find('.T-prePayMoney').on('change',function(event) {
+	 		// BookingArrange.isPrePayMoney = true;
+	 	});
+	 };
+
 	/**
 	 * 取消项目代订
 	 */
 	BookingArrange.deleteBooking = function(id, $that){
 		var $parent = $that.closest('tr');
-		var dialogObj = $( "#confirm-dialog-message" );
+		var dialogObj = $( "#confirm-dialog-message");
 		dialogObj.removeClass('hide').dialog({
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -1144,7 +1338,7 @@ define(function(require, exports) {
 						$( this ).dialog( "close" );
 						BookingArrange.ajax({
 							'url' : 'bookingOrder',
-							'method' : 'deleteBookingOrderByIdAndCateName',
+							'method' : 'deleteBookingOrder',
 							'menuKey' : menuKey,
 							'operation' : 'delete',
 							'cateName' : 'order',
@@ -1228,19 +1422,19 @@ define(function(require, exports) {
 				buttons: [ 
 					{
 						text: "取消",
-						"class" : "btn btn-minier",
+						"class" : "btn btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 						}
 					},
 					{
 						text: "确定",
-						"class" : "btn btn-primary btn-minier",
+						"class" : "btn btn-primary btn-minier btn-heightMall",
 						click: function() {
 							$( this ).dialog( "close" );
 							BookingArrange.ajax({
 								'url' : 'bookingOrder', 
-								'method' : 'deleteBookingOrderByIdAndCateName',
+								'method' : 'deleteBookingOrder',
 								'operation': 'delete', 
 								'cateName' : $list, 
 								'id' : id
@@ -1268,6 +1462,77 @@ define(function(require, exports) {
 			})
 		}
 	};
+
+	/**
+	 * 绑定责任计调的选择
+	 * @param  {object} $target 绑定选择的Jquery对象
+	 * @return {[type]}         [description]
+	 */
+	BookingArrange.getOPUserList = function($target){
+		return $target.autocomplete({
+			minLength:0,
+			change:function(event,ui){
+				if(ui.item == null){
+					$target.val('').data("id", "");
+				}
+			},
+			select:function(event,ui){
+				var item = ui.item;
+				$target.blur().data("id", item.id);
+			}
+		}).one('click', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			$.ajax({
+				url: KingServices.build_url('tripPlan', 'getOPUserList'),
+				type: 'post',
+			})
+			.done(function(data) {
+				if (showDialog(data)) {
+					if($target.val() == ""){
+						$target.val(data.realName).data('id', data.userId)
+					}
+					
+					var userList = JSON.parse(data.userList || false);
+					if (!!userList) {
+						for (var i = 0, len = userList.length;i < len; i++) {
+							userList[i].value = userList[i].realName;
+						}
+
+						$target.autocomplete('option', 'source', userList).data('ajax', true);;
+					}
+				}
+			});
+		})
+		.on('click', function(event) {
+			event.preventDefault();
+			if ($target.data('ajax')) {
+				$target.autocomplete('search', '');
+			}
+		})
+	};
+
+	//检查代订单号重复性
+    BookingArrange.bookNumberChange = function($tab) {
+        $tab.find('.T-bookNumberChange').on('change', function() {
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url('bookingOrder','validateOrderNumber'),
+                type: 'POST',
+                showLoading: false,
+                data: { bookingOrderNumber: $this.val()}
+            })
+            .done(function(data) {
+                if (data.success == 0) {
+                    $this.val('');
+                    layer.tips('该代订单号已存在', $this, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
 
 	exports.init = BookingArrange.initModule;
 	exports.replaceDetail = BookingArrange.viewBooking;

@@ -16,8 +16,6 @@ define(function(require, exports) {
         $checkTab : false,
         $clearTab : false,
         $searchArea : false,
-        $checkSearchArea: false,
-        $clearSearchArea : false,
         insureList : false,
         clearTempData : false,
         clearTempSumDate : false,
@@ -27,28 +25,25 @@ define(function(require, exports) {
 
 	Insure.initModule = function() {
 		var dateJson = FinancialService.getInitDate();
-        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate);
+        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate,2);
    	};
-  	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate){
+  	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate, accountStatus){
   		if (Insure.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
-            insuranceName = Insure.$searchArea.find("input[name=insuranceName]").val(),
-            insuranceId = Insure.$searchArea.find("input[name=insuranceId]").val(),
-            startDate = Insure.$searchArea.find("input[name=startDate]").val(),
-            endDate = Insure.$searchArea.find("input[name=endDate]").val()
+            insuranceName = Insure.$searchArea.find("input[name=insuranceName]").val();
+            insuranceId = Insure.$searchArea.find("input[name=insuranceId]").val();
+            startDate = Insure.$searchArea.find("input[name=startDate]").val();
+            endDate = Insure.$searchArea.find("input[name=endDate]").val();
+            accountStatus = Insure.$searchArea.find(".T-finance-status").find('button').data('value');
     	}
-    	if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
         insuranceName = (insuranceName == "全部") ? "" : insuranceName;
-
   		Insure.searchData={
   			pageNo : page,
   			insuranceName : insuranceName,
   			insuranceId : insuranceId,
   			startDate : startDate,
   			endDate : endDate,
+            accountStatus : accountStatus == undefined ? "2" : accountStatus,
   			sortType: 'auto'
   		};
   		var searchParam = JSON.stringify(Insure.searchData);
@@ -57,14 +52,22 @@ define(function(require, exports) {
 			type:"POST",
 			data:{ searchParam : searchParam },
 	        success: function(data){
-                console.log(data,"3")
 	            var result = showDialog(data);
 	            if (result) {
 	            	Insure.insureList = data.insuranceNameList;
 	                var html = listTemplate(data);
 	                Tools.addTab(menuKey,"保险账务",html);
-	                Insure.initList(startDate,endDate);
-
+                    Insure.$tab = $('#' + tabId);
+                    Insure.$searchArea=Insure.$tab.find('.T-search-area');
+	                Insure.initList(startDate,endDate, Insure.searchData.accountStatus);
+                    //获取合计数据
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    Insure.getSumMoney(sumMoneyData,Insure.$tab);
 	                // 绑定翻页组件
                     laypage({
                         cont: Insure.$tab.find('.T-pagenation'),
@@ -80,12 +83,14 @@ define(function(require, exports) {
         	}
     	});
   	};
-
-  	Insure.initList = function(startDate,endDate){
-        // 初始化jQuery 对象
-        Insure.$tab = $('#' + tabId);
-        Insure.$searchArea=Insure.$tab.find('.T-search-area');
-
+    //获取合计金额
+    Insure.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
+  	Insure.initList = function(startDate,endDate, accountStatus){
         Insure.getQueryList();
         Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);
 
@@ -94,78 +99,111 @@ define(function(require, exports) {
             event.preventDefault();
             Insure.listInsure(0);
         });
+
+        //状态框选择事件
+        Insure.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Insure.listInsure(0);
+        });
+        
+        var status = Insure.$tab.find(".T-finance-status");
+        status.on('click', '.dropdown-menu a', function(event){
+            event.preventDefault();
+            var $that = $(this);
+            status.find('button').data('value', $that.data('value')).find("span").text($that.text());
+        });
+
         // 报表内的操作
         Insure.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
             var $that = $(this),
-            	id = $that.closest('tr').data('id'),
-            	name = $that.closest('tr').data('name');
-
+                args = {
+                    pageNo : 0,
+                    insuranceId : $that.closest('tr').data('id'),
+                    insuranceName : $that.closest('tr').data('name'),
+                    startDate : startDate,
+                    endDate : endDate,
+                    accountStatus  : accountStatus
+                };
             if ($that.hasClass('T-check')) {
                 // 对账
-                Insure.GetChecking(0,id,name,"",startDate,endDate);
+                Insure.GetChecking(args);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
                 Insure.showBtnFlag = false;
-                Insure.getClearing(0,0,id,name,"",startDate,endDate);
+                args.isAutoPay = 0;
+                Insure.getClearing(args);
             }
         });
     };
 
   	// 保险对账
-	Insure.GetChecking = function(page,insuranceId,insuranceName,accountInfo,startDate,endDate){
-		if (Insure.$checkSearchArea && arguments.length === 3) {
-            accountInfo = Insure.$checkSearchArea.find("input[name=accountInfo]").val(),
-            startDate = Insure.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = Insure.$checkSearchArea.find("input[name=endDate]").val()
+	Insure.GetChecking = function(args,$tab){
+		if (!!$tab) {
+            args.insuranceId = $tab.find('.T-insuranceId').val();
+            args.insuranceName = $tab.find('.T-insuranceName').val();
+            args.accountInfo = $tab.find("input[name=accountInfo]").val();
+            args.startDate = $tab.find("input[name=startDate]").val();
+            args.endDate = $tab.find("input[name=endDate]").val();
+            args.accountStatus = $tab.data('account-status');
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
-
-        // 修正页码
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            insuranceId : insuranceId,
-            accountInfo : accountInfo,
-            startDate : startDate,
-            endDate : endDate,
-            sortType : "auto"
-        };
-        searchParam = JSON.stringify(searchParam);
+        args.page = args.page || 0;
+        args.sortType = "auto";
 		$.ajax({
 	       url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
 			type:"POST",
-			data:{ searchParam : searchParam },
+			data:{ searchParam : JSON.stringify(args) },
 			success : function(data){
-				var result = showDialog(data);
-				if(result){
+				if(showDialog(data)){
+
 					var fiList = data.financialInsuranceList;
-                    data.insuranceName = insuranceName;
+                    data.financialInsuranceList = FinancialService.isGuidePay(fiList);
+                    if(Insure.checkTemp && Insure.checkTemp.length > 0){
+                        data.financialInsuranceList = FinancialService.getCheckTempData(data.financialInsuranceList,Insure.checkTemp);
+                        data.sumSettlementMoney = Insure.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = Insure.checkTemp.sumUnPayedMoney;
+                    }
+                    data.insuranceName = args.insuranceName;
+                    data.insuranceId = args.insuranceId;
 					var html = insuranceChecking(data);
 
-					var validator;
                     // 初始化页面
                     if (Tools.addTab(checkTabId,"保险对账",html)) {
-                        Insure.initCheck(page,insuranceId,insuranceName); 
-                        validator = new FinRule(0).check(Insure.$checkTab.find(".T-checkList"));                     
+                        Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        Insure.$checkTab.data('account-status',args.accountStatus);
+                        if(Insure.checkTemp && Insure.checkTemp.length > 0){
+                           Insure.$checkTab.data('isEdited',true); 
+                        }
+                        Insure.initCheck(args,Insure.$checkTab); 
+                        var validator = new FinRule(0).check(Insure.$checkTab.find(".T-checkList"));                     
+                        //取消对账权限过滤
+                        var checkTr = Insure.$checkTab.find(".T-checkTr");
+                        var rightCode = Insure.$checkTab.find(".T-checkList").data("right");
+                        checkDisabled(fiList,checkTr,rightCode);
+                    } else {
+                        Insure.$checkTab.data('next',args);
                     }
-
-                    //取消对账权限过滤
-                    var checkTr = Insure.$checkTab.find(".T-checkTr");
-                    var rightCode = Insure.$checkTab.find(".T-checkList").data("right");
-                    checkDisabled(fiList,checkTr,rightCode);
-
                     //绑定翻页组件
                     laypage({
                         cont: Insure.$checkTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
-                                Insure.GetChecking(obj.curr-1,insuranceId,insuranceName);
+                                var temp = FinancialService.checkSaveJson(Insure.$checkTab,Insure.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                }else{
+                                    Insure.$checkTab.data('isEdited',false);
+                                    Insure.checkTemp = temp;
+                                    args.pageNo = obj.curr-1;
+                                    Insure.GetChecking(args);
+                                }
+                                
                             }
                         }
                     });
@@ -174,81 +212,83 @@ define(function(require, exports) {
 		});
 	};
 
-	Insure.initCheck = function(page,id,name){
-    	// 初始化jQuery 对象 
-        Insure.$checkTab = $("#tab-" + menuKey + "-checking-content");
-        Insure.$checkSearchArea = Insure.$checkTab.find('.T-search-area');
-        Insure.init_event(page,id,name,Insure.$checkTab,"check");
-        Tools.setDatePicker(Insure.$checkTab.find(".date-picker"),true);
+	Insure.initCheck = function(args,$tab){
+        Insure.init_event(args,$tab,"check");
         var checkRule = new FinRule(0);
-        FinancialService.updateUnpayMoney(Insure.$checkTab,new FinRule(1));
+        FinancialService.updateUnpayMoney($tab,new FinRule(0));
 
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            Insure.GetChecking(args,$tab);
+        });
         //搜索按钮事件
-        Insure.$checkSearchArea.find('.T-search').on('click', function(event) {
+        $tab.find('.T-search').off().on('click', function(event) {
             event.preventDefault();
-            Insure.GetChecking(0,id,name);
+            args.pageNo = 0;
+            Insure.GetChecking(args,$tab);
         });
 
-        //报表内的操作
-        Insure.listOption(Insure.$checkTab);
+        //导出报表事件
+        $tab.find(".T-btn-export").click(function(){
+            var argsData = {
+                accountStatus:$tab.find('input[name=accountStatus]').val(),
+                insuranceId : args.insuranceId,
+                insuranceName: args.insuranceName, 
+                accountInfo : $tab.find("input[name=accountInfo]").val(),
+                startDate: $tab.find('input[name=startDate]').val(),
+                endDate: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+            };
+            FinancialService.exportReport(argsData,"exportArrangeInsuranceFinancial");
+        });
 
         //复选框事件初始化
-        var checkboxList = Insure.$checkTab.find(".T-checkList tr .T-checkbox"),
-            $checkAll = Insure.$checkTab.find(".T-checkAll");
-            FinancialService.initCheckBoxs($checkAll,checkboxList);
-        var trList = Insure.$checkTab.find(".T-checkTr");
-        //关闭页面事件
-        Insure.$checkTab.find(".T-close-check").click(function(){
-             FinancialService.changeUncheck(trList,function(){
-                Tools.closeTab(menuKey + "-checking");
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"),$tab.find(".T-checkList tr .T-checkbox"));
+
+        //确认对账按钮事件
+        $tab.find(".T-saveCheck").click(function(){
+            FinancialService.changeUncheck($tab.find(".T-checkTr"),function(){
+               Insure.saveChecking($tab,args);
             });
             
         });
-        //确认对账按钮事件
-        Insure.$checkTab.find(".T-saveCheck").click(function(){
-            FinancialService.changeUncheck(trList,function(){
-               Insure.saveChecking(id,name,page);
-            });
-            
-         });
     };
 
   	// 结算
-  	Insure.getClearing = function(isAutoPay,page,insuranceId,insuranceName,accountInfo,startDate,endDate){
+  	Insure.getClearing = function(args,$tab){
+        if (!!$tab) {
+            args.insuranceId = $tab.find('.T-insuranceId').val();
+            args.insuranceName = $tab.find('.T-insuranceName').val();
+            args.accountInfo = $tab.find("input[name=accountInfo]").val();
+            args.startDate = $tab.find("input[name=startDate]").val();
+            args.endDate = $tab.find("input[name=endDate]").val();
+            args.accountStatus = $tab.data('account-status');
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+        }
+        args.page = args.page || 0;
+        args.sortType = "auto";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
+        if(args.isAutoPay == 1){
+           args.sumCurrentPayMoney = Insure.$clearTab.find('input[name=sumPayMoney]').val();
+        }
 
-  		if (Insure.$clearSearchArea && arguments.length === 4) {
-            accountInfo = Insure.$clearSearchArea.find("input[name=accountInfo]").val(),
-            startDate = Insure.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = Insure.$clearSearchArea.find("input[name=endDate]").val()
-        }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
-
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            insuranceId : insuranceId,
-            accountInfo : accountInfo,
-            startDate : startDate,
-            endDate : endDate,
-            sortType : "auto"
-        };
-        if(isAutoPay == 1){
-           searchParam.isAutoPay = isAutoPay;
-           searchParam.sumCurrentPayMoney = Insure.$clearTab.find('input[name=sumPayMoney]').val();
-        }
-        searchParam = JSON.stringify(searchParam);
   		$.ajax({
 	       url:KingServices.build_url("account/insuranceFinancial","listInsuranceAccount"),
 			type:"POST",
-			data:{ searchParam : searchParam },
+			data:{ searchParam : JSON.stringify(args) },
 			success : function(data){
-				var result = showDialog(data);
-				if(result){
-					data.insuranceName = insuranceName;
-                    if(isAutoPay == 1){
+				if(showDialog(data)){
+					data.insuranceName = args.insuranceName;
+                    data.insuranceId = args.insuranceId;
+                    if(args.isAutoPay == 1){
                         Insure.clearTempData = data.autoPaymentJson;
                     }
 
@@ -261,65 +301,57 @@ define(function(require, exports) {
                         data.bankId = Insure.clearTempSumDate.bankId;
                         data.voucher = Insure.clearTempSumDate.voucher;
                         data.billTime = Insure.clearTempSumDate.billTime;
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     var resultList = data.financialInsuranceList;
                     data.financialInsuranceList = FinancialService.getTempDate(resultList,Insure.clearTempData);
                     // 财务付款入口调用
                     data.showBtnFlag = Insure.showBtnFlag;
                     Insure.saveFlag = Insure.showBtnFlag == true ? true:false;
-                    data.isAutoPay = isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
 					var html = insureClearing(data);
-	  				var validator;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "保险付款", html)) {
+                        Insure.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+                        Insure.$clearTab.data('account-status',args.accountStatus);
                         var settleValidator = data.showBtnFlag == true ? new FinRule(3) : new FinRule(1);
-
-                        Insure.initClear(page,insuranceId,insuranceName,settleValidator); 
-                        validator = settleValidator.check(Insure.$clearTab.find('.T-clearList'));
-                         FinancialService.updateSumPayMoney(Insure.$clearTab,settleValidator);
-                       
-                    }
-
-                    if(isAutoPay == 0){
-                        Insure.$clearTab.find(".T-cancel-auto").hide();
-                    } else {
-                        Insure.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-                        Insure.$clearTab.find(".T-clear-auto").hide(); 
-                        if(isAutoPay == 1){
+                        if(Insure.clearTempData){
                             Insure.$clearTab.data('isEdited',true);
-                            Insure.$clearTab.find(".T-bankDiv").removeClass('hidden');
-                        } else if(isAutoPay == 2){
-                            Insure.$clearTab.find(".T-cancel-auto").hide();
                         }
+                        Insure.initClear(args,Insure.$clearTab); 
+                        var validator = settleValidator.check(Insure.$clearTab.find('.T-clearList'));
+                        FinancialService.updateSumPayMoney(Insure.$clearTab,settleValidator);
+                    } else {
+                        Insure.$clearTab.data('next',args);
                     }
 
                     //绑定翻页组件
-                    var $tr = Insure.$clearTab.find('.T-clearList tr');
                     laypage({
                         cont: Insure.$clearTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 var tempJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,new FinRule(1));
-                                Insure.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
-                                    sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
-                                Insure.clearTempSumDate = {
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : Insure.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : Insure.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                                if(tempJson){
+                                    Insure.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(Insure.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(Insure.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = Insure.$clearTab.find('input[name=sumPayRemark]').val();
+                                    Insure.clearTempSumDate = {
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-number]').val() : Insure.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? Insure.$clearTab.find('input[name=cash-id]').val() : Insure.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
-                                Insure.getClearing(isAutoPay,obj.curr -1,insuranceId,insuranceName);
+                                Insure.$clearTab.data('isEdited',false);
+                                args.pageNo = obj.curr -1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+                                Insure.getClearing(args);
                             }
                         }
                     });
@@ -328,71 +360,65 @@ define(function(require, exports) {
 	  	});	
   	};
 
-  	Insure.initClear = function(page,id,name){
-        // 初始化jQuery 对象 
-        Insure.$clearTab = $("#tab-" + menuKey + "-clearing-content");
-        Insure.$clearSearchArea = Insure.$clearTab.find('.T-search-area');
-        Insure.init_event(page,id,name,Insure.$clearTab,"clear");
-        Tools.setDatePicker(Insure.$clearTab.find(".date-picker"),true);
+  	Insure.initClear = function(args,$tab){
+        Insure.init_event(args,$tab,"clear");
 
-
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+            args.pageNo = 0;
+            Insure.getClearing(args,$tab);
+        });
         //搜索事件
-        Insure.$clearTab.find(".T-search").click(function(){
-            Insure.clearTempSumDate = false;
-            Insure.clearTempData = false;
-            Insure.$clearTab.data('isEdited',false);
-            Insure.getClearing(0,0,id,name);
+        $tab.find(".T-search").click(function(){
+            args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+            args.pageNo = 0;
+            Insure.getClearing(args,$tab);
         });
 
-        FinancialService.initPayEvent(Insure.$clearTab.find('.T-summary'));
-        
-        //关闭页面事件
-        Insure.$clearTab.find(".T-close-clear").click(function(){
-            Tools.closeTab(menuKey + "-clearing");
-        });
-
+        FinancialService.initPayEvent($tab);
         //保存付款事件
-        Insure.$clearTab.find(".T-saveClear").click(function(){
-            Insure.saveClear(id,name,page);
+        $tab.find(".T-saveClear").click(function(){
+            Insure.saveClear($tab,args);
         });
-
-        //报表内的操作
-        Insure.listOption(Insure.$clearTab);
 
         var payingCheck = new FinRule(2).check(Insure.$clearTab);
 
         //自动下账
-        Insure.$clearTab.find(".T-clear-auto").off().on("click",function(){
-            var isAutoPay = FinancialService.autoPayJson(id,Insure.$clearTab,new FinRule(2));
+        $tab.find(".T-clear-auto").off().on("click",function(){
+            var isAutoPay = FinancialService.autoPayJson(args.insuranceId,$tab,new FinRule(2));
             if(!isAutoPay){return false;}
-            var startDate = Insure.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = Insure.$clearSearchArea.find("input[name=endDate]").val();
+            var startDate = $tab.find("input[name=startDate]").val(),
+                endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = $tab.find('select[name=sumPayType]').val();
                 Insure.clearTempSumDate = {
-                    id : id,
-                    sumPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-                    sumPayRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
-                    bankNo : Insure.$clearTab.find('input[name=card-number]').val(),
-                    bankId : Insure.$clearTab.find('input[name=card-id]').val(),
-                    voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
-                    billTime : Insure.$clearTab.find('input[name=tally-date]').val()
+                    id : args.insuranceId,
+                    sumPayMoney : $tab.find('input[name=sumPayMoney]').val(),
+                    sumPayType : payType,
+                    sumPayRemark : $tab.find('input[name=sumPayRemark]').val(),
+                    bankNo : (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                    voucher : $tab.find('input[name=credentials-number]').val(),
+                    billTime : $tab.find('input[name=tally-date]').val()
                 };
-                Insure.getClearing(1,0,id,name);
+                args.isAutoPay = 1;
+                Insure.getClearing(args,$tab);
             });
         });
 
-        Insure.$clearTab.find(".T-cancel-auto").off().on("click",function(){
-            Insure.$clearTab.find(".T-cancel-auto").toggle();
-            Insure.$clearTab.find(".T-clear-auto").toggle();
-            Insure.clearTempSumDate = false;
+        $tab.find(".T-cancel-auto").off().on("click",function(){
             Insure.clearTempData = false;
-            Insure.$clearTab.data('isEdited',false);
-            Insure.getClearing(0,0,id,name);
-        });
-
-        
-        
+            Insure.clearTempSumDate = false;
+            $tab.data('isEdited',false);
+            args.isAutoPay = 0;
+            args.autoPay = 0;
+            Insure.getClearing(args);
+        });        
     };
 
     //显示单据
@@ -421,30 +447,7 @@ define(function(require, exports) {
             content : html,
             scrollbar: false, // 推荐禁用浏览器外部滚动条
             success : function() {
-                var colorbox_params = {
-                    photo : true,
-                    rel: 'colorbox',
-                    reposition:true,
-                    scalePhotos:true,
-                    scrolling:false,
-                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
-                    close:'&times;',
-                    current:'{current} of {total}',
-                    maxWidth:'100%',
-                    maxHeight:'100%',
-                    onOpen:function(){ 
-                        $overflow = document.body.style.overflow;
-                        document.body.style.overflow = 'hidden';
-                    },
-                    onClosed:function(){
-                        document.body.style.overflow = $overflow;
-                    },
-                    onComplete:function(){
-                        $.colorbox.resize();
-                    }
-                };
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
             } 
         });
     };
@@ -454,12 +457,9 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("account/insuranceFinancial","getPayedMoneyDetail"),
             type:"POST",
-            data:{
-                id : id
-            },
+            data:{ id : id },
             success:function(data){
-                var result = showDialog(data);
-                if(result){
+                if(showDialog(data)){
                     var html = payedDetailTempLate(data);
                     layer.open({
                         type : 1,
@@ -480,12 +480,9 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("account/insuranceFinancial","getNeedPayDetail"),
             type:"POST",
-            data:{
-                id : id
-            },
+            data:{ id : id },
             success:function(data){
-                var result = showDialog(data);
-                if(result){
+                if(showDialog(data)){
                     var html = needPayDetailTempLate(data);
                     layer.open({
                         type : 1,
@@ -502,31 +499,25 @@ define(function(require, exports) {
     };
 
     //对账数据保存
-    Insure.saveChecking = function(insuranceId,insuranceName,page,tab_id, title, html){
+    Insure.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab, new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(Insure.$checkTab,Insure.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
             url:KingServices.build_url("account/insuranceFinancial","saveAccountChecking"),
             type:"POST",
-            data:{
-                insuranceJson : checkSaveJson
-            },
+            data:{ insuranceJson : checkSaveJson },
             success:function(data){
-                var result = showDialog(data);
-                if(result){
+                if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-                        if(argumentsLen == 2){
+                        Insure.checkTemp = false;
+                        $tab.data('isEdited',false);
+                        if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
-                            Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceName,Insure.searchData.insuranceId,Insure.searchData.startDate,Insure.searchData.endDate);
-                        } else if(argumentsLen == 3){
-                            Insure.$checkTab.data('isEdited',false);
-                            Insure.GetChecking(page,insuranceId,insuranceName);
-                        } else {
-                            Insure.$checkTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            Insure.initCheck(0,Insure.$checkTab.find(".T-newData").data("id"),Insure.$checkTab.find(".T-newData").data("name"));
+                            Insure.listInsure(Insure.searchData.pageNo);
+                        } else{
+                            Insure.GetChecking(args);
                         }
                     });
                 }
@@ -534,50 +525,42 @@ define(function(require, exports) {
         });
     };
 
-    Insure.saveClear = function(id,name,page,tab_id, title, html){
+    Insure.saveClear = function($tab,args,tabArgs){
         var saveRule = Insure.saveFlag == true ? new FinRule(3):new FinRule(1);
-        if(!FinancialService.isClearSave(Insure.$clearTab,saveRule)){
-            return false;
-        }
-
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(Insure.$clearTab,Insure.clearTempData,saveRule);
-        var searchParam = {
-            insuranceId : id,
-            sumCurrentPayMoney : Insure.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : Insure.$clearTab.find('select[name=sumPayType]').val(),
-            payRemark : Insure.$clearTab.find('input[name=sumPayRemark]').val(),
-            bankId : Insure.$clearTab.find('input[name=card-id]').val(),
-            voucher : Insure.$clearTab.find('input[name=credentials-number]').val(),
-            billTime : Insure.$clearTab.find('input[name=tally-date]').val()
-        };
-
-        clearSaveJson = JSON.stringify(clearSaveJson);
-        searchParam = JSON.stringify(searchParam);
+            clearSaveJson = FinancialService.clearSaveJson($tab,Insure.clearTempData,saveRule,true);
+        if(!clearSaveJson){ return false; }
+        var payType = $tab.find('select[name=sumPayType]').val(),
+            searchParam = {
+                insuranceId : args ? args.insuranceId : $tab.data('insuranceId'),
+                sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
+                payType : payType,
+                payRemark : $tab.find('input[name=sumPayRemark]').val(),
+                bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                voucher : $tab.find('input[name=credentials-number]').val(),
+                billTime : $tab.find('input[name=tally-date]').val()
+            };
         $.ajax({
             url:KingServices.build_url("account/insuranceFinancial","saveAccountSettlement"),
             type:"POST",
             data:{
                 insuranceJson : clearSaveJson,
-                searchParam : searchParam
+                searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
-                var result = showDialog(data);
-                if(result){
+                if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         Insure.clearTempData = false;
                         Insure.clearTempSumDate = false;
-                        if(argumentsLen === 2){
+                        $tab.data('isEdited',false);
+                        if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
-                            Insure.listInsure(Insure.searchData.pageNo,Insure.searchData.insuranceName,Insure.searchData.insuranceId,Insure.searchData.startDate,Insure.searchData.endDate);
-                        }else if(argumentsLen === 3){
-                            Insure.saveFlag = false;    
-                            Insure.$clearTab.data('isEdited',false);
-                            Insure.getClearing(0,page,id,name);
-                        } else {
-                            Insure.$clearTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            Insure.initClear(0,Insure.$clearTab.find(".T-newData").data("id"),Insure.$clearTab.find(".T-newData").data("name"));
+                            Insure.listInsure(Insure.searchData.pageNo);
+                        }else{
+                            Insure.saveFlag = false; 
+                            args.isAutoPay = (args.isAutoPay == 1) ? 0: args.isAutoPay;
+                            args.autoPay = 0;
+                            Insure.getClearing(args);
                         }
                     });  
                 }
@@ -585,73 +568,144 @@ define(function(require, exports) {
         });
     };
 
-	Insure.init_event = function(page,id,name,$tab,option) {
-        if (!!$tab && $tab.length === 1) {
-            // 监听修改
-            $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
-                event.preventDefault();
-                $(this).closest('tr').data("change",true);
-                $tab.data('isEdited', true);
-            });
-            $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-				event.preventDefault();
-                if(option == "check"){
-                    Insure.initCheck(page,id,name);
-                } else if(option == "clear"){
-                    Insure.initClear(page,id,name);
-                    Insure.$clearTab.find(".T-cancel-auto").hide();
-                }
-			})
-            // 监听保存，并切换tab
-            .on('switch.tab.save', function(event, tab_id, title, html) {
-                event.preventDefault();
-                if(option == "check"){
-                    Insure.saveChecking(id,name,0,tab_id, title, html);
-                } else if(option == "clear"){
-                    Insure.saveClear(id,name,0,tab_id, title, html);
-                }
-            })
-            // 保存后关闭
-            .on('close.tab.save', function(event) {
-                event.preventDefault();
-                if(option == "check"){
-                    Insure.saveChecking(id,name);
-                } else if(option == "clear"){
-                    Insure.saveClear(id,name);
+	Insure.init_event = function(args,$tab,option) {
+        Tools.setDatePicker($tab.find(".date-picker"),true);
+        // 监听修改
+        $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            $tab.data('isEdited', true);
+        });
+        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+    		event.preventDefault();
+            if(option == "check"){
+                Insure.checkTemp = false;
+                Insure.GetChecking($tab.data('next'),$tab);
+            } else if(option == "clear"){
+                Insure.clearTempData = false;
+                Insure.clearTempSumDate = false;
+                Insure.getClearing($tab.data('next'),$tab);
+            }
+    	})
+        // 监听保存，并切换tab
+        .on('switch.tab.save', function(event, tab_id, title, html) {
+            event.preventDefault();
+            if(option == "check"){
+                Insure.saveChecking($tab,$tab.data('next'),[tab_id, title, html]);
+            } else if(option == "clear"){
+                Insure.saveClear($tab,$tab.data('next'),[tab_id, title, html]);
+            }
+        })
+        // 保存后关闭
+        .on('close.tab.save', function(event) {
+            event.preventDefault();
+            if(option == "check"){
+                Insure.saveChecking($tab);
+            } else if(option == "clear"){
+                $tab.data('insuranceId',args.insuranceId);
+                Insure.saveClear($tab);
+            }
+        })
+        .on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            if(option == "clear"){
+                Insure.clearTempData = false;
+                Insure.clearTempSumDate = false;
+            }else if(option == "check"){
+                Insure.checkTemp = false;
+            }
+        });
+
+        Insure.getInsureComList($tab.find('.T-insuranceName'));
+
+        //报表内的操作
+        Insure.listOption($tab);
+        //关闭按钮
+        FinancialService.closeTab(menuKey + "-" + option + "ing");
+    };
+
+    Insure.getInsureComList = function($obj) {
+        if (!!Insure.insureList) {
+            Insure.getQueryList($obj);
+        } else {
+            $.ajax({
+               url:KingServices.build_url("account/insuranceFinancial","listSumFinancialInsurance"),
+                type:"POST",
+                data:{ searchParam : JSON.stringify({
+                    insuranceId: '-1'
+                }) },
+                showLoading: false,
+                success: function(data){
+                    if (showDialog(data)) {
+                        Insure.insureList = data.insuranceNameList;
+                        Insure.getQueryList($obj);
+                    }
                 }
             });
         }
     };
 
-	Insure.getQueryList = function(){
-        var $Insure = Insure.$tab.find(".T-chooseInsure"),
-            insureList = Insure.insureList;
-        if(insureList != null && insureList.length > 0){
-            for(var i=0;i<insureList.length;i++){
-            	insureList[i].id = insureList[i].insuranceId;
-                insureList[i].value = insureList[i].insuranceName;
-            }
+    /**
+     * 绑定保险公司列表
+     * @param  {object} $obj 绑定的控件，为空说明是主列表
+     * @return {[type]}      [description]
+     */
+	Insure.getQueryList = function($obj){
+        var isMainList = !$obj;
+
+        if (!$obj || $obj.length == 0) {
+            $obj = Insure.$tab.find(".T-chooseInsure");
         }
+
+        var list = Insure.insureList
+            hasItem = !!list && list.length > 0;
+
+        if (!hasItem) {
+            console.info('绑定下拉菜单时，没有列表数据');
+            return;
+        }
+
+        for(var i=0;i<list.length;i++){
+            list[i].id = list[i].insuranceId;
+            list[i].value = list[i].insuranceName;
+        }
+
         var all = {
             id : "",
             value : "全部"
-        };
-        insureList.unshift(all);
+        }, $tab = $obj.closest('.tab-pane-menu');
+        if (isMainList && list[0].value != '全部')  {
+            list.unshift(all);
+        } else if (!isMainList && list[0].value === '全部') {
+            list.shift(all);
+        }        
 
-        //车队
-        $Insure.autocomplete({
+        var name = $obj.val();
+        //保险
+        $obj.autocomplete({
             minLength: 0,
-            source : insureList,
+            source : list,
             change: function(event,ui) {
-                if (!ui.item)  {
-                    $(this).nextAll('input[name="insuranceId"]').val('');
+                if(!isMainList){
+                    $obj.val(name);
+                } else{
+                    if (!ui.item)  {
+                        $obj.nextAll('input[name="insuranceId"]').val('');
+                    }
                 }
             },
             select: function(event,ui) {
-                $(this).blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+                $obj.blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
+                if (!isMainList) {
+                    $tab.find('input[name="accountInfo"]').val('');
+                    $tab.find('.T-insuranceId').val(ui.item.id);
+                }
+                setTimeout(function() {
+                    $tab.find('.T-search').trigger('click');
+                }, 0);
             }
         }).on("click",function(){
-            $Insure.autocomplete('search','');
+            $obj.autocomplete('search','');
         });      
     };
 
@@ -678,7 +732,16 @@ define(function(require, exports) {
 
     Insure.initPay = function(options){
         Insure.showBtnFlag = true;
-        Insure.getClearing(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        var args = {
+            pageNo : 0,
+            insuranceId : options.id,
+            insuranceName : options.name,
+            startDate : options.startDate,
+            endDate : options.endDate,
+            accountStatus : options.accountStatus,
+            isAutoPay : 2
+        }
+        Insure.getClearing(args); 
     };
 
     exports.init = Insure.initModule;

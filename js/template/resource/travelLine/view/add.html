@@ -25,25 +25,25 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">费用包含:</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" name="includeFee" class="col-sm-12" maxlength="1000"></textarea>
+                            <textarea class="form-control" name="includeFee" class="col-sm-12" maxlength="5000"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">费用不包含:</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" name="excludeFee" class="col-sm-12" maxlength="1000"></textarea>
+                            <textarea class="form-control" name="excludeFee" class="col-sm-12" maxlength="5000"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">行程特色:</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" name="lineFeature" class="col-sm-12" maxlength="1000"></textarea>
+                            <textarea class="form-control" name="lineFeature" class="col-sm-12" maxlength="5000"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right">行程须知:</label>
                         <div class="col-sm-8">
-                            <textarea class="form-control" name="lineNotice" class="col-sm-12" maxlength="2500"></textarea>
+                            <textarea class="form-control" name="lineNotice" class="col-sm-12" maxlength="5000"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -72,14 +72,14 @@
 					</h5>
                     <div class="widget-body">
                         <div class="widget-main no-padding">
-                            <table class="table table-striped table-bordered table-hover lineDayList">
+                            <table class="table table-striped table-bordered table-hover lineDayList" style="border: 1px solid #ddd;">
                                 <thead>
                                     <tr>
                                         <th class="th-border">日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>简要行程</th>
                                         <th class="th-border">含餐情况</th>
                                         <th class="th-border">住宿地点</th>
-                                        <th class="th-border">酒店星级</th>
-                                        <th class="th-border">行程标题</th>
+                                        <th class="th-border">景点</th>
                                         <th class="th-border">操作</th>
                                     </tr>
                                 </thead>
@@ -92,9 +92,9 @@
             </div>
         </div>
         <div class="space-10"></div>
-        <button class="btn btn-block btn-primary T-btn-save guideSubmit">
-            <i class="ace-icon fa fa-check"></i> 提交信息
-        </button>
+       <div class="form-group" style="text-align: center;"> <button class="btn btn-sm btn-danger otherButton T-btn-cancel"> <i class="ace-icon fa fa-times"></i> 取消 </button>
+             <button class="btn btn-sm btn-primary otherButton T-btn-save" style="margin-left: 30px"> <i class="ace-icon fa fa-check"></i> 保存 </button> </div>
+
         <div class="space-20"></div>
     </form>
 </div>

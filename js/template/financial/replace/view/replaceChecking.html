@@ -1,54 +1,80 @@
-<div class="row T-search-area border" style="padding: 0 20px;">
-    <form class="form-inline" role="form" onsubmit="return false" style="padding-top: 10px;">
-        <div class="form-group">
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false" >
+        <div class="form-group mar-r-10">
             <label>同行客户：</label>
-            <label>{{name}}</label>
+            <input value="{{name}}" name="partnerAgencyName" type="text">
+            <input value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" type="hidden">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-10">
             <label>账期：</label>
             <input type="text" class="form-control datepicker T-search-start-date" value="{{searchParam.startDate}}">
             <label>&nbsp;至&nbsp;</label>
             <input type="text" class="form-control datepicker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
-        <div class="form-group marginLeft-30">
-            <label>订单号：</label>
+        <div class="form-group mar-r-10">
+            <label>代订单号：</label>
             <input type="text" class="form-control T-search-order" value="{{searchParam.orderNumber || '全部'}}" style="width: 190px;">
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-10">
             <label>项目：</label>
-            <input type="text" class="form-control T-search-project" value="{{if searchParam.busCompanyOrderStatus == 1}}车队, {{/if}}{{if searchParam.hotelOrderStatus == 1}}酒店, {{/if}}{{if searchParam.scenicOrderStatus == 1}}景区, {{/if}}{{if searchParam.ticketOrderStatus == 1}}票务, {{/if}}">
+            <input type="text" class="form-control T-search-project" value="{{searchParam.projects}}">
         </div>
-        <div class="form-group marginLeft-30">
+        <label class="form-group">对账状态：</label>
+        <div class="form-group btn-group T-check-status mar-r-10">
+            <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                <span>
+                    {{if !searchParam.isConfirmAccount || searchParam.isConfirmAccount == ""}}
+                        全部
+                    {{else if searchParam.isConfirmAccount == 1}}
+                        已对账
+                    {{else}}
+                        未对账
+                    {{/if}}
+                </span>
+                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a data-value="" href="javascript:void(0)">全部</a></li>
+                <li><a data-value="1" href="javascript:void(0)">已对账</a></li>
+                <li><a data-value="0" href="javascript:void(0)">未对账</a></li>
+            </ul>
+        </div>
+        <div class="form-group mar-r-10">
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索 
             </button>
         </div>
-    </form>
-    <div class="form-inline" style="padding-top: 10px;">
         <div class="form-group">
+            <button class="btn-sm search-btn T-btn-export">导出报表</button>
+        </div>
+    </form>
+    <input name="accountStatus" value="{{searchParam.accountStatus}}" type="hidden">
+    <div class="form-inline">
+        <div class="form-group mar-r-20">
             <label>代订金额合计：</label>
-            <label>{{totalList.sumBookingMoney}}</label>
+            <label class="F-float F-money">{{totalList.sumBookingMoney}}</label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-20">
             <label>已收金额合计：</label>
-            <label>{{totalList.sumReceiveMoney}}</label>
+            <label class="F-float F-money">{{totalList.sumReceiveMoney}}</label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-20">
             <label>结算金额合计：</label>
-            <label class="T-stMoney">{{totalList.sumSettlementMoney}}</label>
+            <label class="T-stMoney F-float F-money">{{totalList.sumSettlementMoney}}</label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-20">
             <label>未收金额合计：</label>
-            <label class="T-unpayMoney">{{totalList.sumUnReceiveMoney}}</label>
+            <label class="T-unpayMoney F-float F-money">{{totalList.sumUnReceiveMoney}}</label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-r-10">
             <label>未收金额合计(已对账)：</label>
-            <label>{{totalList.checkedUnPayedMoney}}</label>
+            <label class="F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
         </div>
     </div>
 </div>
-<div class="row" style="margin-top: 30px">
-    <table class="table table-striped table-bordered table-hover table-fixed">
+<div class="row">
+    <div class="overflow-x min-w-1050">
+    <table class="table table-striped table-bordered table-hover table-fixed hct_align_middle w-1500">
         <colgroup> 
             <col style="width:12%;"> 
             <col style="width:6%;"> 
@@ -64,38 +90,41 @@
             <col style="width:7%; min-width: 110px;"> 
         </colgroup>
         <thead>
-            <tr>
-                <th class="th-border">代订单号</th>
-                <th class="th-border">代订日期（账期）</th>
-                <th class="th-border">项目</th>
-                <th class="th-border">明细</th>
-                <th class="th-border">代订金额</th>
-                <th class="th-border">已收金额</th>
-                <th class="th-border">结算金额</th>
-                <th class="th-border">未收金额</th>
-                <th class="th-border">备注</th>
-                <th class="th-border">对账时间</th>
-                <th class="th-border">对账人</th>
-                <th class="th-border">对账</th>
+            <tr class="T-tr-fixed bg-blur">
+                <th>代订单号</th>
+                <th>代订日期（账期）</th>
+                <th>项目</th>
+                <th>明细</th>
+                <th>代订金额</th>
+                <th>已收金额</th>
+                <th>结算金额</th>
+                <th>未收金额</th>
+                <th>备注</th>
+                <th>对账时间</th>
+                <th>对账人</th>
+                <th>对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList">
+        <tbody class="T-list T-checkList" data-right="1290005">
         {{each bookinAccountList as rs index}}
-            <tr class="T-checkTr" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}">
+            <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
                 <td class="T-ctrl-tip" title="{{rs.newDetail}}"><span>{{rs.newDetail}}</span></td>
-                <td>{{rs.bookingMoney}}</td>
-                <td><a class="cursor T-action T-receive-money T-payedDetail" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
-                <td>{{if !!rs.isConfirmAccount}}{{rs.settlementMoney}}{{else}}<input type="text" class="col-xs-12" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
-                <td name="unPayedMoney">{{rs.unReceiveMoney}}</td>
-                <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}<input type="text" class="col-xs-12" name="checkRemark" value="{{rs.checkRemark}}">{{/if}}</td>
+                <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
+                <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
+                <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-xs-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
+                <td name="unPayedMoney"><span class="F-float F-money">{{if rs.unPayedMoney}}{{rs.unPayedMoney}}{{else}}{{rs.unReceiveMoney}}{{/if}}</span></td>
+                <td>{{if !!rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}
+                    <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
+                    {{/if}}
+                </td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel">
-                        <input type="checkbox" class="ace T-checkbox" {{if !!rs.isConfirmAccount}}checked="checked"{{/if}} /> 
+                        <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} /> 
                         <span class="lbl">对账</span>
                     </label>
                     <label class="cursor"> <a> |</a></label>
@@ -105,6 +134,7 @@
         {{/each}}
         </tbody>
     </table>
+    </div>
     <div class="row pageMode">
         <div class="col-xs-6">
             <small>共计 {{searchParam.recordSize}} 条记录</small>

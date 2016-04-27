@@ -7,6 +7,7 @@
 				<th class="th-border">付款方</th>
 				<th class="th-border">金额</th>
 				<th class="th-border">付款方式</th>
+				<th class="th-border">账户名称</th>
 				<th class="th-border">备注</th>
 				<th class="th-border">操作人</th>
 				<th class="th-border">操作时间</th>
@@ -18,7 +19,7 @@
 				<td>{{payedRecord.receivableType}}</td>
 				<td>{{payedRecord.businessType}}</td>
 				<td>{{payedRecord.payParty}}</td>
-				<td>{{payedRecord.payDifferenceMoney}}</td>
+				<td><span class="F-float F-money">{{payedRecord.payDifferenceMoney}}</span></td>
 				<td>{{if payedRecord.payType == 0}}
 					现金
 				{{else if payedRecord.payType == 1}}
@@ -30,6 +31,7 @@
 				{{else if payedRecord.payType == 4}}
 					其他
 				{{/if}}</td>
+				<td>{{if payedRecord.accountName == null || payedRecord.accountName == ""}}-{{else}}{{payedRecord.accountName}}{{/if}}</td>
 				<td>{{payedRecord.remark}}</td>
 				<td>{{payedRecord.checkRealname}}</td>
 				<td>{{payedRecord.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>

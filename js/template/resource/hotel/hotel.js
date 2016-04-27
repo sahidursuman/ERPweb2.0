@@ -114,7 +114,7 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
-					data.hotel = JSON.parse(data.hotel);
+					data.hotel =data.hotel;
 					var html = viewTemplate(data);
 					var updateHotel = layer.open({
 					    type: 1,
@@ -139,7 +139,7 @@ define(function(require, exports) {
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					data.hotel = JSON.parse(data.hotel);
+					data.hotel = data.hotel;
 					if(data.hotel.province != null )var provinceId = data.hotel.province.id;
 					if(data.hotel.city != null )var cityId = data.hotel.city.id;
 					if(data.hotel.district != null ) var districtId = data.hotel.district.id;
@@ -188,6 +188,19 @@ define(function(require, exports) {
 								hotel.addTimeArea($this,$tbody);
 								ruleData.UtimeAreavalidator = rule.checkTimeArea($tbody);
 							})
+							
+							//获取酒店最低价
+							$tbody.find('.T-minPrice').on('change',function(event) {
+								event.preventDefault();
+								/* Act on the event */
+								var minHotelPrice = hotel.minHotelPrice($container);
+								$container.find('.T-lowestPrice').val(minHotelPrice);
+							});
+                           
+                            //获取酒店最低价
+							$tbody.find('.T-minPrice').trigger('change');
+							$tbody.find('[name="normalMarketPrice"]').trigger('change');
+
 							//删除时间区间
 							$tbody.find(".T-del").on("click",function(){
 								var $this = $(this);
@@ -259,15 +272,15 @@ define(function(require, exports) {
 	hotel.addRoomList = function($container){
 		var $tbody = $container.find(".T-roomListTbody"),
 			html = '<tr>' +
-			'<td><input name="type" type="text" class="col-sm-12"  maxlength="32" /></td>' +
+			'<td><input name="type" type="text" class="col-sm-12"  maxlength="32" /></td>' + 
 			'<td class="T-time"><div class="clearfix" style="margin-top:1px;">日常价格<label class="timeArea" style="float:right; padding-top:0px;"><button class="btn btn-success btn-sm btn-white T-add"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></button></label></div></td>' +
-			'<td><div class="clearfix" style="margin-top:1px"><input name="normalMarketPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
-			'<td><div class="clearfix" style="margin-top:1px"><input name="normalInnerPrice" class="col-sm-12" maxlength="9" type="text"/></div></td>' +
+			'<td><div class="clearfix" style="margin-top:1px"><input name="normalMarketPrice" class="col-sm-12 F-float F-money" maxlength="9" type="text"/></div></td>' +
+			'<td><div class="clearfix T-Min-hotelPrice" style="margin-top:1px"><input name="normalInnerPrice" class="col-sm-12 F-float F-money normalInnerPrice T-minPrice" maxlength="9" type="text"/></div></td>' +
 			'<td><select name="containBreakfast" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><select name="containLunch" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><select name="containDinner" class="no-padding foodsAll"><option value="0">不含</option><option value="1">包含</option></select></td>' +
 			'<td><input name="broadband" class="col-sm-12" type="text"  maxlength="100" /></td>' + 
-			'<td><input name="areaSize" class="col-sm-12" type="text"  maxlength="3" /></td>' +
+			'<td><input name="areaSize" class="col-sm-12 F-float F-count" type="text"  maxlength="3" /></td>' +
 			'<td><input name="guestNumber" class="col-sm-12" type="text"  maxlength="4" /></td>' +
 			'<td><input name="remark" class="col-sm-12" type="text"  maxlength="1000" /></td>' +
 			'<td style="width:70px"><a data-entity-id="" href="#" class=" btn-xs  T-btn-hotel-standard-delete">删除</a></td>' +
@@ -280,6 +293,15 @@ define(function(require, exports) {
 		   $normalInPrice=$tbody.find('input[name=normalInnerPrice]');
 		Tools.inputCtrolFloat($normalMPrice);
 		Tools.inputCtrolFloat($normalInPrice);
+
+		//获取酒店最低价
+		$tbody.find('.T-minPrice').on('change',function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var minHotelPrice = hotel.minHotelPrice($('.T-addHotelContainer'));
+			$('.T-addHotelContainer').find('.T-lowestPrice').val(minHotelPrice);
+		});
+
 		// 再调整对话框的高度
 		$(window).trigger('resize');
 		// 对酒店房型设置表单验证
@@ -318,8 +340,8 @@ define(function(require, exports) {
     		timeLimitDiv = '<div data-index="'+(index)+'" class="clearfix T-appendDiv div-'+(index)+'" style="margin-top:1px"><input name="startTime" type="text" class="datepicker" style="width:100px"/><label>&nbsp;至&nbsp;</label><input name="endTime" type="text" class="datepicker" style="width:100px"/><label class="timeArea" style="float:right; padding-top:3px;">' + 
 			'<button class="btn btn-danger btn-sm btn-white T-del" style="margin-top: -3px;"><i class="ace-icon fa fa-minus bigger-110 icon-only"></i></button>'+
 			'</label></div>',
-			marketPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-marketPrice marketPrice-'+(index)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 marketPrice" maxlength="9"/></div>',
-			contractPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-contractPrice contractPrice-'+(index)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 price" maxlength="9"/></div>';
+			marketPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-marketPrice marketPrice-'+(index)+'" style="margin-top:6px"><input name="marketPrice" type="text" class="col-sm-12 F-float F-money marketPrice" maxlength="9"/></div>',
+			contractPriceInput = '<div data-index="'+(index)+'" class="clearfix appendDiv T-contractPrice T-Min-hotelPrice contractPrice-'+(index)+'" style="margin-top:6px"><input name="contractPrice" type="text" class="col-sm-12 F-float F-money price T-minPrice" maxlength="9"/></div>';
     	ruleData.timeAreaTd = td;
     	ruleData.UtimeAreaTd = td;
     	td.append(timeLimitDiv);
@@ -338,7 +360,30 @@ define(function(require, exports) {
 			var $this = $(this);
 			hotel.delTimeArea($this);
 		});
+
+		//获取酒店最低价
+		$tbody.find('.T-minPrice').on('change',function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var minHotelPrice = hotel.minHotelPrice($('.T-addHotelContainer'));
+			$('.T-addHotelContainer').find('.T-lowestPrice').val(minHotelPrice);
+		});
 	};
+
+
+   /**
+    * 获取酒店最低价
+    * @param  {[type]} $tab [description]
+    * @return {[type]}      [description]
+    */
+   hotel.minHotelPrice = function($tab){
+   	    var minHotelPrice=0,$hotelPriceArr=$tab.find('input.T-minPrice'),temp=[];
+   	    for(var i=0;i<$hotelPriceArr.length;i++){
+   	    	temp.push($hotelPriceArr.eq(i).val());
+   	    };
+   	    return Math.min.apply(Math,temp); 
+	}
+
 	hotel.delTimeArea = function($this){
 		if (!$this.data('deleted')) {
 			$this.data('deleted', true);
@@ -418,17 +463,14 @@ define(function(require, exports) {
 					priceJsonAddList : [],//时间区间新增和删除的数组
 					priceJsonDelList : []
 				};
-			console.log(priceJsonTr.length);
 			priceJsonTr.each(function(){
 				if($(this).hasClass('delete')){
-					console.log("has");
 					var $the = $(this),
 						priceJsonDel = {
 							id : $the.data("entity-id")
 						};
 					hotelRoomJson.priceJsonDelList.push(priceJsonDel);
 				} else {
-					console.log("no");
 					var $that = $(this),
 						divIndex = $that.data("index"),
 						priceJsonAdd = {
@@ -453,7 +495,6 @@ define(function(require, exports) {
 		});
 		hotelRoomJsonAdd = JSON.stringify(hotelRoomJsonAdd);
 		hotelRoomJsonDel = JSON.stringify(hotelRoomJsonDel);
-		console.log(hotelRoomJsonDel);
 		var method = "",operation = "";
 		if (type == 1) {
 			method = "addHotel";

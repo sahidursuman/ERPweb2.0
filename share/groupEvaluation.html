@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>跟团评价 - 火柴头</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../components/ace-admin/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../components/ace-admin/assets/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/manner.css" />
+	<style type="text/css">
+		html,
+		body{
+			overflow-y: auto;
+		}
+		body{
+			min-width: 320px!important;
+		}
+		.container-fluid{
+			margin: auto;
+			width: auto;
+			max-width: 680px;
+		}
+		.row{
+			margin-left: 0;
+			margin-right: 0;
+		}
+		.hct-top-header.row,
+		.hct-note.row{
+			margin-left: -12px;
+			margin-right: -12px;
+		}
+		a.control-label,
+		label.control-label{
+			font-size: 12px;
+			color: #313131;
+			font-weight: normal;
+		}
+		.note-guide-info p{
+			font-size: 14px;
+			color: #313131;
+		}
+		.company-logo{
+			padding: 10px 10px 0 20px;
+		}
+		.company-logo img{
+			display: block;
+			width: auto;
+			height: auto;
+			max-width: 300px;
+		}
+		.company-logo h3{
+			padding-left: 10px;
+			color: #333;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+<div class="container-fluid globalAdd hct-min-width" id="groupEvaluationContent">
+</div>
+<script id="groupEvaluation" type="text/html">
+	<div class="row hct-top-header">
+		<div class="col-xs-12">
+			<div class="company-logo T-companyLogo">
+				{{if !!companyLogo}}
+				<img src="{{erpImgUrl + companyLogo}}" alt="{{travelAgencyName}}">
+				{{else}}
+				<h3>{{travelAgencyName}}</h3>
+				{{/if}}
+			</div>
+		</div>
+		<div class="col-xs-12 yj-title">
+			<span class="fa fa-ellipsis-v" style="color: #e2b058;"></span>
+			<label class="control-label mar-l-10">{{note.title}}</label>
+		</div>
+	</div>
+	<div class="row hct-note">
+		<div class="col-xs-12">
+			<a class="pull-left cursor" href="guideEvaluate.html?noteId={{note.id}}" data-id="{{note.id}}">
+				<div class="caption-user-header pull-left{{if !note.guideInfo.photo}} default-img{{/if}}">
+					{{if note.guideInfo.photo}}<img src="{{imgUrl + note.guideInfo.photo}}">{{/if}}
+				</div>
+				<div class="note-guide-info pull-left">
+					<p class="pull-left">{{note.guideInfo.name}}</p>
+					<p class="pull-left starLevel">{{#note.guideInfo.guideSatisfaction | getScoreStar}}</p>
+				</div>
+			</a>
+			<div class="pull-right note-date">
+				<p>
+					<label class="control-label">出行日期：{{note.startTime}}</label>
+	        		<label class="control-label mar-l-10">出游天数：{{note.days}}天</label>
+	        	</p>
+			</div>
+		</div>
+		<div class="col-xs-12 score-body">
+			<div class="pull-left note-score">
+				<p class="scoreCount">{{note.tripSatisfaction}}%</p>
+				<p class="starLevel">{{#note.tripSatisfaction | getScoreStar}}</p>
+			</div>
+			<div class="pull-left note-line-score">
+				<p>此线路产品跟团游客满意度为{{note.tripSatisfaction}}%</p>
+				<p>已有{{note.scoreCount}}人评分</p>
+			</div>
+			<div class="pull-right p-no-mar">
+				<p>&nbsp;</p>
+				<p class="comment-info">
+					<label class="control-label"><i class="fa fa-heart"></i>{{note.likeCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-comment"></i>{{note.commentCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-share-alt"></i>{{note.shareCount}}</label>
+	        		<label class="control-label mar-l-15"><i class="fa fa-eye"></i>{{note.viewCount}}</label>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="comment-container">
+		<div class="note-db-img">
+			<img src="{{imgUrl + note.coverImage}}" alt="{{note.title}}">
+		</div>
+	</div>
+	<div class="praise-content">
+		<div class="praise-cont-head">
+			收到的赞 {{note.likeCount}}
+		</div>
+		<ul class="praise-cont-body">
+			{{each note.noteLikeList as like}}
+			<li class="{{if !like.photo}}default-img{{/if}}">
+				{{if like.photo}}
+				<img src="{{like.photo}}" alt="{{like.name}}">
+				{{/if}}
+			</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="comment-content">
+		<div class="comment-cont-head">
+			收到的评论 {{note.commentCount}}
+		</div>
+		<div class="comment-cont-body">
+			{{each note.noteCommentList as comment}}
+			<div class="comment-cont-item">
+				<div class="comment-user">
+					<div class="caption-user-header pull-left{{if !comment.photo}} default-img{{/if}}">
+						{{if comment.photo}}<img src="{{imgUrl + comment.photo}}">{{/if}}
+					</div>
+					<div class="pull-left comment-cont-name">
+						{{comment.name}}
+					</div>
+					<div class="pull-right comment-cont-date">{{comment.createTime}}</div>
+				</div>
+				<div class="comment-cont-text">
+					<p>{{comment.commentContent}}</p>
+				</div>
+				<ul class="comment-cont-images">
+					{{each comment.images as img}}
+					<li>
+						<a href="{{imgUrl + img}}" class="T-photos"><img src="{{imgUrl + img}}"></a>
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+			{{/each}}
+		</div>
+	</div>
+</script>
+	<script src="../components/ace-admin/assets/js/jquery.1.11.1.min.js" type="text/javascript"></script>
+	<script src="../js/libs/template.js" type="text/javascript"></script>
+	<script src="common.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$.ajax({
+			url : "/huochaitou/base.do?method=findNoteCommentById",
+			data : {noteId : getQueryString("noteId"), fromOut : 1},
+			type : "POST",
+			success : function(data){
+				if(!!data){
+					data.imgUrl = imgUrl;
+					var commentList = data.note.noteCommentList;
+	                for(var i=0; i<commentList.length; i++){
+	                    if(!!commentList[i].commentImages){
+	                        commentList[i].images = commentList[i].commentImages.split(",");
+	                    }else{
+	                        commentList[i].images = [];
+	                    }
+	                }
+	                data.note.noteCommentList = commentList;
+				    var html = template('groupEvaluation', data);
+				    document.getElementById('groupEvaluationContent').innerHTML = html;
+				    setShare();
+				}
+			}
+		});
+		function setShare(){
+			with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+			window._bd_share_config = {
+	            common : {
+	                bdText : $(".yj-title label").text(), 
+	                bdDesc : $(".yj-title label").text(), 
+	                bdPic : 'http://djs.huochaitou.com/images/default_youji.png'
+	            },
+	            share : [{
+	                "bdSize" : 16
+	            }],
+	            slide : [{	   
+					bdImg : 2,
+					bdPos : "right",
+					bdTop : 100
+				}],
+	        };
+		}
+		
+	</script>
+</body>
+</html>

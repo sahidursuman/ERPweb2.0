@@ -7,10 +7,12 @@
 define(function(require, exports) {
 	var menuKey = 'financial_pay',
 		listTemplate = require('./view/list'),
+		listHeaderTemplate = require('./view/listHeader'),
 		listTableTemplate = require('./view/listTable');
 
 	var FinPay = {
 		currentType: 0,
+		accountStatus:2,
 		moduleKeys: ['financial_innerTransfer_out', 'financial_transfer', 'financial_restaurant', 'financial_rummery', 'financial_busCompany',
 					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts','financial_guide']
 	};
@@ -23,10 +25,12 @@ define(function(require, exports) {
 		FinPay.$tab = false;
 
 		var data = FinancialService.getInitDate();
+			data.accountStatus = FinPay.accountStatus;
 		if (Tools.addTab(menuKey, '财务付款', listTemplate(data))) {
 			FinPay.initEvent();
 		}
 
+		FinPay.currentType = 0;
 		FinPay.getList();
 	};
 
@@ -38,7 +42,8 @@ define(function(require, exports) {
 		if (FinPay.$tab) {
 			var args = {
 				startDate: FinPay.$tab.find('.T-start').val(),
-				endDate: FinPay.$tab.find('.T-end').val()
+				endDate: FinPay.$tab.find('.T-end').val(),
+				accountStatus : FinPay.$tab.find(".T-finance-status").find("button").data("value")
 			},
 			org = FinPay.$tab.find('.T-org-name').val();
 
@@ -52,9 +57,9 @@ define(function(require, exports) {
 		.done(function(data) {
 			if (showDialog(data)) {
 				data = FinPay.covertResponse(data);
-				console.info(data)
+				data.currentType = FinPay.currentType;
 				FinPay.$tab.find('.T-list').html(listTableTemplate(data));
-
+				FinPay.$tab.find('.T-sum-area').html(Tools.filterUnPoint(listHeaderTemplate(data)));
 				FinPay.$tab.find('.T-sumItem').html('共计 '+ data.totalCount + ' 条记录');
 				// 绑定翻页组件
 				laypage({
@@ -82,7 +87,8 @@ define(function(require, exports) {
 		}, resArgs = {}, beJson = true;
 
 		resArgs.pageNo = args.pageNo;
-
+		resArgs.accountStatus = args.accountStatus;
+		FinPay.accountStatus = args.accountStatus;
 		switch(FinPay.currentType) {
 			case 0:  //内转转出账务
 				options.url = KingServices.build_url('account/innerTransferOutFinancial', 'listSumFinancialInnerTransferOut');
@@ -99,10 +105,14 @@ define(function(require, exports) {
 				break;
 			case 3:  //酒店账务
 				options.url = KingServices.build_url('account/financialHotel', 'listSumFinancialHotel');
+				resArgs.startTime = args.startDate;
+				resArgs.endTime = args.endDate
 				resArgs.hotelName = args.name;
 				break;
 			case 4:  //车队账务
 				options.url = KingServices.build_url('account/financialBusCompany', 'listSumFinancialBusCompany');
+				resArgs.startTime = args.startDate;
+				resArgs.endTime = args.endDate;
 				resArgs.busCompanyName = args.name;
 				break;
 			case 5:  //票务账务
@@ -115,7 +125,10 @@ define(function(require, exports) {
 				break;
 			case 7:  //自费账务
 				options.url = KingServices.build_url('account/selfPayFinancial', 'listFinancialSummaryOfSelfPay');
+				resArgs.startTime = args.startDate;
+				resArgs.endTime = args.endDate;
 				resArgs.selfPayName = args.name;
+				beJson = false;
 				break;
 			case 8:  //保险账务
 				options.url = KingServices.build_url('account/insuranceFinancial', 'listSumFinancialInsurance');
@@ -125,7 +138,8 @@ define(function(require, exports) {
 			case 9:  //其它账务
 				options.url = KingServices.build_url('account/arrangeOtherFinancial', 'listFinancialOther');
 				resArgs.name = args.name;
-
+				resArgs.startAccountTime = args.startDate;
+				resArgs.endAccountTime = args.endDate;
 				beJson = false;
 				break;
 			case 10:  //导游账务
@@ -170,10 +184,12 @@ define(function(require, exports) {
 							id: tmp.businessGroupId
 						})
 					}
-
+					var sum = data.sumFinancialInnerTransferOutList[0];
+					data.sumNeedPayMoney = sum.sumAllSettlementMoney;
+					data.sumPaiedMoney = sum.sumAllPayedMoney;
+					data.sumUnPaiedMoney = sum.sumAllUnPayedMoney;
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
-					break;
 					break;
 				case 1:  //外转转出账务
 					var src = data.financialTransferList;
@@ -188,7 +204,10 @@ define(function(require, exports) {
 							id: tmp.partnerAgencyId
 						})
 					}
-
+					var sum = data.totalStatisticsData[0];
+					data.sumNeedPayMoney = sum.totalSettlementMoney;
+					data.sumPaiedMoney = sum.totalPayedMoney;
+					data.sumUnPaiedMoney = sum.totalUnPayedMoney
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -205,7 +224,10 @@ define(function(require, exports) {
 							id: tmp.restaurantId
 						})
 					}
-
+					//var sum = data.totalStatisticsData[0];
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -222,7 +244,9 @@ define(function(require, exports) {
 							id: tmp.hotelId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -239,7 +263,9 @@ define(function(require, exports) {
 							id: tmp.busCompanyId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -256,7 +282,9 @@ define(function(require, exports) {
 							id: tmp.ticketId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -273,7 +301,9 @@ define(function(require, exports) {
 							id: tmp.scenicId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -290,7 +320,9 @@ define(function(require, exports) {
 							id: tmp.id
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;
@@ -307,7 +339,9 @@ define(function(require, exports) {
 							id: tmp.insuranceId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.searchParam.totalPage;
 					data.totalCount = data.searchParam.recordSize;
 					break;
@@ -324,7 +358,10 @@ define(function(require, exports) {
 							id: ''
 						})
 					}
-
+					var sum = data.totalFinancialOtherData[0];
+					data.sumNeedPayMoney = sum.sumSettlementMoney;
+					data.sumPaiedMoney = sum.sumPayedMoney;
+					data.sumUnPaiedMoney = sum.sumUnPayedMoney
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;
@@ -341,7 +378,9 @@ define(function(require, exports) {
 							id: tmp.guideId
 						})
 					}
-
+					data.sumNeedPayMoney = data.settlementMoneySum;
+					data.sumPaiedMoney = data.payedMoneySum;
+					data.sumUnPaiedMoney = data.unPayedMoneySum
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;
@@ -384,15 +423,28 @@ define(function(require, exports) {
 		    FinPay.getList();
 		});
 
+		//状态框选择事件
+        $tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            FinPay.getList();
+        });
+
 		// 收款
-		$tab.find('.T-list').on('click', '.T-pay-task', function(event) {
+		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
 			var $tr = $(this).closest('tr'),
 			options = {
 				id: $tr.data('id'),
 				name: $tr.children('td').eq(0).text(),
 				startDate: $tab.find('.T-start').val(),
-				endDate: $tab.find('.T-end').val()
+				endDate: $tab.find('.T-end').val(),
+				accountStatus : FinPay.accountStatus
+			}
+			if($(this).hasClass('T-pay-borrow')){
+				options.borrow = true;
 			}
 			FinPay.doIncomeTask(options);
 		});

@@ -35,7 +35,7 @@
 										<td>
 											{{each policy.costMoneyList as cost j}}
 											<div data-index="{{j+1}}" class="clearfix div-{{j+1}}" style="margin-bottom:2px">
-												<input name="costMoneyStart" type="text" style="width:100px" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}" maxlength="9"/>
+												<input name="costMoneyStart" type="text" style="width:100px" value="{{cost.costMoneyStart}}" data-entity-id="{{cost.id}}" maxlength="9" class="F-float F-money" />
 												<label>&nbsp;至&nbsp;</label>
 												<input name="costMoneyEnd" type="text" value="{{cost.costMoneyEnd}}" maxlength="9" style="width:100px" />
 												<label class="priceArea" style="margin-left:10px;">

@@ -154,12 +154,7 @@ define(function(require, exports) {
 	     orderManage.$busCompanyOrderTabId.find('.T-busCompanyOrder-search').trigger('click');
 
 	    //车--搜索下拉事件
-    	orderManage.$busCompanyOrderTabId.find(".dropdown-menu a").click(function(){
-    	   var $that=$(this),
-    	       $thatDivObj=$that.closest('div');
-	    	   $thatDivObj.find("button").attr("data-value",$that.data('value'));
-	    	   $thatDivObj.find(".T-status").val($that.data('value'));
-			   $thatDivObj.find("span").text($(this).text());
+    	orderManage.$busCompanyOrderTabId.find(".T-status").change(function(){
 			//表单序列化
 			var $searchParam = orderManage.$busCompanyOrderTabId.find('form'),pageNo=0;
 	     	//车队订单Ajax
@@ -197,12 +192,7 @@ define(function(require, exports) {
 	     });
 	     orderManage.$hotelOrderTabId.find('.T-hotelOrder-search').trigger('click');
     	//酒店--搜索下拉数据
-	    orderManage.$hotelOrderTabId.find(".dropdown-menu a").click(function(){
-    	   var $that=$(this),
-    	       $thatDivObj=$that.closest('div');
-	    	   $thatDivObj.find("button").attr("data-value",$that.data('value'));
-	    	   $thatDivObj.find(".T-status").val($that.data('value'));
-			   $thatDivObj.find("span").text($(this).text());
+	    orderManage.$hotelOrderTabId.find(".T-status").change(function(){
 			var $searchParam = orderManage.$hotelOrderTabId.find('form'),pageNo=0;
 	     	//房订单Ajax
 	        orderManage.listHotelOrder($searchParam,pageNo);
@@ -349,8 +339,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=orderNumber]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -427,8 +415,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=seatCount]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -466,8 +452,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=brand]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -546,6 +530,7 @@ define(function(require, exports) {
 				if(ui.item == null){
 					var parents = $(this).parent();
 					parents.find("input[name=hotelName]").val("");
+					parents.find("input[name=hotelId]").val("");
 				}
 			},
 			select :function(event, ui){
@@ -602,8 +587,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=level]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -642,8 +625,6 @@ define(function(require, exports) {
 				}
 			},
 			select :function(event, ui){
-				var _this = this, parents = $(_this).parent();
-				parents.find("input[name=type]").val(ui.item).trigger('change');
 			},source:list
 		}).unbind("click").click(function(){
 			var obj = this;
@@ -700,14 +681,14 @@ define(function(require, exports) {
 			buttons: [ 
 				{
 					text: "否",
-					"class" : "btn btn-minier",
+					"class" : "btn btn-minier btn-heightMall",
 					click: function() {
 						$( this ).dialog( "close" );
 					}
 				},
 				{
 					text: "是",
-					"class" : "btn btn-primary btn-minier",
+					"class" : "btn btn-primary btn-minier btn-heightMall",
 					click: function() {
 						if (type==1) {//车队订单
 							$.ajax({
@@ -716,7 +697,6 @@ define(function(require, exports) {
 								data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
 								success:function(data){
 									orderManage.listBusCompanyOrder(0);
-									console.info(type);
 								}
 							});
 						}else if(type==2){
@@ -726,8 +706,6 @@ define(function(require, exports) {
 								data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
 								success:function(data){
 									orderManage.listHotelOrder(0);
-									console.info(type);
-
 								}
 							});
 						};

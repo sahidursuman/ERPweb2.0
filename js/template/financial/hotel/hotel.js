@@ -1,3 +1,8 @@
+/**
+ * 财务管理--酒店账务
+ *
+ * by 廖佳玲
+ */
 define(function(require, exports) {
 	var menuKey = "financial_rummery",
 	    listTemplate = require("./view/list"),
@@ -13,8 +18,6 @@ define(function(require, exports) {
         $checkTab : false,
         $clearTab : false,
         $searchArea : false,
-        $checkSearchArea: false,
-        $clearSearchArea : false,
         hotelList : false,
         clearTempData : false,
         clearTempSumDate : false
@@ -22,19 +25,16 @@ define(function(require, exports) {
 
   	hotel.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate);
+        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate,2);
     };
 
-    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate){
+    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate,accountStatus){
     	if (hotel.$searchArea && arguments.length === 1) {
-            hotelName = hotel.$searchArea.find("input[name=hotelName]").val(),
-            hotelId = hotel.$searchArea.find("input[name=hotelId]").val(),
-            startDate = hotel.$searchArea.find("input[name=startDate]").val(),
-            endDate = hotel.$searchArea.find("input[name=endDate]").val()
-        }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
+            hotelName = hotel.$searchArea.find("input[name=hotelName]").val();
+            hotelId = hotel.$searchArea.find("input[name=hotelId]").val();
+            startDate = hotel.$searchArea.find("input[name=startDate]").val();
+            endDate = hotel.$searchArea.find("input[name=endDate]").val();
+            accountStatus = hotel.$searchArea.find(".T-finance-status").find("button").data("value")
         }
         hotelName = (hotelName == "全部") ? "" : hotelName;
         // 修正页码
@@ -45,7 +45,8 @@ define(function(require, exports) {
             hotelId : hotelId,
             startTime : startDate,
             endTime : endDate,
-            sortType: 'auto'
+            accountStatus : accountStatus,
+            sortType: hotel.$searchArea ? hotel.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
         var searchParam = JSON.stringify(hotel.searchData);
@@ -54,15 +55,23 @@ define(function(require, exports) {
             type:"POST",
             data:{ searchParam : searchParam },
             success:function(data){
-               layer.close(globalLoadingLayer);
                var result = showDialog(data);
                 if(result){
                     hotel.hotelList = data.hotelNameList;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"酒店账务",html);
-
-                    hotel.initList(startDate,endDate);
-
+                    hotel.$tab = $('#tab-' + menuKey + "-content");
+                    hotel.$searchArea = hotel.$tab.find('.T-search-area');
+                    hotel.listPage = page;
+                    hotel.initList(startDate,endDate,accountStatus);
+                    //获取合计数据
+                    var sumMoneyData = {
+                        settlementMoneySum:data.settlementMoneySum,
+                        unPayedMoneySum:data.unPayedMoneySum,
+                        payedMoneySum:data.payedMoneySum,
+                        needPayMoneySum:data.needPayMoneySum
+                    };
+                    hotel.getSumMoney(sumMoneyData,hotel.$tab);
                     // 绑定翻页组件
 					laypage({
 					    cont: hotel.$tab.find('.T-pagenation'),
@@ -78,13 +87,16 @@ define(function(require, exports) {
             }
         });
     };
-
-    hotel.initList = function(startDate,endDate){
-    	hotel.$tab = $('#tab-' + menuKey + "-content");
-        hotel.$searchArea = hotel.$tab.find('.T-search-area');
-
-        hotel.getQueryList();
-        Tools.setDatePicker(hotel.$tab.find(".date-picker"),true);
+    //获取合计金额
+    hotel.getSumMoney = function(data,tabId){
+        tabId.find('.T-sumNeedPay').text(data.needPayMoneySum);
+        tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
+        tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
+        tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+    };
+    hotel.initList = function(startDate,endDate,accountStatus){
+    	hotel.getQueryList();
+        Tools.setDatePicker(hotel.$tab.find(".date-picker"),true,"",true);
 
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
@@ -92,76 +104,96 @@ define(function(require, exports) {
             hotel.listHotel(0);
         });
 
+        //状态框选择事件
+        hotel.$tab.find(".T-finance-status").on('click','a',function(event){
+            event.preventDefault();//阻止相应控件的默认事件
+            var $that = $(this);
+            // 设置选择的效果
+            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            hotel.listHotel(0);
+        });
+
         // 报表内的操作
         hotel.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
             var $that = $(this),
-                id = $that.closest('tr').data('id'),
-                name = $that.closest('tr').data('name');
+                args = {
+                    pageNo : 0,
+                    hotelId : $that.closest('tr').data('id'),
+                    hotelName : $that.closest('tr').data('name'),
+                    startTime : startDate,
+                    endTime : endDate,
+                    accountStatus : accountStatus
+                };
             if ($that.hasClass('T-check')) {
                 // 对账
-               
-                hotel.hotelCheck(0,id,name,"",startDate,endDate);
+                hotel.hotelCheck(args);
             } else if ($that.hasClass('T-clear')) {
                 // 结算
-                
-                hotel.hotelClear(0,0,id,name,"",startDate,endDate);
+                args.isAutoPay = 0;
+                hotel.hotelClear(args);
             }
         });
     };
 
     //对账
-    hotel.hotelCheck = function(page,hotelId,hotelName,accountInfo,startDate,endDate){
-        if (hotel.$checkSearchArea && arguments.length === 3) {
-            accountInfo = hotel.$checkSearchArea.find("input[name=accountInfo]").val(),
-            startDate = hotel.$checkSearchArea.find("input[name=startDate]").val(),
-            endDate = hotel.$checkSearchArea.find("input[name=endDate]").val()
+    hotel.hotelCheck = function(args,$tab){
+        if (!!$tab) {
+            args.pageNo = args.pageNo || 0;
+            args.accountInfo = $tab.find("input[name=accountInfo]").val();
+            args.startTime = $tab.find("input[name=startDate]").val();
+            args.endTime = $tab.find("input[name=endDate]").val();
+            args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
-
-        // 修正页码
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            hotelId : hotelId + "",
-            accountInfo : accountInfo,
-            startTime : startDate,
-            endTime : endDate,
-            sortType : "accountTime"
-        };
-        searchParam = JSON.stringify(searchParam);
+        args.sortType = "accountTime";
         $.ajax({
             url:KingServices.build_url("account/financialHotel","listHotelAccount"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam : JSON.stringify(args) },
             success:function(data){
-                var result = showDialog(data);
-                if(result){
+                if(showDialog(data)){
                     var fhList = data.financialHotelListData;
                     data.financialHotelListData = FinancialService.isGuidePay(fhList);
-                    data.hotelName = hotelName;
+                    data.hotelName = args.hotelName;
+                    if(hotel.checkTemp && hotel.checkTemp.length > 0){
+                        data.financialHotelListData = FinancialService.getCheckTempData(data.financialHotelListData,hotel.checkTemp);
+                        data.sumSettlementMoney = hotel.checkTemp.sumSttlementMoney;
+                        data.sumUnPayedMoney = hotel.checkTemp.sumUnPayedMoney;
+                    }
                     var html = hotelChecking(data);
                     
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-checking", "酒店对账", html)) {
-                        hotel.initCheck(page,hotelId,hotelName); 
+                        hotel.$checkTab = $("#tab-" + menuKey + "-checking-content");
+                        if(hotel.checkTemp && hotel.checkTemp.length > 0){
+                            hotel.$checkTab.data('isEdited',true);
+                        }
+                        hotel.initCheck(args,hotel.$checkTab); 
+                        //取消对账权限过滤
+                        checkDisabled(fhList,hotel.$checkTab.find(".T-checkTr"),hotel.$checkTab.find(".T-checkList").data("right"));
+                    } else {
+                        hotel.$checkTab.data('next',args);
                     }
-                    //取消对账权限过滤
-                    var checkTr = hotel.$checkTab.find(".T-checkTr");
-                    var rightCode = hotel.$checkTab.find(".T-checkList").data("right");
-                    checkDisabled(fhList,checkTr,rightCode);
 
                     //绑定翻页组件
                     laypage({
                         cont: hotel.$checkTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
-                            if (!first) { 
-                                hotel.hotelCheck(obj.curr-1,hotelId,hotelName);
+                            if (!first) {
+                                var temp = FinancialService.checkSaveJson(hotel.$checkTab,hotel.checkTemp,new FinRule(0));
+                                if(!temp){
+                                    return false;
+                                } else {
+                                    hotel.checkTemp = temp;
+                                    hotel.$checkTab.data('isEdited',false);
+                                    args.pageNo = obj.curr-1;
+                                    hotel.hotelCheck(args);
+                                }
                             }
                         }
                     });
@@ -170,96 +202,90 @@ define(function(require, exports) {
         });
     };
 
-    hotel.initCheck = function(page,id,name){
+    hotel.initCheck = function(args,$tab){
     	// 初始化jQuery 对象 
         var ruleCheck = new FinRule(0);
-        hotel.$checkTab = $("#tab-" + menuKey + "-checking-content");
-        hotel.$checkSearchArea = hotel.$checkTab.find('.T-search-area');
+        hotel.init_event(args,$tab,"check");
+        FinancialService.updateUnpayMoney($tab,ruleCheck);
+        hotel.getHotelList($tab,false);
 
-        hotel.init_event(page,id,name,hotel.$checkTab,"check");
-        Tools.setDatePicker(hotel.$checkTab.find(".date-picker"),true);
-        FinancialService.updateUnpayMoney(hotel.$checkTab,ruleCheck);
-
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            args.pageNo = 0;
+            hotel.hotelCheck(args,$tab);
+        });
         //搜索按钮事件
-        hotel.$checkSearchArea.find('.T-search').on('click', function(event) {
+        $tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            hotel.hotelCheck(0,id,name);
+            args.pageNo = 0;
+            hotel.hotelCheck(args,$tab);
         });
 
         //导出报表事件 btn-hotelExport
-        // hotel.$checkSearchArea.find(".T-hotelExport").click(function(){
-        //     var year = hotel.$checkSearchArea.find("[name=year]").val();
-        //     var month = hotel.$checkSearchArea.find("[name=month]").val();
-        //     checkLogin(function(){
-        //         var url = KingServices.build_url("export","hotel") + "&hotelId="+id+"&year="+year+"&month="+month+"&sortType=auto";
-        //         exportXLS(url)
-        //     });
-        // });
+        $tab.find(".T-btn-export").click(function(){
+            var argsData = {
+                hotelId: args.hotelId, 
+                accountInfo : $tab.find("input[name=accountInfo]").val(),
+                startTime: $tab.find('input[name=startDate]').val(),
+                endTime: $tab.find('input[name=endDate]').val(),
+                accountStatus : args.accountStatus,
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                startCheck : $tab.find('.T-checkStartTime').val(),
+                endCheck : $tab.find('.T-checkEndTime').val()
+            };
+            console.log(argsData);
+            FinancialService.exportReport(argsData,"exportArrangeHotelFinancial");
+        });
 
         //复选框事件初始化
-        var checkboxList = hotel.$checkTab.find(".T-checkList tr .T-checkbox"),
-            $checkAll = hotel.$checkTab.find(".T-checkAll");
-        FinancialService.initCheckBoxs($checkAll,checkboxList);
-
-        //报表内的操作
-        hotel.listOption(hotel.$checkTab);
-
-        var trList = hotel.$checkTab.find(".T-checkTr");
-        //关闭页面事件
-        hotel.$checkTab.find(".T-close-check").click(function(){
-            FinancialService.changeUncheck(trList,function(){
-                Tools.closeTab(menuKey + "-checking");
-            });
-        });
+        FinancialService.initCheckBoxs($tab.find(".T-checkAll"),$tab.find(".T-checkList tr .T-checkbox"));
         //确认对账按钮事件
         hotel.$checkTab.find(".T-saveCheck").click(function(){ 
-            FinancialService.changeUncheck(trList,function(){
-                hotel.saveChecking(id,name,page);
+            FinancialService.changeUncheck($tab.find(".T-checkTr"),function(){
+                hotel.saveChecking($tab,args);
             });
         });
     };
 
     //结算
-    hotel.hotelClear = function(isAutoPay,page,hotelId,hotelName,accountInfo,startDate,endDate){
-        if (hotel.$clearSearchArea && arguments.length === 4) {
-            accountInfo = hotel.$clearSearchArea.find("input[name=accountInfo]").val(),
-            startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
-            endDate = hotel.$clearSearchArea.find("input[name=endDate]").val()
+    hotel.hotelClear = function(args,$tab){
+        if (!!$tab) {
+            args.pageNo = args.pageNo || 0;
+            args.accountInfo = $tab.find("input[name=accountInfo]").val();
+            args.startTime = $tab.find("input[name=startDate]").val();
+            args.endTime = $tab.find("input[name=endDate]").val();
+            args.accountStatus = $tab.find("input[name=accountStatus]").val();
+            args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
+            args.startCheck = $tab.find('.T-checkStartTime').val();
+            args.endCheck = $tab.find('.T-checkEndTime').val();
         }
-        if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
-            return false;
+        args.sortType = "accountTime";
+        if(args.autoPay == 1){
+            args.isAutoPay = 0;
+        }
+        if(args.isAutoPay == 1){
+           args.sumCurrentPayMoney = hotel.$clearTab.find('input[name=sumPayMoney]').val();
         }
 
-        page = page || 0;
-        var searchParam = {
-            pageNo : page,
-            hotelId : hotelId + "",
-            accountInfo : accountInfo,
-            startTime : startDate,
-            endTime : endDate,
-            sortType : "accountTime"
-        }, args = arguments;
-        if(isAutoPay == 1){
-           searchParam.isAutoPay = isAutoPay;
-           searchParam.sumCurrentPayMoney = hotel.$clearTab.find('input[name=sumPayMoney]').val();
-        }
-        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialHotel","listHotelAccount"),
             type:"POST",
-            data:{ searchParam : searchParam },
+            data:{ searchParam : JSON.stringify(args) },
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    data.hotelName = hotelName;
-                    if(isAutoPay == 1){
+                    data.hotelName = args.hotelName;
+                    if(args.isAutoPay == 1){
                         hotel.clearTempData = data.autoPaymentJson;
                     }
 
                     var resultList = data.financialHotelListData;
                     //暂存数据读取
-                    if(hotel.clearTempSumDate && hotel.clearTempSumDate.id == hotelId){
+                    if(hotel.clearTempSumDate && hotel.clearTempSumDate.id == args.hotelId){
                         data.sumPayMoney = hotel.clearTempSumDate.sumPayMoney;
                         data.sumPayType = hotel.clearTempSumDate.sumPayType;
                         data.sumPayRemark = hotel.clearTempSumDate.sumPayRemark;
@@ -269,47 +295,51 @@ define(function(require, exports) {
                         data.billTime = hotel.clearTempSumDate.billTime;
 
                         data.financialHotelListData = FinancialService.getTempDate(resultList,hotel.clearTempData);
-                    } else {
-                        data.sumPayMoney = 0;
-                        data.sumPayType = 0;
-                        data.sumPayRemark = "";
                     }
                     data.financialHotelListData = FinancialService.isGuidePay(resultList);
-                    data.isAutoPay = isAutoPay;
+                    data.isAutoPay = (args.autoPay == 1) ? 1 : args.isAutoPay;
                     var html = hotelClearing(data);
                     
-                    args.data = data;
                     // 初始化页面
                     if (Tools.addTab(menuKey + "-clearing", "酒店付款", html)) {
-                        hotel.initClear(args); 
+                        hotel.$clearTab = $("#tab-" + menuKey + "-clearing-content");
+                        if(hotel.clearTempData){
+                            hotel.$clearTab.data('isEdited',true);
+                        }
+                        hotel.initClear(args,hotel.$clearTab); 
                     } else {
                         hotel.$clearTab.data('next', args);
                     }
 
                     //绑定翻页组件
-                    var $tr = hotel.$clearTab.find('.T-clearList tr');
                     laypage({
                         cont: hotel.$clearTab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
-                                var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,new FinRule(isAutoPay== 2?3: 1));
-                                hotel.clearTempData = tempJson;
-                                var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
-                                    sumPayType = parseFloat(hotel.$clearTab.find('select[name=payType]').val()),
-                                    sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
-                                hotel.clearTempSumDate = {
-                                    id : hotelId,
-                                    sumPayMoney : sumPayMoney,
-                                    sumPayType : sumPayType,
-                                    sumPayRemark : sumPayRemark,
-                                    bankNo : hotel.$clearTab.find('input[name=card-number]').val(),
-                                    bankId : hotel.$clearTab.find('input[name=card-id]').val(),
-                                    voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
-                                    billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                                var tempJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,new FinRule(args.isAutoPay== 2?3: 1));
+                                if(tempJson){
+                                    hotel.clearTempData = tempJson;
+                                    var sumPayMoney = parseFloat(hotel.$clearTab.find('input[name=sumPayMoney]').val()),
+                                        sumPayType = parseFloat(hotel.$clearTab.find('select[name=sumPayType]').val()),
+                                        sumPayRemark = hotel.$clearTab.find('input[name=remark]').val();
+                                    hotel.clearTempSumDate = {
+                                        id : args.hotelId,
+                                        sumPayMoney : sumPayMoney,
+                                        sumPayType : sumPayType,
+                                        sumPayRemark : sumPayRemark,
+                                        bankNo : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-number]').val() : hotel.$clearTab.find('input[name=card-number]').val(),
+                                        bankId : (sumPayType == 0) ? hotel.$clearTab.find('input[name=cash-id]').val() : hotel.$clearTab.find('input[name=card-id]').val(),
+                                        voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
+                                        billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                                    }
                                 }
-                                hotel.hotelClear(isAutoPay,obj.curr-1,hotelId,hotelName);
+                                hotel.$clearTab.data('isEdited',false);
+                                args.pageNo = obj.curr-1;
+                                args.autoPay = (args.autoPay == 1) ? args.autoPay : args.isAutoPay;
+                                args.isAutoPay = (args.isAutoPay == 1) ? 0 : args.isAutoPay;
+                                hotel.hotelClear(args);
                             }
                         }
                     });
@@ -318,114 +348,74 @@ define(function(require, exports) {
         });
     };
 
-    hotel.initClear = function(args){
-        var isAutoPay = args[0],
-            data = args.data,
-            page = args[1] || 0,
-            id = args[2],
-            name = args[3];
+    hotel.initClear = function(args,$tab){
         // 初始化jQuery 对象 
-        hotel.$clearTab = $("#tab-" + menuKey + "-clearing-content");
-        hotel.$clearSearchArea = hotel.$clearTab.find('.T-search-area');
-        var $tab = hotel.$clearTab, saveRule = new FinRule(isAutoPay== 2?3: 1), autoPayRule = (new FinRule(2)).check(hotel.$clearTab);
-        args.saveRule = saveRule;
+        var autoPayRule = (new FinRule(2)).check($tab);
+            args.saveRule = new FinRule(args.isAutoPay== 2?3: 1);
+        hotel.init_event(args,$tab,"clear");
+        hotel.getHotelList($tab,true);
 
-        if(isAutoPay == 0){
-            hotel.$clearTab.find(".T-cancel-auto").hide();
-        } else {
-            hotel.$clearTab.find('input[name=sumPayMoney]').prop("disabled",true);
-            hotel.$clearTab.find(".T-clear-auto").hide(); 
-            if(isAutoPay == 1){
-                hotel.$clearTab.data('isEdited',true);
-                hotel.$clearTab.find(".T-bankDiv").removeClass('hidden');
-            } else if(isAutoPay == 2){
-                hotel.$clearTab.find(".T-cancel-auto").hide();
+        FinancialService.initPayEvent($tab);
+
+        //搜索下拉事件
+        $tab.find('.T-check-status').on('click', 'a', function(event) {
+            event.preventDefault(); 
+            var $this = $(this);
+            // 设置选择的效果
+            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            if(args.isAutoPay == 1){
+                args.isAutoPay = 0;
             }
-        }
-
-        FinancialService.initPayEvent(hotel.$clearTab.find('.T-summary'));
-        // 监听修改
-        $tab.find(".T-clearList").off('change').on('change',"input",function(event) {
-            event.preventDefault();
-            $(this).closest('tr').data("change",true);
-            $tab.data('isEdited', true);
+            args.pageNo = 0;
+            hotel.hotelClear(args,$tab);
         });
-        $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
-            event.preventDefault();
-            hotel.clearTempSumDate = false;
-            hotel.clearTempData = false;
-            hotel.$clearTab.data('isEdited',false);
-            isAutoPay = hotel.$clearTab.data('next')[0];
-            if(isAutoPay == 1){
-                isAutoPay = 0;
-            }
-            hotel.hotelClear(isAutoPay,0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
-            hotel.$clearTab.find(".T-cancel-auto").hide();
-        })
-        // 监听保存，并切换tab
-        .on('switch.tab.save', function(event,tab_id,title,html) {
-            event.preventDefault();
-            hotel.saveClear(args,tab_id,title,html);
-        })
-        // 保存后关闭
-        .on('close.tab.save', function(event) {
-            event.preventDefault();
-            hotel.saveClear(args,true);
-        });
-        Tools.setDatePicker(hotel.$clearTab.find(".date-picker"),true);
-
         //搜索事件
-        hotel.$clearTab.find(".T-search").click(function(){
-            if(isAutoPay == 1){
-                isAutoPay = 0;
+        $tab.find(".T-search").click(function(){
+            if(args.isAutoPay == 1){
+                args.isAutoPay = 0;
             }
-            hotel.hotelClear(isAutoPay,0,id,name);
-        });
-
-        //报表内的操作
-        hotel.listOption(hotel.$clearTab);
-
-        //关闭页面事件
-        hotel.$clearTab.find(".T-close-clear").click(function(){
-            Tools.closeTab(menuKey + "-clearing");
+            args.pageNo = 0;
+            hotel.hotelClear(args,$tab);
         });
         //保存结算事件
-        hotel.$clearTab.find(".T-saveClear").click(function(){
-            if (!(new FinRule(isAutoPay== 2?3: 1)).check(hotel.$clearTab).form()) { return; }
-            hotel.saveClear(args);
+        $tab.find(".T-saveClear").click(function(){
+            if (!(new FinRule(args.isAutoPay== 2?3: 1)).check($tab).form()) { return; }
+            hotel.saveClear($tab,args);
         });
 
         //自动下账
-        hotel.$clearTab.find(".T-clear-auto").click(function(){
-            var autoPayJson = FinancialService.autoPayJson(id,hotel.$clearTab,new FinRule(2));
+        $tab.find(".T-clear-auto").click(function(){
+            var autoPayJson = FinancialService.autoPayJson(args.hotelId,$tab,new FinRule(2));
             if(!autoPayJson){return false;}
-            var startDate = hotel.$clearSearchArea.find("input[name=startDate]").val(),
-                endDate = hotel.$clearSearchArea.find("input[name=endDate]").val();
+            var startDate = $tab.find("input[name=startDate]").val(),
+                endDate = $tab.find("input[name=endDate]").val();
             FinancialService.autoPayConfirm(startDate,endDate,function(){
+                var payType = $tab.find('select[name=sumPayType]').val();
                 hotel.clearTempSumDate = {
-                    id : id,
-                    sumPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-                    sumPayType : hotel.$clearTab.find('select[name=payType]').val(),
-                    sumPayRemark : hotel.$clearTab.find('input[name=remark]').val(),
-                    bankNo : hotel.$clearTab.find('input[name=card-number]').val(),
-                    bankId : hotel.$clearTab.find('input[name=card-id]').val(),
-                    voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
-                    billTime : hotel.$clearTab.find('input[name=tally-date]').val()
+                    id : args.hotelId,
+                    sumPayMoney : $tab.find('input[name=sumPayMoney]').val(),
+                    sumPayType : payType,
+                    sumPayRemark : $tab.find('input[name=remark]').val(),
+                    bankNo : (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val(),
+                    bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                    voucher : $tab.find('input[name=credentials-number]').val(),
+                    billTime : $tab.find('input[name=tally-date]').val()
                 };
-                hotel.hotelClear(1,page,id,name);
+                args.isAutoPay = 1;
+                hotel.hotelClear(args,$tab);
             });
         });
 
-        hotel.$clearTab.find(".T-cancel-auto").off().on("click",function(){
-            hotel.$clearTab.find(".T-cancel-auto").toggle();
-            hotel.$clearTab.find(".T-clear-auto").toggle();
+        $tab.find(".T-cancel-auto").off().on("click",function(){
             hotel.clearTempSumDate = false;
             hotel.clearTempData = false;
-            hotel.$clearTab.data('isEdited',false);
-            hotel.hotelClear(0,0,id,name);
+            $tab.data('isEdited',false);
+            args.isAutoPay = 0;
+            args.autoPay = 0;
+            hotel.hotelClear(args,$tab);
         });
 
-        FinancialService.updateSumPayMoney(hotel.$clearTab,saveRule);
+        FinancialService.updateSumPayMoney($tab,args.saveRule);
     };
 
     //显示单据
@@ -454,30 +444,7 @@ define(function(require, exports) {
 			content : html,
 			scrollbar: false,
 			success : function() {
-				var colorbox_params = {
-                    photo: true,
-	    			rel: 'colorbox',
-	    			reposition:true,
-	    			scalePhotos:true,
-	    			scrolling:false,
-	    			previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-	    			next:'<i class="ace-icon fa fa-arrow-right"></i>',
-	    			close:'&times;',
-	    			current:'{current} of {total}',
-	    			maxWidth:'100%',
-	    			maxHeight:'100%',
-	    			onOpen:function(){ 
-	    				$overflow = document.body.style.overflow;
-	    				document.body.style.overflow = 'hidden';
-	    			},
-	    			onClosed:function(){
-	    				document.body.style.overflow = $overflow;
-	    			},
-	    			onComplete:function(){
-	    				$.colorbox.resize();
-	    			}
-	    		};
-	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(colorbox_params);
+	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
 			}
 		});
     }; 
@@ -535,9 +502,9 @@ define(function(require, exports) {
     }; 
 
     //对账数据保存
-    hotel.saveChecking = function(hotelId,hotelName,page,tab_id, title, html){
+    hotel.saveChecking = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            checkSaveJson = FinancialService.checkSaveJson(hotel.$checkTab,new FinRule(0));
+            checkSaveJson = FinancialService.checkSaveJson(hotel.$checkTab,hotel.checkTemp,new FinRule(0),true);
         if(!checkSaveJson){ return false; }
 
         $.ajax({
@@ -548,16 +515,13 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
-                        if(argumentsLen == 2){
+                        hotel.checkTemp = false;
+                        $tab.data('isEdited',false);
+                        if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
-                            hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
-                        } else if(argumentsLen == 3){
-                            hotel.$checkTab.data('isEdited',false);
-                            hotel.hotelCheck(page,hotelId,hotelName);
+                            hotel.listHotel(hotel.listPage);
                         } else {
-                            hotel.$checkTab.data('isEdited',false);
-                            Tools.addTab(tab_id, title, html);
-                            hotel.initCheck(0,hotel.$checkTab.find(".T-newData").data("id"),hotel.$checkTab.find(".T-newData").data("name"));
+                            hotel.hotelCheck(args,$tab);
                         }
                     });
                 }
@@ -565,55 +529,43 @@ define(function(require, exports) {
         });
     };
 
-    hotel.saveClear = function(args,tab_id, title, html){
-        if(!FinancialService.isClearSave(hotel.$clearTab,new FinRule(args[0] == 2 ? 3:1))){
-            return false;
-        }
-
-        var isAutoPay = args[0],
-            data = args.data,
-            page = args[1] || 0,
-            id = args[2],
-            name = args[3];
-
+    hotel.saveClear = function($tab,args,tabArgs){
         var argumentsLen = arguments.length,
-            clearSaveJson = FinancialService.clearSaveJson(hotel.$clearTab,hotel.clearTempData,args.saveRule);
-        var searchParam = {
-            hotelId : id,
-            sumCurrentPayMoney : hotel.$clearTab.find('input[name=sumPayMoney]').val(),
-            payType : hotel.$clearTab.find('select[name=payType]').val(),
-            payRemark : hotel.$clearTab.find('input[name=remark]').val(),
-            bankId : hotel.$clearTab.find('input[name=card-id]').val(),
-            voucher : hotel.$clearTab.find('input[name=credentials-number]').val(),
-            billTime : hotel.$clearTab.find('input[name=tally-date]').val()
-        };
+            clearSaveJson = FinancialService.clearSaveJson($tab,hotel.clearTempData,new FinRule((args ? args.isAutoPay : $tab.data('isAutoPay')) == 2?3: 1),true);
+        if(!clearSaveJson){ return false; }
+        var payType = $tab.find('select[name=sumPayType]').val(),
+            searchParam = {
+                hotelId : args ? args.hotelId : $tab.data('hotelId'),
+                sumCurrentPayMoney : $tab.find('input[name=sumPayMoney]').val(),
+                payType : payType,
+                payRemark : $tab.find('input[name=remark]').val(),
+                bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
+                voucher : $tab.find('input[name=credentials-number]').val(),
+                billTime : $tab.find('input[name=tally-date]').val()
+            };
 
-        clearSaveJson = JSON.stringify(clearSaveJson);
-        searchParam = JSON.stringify(searchParam);
         $.ajax({
             url:KingServices.build_url("account/financialHotel","saveAccountSettlement"),
             type:"POST",
             data:{
                 hotelJson : clearSaveJson,
-                searchParam : searchParam
+                searchParam : JSON.stringify(searchParam)
             },
             success:function(data){
-                var result = showDialog(data);
-                if(result){
-                    hotel.$clearTab.data('isEdited',false);
+                if(showDialog(data)){
                     showMessageDialog($("#confirm-dialog-message"),data.message,function(){
                         hotel.clearTempData = false;
                         hotel.clearTempSumDate = false;
-                        if(argumentsLen === 2){
+                        $tab.data('isEdited',false);
+                        if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-clearing");
-                            hotel.listhotel(hotel.searchData.pageNo,hotel.searchData.hotelName,hotel.searchData.hotelId,hotel.searchData.startDate,hotel.searchData.endDate);
-                        }else if(argumentsLen === 1){
-                            if(isAutoPay == 1){
-                                isAutoPay = 0;
+                            hotel.listHotel(hotel.listPage);
+                        }else {
+                            if(args.isAutoPay == 1){
+                                args.isAutoPay = 0;
                             }
-                            hotel.hotelClear(isAutoPay,page,id,name);
-                        } else {
-                            hotel.hotelClear(hotel.$clearTab.data('next')[0],0,hotel.$clearTab.data('next')[2],hotel.$clearTab.data('next')[3]);
+                            args.autoPay = 0;
+                            hotel.hotelClear(args,$tab);
                         }
                     }); 
                 }
@@ -621,9 +573,11 @@ define(function(require, exports) {
         });
     };
 
-    hotel.init_event = function(page,id,name,$tab,option) {
+    hotel.init_event = function(args,$tab,option) {
         if (!!$tab && $tab.length === 1) {
             var validator = (new FinRule(0)).check($tab);
+            Tools.setDatePicker($tab.find(".T-time"), true);
+            Tools.setDatePicker($tab.find(".T-checkTime"), true);
 
             // 监听修改
             $tab.find(".T-" + option + "List").off('change').on('change',"input",function(event) {
@@ -634,30 +588,48 @@ define(function(require, exports) {
             $tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
 				event.preventDefault();
                 if(option == "check"){
-                    hotel.initCheck(page,id,name);
+                    hotel.checkTemp = false;
+                    hotel.hotelCheck($tab.data('next'),$tab);
                 } else if(option == "clear"){
-                    hotel.initClear(page,id,name);
-                    hotel.$clearTab.find(".T-cancel-auto").hide();
+                    hotel.clearTempData = false;
+                    hotel.clearTempSumDate = false;
+                    hotel.hotelClear($tab.data('next'),$tab);
                 }
 			})
             // 监听保存，并切换tab
             .on('switch.tab.save', function(event,tab_id,title,html) {
                 event.preventDefault();
                 if(option == "check"){
-                    hotel.saveChecking(id,name,0,tab_id,title,html);
+                    hotel.saveChecking($tab,$tab.data('next'),[tab_id,title,html]);
                 } else if(option == "clear"){
-                    hotel.saveClear(id,name, tab_id,title,html);
+                    hotel.saveClear($tab,$tab.data('next'),[tab_id,title,html]);
                 }
             })
             // 保存后关闭
             .on('close.tab.save', function(event) {
                 event.preventDefault();
                 if(option == "check"){
-                    hotel.saveChecking(id,name);
+                    hotel.saveChecking($tab);
                 } else if(option == "clear"){
-                    hotel.saveClear(id,name);
+                    $tab.data('isAutoPay',args.isAutoPay);
+                    $tab.data('hotelId',args.hotelId);
+                    hotel.saveClear($tab);
+                }
+            })
+            .on(CLOSE_TAB_SAVE_NO, function(event) {
+                event.preventDefault();
+                if(option == "clear"){
+                    hotel.clearTempData = false;
+                    hotel.clearTempSumDate = false;
+                } else if(option == "check"){
+                    hotel.checkTemp = false;
                 }
             });
+
+            //报表内的操作
+            hotel.listOption($tab);
+            //关闭页面事件
+            FinancialService.closeTab(menuKey + "-" + option + "ing");
         }
     };
 
@@ -674,6 +646,7 @@ define(function(require, exports) {
             id : "",
             value : "全部"
         };
+        hotel.hotelList = hotelList.slice(all);
         hotelList.unshift(all);
 
         //酒店
@@ -714,8 +687,68 @@ define(function(require, exports) {
         });
     };
 
+    hotel.getHotelList = function($tab,type){
+        var $obj = $tab.find('input[name=hotelName]'),
+            name = $obj.val();
+        $obj.autocomplete({
+            minLength: 0,
+            source : hotel.hotelList,
+            change: function(event,ui) {
+                if (!ui.item)  {
+                    $obj.val(name);
+                }
+            },
+            select: function(event,ui) {
+                var args = {
+                    pageNo : 0,
+                    hotelId : ui.item.id,
+                    hotelName : ui.item.value,
+                    startTime : $tab.find('input[name=startDate]').val(),
+                    endTime : $tab.find('input[name=endDate]').val(),
+                    accountStatus : $tab.find('input[name=accountStatus]').val()
+                };
+                if(type){
+                    args.isAutoPay = ($tab.find(".T-clear-auto").length || $tab.find(".T-cancel-auto").length) ? 0 : 2;
+                    hotel.hotelClear(args);
+                } else {
+                    hotel.hotelCheck(args);
+                }
+            }
+        }).on("click",function(){
+            $obj.autocomplete('search','');
+        });
+    };
+
     hotel.initPay = function(options){
-        hotel.hotelClear(2,0,options.id,options.name,"",options.startDate,options.endDate); 
+        var args = {
+            pageNo : 0,
+            hotelId : options.id,
+            hotelName : options.name,
+            startTime : options.startDate,
+            endTime : options.endDate,
+            accountStatus : options.accountStatus
+        };
+        $.ajax({
+            url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
+            type:"POST",
+            data:{ searchParam : JSON.stringify(args) },
+            success:function(data){
+               var result = showDialog(data);
+                if(result){
+                    var hotelList = data.hotelNameList;
+                    if(hotelList != null && hotelList.length > 0){
+                        for(var i=0;i<hotelList.length;i++){
+                            hotelList[i].id = hotelList[i].hotelId;
+                            hotelList[i].value = hotelList[i].hotelName;
+                        }
+                    }
+                    hotel.hotelList = hotelList;
+                    args.isAutoPay=2;
+                    hotel.hotelClear(args);
+                }
+            }
+        });
+         
     };
 
     exports.init = hotel.initModule;

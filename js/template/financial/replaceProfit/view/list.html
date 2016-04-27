@@ -2,6 +2,8 @@
 <tr data-id="{{rs.id}}">
 	<td><a class="T-option T-replaceDetail">{{rs.orderNumber}}</a></td>
 	<td>{{if rs.partnerAgency != null}}{{rs.partnerAgency.travelAgencyName}}{{/if}}</td>
+	<td>{{if rs.outOPUser}}{{rs.outOPUser.realName}}{{else}}-{{/if}}</td>
+	<td>{{if !!rs.businessGroup}}{{rs.businessGroup.name}}{{/if}}-{{if rs.group}}{{rs.group.name}}{{/if}}</td>
 	<td>
 		{{if rs.financialHotel == ""}}
 			-
@@ -30,8 +32,8 @@
 			{{rs.financialBus}}
 		{{/if}}
 	</td>
-	<td><a class="T-option T-needPayDetail">{{rs.sumNeedGetMoney}}</a></td>
-	<td><a class="T-option T-costDetail">{{rs.sumCostMoney}}</a></td>
-	<td>{{rs.financialGrossProfit}}</td>
+	<td><a class="T-option T-needPayDetail F-float F-money">{{rs.sumNeedGetMoney}}</a></td>
+	<td><a class="T-option T-costDetail F-float F-money">{{rs.sumCostMoney}}</a></td>
+	<td><span class="F-float F-money">{{rs.financialGrossProfit}}</span></td>
 </tr>
 {{/each}}

@@ -1,23 +1,36 @@
 	<form class="form-horizontal ticketMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 		<table class="whereQ" style="width: 96%">
-
 			<tr>
-				<td class="style-myself">银行账号&nbsp;&nbsp;</td>
-				<td class="styleOne-self">{{bankAccount.bankAccountNumber}}</td>
-				<td class="style-myself">是否启用&nbsp;&nbsp;</td>
-				<td class="styleOne-self">{{if bankAccount.status == 1}}启用{{else}}停用{{/if}}</td>
+				<td class="style-myself">账户类型&nbsp;&nbsp;</td>
+				<td class="styleOne-self">{{if bankAccount.type == 0}}现金账户{{else bankAccount.type == 1}}银行账户{{/if}}</td>
+				<td class="style-myself" >是否启用&nbsp;&nbsp;</td>
+				<td class="styleOne-self">{{if bankAccount.status == 1}}已启用{{else}}已停用{{/if}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">开户银行&nbsp;&nbsp;</td>
-				<td class="styleOne-self">{{bankAccount.openingBank}}</td>
+				<td class="style-myself">账户名称&nbsp;&nbsp;</td>
+				<td class="styleOne-self" {{if bankAccount.type == 0}}colspan="3"{{/if}}>{{bankAccount.aliasName}}</td>
+				{{if bankAccount.type != 0}}
+					<td class="style-myself">银行账号&nbsp;&nbsp;</td>
+					<td class="styleOne-self">{{bankAccount.bankAccountNumber}}</td>
+				{{/if}}
+			</tr>
+			<tr>
 				<td class="style-myself">期初余额&nbsp;&nbsp;</td>
-				<td class="styleOne-self">{{bankAccount.beginningBalance}}</td>
+				<td class="styleOne-self" {{if bankAccount.type == 0}}colspan="3"{{/if}}>{{bankAccount.beginningBalance}}</td>
+				{{if bankAccount.type != 0}}
+					<td class="style-myself">开户银行&nbsp;&nbsp;</td>
+					<td class="styleOne-self">{{bankAccount.openingBank}}</td>
+				{{/if}}
 			</tr>
 			<tr>
-				<td class="style-myself">开户户名&nbsp;&nbsp;</td>
-				<td class="styleOne-self">{{bankAccount.accountName}}</td>
 				<td class="style-myself">期初日期&nbsp;&nbsp;</td>
-				<td class="styleOne-self">{{bankAccount.beginningTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<td class="styleOne-self" {{if bankAccount.type == 0}}colspan="3"{{/if}}>
+					{{bankAccount.beginningTime | dateFormat: 'yyyy-MM-dd'}}
+				</td>
+				{{if bankAccount.type != 0}}
+					<td class="style-myself">开户户名&nbsp;&nbsp;</td>
+					<td class="styleOne-self">{{bankAccount.accountName}}</td>
+				{{/if}}
 			</tr>
 
 			<tr>

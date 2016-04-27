@@ -2,11 +2,12 @@
 <thead>
 	<tr class="bg-blur">
 		<th>同行地接</th>
+		<th>出游日期</th>
 		<th>游客</th>
 		<th>联系电话</th>
 		<th>人数</th>           
 		<th>应付款</th>	  	
-		<th>已付款</th>  
+		<!-- <th>已付款</th>   -->
 		<th>转客人</th>  
 		<th>转客时间</th>
 		<th>对方状态</th>   
@@ -16,8 +17,9 @@
  <tbody class="T-listTransferOut">
  		{{each result as result}}
  		{{if result!=null}}        
-			<tr data-value="{{result.id}}">
+			<tr data-value="{{result.id}}" data-status="{{result.status}}">
 				<td>{{result.partnerAgency.travelAgencyName}}</td>
+				<td>{{if !!result.touristGroup}}{{result.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				{{if result.touristGroup != null}}
 				<td>
 				    {{if result.touristGroup.contactMember!=null}}
@@ -31,14 +33,13 @@
 				</td>
 				<td>
 				
-				    {{result.touristGroup.adultCount}}大{{result.touristGroup.childCount}}小
+				    <span class="F-float F-count">{{result.touristGroup.adultCount}}</span>大<span class="F-float F-money">{{result.touristGroup.childCount}}</span>小
 				</td>	
-				<td>{{result.touristGroup.transNeedPayAllMoney}}</td>
-				<td>{{result.touristGroup.transPayedMoney}}</td>
+				<td><span class="F-float F-money">{{result.touristGroup.transNeedPayAllMoney}}</span></td>
 				{{else}}
 				<td></td>
 				<td></td>
-				<td>0大0小</td>	
+				<td><span class="F-float F-count">0</span>大<span class="F-float F-money">0</span>小</td>	
 				<td></td>
 				<td></td>
 				{{/if}}
@@ -46,60 +47,45 @@
 					{{if result.user!=null}}  
 						{{if result.user.realName!=null}}
 					        {{result.user.realName}}
-					 	{{/if}}    
+					 	{{/if}}
 					{{/if}}
 				</td>
 				<td>{{result.createTime}}</td>        
-				<td>{{if result.status == 0}}<span style="color:#D2691E;">未确认</span>{{else if result.status == 1}}<span style="color: green;">已接收</span>{{else if result.status == 2}}<span style="color: red;">已拒收</span>{{else}}<span style="">未使用</span>{{/if}}</td>
 				<td>
-					<div class="hidden-sm hidden-xs btn-group">
+					{{if result.status == 0}}<span style="color:#D2691E;">未确认</span>
+					{{else if result.status == 1}}<span style="color: green;">已接收</span>
+					{{else if result.status == 2}}<span style="color: red;">已拒收</span>
+					{{else if result.transTravelAgencyId==null && result.status == 3}}<span style="">未使用</span>
+					{{else if result.status == 4}}<span style="color: red">已退回</span>
+					{{/if}}
+				</td>
+				<td>
+					<div class="btn-group">
 						<a data-value="{{result.id}}" class="cursor  T-transfer-view T-action">
 							查看
 						</a>
-						<a data-value="{{result.id}}" class="cursor {{if result.status != 1}}T-transfer-edit{{/if}} T-action R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180003">
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 &&  result.status!= 2 && result.status!= 4}}T-transfer-edit{{/if}} T-action R-right"  data-right="1180003" {{if result.status == 1 || result.status== 2 || result.status == 4}}style="color:#bbb;"{{/if}}>
 							<label class="padding-right20">|</label>
 							编辑
 						</a>
-						<a data-value="{{result.id}}" class="cursor {{if result.status != 1}}T-transfer-delete{{/if}} T-action R-right" {{if result.status == 1}}style="color:#bbb;"{{/if}} data-right="1180004">
+
+						<a data-value="{{result.id}}" class="cursor {{if result.status!= 1 && result.status!= 4}}T-transfer-delete{{/if}} T-action R-right" {{if result.status == 1 || result.status == 4}}style="color:#bbb;"{{/if}} data-right="1180004">
 							<label class="padding-right20">|</label>
 							撤销
 						</a>
+
+						<a data-value="{{result.id}}" class="cursor {{if result.status==3}}T-transfer-confirm{{/if}} T-action R-right" {{if result.status !=3}}style="color:#bbb;"{{/if}} data-right="1180004">
+							<label class="padding-right20">|</label>
+							确认
+						</a>
+
+						<a data-value="{{result.id}}" class="cursor {{if result.status == 4 || (result.transTravelAgencyId==null && result.status == 1)}}T-returnTransfer-confirm{{/if}} T-action R-right"  data-right="1180004" {{if !(result.status == 4 || (result.status == 1 && result.transTravelAgencyId==null))}}style="color:#bbb;"{{/if}}>
+							<label class="padding-right20">|</label>
+							确认退回
+						</a>
+
 					</div>
-	
-					<div class="hidden-md hidden-lg">
-						<div class="inline pos-rel">
-							<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-								<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-							</button>
-	
-							<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-								
-								<li>
-									<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transfer-view" data-rel="tooltip">
-										<span class="red">
-											<i class="ace-icon fa fa-search-plus bigger-120"></i>
-										</span>
-									</a>
-								</li>
-								
-								<li>
-									<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-success T-transfer-edit" data-rel="tooltip">
-										<span class="green">
-											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-										</span>
-									</a>
-								</li>
-	
-								<li>
-									<a data-value="{{result.id}}" href="javascript:void(0)" class="tooltip-error T-transfer-delete" data-rel="tooltip">
-										<span class="red">
-											<i class="ace-icon fa fa-trash-o bigger-120"></i>
-										</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+
 				</td>
 			</tr>
 		{{/if}}

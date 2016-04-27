@@ -1,5 +1,5 @@
 <div class="search-area globalAdd">
-	<input name="busCompany_companyName" class="col-xs-2 input-default-height T-busCompanyInputList guideInputList" value="{{searchParam.companyName}}" placeholder="请输入车队名称关键词"/>&nbsp;
+	<input name="busCompany_companyName" class="pull-left w-300 T-busCompanyInputList" value="{{searchParam.companyName}}" placeholder="请输入车队名称、车牌号、联系人或联系电话关键词"/>&nbsp;
 	<button class=" btn-sm  pull-left T-busCompany-search search-btn" >
 		<i class="ace-icon fa fa-search"></i>
 		搜索
@@ -66,7 +66,7 @@
 						<td>{{busCompany.companyName}}</td>
 						<td>{{busCompany.managerName}}</td>
 						<td>{{busCompany.mobileNumber}}</td>
-						<td>{{busCompany.busCount}}辆</td>
+						<td><span class="F-float F-count">{{busCompany.busCount}}</span>辆</td>
 						<td>{{busCompany.driverCount}}个</td>
 						<td>
 							{{if busCompany.province != null}}
@@ -89,7 +89,7 @@
 							{{/if}}
 						</td>
 						<td>
-							<div class="hidden-sm hidden-xs btn-group">
+							<div class="btn-group">
 								<a data-entity-id="{{busCompany.id}}" class="T-action T-view cursor">
 									查看
 								</a>
@@ -101,38 +101,6 @@
 									<label class="padding-right20">|</label>
 									删除
 								</a>
-							</div>
-
-							<div class="hidden-md hidden-lg">
-								<div class="inline pos-rel">
-									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-									</button>
-
-									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-										<li>
-											<a data-entity-id="{{busCompany.id}}" href="javascript:void(0)" class="tooltip-error btn-busCompany-view" data-rel="tooltip">
-												<span class="red">
-													<i class="ace-icon fa fa-search-plus bigger-120"></i>
-												</span>
-											</a>
-										</li>
-										<li>
-											<a data-entity-id="{{busCompany.id}}" href="javascript:void(0)" class="tooltip-success btn-busCompany-edit" data-rel="tooltip">
-												<span class="green">
-													<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-												</span>
-											</a>
-										</li>
-										<li>
-											<a data-entity-id="{{busCompany.id}}" href="javascript:void(0)" class="tooltip-error btn-busCompany-delete" data-rel="tooltip">
-												<span class="red">
-													<i class="ace-icon fa fa-trash-o bigger-120"></i>
-												</span>
-											</a>
-										</li>
-									</ul>
-								</div>
 							</div>
 						</td>
 					</tr>

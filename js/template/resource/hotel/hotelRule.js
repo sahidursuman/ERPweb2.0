@@ -11,22 +11,9 @@ define(function(require, exports) {
     	    	        }
 	    	        ]
 	    	    },
-	    	    {	// 联系人
-	    	    	$ele: $obj.find('input[name="managerName"]'),
-	    	    	rules: [
-							{
-								type: 'null', 
-								errMsg: '联系人不能为空'
-							}
-	    	        ]
-	    	    },
 	    	    {	// 联系人电话
 	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
 	    	    	rules: [
-							{
-								type: 'null', 
-								errMsg: '联系电话不能为空'
-							},
 	    	    	        {
 	    	    	        	type: 'mobile-phone',
 	    	    	        	errMsg: '联系电话格式不正确'
@@ -106,37 +93,37 @@ define(function(require, exports) {
 							errMsg: '旅行社价不能为空'
 						},
 				        {
-				        	type: 'int', 
-				        	errMsg: '请输入数字'
-				        }
-				    ]
-				},
-				{	//市场价
-					$ele: $obj.find('input[name="normalMarketPrice"]'),
-					rules: [
-						{
-							type: 'null', 
-							errMsg: '市场价不能为空'
-						},
-				        {
 				        	type: 'float', 
 				        	errMsg: '请输入数字'
 				        }
 				    ]
 				},
-				{	//旅行社价
-					$ele: $obj.find('input[name="normalInnerPrice"]'),
-					rules: [
-						{
-							type: 'null', 
-							errMsg: '旅行社价不能为空'
-						},
-				        {
-				        	type: 'float', 
-				        	errMsg: '请输入数字'
-				        }
-				    ]
-				},
+				// {	//市场价
+				// 	$ele: $obj.find('input[name="normalMarketPrice"]'),
+				// 	rules: [
+				// 		{
+				// 			type: 'null', 
+				// 			errMsg: '市场价不能为空'
+				// 		},
+				//         {
+				//         	type: 'float', 
+				//         	errMsg: '请输入数字'
+				//         }
+				//     ]
+				// },
+				// {	//旅行社价
+				// 	$ele: $obj.find('input[name="normalInnerPrice"]'),
+				// 	rules: [
+				// 		{
+				// 			type: 'null', 
+				// 			errMsg: '旅行社价不能为空'
+				// 		},
+				//         {
+				//         	type: 'float', 
+				//         	errMsg: '请输入数字'
+				//         }
+				//     ]
+				// },
 				{	//建筑面积
 					$ele: $obj.find('input[name="areaSize"]'),
 					rules: [
