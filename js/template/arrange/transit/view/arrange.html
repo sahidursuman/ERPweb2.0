@@ -1,99 +1,74 @@
 <div class="col-xs-12 arrangeTouristMain globalAdd">
-	<form class="form-horizontal formOneList" role="form" onsubmit="return false" style="margin-left: 10px">
-		<div class="form-group">
-			<input type="hidden" name="touristGroup" value="{{touristGroup.id}}"/>
-
-
+    <form class="form-horizontal formOneList" role="form" onsubmit="return false" style="margin-left: 10px">
+        <div class="form-group">
+            <input type="hidden" name="touristGroup" value="{{touristGroup.id}}" />
             <div class="row">
-                <div class="col-md-3">
-                    <span>小组联系人:</span>{{touristGroup.contactMember.name}}
-                </div>
-                <div class="col-md-2">
-                    <span class="fix-w-4">联系电话:</span>{{touristGroup.contactMember.mobileNumber}}
-                </div>
-                <div class="col-md-2">
-                    <span class="fix-w-4 T-touristCount">人数:</span><span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</label>
-                </div>
                 <div class="col-md-2">
                     <span class="fix-w-4">线路产品:</span>{{touristGroup.lineProduct.name}}
                 </div>
                 <div class="col-md-2">
                     <span class="fix-w-4">出游日期:</span>{{if touristGroup.startTime != null}}{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}
                 </div>
+                <div class="col-md-2">
+                    <span class="fix-w-4 T-touristCount">人数:</span><span class="F-float F-count">{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</label>
+                </div>
             </div>
-		</div>
-		<!-- <div class="form-group">
-			{{if arriveTime != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团日期：{{arriveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
-			{{if arrivePosition != null && arrivePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团地点：{{arrivePosition}}</label>{{/if}}
-			{{if arriveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{arriveShift}}</label>{{/if}}
-			{{if arriveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{if arriveShiftTime != null}}{{arriveShiftTime}}{{/if}}</label>{{/if}}
-		</div>
-		<div class="form-group">
-			{{if leaveTime != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}}
-			{{if leavePosition != null && leavePosition != ""}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团地点：{{leavePosition}}</label>{{/if}}
-			{{if leaveShift != null}}<label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团班次：{{leaveShift}}</label>{{/if}}
-			{{if leaveShiftTime != null}}<label class="col-sm-3 control-label no-padding-right" style="text-align: left;">送团班次时间：{{if leaveShiftTime != null}}{{leaveShiftTime}}{{/if}}</label>{{/if}}
-		</div> -->
-	</form> 
-	<a href="javascript:void(0)" hidden="hidden" class="T-btn-financial" style="right: 25px;position: absolute;z-index:1001;"> 
-	<button class="btn btn-sm  btn-success" style="margin-left: 20px"> 通知财务 </button> </a>
-	<div class="tabbable">
-		<ul class="nav nav-tabs" id="myTab_transitArrange">
-			{{if arrangeStatus.receiveBusStatus != 0 }}
-			<li class="col-sm-1 no-padding align-center act">
-				<a data-toggle="tab" href="#transit_receive_bus" aria-expanded="true">接团车辆</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.receiveHotelStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_receive_hotel" aria-expanded="false">接团酒店</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.receiveRestaurantStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_receive_restaurant" aria-expanded="false">接团餐饮</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.receiveTicketStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_receive_ticket" aria-expanded="false">接团票务</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.receiveOtherStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_receive_other" aria-expanded="false">接团其它</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.sendBusStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_send_bus" aria-expanded="true">送团车辆</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.sendHotelStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_send_hotel" aria-expanded="false">送团酒店</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.sendRestaurantStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_send_restaurant" aria-expanded="false">送团餐饮</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.sendTicketStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_send_ticket" aria-expanded="false">送团票务</a>
-			</li>
-			{{/if}}
-			{{if arrangeStatus.sendOtherStatus != 0}}
-			<li class="col-sm-1 no-padding align-center">
-				<a data-toggle="tab" href="#transit_send_other" aria-expanded="false">送团其它</a>
-			</li>
-			{{/if}}
-		</ul>
-		<div class="tab-content" style="position: relative;top: -2px">
-			<div id="transit_receive_bus" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+            <p class="mar-t-10">
+                游客小组联系人: {{each membersList as member}} {{member.name}}{{if !!member.mobileNumber}}({{member.mobileNumber}}){{/if}}&nbsp;&nbsp; {{/each}}
+            </p>
+        </div>
+    </form>
+    <a href="javascript:void(0)" hidden="hidden" class="T-btn-financial" style="right: 25px;position: absolute;z-index:1001;">
+        <button class="btn btn-sm  btn-success" style="margin-left: 20px"> 通知财务 </button>
+    </a>
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab_transitArrange">
+            {{if arrangeStatus.receiveBusStatus != 0 }}
+            <li class="col-sm-1 no-padding align-center act">
+                <a data-toggle="tab" href="#transit_receive_bus" aria-expanded="true">接团车辆</a>
+            </li>
+            {{/if}} {{if arrangeStatus.receiveHotelStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_receive_hotel" aria-expanded="false">接团酒店</a>
+            </li>
+            {{/if}} {{if arrangeStatus.receiveRestaurantStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_receive_restaurant" aria-expanded="false">接团餐饮</a>
+            </li>
+            {{/if}} {{if arrangeStatus.receiveTicketStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_receive_ticket" aria-expanded="false">接团票务</a>
+            </li>
+            {{/if}} {{if arrangeStatus.receiveOtherStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_receive_other" aria-expanded="false">接团其它</a>
+            </li>
+            {{/if}} {{if arrangeStatus.sendBusStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_send_bus" aria-expanded="true">送团车辆</a>
+            </li>
+            {{/if}} {{if arrangeStatus.sendHotelStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_send_hotel" aria-expanded="false">送团酒店</a>
+            </li>
+            {{/if}} {{if arrangeStatus.sendRestaurantStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_send_restaurant" aria-expanded="false">送团餐饮</a>
+            </li>
+            {{/if}} {{if arrangeStatus.sendTicketStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_send_ticket" aria-expanded="false">送团票务</a>
+            </li>
+            {{/if}} {{if arrangeStatus.sendOtherStatus != 0}}
+            <li class="col-sm-1 no-padding align-center">
+                <a data-toggle="tab" href="#transit_send_other" aria-expanded="false">送团其它</a>
+            </li>
+            {{/if}}
+        </ul>
+        <div class="tab-content" style="position: relative;top: -2px">
+            <div id="transit_receive_bus" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-bus"></i>
 						<label class="middle title-size">接团车辆</label>
 						<a href="javascript:void(0)" class="T-add T-bus" data-type="0">
@@ -103,149 +78,184 @@
 							</button>
 						</a>
 					</h5>
-					<div class="form-group">
-						<label>接团日期：{{arriveTime | dateTimeHSFormat}}</label>
-						<label class="mar-l-15">上车地点：{{arrivePosition}}</label>
-					</div>
-                    {{if !!receiveGroup.oldBusRequire}}<p class="requirementsPlan">原车辆要求：{{receiveGroup.oldBusRequire}}</p>{{/if}}
-                    {{if !!receiveGroup.nowBusRequire}}<p class="requirementsPlan">现车辆要求：{{receiveGroup.nowBusRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>车队</th>    
-										<th class="th-border">车座数</th>
-										<th class="th-border">车辆品牌</th>
-										<th class="th-border">车牌</th>          
-										<th class="th-border">司机</th>
-										<th class="th-border">司机电话</th>
-										<th class="th-border"><span class="necessary">*</span>用车时间</th>
-										<th class="th-border"><span class="necessary">*</span>上车地点</th>
-										<th class="th-border">目的地</th>
-										<th class="th-border">车费</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">计划代收</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>
-								{{if receiveGroup.outBusList != null && receiveGroup.outBusList.length > 0}}
-								{{each receiveGroup.outBusList as outBus}}
-									{{if outBus.id != null && outBus.busCompany != null}}
-									<tr data-entity-id="{{outBus.id}}" {{if outBus.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="0" />
-												<input class="col-sm-12 bind-change {{if !outBus.isConfirmAccount}}T-busCompanyName{{/if}}" name="busCompanyName"  type="text" value="{{outBus.busCompany.companyName}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" />
-												{{if !outBus.isConfirmAccount}}
-	                                            <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+                    <div class="form-group">
+                        <label>接团日期：{{arriveTime | dateTimeHSFormat}}</label>
+                        <label class="mar-l-15">上车地点：{{arrivePosition}}</label>
+                    </div>
+                    {{if !!receiveGroup.oldBusRequire}}
+                    <p class="requirementsPlan">原车辆要求：{{receiveGroup.oldBusRequire}}</p>{{/if}} {{if !!receiveGroup.nowBusRequire}}
+                    <p class="requirementsPlan">现车辆要求：{{receiveGroup.nowBusRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>车队</th>
+                                        <th class="th-border">车座数</th>
+                                        <th class="th-border">车辆品牌</th>
+                                        <th class="th-border">车牌</th>
+                                        <th class="th-border">司机</th>
+                                        <th class="th-border">司机电话</th>
+                                        <th class="th-border"><span class="necessary">*</span>用车时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>上车地点</th>
+                                        <th class="th-border">目的地</th>
+                                        <th class="th-border">车费</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{if receiveGroup.outBusList != null && receiveGroup.outBusList.length > 0}} {{each receiveGroup.outBusList as outBus}} {{if outBus.id != null && outBus.busCompany != null}}
+                                    <tr data-entity-id="{{outBus.id}}" {{if outBus.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="0" />
+                                                <input class="col-sm-12 bind-change {{if !outBus.isConfirmAccount}}T-busCompanyName{{/if}}" name="busCompanyName" type="text" value="{{outBus.busCompany.companyName}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" /> {{if !outBus.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                            </span> {{/if}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseSeatCount{{/if}}" name="seatCount" value="{{outBus.seatCount}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusBrand{{/if}}" name="busbrand" type="text" value="{{outBus.brand}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusLicenseNumber{{/if}}{{if outBus.isConfirmAccount}}disabled=" disabled "{{/if}} bind-change" name="busLicenseNumber" type="text" value="{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="busLicenseNumberId" value="{{if outBus.bus != null}}{{outBus.bus.id}}{{/if}}" /> {{if !outBus.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
+	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                            </span> {{/if}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseDriver{{/if}} bind-change" name="driverName" type="text" value="{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="driverId" value="{{if outBus.driver != null}}{{outBus.driver.id}}{{/if}}" /> {{if !outBus.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
+	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                            </span> {{/if}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime | dateTimeHSFormat}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="boardLocation" type="text" maxlength="20" value="{{outBus.boardLocation}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text" maxlength="9" value="{{outBus.fee}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                            <input type="hidden" class="count" value="1" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney" maxlength="9" type="text" value="{{outBus.reduceMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney" maxlength="9" type="text" value="{{outBus.needPayMoney}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outBus.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" data-catename="bus" title="删除">
+												删除
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}{{else}}
+                                    <tr data-entity-id="">
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="0" />
+                                                <input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName" type="text" value="" />
+                                                <input type="hidden" name="busCompanyId" value="" />
+                                                <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
 	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 	                                            </span>
-	                                            {{/if}}
-	                                        </div>
-										</td>
-										<td><input type="text" class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseSeatCount{{/if}}" name="seatCount" value="{{outBus.seatCount}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusBrand{{/if}}" name="busbrand" type="text" value="{{outBus.brand}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusLicenseNumber{{/if}}{{if outBus.isConfirmAccount}}disabled="disabled"{{/if}} bind-change" name="busLicenseNumber" type="text" value="{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="busLicenseNumberId" value="{{if outBus.bus != null}}{{outBus.bus.id}}{{/if}}" />
-												{{if !outBus.isConfirmAccount}}
-												<span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" />
+                                                <input type="hidden" name="busLicenseNumberId" value="" />
+                                                <span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
 	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 	                                            </span>
-	                                            {{/if}}
-	                                        </div>
-										</td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseDriver{{/if}} bind-change" name="driverName" type="text" value="{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="driverId" value="{{if outBus.driver != null}}{{outBus.driver.id}}{{/if}}" />
-												{{if !outBus.isConfirmAccount}}
-												<span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" />
+                                                <input type="hidden" name="driverId" value="" />
+                                                <span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
 	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
 	                                            </span>
-	                                            {{/if}}
-	                                        </div>
-										</td>
-										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime | dateTimeHSFormat}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}} /><input type="hidden" class="count" value="1" /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="{{outBus.collection}}" maxlength="9" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outBus.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{arriveTime | dateTimeHSFormat}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="boardLocation" type="text" maxlength="20" value="{{arrivePosition}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="destination" type="text" maxlength="20" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text" maxlength="9" value="" />
+                                            <input type="hidden" class="count" value="1" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" />
+                                        </td>
+                                        <td>
+                                            <a class="cursor T-arrange-delete" data-catename="bus" title="删除">
 												删除
 											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}{{else}}
-									<tr data-entity-id="">
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="0" />
-												<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />
-												<input type="hidden" name="busCompanyId" value="" />
-	                                            <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
-	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-	                                            </span>
-	                                        </div>
-										</td>
-										<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>
-										<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" />
-												<input type="hidden" name="busLicenseNumberId" value="" />
-												<span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
-	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-	                                            </span>
-	                                        </div>
-										</td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" />
-												<input type="hidden" name="driverId" value="" />
-												<span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
-	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-	                                            </span>
-	                                        </div>
-										</td>
-										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{arriveTime | dateTimeHSFormat}}" /></td>
-										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{arrivePosition}}" /></td>
-										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>
-										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="" maxlength="9"/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
-										<td>
-											<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
-												删除
-											</a>
-										</td>
-									</tr>{{/if}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_receive_hotel" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+                                        </td>
+                                    </tr>{{/if}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_receive_hotel" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-hotel"></i>
 						<label class="middle title-size">接团酒店</label>
 						<a href="javascript:void(0)" class="T-add T-hotel" data-type="0" data-type="0">
@@ -254,89 +264,101 @@
 								新增
 							</button>
 						</a>
-					</h5>
-                    {{if !!receiveGroup.oldHotelRequire}}<p class="requirementsPlan">原酒店要求：{{receiveGroup.oldHotelRequire}}</p>{{/if}}
-                    {{if !!receiveGroup.nowHotelRequire}}<p class="requirementsPlan">现酒店要求：{{receiveGroup.nowHotelRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border">星级</th>
-										<th class="th-border"><span class="necessary">*</span>酒店</th>
-										<th class="th-border">联系人</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border"><span class="necessary">*</span>房型</th>
-										<th class="th-border">单价</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">计划代收</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>{{each receiveGroup.outHotelList as outHotel}}
-									{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
-									<tr data-entity-id="{{outHotel.id}}" {{if outHotel.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input type="hidden" name="serviceType" value="0" />
-										<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
-											<select class="tripPlanHotelStar" name="hotelLevel" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}>
-											<option value="" {{if outHotel.hotel.level == 0}}selected="selected"{{/if}}>--全部--</option>
-												<option value="1" {{if outHotel.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
-												<option value="2" {{if outHotel.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
-												<option value="3" {{if outHotel.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
-												<option value="4" {{if outHotel.hotel.level == 4}}selected="selected"{{/if}}>四星</option>
-												<option value="5" {{if outHotel.hotel.level == 5}}selected="selected"{{/if}}>准五星</option>
-												<option value="6" {{if outHotel.hotel.level == 6}}selected="selected"{{/if}}>五星</option>
-												<option value="7" {{if outHotel.hotel.level == 7}}selected="selected"{{/if}}>五星以上</option>
-											</select>
-										</td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 {{if !outHotel.isConfirmAccount}}T-chooseHotel{{/if}} bind-change" name="hotelName" maxlength="200" value="{{outHotel.hotel.name}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="hotelId" value="{{outHotel.hotel.id}}" />
-												{{if !outHotel.isConfirmAccount}}
-												<span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
+					</h5> {{if !!receiveGroup.oldHotelRequire}}
+                    <p class="requirementsPlan">原酒店要求：{{receiveGroup.oldHotelRequire}}</p>{{/if}} {{if !!receiveGroup.nowHotelRequire}}
+                    <p class="requirementsPlan">现酒店要求：{{receiveGroup.nowHotelRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover hotelListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border">星级</th>
+                                        <th class="th-border"><span class="necessary">*</span>酒店</th>
+                                        <th class="th-border">联系人</th>
+                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border"><span class="necessary">*</span>房型</th>
+                                        <th class="th-border">单价</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{each receiveGroup.outHotelList as outHotel}} {{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
+                                    <tr data-entity-id="{{outHotel.id}}" {{if outHotel.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <input type="hidden" name="serviceType" value="0" />
+                                            <input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
+                                            <select class="tripPlanHotelStar" name="hotelLevel" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                                <option value="" {{if outHotel.hotel.level==0 }}selected="selected" {{/if}}>--全部--</option>
+                                                <option value="1" {{if outHotel.hotel.level==1 }}selected="selected" {{/if}}>三星以下</option>
+                                                <option value="2" {{if outHotel.hotel.level==2 }}selected="selected" {{/if}}>三星</option>
+                                                <option value="3" {{if outHotel.hotel.level==3 }}selected="selected" {{/if}}>准四星</option>
+                                                <option value="4" {{if outHotel.hotel.level==4 }}selected="selected" {{/if}}>四星</option>
+                                                <option value="5" {{if outHotel.hotel.level==5 }}selected="selected" {{/if}}>准五星</option>
+                                                <option value="6" {{if outHotel.hotel.level==6 }}selected="selected" {{/if}}>五星</option>
+                                                <option value="7" {{if outHotel.hotel.level==7 }}selected="selected" {{/if}}>五星以上</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 {{if !outHotel.isConfirmAccount}}T-chooseHotel{{/if}} bind-change" name="hotelName" maxlength="200" value="{{outHotel.hotel.name}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="hotelId" value="{{outHotel.hotel.id}}" /> {{if !outHotel.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td><input class="col-sm-12" name="hotelManagerName"  maxlength="100" value="{{outHotel.hotel.managerName}}" readonly="readonly" type="text" /></td>
-										<td><input class="col-sm-12" name="hotelMobileNumber" value="{{outHotel.hotel.mobileNumber}}" readonly="readonly" type="text" /></td>
-										<td>
-											<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/>
-											<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
-										</td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
-										<td><input class="col-sm-12 F-float F-money" name="collection" type="text" value="{{outHotel.collection}}" maxlength="9" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}"  maxlength="1000"{{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outHotel.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" data-catename="hotel">
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="hotelManagerName" maxlength="100" value="{{outHotel.hotel.managerName}}" readonly="readonly" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="hotelMobileNumber" value="{{outHotel.hotel.mobileNumber}}" readonly="readonly" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" maxlength="9" value="{{outHotel.price}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="hotelMemberCount" maxlength="6" value="{{outHotel.memberCount}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outHotel.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" data-catename="hotel">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_receive_restaurant" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_receive_restaurant" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-cutlery"></i>
 						<label class="middle title-size ">接团餐饮</label>
 						<a href="javascript:void(0)" class="T-add T-restaurant" data-type="0">
@@ -345,78 +367,90 @@
 								新增
 							</button>
 						</a>
-					</h5>
-                    {{if !!receiveGroup.oldRestaurantRequire}}<p class="requirementsPlan">原餐厅要求：{{receiveGroup.oldRestaurantRequire}}</p>{{/if}}
-                    {{if !!receiveGroup.nowRestaurantRequire}}<p class="requirementsPlan">现餐厅要求：{{receiveGroup.nowRestaurantRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>餐厅</th>
-										<th class="th-border">联系人</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border">类型</th>
-										<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
-										<th class="th-border">人数</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>{{each receiveGroup.outRestaurantList as outRestaurant}}
-									{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
-									<tr data-entity-id="{{outRestaurant.id}}" {{if outRestaurant.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="0" />
-												<input class="col-sm-12 bind-change {{if !outRestaurant.isConfirmAccount}}T-chooseRestaurant{{/if}}" name="restaurant" type="text" value="{{outRestaurant.restaurant.name}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="restaurantId" value="{{outRestaurant.restaurant.id}}" />
-												{{if !outRestaurant.isConfirmAccount}}
-												<span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
+					</h5> {{if !!receiveGroup.oldRestaurantRequire}}
+                    <p class="requirementsPlan">原餐厅要求：{{receiveGroup.oldRestaurantRequire}}</p>{{/if}} {{if !!receiveGroup.nowRestaurantRequire}}
+                    <p class="requirementsPlan">现餐厅要求：{{receiveGroup.nowRestaurantRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover restaurantListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>餐厅</th>
+                                        <th class="th-border">联系人</th>
+                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border">类型</th>
+                                        <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
+                                        <th class="th-border">人数</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{each receiveGroup.outRestaurantList as outRestaurant}} {{if outRestaurant.id != null && outRestaurant.restaurant != null}}
+                                    <tr data-entity-id="{{outRestaurant.id}}" {{if outRestaurant.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="0" />
+                                                <input class="col-sm-12 bind-change {{if !outRestaurant.isConfirmAccount}}T-chooseRestaurant{{/if}}" name="restaurant" type="text" value="{{outRestaurant.restaurant.name}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="restaurantId" value="{{outRestaurant.restaurant.id}}" /> {{if !outRestaurant.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addRestaurantResource R-right" data-right="1030002" title="添加餐厅">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="{{outRestaurant.restaurant.managerName}}" /></td>
-										<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="{{outRestaurant.restaurant.mobileNumber}}" /></td>
-										<td>
-											<select name="standardType" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}>
-												<option value="早餐" {{if outRestaurant.standardType == "早餐"}}selected="selected"{{/if}}>早餐</option>
-												<option value="午餐" {{if outRestaurant.standardType == "午餐"}}selected="selected"{{/if}}>午餐</option>
-												<option value="晚餐" {{if outRestaurant.standardType == "晚餐"}}selected="selected"{{/if}}>晚餐</option>
-											</select>
-										</td>
-										<td>
-											<input class="col-sm-12 {{if !outRestaurant.isConfirmAccount}}T-chooseStandard{{/if}} price F-float F-money" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/>
-											<input type="hidden" name="price" value="{{outRestaurant.price}}" />
-										</td>
-										<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outRestaurant.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="manager" readonly="readonly" type="text" value="{{outRestaurant.restaurant.managerName}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="{{outRestaurant.restaurant.mobileNumber}}" />
+                                        </td>
+                                        <td>
+                                            <select name="standardType" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                                <option value="早餐" {{if outRestaurant.standardType=="早餐" }}selected="selected" {{/if}}>早餐</option>
+                                                <option value="午餐" {{if outRestaurant.standardType=="午餐" }}selected="selected" {{/if}}>午餐</option>
+                                                <option value="晚餐" {{if outRestaurant.standardType=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 {{if !outRestaurant.isConfirmAccount}}T-chooseStandard{{/if}} price F-float F-money" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" maxlength="9" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" name="price" value="{{outRestaurant.price}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="{{outRestaurant.memberCount}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" maxlength="9" value="{{outRestaurant.prePayMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outRestaurant.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_receive_ticket" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_receive_ticket" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-car"></i>
 						<label class="middle title-size">接团票务</label>
 						<a href="javascript:void(0)" class="T-add T-ticket" data-type="0">
@@ -426,121 +460,161 @@
 							</button>
 						</a>
 					</h5>
-					<div class="form-group">
-						<label>票务时间：{{arriveShiftTime | dateTimeHSFormat}}</label>
-						<label class="mar-l-15">票务班次：{{arriveShift}}</label>
-					</div>
-                    {{if !!receiveGroup.oldTicketRequire}}<p class="requirementsPlan">原票务要求：{{receiveGroup.oldTicketRequire}}</p>{{/if}}
-                    {{if !!receiveGroup.nowTicketRequire}}<p class="requirementsPlan">现票务要求：{{receiveGroup.nowTicketRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>票务公司</th>
-										<th class="th-border"><span class="necessary">*</span>类型</th>
-										<th class="th-border">出发城市</th>
-										<th class="th-border">到达城市</th>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>班次</th>
-										<th class="th-border"><span class="necessary">*</span>座位级别</th>
-										<th class="th-border">单价</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>
-								{{if receiveGroup.outTicketList != null && receiveGroup.outTicketList.length > 0}}
-								{{each receiveGroup.outTicketList as outTicket}}
-									{{if outTicket.id != null && outTicket.ticket != null}}
-									<tr data-entity-id="{{outTicket.id}}" {{if outTicket.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="0" />
-												<input class="col-sm-12 {{if !outTicket.isConfirmAccount}}T-chooseTicket{{/if}} bind-change" name="ticketName" value="{{outTicket.ticket.name}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="tickeId" value="{{outTicket.ticket.id}}" />
-												{{if !outTicket.isConfirmAccount}}
-												<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
+                    <div class="form-group">
+                        <label>票务时间：{{arriveShiftTime | dateTimeHSFormat}}</label>
+                        <label class="mar-l-15">票务班次：{{arriveShift}}</label>
+                    </div>
+                    {{if !!receiveGroup.oldTicketRequire}}
+                    <p class="requirementsPlan">原票务要求：{{receiveGroup.oldTicketRequire}}</p>{{/if}} {{if !!receiveGroup.nowTicketRequire}}
+                    <p class="requirementsPlan">现票务要求：{{receiveGroup.nowTicketRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover ticketListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>票务公司</th>
+                                        <th class="th-border"><span class="necessary">*</span>类型</th>
+                                        <th class="th-border">出发城市</th>
+                                        <th class="th-border">到达城市</th>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>班次</th>
+                                        <th class="th-border"><span class="necessary">*</span>座位级别</th>
+                                        <th class="th-border">单价</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{if receiveGroup.outTicketList != null && receiveGroup.outTicketList.length > 0}} {{each receiveGroup.outTicketList as outTicket}} {{if outTicket.id != null && outTicket.ticket != null}}
+                                    <tr data-entity-id="{{outTicket.id}}" {{if outTicket.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="0" />
+                                                <input class="col-sm-12 {{if !outTicket.isConfirmAccount}}T-chooseTicket{{/if}} bind-change" name="ticketName" value="{{outTicket.ticket.name}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="tickeId" value="{{outTicket.ticket.id}}" /> {{if !outTicket.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td>
-											<select class="" name="ticketType" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}>
-												<option value="1" {{if outTicket.type == 1}}selected="selected"{{/if}}>机票</option>
-												<option value="2" {{if outTicket.type == 2}}selected="selected"{{/if}}>汽车票</option>
-												<option value="3" {{if outTicket.type == 3}}selected="selected"{{/if}}>火车票</option>
-												<option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
-											</select>
-										</td>
-										<td><input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime | dateTimeHSFormat}}{{/if}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
-										<td>{{if !outTicket.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" data-catename="ticket">
+                                        </td>
+                                        <td>
+                                            <select class="" name="ticketType" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                                <option value="1" {{if outTicket.type==1 }}selected="selected" {{/if}}>机票</option>
+                                                <option value="2" {{if outTicket.type==2 }}selected="selected" {{/if}}>汽车票</option>
+                                                <option value="3" {{if outTicket.type==3 }}selected="selected" {{/if}}>火车票</option>
+                                                <option value="4" {{if outTicket.type==4 }}selected="selected" {{/if}}>轮船票</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketStartCity" value="{{outTicket.startingCity}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketArriveCity" value="{{outTicket.arriveCity}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime | dateTimeHSFormat}}{{/if}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="ticketPrice" maxlength="9" value="{{outTicket.price}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="ticketMemberCount" maxlength="6" value="{{outTicket.memberCount}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney" maxlength="9" value="{{outTicket.reduceMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outTicket.prePayMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                        </td>
+                                        <td>{{if !outTicket.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" data-catename="ticket">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}{{else}}
-									<tr data-entity-id="">
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="0" />
-												<input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
-												<input type="hidden" name="tickeId" value="" />
-												<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}{{else}}
+                                    <tr data-entity-id="">
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="0" />
+                                                <input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
+                                                <input type="hidden" name="tickeId" value="" />
+                                                <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                 </span>
                                             </div>
-										</td>
-										<td>
-											<select class="" name="ticketType">
-												<option value="1">机票</option>
-												<option value="2">汽车票</option>
-												<option value="3">火车票</option>
-												<option value="4">轮船票</option>
-											</select>
-										</td>
-										<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateTimeHSFormat}}" type="text" /></td>
-										<td><input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
-										<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="" type="text" /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="" type="text" /></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="" type="text" /></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
-										<td>
-											<a class="cursor T-arrange-delete" data-catename="ticket">
+                                        </td>
+                                        <td>
+                                            <select class="" name="ticketType">
+                                                <option value="1">机票</option>
+                                                <option value="2">汽车票</option>
+                                                <option value="3">火车票</option>
+                                                <option value="4">轮船票</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{arriveShiftTime | dateTimeHSFormat}}" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketShift" value="{{arriveShift}}" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="ticketPrice" maxlength="9" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="ticketMemberCount" maxlength="6" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney" maxlength="9" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" />
+                                        </td>
+                                        <td>
+                                            <a class="cursor T-arrange-delete" data-catename="ticket">
 												删除
 											</a>
-										</td>
-									</tr>{{/if}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_receive_other" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+                                        </td>
+                                    </tr>{{/if}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_receive_other" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa fa-smile-o"></i>
 						<label class="middle title-size">接团其它</label>
 						<a href="javascript:void(0)" class="T-add T-other" data-type="0">
@@ -549,59 +623,75 @@
 								新增
 							</button>
 						</a>
-					</h5>
-                    {{if !!receiveGroup.oldOtherRequire}}<p class="requirementsPlan">原其它要求：{{receiveGroup.oldOtherRequire}}</p>{{/if}}
-                    {{if !!receiveGroup.nowOtherRequire}}<p class="requirementsPlan">现其它要求：{{receiveGroup.nowOtherRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>项目</th>
-										<th class="th-border">联系人</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border">单价</th>
-										<th class="th-border">数量</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>{{each receiveGroup.outOtherList as outOther}}
-								{{if outOther != null && outOther.name != null}}
-									<tr data-entity-id="{{outOther.id}}" {{if outOther.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/>
-											<input type="hidden" name="serviceType" value="0" />
-										</td>
-										<td><input class="col-sm-12" name="managerName"  maxlength="20" type="text" value="{{outOther.managerName}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="mobileNumber"  maxlength="11" type="text" value="{{outOther.mobileNumber}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 price F-float F-money" name="price"  maxlength="9" type="text" value="{{outOther.price}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6"  type="text" value="{{outOther.memberCount}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"   maxlength="9" type="text" value="{{outOther.reduceMoney}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" type="text" value="{{outOther.prePayMoney}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outOther.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" title="删除" data-catename="other">
+					</h5> {{if !!receiveGroup.oldOtherRequire}}
+                    <p class="requirementsPlan">原其它要求：{{receiveGroup.oldOtherRequire}}</p>{{/if}} {{if !!receiveGroup.nowOtherRequire}}
+                    <p class="requirementsPlan">现其它要求：{{receiveGroup.nowOtherRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>项目</th>
+                                        <th class="th-border">联系人</th>
+                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border">单价</th>
+                                        <th class="th-border">数量</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{each receiveGroup.outOtherList as outOther}} {{if outOther != null && outOther.name != null}}
+                                    <tr data-entity-id="{{outOther.id}}" {{if outOther.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <input class="col-sm-12  T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" name="serviceType" value="0" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="managerName" maxlength="20" type="text" value="{{outOther.managerName}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="mobileNumber" maxlength="11" type="text" value="{{outOther.mobileNumber}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 price F-float F-money" name="price" maxlength="9" type="text" value="{{outOther.price}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="{{outOther.memberCount}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="{{outOther.reduceMoney}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" name="needPayMoney" maxlength="9" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outOther.prePayMoney}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outOther.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" title="删除" data-catename="other">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_send_bus" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_send_bus" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-bus"></i>
 						<label class="middle title-size">送团车辆</label>
 						<a href="javascript:void(0)" class="T-add T-bus" data-type="1">
@@ -611,151 +701,184 @@
 							</button>
 						</a>
 					</h5>
-					<div class="form-group">
-						<label>送团日期：{{leaveTime | dateTimeHSFormat}}</label>
-						<label class="mar-l-15">上车地点：{{leavePosition}}</label>
-					</div>
-                    {{if !!sendGroup.oldBusRequire}}<p class="requirementsPlan">原车辆要求：{{sendGroup.oldBusRequire}}</p>{{/if}}
-                    {{if !!sendGroup.nowBusRequire}}<p class="requirementsPlan">现车辆要求：{{sendGroup.nowBusRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>车队</th>  
-										<th class="th-border">车座数</th>
-										<th class="th-border">车辆品牌</th>
-										<th class="th-border">车牌</th>            
-										<th class="th-border">司机</th>
-										<th class="th-border">司机电话</th>
-										<th class="th-border"><span class="necessary">*</span>用车时间</th>
-										<th class="th-border"><span class="necessary">*</span>上车地点</th>
-										<th class="th-border">目的地</th>
-										<th class="th-border">车费</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">计划代收</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>
-								{{if sendGroup.outBusList != null && sendGroup.outBusList.length > 0}}
-								{{each sendGroup.outBusList as outBus}}
-									{{if outBus.id != null && outBus.busCompany != null}}
-									<tr data-entity-id="{{outBus.id}}" {{if outBus.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="1" />
-												<input class="col-sm-12 bind-change {{if !outBus.isConfirmAccount}}T-busCompanyName{{/if}}" name="busCompanyName"  type="text" value="{{outBus.busCompany.companyName}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" />
-												{{if !outBus.isConfirmAccount}}
+                    <div class="form-group">
+                        <label>送团日期：{{leaveTime | dateTimeHSFormat}}</label>
+                        <label class="mar-l-15">上车地点：{{leavePosition}}</label>
+                    </div>
+                    {{if !!sendGroup.oldBusRequire}}
+                    <p class="requirementsPlan">原车辆要求：{{sendGroup.oldBusRequire}}</p>{{/if}} {{if !!sendGroup.nowBusRequire}}
+                    <p class="requirementsPlan">现车辆要求：{{sendGroup.nowBusRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover busListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>车队</th>
+                                        <th class="th-border">车座数</th>
+                                        <th class="th-border">车辆品牌</th>
+                                        <th class="th-border">车牌</th>
+                                        <th class="th-border">司机</th>
+                                        <th class="th-border">司机电话</th>
+                                        <th class="th-border"><span class="necessary">*</span>用车时间</th>
+                                        <th class="th-border"><span class="necessary">*</span>上车地点</th>
+                                        <th class="th-border">目的地</th>
+                                        <th class="th-border">车费</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{if sendGroup.outBusList != null && sendGroup.outBusList.length > 0}} {{each sendGroup.outBusList as outBus}} {{if outBus.id != null && outBus.busCompany != null}}
+                                    <tr data-entity-id="{{outBus.id}}" {{if outBus.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="1" />
+                                                <input class="col-sm-12 bind-change {{if !outBus.isConfirmAccount}}T-busCompanyName{{/if}}" name="busCompanyName" type="text" value="{{outBus.busCompany.companyName}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="busCompanyId" value="{{if outBus.busCompany != null}}{{outBus.busCompany.id}}{{/if}}" /> {{if !outBus.isConfirmAccount}}
                                                 <span class="addResourceBtn T-addBusCompanyResource" title="添加车队">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td><input type="text" class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseSeatCount{{/if}}" name="seatCount" value="{{outBus.seatCount}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusBrand{{/if}}" name="busbrand" type="text" value="{{outBus.brand}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusLicenseNumber{{/if}} bind-change" name="busLicenseNumber" type="text" value="{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="busLicenseNumberId" value="{{if outBus.bus != null}}{{outBus.bus.id}}{{/if}}" />
-												{{if !outBus.isConfirmAccount}}
-												<span class="addResourceBtn T-addBusResource" title="添加车辆">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseSeatCount{{/if}}" name="seatCount" value="{{outBus.seatCount}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusBrand{{/if}}" name="busbrand" type="text" value="{{outBus.brand}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseBusLicenseNumber{{/if}} bind-change" name="busLicenseNumber" type="text" value="{{if outBus.bus != null}}{{outBus.bus.licenseNumber}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="busLicenseNumberId" value="{{if outBus.bus != null}}{{outBus.bus.id}}{{/if}}" /> {{if !outBus.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addBusResource" title="添加车辆">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseDriver{{/if}} bind-change" name="driverName" type="text" value="{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="driverId" value="{{if outBus.driver != null}}{{outBus.driver.id}}{{/if}}" />
-												{{if !outBus.isConfirmAccount}}
-												<span class="addResourceBtn T-addDriverResource" title="添加司机">
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 {{if !outBus.isConfirmAccount}}T-chooseDriver{{/if}} bind-change" name="driverName" type="text" value="{{if outBus.driver != null}}{{outBus.driver.name}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="driverId" value="{{if outBus.driver != null}}{{outBus.driver.id}}{{/if}}" /> {{if !outBus.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addDriverResource" title="添加司机">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime | dateTimeHSFormat}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{outBus.boardLocation}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="{{outBus.fee}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/><input type="hidden" class="count" value="1" /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-
-										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="{{outBus.collection}}" maxlength="9" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outBus.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" title="删除" data-catename="bus">
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="{{if outBus.driver != null}}{{outBus.driver.mobileNumber}}{{/if}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{if outBus.useTime != null}}{{outBus.useTime | dateTimeHSFormat}}{{/if}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="boardLocation" type="text" maxlength="20" value="{{outBus.boardLocation}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="destination" type="text" maxlength="20" value="{{outBus.destination}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text" maxlength="9" value="{{outBus.fee}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" class="count" value="1" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney" maxlength="9" type="text" value="{{outBus.reduceMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney" maxlength="9" type="text" value="{{outBus.needPayMoney}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outBus.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" title="删除" data-catename="bus">
+												删除
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}} {{else}}
+                                    <tr data-entity-id="">
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="1" />
+                                                <input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName" type="text" value="" />
+                                                <input type="hidden" name="busCompanyId" value="" />
+                                                <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                            </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" />
+                                                <input type="hidden" name="busLicenseNumberId" value="" />
+                                                <span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
+	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                            </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" />
+                                                <input type="hidden" name="driverId" value="" />
+                                                <span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
+	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+	                                            </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{leaveTime | dateTimeHSFormat}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="boardLocation" type="text" maxlength="20" value="{{leavePosition}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="destination" type="text" maxlength="20" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text" maxlength="9" value="" />
+                                            <input type="hidden" class="count" value="1" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" />
+                                        </td>
+                                        <td>
+                                            <a class="cursor T-arrange-delete" data-catename="bus" title="删除">
 												删除
 											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-									{{else}}
-									<tr data-entity-id="">
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="1" />
-												<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />
-												<input type="hidden" name="busCompanyId" value="" />
-	                                            <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
-	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-	                                            </span>
-	                                        </div>
-										</td>
-										<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>
-										<td><input class="col-sm-12 T-chooseBusBrand" name="busbrand" type="text" value="" /></td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 T-chooseBusLicenseNumber bind-change" name="busLicenseNumber" type="text" value="" />
-												<input type="hidden" name="busLicenseNumberId" value="" />
-												<span class="addResourceBtn T-addBusResource R-right" data-right="1020002" title="添加车辆">
-	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-	                                            </span>
-	                                        </div>
-										</td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 T-chooseDriver bind-change" name="driverName" type="text" value="" />
-												<input type="hidden" name="driverId" value="" />
-												<span class="addResourceBtn T-addDriverResource R-right" data-right="1020002" title="添加司机">
-	                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-	                                            </span>
-	                                        </div>
-										</td>
-										<td><input class="col-sm-12" name="driverMobileNumber" readonly="readonly" type="text" value="" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="bususeTime" type="text" value="{{leaveTime | dateTimeHSFormat}}" /></td>
-										<td><input class="col-sm-12" name="boardLocation" type="text"  maxlength="20"  value="{{leavePosition}}" /></td>
-										<td><input class="col-sm-12" name="destination" type="text" maxlength="20" value="" /></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="busFee" type="text"  maxlength="9" value="" /><input type="hidden" class="count" value="1" /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>
-										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="" maxlength="9"/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
-										<td>
-											<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
-												删除
-											</a>
-										</td>
-									</tr>{{/if}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_send_hotel" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+                                        </td>
+                                    </tr>{{/if}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_send_hotel" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-hotel"></i>
 						<label class="middle title-size">送团酒店</label>
 						<a href="javascript:void(0)" class="T-add T-hotel" data-type="1">
@@ -764,88 +887,100 @@
 								新增
 							</button>
 						</a>
-					</h5>
-                    {{if !!sendGroup.oldHotelRequire}}<p class="requirementsPlan">原酒店要求：{{sendGroup.oldHotelRequire}}</p>{{/if}}
-                    {{if !!sendGroup.nowHotelRequire}}<p class="requirementsPlan">现酒店要求：{{sendGroup.nowHotelRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover hotelListTable margin-top"  style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border">星级</th>
-										<th class="th-border"><span class="necessary">*</span>酒店</th>
-										<th class="th-border">联系人</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border"><span class="necessary">*</span>房型</th>
-										<th class="th-border">单价</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">计划代收</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>{{each sendGroup.outHotelList as outHotel}}
-									{{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
-									<tr data-entity-id="{{outHotel.id}}" {{if outHotel.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input type="hidden" name="serviceType" value="1" />
-										<input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
-											<select class="tripPlanHotelStar" name="hotelLevel" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}>
-												<option value="1" {{if outHotel.hotel.level == 1}}selected="selected"{{/if}}>三星以下</option>
-												<option value="2" {{if outHotel.hotel.level == 2}}selected="selected"{{/if}}>三星</option>
-												<option value="3" {{if outHotel.hotel.level == 3}}selected="selected"{{/if}}>准四星</option>
-												<option value="4" {{if outHotel.hotel.level == 4}}selected="selected"{{/if}}>四星</option>
-												<option value="5" {{if outHotel.hotel.level == 5}}selected="selected"{{/if}}>准五星</option>
-												<option value="6" {{if outHotel.hotel.level == 6}}selected="selected"{{/if}}>五星</option>
-												<option value="7" {{if outHotel.hotel.level == 7}}selected="selected"{{/if}}>五星以上</option>
-											</select>
-										</td>
-										<td>
-											<div class="col-sm-12">
-												<input class="col-sm-12 {{if !outHotel.isConfirmAccount}}T-chooseHotel{{/if}} bind-change" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}} name="hotelName" value="{{outHotel.hotel.name}}" type="text" />
-												<input type="hidden" name="hotelId" value="{{outHotel.hotel.id}}" />
-												{{if !outHotel.isConfirmAccount}}
-												<span class="addResourceBtn T-addHotelResource" title="添加酒店">
+					</h5> {{if !!sendGroup.oldHotelRequire}}
+                    <p class="requirementsPlan">原酒店要求：{{sendGroup.oldHotelRequire}}</p>{{/if}} {{if !!sendGroup.nowHotelRequire}}
+                    <p class="requirementsPlan">现酒店要求：{{sendGroup.nowHotelRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover hotelListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border">星级</th>
+                                        <th class="th-border"><span class="necessary">*</span>酒店</th>
+                                        <th class="th-border">联系人</th>
+                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border"><span class="necessary">*</span>房型</th>
+                                        <th class="th-border">单价</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{each sendGroup.outHotelList as outHotel}} {{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
+                                    <tr data-entity-id="{{outHotel.id}}" {{if outHotel.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <input type="hidden" name="serviceType" value="1" />
+                                            <input class="col-sm-12 T-datePicker datepicker" name="hotelCheckInTime" value="{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <!-- <input class="col-sm-12 tripPlanHotelStar" name="hotelLevel" value="{{outHotel.hotel.level}}" type="text" /> -->
+                                            <select class="tripPlanHotelStar" name="hotelLevel" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                                <option value="1" {{if outHotel.hotel.level==1 }}selected="selected" {{/if}}>三星以下</option>
+                                                <option value="2" {{if outHotel.hotel.level==2 }}selected="selected" {{/if}}>三星</option>
+                                                <option value="3" {{if outHotel.hotel.level==3 }}selected="selected" {{/if}}>准四星</option>
+                                                <option value="4" {{if outHotel.hotel.level==4 }}selected="selected" {{/if}}>四星</option>
+                                                <option value="5" {{if outHotel.hotel.level==5 }}selected="selected" {{/if}}>准五星</option>
+                                                <option value="6" {{if outHotel.hotel.level==6 }}selected="selected" {{/if}}>五星</option>
+                                                <option value="7" {{if outHotel.hotel.level==7 }}selected="selected" {{/if}}>五星以上</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input class="col-sm-12 {{if !outHotel.isConfirmAccount}}T-chooseHotel{{/if}} bind-change" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}} name="hotelName" value="{{outHotel.hotel.name}}" type="text" />
+                                                <input type="hidden" name="hotelId" value="{{outHotel.hotel.id}}" /> {{if !outHotel.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addHotelResource" title="添加酒店">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td><input class="col-sm-12" name="hotelManagerName" value="{{outHotel.hotel.managerName}}" readonly="readonly" type="text" /></td>
-										<td><input class="col-sm-12" name="hotelMobileNumber" value="{{outHotel.hotel.mobileNumber}}" readonly="readonly" type="text" /></td>
-										<td>
-											<input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}{{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/>
-											<input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
-										</td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="hotelPrice"  maxlength="9" value="{{outHotel.price}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 count F-float F-count" name="hotelMemberCount"  maxlength="6" value="{{outHotel.memberCount}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="{{outHotel.reduceMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
-										<td><input class="col-sm-12 F-float F-money" name="collection" value="{{outHotel.collection}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outHotel.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" data-catename="hotel">
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="hotelManagerName" value="{{outHotel.hotel.managerName}}" readonly="readonly" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="hotelMobileNumber" value="{{outHotel.hotel.mobileNumber}}" readonly="readonly" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 bind-change" name="hotelRoomType" value="{{outHotel.hotelRoom.type}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}{{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" name="hotelRoomTypeId" value="{{outHotel.hotelRoom.id}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="hotelPrice" maxlength="9" value="{{outHotel.price}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="hotelMemberCount" maxlength="6" value="{{outHotel.memberCount}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney" maxlength="9" value="{{outHotel.reduceMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outHotel.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" data-catename="hotel">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_send_restaurant" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_send_restaurant" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-cutlery"></i>
 						<label class="middle title-size ">送团餐饮</label>
 						<a href="javascript:void(0)" class="T-add T-restaurant" data-type="1">
@@ -854,78 +989,90 @@
 								新增
 							</button>
 						</a>
-					</h5>
-                    {{if !!sendGroup.oldRestaurantRequire}}<p class="requirementsPlan">原餐厅要求：{{sendGroup.oldRestaurantRequire}}</p>{{/if}}
-                    {{if !!sendGroup.nowRestaurantRequire}}<p class="requirementsPlan">现餐厅要求：{{sendGroup.nowRestaurantRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover restaurantListTable margin-top"  style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>餐厅</th>
-										<th class="th-border">联系人</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border">类型</th>
-										<th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
-										<th class="th-border">人数</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>{{each sendGroup.outRestaurantList as outRestaurant}}
-									{{if outRestaurant.id != null && outRestaurant.restaurant != null}}
-									<tr data-entity-id="{{outRestaurant.id}}" {{if outRestaurant.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="1" />
-												<input class="col-sm-12 bind-change {{if !outRestaurant.isConfirmAccount}}T-chooseRestaurant{{/if}}" name="restaurant" type="text" value="{{outRestaurant.restaurant.name}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="restaurantId" value="{{outRestaurant.restaurant.id}}" />
-												{{if !outRestaurant.isConfirmAccount}}
-												<span class="addResourceBtn T-addRestaurantResource" title="添加餐厅">
+					</h5> {{if !!sendGroup.oldRestaurantRequire}}
+                    <p class="requirementsPlan">原餐厅要求：{{sendGroup.oldRestaurantRequire}}</p>{{/if}} {{if !!sendGroup.nowRestaurantRequire}}
+                    <p class="requirementsPlan">现餐厅要求：{{sendGroup.nowRestaurantRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover restaurantListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>餐厅</th>
+                                        <th class="th-border">联系人</th>
+                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border">类型</th>
+                                        <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
+                                        <th class="th-border">人数</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{each sendGroup.outRestaurantList as outRestaurant}} {{if outRestaurant.id != null && outRestaurant.restaurant != null}}
+                                    <tr data-entity-id="{{outRestaurant.id}}" {{if outRestaurant.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="1" />
+                                                <input class="col-sm-12 bind-change {{if !outRestaurant.isConfirmAccount}}T-chooseRestaurant{{/if}}" name="restaurant" type="text" value="{{outRestaurant.restaurant.name}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="restaurantId" value="{{outRestaurant.restaurant.id}}" /> {{if !outRestaurant.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addRestaurantResource" title="添加餐厅">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td><input class="col-sm-12" name="manager" readonly="readonly" type="text" value="{{outRestaurant.restaurant.managerName}}" /></td>
-										<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="{{outRestaurant.restaurant.mobileNumber}}" /></td>
-										<td>
-											<select name="standardType" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}>
-												<option value="早餐" {{if outRestaurant.standardType == "早餐"}}selected="selected"{{/if}}>早餐</option>
-												<option value="午餐" {{if outRestaurant.standardType == "午餐"}}selected="selected"{{/if}}>午餐</option>
-												<option value="晚餐" {{if outRestaurant.standardType == "晚餐"}}selected="selected"{{/if}}>晚餐</option>
-											</select>
-										</td>
-										<td>
-											<input class="col-sm-12 price {{if !outRestaurant.isConfirmAccount}}T-chooseStandard{{/if}} F-float F-money" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/>
-											<input type="hidden" name="price" value="{{outRestaurant.price}}" />
-										</td>
-										<td><input class="col-sm-12 count F-float F-count" name="memberCount"  maxlength="6" type="text" value="{{outRestaurant.memberCount}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney"  maxlength="9" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text"  maxlength="9" value="{{outRestaurant.prePayMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" {{if outRestaurant.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outRestaurant.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="manager" readonly="readonly" type="text" value="{{outRestaurant.restaurant.managerName}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="{{outRestaurant.restaurant.mobileNumber}}" />
+                                        </td>
+                                        <td>
+                                            <select name="standardType" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                                <option value="早餐" {{if outRestaurant.standardType=="早餐" }}selected="selected" {{/if}}>早餐</option>
+                                                <option value="午餐" {{if outRestaurant.standardType=="午餐" }}selected="selected" {{/if}}>午餐</option>
+                                                <option value="晚餐" {{if outRestaurant.standardType=="晚餐" }}selected="selected" {{/if}}>晚餐</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 price {{if !outRestaurant.isConfirmAccount}}T-chooseStandard{{/if}} F-float F-money" name="restaurantStandardId" type="text" value="{{outRestaurant.price}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" name="price" value="{{outRestaurant.price}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="{{outRestaurant.memberCount}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="{{outRestaurant.reduceMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" name="needPayMoney" maxlength="9" readonly="readonly" type="text" value="{{outRestaurant.needPayMoney}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" maxlength="9" value="{{outRestaurant.prePayMoney}}" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outRestaurant.remark}}" maxlength="1000" {{if outRestaurant.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outRestaurant.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" title="删除" data-catename="restaurant">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_send_ticket" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_send_ticket" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa-car"></i>
 						<label class="middle title-size">送团票务</label>
 						<a href="javascript:void(0)" class="T-add T-ticket" data-type="1">
@@ -935,121 +1082,161 @@
 							</button>
 						</a>
 					</h5>
-					<div class="form-group">
-						<label>票务时间：{{leaveShiftTime | dateTimeHSFormat}}</label>
-						<label class="mar-l-15">票务班次：{{leaveShift}}</label>
-					</div>
-                    {{if !!sendGroup.oldTicketRequire}}<p class="requirementsPlan">原票务要求：{{sendGroup.oldTicketRequire}}</p>{{/if}}
-                    {{if !!sendGroup.nowTicketRequire}}<p class="requirementsPlan">现票务要求：{{sendGroup.nowTicketRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover ticketListTable margin-top"  style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>票务公司</th>
-										<th class="th-border"><span class="necessary">*</span>类型</th>
-										<th class="th-border">出发城市</th>
-										<th class="th-border">到达城市</th>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>班次</th>
-										<th class="th-border"><span class="necessary">*</span>座位级别</th>
-										<th class="th-border">单价</th>
-										<th class="th-border"><span class="necessary">*</span>数量</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>
-								{{if sendGroup.outTicketList != null && sendGroup.outTicketList.length >0}}
-								{{each sendGroup.outTicketList as outTicket}}
-									{{if outTicket.id != null && outTicket.ticket != null}}
-									<tr data-entity-id="{{outTicket.id}}" {{if outTicket.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="1" />
-												<input class="col-sm-12 {{if !outTicket.isConfirmAccount}}T-chooseTicket{{/if}} bind-change" name="ticketName"  maxlength="30" value="{{outTicket.ticket.name}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/>
-												<input type="hidden" name="tickeId" value="{{outTicket.ticket.id}}" />
-												{{if !outTicket.isConfirmAccount}}
-												<span class="addResourceBtn T-addTicketResource" title="添加票务">
+                    <div class="form-group">
+                        <label>票务时间：{{leaveShiftTime | dateTimeHSFormat}}</label>
+                        <label class="mar-l-15">票务班次：{{leaveShift}}</label>
+                    </div>
+                    {{if !!sendGroup.oldTicketRequire}}
+                    <p class="requirementsPlan">原票务要求：{{sendGroup.oldTicketRequire}}</p>{{/if}} {{if !!sendGroup.nowTicketRequire}}
+                    <p class="requirementsPlan">现票务要求：{{sendGroup.nowTicketRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover ticketListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>票务公司</th>
+                                        <th class="th-border"><span class="necessary">*</span>类型</th>
+                                        <th class="th-border">出发城市</th>
+                                        <th class="th-border">到达城市</th>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>班次</th>
+                                        <th class="th-border"><span class="necessary">*</span>座位级别</th>
+                                        <th class="th-border">单价</th>
+                                        <th class="th-border"><span class="necessary">*</span>数量</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{if sendGroup.outTicketList != null && sendGroup.outTicketList.length >0}} {{each sendGroup.outTicketList as outTicket}} {{if outTicket.id != null && outTicket.ticket != null}}
+                                    <tr data-entity-id="{{outTicket.id}}" {{if outTicket.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="1" />
+                                                <input class="col-sm-12 {{if !outTicket.isConfirmAccount}}T-chooseTicket{{/if}} bind-change" name="ticketName" maxlength="30" value="{{outTicket.ticket.name}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                                <input type="hidden" name="tickeId" value="{{outTicket.ticket.id}}" /> {{if !outTicket.isConfirmAccount}}
+                                                <span class="addResourceBtn T-addTicketResource" title="添加票务">
                                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </span>
-                                                {{/if}}
+                                                </span> {{/if}}
                                             </div>
-										</td>
-										<td>
-											<select class="" name="ticketType" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}>
-												<option value="1" {{if outTicket.type == 1}}selected="selected"{{/if}}>机票</option>
-												<option value="2" {{if outTicket.type == 2}}selected="selected"{{/if}}>汽车票</option>
-												<option value="3" {{if outTicket.type == 3}}selected="selected"{{/if}}>火车票</option>
-												<option value="4" {{if outTicket.type == 4}}selected="selected"{{/if}}>轮船票</option>
-											</select>
-										</td>
-										<td><input class="col-sm-12" name="ticketStartCity"  maxlength="20" value="{{outTicket.startingCity}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="ticketArriveCity"  maxlength="20" value="{{outTicket.arriveCity}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime | dateTimeHSFormat}}{{/if}}" type="text"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
-										<td><input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="{{outTicket.price}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="{{outTicket.memberCount}}" type="text"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="{{outTicket.reduceMoney}}" type="text"{{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outTicket.prePayMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" {{if outTicket.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outTicket.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" data-catename="ticket">
+                                        </td>
+                                        <td>
+                                            <select class="" name="ticketType" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                                <option value="1" {{if outTicket.type==1 }}selected="selected" {{/if}}>机票</option>
+                                                <option value="2" {{if outTicket.type==2 }}selected="selected" {{/if}}>汽车票</option>
+                                                <option value="3" {{if outTicket.type==3 }}selected="selected" {{/if}}>火车票</option>
+                                                <option value="4" {{if outTicket.type==4 }}selected="selected" {{/if}}>轮船票</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketStartCity" maxlength="20" value="{{outTicket.startingCity}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}{{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketArriveCity" maxlength="20" value="{{outTicket.arriveCity}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{if outTicket.startTime != null}}{{outTicket.startTime | dateTimeHSFormat}}{{/if}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketShift" value="{{outTicket.shift}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketSeatLevel" value="{{outTicket.seatLevel}}" type="text" maxlength="20" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="ticketPrice" maxlength="9" value="{{outTicket.price}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="ticketMemberCount" maxlength="6" value="{{outTicket.memberCount}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney" maxlength="9" value="{{outTicket.reduceMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="{{outTicket.needPayMoney}}" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outTicket.prePayMoney}}" type="text" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outTicket.remark}}" maxlength="1000" {{if outTicket.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outTicket.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" data-catename="ticket">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}{{else}}
-									<tr data-entity-id="">
-										<td>
-											<div class="col-sm-12">
-												<input type="hidden" name="serviceType" value="1" />
-												<input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
-												<input type="hidden" name="tickeId" value="" />
-												<span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}{{else}}
+                                    <tr data-entity-id="">
+                                        <td>
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="serviceType" value="1" />
+                                                <input class="col-sm-12 T-chooseTicket bind-change" name="ticketName" value="" type="text" />
+                                                <input type="hidden" name="tickeId" value="" />
+                                                <span class="addResourceBtn T-addTicketResource R-right" data-right="1070002" title="添加票务">
                                                     <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                                 </span>
                                             </div>
-										</td>
-										<td>
-											<select class="" name="ticketType">
-												<option value="1">机票</option>
-												<option value="2">汽车票</option>
-												<option value="3">火车票</option>
-												<option value="4">轮船票</option>
-											</select>
-										</td>
-										<td><input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{leaveShiftTime | dateTimeHSFormat}}" type="text" /></td>
-										<td><input class="col-sm-12" name="ticketShift" value="{{leaveShift}}" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" /></td>
-										<td><input class="col-sm-12 T-number price F-float F-money" name="ticketPrice"  maxlength="9" value="" type="text" /></td>
-										<td><input class="col-sm-12 count F-float F-count" name="ticketMemberCount"  maxlength="6" value="" type="text" /></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney"  maxlength="9" value="" type="text" /></td>
-										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="" type="text" /></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
-										<td>
-											<a class="cursor T-arrange-delete" data-catename="ticket">
+                                        </td>
+                                        <td>
+                                            <select class="" name="ticketType">
+                                                <option value="1">机票</option>
+                                                <option value="2">汽车票</option>
+                                                <option value="3">火车票</option>
+                                                <option value="4">轮船票</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketStartCity" value="" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketArriveCity" value="" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-dateTimePicker" name="ticketStartTime" value="{{leaveShiftTime | dateTimeHSFormat}}" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketShift" value="{{leaveShift}}" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="ticketSeatLevel" value="" type="text" maxlength="20" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number price F-float F-money" name="ticketPrice" maxlength="9" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="ticketMemberCount" maxlength="6" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="ticketReduceMoney" maxlength="9" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="ticketNeedPayMoney" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="" type="text" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" />
+                                        </td>
+                                        <td>
+                                            <a class="cursor T-arrange-delete" data-catename="ticket">
 												删除
 											</a>
-										</td>
-									</tr>{{/if}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="transit_send_other" class="T-tab-pane tab-pane fade">
-				<div class=" ui-sortable-handle">
-					<h5 class="title-size">
+                                        </td>
+                                    </tr>{{/if}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transit_send_other" class="T-tab-pane tab-pane fade">
+                <div class=" ui-sortable-handle">
+                    <h5 class="title-size">
 						<i class="ace-icon fa fa fa-smile-o"></i>
 						<label class="middle title-size">送团其它</label>
 						<a href="javascript:void(0)" class="T-add T-other" data-type="1">
@@ -1058,142 +1245,148 @@
 								新增
 							</button>
 						</a>
-					</h5>
-                    {{if !!sendGroup.oldOtherRequire}}<p class="requirementsPlan">原其他要求：{{sendGroup.oldOtherRequire}}</p>{{/if}}
-                    {{if !!sendGroup.nowOtherRequire}}<p class="requirementsPlan">现其他要求：{{sendGroup.nowOtherRequire}}</p>{{/if}}
-					<div class="widget-body">
-						<div class="widget-main no-padding">
-							<table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
-								<thead>
-									<tr>
-										<th class="th-border"><span class="necessary">*</span>日期</th>
-										<th class="th-border"><span class="necessary">*</span>项目</th>
-										<th class="th-border">联系人</th>
-										<th class="th-border">联系电话</th>
-										<th class="th-border">单价</th>
-										<th class="th-border">数量</th>
-										<th class="th-border">优惠</th>
-										<th class="th-border">应付款</th>
-										<th class="th-border">预付款</th>
-										<th class="th-border">备注</th>
-										<th class="th-border" style="width: 100px">操作</th>
-									</tr>
-								</thead>
-								<tbody>{{each sendGroup.outOtherList as outOther}}
-								{{if outOther != null && outOther.name != null}}
-									<tr data-entity-id="{{outOther.id}}" {{if outOther.isConfirmAccount}}title="财务已对账，不可编辑！"{{/if}}>
-										<td><input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}} /></td>
-										<td>
-											<input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/>
-											<input type="hidden" name="serviceType" value="1" />
-										</td>
-										<td><input class="col-sm-12" name="managerName" type="text" value="{{outOther.managerName}}" maxlength="20" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="mobileNumber" type="text" value="{{outOther.mobileNumber}}" maxlength="11" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 price F-float F-money" name="price" type="text" value="{{outOther.price}}" maxlength="9" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 count F-float F-count" name="memberCount" type="text" value="{{outOther.memberCount}}" maxlength="6" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" type="text" value="{{outOther.reduceMoney}}" maxlength="9" /{{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}></td>
-										<td><input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" /></td>
-										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" value="{{outOther.prePayMoney}}" maxlength="9" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td><input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" maxlength="1000" {{if outOther.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
-										<td>{{if !outOther.isConfirmAccount}}
-											<a class="cursor T-arrange-delete" title="删除" data-catename="other">
+					</h5> {{if !!sendGroup.oldOtherRequire}}
+                    <p class="requirementsPlan">原其他要求：{{sendGroup.oldOtherRequire}}</p>{{/if}} {{if !!sendGroup.nowOtherRequire}}
+                    <p class="requirementsPlan">现其他要求：{{sendGroup.nowOtherRequire}}</p>{{/if}}
+                    <div class="widget-body">
+                        <div class="widget-main no-padding">
+                            <table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th class="th-border"><span class="necessary">*</span>日期</th>
+                                        <th class="th-border"><span class="necessary">*</span>项目</th>
+                                        <th class="th-border">联系人</th>
+                                        <th class="th-border">联系电话</th>
+                                        <th class="th-border">单价</th>
+                                        <th class="th-border">数量</th>
+                                        <th class="th-border">优惠</th>
+                                        <th class="th-border">应付款</th>
+                                        <th class="th-border">预付款</th>
+                                        <th class="th-border">备注</th>
+                                        <th class="th-border" style="width: 100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{{each sendGroup.outOtherList as outOther}} {{if outOther != null && outOther.name != null}}
+                                    <tr data-entity-id="{{outOther.id}}" {{if outOther.isConfirmAccount}}title="财务已对账，不可编辑！" {{/if}}>
+                                        <td>
+                                            <input class="col-sm-12 T-datePicker datepicker" name="startTime" type="text" value="{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}} />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="name" type="text" value="{{outOther.name}}" maxlength="30" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="hidden" name="serviceType" value="1" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="managerName" type="text" value="{{outOther.managerName}}" maxlength="20" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="mobileNumber" type="text" value="{{outOther.mobileNumber}}" maxlength="11" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 price F-float F-money" name="price" type="text" value="{{outOther.price}}" maxlength="9" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 count F-float F-count" name="memberCount" type="text" value="{{outOther.memberCount}}" maxlength="6" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" type="text" value="{{outOther.reduceMoney}}" maxlength="9" /{{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="{{outOther.needPayMoney}}" />
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" type="text" value="{{outOther.prePayMoney}}" maxlength="9" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="remark" type="text" value="{{outOther.remark}}" maxlength="1000" {{if outOther.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>{{if !outOther.isConfirmAccount}}
+                                            <a class="cursor T-arrange-delete" title="删除" data-catename="other">
 												删除
-											</a>
-											{{/if}}
-										</td>
-									</tr>{{/if}}{{/each}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	 <div class="col-md-12 text-center mar-t-20">
+											</a> {{/if}}
+                                        </td>
+                                    </tr>{{/if}}{{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-center mar-t-20">
         <button class="btn btn-sm btn-primary T-cancel">
             <i class="ace-icon fa fa-times-circle"></i> 取消
         </button>
-		
         <button class="btn btn-sm btn-primary T-arrange-update" data-entity-id="{{touristGroup.id}}" data-isouter="{{isOuter?1:0}}">
             <i class="ace-icon fa fa-check-circle"></i> 提交信息
         </button>
-		{{if arrangeStatus.receiveBusStatus != 0}}
+        {{if arrangeStatus.receiveBusStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_receive_bus">
             <label>
-                <input name="receiveBusStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveBusStatus == 3}}checked{{/if}}>
+                <input name="receiveBusStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveBusStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 接团车辆安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.receiveHotelStatus != 0}}
+        {{/if}} {{if arrangeStatus.receiveHotelStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_receive_hotel">
             <label>
-                <input name="receiveHotelStatus" type="checkbox" class="ace T-finishedArrange"  {{if arrangeStatus.receiveHotelStatus == 3}}checked{{/if}} >
+                <input name="receiveHotelStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveHotelStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 接团酒店安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.receiveRestaurantStatus != 0}}
+        {{/if}} {{if arrangeStatus.receiveRestaurantStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_receive_restaurant">
             <label>
-                <input name="receiveRestaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveRestaurantStatus == 3}}checked{{/if}}>
+                <input name="receiveRestaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveRestaurantStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 接团餐饮安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.receiveTicketStatus != 0}}
+        {{/if}} {{if arrangeStatus.receiveTicketStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_receive_ticket">
             <label>
-                <input name="receiveTicketStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveTicketStatus == 3}}checked{{/if}}>
+                <input name="receiveTicketStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveTicketStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 接团票务安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.receiveOtherStatus != 0}}
+        {{/if}} {{if arrangeStatus.receiveOtherStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_receive_other">
             <label>
-                <input name="receiveOtherStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveOtherStatus == 3}}checked{{/if}}>
+                <input name="receiveOtherStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.receiveOtherStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 接团其它安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.sendBusStatus != 0}}
+        {{/if}} {{if arrangeStatus.sendBusStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_send_bus">
             <label>
-                <input name="sendBusStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendBusStatus == 3}}checked{{/if}}>
+                <input name="sendBusStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendBusStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 送团车辆安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.sendHotelStatus != 0}}
+        {{/if}} {{if arrangeStatus.sendHotelStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_send_hotel">
             <label>
-                <input name="sendHotelStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendHotelStatus == 3}}checked{{/if}}>
+                <input name="sendHotelStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendHotelStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 送团酒店安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.sendRestaurantStatus != 0}}
+        {{/if}} {{if arrangeStatus.sendRestaurantStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_send_restaurant">
             <label>
-                <input name="sendRestaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendRestaurantStatus == 3}}checked{{/if}}>
+                <input name="sendRestaurantStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendRestaurantStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 送团餐饮安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.sendTicketStatus != 0}}
+        {{/if}} {{if arrangeStatus.sendTicketStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_send_ticket">
             <label>
-                <input name="sendTicketStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendTicketStatus == 3}}checked{{/if}}>
+                <input name="sendTicketStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendTicketStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 送团票务安排完成</span>
             </label>
         </div>
-		{{/if}}
-		{{if arrangeStatus.sendOtherStatus != 0}}
+        {{/if}} {{if arrangeStatus.sendOtherStatus != 0}}
         <div class="checkbox checkbox-inline mar-0 hidden" data-target="#transit_send_other">
             <label>
-                <input name="sendOtherStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendOtherStatus == 3}}checked{{/if}}>
+                <input name="sendOtherStatus" type="checkbox" class="ace T-finishedArrange" {{if arrangeStatus.sendOtherStatus==3 }}checked{{/if}}>
                 <span class="lbl font-w"> 送团其它安排完成</span>
             </label>
         </div>
