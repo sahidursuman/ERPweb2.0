@@ -2402,7 +2402,7 @@ define(function(require, exports) {
             if(!!$that.data('id')){
                 joinTripData.id = $that.data('id');
             }
-            if(status != -1 && status != -2){
+            if(status == 1){
                 data.joinTrip.push(joinTripData);
             }
         });
@@ -2507,7 +2507,7 @@ define(function(require, exports) {
             });
         }
 
-        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId){
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
             var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
             showMessageDialog($("#confirm-dialog-message"), msg);
             return false;
