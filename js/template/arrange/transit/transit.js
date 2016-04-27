@@ -120,61 +120,50 @@ define(function(require, exports) {
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
 
+    	var args = {
+			fromPartnerAgencyName: fromPartnerAgencyName,
+			fromPartnerAgencyId: fromPartnerAgencyId,
+			lineProductName: lineProductName,
+			lineProductId: lineProductId,
+			startTime: startTime,
+			arrangeUserName: arrangeUserName,
+			arrangeUserId: arrangeUserId,
+			arrangeStartTime: arrangeStartTime,
+			arrangeEndTime: arrangeEndTime,
+			status: status,
+			tgOrderNumber: tgOrderNumber,
+			orderNumber: orderNumber,
+			shuttleType: shuttleType,
+			shuttleTime: shuttleTime,
+			arrangeItem: arrangeItem,
+			arrangeItemStatus: arrangeItemStatus,
+			contactInfo: contactInfo,
+			shift: shift
+		}
         if (page == -1) {
-        	var exportData = {
-				fromPartnerAgencyName: fromPartnerAgencyName,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				lineProductName: lineProductName,
-				lineProductId: lineProductId,
-				startTime: startTime,
-				arrangeUserName: arrangeUserName,
-				arrangeUserId: arrangeUserId,
-				arrangeStartTime: arrangeStartTime,
-				arrangeEndTime: arrangeEndTime,
-				status: status,
-				tgOrderNumber: tgOrderNumber,
-				orderNumber: orderNumber,
-				shuttleType: shuttleType,
-				shuttleTime: shuttleTime,
-				arrangeItem: arrangeItem,
-				arrangeItemStatus: arrangeItemStatus,
-				contactInfo: contactInfo,
-				shift: shift
-			}
-        	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(exportData));
+        	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(args));
         	return;
         }
 
         // 修正页码
-		pageNo = (page || 0)
-		
+		args.pageNo = (page || 0);
+		args.sortType = 'touristGroup.startTime';
+		args.order = transit.$searchArea.find("#order_by").val();
+		if (!args.fromPartnerAgencyName) {
+			args.fromPartnerAgencyId = '';
+		}
+		if (!args.lineProductName) {
+			args.lineProductId = '';
+		}
+		if (!args.arrangeUserName) {
+			args.arrangeUserId = '';
+		}
+
 
         $.ajax({
 			url: KingServices.build_url('touristGroup','listTransitArrange'),
 			type:"POST",
-			data: {
-				pageNo: page,
-				sortType: 'touristGroup.startTime',
-				order: transit.$searchArea.find("#order_by").val(),
-				fromPartnerAgencyName: fromPartnerAgencyName,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				lineProductName: lineProductName,
-				lineProductId: lineProductId,
-				startTime: startTime,
-				arrangeUserName: arrangeUserName,
-				arrangeUserId: arrangeUserId,
-				arrangeStartTime: arrangeStartTime,
-				arrangeEndTime: arrangeEndTime,
-				status: status,
-				tgOrderNumber: tgOrderNumber,
-				orderNumber: orderNumber,
-				shuttleType: shuttleType,
-				shuttleTime: shuttleTime,
-				arrangeItem: arrangeItem,
-				arrangeItemStatus: arrangeItemStatus,
-				contactInfo:contactInfo,
-				shift: shift
-			},
+			data: args,
 			success:function(data){
 				//根据返回值判断下一步操作，或者已出现错误
 				if(showDialog(data)){
@@ -666,6 +655,7 @@ define(function(require, exports) {
 		'<td><input class="col-sm-12 T-number discount F-float F-count" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>'+
 		'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>'+
+		'<td><input class="col-sm-12 F-float F-money" name="collection" type="text" value="" maxlength="9" /></td>'+
 		'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 		'<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>'+
 		'</tr>';
@@ -705,6 +695,7 @@ define(function(require, exports) {
 			'<td><input class="col-sm-12 T-number discount F-float F-money" name="hotelReduceMoney"  maxlength="9" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="" type="text" /></td>'+
 			'<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>'+
+			'<td><input class="col-sm-12 F-float F-money" name="collection" type="text" value="" maxlength="9" /></td>'+
 			'<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>'+
 			'<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>'+
 			'</tr>';
@@ -713,7 +704,6 @@ define(function(require, exports) {
 		    $tbody.append(html);
 		//Input控件位数的输入
 		Tools.inputCtrolFloat($tbody.find('.F-float'));
-
 		//表单验证
 		rule.update(validator);
 		//时间控件
@@ -1671,6 +1661,7 @@ define(function(require, exports) {
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"busReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"busNeedPayMoney"),
 				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
+				collection :  transit.getArrangeTrValue(obj.eq(i),"collection"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(busJson.busCompanyId != "" && busJson.busCompanyId.length>0){
@@ -1693,6 +1684,7 @@ define(function(require, exports) {
 				reduceMoney : transit.getArrangeTrValue(obj.eq(i),"hotelReduceMoney"),
 				needPayMoney : transit.getArrangeTrValue(obj.eq(i),"hotelNeedPayMoney"),
 				prePayMoney : transit.getArrangeTrValue(obj.eq(i),"prePayMoney"),
+				collection :  transit.getArrangeTrValue(obj.eq(i),"collection"),
 				remark : transit.getArrangeTrValue(obj.eq(i),"remark")
 			}
 			if(hotelJson.hotelId != "" && hotelJson.hotelId.length>0){

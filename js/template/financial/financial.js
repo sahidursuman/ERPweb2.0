@@ -145,11 +145,16 @@ FinancialService.updateUnpayMoney = function($tab,rule){
             validator = rule.check($tr);
         if(!validator.form()){ return false;}
         var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
-            payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1;
+            payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1,
+            planPayMoney = ($tr.find('input[name=collection]').val() || 0)*1;
 
         // 设置未付金额
         $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney));
 
+        //若存在代收
+        if (!!$tr.find('input[name=planPay]')) {
+             $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney - planPayMoney));
+        }
         //计算结算金额修改前后差值
         var spread = settlementMoney - $(this).data("oldVal")*1;
         //统计数据更新
@@ -160,6 +165,35 @@ FinancialService.updateUnpayMoney = function($tab,rule){
 
         $(this).data("oldVal",$(this).val());
     });
+    
+    //代收金额计算 
+    $tab.find('.T-checkList').on('focusin', 'input[name=collection]', function(event) {
+       event.preventDefault();
+       if (!$(this).data('oldVal')) {
+          $(this).data("oldVal",$(this).val());
+       }
+    }).on('change', 'input[name="collection"]', function(event) {
+       var $that = $(this),
+            $tr = $that.closest('tr'),
+            validator = rule.check($tr);
+        if(!validator.form()){ return false;}
+        var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1, //结算金额
+            payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1,//已付
+            planPayMoney = ($that.val() || 0)*1; //代收
+
+        //未付金额的计算
+        $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney - planPayMoney));
+
+        //代收金额修改前后差值
+        var balance = planPayMoney - $(this).data("oldVal")*1;
+
+        //统计数据更新--未付金额
+        var $unpay = $tab.find(".T-unpayMoney");
+        $unpay.text(Tools.toFixed($unpay.text()*1 - balance));
+        //重置代收oldVal值
+        $that.data("oldVal",$(this).val());
+    });
+
 };
 
 //对账-保存json组装
@@ -204,6 +238,10 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
                         saveJson[i].settlementMoney = $this.find(".T-settlementMoney").text();
                     } else {
                         saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
+
+                    }
+                    if (!!$this.find("input[name=collection]")) { //代收
+                       saveJson[i].collection = $this.find("input[name=collection]").val();
                     }
                     saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
                     saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
@@ -221,6 +259,9 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
                     confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
                     isChecked : isChecked
                 };
+                if (!!$this.find("input[name=collection]")) { //代收
+                    checkRecord.collection = $this.find("input[name=collection]").val();
+                }
                 if(inner){
                     checkRecord.backMoney = $this.find("input[name=settlementMoney]").val();
                     checkRecord.settlementMoney = $this.find(".T-settlementMoney").text();
