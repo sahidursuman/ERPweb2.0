@@ -96,6 +96,13 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     touristGroup.getList = function(args, $tab){
+        var page = 0;
+        if(typeof args === "number"){
+            page = args;
+        }
+        if(typeof args !== "object" || !args){
+            args = getArgs($tab.find(".T-search-area"));
+        }
         touristGroup.getTouristStatisticData(args, $tab);
     	$.ajax({
             url: KingServices.build_url('touristGroup','listTouristGroup'),
@@ -180,6 +187,36 @@ define(function(require, exports) {
             	}
             }
         });
+        return this;
+        function getArgs($searchArea){
+            var type = $searchArea.find('.T-choosePorB').val(),
+                args = {
+                    pageNo : 0,
+                    orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                    type : type,
+                    lineTripName : $searchArea.find('[name="lineTripName"]').val(),
+                    guestDetails : $searchArea.find('[name="guestDetails"]').val(),
+                    customerType : $searchArea.find('[name="customerType"]').val(),
+                    dateType : $searchArea.find('[name="dateType"]').val(),
+                    tripTime : $searchArea.find('[name="tripTime"]').val(),
+                    realName: $searchArea.find('[name=realName]').val(),
+                    statusSearch : $searchArea.find('.T-select-status').val()
+                };
+            if(type == "1"){
+                args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
+                args.fromPartnerAgencyId = $searchArea.find('[name="fromPartnerAgencyId"]').val();
+            }else if(type == "2"){
+                args.fromBussinessGroupName = $searchArea.find('[name="fromBussinessGroupName"]').val();
+                args.fromBussinessGroupId = $searchArea.find('[name="fromBussinessGroupId"]').val();
+            }
+            if(args.fromPartnerAgencyName == "全部"){
+                args.fromPartnerAgencyName = "";
+            }
+            if(args.fromBussinessGroupName == "全部"){
+                args.fromBussinessGroupName = "";
+            }
+            return args;
+        }
     };
 
     /**
@@ -202,7 +239,7 @@ define(function(require, exports) {
         });
         //搜索
         $searchArea.find('.T-touristGroupList-search').on('click', function(){
-            touristGroup.getList(getArgs($searchArea), $tab);
+            touristGroup.getList(0, $tab);
         });
         //高级搜索
         $searchArea.find('.T-more-btn').on('click', function(){
@@ -255,35 +292,6 @@ define(function(require, exports) {
         });
 
     	return this;
-        function getArgs($searchArea){
-            var type = $searchArea.find('.T-choosePorB').val(),
-                args = {
-                    pageNo : 0,
-                    orderNumber : $searchArea.find('[name="orderNumber"]').val(),
-                    type : type,
-                    lineTripName : $searchArea.find('[name="lineTripName"]').val(),
-                    guestDetails : $searchArea.find('[name="guestDetails"]').val(),
-                    customerType : $searchArea.find('[name="customerType"]').val(),
-                    dateType : $searchArea.find('[name="dateType"]').val(),
-                    tripTime : $searchArea.find('[name="tripTime"]').val(),
-                    realName: $searchArea.find('[name=realName]').val(),
-                    statusSearch : $searchArea.find('.T-select-status').val()
-                };
-            if(type == "1"){
-                args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
-                args.fromPartnerAgencyId = $searchArea.find('[name="fromPartnerAgencyId"]').val();
-            }else if(type == "2"){
-                args.fromBussinessGroupName = $searchArea.find('[name="fromBussinessGroupName"]').val();
-                args.fromBussinessGroupId = $searchArea.find('[name="fromBussinessGroupId"]').val();
-            }
-            if(args.fromPartnerAgencyName == "全部"){
-                args.fromPartnerAgencyName = "";
-            }
-            if(args.fromBussinessGroupName == "全部"){
-                args.fromBussinessGroupName = "";
-            }
-            return args;
-        }
     };
 
     /**
@@ -387,9 +395,9 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
                             str = str && str +" ";
-                            str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -514,9 +522,9 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
                             str = str && str +" ";
-                            str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -611,6 +619,9 @@ define(function(require, exports) {
                 $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 转团 ');
                 $tab.find('.T-part-group-text').text('转团');
             }
+        });
+        $tab.find('.T-team-info').on('change', '[name="lineProductName"]', function(){
+            $(this).data('id', '');
         });
         $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
             var $that = $(this),
@@ -912,6 +923,7 @@ define(function(require, exports) {
                             '</div></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
+                        '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
                         '<td><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
@@ -2530,6 +2542,7 @@ define(function(require, exports) {
                 lineProductId : $that.find('[name="lineProductName"]').data('id'),
                 tripStartTime : $that.find('[name="tripStartTime"]').val(),
                 tripEndTime : $that.find('[name="tripEndTime"]').val(),
+                subNeedPayMoney : $that.find('[name="subNeedPayMoney"]').val() || "",
                 lineInfo : typeof lineInfo !== "object" ? JSON.parse(lineInfo || "{}") : lineInfo
             };
             //$innerTurn = $that.find('.T-inner-turn'),

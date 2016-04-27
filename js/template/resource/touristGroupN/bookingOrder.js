@@ -285,13 +285,13 @@ define(function(require, exports, module) {
         $tab.find(".T-btn-save").on('click', function(){
             bookingOrder.saveData($tab);
         }); 
-        $tab.find('.T-restore').on('click', function(){
+        /*$tab.find('.T-restore').on('click', function(){
            showConfirmDialog($("#confirm-dialog-message"), "确定还原到上次操作?", function() {
-                var data = window.localStorage.getItem("hct_booking_order_add");
+                var data = window.localStorage.getItem("hct_booking_order_add"), arr = [];
                 data = JSON.parse(data || null);
                 if(!!data){
                     for(var i in data){
-                        console.log(data[i])
+                        arr.push(i);
                     }
                 }else{
                     showMessageDialog($("#confirm-dialog-message"), "暂无缓存数据！");
@@ -303,7 +303,7 @@ define(function(require, exports, module) {
             showConfirmDialog($("#confirm-dialog-message"), "确定重新加载当前项目代订信息?", function() {
                 bookingOrder.getUpdateBooking(bookingId, 1);
             });
-        });
+        });*/
         $tab.find('[name="orderNumber"]').on('change', function(){
         });
 

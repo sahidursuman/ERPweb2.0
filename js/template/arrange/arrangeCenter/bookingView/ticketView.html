@@ -38,11 +38,11 @@
                         <td>{{rs.shift}}</td>
                         <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}</td>
                         <td>{{rs.seatLevel}}</td>
-                        <td>{{rs.costPrice}}</td>
-                        <td>{{rs.roomCount}}</td>
-                        <td>{{rs.reduceMoney}}</td>
-                        <td>{{rs.sumCostMoney}}</td>
-                        <td>{{rs.prePayMoney}}</td>
+                        <td class="F-float F-money">{{rs.costPrice}}</td>
+                        <td class="F-float F-count">{{rs.roomCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.sumCostMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
                         <td>{{rs.remark}}</td>
                     </tr>
                 {{/each}}

@@ -158,6 +158,7 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     FrameFun.initBookingEvent = function($tab) {
+        BookingFun.getOPUserList($tab.find('.T-search-area').find('[name="outOPUserName"]'));
         $tab.find('.T-search').on('click', function(event) {
                 event.preventDefault();
                 BookingFun.getList($(this).closest('form'));
