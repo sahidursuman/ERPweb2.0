@@ -1862,7 +1862,7 @@ define(function(require, exports){
 			'<td rowspan="2" name="currGuideRemark">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input type="text" name="currGuideRemark"/>'+
+					'<input type="text" name="currGuideRemark" class="w-100"/>'+
 				'</div>'+
 			'</td>'+
 			'<td rowspan="2">未对账&nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
@@ -1941,7 +1941,7 @@ define(function(require, exports){
 		var guideShopMoneyHtml = Count.shopPersonAndBusGuide($obj);
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><div class="div-h-30"></div>'+
-				'<input type="text" name="shopPolicy" style="width:90px;"/>'+
+				'<input type="text" name="shopPolicy" class="w-70"/>'+
 				'<input type="hidden" name="shopPolicyId" />'+
 				'<button class="btn btn-danger btn-sm btn-white pull-right T-shopArrDelItem">'+
 				'<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
@@ -6623,7 +6623,7 @@ define(function(require, exports){
 		'<td name="billRemark">'+
 			'<div class="div-h-30"></div>'+
 			'<div class="div-h-30 mar-t-5" index="1">'+
-				'<input name="billRemark" type="text"/>'+
+				'<input name="billRemark" type="text" class="w-100"/>'+
 			'</div>'+
 		'</td>';
 		return tdHtml;
@@ -6666,7 +6666,7 @@ define(function(require, exports){
 		if(!!$obj){
 			shopGuideMoney = '<input name="shopGuideMoney" class="w-80" type="text">';
 			imgTd = '<span style="color:#bbb;">查看</span>';
-			billRemark = '<input name="billRemark" type="text">';
+			billRemark = '<input name="billRemark" type="text" class="w-100">';
 		};
 		var html = '<td name="shopGuideMoney">'+
 				'<div class="div-h-30"></div>'+
