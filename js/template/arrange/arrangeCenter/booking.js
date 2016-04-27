@@ -173,9 +173,18 @@ define(function(require, exports) {
             sumCostMoney = ($tr.find('[name="fee"]').val() || 0) - ($tr.find('[name="reduceMoney"]').val() || 0);
             $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-busList').on('click', '.T-bus-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-busList').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr');;
+            if($that.hasClass('T-bus-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-busCompany')){
+                KingServices.addBusCompany(function(formData){
+                    $tr.find('[name="busCompany"]').val(formData.companyName).data('id', formData.id);
+                    $tr.find('[name="needSeatCount"]').val('');
+                    $tr.find('[name="needBusBrand"]').val('');
+                })
+            }
         });
         $tab.find('.T-bus-add').on('click', function(){
             addBus();
@@ -190,7 +199,7 @@ define(function(require, exports) {
                         '<td><input name="endTime" type="text" class="datepicker" /></td>'+
                         '<td><input name="needSeatCount" type="text" class="col-sm-12 bind-change" /></td>'+
                         '<td><input name="needBusBrand" type="text" class="col-sm-12 bind-change" /></td>'+
-                        '<td><input name="busCompany" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><div class="col-sm-12"><input name="busCompany" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-busCompany" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="fee" type="text" class="col-sm-12 T-action-blur F-float F-money" maxlength="9" /></td>'+
                         '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" maxlength="9" /></td>'+
                         '<td><input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly /></td>'+
@@ -221,9 +230,18 @@ define(function(require, exports) {
                                 ($tr.find('[name="reduceMoney"]').val() || 0);
             $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-hotelList').on('click', '.T-hotel-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-hotelList').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr');
+            if($that.hasClass('T-hotel-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-hotelName')){
+                KingServices.addHotel(function(formData){
+                    $tr.find('[name="hotelLevel"]').val(formData.level);
+                    $tr.find('[name="hotelName"]').val(formData.name).data('id', formData.id);
+                    $tr.find('[name="hotelRoomType"]').val('').data('id', '');
+                });
+            }
         });
         $tab.find('.T-hotel-add').on('click', function(){
             addHotel();
@@ -246,7 +264,7 @@ define(function(require, exports) {
                         '    <option value="6">五星</option>'+
                         '    <option value="7">五星以上</option>'+
                         '    </select></td>'+
-                        '<td><input name="hotelName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><div class="col-sm-12"><input name="hotelName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-hotelName" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="hotelRoomType" type="text" class="col-sm-12 bind-change" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
@@ -279,9 +297,17 @@ define(function(require, exports) {
                                 ($tr.find('[name="reduceMoney"]').val() || 0);
             $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-scenicList').on('click', '.T-scenic-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-scenicList').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr');
+            if($that.hasClass('T-scenic-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-scenicName')){
+                KingServices.addScenic(function(formData){
+                    $tr.find('[name="scenicName"]').val(formData.name).data('id', formData.id);
+                    $tr.find('[name="scenicItemName"]').val('').data('id', '');
+                });
+            }
         });
         $tab.find('.T-scenic-add').on('click', function(){
             addScenic();
@@ -298,7 +324,7 @@ define(function(require, exports) {
                         '        <option value="上午">上午</option> '+
                         '        <option value="下午">下午</option> '+
                         '    </select></td>'+
-                        '<td><input name="scenicName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><div class="col-sm-12"><input name="scenicName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-scenicName" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="scenicItemName" type="text" class="col-sm-12"/></td>'+
                         '<td><input name="tourDuration" type="text" class="col-sm-12" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
@@ -334,9 +360,16 @@ define(function(require, exports) {
                                 ($tr.find('[name="reduceMoney"]').val() || 0);
             $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-ticketList').on('click', '.T-ticket-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-ticketList').on('click', '.T-action', function(event){
+            event.preventDefault()
+            var $that = $(this), $tr = $that.closest('tr');
+            if($that.hasClass('T-ticket-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-ticketName')){
+                KingServices.addTicket(function(formData){
+                    $tr.find('[name="ticketName"]').val(formData.name).data('id', formData.id);
+                });
+            }
         });
         $tab.find('.T-ticket-add').on('click', function(){
             addTicket();
@@ -347,7 +380,7 @@ define(function(require, exports) {
         });
         return this;
         function addTicket(){
-            var html =  '<tr><td><input name="ticketName" type="text" class="col-sm-12 bind-change" /></td>'+
+            var html =  '<tr><td><div class="col-sm-12"><input name="ticketName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><select name="type">'+
                         '        <option value="1">机票</option>'+
                         '        <option value="2">汽车票</option>'+
@@ -884,7 +917,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if(showDialog(data)){
                             if(!!data.price){
-                                $parents.find("input[name=price]").val(data.price).trigger('change');
+                                $parents.find('input[name="costPrice"]').val(data.price).trigger('change');
                             }
                         }
                     }
@@ -993,7 +1026,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if(showDialog(data)) {
                             if(!!data.price){
-                                $parents.find("input[name=price]").val(data.price);
+                                $parents.find('input[name="costPrice"]').val(data.price);
                             }
                         }
                     }

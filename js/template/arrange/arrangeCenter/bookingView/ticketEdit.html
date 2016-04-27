@@ -37,7 +37,10 @@
                 {{each arrangeList as rs}}
                     <tr data-id="{{rs.id}}">
                         <td>
-                            <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" />
+                            <div class="col-sm-12">
+                                <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" />
+                                <span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+                            </div>
                         </td>
                         <td>
                             <select name="type">
@@ -88,7 +91,10 @@
                 {{else}}
                     <tr>
                         <td>
-                            <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                            <div class="col-sm-12">
+                                <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                                <span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+                            </div>
                         </td>
                         <td>
                             <select name="type">
