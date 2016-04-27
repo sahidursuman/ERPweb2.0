@@ -103,6 +103,7 @@
                                         <th class="th-border">优惠</th>
                                         <th class="th-border">应付款</th>
                                         <th class="th-border">预付款</th>
+                                        <th class="th-border">计划代收</th>
                                         <th class="th-border">备注</th>
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
@@ -169,6 +170,7 @@
                                         <td>
                                             <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
+                                        <td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="{{outBus.collection}}" maxlength="9" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/></td>
                                         <td>
                                             <input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
@@ -238,6 +240,7 @@
                                         <td>
                                             <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" />
                                         </td>
+                                         <td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="" maxlength="9"/></td>
                                         <td>
                                             <input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" />
                                         </td>
@@ -283,6 +286,7 @@
                                         <th class="th-border">优惠</th>
                                         <th class="th-border">应付款</th>
                                         <th class="th-border">预付款</th>
+                                        <th class="th-border">计划代收</th>
                                         <th class="th-border">备注</th>
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
@@ -341,6 +345,9 @@
                                             <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
+                                         <td>
+                                            <input class="col-sm-12" name="collection" type="text" value="{{outHotel.collection}}" maxlength="9" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
                                         <td>
                                             <input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
@@ -726,6 +733,7 @@
                                         <th class="th-border">优惠</th>
                                         <th class="th-border">应付款</th>
                                         <th class="th-border">预付款</th>
+                                        <th class="th-border">计划代收</th>
                                         <th class="th-border">备注</th>
                                         <th class="th-border" style="width: 100px">操作</th>
                                     </tr>
@@ -791,6 +799,9 @@
                                         </td>
                                         <td>
                                             <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
+                                        <td>
+                                            <input class="col-sm-12" name="collection" type="text" value="{{outBus.collection}}" maxlength="9" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
                                             <input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled" {{/if}}/>
@@ -860,6 +871,9 @@
                                         </td>
                                         <td>
                                             <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" />
+                                        </td>
+                                         <td>
+                                            <input class="col-sm-12" name="collection" type="text" value="" maxlength="9" />
                                         </td>
                                         <td>
                                             <input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" />
@@ -963,6 +977,9 @@
                                             <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
+                                        <td>
+                                            <input class="col-sm-12" name="collection" type="text" value="{{outHotel.collection}}" maxlength="9" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        </td>
                                         <td>
                                             <input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" {{if outHotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
