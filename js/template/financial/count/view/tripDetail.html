@@ -96,7 +96,7 @@
         </div>
         <div style="float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="T-tripPlanArrange">安排预算表</a>
-        </div>
+        </div> 
         {{if tripPlan.billStatus > -1}}
             <div style="float:left;width:90px;text-align:center;">
                 <a href="javascript:void(0);" class="T-guideAccount">导游报账表</a>
@@ -682,13 +682,9 @@
             </div>
             <!-- 自费 -->
             <div id="financial-count-tripdetail-selfpay" class="tab-pane fade">
-                <div class="ui-sortable-handle widget-container-col">
-                    <h5 class="title-size">
-                        <span>
-                            <a href="#" class="T-formula">计算公式</a> 
-                        </span>
-                    </h5>
-                </div>
+                <span style="margin-bottom: 5px">
+                    <a href="#" class="T-formula">计算公式</a> 
+                </span>
                 <div class="T-formula-List hide">
                     <table class="table overflow-table table-striped table-bordered table-hover">
                         <thead>
