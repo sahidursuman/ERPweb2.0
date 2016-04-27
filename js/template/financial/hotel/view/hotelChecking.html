@@ -110,7 +110,7 @@
                 </td> 
 				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money F-float F-money"></td>
-                <td><input type="text" name="planPay" value="0" class="money F-float F-money"></td>
+                <td>{{if rs.serviceType==1}}<input type="text" name="collection" value="{{rs.collection}}" class="money F-float F-money">{{else}}-{{/if}}</td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
                 <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>

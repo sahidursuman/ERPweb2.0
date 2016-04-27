@@ -146,7 +146,7 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         if(!validator.form()){ return false;}
         var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
             payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1,
-            planPayMoney = ($tr.find('input[name=planPay]').val() || 0)*1;
+            planPayMoney = ($tr.find('input[name=collection]').val() || 0)*1;
 
         // 设置未付金额
         $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney));
@@ -167,12 +167,12 @@ FinancialService.updateUnpayMoney = function($tab,rule){
     });
     
     //代收金额计算 
-    $tab.find('.T-checkList').on('focusin', 'input[name=planPay]', function(event) {
+    $tab.find('.T-checkList').on('focusin', 'input[name=collection]', function(event) {
        event.preventDefault();
        if (!$(this).data('oldVal')) {
           $(this).data("oldVal",$(this).val());
        }
-    }).on('change', 'input[name="planPay"]', function(event) {
+    }).on('change', 'input[name="collection"]', function(event) {
        var $that = $(this),
             $tr = $that.closest('tr'),
             validator = rule.check($tr);
@@ -240,8 +240,8 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
                         saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
 
                     }
-                    if (!!$this.find("input[name=planPay]")) { //代收
-                       saveJson[i].collection = $this.find("input[name=planPay]").val();
+                    if (!!$this.find("input[name=collection]")) { //代收
+                       saveJson[i].collection = $this.find("input[name=collection]").val();
                     }
                     saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
                     saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
@@ -259,8 +259,8 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
                     confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
                     isChecked : isChecked
                 };
-                if (!!$this.find("input[name=planPay]")) { //代收
-                    checkRecord.collection = $this.find("input[name=planPay]").val();
+                if (!!$this.find("input[name=collection]")) { //代收
+                    checkRecord.collection = $this.find("input[name=collection]").val();
                 }
                 if(inner){
                     checkRecord.backMoney = $this.find("input[name=settlementMoney]").val();
