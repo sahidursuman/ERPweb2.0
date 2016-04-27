@@ -297,6 +297,16 @@ define(function(require, exports) {
 					}
 
 					$tab.find('.T-guidePayMoneyLabel').text(text.length?text.join(','): 0);
+
+					$tab.on('click', '.T-collapse', function(event) {
+						event.preventDefault();
+						var $this = $(this);
+						if($this.hasClass('collapsed')){
+							$this.text('[收起]');
+						} else {
+							$this.text('[展开]');
+						}
+					});
 				}
 			}
 		});
