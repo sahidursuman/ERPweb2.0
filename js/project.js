@@ -2756,6 +2756,111 @@ Tools.loadPluginScript = function(pluginKey){
 	}
 };
 
+//方向键控制table中input焦点
+Tools.directionKeyControlFocus = function($tab) {
+
+	function filterInput($obj) {
+		return $obj.find('input').filter(function() {
+			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') != 'hidden';
+		})
+	}
+	$tab.find('table').on('keydown', function() {
+		var $this = $(this),
+			keyCode = event.which,
+			$focusInput = $this.find('input:focus'),
+			$parentTd = $focusInput.closest('td'),
+			$parentTr = $focusInput.closest('tr'),
+			$parentTbody = $focusInput.closest('tbody'),
+			inputIndex = filterInput($parentTd).index($focusInput),
+			tdIndex = $parentTr.find('td').index($parentTd),
+			trIndex = $parentTbody.find('tr').index($parentTr),
+			inputsLength = filterInput($parentTd).length;
+
+		function findInput(tri, tdi, inputi) {
+			if (!!inputi || inputi === 0) {
+				return filterInput($parentTbody.find('tr').eq(tri).find('td').eq(tdi)).eq(inputi);
+			}else {
+				return filterInput($parentTbody.find('tr').eq(tri).find('td').eq(tdi));
+			}
+		}
+		switch(keyCode){
+			case 37://左
+				if (!!$focusInput.data('datepicker')) {
+				 	$focusInput.datepicker('hide');
+				 }
+				if (findInput(trIndex, tdIndex-1).length > 0) {
+					if (findInput(trIndex, tdIndex-1, inputIndex).length > 0) {
+						findInput(trIndex, tdIndex-1, inputIndex).focus();
+					}else {
+						findInput(trIndex, tdIndex-1, findInput(trIndex, tdIndex-1).length-1).focus();
+					}
+				}else{
+					for (var i = tdIndex-1; i >= 0; i--) {
+						if (findInput(trIndex, i).length > 0) {
+							if (findInput(trIndex, i, inputIndex).length > 0) {
+								findInput(trIndex, i, inputIndex).focus();
+							}else {
+								findInput(trIndex, i, findInput(trIndex, i).length-1).focus();
+							}
+							break;
+						}
+					}
+				}
+				break;
+			case 38://上
+				if (!!$focusInput.data('datepicker')) {
+			 		$focusInput.datepicker('hide');
+			 	}
+				if (inputIndex > 0) {
+					findInput(trIndex, tdIndex, inputIndex-1).focus();
+				}else if (inputIndex == 0) {
+					if (trIndex > 0) {
+						findInput(trIndex-1, tdIndex, findInput(trIndex-1, tdIndex).length-1).focus();
+					}
+				}
+				break;
+			case 39://右
+				if (!!$focusInput.data('datepicker')) {
+				 	$focusInput.datepicker('hide');
+				 }
+				if (findInput(trIndex, tdIndex+1).length > 0) {
+					if (findInput(trIndex, tdIndex+1, inputIndex).length > 0) {
+						findInput(trIndex, tdIndex+1, inputIndex).focus();
+					}else {
+						findInput(trIndex, tdIndex+1, findInput(trIndex, tdIndex+1).length-1).focus();
+					}
+				}else{
+					for (var i = tdIndex+1; i < $parentTr.find('td').length; i++) {
+						if (findInput(trIndex, i).length > 0) {
+							if (findInput(trIndex, i, inputIndex).length > 0) {
+								findInput(trIndex, i, inputIndex).focus();
+							}else {
+								findInput(trIndex, i, findInput(trIndex, i).length-1).focus();
+							}
+							break;
+						}
+					}
+				}
+				break;
+			case 40://下
+				if (!!$focusInput.data('datepicker')) {
+				 	$focusInput.datepicker('hide');
+				 }
+				if (inputIndex < inputsLength-1) {
+					findInput(trIndex, tdIndex, inputIndex+1).focus();
+				}else if (inputIndex == inputsLength-1) {
+					if (trIndex < $parentTbody.find('tr').length-1) {
+						findInput(trIndex+1, tdIndex, 0).focus();
+					}
+				}
+				break;
+			default:
+				return;
+		}
+		//console.log("第"+(trIndex+1)+"行，"+"第"+(tdIndex+1)+"列，"+"第"+(inputIndex+1)+"个input。td里面一共有"+inputsLength+"个input")
+	})
+};
+
 window.onbeforeunload=function(e){
 	var event = e || window.event;
 	var $children = $('#tabContent').children();
