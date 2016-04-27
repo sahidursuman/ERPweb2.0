@@ -2,6 +2,7 @@
  * 代订安排
  * author：魏桂云
  * date：2016-04-11
+ * description:一切描述尽在不言中
  */
 
 define(function(require, exports) {
@@ -692,7 +693,7 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 var tab_key = tabKey + '_' + target + '_view';
 
-                if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
+                if (Tools.addTab(tab_key, "查看代订" + title, html(data))) {
                     var $tab = $('#tab-' + tab_key + '-content');
                     $tab.find('.T-btn-close').on('click', function(){
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
