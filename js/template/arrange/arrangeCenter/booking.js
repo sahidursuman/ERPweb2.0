@@ -390,7 +390,7 @@ define(function(require, exports) {
                         '<td><input name="startCity" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="arriveCity" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="shift" type="text" class="col-sm-12" maxlength="50" /></td>'+
-                        '<td><input name="startTime" type="text" class="col-sm-12 datepicker" /></td>'+
+                        '<td><input name="startTime" type="text" class="col-sm-12 datetimepicker" /></td>'+
                         '<td><input name="seatLevel" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
@@ -401,7 +401,7 @@ define(function(require, exports) {
                         '<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
             $tab.find('.T-ticketList').append(html);
             BookingArrange.bindTicketChoose($tab);
-            Tools.setDatePicker($tab.find('.datepicker'));
+        BookingArrange.setDateTimePicker($tab.find('.datetimepicker'));
             rule.ticketUpdate(validate);
         }
     };
