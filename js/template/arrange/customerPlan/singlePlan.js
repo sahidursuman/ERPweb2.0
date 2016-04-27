@@ -770,37 +770,49 @@ define(function(require, exports) {
         // 、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
         $tab.find('.T-tab-content').on('click', '.T-addResource', function() {
             var $that = $(this);
-            if ($that.hasClass('T-addInsurance')) {
-                //保险安排
-                singlePlan.addInsurance($tab);
-            }else if ($that.hasClass('T-addGuide')) {
-                //导游安排
-                singlePlan.addGuide($tab);
-            }else if ($that.hasClass('T-addBus')) {
-                //车辆安排
-                singlePlan.addBus($tab);
-            }else if ($that.hasClass('T-addRestaurant')) {
-                //餐厅安排
-                singlePlan.addRestaurant($tab);
-            }else if ($that.hasClass('T-addHotel')) {
-                //酒店安排
-                singlePlan.addHotel($tab);
-            }else if ($that.hasClass('T-addScenic')) {
-                //景区安排
-                singlePlan.addScenic($tab);
-            }else if ($that.hasClass('T-addShop')) {
-                //购物安排
-                singlePlan.addShop($tab);
-            }else if ($that.hasClass('T-addSelfPay')) {
-                //自费安排
-                singlePlan.addSelfPay($tab);
-            }else if ($that.hasClass('T-addTicket')) {
-                //票务安排
-                singlePlan.addTicket($tab);
-            }else if ($that.hasClass('T-addOther')) {
-                //其它安排
-                singlePlan.addOther($tab);
-            }
+            var startTime = $tab.find('.T-basic-info').find('input[name=startTime]').val();
+            var endTime = $tab.find('.T-basic-info').find('input[name=endTime]').val();
+            $.ajax({
+                url: KingServices.build_url('v2/tripPlan', 'getOPUserList'),
+                type: 'post',
+            }).done(function(data) {
+                if (showDialog(data)) {
+                    // datas = JSON.parse(data.userList)
+                    console.log(data)
+                    // console.log(data.tripPlan.dutyOPUser.businessGroup.name)
+                    if ($that.hasClass('T-addInsurance')) {
+                        //保险安排
+                        singlePlan.addInsurance($tab);
+                    } else if ($that.hasClass('T-addGuide')) {
+                        //导游安排
+                        singlePlan.addGuide($tab, startTime, endTime,data);
+                    } else if ($that.hasClass('T-addBus')) {
+                        //车辆安排
+                        singlePlan.addBus($tab);
+                    } else if ($that.hasClass('T-addRestaurant')) {
+                        //餐厅安排
+                        singlePlan.addRestaurant($tab);
+                    } else if ($that.hasClass('T-addHotel')) {
+                        //酒店安排
+                        singlePlan.addHotel($tab);
+                    } else if ($that.hasClass('T-addScenic')) {
+                        //景区安排
+                        singlePlan.addScenic($tab);
+                    } else if ($that.hasClass('T-addShop')) {
+                        //购物安排
+                        singlePlan.addShop($tab);
+                    } else if ($that.hasClass('T-addSelfPay')) {
+                        //自费安排
+                        singlePlan.addSelfPay($tab);
+                    } else if ($that.hasClass('T-addTicket')) {
+                        //票务安排
+                        singlePlan.addTicket($tab);
+                    } else if ($that.hasClass('T-addOther')) {
+                        //其它安排
+                        singlePlan.addOther($tab);
+                    }
+                }
+            });
         });
         Tools.setDatePicker($tab.find('.T-datepicker'), true);
         //部门下拉框
@@ -1059,14 +1071,14 @@ define(function(require, exports) {
      * 添加导游安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addGuide = function($obj) {
+    singlePlan.addGuide = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class="T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class="T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
