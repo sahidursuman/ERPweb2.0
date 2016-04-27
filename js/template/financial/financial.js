@@ -1039,7 +1039,7 @@ FinancialService.closeTab = function(tab_id){
 };
 
 //查看单据公共方法
-FinancialService.viewBillImage = function(this,bigImg,smallImg) {
+FinancialService.viewBillImage = function(obj,bigImg,smallImg) {
     var tHtml =  '<ul class="billImageDowebok">'
                     +    '{{each images as image}}'
                     +    '<li><span></span><img data-original="{{image.WEB_IMG_URL_BIG}}" src="{{image.WEB_IMG_URL_SMALL}}"></li>'
@@ -1047,7 +1047,7 @@ FinancialService.viewBillImage = function(this,bigImg,smallImg) {
                     +'</ul>';
     var data = {
         "images":[]
-    }, url = $(this).attr('url');
+    }, url = $(obj).attr('url');
     var strs = url.split(",");
     for(var i = 0; i < strs.length; i ++) {
         var s = strs[i];

@@ -878,11 +878,9 @@ define(function(require, exports){
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
-			var $that = $(this);
-			var url = $that.attr("url");
-			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-			var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
-			FinancialService.viewBillImage(url,bigImg,smallImg);
+			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val(),
+			smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+			FinancialService.viewBillImage(this,bigImg,smallImg);
 		});
 		//查看操作记录事件
 		$obj.find('.btn-financialLog').off('click').on('click',function(){
@@ -1367,11 +1365,9 @@ define(function(require, exports){
 		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
-			var $that = $(this);
-			var url = $that.attr("url");
-			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val();
-			var smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
-			FinancialService.viewBillImage(url,bigImg,smallImg);
+			var bigImg = $obj.find('input[name=WEB_IMG_URL_BIG]').val(),
+				smallImg = $obj.find('input[name=WEB_IMG_URL_SMALL]').val();
+			FinancialService.viewBillImage(this,bigImg,smallImg);
 		});
 		//查看操作记录事件
 		$obj.find('.btn-financialLog').off('click').on('click',function(){
@@ -1638,11 +1634,9 @@ define(function(require, exports){
 					});
 					//查看图片事件
 					$outDetailTab.find('.btn-view').off('click').on('click',function(){
-						var $that = $(this);
-						var url = $that.attr("url");
-						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val();
-						var smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
-						FinancialService.viewBillImage(url,bigImg,smallImg);
+						var bigImg = $outDetailTab.find('input[name=WEB_IMG_URL_BIG]').val(),
+							smallImg = $outDetailTab.find('input[name=WEB_IMG_URL_SMALL]').val();
+						FinancialService.viewBillImage(this,bigImg,smallImg);
 					});
 				}
 				
