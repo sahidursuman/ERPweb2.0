@@ -76,6 +76,7 @@
 		</div>
 	</div>
 	{{/if}}
+	{{if !!joinTrip && joinTrip.length >0}}
 	<div class="row T-offered">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">{{if baseInfo.customerType == 0}}参团{{else}}转团{{/if}}</h3>
@@ -117,6 +118,7 @@
 			</table>
 		</div>
 	</div>
+	{{/if}}
 	{{if baseInfo.customerType == 0 && sendTrip.length > 0}}
 	<div class="row T-send-group">
 		<div class="col-xs-12">
