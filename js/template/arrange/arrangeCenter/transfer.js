@@ -2142,13 +2142,13 @@ define(function(require, exports) {
                     $(this).closest('tr').find("input[name=price]").blur();
 
                 },
-                change: function(event, ui) {
-                    if (ui.item == null) {
-                        var objParent = $(this).closest('tr');
-                        objParent.find("input[name=price]").val("");
-                    };
-                    Transfer.calculation($(this));
-                }
+                // change: function(event, ui) {
+                //     if (ui.item == null) {
+                //         var objParent = $(this).closest('tr');
+                //         objParent.find("input[name=price]").val("");
+                //     };
+                //     Transfer.calculation($(this));
+                // }
             }).off("click").on("click", function() {
                 var obj = this,
                     parents = $(obj).closest('tr');
