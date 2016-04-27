@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":717,"md5":"4f1d7766663df738bc5c78915686e106"}*/
+/*TMODJS:{"debug":true,"version":718,"md5":"e8bea64d7596032eccceb4d663b52965"}*/
 define(function(require) {
-    return require("/js/template/template")("financial/count/view/Reimbursement", function($data, $filename) {
+    return require("../../../template")("financial/count/view/Reimbursement", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, tripPlan = $data.tripPlan, busCompanyArranges = $data.busCompanyArranges, touristGroup = $data.touristGroup, transfer = $data.transfer, isOp = $data.isOp, WEB_IMG_URL_BIG = $data.WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL = $data.WEB_IMG_URL_SMALL, financialTripPlanId = $data.financialTripPlanId, $each = $utils.$each, guideCount = ($data.index, 
             $data.guideCount), guideArrange = $data.guideArrange, $out = ($data.touristGroupFee, 

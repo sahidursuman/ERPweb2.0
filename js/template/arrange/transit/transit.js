@@ -119,61 +119,50 @@ define(function(require, exports) {
             shift = transit.$searchArea.find("input[name=shift]").val()
         }
 
+    	var args = {
+			fromPartnerAgencyName: fromPartnerAgencyName,
+			fromPartnerAgencyId: fromPartnerAgencyId,
+			lineProductName: lineProductName,
+			lineProductId: lineProductId,
+			startTime: startTime,
+			arrangeUserName: arrangeUserName,
+			arrangeUserId: arrangeUserId,
+			arrangeStartTime: arrangeStartTime,
+			arrangeEndTime: arrangeEndTime,
+			status: status,
+			tgOrderNumber: tgOrderNumber,
+			orderNumber: orderNumber,
+			shuttleType: shuttleType,
+			shuttleTime: shuttleTime,
+			arrangeItem: arrangeItem,
+			arrangeItemStatus: arrangeItemStatus,
+			contactInfo: contactInfo,
+			shift: shift
+		}
         if (page == -1) {
-        	var exportData = {
-				fromPartnerAgencyName: fromPartnerAgencyName,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				lineProductName: lineProductName,
-				lineProductId: lineProductId,
-				startTime: startTime,
-				arrangeUserName: arrangeUserName,
-				arrangeUserId: arrangeUserId,
-				arrangeStartTime: arrangeStartTime,
-				arrangeEndTime: arrangeEndTime,
-				status: status,
-				tgOrderNumber: tgOrderNumber,
-				orderNumber: orderNumber,
-				shuttleType: shuttleType,
-				shuttleTime: shuttleTime,
-				arrangeItem: arrangeItem,
-				arrangeItemStatus: arrangeItemStatus,
-				contactInfo: contactInfo,
-				shift: shift
-			}
-        	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(exportData));
+        	exportXLS( APP_ROOT + 'back/export.do?method=exportOutArrangeItemList&token='+ $.cookie("token") + '&' + $.param(args));
         	return;
         }
 
         // 修正页码
-		pageNo = (page || 0)
-		
+		args.pageNo = (page || 0);
+		args.sortType = 'touristGroup.startTime';
+		args.order = transit.$searchArea.find("#order_by").val();
+		if (!args.fromPartnerAgencyName) {
+			args.fromPartnerAgencyId = '';
+		}
+		if (!args.lineProductName) {
+			args.lineProductId = '';
+		}
+		if (!args.arrangeUserName) {
+			args.arrangeUserId = '';
+		}
+
 
         $.ajax({
 			url: KingServices.build_url('touristGroup','listTransitArrange'),
 			type:"POST",
-			data: {
-				pageNo: page,
-				sortType: 'touristGroup.startTime',
-				order: transit.$searchArea.find("#order_by").val(),
-				fromPartnerAgencyName: fromPartnerAgencyName,
-				fromPartnerAgencyId: fromPartnerAgencyId,
-				lineProductName: lineProductName,
-				lineProductId: lineProductId,
-				startTime: startTime,
-				arrangeUserName: arrangeUserName,
-				arrangeUserId: arrangeUserId,
-				arrangeStartTime: arrangeStartTime,
-				arrangeEndTime: arrangeEndTime,
-				status: status,
-				tgOrderNumber: tgOrderNumber,
-				orderNumber: orderNumber,
-				shuttleType: shuttleType,
-				shuttleTime: shuttleTime,
-				arrangeItem: arrangeItem,
-				arrangeItemStatus: arrangeItemStatus,
-				contactInfo:contactInfo,
-				shift: shift
-			},
+			data: args,
 			success:function(data){
 				//根据返回值判断下一步操作，或者已出现错误
 				if(showDialog(data)){

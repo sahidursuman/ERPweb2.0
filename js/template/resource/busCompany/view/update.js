@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":391,"md5":"20100a7eca451f1cbcfa271d501fb1d5"}*/
+/*TMODJS:{"debug":true,"version":392,"md5":"14674632915b178d676a44dfcb8a3014"}*/
 define(function(require) {
-    return require("/js/template/template")("resource/busCompany/view/update", function($data, $filename) {
+    return require("../../../template")("resource/busCompany/view/update", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, busCompany = $data.busCompany, $each = $utils.$each, $out = ($data.bus, 
             $data.$index, $data.price, $data.i, $data.driver, "");
