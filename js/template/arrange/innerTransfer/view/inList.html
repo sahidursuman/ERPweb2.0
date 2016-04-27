@@ -1,6 +1,7 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight">
 	<thead>
 		<tr class="bg-blur">
+		    <th>收客单号</th>
 		    <th>线路产品</th> 
 			<th>天数</th>
 			<th>出游日期</th>
@@ -15,6 +16,7 @@
 	</thead>
 	<tbody class="T-transferIn-list">{{each resultList as list}}
 		<tr data-value="{{list.id}}">
+			<td>{{if !!list.touristGroup}}{{list.touristGroup.orderNumber }}{{/if}}</td>
 			<td>{{if !!list.lineProduct}}{{list.lineProduct.name}}{{/if}}</td>
 			<td><span class=" F-float F-count">{{if !!list.lineProduct}}{{list.lineProduct.days}}{{/if}}</span>天</td>
 			<td>{{list.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
