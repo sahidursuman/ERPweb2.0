@@ -10,8 +10,15 @@
 				<i class="fa fa-hourglass"></i> 资金账户设置
 			</a>
 		</li>
+
+		<li>
+			<a data-toggle="tab" href="#basicSet-teamNumber" class="T-basicSet-teamNumber" aria-expanded="true" data-value="2">
+				<i class="menu-icon fa fa-cog"></i> 系统设置
+			</a>
+		</li>
+
 	</ul>
-	<div class="tab-content" style="top:-2px;">
+	<div class="tab-content clearfix" style="top:-2px;">
 		<!--会计科目start-->
 		<div class="tab-pane fade active in" id="basicSet-accountObj">
 			<div class="add-search globalAdd">
@@ -91,6 +98,15 @@
 			</div>
 		</div>
 		<!--银行账户设置end-->
+
+		<!--自定义团号start-->
+		<div id="basicSet-teamNumber" class="tab-pane fade" >
+			<div class="T-teamNumbert-content form-inline">
+				<label class="pull-left mar-r-10">自定义团号规则</label>
+				<input type="text" class="col-sm-1 T-teamNumber  pull-left" name="tripNumber" placeholder="自定义团号规则"/><span>－出团日期－t／s－3位自增数字</span>
+			</div>
+		</div>
+		<!--自定义团号end-->
 
 	</div>
 </div>

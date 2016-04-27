@@ -2170,6 +2170,17 @@ KingServices.build_url = function(path,method){
     return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
 
+
+/**
+ * 构建请求的URL
+ * @param  {[type]} path   [description]
+ * @param  {[type]} method [description]
+ * @return {[type]}        [description]
+ */
+KingServices.buildTrave_url = function(path,method){
+    return APP_ROOT+path +'.do?method='+method+'&token='+$.cookie('token');
+};
+
 /**
  * 获取主列表
  * @param  {string} key       列表key

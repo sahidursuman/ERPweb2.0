@@ -127,6 +127,7 @@
 										<th class="th-border">优惠</th>
 										<th class="th-border">应付款</th>
 										<th class="th-border">预付款</th>
+										<th class="th-border">计划代收</th>
 										<th class="th-border">备注</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
@@ -180,6 +181,7 @@
 										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
 										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="{{outBus.collection}}" maxlength="9"/></td>
 										<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>{{if !outBus.isConfirmAccount}}
 											<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
@@ -227,6 +229,7 @@
 										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>
 										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>
 										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>
+										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="" maxlength="9"/></td>
 										<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
 										<td>
 											<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
@@ -270,6 +273,7 @@
 										<th class="th-border">优惠</th>
 										<th class="th-border">应付款</th>
 										<th class="th-border">预付款</th>
+										<th class="th-border">计划代收</th>
 										<th class="th-border">备注</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
@@ -315,6 +319,7 @@
 										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
 										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
+										<td><input class="col-sm-12 F-float F-money" name="collection" type="text" value="{{outHotel.collection}}" maxlength="9"/></td>
 										<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}"  maxlength="1000"{{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>{{if !outHotel.isConfirmAccount}}
 											<a class="cursor T-arrange-delete" data-catename="hotel">
@@ -630,6 +635,7 @@
 										<th class="th-border">优惠</th>
 										<th class="th-border">应付款</th>
 										<th class="th-border">预付款</th>
+										<th class="th-border">计划代收</th>
 										<th class="th-border">备注</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
@@ -683,6 +689,8 @@
 										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="{{outBus.reduceMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="{{outBus.needPayMoney}}" /></td>
 										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="{{outBus.prePayMoney}}" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
+
+										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="{{outBus.collection}}" maxlength="9"/></td>
 										<td><input class="col-sm-12" name="remark" type="text" value="{{outBus.remark}}" maxlength="1000" {{if outBus.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>{{if !outBus.isConfirmAccount}}
 											<a class="cursor T-arrange-delete" title="删除" data-catename="bus">
@@ -731,6 +739,7 @@
 										<td><input class="col-sm-12 T-number discount F-float F-money" name="busReduceMoney"  maxlength="9" type="text" value="" /></td>
 										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="busNeedPayMoney"  maxlength="9" type="text" value="" /></td>
 										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>
+										<td><input class="col-sm-12  F-float F-money" name="collection" type="text" value="" maxlength="9"/></td>
 										<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>
 										<td>
 											<a class="cursor T-arrange-delete" data-catename="bus" title="删除">
@@ -774,6 +783,7 @@
 										<th class="th-border">优惠</th>
 										<th class="th-border">应付款</th>
 										<th class="th-border">预付款</th>
+										<th class="th-border">计划代收</th>
 										<th class="th-border">备注</th>
 										<th class="th-border" style="width: 100px">操作</th>
 									</tr>
@@ -818,6 +828,7 @@
 										<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="hotelNeedPayMoney" value="{{outHotel.needPayMoney}}" type="text" /></td>
 										<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney"  maxlength="9" value="{{outHotel.prePayMoney}}" type="text" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<!-- <input class="col-sm-12" name="hotelPayType" value="{{outHotel.payType}}" type="text" /></td> -->
+										<td><input class="col-sm-12 F-float F-money" name="collection" value="{{outHotel.collection}}" type="text" /></td>
 										<td><input class="col-sm-12" name="remark" type="text" value="{{outHotel.remark}}" maxlength="1000" {{if outHotel.isConfirmAccount}}disabled="disabled"{{/if}}/></td>
 										<td>{{if !outHotel.isConfirmAccount}}
 											<a class="cursor T-arrange-delete" data-catename="hotel">
