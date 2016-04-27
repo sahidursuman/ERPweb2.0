@@ -1163,13 +1163,20 @@ select {
 .export-Btn {
     height: 24px;
     line-height: 9px;
-    position: absolute;
     right: 14px;
     top: 0px;
+    margin-left: 15px;
+}
+.settlement-Btn {
+   height: 24px;
+   line-height: 9px;
+   top: 0px;
+   
 }
 .addManagerRight {
     cursor: pointer;
     left: -38px;
+    margin-left: 0px;
 }
 
 
