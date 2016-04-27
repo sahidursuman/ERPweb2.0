@@ -2,11 +2,11 @@ define(function(require, exports) {
     var rule=require("./rule"),
         menuKey = "arrange_singleplan",
         listMainTemplate = require("./view/listMain"),
-        singleListTemplate = require("./view/singleList"),
+        singleListTemplate = require("./view/list"),
         // 散客计划模板
-        addSingleTripPlanTemplate=require("./view/addSingleTripPlan"),
-        updateSingleTripPlanTemplate=require("./view/updateSingleTripPlan"),
-        searchTemplate = require("./view/searchList"),
+        addSingleTripPlanTemplate=require("./view/add"),
+        updateSingleTripPlanTemplate=require("./view/update"),
+        searchTemplate = require("./view/searchListMain"),
         lineproductSearchList = require("./view/lineproductSearchList"),
         addGroupTemplate = require("./view/addGroup"),
         viewGroupTemplate = require("./view/viewGroup"),
@@ -18,11 +18,7 @@ define(function(require, exports) {
     //模版
     var T = {
         updateDetail : require("./view/updateDetail"),
-        touristsList : require("./view/touristsList"),
-        feeList : require("./view/feeList"),
-        addPartnerManager : require('./view/addPartnerManager'),
-        viewTripPlanSingle : require('./view/viewTripPlanSingle'),
-        batchAddTourist : require('./view/batchAddTourist')
+        viewTripPlanSingle : require('./view/view'),
     }
     var singlePlan = {
         searchData : false,
@@ -65,6 +61,7 @@ define(function(require, exports) {
         })
     }
 
+    //list页面事件绑定-
     singlePlan.init_eventMain = function($tab){
         // 绑定日期
         Tools.setDatePicker($tab.find('.datepicker'), true);
@@ -160,6 +157,7 @@ define(function(require, exports) {
         });
     };
 
+    //list数据请求-
     singlePlan.listTripPlanSingle = function(page, $tab){
         var $searchArea = $tab.find(".T-search-tripPlan-single"),
             arge = {
@@ -192,16 +190,7 @@ define(function(require, exports) {
             data : {searchParam : JSON.stringify(arge)}
         }).done(function(data){
             if(showDialog(data)){
-                var rs = JSON.parse(data.result);
-                data.result = rs;
-                for (var i = rs.length - 1; i >= 0; i--) {
-                    if(rs[i].tripPlanTouristList.length === 1 && !!rs[i].tripPlanTouristList[0].touristGroup &&
-                        rs[i].tripPlanTouristList[0].touristGroup.lineProduct && 
-                        rs[i].lineProduct && 
-                        rs[i].tripPlanTouristList[0].touristGroup.lineProduct.id == rs[i].lineProduct.id){
-                        rs[i].tripPlanTouristList.splice(0, 1);
-                    }
-                };
+                data.result = JSON.parse(data.result);
 
                 var singleHrml = filterUnAuth(singleListTemplate(data));
                 $tab.find('.T-tripPlan-singleList').html(singleHrml);
@@ -220,6 +209,7 @@ define(function(require, exports) {
         });
     };
     
+    //autocomplete事件绑定-
     singlePlan.autocompleteSearch = function(chooseObj,jsonList,valueName) {
         chooseObj.autocomplete({
             minLength: 0,
@@ -253,7 +243,7 @@ define(function(require, exports) {
         });
     }
 
-    //新增计划
+    //新增计划-
     singlePlan.addTripPlan = function(planType, args, groupIds, isInnerSinglePlan){
         var tabKey = menuKey + "_single_add";
         if(!args){
@@ -270,100 +260,8 @@ define(function(require, exports) {
         }
     };
 
-    singlePlan.chooseTravelAgencyName = function($that){
-        $that.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    $(this).val("").nextAll('[name="fromPartnerAgencyId"]').val("");
-                }
-            },
-            select: function(event, ui) {
-                $(this).trigger('change').nextAll('[name="fromPartnerAgencyId"]').val(ui.item.id)
-                .closest('.T-tab').find('[name="contactRealname"]').val("")
-                .nextAll('[name="fromPartnerAgencyContactId"]').val("");
-            }
-        })
-        $that.off('click').on('click', function() {
-            var $that = $(this);
-            $.ajax({
-                url: KingServices.build_url("partnerAgency", "getPartnerAgency"),
-                data: {operation: 'view'},
-                showLoading:false,
-                type: 'POST',
-                success: function(data) {
-                    if (showDialog(data)) {
-                        var formParObj = JSON.parse(data.partnerAgencyList);
-
-                        if (formParObj != null && formParObj.length > 0) {
-                            for (var i = 0; i < formParObj.length; i++) {
-                                formParObj[i].value = formParObj[i].travelAgencyName
-                            }
-                        };
-                        $that.autocomplete('option', 'source', formParObj);
-                        $that.autocomplete('search', '');
-                    }
-
-                }
-            });
-        });
-    };
-
-    singlePlan.chooseContactRealname = function($that, $tab){
-        $that.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (ui.item == null) {
-                    $(this).val("").nextAll('[name="fromPartnerAgencyContactId"]').val("");
-                }
-            },
-            select: function(event, ui) {
-                $(this).trigger('change').nextAll('[name="fromPartnerAgencyContactId"]').val(ui.item.id);
-            }
-        }).off('click').on('click', function() {
-            var objM = this;
-            var partnerAgencyId = $tab.find('input[name=fromPartnerAgencyId]').val();
-            if (partnerAgencyId) {
-                $.ajax({
-                    url: KingServices.build_url("partnerAgency", "getContactListByPartnerAgencyId"),
-                    data: {
-                        partnerAgencyId: partnerAgencyId
-                    },
-                    showLoading: false,
-                    type: 'POST',
-                    success: function(data) {
-                        var result = showDialog(data);
-                        if (result) {
-                            var contactList = JSON.parse(data.partnerAgencyContactList);
-                            if (contactList != null && contactList.length > 0) {
-                                if (contactList != null && contactList.length) {
-                                    for (var i = 0; i < contactList.length; i++) {
-                                        contactList[i].value = contactList[i].contactRealname + " - [" + contactList[i].contactMobileNumber + "]";
-                                    }
-                                }
-                                $that.autocomplete('option', 'source', contactList);
-                                $that.autocomplete('search', '');
-                            } else {
-                                layer.tips('该组团社没有联系人，请添加！', objM, {
-                                    tips: [1, '#3595CC'],
-                                    time: 2000
-                                });
-                            }
-                        }
-                    }
-                });
-            } else {
-                layer.tips('请选择客户来源', this, {
-                    tips: [1, '#3595CC'],
-                    time: 2000
-                });
-            }
-
-        });
-    };
-
     /**
-     * 团散的通用事件绑定
+     * 散客计划的事件绑定-
      * @param  {object} $tab 顶层父元素
      * @return {object}      返回表单对象
      */
@@ -626,7 +524,7 @@ define(function(require, exports) {
     };
 
     /**
-     * 获取散客计划，进入编辑页面
+     * 获取散客计划，进入编辑页面-
      * @param  {int} id 计划ID
      * @return {[type]}    [description]
      */
@@ -711,6 +609,7 @@ define(function(require, exports) {
         }
     };
 
+    //新增编辑散客计划事件-
     singlePlan.initSigleEvent = function($tab,isInnerSinglePlan) {
         var validate = singlePlan.bindCommonEvent($tab, 0);
         //搜索线路
@@ -1059,7 +958,7 @@ define(function(require, exports) {
         })
     };
 
-    //添加游客小组
+    //添加游客小组-
     singlePlan.addTouristGroup = function(lineProductId,startTime,$tab){
         //添加游客小组 （多选）           
         var excludeIdJson = [];
@@ -1189,7 +1088,7 @@ define(function(require, exports) {
             }
         });
     };
-    //删除小组成员
+    //删除小组成员-
     singlePlan.deleteTouristGroup = function(obj,id,tripPlanId,$tab){
         showConfirmMsg($( "#confirm-dialog-message" ), "你确定要移除该小组吗？",function(){
             if(!!id && !!tripPlanId){
@@ -1218,67 +1117,7 @@ define(function(require, exports) {
         },function(){},"取消","确定");
     };
 
-    singlePlan.getOutOPUser = function($that){
-
-    };
-
-    //新增同行联系人
-    singlePlan.addPartnerManager = function($that, $tab) {
-        var partnerAgencyId = $tab.find('input[name=fromPartnerAgencyId]').val();
-        var html = T.addPartnerManager();
-        if (partnerAgencyId) {
-            var addPartnerManagerLayer = layer.open({
-                type: 1,
-                title: '新增同行联系人',
-                skin: "layui-layer-rim",
-                area: '40%',
-                content: html,
-                scrollbar: false,
-                zIndex: 1028,
-                success: function() {
-                    var $addPartnerManagerObj = $(".T-addPartnerManager");
-                    //提交事件
-                    $addPartnerManagerObj.find('.T-submit-addPartnerManager').on('click', function() {
-                        var managerName = $addPartnerManagerObj.find('input[name=managerName]').val(),
-                            managerMobile = $addPartnerManagerObj.find('input[name=managerMobile]').val(),
-                            departmentName = $addPartnerManagerObj.find('input[name=departmentName]').val(),
-                            dutyName = $addPartnerManagerObj.find('input[name=dutyName]').val();
-                        singlePlan.addPartnerManagerFn(partnerAgencyId, managerName, managerMobile, departmentName, dutyName, $tab, addPartnerManagerLayer);
-                    });
-                }
-            });
-        } else {
-            layer.tips('新建联系人请先选择客户来源', $that, {
-                tips: [1, '#3595CC'],
-                time: 2000
-            });
-        }
-    };
-    //新增同行联系人
-    singlePlan.addPartnerManagerFn = function(partnerAgencyId, managerName, managerMobile, departmentName, dutyName, $obj, addPartnerManagerLayer) {
-        $.ajax({
-            url: KingServices.build_url("partnerAgency", "saveContact"),
-            data: {
-                partnerAgencyId: partnerAgencyId,
-                contactRealname: managerName,
-                contactMobileNumber: managerMobile,
-                departmentName: departmentName,
-                dutyName: dutyName,
-                operation: "view"
-            },
-            type: 'POST',
-            success: function(data) {
-                var result = showDialog(data);
-                if (result) {
-                    var contact = JSON.parse(data.partnerAgencyContact);
-                    layer.close(addPartnerManagerLayer);
-                    $obj.find('input[name=contactRealname]').val(contact.contactRealname + "-[" + contact.contactMobileNumber + "]").trigger('change');
-                    $obj.find('input[name=fromPartnerAgencyContactId]').val(contact.id);
-                }
-            }
-        });
-    };
-
+    //发团-
     singlePlan.confirmTripPlan = function(id,statusValue,billStatus, $that){
         if(billStatus != -1){
             showMessageDialog($( "#confirm-dialog-message" ),"该团已审核，无法确认");
@@ -1317,6 +1156,7 @@ define(function(require, exports) {
         }
     };
 
+    //监听-
     singlePlan.init_edit_event = function($tab, validate, type) {
         if (!!$tab && $tab.length === 1) {
             // 监听修改
@@ -1345,7 +1185,7 @@ define(function(require, exports) {
     };
     
     /**
-     * 初始化选择线路的对话框
+     * 初始化选择线路的对话框-
      */
     singlePlan.initLineProductSearch = function($tab, type, isSingle) {
         var html = searchTemplate({}),
@@ -1392,7 +1232,7 @@ define(function(require, exports) {
     };
 
     /**
-     * 获取线路产品数据，并填入选择线路产品的对话框
+     * 获取线路产品数据，并填入选择线路产品的对话框-
      * @param  {object} $dialog dialog的Jquery对象
      * @param  {int} type    0：新增 1：更新
      * @param  {int} page    页码
@@ -1532,7 +1372,7 @@ define(function(require, exports) {
         }
     }
 
-    //查看旅游小组成员
+    //查看旅游小组成员-
     singlePlan.viewTouristGroup = function(id){
         $.ajax({
             url:KingServices.build_url("tripPlan","getMemberList"),
@@ -1557,7 +1397,7 @@ define(function(require, exports) {
         });
     };
 
-    //导出发团计划
+    //导出发团计划-
     singlePlan.exportTripPlan = function(id){
         checkLogin(function(){
             var url = KingServices.build_url("export","exportTripPlan") + "&tripPlanId="+id+"";
@@ -1565,7 +1405,7 @@ define(function(require, exports) {
         });
     };
 
-    //取消计划
+    //取消计划-
     singlePlan.cancelTripPlan = function(id, $that){
         showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该发团计划信息？",function(){
             $.ajax({
@@ -1594,7 +1434,7 @@ define(function(require, exports) {
         trMemberCount = 0;
     };
 
-    //游客名单成员添加自动序号函数  singlePlan.MenberNumber(oClass);
+    //游客名单成员添加自动序号函数  singlePlan.MenberNumber(oClass);-
     singlePlan.MenberNumber = function($tab, isGroup){
         var $tr = $tab.find(".T-tourist-list tr");
         if(isGroup){
@@ -1641,59 +1481,6 @@ define(function(require, exports) {
                     }
                 }
             });
-        },
-        batchAddTourists : function($obj, fn){
-            var addVisotorMoreLayer = layer.open({
-                type: 1,
-                title: '批量添加游客',
-                skin: 'layui-layer-rim',
-                area: '40%',
-                zIndex: 1028,
-                content: T.batchAddTourist(),
-                success: function() {
-                    var $panelObj = $(".T-batchAddTouristGroupMemberContainer");
-                    $panelObj.find('.T-submit-batchTouristGroupMember').on('click', function() {
-                        F.saveVisitorMore($panelObj, addVisotorMoreLayer, $obj, fn);
-                    });
-                }
-            });
-        },
-        getName : function(str){
-            //return trim(str.replace(/[^\u4e00-\u9fa5a-zA-Z\s]/ig, "").replace(/\s+/g, " "));
-            var name = str.match(/(^|\s)([\u4e00-\u9fa5a-zA-Z\s]+)(\s|$)/ig);
-            return trim(name ? name[0] : " ").replace(/\s+/g, " ");
-        },
-        getPhone : function(str){
-            var phone = str.match(/(^|\s)(1[34587]\d{9})|(0[1-9]\d{1,2}[-\s]\d{7,8})(\s|$)/ig);
-            return trim(phone ? phone[0] : " ");
-        },
-        getIdCard : function(str){
-            var idCard = str.match(/(^|\s)\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)(\s|$)/ig);
-            return trim(idCard ? idCard[0] : " ");
-        },
-        saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj, fn){
-            var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val());
-            if (data != "") {
-                var dataArray = data.split(/\r?\n/);
-                if (dataArray.length > 0) {
-                    for (var i = 0; i < dataArray.length; i++) {
-                        var memberInfo = trim(dataArray[i]);
-                        if(memberInfo){
-                            $obj.append(T.touristsList({touristGroupMemberList:[{
-                                name : F.getName(memberInfo),
-                                mobileNumber : F.getPhone(memberInfo),
-                                idCardNumber : F.getIdCard(memberInfo)
-                            }]}));
-                            layer.close(addVisotorMoreLayer);
-                        }
-                    }
-                    if(fn){
-                        fn();
-                    }
-                }
-            }else{
-                showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
-            }
         },
         calcWhicDay : function($tab) {
             var $time = $tab.find('[name="startTime"]'),

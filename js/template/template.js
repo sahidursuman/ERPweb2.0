@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -92,6 +92,10 @@
         /(y+)/.test(fmt) && (fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length)));
         for (var k in o) new RegExp("(" + k + ")").test(fmt) && (fmt = fmt.replace(RegExp.$1, 1 == RegExp.$1.length ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
+    }), template.helper("dateTimeFormat", function(date, fmt) {
+        return date ? Tools.getDateTimeFormat(date, fmt) : "";
+    }), template.helper("dateTimeHSFormat", function(date) {
+        return date ? Tools.getDateTimeFormat(date, "yyyy-MM-dd hh:mm") : "";
     }), template.helper("getDateText", function(startTime, whichDay) {
         return Tools.addDay(startTime, whichDay - 1);
     }), template.helper("encode", function(data) {

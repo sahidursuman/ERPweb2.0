@@ -73,7 +73,7 @@ define(function(require, exports) {
 				       //初始化页面控件
 				       Tools.setDatePicker(tourguidPerObj.$tab.find('.datepicker'), true);
 				       //初始化页面绑定事件
-				       tourguidPerObj.init_event();
+				       tourguidPerObj.init_event(startTime,endTime);
 				       //autocomplete数据
 				       tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
 			       	// 绑定翻页组件
@@ -83,7 +83,7 @@ define(function(require, exports) {
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		tourguidPerObj.listtourguidPer(obj.curr -1,sortType,order);
+					    		tourguidPerObj.listtourguidPer(obj.curr -1,sortType,order,startTime,endTime,guideId,guideName);
 					    	}
 					    }
 					});
@@ -105,7 +105,7 @@ define(function(require, exports) {
 	};
 
     //初始化页面绑定事件
-    tourguidPerObj.init_event=function(){
+    tourguidPerObj.init_event=function(startTime,endTime){
     	//搜索按钮绑定事件
     	tourguidPerObj.$tab.find('.T-tourguidPer-search').on('click', function(event) {
     		event.preventDefault();
@@ -118,7 +118,7 @@ define(function(require, exports) {
     		event.preventDefault();
     		var $that=$(this),$tr=$that.closest('tr'),guideId=$tr.attr('data-guideId');
     		/* Act on the event */
-    		tourguidPerObj.guidePlayList(0,guideId,"","","");
+    		tourguidPerObj.guidePlayList(0,guideId,startTime,endTime);
     	});
     };
     

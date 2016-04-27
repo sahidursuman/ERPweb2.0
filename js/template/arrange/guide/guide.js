@@ -24,8 +24,6 @@ define(function(require, exports) {
 
         GuideArrange.initSelect($tab);
 
-        Tools.setDatePicker($searchArea.find('.datepicker'), true);
-
         // search
         $searchArea.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -107,6 +105,7 @@ define(function(require, exports) {
             end = Tools.addDay(start, factor);
             $end.val(end > today?today: end);
         }
+        Tools.setDatePicker($form.find('.datepicker'), true);
     };
     /**
      * 组织表格数据
