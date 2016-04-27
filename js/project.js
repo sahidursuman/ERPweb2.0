@@ -2757,14 +2757,14 @@ Tools.loadPluginScript = function(pluginKey){
 };
 
 //方向键控制table中input焦点
-Tools.directionKeyControlFocus = function($tab) {
+Tools.directionKeyControlFocus = function() {
 
 	function filterInput($obj) {
 		return $obj.find('input').filter(function() {
 			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') != 'hidden';
 		})
 	}
-	$tab.find('table').on('keydown', function() {
+	$(document).on('keydown.tableFocus','table', function() {
 		var $this = $(this),
 			keyCode = event.which,
 			$focusInput = $this.find('input:focus'),
@@ -2857,7 +2857,6 @@ Tools.directionKeyControlFocus = function($tab) {
 			default:
 				return;
 		}
-		//console.log("第"+(trIndex+1)+"行，"+"第"+(tdIndex+1)+"列，"+"第"+(inputIndex+1)+"个input。td里面一共有"+inputsLength+"个input")
 	})
 };
 

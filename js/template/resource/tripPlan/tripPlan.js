@@ -460,7 +460,6 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	tripPlan.init_event = function($tab,id,target) {
-		Tools.directionKeyControlFocus($tab);
 		Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
 		tripPlan.$editTab = $tab;
 		// 计算导付
