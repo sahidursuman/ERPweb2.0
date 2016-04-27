@@ -416,9 +416,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'bus',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-busList tr'), 
+            $busList = $tab.find('.T-busList'),
+            $tr = $busList.find('tr'), 
+            ids = $busList.data('del-json'),
             busList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -440,6 +443,12 @@ define(function(require, exports) {
             }
             busList.push(busJson);
         });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(busList.length > 0){
             data.arrangeList = JSON.stringify(busList);
         }
@@ -456,9 +465,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'hotel',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-hotelList tr'), 
+            $hotelList = $tab.find('.T-hotelList'),
+            $tr = $hotelList.find('tr'), 
+            ids = $hotelList.data('del-json'),
             hotelList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -481,6 +493,13 @@ define(function(require, exports) {
             }
             hotelList.push(hotelJson);
         });
+
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(hotelList.length > 0){
             data.arrangeList = JSON.stringify(hotelList);
         }
@@ -496,9 +515,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'scenic',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-scenicList tr'), 
+            $scenicList = $tab.find('.T-scenicList'),
+            $tr = $scenicList.find('tr'), 
+            ids = $scenicList.data('del-json'),
             scenicList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -522,6 +544,12 @@ define(function(require, exports) {
             }
             scenicList.push(scenicJson);
         });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(scenicList.length > 0){
             data.arrangeList = JSON.stringify(scenicList);
         }
@@ -537,9 +565,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'ticket',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-ticketList tr'), 
+            $ticketList = $tab.find('.T-ticketList'),
+            $tr = $ticketList.find('tr'), 
+            ids = $ticketList.data('del-json'),
             ticketList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -564,6 +595,12 @@ define(function(require, exports) {
             }
             ticketList.push(ticketJson);
         });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(ticketList.length > 0){
             data.arrangeList = JSON.stringify(ticketList);
         }
@@ -1174,6 +1211,26 @@ define(function(require, exports) {
             format: 'YYYY-MM-DD HH:mm',
             language: 'zh-CN'
         });
+    };
+
+    /**
+     * 组装删除ID集合
+     * @param  {[type]} arr [description]
+     * @return {[type]}     [description]
+     */
+    BookingArrange.assemblyDelIds = function(arr){
+        var delIds = null;
+        if(!!arr && arr.length > 0){
+            delIds = "";
+            for(var i=0; i<arr.length; i++){
+                if(i != arr.length -1){
+                    delIds += arr[i].id + ",";
+                }else{
+                    delIds += arr[i].id;
+                }
+            }
+        }
+        return delIds;
     };
 
     return BookingArrange;
