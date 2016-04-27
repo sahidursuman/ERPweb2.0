@@ -14,26 +14,26 @@
 <div class="overflow-x min-w-1050">
     <table class="table overflow-table  table-striped table-bordered table-hover w-1500">
         <thead>
-        <tr>
-            <th class="th-border" rowspan="2"><span class="necessary">*</span>开始时间</th>
-            <th class="th-border" rowspan="2"><span class="necessary">*</span>结束时间</th>
-            <th class="th-border" rowspan="2"><span class="necessary">*</span>任务</th>
-            <th class="th-border" rowspan="2"><span class="necessary">*</span>所属车队</th>
-            <th class="th-border" rowspan="2">车牌号</th>
-            <th class="th-border" rowspan="2">座位数</th>
-            <th class="th-border" rowspan="2"><span class="necessary">*</span>车费</th>
-            <th class="th-border" rowspan="2">优惠</th>
-            <th class="th-border" rowspan="2">应付</th>
-            <th class="th-border" rowspan="2">已付</th>
-            <th class="th-border" colspan="5">导游实销</th>
-            <th class="th-border" rowspan="2">操作</th>
+        <tr class="bg-blur">
+            <th rowspan="2"><span class="necessary">*</span>开始时间</th>
+            <th rowspan="2"><span class="necessary">*</span>结束时间</th>
+            <th rowspan="2"><span class="necessary">*</span>任务</th>
+            <th rowspan="2"><span class="necessary">*</span>所属车队</th>
+            <th rowspan="2">车牌号</th>
+            <th rowspan="2">座位数</th>
+            <th rowspan="2"><span class="necessary">*</span>车费</th>
+            <th rowspan="2">优惠</th>
+            <th rowspan="2">应付</th>
+            <th rowspan="2">社付</th>
+            <th colspan="5">导游实销</th>
+            <th rowspan="2">操作</th>
         </tr>
-        <tr>
-            <th class="th-border">导游</th>
-            <th class="th-border">金额</th>
-            <th class="th-border">付款方式</th>
-            <th class="th-border">单据</th>
-            <th class="th-border">导游报账备注</th>
+        <tr class="bg-blur">
+            <th>导游</th>
+            <th>金额</th>
+            <th>付款方式</th>
+            <th>单据</th>
+            <th>导游报账备注</th>
         </tr>
         </thead>
         <tbody class="T-count-bus">
@@ -135,7 +135,7 @@
                         <td>
                             <div class="div-h-30"></div>
                             <span class="F-float F-money">{{arrange.payedMoney}}</span>
-                        </td><!-- 已付 -->
+                        </td><!-- 社付 -->
                         
                         <td name="guideName">
                             <div class="div-h-30">
@@ -342,7 +342,7 @@
 
 {{if tripPlan.billStatus > -1}}
     <div style="width:60%;">
-        <div> 
+        <div arrangeType="bus"> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
             <input name="accountFinancialCheckComment" {{if !isFinance }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.busRemark.length>0}}{{remarkArrangeList.busRemark[0].opCheckRemark}}{{/if}}" />
         

@@ -1,6 +1,6 @@
-/*TMODJS:{"debug":true,"version":229,"md5":"bd8ed40ae881a84177c4e47b3840cb35"}*/
+/*TMODJS:{"debug":true,"version":1,"md5":"bd8ed40ae881a84177c4e47b3840cb35"}*/
 define(function(require) {
-    return require("../../../template")("arrange/singlePlan/view/updateSingleTripPlan", function($data, $filename) {
+    return require("../../../template")("arrange/singlePlan/view/update", function($data, $filename) {
         try {
             var $utils = this, $helpers = $utils.$helpers, $line = 0, $escape = $utils.$escape, tripPlan = $data.tripPlan, tripPlanDay = $data.tripPlanDay, guideDetail = $data.guideDetail, $each = $utils.$each, touristGroupList = ($data.rs, 
             $data.$index, $data.touristGroupList), hasData = ($data.group, $data.hasData), require = $data.require, $out = ($data.req, 
