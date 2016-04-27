@@ -917,7 +917,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if(showDialog(data)){
                             if(!!data.price){
-                                $parents.find("input[name=price]").val(data.price).trigger('change');
+                                $parents.find('input[name="costPrice"]').val(data.price).trigger('change');
                             }
                         }
                     }
@@ -1026,7 +1026,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if(showDialog(data)) {
                             if(!!data.price){
-                                $parents.find("input[name=price]").val(data.price);
+                                $parents.find('input[name="costPrice"]').val(data.price);
                             }
                         }
                     }
