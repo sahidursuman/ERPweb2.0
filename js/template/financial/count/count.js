@@ -1514,19 +1514,10 @@ define(function(require, exports){
 				content : html,
                 scrollbar: false, // 推荐禁用浏览器外部滚动条
 				success : function() {
-		    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-		    		/**图片查看旋转    ——不要删——*/
-		    		/*$('#layer-photos-financial-count').one('click', '[data-rel="colorbox"]', function() {
-		    			setTimeout(function() {
-		    				var btn = '<button type="button" id="cboxrotate" style="background:0 0;text-indent:0;width:26px;position:absolute;right:10px;bottom:0;height:26px;line-height:22px;padding:0 4px;text-align:center;border:2px solid #999;border-radius:16px;color:#666;font-size:12px;margin-left:5px;margin-bottom:5px;" ><i class="ace-icon fa fa-repeat"></i></button>'
-		    				$('#cboxContent').append(btn)
-		    			},1000)
-		    			var deg = 0;
-		    			$('#cboxContent').on('click', '#cboxrotate', function() {
-		    				deg += 90;
-		    				$('#cboxContent img').css("transform","rotate("+deg+"deg)")
-		    			})
-		    		})*/
+
+					$('.billImageDowebok').viewer({
+						url: 'data-original',
+					});
 				}
 			});
 	};
