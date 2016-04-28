@@ -1037,3 +1037,46 @@ FinancialService.closeTab = function(tab_id){
         }
     });
 };
+
+//查看单据公共方法
+FinancialService.viewBillImage = function(obj,bigImg,smallImg) {
+    var tHtml =  '<ul class="billImageDowebok">'
+                    +    '{{each images as image}}'
+                    +    '<li><span></span><img data-original="{{image.WEB_IMG_URL_BIG}}" src="{{image.WEB_IMG_URL_SMALL}}"></li>'
+                    +    '{{/each}}'
+                    +'</ul>';
+    var data = {
+        "images":[]
+    }, url = $(obj).attr('url');
+    var strs = url.split(",");
+    for(var i = 0; i < strs.length; i ++) {
+        var s = strs[i];
+        if(s != null && s != "" && s.length > 0) {
+            var image = {
+                "WEB_IMG_URL_BIG":imgUrl+s,
+                "WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
+            }
+            data.images.push(image);
+        }
+    }
+    if(data.images.length == 0) {
+        showMessageDialog($( "#confirm-dialog-message" ), "没有回传单据", function(){});
+        return;
+    }
+    var html = KingServices.inlineTemplate(tHtml, data);
+    layer.open({
+        type : 1,
+        title : "单据图片",
+        skin : 'layui-layer-rim', // 加上边框
+        area : '500px', // 宽高
+        zIndex : 1028,
+        content : html,
+        scrollbar: false, // 推荐禁用浏览器外部滚动条
+        success : function() {
+
+            $('.billImageDowebok').viewer({
+                url: 'data-original',
+            });
+        }
+    });
+}

@@ -8,7 +8,6 @@ define(function(require, exports) {
 	    listTemplate = require("./view/list"),
         hotelChecking = require("./view/hotelChecking"),
         hotelClearing = require("./view/hotelClearing"),
-	    billImagesTemplate = require("./view/billImages"),
         payedDetailTempLate = require("./view/viewPayedDetail"),
         needPayDetailTempLate = require("./view/viewNeedPayDetail");
 
@@ -418,37 +417,6 @@ define(function(require, exports) {
         FinancialService.updateSumPayMoney($tab,args.saveRule);
     };
 
-    //显示单据
-    hotel.viewImage = function(obj,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL) {
-    	var data = {"images":[] };
-    	var str = $(obj).attr('url');
-    	var strs = str.split(",");
-    	for(var i = 0; i < strs.length; i ++) {
-    		var s = strs[i];
-    		if(s != null && s != "" && s.length > 0) {
-	    		var image = {
-    				"WEB_IMG_URL_BIG":imgUrl+s,
-    				"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-	    		}
-	    		data.images.push(image);
-    		}
-    	}
-    	var html = billImagesTemplate(data);
-    	
-		layer.open({
-			type : 1,
-			title : "单据图片",
-			skin : 'layui-layer-rim',
-			area : '500px',
-			zIndex : 1028,
-			content : html,
-			scrollbar: false,
-			success : function() {
-	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-			}
-		});
-    }; 
-
     //已付金额明细
     hotel.payedDetail = function(id){
         $.ajax({
@@ -674,9 +642,9 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('id');
             if ($that.hasClass('T-hotelImg')) {
                 // 查看单据
-                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val();//大图
-                var WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-                hotel.viewImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val(),//大图
+                    WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
+                FinancialService.viewBillImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
             } else if ($that.hasClass('T-payedDetail')) {
                 // 已付明细
                 hotel.payedDetail(id);
