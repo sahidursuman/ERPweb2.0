@@ -2,7 +2,14 @@
     <tr class="touristGroup-{{touristGroup.id}}" data-id="{{touristGroup.id}}" data-status="{{touristGroup.status}}" data-InnerTransfer="{{touristGroup.isInnerTransferConfirm}}">
         <td>{{touristGroup.orderNumber}}</td>
         <td>{{if touristGroup.partnerAgency != null}}{{touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
-        <td>{{if touristGroup.lineProduct != null}} {{touristGroup.lineProduct.name}} {{/if}}</td>
+        <td>
+            {{if touristGroup.lineProduct != null}} {{touristGroup.lineProduct.name}} {{/if}}
+            {{if touristGroup.status == 5}}
+            <label class="lineProductArea pull-right"> 
+                <button class="btn btn-success btn-sm btn-white T-action T-show-part-group" index="0"> <i class="ace-icon fa bigger-110 icon-only fa-plus"></i>  </button> 
+            </label>
+            {{/if}}
+        </td>
         <td>{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td>{{touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
         <td><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
@@ -37,4 +44,22 @@
             </div>
         </td>
     </tr>
+    {{if touristGroup.status == 5}}
+    <tr class="hidden">
+        <td colspan="12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="th-border">线路产品</th>
+                        <th class="th-border">出团日期</th>
+                        <th class="th-border">完团日期</th>
+                        <th class="th-border">状态</th>
+                    </tr>
+                </thead>
+                <tbody class="T-part-group-list">
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    {{/if}}
 {{/each}}
