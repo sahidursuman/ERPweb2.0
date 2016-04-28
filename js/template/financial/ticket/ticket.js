@@ -265,9 +265,7 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
-					WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small');
-				FinancialService.viewBillImage(this, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
+				FinancialService.viewBillImage(this);
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
