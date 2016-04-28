@@ -438,9 +438,7 @@ define(function(require, exports) {
                 FinShop.unfold($that);
             } else if ($that.hasClass('T-view-receipts')) {
                 // 查看单据
-                var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),//大图
-                    WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small');//小图
-                FinancialService.viewBillImage(this, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
+                FinancialService.viewBillImage(this);
             } else if ($that.hasClass('T-payDetails')) {
                 FinShop.viewOperationDetail(id, 0);
             } else if ($that.hasClass('T-view-details')) {
