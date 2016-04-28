@@ -700,9 +700,7 @@ define(function(require, exports) {
                 id = $that.closest('tr').data('id');
             if ($that.hasClass('T-scenicImg')) {
                 // 查看单据
-                var WEB_IMG_URL_BIG = $tab.find("input[name=WEB_IMG_URL_BIG]").val(),//大图
-                    WEB_IMG_URL_SMALL = $tab.find("input[name=WEB_IMG_URL_SMALL]").val();//大图
-                FinancialService.viewBillImage(this,WEB_IMG_URL_BIG,WEB_IMG_URL_SMALL);
+                FinancialService.viewBillImage(this);
             } else if ($that.hasClass('T-payedDetail')) {
                 // 已付明细
                 scenic.payedDetail(id);
