@@ -724,7 +724,6 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				$parent.find('[name=price]').val(data.contractPrice * busDays);
-				tripPlan.plusPrice($this,$tab,false)
 			});
 		})
 
@@ -827,8 +826,6 @@ define(function(require, exports) {
 		tripPlan.viewOptionalRestaurant($tab.find('.T-chooseRestaurant'));
 		// 绑定费用计算
 		tripPlan.bindAutoCalcPrice($tab);
-		//计算计划导付
-		tripPlan.calculatePrice($tab,true);
 		//时间控件
 		tripPlan.dateTimePicker($tab);
 		// 绑定日期
@@ -1463,7 +1460,6 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
-		tripPlan.calculatePrice($tab, true);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 	};
@@ -1496,7 +1492,6 @@ define(function(require, exports) {
 		Tools.setDatePicker($tr.find('.datepicker'), true);
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
-		tripPlan.calculatePrice($tab, true);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindGuideChosen($tr);
@@ -1556,7 +1551,6 @@ define(function(require, exports) {
 		Tools.inputCtrolFloat($price);
 		tripPlan.addResource();
 		tripPlan.addBusResource($tab);
-		tripPlan.calculatePrice($tab, true);
 		tripPlan.dateTimePicker($tab);
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
@@ -1583,7 +1577,6 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_restaurant");
-		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
@@ -1614,7 +1607,6 @@ define(function(require, exports) {
 		var $price = tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_hotel");
-		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定  
 		validator = rule.update(validator); 
@@ -1643,7 +1635,6 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_scenic");
-		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);  
@@ -1692,7 +1683,6 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_selfPay");
-		tripPlan.calculatePrice($tab, true);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);  
@@ -1724,7 +1714,6 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_ticket");
-		tripPlan.calculatePrice($tab, true);
 		tripPlan.dateTimePicker($tab);
 		tripPlan.addResource();
 		// 更新表单验证的事件绑定
@@ -1753,7 +1742,6 @@ define(function(require, exports) {
 		var $price=tableContainer.find('.price');
 		Tools.inputCtrolFloat($price);
 		tripPlan.setChooseDays("tripPlan_addPlan_other");
-		tripPlan.calculatePrice($tab, true);
 		// 更新表单验证的事件绑定
 		validator = rule.update(validator);    
 	};
@@ -2607,7 +2595,7 @@ define(function(require, exports) {
 			$parents.find("input[name=hotelRoomId]").val("");
 			$parents.find("input[name=mobileNumber]").val("");
 			$parents.find("input[name=managerName]").val("");
-        	$parents.find("input[name=price]").val("");
+        	$parents.find("input[name=price]").val("").trigger('change');
 		});
 		
 		hotelChoose.autocomplete({
@@ -2621,7 +2609,7 @@ define(function(require, exports) {
 					$parents.find("input[name=hotelRoomId]").val("");
 					$parents.find("input[name=mobileNumber]").val("");
 					$parents.find("input[name=managerName]").val("");
-                	$parents.find("input[name=price]").val("");
+                	$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select: function(event,ui){
@@ -2639,7 +2627,7 @@ define(function(require, exports) {
 							$parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
-	                    	$parents.find("input[name=price]").val("");
+	                    	$parents.find("input[name=price]").val("").trigger('change');
 						}
                     }
 				});
@@ -2682,7 +2670,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=hotelRoomId]").val("");
-                	$parents.find("input[name=price]").val("");
+                	$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select:function(event,ui){
@@ -2747,7 +2735,7 @@ define(function(require, exports) {
 					$parents.find("input[name=scenicId]").val("");
 					$parents.find("input[name=chargingProjects]").val("");
 					$parents.find("input[name=scenicItemId]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select: function(event,ui){
@@ -2755,11 +2743,8 @@ define(function(require, exports) {
 				$parents.find("input[name=scenicId]").val(ui.item.id).trigger('change');
 				$parents.find("input[name=chargingProjects]").val("");
 				$parents.find("input[name=scenicItemId]").val("");
-				$parents.find("input[name=price]").val("");
+				$parents.find("input[name=price]").val("").trigger('change');
 				$parents.find("input[name=orderNumber]").val("");
-				$parents.find("input[name=price]").val(0);
-				$parents.find("input[name=price]").trigger('change');
-				tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this);
@@ -2809,9 +2794,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)) {
-							$parents.find("input[name=price]").val(data.price);
-							$parents.find("input[name=price]").trigger('change');
-							tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
+							$parents.find("input[name=price]").val(data.price).trigger('change');
 						}
                     }
                 });
@@ -2821,7 +2804,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=scenicItemId]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=price]").val("").trigger('change');
 				}
 			}
 		}).off("click").on("click", function(){
@@ -2984,9 +2967,10 @@ define(function(require, exports) {
 					$this.val("");
 					$parents.find("input[name=selfPayId]").val("");
 					$parents.find("input[name=managerName]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=price]").val("").trigger('change');
 					$parents.find("input[name=selfPayItemId]").val("");
 					$parents.find("input[name=selfitem]").val("");
+					$parents.find("input[name=lowestPrice]").val("").trigger('change');
 				}
 			},
 			select:function(event, ui){
@@ -3003,9 +2987,8 @@ define(function(require, exports) {
 							$parents.find("input[name=managerName]").val(selfPay.managerName +' '+ selfPay.mobileNumber);
 							$parents.find("input[name=selfPayItemId]").val("");
 							$parents.find("input[name=selfitem]").val("");
-							$parents.find("input[name=price]").val(0);
-							$parents.find("input[name=lowestPrice]").val(0);
-							tripPlan.calculatePrice($tab);
+							$parents.find("input[name=price]").val("").trigger('change');
+							$parents.find("input[name=lowestPrice]").val("").trigger('change');
 						}
                     }
                 });
@@ -3046,6 +3029,10 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=selfPayItemId]").val("");
+					// 底价
+					$parents.find("input[name=lowestPrice]").val('').trigger('change');
+					// 单价
+					$parents.find("input[name=price]").val('').trigger('change');
 				}
 			},
 			select: function(event, ui){
@@ -3065,10 +3052,9 @@ define(function(require, exports) {
                     success: function(data) {
 						if(showDialog(data)){
 							// 底价
-							$parents.find("input[name=lowestPrice]").val(data.price);
+							$parents.find("input[name=lowestPrice]").val(data.price).trigger('change');
 							// 单价
-							$parents.find("input[name=price]").val(data.marketPrice);
-							tripPlan.calculatePrice($tab);
+							$parents.find("input[name=price]").val(data.marketPrice).trigger('change');
 						}
                     }
 				})
@@ -3420,54 +3406,6 @@ define(function(require, exports) {
 	        	tripPlan.calcSummary($tab);  
 	        }
 	    });
-	};
-
-	//计算 应付 计划导付
-	tripPlan.calculatePrice = function($tab, isFirst){
-		return;
-		$tab.find("input[name=guidePayMoney]").off("blur").on("blur", function() {
-			tripPlan.calcSummary($tab);
-		});
-		var table = $tab.find(".table-tripPlan-container tbody tr"), price = 0, num = 0, reduceMoney = 0;
-		table.each(function(){
-			var $this = $(this), $parents = $this.closest('tr');
-			$this.find("input[name=price], input[name=prePayMoney], input[name=reduceMoney], input[name=lowestPrice], input[name=memberCount], input[name=needRoomCount]").on("change", function(){
-				tripPlan.plusPrice($(this), $tab);
-			});
-			$this.find("select[name=payType]").off("change").on("change", function(){
-				tripPlan.plusPrice($(this), $tab);
-			});
-			if (isFirst) {
-				//加载时自动计算
-				tripPlan.plusPrice($this.find('input[name=price], input[name=memberCount], input[name=reduceMoney], input[name=prePayMoney]'), $tab ,isFirst);
-			}else{
-				tripPlan.plusPrice($(this), $tab);
-			}
-		});
-	};
-	tripPlan.plusPrice = function($this, $tab , isCalc){
-		var $parents = $this.closest('tr');
-		var payType = $parents.find("select[name=payType]").val(),
-			prePayMoney = $parents.find("input[name=prePayMoney]").val(),
-			prePayMoney = isNaN(prePayMoney) ? 0 : prePayMoney,
-			price = parseFloat($parents.find("input[name=price]").val()),
-			lowestPrice = $parents.find("input[name=lowestPrice]").val();
-
-		if (lowestPrice != undefined) { // 处理底价问题
-			price = lowestPrice*1;
-		}
-		price = isNaN(price) ? 0 : price;
-		num = parseFloat($parents.find("input[name=memberCount], input[name=memberCount], input[name=needRoomCount]").val());
-		num = isNaN(num) ? 0 : num;
-		reduceMoney = parseFloat($parents.find("input[name=reduceMoney]").val());
-		reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
-
-		$parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
-		
-		if (!!isCalc == false) {
-			$parents.find("input[name=guidePayMoney]").val((price * num - reduceMoney)-prePayMoney);
-		}
-		tripPlan.calcSummary($tab);
 	};
 
 	/**
