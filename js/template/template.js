@@ -455,6 +455,12 @@
           case 6:
             return "已内转";
 
+          case -1:
+            return "内转成功";
+
+          case -2:
+            return "外转成功";
+
           default:
             return "-";
         }

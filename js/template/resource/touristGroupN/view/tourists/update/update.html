@@ -108,7 +108,7 @@
 		</div>
 	</div>
 	
-	<div class="row T-offered">
+	<div class="row T-offered {{if !joinTrip || joinTrip.length ==0}}hidden{{/if}}">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point T-part-group-text">{{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}}</h3>
 		</div>
@@ -119,9 +119,10 @@
 						<th>线路产品</th>
 						<th width="100">出团日期</th>
 						<th width="100">完团日期</th>
+						<th width="95">本段团款</th>
 						<th width="260">线路应付</th>
 						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}" width="260">返程住宿</th>
-						<th width="95">本段现收团款</th>
+						<th width="95">本段代收团款</th>
 						<th width="80">状态</th>
 						<th width="80">操作</th>
 					</tr>
@@ -137,6 +138,7 @@
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker" name="tripStartTime" value="{{rs.tripStartTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status != 1}} disabled{{/if}}></td>
 						<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime" value="{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status != 1}} disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney" value="{{rs.subNeedPayMoney}}"{{if rs.status != 1}} disabled{{/if}}></td>
 						<td>
 							<input type="text" class="min-w-200 F-float F-money{{if rs.status == 1}} T-action T-line-cope hct-cursor{{/if}}" readonly name="lineNeedPayMoney" value="{{rs.lineNeedPayAllMoney}}" data-json="{{rs.lineInfo}}" data-id="{{rs.lineInfoId}}" placeholder="点击填写线路应付">
 							<a class="cursor{{if rs.status != 1}} hct-color-BBB{{else}} T-action T-clear{{/if}}" data-status="partLine">清空</a>
@@ -265,8 +267,8 @@
 		</div>
 	</div>
 </div>
-<div style="position: fixed; right: 20px; bottom: 10px;min-width: 50px;">
+<!-- <div style="position: fixed; right: 20px; bottom: 10px;min-width: 50px;">
 	<a class="btn btn-warning T-refresh" title="重新加载数据" style="border-radius: 5px;">
 		<i class="ace-icon fa fa-refresh bigger-160" style="margin-right: 0;"></i>
 	</a>
-</div>
+</div> -->

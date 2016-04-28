@@ -486,6 +486,8 @@ define(function(require, exports) {
                 tripPlan.addOther($tab);
             }
         });
+        // 时间控件
+        Tools.setDatePicker($tab.find('.T-datepicker'), true);
         //部门下拉框
         $tab.find('input[name="dutyDepartmentName"]').each(function(index, el) {
             tripPlan.getBusinessList($(this));
@@ -528,13 +530,15 @@ define(function(require, exports) {
                 }
             },
             select:function(event,ui){
-                var item = ui.item;
-                if(item.id != $target.data('id')){
-                    $groupName.val('').data('id', '');
-                    $dutyUser.val('').data('id', '');
+                var item = ui.item,
+                    $tr = $target.closest('tr');
+                if(item != null){
+                    $tr.find('input[name=dutySubDepartmentName]').val('');
+                    $tr.find('input[name=dutySubDepartmentId]').val('');
+                    $tr.find('input[name=dutyUserName]').val('');
+                    $tr.find('input[name=dutyUserId]').val('');
+                    $target.siblings('input[name="dutyDepartmentId"]').val(item.id);
                 }
-                $target.blur().data('id', item.id);
-                $target.siblings('input[name="dutyDepartmentId"]').val(item.id);
             }
         }).on('click', function(event) {
             event.preventDefault();
@@ -563,7 +567,7 @@ define(function(require, exports) {
             }
         });
     };
-    /**
+     /**
      * 绑定子部门
      * @param  {object} $target 绑定选择的Jquery对象
      * @return {[type]}         [description]
@@ -572,26 +576,29 @@ define(function(require, exports) {
         var $businessName = $target.closest('.layui-layer-content').find('[name="businessName"]'),
             $dutyUser = $target.closest('.layui-layer-content').find('[name="dutyUserName"]'),
             $tr = $target.closest('tr');
-
+            
         return $target.autocomplete({
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
                     $target.val('').data('id', '');
                     $dutyUser.val('').data('id', '');
+
                 }
             },
             select:function(event,ui){
-                var item = ui.item;
-                if(item.id != $target.data('id')){
-                    $dutyUser.val('').data('id', '');
+                var item = ui.item,
+                    $tr = $target.closest('tr');
+                if(item != null){
+                    $tr.find('input[name=dutyUserName]').val('');
+                    $tr.find('input[name=dutyUserId]').val('');
+                    $tr.find('input[name=dutySubDepartmentId]').val(item.id);
                 }
-                $target.blur().data('id', item.id);
             }
         }).on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var businessNameId = $tr.find('input[name=dutyDepartmentName]').data('id');
+            var businessNameId = $tr.find('input[name=dutyDepartmentId]').val();
             if(!!businessNameId){
                 $.ajax({
                     url: KingServices.build_url('group', 'selectGroup'),
@@ -605,11 +612,11 @@ define(function(require, exports) {
                             for (var i = 0, len = groupMapList.length;i < len; i++) {
                                 groupMapList[i].id = groupMapList[i].groupId;
                                 groupMapList[i].value = groupMapList[i].groupName;
-                                $target.siblings('input[name="dutySubDepartmentId"]').val(groupMapList[i].id);
                             }
 
                             $target.autocomplete('option', 'source', groupMapList);
                             $target.autocomplete('search', '');
+
 
                         }
                     }
@@ -636,14 +643,18 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data('id', item.id);
+                    $tr = $target.closest('tr');
+                if(item != null){
+                    $tr.find('input[name=dutyUserId]').val(item.id);
+                }
+                
             }
         })
         .on('click', function(event) {
             event.preventDefault();
             var $tr = $target.closest('tr'),$dutyDepartment = $tr.find('[name="dutySubDepartmentName"]');
             $dutyDepartment = $dutyDepartment.length > 0 ? $dutyDepartment : $target.closest('.layui-layer-content').find('[name="groupName"]');
-            var businessGroupId = $dutyDepartment.data('id');
+            var businessGroupId = $tr.find('input[name=dutySubDepartmentId]').val();
             var type = 1;//$dutyDepartment.data('type');
             var url = !!type ? KingServices.build_url('group', 'selectDutyUser') : KingServices.build_url('innerTransferOperation', 'getDutyOPUserList');
             var data = !!type ? {"groupId" : businessGroupId} : {businessGroupId : businessGroupId};
@@ -662,7 +673,6 @@ define(function(require, exports) {
                                 for (var i = 0, len = dutyUserList.length;i < len; i++) {
                                     dutyUserList[i].value = dutyUserList[i].dutyUserName;
                                     dutyUserList[i].id = dutyUserList[i].dutyUserId;
-                                    $target.siblings('input[name="dutyUserId"]').val(dutyUserList[i].id);
                                 }
 
                                 $target.autocomplete('option', 'source', dutyUserList);
@@ -1263,7 +1273,6 @@ define(function(require, exports) {
      */
     tripPlan.deleteArrangePlan = function($obj) {
         var $tr = $obj.closest('tr'),id = $tr.attr('entity-id'),arrangeType = $tr.attr('arrangeType');
-        console.log($obj);
         if(arrangeType == 'bus'){
             //车ID缓存
             var  RequireListDelJson = {
@@ -1329,7 +1338,7 @@ define(function(require, exports) {
             tripPlan.guideRequireListDel.push(singleDateArray);
         }
         $tr.fadeOut(function(){
-            $that.parents('tr').remove();
+            $obj.parents('tr').remove();
         })
     };
     // 、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
@@ -2895,6 +2904,6 @@ define(function(require, exports) {
     exports.init = tripPlan.initModule;
     exports.addTripPlan = tripPlan.addTripPlan;
     exports.listTripPlanGroup = tripPlan.listTripPlanGroup;
-
+    exports.viewTripPlan = tripPlan.viewTripPlan;
     exports.addVisotorMore = F.batchAddTourists;
 });

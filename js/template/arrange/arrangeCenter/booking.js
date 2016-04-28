@@ -2,6 +2,7 @@
  * 代订安排
  * author：魏桂云
  * date：2016-04-11
+ * description:一切描述尽在不言中
  */
 
 define(function(require, exports) {
@@ -32,6 +33,7 @@ define(function(require, exports) {
             ticketPageNo : 0,
             scenicPageNo : 0
         },
+        rule = require('./rule'),
         service = 'v2/singleItemArrange/bookingOrderArrange';
 
     /**
@@ -164,20 +166,32 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initBusEvent = function($tab){
+        var validate = rule.busCheck($tab);
         BookingArrange.bindBusCompanyChoose($tab);
         $tab.find('.T-busList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
-            var $that = $(this), $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="fee"]').val() - $tr.find('[name="reduceMoney"]').val())
+            var $that = $(this), $tr = $that.closest('tr'),
+            sumCostMoney = ($tr.find('[name="fee"]').val() || 0) - ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-busList').on('click', '.T-bus-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-busList').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr');;
+            if($that.hasClass('T-bus-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-busCompany')){
+                KingServices.addBusCompany(function(formData){
+                    $tr.find('[name="busCompany"]').val(formData.companyName).data('id', formData.id);
+                    $tr.find('[name="needSeatCount"]').val('');
+                    $tr.find('[name="needBusBrand"]').val('');
+                })
+            }
         });
         $tab.find('.T-bus-add').on('click', function(){
             addBus();
         });
         $tab.find('.T-hotel-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveBusData($tab);
         });
         return this;
@@ -186,7 +200,7 @@ define(function(require, exports) {
                         '<td><input name="endTime" type="text" class="datepicker" /></td>'+
                         '<td><input name="needSeatCount" type="text" class="col-sm-12 bind-change" /></td>'+
                         '<td><input name="needBusBrand" type="text" class="col-sm-12 bind-change" /></td>'+
-                        '<td><input name="busCompany" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><div class="col-sm-12"><input name="busCompany" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-busCompany" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="fee" type="text" class="col-sm-12 T-action-blur F-float F-money" maxlength="9" /></td>'+
                         '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" maxlength="9" /></td>'+
                         '<td><input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly /></td>'+
@@ -196,6 +210,7 @@ define(function(require, exports) {
             $tab.find('.T-busList').append(html);
             BookingArrange.bindBusCompanyChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.busUpdate(validate);
         }
     };
 
@@ -205,21 +220,35 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initHotelEvent = function($tab){
+        var validate = rule.hotelCheck($tab);
         BookingArrange.bindHotelChoose($tab);
         $tab.find('.T-hotelList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), 
-                $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                                ($tr.find('[name="roomCount"]').val() || 0) - 
+                                ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-hotelList').on('click', '.T-hotel-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-hotelList').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr');
+            if($that.hasClass('T-hotel-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-hotelName')){
+                KingServices.addHotel(function(formData){
+                    $tr.find('[name="hotelLevel"]').val(formData.level);
+                    $tr.find('[name="hotelName"]').val(formData.name).data('id', formData.id);
+                    $tr.find('[name="hotelRoomType"]').val('').data('id', '');
+                });
+            }
         });
         $tab.find('.T-hotel-add').on('click', function(){
             addHotel();
         });
         $tab.find('.T-hotel-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveHotelData($tab);
         });
         return this;
@@ -236,7 +265,7 @@ define(function(require, exports) {
                         '    <option value="6">五星</option>'+
                         '    <option value="7">五星以上</option>'+
                         '    </select></td>'+
-                        '<td><input name="hotelName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><div class="col-sm-12"><input name="hotelName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-hotelName" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="hotelRoomType" type="text" class="col-sm-12 bind-change" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
@@ -248,6 +277,7 @@ define(function(require, exports) {
             $tab.find('.T-hotelList').append(html);
             BookingArrange.bindHotelChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.hotelUpdate(validate);
         }
     };
 
@@ -257,32 +287,45 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initScenicEvent = function($tab){
+        var validate = rule.scenicCheck($tab);
         BookingArrange.bindScenicChoose($tab);
         $tab.find('.T-scenicList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), 
-                $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                                ($tr.find('[name="roomCount"]').val() || 0) - 
+                                ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-scenicList').on('click', '.T-scenic-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-scenicList').on('click', '.T-action', function(event){
+            event.preventDefault();
+            var $that = $(this), $tr = $that.closest('tr');
+            if($that.hasClass('T-scenic-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-scenicName')){
+                KingServices.addScenic(function(formData){
+                    $tr.find('[name="scenicName"]').val(formData.name).data('id', formData.id);
+                    $tr.find('[name="scenicItemName"]').val('').data('id', '');
+                });
+            }
         });
         $tab.find('.T-scenic-add').on('click', function(){
             addScenic();
         });
         $tab.find('.T-scenic-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveScenicData($tab);
         });
         return this;
-        function addHotel(){
+        function addScenic(){
             var html =  '<tr><td><input name="startTime" type="text" class="datepicker" /></td>'+
                         '<td><select name="tourTime" class="col-sm-12">'+
                         '    <option selected="selected" value="全天">全天</option> '+
                         '        <option value="上午">上午</option> '+
                         '        <option value="下午">下午</option> '+
                         '    </select></td>'+
-                        '<td><input name="scenicName" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><div class="col-sm-12"><input name="scenicName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-scenicName" title="添加景区"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="scenicItemName" type="text" class="col-sm-12"/></td>'+
                         '<td><input name="tourDuration" type="text" class="col-sm-12" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
@@ -296,6 +339,7 @@ define(function(require, exports) {
             $tab.find('.T-scenicList').append(html);
             BookingArrange.bindScenicChoose($tab);
             Tools.setDatePicker($tab.find('.datepicker'));
+            rule.scenicUpdate(validate);
         }
     };
 
@@ -305,27 +349,39 @@ define(function(require, exports) {
      * @return {[type]}      [description]
      */
     BookingArrange._initTicketEvent = function($tab){
+        var validate = rule.ticketCheck($tab);
         BookingArrange.setDateTimePicker($tab.find('.datetimepicker'));
         BookingArrange.bindTicketChoose($tab);
         $tab.find('.T-ticketList').on('change', '.T-action-blur', function(event){
             event.preventDefault();
             var $that = $(this), 
-                $tr = $that.closest('tr');
-            $tr.find('[name="sumCostMoney"]').val($tr.find('[name="costPrice"]').val() * $tr.find('[name="roomCount"]').val() - $tr.find('[name="reduceMoney"]').val())
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                                ($tr.find('[name="roomCount"]').val() || 0) - 
+                                ($tr.find('[name="reduceMoney"]').val() || 0);
+            $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
         });
-        $tab.find('.T-ticketList').on('click', '.T-ticket-delete', function(event){
-            var $tr = $(this).closest('tr');
-            BookingArrange.delArrangeList($tr, $tr.data('id'));
+        $tab.find('.T-ticketList').on('click', '.T-action', function(event){
+            event.preventDefault()
+            var $that = $(this), $tr = $that.closest('tr');
+            if($that.hasClass('T-ticket-delete')){
+                BookingArrange.delArrangeList($tr, $tr.data('id'));
+            }else if($that.hasClass('T-add-ticketName')){
+                KingServices.addTicket(function(formData){
+                    $tr.find('[name="ticketName"]').val(formData.name).data('id', formData.id);
+                });
+            }
         });
         $tab.find('.T-ticket-add').on('click', function(){
             addTicket();
         });
         $tab.find('.T-ticket-save').on('click', function(){
+            if(!validate.form())return;
             BookingArrange.saveTicketData($tab);
         });
         return this;
         function addTicket(){
-            var html =  '<tr><td><input name="ticketName" type="text" class="col-sm-12 bind-change" /></td>'+
+            var html =  '<tr><td><div class="col-sm-12"><input name="ticketName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><select name="type">'+
                         '        <option value="1">机票</option>'+
                         '        <option value="2">汽车票</option>'+
@@ -335,10 +391,10 @@ define(function(require, exports) {
                         '<td><input name="startCity" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="arriveCity" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="shift" type="text" class="col-sm-12" maxlength="50" /></td>'+
-                        '<td><input name="startTime" type="text" class="col-sm-12 datepicker" /></td>'+
+                        '<td><input name="startTime" type="text" class="col-sm-12 datetimepicker" /></td>'+
                         '<td><input name="seatLevel" type="text" class="col-sm-12" maxlength="30" /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
-                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
+                        '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
                         '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="sumCostMoney" type="text" class="col-sm-12 F-float F-money" readonly /></td>'+
                         '<td><input name="prePayMoney" type="text" class="col-sm-12 F-float F-money" /></td>'+
@@ -346,7 +402,8 @@ define(function(require, exports) {
                         '<td><a class="cursor T-action T-ticket-delete">删除</a></td></tr>';
             $tab.find('.T-ticketList').append(html);
             BookingArrange.bindTicketChoose($tab);
-            Tools.setDatePicker($tab.find('.datepicker'));
+        BookingArrange.setDateTimePicker($tab.find('.datetimepicker'));
+            rule.ticketUpdate(validate);
         }
     };
 
@@ -360,9 +417,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'bus',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-busList tr'), 
+            $busList = $tab.find('.T-busList'),
+            $tr = $busList.find('tr'), 
+            ids = $busList.data('del-json'),
             busList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -384,6 +444,12 @@ define(function(require, exports) {
             }
             busList.push(busJson);
         });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(busList.length > 0){
             data.arrangeList = JSON.stringify(busList);
         }
@@ -400,9 +466,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'hotel',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-hotelList tr'), 
+            $hotelList = $tab.find('.T-hotelList'),
+            $tr = $hotelList.find('tr'), 
+            ids = $hotelList.data('del-json'),
             hotelList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -425,6 +494,13 @@ define(function(require, exports) {
             }
             hotelList.push(hotelJson);
         });
+
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(hotelList.length > 0){
             data.arrangeList = JSON.stringify(hotelList);
         }
@@ -440,9 +516,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'scenic',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-scenicList tr'), 
+            $scenicList = $tab.find('.T-scenicList'),
+            $tr = $scenicList.find('tr'), 
+            ids = $scenicList.data('del-json'),
             scenicList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -466,6 +545,12 @@ define(function(require, exports) {
             }
             scenicList.push(scenicJson);
         });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(scenicList.length > 0){
             data.arrangeList = JSON.stringify(scenicList);
         }
@@ -481,9 +566,12 @@ define(function(require, exports) {
         var data = {
                 id : $tab.find('.base-info').data('id'),
                 item : 'ticket',
-                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
             },
-            $tr = $tab.find('.T-ticketList tr'), 
+            $ticketList = $tab.find('.T-ticketList'),
+            $tr = $ticketList.find('tr'), 
+            ids = $ticketList.data('del-json'),
             ticketList = [];
         $tr.each(function(){
             var $that = $(this),
@@ -508,6 +596,12 @@ define(function(require, exports) {
             }
             ticketList.push(ticketJson);
         });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
         if(ticketList.length > 0){
             data.arrangeList = JSON.stringify(ticketList);
         }
@@ -599,7 +693,7 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 var tab_key = tabKey + '_' + target + '_view';
 
-                if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
+                if (Tools.addTab(tab_key, "查看代订" + title, html(data))) {
                     var $tab = $('#tab-' + tab_key + '-content');
                     $tab.find('.T-btn-close').on('click', function(){
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
@@ -861,7 +955,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if(showDialog(data)){
                             if(!!data.price){
-                                $parents.find("input[name=price]").val(data.price).trigger('change');
+                                $parents.find('input[name="costPrice"]').val(data.price).trigger('change');
                             }
                         }
                     }
@@ -970,7 +1064,7 @@ define(function(require, exports) {
                     success: function(data) {
                         if(showDialog(data)) {
                             if(!!data.price){
-                                $parents.find("input[name=price]").val(data.price);
+                                $parents.find('input[name="costPrice"]').val(data.price);
                             }
                         }
                     }
@@ -1064,6 +1158,53 @@ define(function(require, exports) {
         });
     }
 
+    /**
+     * 选择外联销售
+     * @param  {[type]} $target [description]
+     * @return {[type]}         [description]
+     */
+    BookingArrange.getOPUserList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data('id', '');
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur()
+                .data('id', item.id);
+            }
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+                return false;
+            }
+            $.ajax({
+                url: KingServices.build_url('tripPlan', 'getOPUserList'),
+                type: 'post',
+                showLoading: false,
+            })
+            .done(function(data) {
+                if (showDialog(data)) {                    
+                    var userList = JSON.parse(data.userList || false);
+                    if (!!userList) {
+                        for (var i = 0, len = userList.length;i < len; i++) {
+                            userList[i].value = userList[i].realName;
+                        }
+
+                        $target.autocomplete('option', 'source', userList).data('ajax', true);
+                        $target.autocomplete('search', '');
+                    }
+                }
+            });
+        });
+    }
+
     BookingArrange.setDateTimePicker = function($obj){
         $obj.datetimepicker({
             autoclose: true,
@@ -1071,6 +1212,26 @@ define(function(require, exports) {
             format: 'YYYY-MM-DD HH:mm',
             language: 'zh-CN'
         });
+    };
+
+    /**
+     * 组装删除ID集合
+     * @param  {[type]} arr [description]
+     * @return {[type]}     [description]
+     */
+    BookingArrange.assemblyDelIds = function(arr){
+        var delIds = null;
+        if(!!arr && arr.length > 0){
+            delIds = "";
+            for(var i=0; i<arr.length; i++){
+                if(i != arr.length -1){
+                    delIds += arr[i].id + ",";
+                }else{
+                    delIds += arr[i].id;
+                }
+            }
+        }
+        return delIds;
     };
 
     return BookingArrange;

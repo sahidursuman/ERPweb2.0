@@ -2143,6 +2143,7 @@ Tools.addDay = function(date, days) {
  * @return {string}      格式化之后的日期/时间
  */
 Tools.getDateTimeFormat = function(date, fmt) {
+	date = date.split('-').join('/');
 	fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
 	return (new Date(date)).Format(fmt);
 };

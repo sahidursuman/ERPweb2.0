@@ -24,7 +24,7 @@ define(function(require, exports) {
         customerOrder.isFirstBookingOrder = 0;
 
 		tabIndex = tabIndex || 0;
-        if(Tools.addTab(tabKey, '客户订单', mainFrameTemplate())){
+        if(Tools.addTab(tabKey, '订单中心', mainFrameTemplate())){
         	var $tab = $("#tab-" + tabKey + "-content");
         	if(tabIndex === 0){
         		$('a[href="#customerOrderTouristsOrder"]').trigger('click');

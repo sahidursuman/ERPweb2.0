@@ -21,7 +21,7 @@
                         <th class="th-border">出发城市</th>
                         <th class="th-border">到达城市</th>
                         <th class="th-border"><span class="necessary">*</span>班次</th>
-                        <th class="th-border" width="100"><span class="necessary">*</span>时间</th>
+                        <th class="th-border" width="130"><span class="necessary">*</span>时间</th>
                         <th class="th-border"><span class="necessary">*</span>座位级别</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
@@ -37,7 +37,10 @@
                 {{each arrangeList as rs}}
                     <tr data-id="{{rs.id}}">
                         <td>
-                            <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" />
+                            <div class="col-sm-12">
+                                <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" />
+                                <span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+                            </div>
                         </td>
                         <td>
                             <select name="type">
@@ -63,10 +66,10 @@
                             <input name="seatLevel" value="{{rs.seatLevel}}" type="text" class="col-sm-12" maxlength="30" />
                         </td>
                         <td>
-                            <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur" />
+                            <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
                         </td>
                         <td>
-                            <input name="roomCount" value="{{rs.roomCount}}" type="text" class="col-sm-12 T-action-blur" />
+                            <input name="roomCount" value="{{rs.roomCount}}" type="text" class="col-sm-12 T-action-blur F-float F-count" />
                         </td>
                         <td>
                             <input name="reduceMoney" value="{{rs.reduceMoney}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
@@ -88,7 +91,10 @@
                 {{else}}
                     <tr>
                         <td>
-                            <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                            <div class="col-sm-12">
+                                <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                                <span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+                            </div>
                         </td>
                         <td>
                             <select name="type">

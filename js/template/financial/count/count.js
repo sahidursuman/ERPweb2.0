@@ -307,6 +307,10 @@ define(function(require, exports){
 
 		//显示隐藏
 		Count.showOrhideList($obj);
+		//显示计算公式
+		/*$obj.find('.T-formula').on('click',function(){
+			window.open('../share/formula.html');
+		});*/
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
 		});
@@ -516,15 +520,14 @@ define(function(require, exports){
 		
 		//显示隐藏
 		Count.showOrhideList($obj);
-		/*//显示计算公式
-		$obj.find('.T-formula').on('click',function(){
-			var html = formulaTemplate();
-			Tools.addTab(menuKey+'formula','计算公式',html);
-		});*/
+		
 		//显示计算公式
+		/*$obj.find('.T-formula').on('click',function(){
+			window.open('../share/formula.html');
+		});*/	
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
-		});
+		});	
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -983,6 +986,9 @@ define(function(require, exports){
 		//显示隐藏
 		Count.showOrhideList($obj);
 		//显示计算公式
+		/*$obj.find('.T-formula').on('click',function(){
+			window.open('../share/formula.html');
+		});*/
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
 		});
@@ -1198,10 +1204,10 @@ define(function(require, exports){
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
 		$hotelObj.off('change').on('change','input',function(){
-			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
+			var nameFlag = $(this).attr('name');
+			if(scenicNoneAutoFields.indexOf(nameFlag)<0){
 				Count.calculateCost($(this));
-				Count.autoHotelSum($(this),$obj);
+				Count.autoScenicSum($(this),$obj);
 				Count.formatDays($(this),$obj);
 			}
 			
@@ -1856,7 +1862,7 @@ define(function(require, exports){
 			'<td rowspan="2" name="currGuideRemark">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input type="text" name="currGuideRemark"/>'+
+					'<input type="text" name="currGuideRemark" class="w-100"/>'+
 				'</div>'+
 			'</td>'+
 			'<td rowspan="2">未对账&nbsp;&nbsp;<a href="javascript:void(0)" class="T-shopArrDelAll">删除</a></td>'+
@@ -1935,7 +1941,7 @@ define(function(require, exports){
 		var guideShopMoneyHtml = Count.shopPersonAndBusGuide($obj);
 		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
 			'<td><div class="div-h-30"></div>'+
-				'<input type="text" name="shopPolicy" style="width:90px;"/>'+
+				'<input type="text" name="shopPolicy" class="w-70"/>'+
 				'<input type="hidden" name="shopPolicyId" />'+
 				'<button class="btn btn-danger btn-sm btn-white pull-right T-shopArrDelItem">'+
 				'<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
@@ -6617,7 +6623,7 @@ define(function(require, exports){
 		'<td name="billRemark">'+
 			'<div class="div-h-30"></div>'+
 			'<div class="div-h-30 mar-t-5" index="1">'+
-				'<input name="billRemark" type="text"/>'+
+				'<input name="billRemark" type="text" class="w-100"/>'+
 			'</div>'+
 		'</td>';
 		return tdHtml;
@@ -6660,7 +6666,7 @@ define(function(require, exports){
 		if(!!$obj){
 			shopGuideMoney = '<input name="shopGuideMoney" class="w-80" type="text">';
 			imgTd = '<span style="color:#bbb;">查看</span>';
-			billRemark = '<input name="billRemark" type="text">';
+			billRemark = '<input name="billRemark" type="text" class="w-100">';
 		};
 		var html = '<td name="shopGuideMoney">'+
 				'<div class="div-h-30"></div>'+
@@ -6746,7 +6752,7 @@ define(function(require, exports){
 	//显示隐藏列表
 	Count.showOrhideList = function($obj){
 		$obj.find('.T-toggle-List').off('click.toggle').on('click.toggle', function() {
-			var $this = $(this), $tbody = $this.closest('h5').next();/*$tab.find('.T-tripPlanDayList-tbody')*/;
+			var $this = $(this), $tbody = $this.closest('h5').next();
 			if ($this.hasClass('T-show')) {
 				$this.addClass('T-hide');
 				$tbody.hide();
