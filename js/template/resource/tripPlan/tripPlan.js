@@ -2758,6 +2758,7 @@ define(function(require, exports) {
 				$parents.find("input[name=price]").val("");
 				$parents.find("input[name=orderNumber]").val("");
 				$parents.find("input[name=price]").val(0);
+				$parents.find("input[name=price]").trigger('change');
 				tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 			}
 		}).off("click").on("click", function(){
@@ -2809,6 +2810,7 @@ define(function(require, exports) {
                     success: function(data) {
 						if(showDialog(data)) {
 							$parents.find("input[name=price]").val(data.price);
+							$parents.find("input[name=price]").trigger('change');
 							tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 						}
                     }
@@ -3422,6 +3424,7 @@ define(function(require, exports) {
 
 	//计算 应付 计划导付
 	tripPlan.calculatePrice = function($tab, isFirst){
+		console.log("calculatePrice");
 		return;
 		$tab.find("input[name=guidePayMoney]").off("blur").on("blur", function() {
 			tripPlan.calcSummary($tab);
@@ -3460,6 +3463,7 @@ define(function(require, exports) {
 		reduceMoney = parseFloat($parents.find("input[name=reduceMoney]").val());
 		reduceMoney = isNaN(reduceMoney) ? 0 : reduceMoney;
 
+		console.log(num);
 		$parents.find("input[name=needPayMoney]").val(price * num - reduceMoney);
 		
 		if (!!isCalc == false) {
