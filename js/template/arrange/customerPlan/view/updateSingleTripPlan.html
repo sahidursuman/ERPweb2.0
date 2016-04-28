@@ -280,43 +280,43 @@
             <h3 class="pull-left">操作计划</h3>
             <div class="pull-left mar-l-15 T-action-plan">
                 <label data-type="guide" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.guide}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="guide" class="ace" {{if hasData.guide}}checked="true"{{/if}}>
                     <span class="lbl">导游</span>
                 </label>
                 <label data-type="insurance" class="control-label T-add-action">
-                    <input type="checkbox" class="ace" {{if hasData.insurance}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="insurance" class="ace" {{if hasData.insurance}}checked="true"{{/if}}>
                     <span class="lbl">保险</span>
                 </label>
                 <label data-type="bus" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.bus}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="bus" class="ace" {{if hasData.bus}}checked="true"{{/if}}>
                     <span class="lbl">车辆</span>
                 </label>
                 <label data-type="restaurant" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.restaurant}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="restaurant" class="ace" {{if hasData.restaurant}}checked="true"{{/if}}>
                     <span class="lbl">餐饮</span>
                 </label>
                 <label data-type="hotel" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.hotel}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="hotel" class="ace" {{if hasData.hotel}}checked="true"{{/if}}>
                     <span class="lbl">酒店</span>
                 </label>
                 <label data-type="scenic" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.scenic}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="scenic" class="ace" {{if hasData.scenic}}checked="true"{{/if}}>
                     <span class="lbl">景区</span>
                 </label>
                 <label data-type="ticket" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.ticket}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="ticket" class="ace" {{if hasData.ticket}}checked="true"{{/if}}>
                     <span class="lbl">票务</span>
                 </label>
                 <label data-type="shop" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.shop}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="shop" class="ace" {{if hasData.shop}}checked="true"{{/if}}>
                     <span class="lbl">购物</span>
                 </label>
                 <label data-type="selfPay" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.selfPay}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="selfPay" class="ace" {{if hasData.selfPay}}checked="true"{{/if}}>
                     <span class="lbl">自费</span>
                 </label>
                 <label data-type="other" class="control-label T-add-action mar-l-10">
-                    <input type="checkbox" class="ace" {{if hasData.other}}checked="true"{{/if}}>
+                    <input type="checkbox" tab-type="other" class="ace" {{if hasData.other}}checked="true"{{/if}}>
                     <span class="lbl">其它</span>
                 </label>
                 <label data-type="all" class="control-label T-add-all mar-l-15">
@@ -329,16 +329,35 @@
     <div class="row">
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
-                <li class="col-sm-1 no-padding align-center R-right active" data-right="1140011"> <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="true">导游</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140012"> <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="false">保险</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140013"> <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140014"> <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="true">餐饮</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140015"> <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="true">酒店</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140016"> <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="true">景区</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140017"> <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="true">票务</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140018"> <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="true">购物</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019"> <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="true">自费</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019"> <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="true">其他</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="guide" data-right="1140011">   <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="true">导游</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="insurance" data-right="1140012"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="false">保险</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="bus" data-right="1140013"> 
+                    <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="restaurant" data-right="1140014">
+                     <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="true">餐饮</a> 
+                 </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="hotel" data-right="1140015"> 
+                    <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="true">酒店</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="scenic" data-right="1140016"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="true">景区</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="ticket" data-right="1140017">
+                 <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="true">票务</a>
+                  </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="shop" data-right="1140018"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="true">购物</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="selfPay" data-right="1140019"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="true">自费</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="other" data-right="1140019"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="true">其他</a>
+                </li>
             </ul>
             <div class="tab-content T-tab-content" style="position:relative;top: -2px">
                 <!-- 保险 -->
@@ -401,7 +420,7 @@
                     </div>
                 </div>
                 <!-- 导游 -->
-                <div id="tripPlan_addPlan_guide" class="tab-pane fade active in">
+                <div id="tripPlan_addPlan_guide" class="tab-pane fade ">
                     <div class=" ui-sortable-handle">
                         <h5 class="title-size"> <i class="ace-icon fa fa-user"></i> 导游计划 <button class="btn btn-sm btn-success T-addResource T-addGuide" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
                         <form class="T-guide-list">

@@ -531,7 +531,7 @@ define(function(require, exports) {
                             title = $obj.find('.hct-plan-ask-title').text(),
                             id = $obj.data('id');
                         if(type === thisType){
-                            if(!!id){
+                            if(!!id){ 
                                 showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
                                     $.ajax({
                                         url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequire'),
@@ -545,7 +545,7 @@ define(function(require, exports) {
                                             });
                                         }
                                     });
-                                },function(){
+                                    },function(){
                                     $label.html('<input type="checkbox" class="ace" checked="checked"><span class="lbl">'+$label.text()+'</span>')
                                 });
                             }else{
@@ -782,34 +782,34 @@ define(function(require, exports) {
                     // console.log(data.tripPlan.dutyOPUser.businessGroup.name)
                     if ($that.hasClass('T-addInsurance')) {
                         //保险安排
-                        singlePlan.addInsurance($tab);
+                        singlePlan.addInsurance($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addGuide')) {
                         //导游安排
                         singlePlan.addGuide($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addBus')) {
                         //车辆安排
-                        singlePlan.addBus($tab);
+                        singlePlan.addBus($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addRestaurant')) {
                         //餐厅安排
-                        singlePlan.addRestaurant($tab);
+                        singlePlan.addRestaurant($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addHotel')) {
                         //酒店安排
-                        singlePlan.addHotel($tab);
+                        singlePlan.addHotel($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addScenic')) {
                         //景区安排
-                        singlePlan.addScenic($tab);
+                        singlePlan.addScenic($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addShop')) {
                         //购物安排
-                        singlePlan.addShop($tab);
+                        singlePlan.addShop($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addSelfPay')) {
                         //自费安排
-                        singlePlan.addSelfPay($tab);
+                        singlePlan.addSelfPay($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addTicket')) {
                         //票务安排
-                        singlePlan.addTicket($tab);
+                        singlePlan.addTicket($tab, startTime, endTime,data);
                     } else if ($that.hasClass('T-addOther')) {
                         //其它安排
-                        singlePlan.addOther($tab);
+                        singlePlan.addOther($tab, startTime, endTime,data);
                     }
                 }
             });
@@ -836,7 +836,23 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.chooseHotel($(this));
         });
+        //
+        $tab.find('.T-action-plan').find('input[type=checkbox]').on('click', function(event) {
+            var $that = $(this),tabtype = $that.attr('tab-type');
+            var $checked = $that.is(":checked")
+            singlePlan.tabTransition($tab,tabtype,$checked);
+        });
     };
+    singlePlan.tabTransition = function($tab,tabtype,$checked){
+        var tab = $tab.find('.T-arrange-tabs').children('[tab-name='+tabtype+']');
+        if(!$checked){
+           tab.addClass('hidden');
+
+        }else{
+           tab.removeClass('hidden');
+        }
+        
+    }
     /**
      * 绑定部门
      * @param  {object} $target 绑定选择的Jquery对象
@@ -1030,7 +1046,7 @@ define(function(require, exports) {
      * 添加保险安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addInsurance = function($obj) {
+    singlePlan.addInsurance = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
                     '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
@@ -1107,14 +1123,14 @@ define(function(require, exports) {
      * 添加车安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addBus = function($obj) {
+    singlePlan.addBus = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1148,14 +1164,14 @@ define(function(require, exports) {
      * 添加餐安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addRestaurant = function($obj) {
+    singlePlan.addRestaurant = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1189,29 +1205,29 @@ define(function(require, exports) {
      * 添加酒店安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addHotel = function($obj) {
+    singlePlan.addHotel = function($obj,startTime, endTime,data) {
         var html = '<tr entity-id="" arrangeType = "hotel">'+
                     '<td>'+
                         '<input type="hidden" name="id" value="">'+
-                        '<input type="text" name="startTime" value="" class="T-datepicker">'+
+                        '<input type="text" name="startTime"  value="'+(startTime||"")+'" class="T-datepicker">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="text" name="endTime" value="" class="T-datepicker">'+
+                        '<input type="text" name="endTime" value="'+(endTime||"")+'" class="T-datepicker">'+
                     '</td>'+
                     '<td><input type="text" class="T-choose-hotel col-xs-12" name="hotel" readonly="readonly"></td>'+
                     '<td>'+
                         '<input type="text" name="requireContent" value="" class="col-xs-12">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="hidden" name="dutyDepartmentId" value="">'+
-                        '<input type="text" name="dutyDepartmentName" value="">'+
+                        '<input type="hidden" name="dutyDepartmentId" >'+
+                        '<input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'">'+
                     '</td>'+
                     '<td>'+
                         '<input type="hidden" name="dutySubDepartmentId" value="">'+
-                        '<input type="text" name="dutySubDepartmentName" value="">'+
+                        '<input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'">'+
                     '</td>'+
                     '<td>'+
-                        '<input type="hidden" name="dutyUserId" value="">'+
+                        '<input type="hidden" name="dutyUserId" value="'+(data.realName||"")+'">'+
                         '<input type="text" name="dutyUserName" value="">'+
                     '</td>'+
                     '<td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>'+
@@ -1250,14 +1266,14 @@ define(function(require, exports) {
      * 添加景区安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addScenic = function($obj) {
+    singlePlan.addScenic = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1291,14 +1307,14 @@ define(function(require, exports) {
      * 添加购物安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addShop = function($obj) {
+    singlePlan.addShop = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1332,14 +1348,14 @@ define(function(require, exports) {
      * 添加自费安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addSelfPay = function($obj) {
+    singlePlan.addSelfPay = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1373,14 +1389,14 @@ define(function(require, exports) {
      * 添加票务安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addTicket = function($obj) {
+    singlePlan.addTicket = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1414,14 +1430,14 @@ define(function(require, exports) {
      * 添加其他安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addOther = function($obj) {
+    singlePlan.addOther = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input  type="hidden" name="dutyDepartmentId" value="" /></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input name="dutySubDepartmentId" type="hidden" value="" /></td>'+
-                    '<td><input type="text" name="dutyUserName"><input name="dutyUserId" type="hidden" value=""/></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
