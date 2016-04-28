@@ -771,6 +771,8 @@ define(function(require, exports) {
          $tab.find(".T-sumConsumeMoney").text(total.sumConsumeMoney);
         $tab.find(".T-sumTravelAgencyRebateMoney").text(total.sumTravelAgencyRebateMoney);
         $tab.find(".T-sumGuideRebateMoney").text(total.sumGuideRebateMoney);
+        $tab.find(".T-quanpeiRebateMoney").text(total.sumQuanpeiRebateMoney);
+        $tab.find(".T-twoRebateMoney").text(total.sumTwoRebateMoney);
         $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
         $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
         $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);

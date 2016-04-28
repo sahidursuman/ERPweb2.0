@@ -1842,7 +1842,7 @@ define(function(require, exports){
 				'<td style="font-weight: bold;text-align:right;" colspan="5">导佣小计：</td>'+
 				'<td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalGuideMoney">0</span></td>'+
 				'<td style="font-weight: bold;text-align:right;">全陪小计：</td>'+
-				'<td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-allGuideMoney">0</span></td>'+
+				'<td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-allTravelMoney">0</span></td>'+
 				'<td style="font-weight: bold;text-align:right;">社佣小计：</td>'+
 				'<td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalTravelMoney">0</span></td>'+
 				'<td style="font-weight: bold;text-align:right;">返佣小计：</td>'+
@@ -2124,6 +2124,7 @@ define(function(require, exports){
 					$prev.eq(i).children('td[rowspan]').prop('rowspan', rowSpan);
 					$tr.remove();
 					Count.autoShopSumCost($obj,$parentObj);
+					Count.sumShopTwoMoney($obj,$parentObj);
 					break;
 				}
 			};
@@ -2192,8 +2193,9 @@ define(function(require, exports){
 		var $twoRebateMoney = $tr.find('input[name=twoRebateMoney]');
 		var thisIndex = $obj.closest('div').attr('index');
 		var sumGmoney = 0,sumTmoney = 0,sumSmoney = 0,gRate = 0,thisSmoney = 0,
-			tRate = $travelAgencyRate.val(),qRate = 0;
+			tRate = $travelAgencyRate.val(),qRate = 0,sumTwoMoney = 0;
 
+		
 		$guideRate.find('div').each(function(){
 			var index = $(this).attr('index');
 			if(index == thisIndex){
@@ -2239,14 +2241,19 @@ define(function(require, exports){
 					travelMoney();
 					guideMoney();
 					quanpeiRebateMoney();
+					Count.sumShopTwoMoney($obj,$parentObj);
+					break;
+				case 'twoRebate':
+					Count.sumShopTwoMoney($obj,$parentObj);
 					break;
 				default: break;
 			}
 		}else{
-			if(editFeildTagName != 'travelAgencyRateMoney' && editFeildTagName != 'guideRateMoney' && editFeildTagName != "quanpeiRebateMoney"){
+			if(editFeildTagName != 'travelAgencyRateMoney' && editFeildTagName != 'guideRateMoney' && editFeildTagName != "quanpeiRebateMoney" && editFeildTagName != "twoRebateMoney"){
 				travelMoney();
 				guideMoney();
 				quanpeiRebateMoney();
+				Count.sumShopTwoMoney($obj,$parentObj);
 			}
 		}
 		function guideMoney (){
@@ -2289,9 +2296,6 @@ define(function(require, exports){
 			$quanpeiRebateMoney = $shopList.find('input[name=quanpeiRebateMoney]');
 
 		var sumMoney = 0,sumSGmoney = 0,sumgMoney = 0,sumtMoney = 0,sumtwoRebateMoney = 0,sumgQuanpMoney = 0;
-
-		
-
 		$shopGuideMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumSGmoney += sum;
@@ -2500,6 +2504,61 @@ define(function(require, exports){
 		$parentObj.find('.T-sumShopMoney').text(sumShopMoney);
 		$parentObj.find('.T-sumTravelMoney').text(sumTravelMoney);
 		$parentObj.find('.T-sumGuideMoney').text(sumGuideMoney);
+	};
+	//计算二次返佣
+	Count.sumShopTwoMoney = function($obj,$parentObj){
+		var $tr = $obj.closest('tr'),
+			td_cnt = 0,nextTr = $tr.nextAll(),preTr = $tr.prevAll(),sumTwoMoney = 0,shopTwoRate = 0,
+			thisShopTwoMoney = 0;
+		if($tr.hasClass('oldData')){
+			for(var i = 0;i<nextTr.length;i++){
+				var $that = nextTr.eq(i);
+				if($that.hasClass('sumMoney')){
+					var t = sumTwoMoneyFn($tr);
+						shopTwoRate = $tr.find('input[name=twoRebate]').val();
+					sumTwoMoney += t;
+					thisShopTwoMoney = Count.changeTwoDecimal(sumTwoMoney*shopTwoRate/100);
+					$tr.find('input[name=twoRebateMoney]').val(thisShopTwoMoney);
+					break;
+				}else{
+					var t = sumTwoMoneyFn($that);
+					sumTwoMoney += t;
+				}
+			};
+		}else{
+			for(var i = 0;i<nextTr.length;i++){
+				var $that = nextTr.eq(i);
+				if($that.hasClass('sumMoney')){
+					var t = sumTwoMoneyFn($tr);
+						sumTwoMoney += t;
+					break;
+				}else{
+					var t = sumTwoMoneyFn($that);
+					sumTwoMoney += t;
+				}
+			};
+
+			for(var i = 0;i<preTr.length;i++){
+				var $this = preTr.eq(i);
+				if($this.hasClass('oldData')){
+					var t = sumTwoMoneyFn($this);
+						shopTwoRate = $this.find('input[name=twoRebate]').val();
+						sumTwoMoney += t;
+					thisShopTwoMoney = Count.changeTwoDecimal(sumTwoMoney*shopTwoRate/100);
+					$this.find('input[name=twoRebateMoney]').val(thisShopTwoMoney);
+					break;
+				}else{
+					var t = sumTwoMoneyFn($this);
+					sumTwoMoney += t;
+				}
+			};
+		};
+		function sumTwoMoneyFn (tr){
+			var twoMoney = Count.changeTwoDecimal(tr.find('.sumConsumeMoney').text());
+			return twoMoney;
+		};
+		
+		Count.autoShopSumCost($obj,$parentObj);
 	};
 	//计算整个团收入、毛利、人均毛利
 	Count.tripIncome = function($obj){
@@ -4063,7 +4122,7 @@ define(function(require, exports){
 					Count.autoSelfSum($obj,$parentObj);
 				break;
 			case 'shopArrange' :
-					Count.autoShopSumCost($obj,$parentObj);
+					Count.sumShopTwoMoney($obj,$parentObj);
 					var $tr = $obj.closest('tr'),$td = $obj.closest('td'),
 						shopPolicyId = $tr.find('input[name=shopPolicyId]').val(),
 						consumeMoney = $tr.find('input[name=sumConsumeMoney]').val(),
