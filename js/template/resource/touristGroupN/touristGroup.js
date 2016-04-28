@@ -1953,16 +1953,15 @@ define(function(require, exports) {
                 $target.autocomplete('search', '');
             }else{
                 $.ajax({
-                    url: KingServices.build_url('group', 'selectBusinessGroup'),
+                    url: KingServices.build_url('innerTransferOperation', 'getBusinessGroupList'),
                     type: 'post',
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var businessGroupList = data.businessGroupList;
+                        var businessGroupList = JSON.parse(data.businessGroupList || null);
                         if (!!businessGroupList) {
                             for (var i = 0, len = businessGroupList.length;i < len; i++) {
-                                businessGroupList[i].id = businessGroupList[i].businessGroupId;
-                                businessGroupList[i].value = businessGroupList[i].businessGroupName;
+                                businessGroupList[i].value = businessGroupList[i].name;
                             }
 
                             $target.autocomplete('option', 'source', businessGroupList).data('ajax', true);
