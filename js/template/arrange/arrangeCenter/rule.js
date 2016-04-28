@@ -442,7 +442,7 @@ define(function(require, exports) {
                     errMsg: '景区不能为空'
                 }]
             },
-            {
+           /* {
                 //出发城市
                 $ele: $obj.find('[name="startCity"]'),
                 rules : [{
@@ -457,7 +457,7 @@ define(function(require, exports) {
                     type: 'null',
                     errMsg: '到达城市不能为空'
                 }]
-            },
+            },*/
             {
                 //班次
                 $ele: $obj.find('[name="shift"]'),
@@ -517,12 +517,12 @@ define(function(require, exports) {
             return settings;
         },
         ticketCheck : function($container){
-            this.$scenicContainer = $container;
+            this.$ticketContainer = $container;
             return $container.formValidate(this.ticketEditor($container));
         },
         ticketUpdate : function(validator) {
             if (!!validator)  {
-                validator.update(this.ticketEditor(this.$scenicContainer));
+                validator.update(this.ticketEditor(this.$ticketContainer));
             }
 
             return validator;

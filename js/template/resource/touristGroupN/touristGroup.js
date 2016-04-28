@@ -17,6 +17,7 @@ define(function(require, exports) {
             list : require('./view/tourists/list'),//列表页
             listTable : require('./view/tourists/listTable'),//列表页表格
             listCount : require('./view/tourists/listCount'),//列表页合计
+            listPartGroup : require('./view/tourists/listPartGroup'),//获取参团列表
             add : require('./view/tourists/add'),//新增页面
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
@@ -215,6 +216,12 @@ define(function(require, exports) {
             if(args.fromBussinessGroupName == "全部"){
                 args.fromBussinessGroupName = "";
             }
+            if($searchArea.find('.T-more-btn').hasClass('unfold')){
+                delete args.dateType;
+                delete args.tripTime;
+                delete args.realName;
+                delete args.customerType;
+            }
             return args;
         }
     };
@@ -265,7 +272,7 @@ define(function(require, exports) {
         //表内操作
     	$tab.find('.T-touristGroup').on('click', '.T-action', function(event){
     		event.preventDefault();
-    		var $that = $(this), id = $that.closest('tr').data('id');
+    		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
     		if($that.hasClass('T-edit')){
     			touristGroup.touristGroupUpdate(id);
     		}else if($that.hasClass('T-view')){
@@ -274,6 +281,8 @@ define(function(require, exports) {
                 showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
                     touristGroup.touristGroupDelete(id, $tab);
                 });
+            }else if($that.hasClass('T-show-part-group')){
+                touristGroup.getListPartGroup(id, $tr, $that);
             }
     	});
 
@@ -292,6 +301,57 @@ define(function(require, exports) {
         });
 
     	return this;
+        function getArgs($searchArea){
+            var type = $searchArea.find('.T-choosePorB').val(),
+                args = {
+                    pageNo : 0,
+                    orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                    type : type,
+                    lineTripName : $searchArea.find('[name="lineTripName"]').val(),
+                    guestDetails : $searchArea.find('[name="guestDetails"]').val(),
+                    customerType : $searchArea.find('[name="customerType"]').val(),
+                    dateType : $searchArea.find('[name="dateType"]').val(),
+                    tripTime : $searchArea.find('[name="tripTime"]').val(),
+                    realName: $searchArea.find('[name=realName]').val(),
+                    statusSearch : $searchArea.find('.T-select-status').val()
+                };
+            if(type == "1"){
+                args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
+                args.fromPartnerAgencyId = $searchArea.find('[name="fromPartnerAgencyId"]').val();
+            }else if(type == "2"){
+                args.fromBussinessGroupName = $searchArea.find('[name="fromBussinessGroupName"]').val();
+                args.fromBussinessGroupId = $searchArea.find('[name="fromBussinessGroupId"]').val();
+            }
+            if(args.fromPartnerAgencyName == "全部"){
+                args.fromPartnerAgencyName = "";
+            }
+            if(args.fromBussinessGroupName == "全部"){
+                args.fromBussinessGroupName = "";
+            }
+            return args;
+        }
+    };
+
+    touristGroup.getListPartGroup = function(id, $tr, $that){
+
+        if($that.attr('index') == "1"){
+            $that.html('<i class="ace-icon fa bigger-110 icon-only fa-plus"></i>');
+            $tr.next('tr').addClass('hidden');
+            $that.attr('index', "0");
+        }else{
+            $.ajax({
+                url: KingServices.build_url('customerOrder','getSubOrderInfo'),
+                data: {id : id},
+                type: 'POST',
+                success: function(data) {
+                    if(showDialog(data)){
+                        $that.html('<i class="ace-icon fa bigger-110 icon-only fa-minus"></i>');
+                        $tr.next('tr').removeClass('hidden').find('.T-part-group-list').html(T.listPartGroup(data));
+                        $that.attr('index', "1");
+                    }
+                }
+            });
+        }
     };
 
     /**
@@ -1953,16 +2013,15 @@ define(function(require, exports) {
                 $target.autocomplete('search', '');
             }else{
                 $.ajax({
-                    url: KingServices.build_url('group', 'selectBusinessGroup'),
+                    url: KingServices.build_url('innerTransferOperation', 'getBusinessGroupList'),
                     type: 'post',
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        var businessGroupList = data.businessGroupList;
+                        var businessGroupList = JSON.parse(data.businessGroupList || null);
                         if (!!businessGroupList) {
                             for (var i = 0, len = businessGroupList.length;i < len; i++) {
-                                businessGroupList[i].id = businessGroupList[i].businessGroupId;
-                                businessGroupList[i].value = businessGroupList[i].businessGroupName;
+                                businessGroupList[i].value = businessGroupList[i].name;
                             }
 
                             $target.autocomplete('option', 'source', businessGroupList).data('ajax', true);
