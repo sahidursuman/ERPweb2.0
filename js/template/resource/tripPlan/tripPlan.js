@@ -2845,7 +2845,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)) {
-							$parents.find("input[name=price]").val(data.price);
+							$parents.find("input[name=price]").val(data.price).trigger('change');
 							tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 						}
                     }
