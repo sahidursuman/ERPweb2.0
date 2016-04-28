@@ -5,9 +5,9 @@
 			<td colspan="4" class="HeadManage">商家主体信息</td>
 		</tr>
 		<tr>
-			<td class="style-myself">商家名称：</td>
+			<td class="style-myself">商家名称</td>
 			<td class="styleOne-self">{{selfpay.name}}</td>
-			<td class="style-myself">是否启用：</td>
+			<td class="style-myself">是否启用</td>
 			<td class="styleOne-self">{{if selfpay.status == 0}}
 				已停用
 				{{else}}
@@ -15,19 +15,19 @@
 				{{/if}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">联系人：</td>
+			<td class="style-myself">联系人</td>
 			<td class="styleOne-self">{{selfpay.managerName}}</td>
-			<td class="style-myself">联系电话：</td>
+			<td class="style-myself">联系电话</td>
 			<td class="styleOne-self">{{selfpay.mobileNumber}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">座机号码：</td>
+			<td class="style-myself">座机号码</td>
 			<td class="styleOne-self">{{selfpay.telNumber}}</td>
-			<td class="style-myself">传真号码：</td>
+			<td class="style-myself">传真号码</td>
 			<td class="styleOne-self">{{selfpay.faxNumber}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">所在地区：</td>
+			<td class="style-myself">所在地区</td>
 			<td class="styleOne-self" colspan="3">{{if selfpay.province != null}}
 				{{selfpay.province.name}}
 				{{/if}}
@@ -40,11 +40,11 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="style-myself">详细地址：</td>
+			<td class="style-myself">详细地址</td>
 			<td class="styleOne-self" colspan="3">{{selfpay.street}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">商家简介：</td>
+			<td class="style-myself">商家简介</td>
 			<td class="styleOne-self" colspan="3">{{selfpay.remark}}</td>
 		</tr>
 	</table>
