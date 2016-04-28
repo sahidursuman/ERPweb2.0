@@ -543,7 +543,9 @@ table tr td {
 .font-w-bold{
     font-weight: bold;
 }
-
+.font-s-12{
+    font-size: 12px;
+}
 .label-inline-60 {
     display: inline-block;
     width: 60px;
