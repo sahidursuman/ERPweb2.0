@@ -104,7 +104,7 @@ define(function(require, exports) {
 
                 }
             })
-            .on('change', 'input[type="checkbox"]', function(event) {
+            .on('change', '.T-cheked', function(event) {
                 event.preventDefault();
                 TransferFun.setArrangeId($(this));
             })

@@ -1408,7 +1408,7 @@ define(function(require, exports) {
         var installCheckDatahotel = [];
         $tr.each(function(i){
             var $that = $(this),id = $that.attr('data-id');
-            var selectFlag = $that.find('.T-hotelcheked').is(':checked');//判断是否勾选
+            var selectFlag = $that.find('.T-cheked').is(':checked');//判断是否勾选
             if(selectFlag){
                 var checkData = {
                     id : id,
