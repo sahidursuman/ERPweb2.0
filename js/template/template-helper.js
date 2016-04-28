@@ -468,6 +468,8 @@ template.helper("getPartGroupStatusText", function(status){
         case 4:     return '已取消';
         case 5:     return '已分段';
         case 6:     return '已内转';
+        case -1:     return '内转成功';
+        case -2:     return '外转成功';
         default:     return '-';
     }
 });

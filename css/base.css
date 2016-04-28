@@ -1023,7 +1023,20 @@ input.datepicker:not([class^="col-"]) {
 	position: relative;
 	border-left: 1px solid #ddd!important;
 }
-.table>thead>tr.T-tr-fixed>th:last-child{
+.widget-main.no-padding .table-bordered th:first-child{
+	border-left: 1px solid #ddd;
+}
+.widget-main.no-padding .table-bordered>tbody>tr:last-child>td{
+    border-bottom-width: 1px!important;
+}
+.widget-main.no-padding .table-bordered td:first-child{
+    border-left-width: 1px;
+}
+.widget-main.no-padding .table-bordered>tbody>tr>td:last-child{
+    border-right-width: 1px!important;
+}
+.table>thead>tr.T-tr-fixed>th:last-child,
+.widget-main.no-padding .table-bordered>thead>tr>th:last-child{
 	border-right: 1px solid #ddd!important;
 }
 .table>thead>tr.bg-blur.T-tr-fixed>th{

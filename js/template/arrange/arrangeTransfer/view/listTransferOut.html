@@ -1,6 +1,7 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight">
 <thead>
 	<tr class="bg-blur">
+		<th>收客单号</th>
 		<th>同行地接</th>
 		<th>出游日期</th>
 		<th>游客</th>
@@ -18,6 +19,7 @@
  		{{each result as result}}
  		{{if result!=null}}        
 			<tr data-value="{{result.id}}" data-status="{{result.status}}">
+				<td>{{if result.touristGroup}}{{result.touristGroup.orderNumber }} {{/if}}</td>
 				<td>{{result.partnerAgency.travelAgencyName}}</td>
 				<td>{{if !!result.touristGroup}}{{result.touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				{{if result.touristGroup != null}}

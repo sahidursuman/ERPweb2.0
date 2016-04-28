@@ -108,7 +108,7 @@
 		</div>
 	</div>
 	
-	<div class="row T-offered">
+	<div class="row T-offered {{if !joinTrip || joinTrip.length ==0}}hidden{{/if}}">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point T-part-group-text">{{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}}</h3>
 		</div>
