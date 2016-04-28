@@ -2596,7 +2596,7 @@ define(function(require, exports) {
 			$parents.find("input[name=hotelRoomId]").val("");
 			$parents.find("input[name=mobileNumber]").val("");
 			$parents.find("input[name=managerName]").val("");
-        	$parents.find("input[name=price]").val("");
+        	$parents.find("input[name=price]").val("").trigger('change');
 		});
 		
 		hotelChoose.autocomplete({
@@ -2610,7 +2610,7 @@ define(function(require, exports) {
 					$parents.find("input[name=hotelRoomId]").val("");
 					$parents.find("input[name=mobileNumber]").val("");
 					$parents.find("input[name=managerName]").val("");
-                	$parents.find("input[name=price]").val("");
+                	$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select: function(event,ui){
@@ -2628,7 +2628,7 @@ define(function(require, exports) {
 							$parents.find(".T-tripPlanHotelStar").val(data.hotel.level);
 							$parents.find("input[name=hotelRoom]").val("");
 							$parents.find("input[name=hotelRoomId]").val("");
-	                    	$parents.find("input[name=price]").val("");
+	                    	$parents.find("input[name=price]").val("").trigger('change');
 						}
                     }
 				});
@@ -2671,7 +2671,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=hotelRoomId]").val("");
-                	$parents.find("input[name=price]").val("");
+                	$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select:function(event,ui){
@@ -2736,7 +2736,7 @@ define(function(require, exports) {
 					$parents.find("input[name=scenicId]").val("");
 					$parents.find("input[name=chargingProjects]").val("");
 					$parents.find("input[name=scenicItemId]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=price]").val("").trigger('change');
 				}
 			},
 			select: function(event,ui){
@@ -2744,9 +2744,8 @@ define(function(require, exports) {
 				$parents.find("input[name=scenicId]").val(ui.item.id).trigger('change');
 				$parents.find("input[name=chargingProjects]").val("");
 				$parents.find("input[name=scenicItemId]").val("");
-				$parents.find("input[name=price]").val("");
+				$parents.find("input[name=price]").val("").trigger('change');
 				$parents.find("input[name=orderNumber]").val("");
-				$parents.find("input[name=price]").val(0);
 			}
 		}).off("click").on("click", function(){
 			var $this = $(this);
@@ -2806,7 +2805,7 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=scenicItemId]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=price]").val("").trigger('change');
 				}
 			}
 		}).off("click").on("click", function(){
@@ -2969,9 +2968,10 @@ define(function(require, exports) {
 					$this.val("");
 					$parents.find("input[name=selfPayId]").val("");
 					$parents.find("input[name=managerName]").val("");
-					$parents.find("input[name=price]").val("");
+					$parents.find("input[name=price]").val("").trigger('change');
 					$parents.find("input[name=selfPayItemId]").val("");
 					$parents.find("input[name=selfitem]").val("");
+					$parents.find("input[name=lowestPrice]").val("").trigger('change');
 				}
 			},
 			select:function(event, ui){
@@ -2988,8 +2988,8 @@ define(function(require, exports) {
 							$parents.find("input[name=managerName]").val(selfPay.managerName +' '+ selfPay.mobileNumber);
 							$parents.find("input[name=selfPayItemId]").val("");
 							$parents.find("input[name=selfitem]").val("");
-							$parents.find("input[name=price]").val(0);
-							$parents.find("input[name=lowestPrice]").val(0);
+							$parents.find("input[name=price]").val("").trigger('change');
+							$parents.find("input[name=lowestPrice]").val("").trigger('change');
 						}
                     }
                 });
@@ -3030,6 +3030,10 @@ define(function(require, exports) {
 					var $this = $(this), $parents = $this.closest('tr');
 					$this.val("");
 					$parents.find("input[name=selfPayItemId]").val("");
+					// 底价
+					$parents.find("input[name=lowestPrice]").val('').trigger('change');
+					// 单价
+					$parents.find("input[name=price]").val('').trigger('change');
 				}
 			},
 			select: function(event, ui){
