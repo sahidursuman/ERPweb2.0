@@ -1,9 +1,9 @@
 <form class="form-horizontal guideMainForm" role="form" style="margin-top:10px" onsubmit="return false">
 <table class="whereQ">
 	<tr>
-		<td class="style-myself">导游姓名：</td>
+		<td class="style-myself">导游姓名</td>
 		<td class="styleOne-self">{{guide.realname}}</td>
-		<td class="style-myself">性别：</td>
+		<td class="style-myself">性别</td>
 		<td class="styleOne-self">{{if guide.gender == 1}}
 			女
 			{{else}}
@@ -11,19 +11,19 @@
 			{{/if}}</td>
 	</tr>
 	<tr>
-		<td class="style-myself">联系电话：</td>
+		<td class="style-myself">联系电话</td>
 		<td class="styleOne-self">{{guide.mobileNumber}}</td>
-		<td class="style-myself">所属公司：</td>
+		<td class="style-myself">所属公司</td>
 		<td class="styleOne-self">{{guide.company}}</td>
 	</tr>
 	<tr>
-		<td class="style-myself">导游证编号：</td>
+		<td class="style-myself">导游证编号</td>
 		<td class="styleOne-self">{{guide.guideCardNumber}}</td>
-		<td class="style-myself">身份证号：</td>
+		<td class="style-myself">身份证号</td>
 		<td class="styleOne-self">{{guide.idCardNumber}}</td>
 	</tr>
 	<tr>
-		<td class="style-myself">导游等级：</td>
+		<td class="style-myself">导游等级</td>
 		<td class="styleOne-self">{{if guide.guideLevel == 1}}
 			初级导游
 			{{else if guide.guideLevel == 2}}
@@ -33,7 +33,7 @@
 			{{else if guide.guideLevel == 4}}
 			特级导游
 			{{/if}}</td>
-		<td class="style-myself">学历：</td>
+		<td class="style-myself">学历</td>
 		<td class="styleOne-self">{{if guide.guideEducation == 1}}
 			小学
 			{{else if guide.guideEducation == 2}}
@@ -55,9 +55,9 @@
 			{{/if}}</td>
 	</tr>
 	<tr>
-		<td class="style-myself">加入时间：</td>
+		<td class="style-myself">加入时间</td>
 		<td class="styleOne-self">{{guide.joinTime | dateFormat:'yyyy-MM-dd'}}</td>
-		<td class="style-myself">是否启用：</td>
+		<td class="style-myself">是否启用</td>
 		<td class="styleOne-self">{{if guide.status == 0}}
 			已停用
 			{{else guide.status == 1}}
@@ -65,7 +65,7 @@
 			{{/if}}</td>
 	</tr>
 	<tr>
-		<td class="style-myself">导游简介：</td>
+		<td class="style-myself">导游简介</td>
 		<td colspan="3" class="styleOne-self"> {{guide.remark}}</td>
 	</tr>
 </table>
