@@ -313,7 +313,7 @@ define(function(require, exports) {
         FinTransIn.getGroupList($tab,type);
 
         //搜索下拉事件
-        $tab.find('.T-check-status').on('click', 'a', function(event) {
+        $tab.find('.T-check-status').off().on('click', 'a', function(event) {
             event.preventDefault(); 
             var $this = $(this);
             // 设置选择的效果

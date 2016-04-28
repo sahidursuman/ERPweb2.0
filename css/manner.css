@@ -1165,13 +1165,20 @@ select {
 .export-Btn {
     height: 24px;
     line-height: 9px;
-    position: absolute;
     right: 14px;
     top: 0px;
+    margin-left: 15px;
+}
+.settlement-Btn {
+   height: 24px;
+   line-height: 9px;
+   top: 0px;
+   
 }
 .addManagerRight {
     cursor: pointer;
     left: -38px;
+    margin-left: 0px;
 }
 
 
@@ -2832,3 +2839,9 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 
 /* 财务已收样式 */
 .in-block{display: inline-block;white-space:nowrap;}
+
+/*billImage style*/
+ul.billImageDowebok{list-style-type: none;}
+ul.billImageDowebok li{float:left; width:130px; height:130px; border:1px solid #ccc;margin:10px;text-align:center;vertical-align:middle;}
+ul.billImageDowebok li span{display: inline-block;height: 65px;}
+ul.billImageDowebok li img{max-height:100%; max-width: 100%;vertical-align: middle;cursor: pointer;}

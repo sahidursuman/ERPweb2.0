@@ -390,6 +390,7 @@
                                     {{each arrange.cashList as cash index}}
                                         <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                             <input name="currGuideRemark" value="{{cash.billRemark}}" type="text" 
+                                            class="w-100" 
                                             {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
                                                 readOnly="readOnly" 
                                             {{/if}}/>
@@ -397,7 +398,7 @@
                                     {{/each}}
                                 {{else}}
                                     <div class="mar-t-5 div-h-30" index="1">
-                                        <input name="currGuideRemark" value="" type="text" 
+                                        <input name="currGuideRemark" value="" type="text" class="w-100" 
                                         {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
                                             readOnly="readOnly" 
                                         {{/if}}/>

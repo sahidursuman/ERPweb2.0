@@ -51,7 +51,8 @@ define(function(require,exports){
 	//列表事件
 	Infrastructure.initEvents = function($obj,args){
 		//绑定会计科目设置事件
-		var $divObj = $obj.find("#basicSet-accountObj");
+		var $divObj = $obj.find("#basicSet-accountObj"),
+		$teamTab = $obj.find('#basicSet-teamNumber');
 		Infrastructure.listAccountant($divObj,args);
 		//银行账户列表初始化
 		$obj.find('.tabbable').on('click','.T-basicSet-bankAccount',function(){
@@ -66,6 +67,53 @@ define(function(require,exports){
 			Infrastructure.$listBankhObj = $obj;
 			Infrastructure.listBankAcc(BankArgs,$bankAccObj);
 		});
+
+		//自定义团号
+		$teamTab.on('change', 'input[name=tripNumber]', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			 var $that = $(this),
+                tripNumber = $that.val();
+            $.ajax({
+                url: KingServices.buildTrave_url('travelAgency','updateTripNumberPrefix'),
+                type: 'POST',
+                showLoading: false,
+                data: {
+                    tripNumberPrefix: tripNumber
+                }
+            })
+            .done(function(data) {
+                var result = showDialog(data);
+				if(result){
+					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){});
+				}
+            })
+		});
+
+
+		$obj.find('.tabbable').on('click','.T-basicSet-teamNumber',function(event){
+			event.preventDefault();
+			/* Act on the event */
+			 $.ajax({
+                url: KingServices.buildTrave_url('travelAgency','findTravelAgency'),
+                type: 'POST',
+                showLoading: false
+            })
+            .done(function(data) {
+            	var tripNumber='';
+            	data.travelAgency=JSON.parse(data.travelAgency);
+            	if(!!data.travelAgency.tripNumberPrefix){
+            		tripNumber=data.travelAgency.tripNumberPrefix;
+            	}else{
+            		tripNumber=data.travelAgency.shortName;
+            	}
+            	$teamTab.find('[name=tripNumber]').val(tripNumber);
+            })
+
+		});
+
+
+
 	};
 	//初始化会计科目设置列表
 	Infrastructure.listAccountant = function($obj,args){

@@ -6,7 +6,6 @@
 define(function(require, exports) {
 	var menuKey = "financial_ticket",
 		listTemplate = require("./view/list"),
-		billImagesTemplate = require("./view/billImages"),
 		ticketChecking = require("./view/TicketChecking"),
 		ticketClearing = require("./view/TicketClearing"),
 		blanceRecords = require("./view/ticketRecords"),
@@ -266,7 +265,9 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				Ticket.viewReceipts($tab, $that.data('billimage'));
+				var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
+					WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small');
+				FinancialService.viewBillImage(this, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
@@ -322,42 +323,6 @@ define(function(require, exports) {
 				}
 			});			
 		}
-	};
-
-	Ticket.viewReceipts = function($tab, billImage){
-		if(!billImage){
-			return;
-		}
-		var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
-			WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small'),
-				data = {
-	    		"images":[]
-    		},
-    		str = billImage,
-    		strs = str.split(",");
-    	for(var i = 0; i < strs.length; i ++) {
-    		var s = strs[i];
-    		if(s != null && s != "" && s.length > 0) {
-	    		var image = {
-	    			"WEB_IMG_URL_BIG":imgUrl+s,
-	    			"WEB_IMG_URL_SMALL":imgUrl+s+"?imageView2/2/w/150",
-	    		}
-	    		data.images.push(image);
-    		}
-    	}
-    	var $overflow = null;
-    	layer.open({
-			type : 1,
-			title : "单据图片",
-			skin : 'layui-layer-rim', // 加上边框
-			area : '500px', // 宽高
-			zIndex : 1028,
-			content : billImagesTemplate(data),
-			scrollbar: false, // 推荐禁用浏览器外部滚动条
-			success : function() {
-	    		$('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-			}
-		});
 	};
 
 	Ticket.viewDetails = function(id){
@@ -547,7 +512,9 @@ define(function(require, exports) {
 				Ticket.payDetails(id);
 			} else if ($that.hasClass('T-view-receipts'))  {
 				// 单据
-				Ticket.viewReceipts($tab, $that.data('billimage'));
+				var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
+					WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small');
+				FinancialService.viewBillImage(this, WEB_IMG_URL_BIG, WEB_IMG_URL_SMALL);
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
