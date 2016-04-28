@@ -215,6 +215,12 @@ define(function(require, exports) {
             if(args.fromBussinessGroupName == "全部"){
                 args.fromBussinessGroupName = "";
             }
+            if($searchArea.find('.T-more-btn').hasClass('unfold')){
+                delete args.dateType;
+                delete args.tripTime;
+                delete args.realName;
+                delete args.customerType;
+            }
             return args;
         }
     };
@@ -292,6 +298,35 @@ define(function(require, exports) {
         });
 
     	return this;
+        function getArgs($searchArea){
+            var type = $searchArea.find('.T-choosePorB').val(),
+                args = {
+                    pageNo : 0,
+                    orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                    type : type,
+                    lineTripName : $searchArea.find('[name="lineTripName"]').val(),
+                    guestDetails : $searchArea.find('[name="guestDetails"]').val(),
+                    customerType : $searchArea.find('[name="customerType"]').val(),
+                    dateType : $searchArea.find('[name="dateType"]').val(),
+                    tripTime : $searchArea.find('[name="tripTime"]').val(),
+                    realName: $searchArea.find('[name=realName]').val(),
+                    statusSearch : $searchArea.find('.T-select-status').val()
+                };
+            if(type == "1"){
+                args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
+                args.fromPartnerAgencyId = $searchArea.find('[name="fromPartnerAgencyId"]').val();
+            }else if(type == "2"){
+                args.fromBussinessGroupName = $searchArea.find('[name="fromBussinessGroupName"]').val();
+                args.fromBussinessGroupId = $searchArea.find('[name="fromBussinessGroupId"]').val();
+            }
+            if(args.fromPartnerAgencyName == "全部"){
+                args.fromPartnerAgencyName = "";
+            }
+            if(args.fromBussinessGroupName == "全部"){
+                args.fromBussinessGroupName = "";
+            }
+            return args;
+        }
     };
 
     /**
