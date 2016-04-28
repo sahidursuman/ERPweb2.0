@@ -1436,7 +1436,12 @@ define(function(require, exports){
 		}else if(data.editStatus == 2){
 			Count.detailEvents($obj);
 		};
-		Count.addFee($obj, data.id)
+		Count.addFee($obj, data.id);
+
+		//
+		$obj.on("change",'input[name="accountFinancialCheckComment"],input[name="accountOPCheckComment"]',function(){
+			$(this).data('change', true);
+		});
 	};
 	//查看操作记录事件
 	Count.viewTripLog = function(id){
@@ -5862,57 +5867,57 @@ define(function(require, exports){
             type = 0,
             remarkList = [];
         for (var i = 0, len = $financialRemark.length, opCheckRemark, financeCheckRemark; i < len; i ++)  {
-            opCheckRemark = $financialRemark.eq(i).val();
-            financeCheckRemark = $accountOPCheckComment.eq(i).val();
-            var arrangeType = $financialRemark.eq(i).closest('div').attr('arrangeType');
-            switch(arrangeType){
-            	case 'tripDetail' :
-            		type = 0;
-            	break;
-            	case 'shop' :
-            		type = 1;
-            	break;
-            	case 'self' :
-            		type = 2;
-            	break;
-            	case 'otherIn' :
-            		type = 3;
-            	break;
-            	case 'bus' :
-            		type = 4;
-            	break;
-            	case 'rest' :
-            		type = 5;
-            	break;
-            	case 'hotel' :
-            		type = 6;
-            	break;
-            	case 'scenic' :
-            		type = 7;
-            	break;
-            	case 'ticket' :
-            		type = 8;
-            	break;
-            	case 'otherOut' :
-            		type = 9;
-            	break;
-            	case 'innerTransfer' :
-            		type = 10;
-            	break;
-            	case 'insure' :
-            		type = 11;
-            	break;
-            	case 'guide' :
-            		type = 12;
-            	break;
-            };
-            if (!!opCheckRemark || !!financeCheckRemark)  {
+        	if($financialRemark.eq(i).data('change') || $accountOPCheckComment.eq(i).data('change')){
+	            opCheckRemark = $financialRemark.eq(i).val();
+	            financeCheckRemark = $accountOPCheckComment.eq(i).val();
+	            var arrangeType = $financialRemark.eq(i).closest('div').attr('arrangeType');
+	            switch(arrangeType){
+	            	case 'tripDetail' :
+	            		type = 0;
+	            	break;
+	            	case 'shop' :
+	            		type = 1;
+	            	break;
+	            	case 'self' :
+	            		type = 2;
+	            	break;
+	            	case 'otherIn' :
+	            		type = 3;
+	            	break;
+	            	case 'bus' :
+	            		type = 4;
+	            	break;
+	            	case 'rest' :
+	            		type = 5;
+	            	break;
+	            	case 'hotel' :
+	            		type = 6;
+	            	break;
+	            	case 'scenic' :
+	            		type = 7;
+	            	break;
+	            	case 'ticket' :
+	            		type = 8;
+	            	break;
+	            	case 'otherOut' :
+	            		type = 9;
+	            	break;
+	            	case 'innerTransfer' :
+	            		type = 10;
+	            	break;
+	            	case 'insure' :
+	            		type = 11;
+	            	break;
+	            	case 'guide' :
+	            		type = 12;
+	            	break;
+	            };
                 remarkList.push({
                     type:type,               // server要求字符串
                     opCheckRemark: opCheckRemark,
                     financeCheckRemark: financeCheckRemark
                 })
-            };
+	        }
         }
         saveJson.remarkArrangeList = remarkList;
         return saveJson;
