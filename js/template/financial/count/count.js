@@ -490,7 +490,6 @@ define(function(require, exports){
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                Count.reimbursementGuide = data.guideArranges;
-	                //Count.guide = data.guideArranges;
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 	                var html = Reimbursement(tmp);
@@ -928,7 +927,6 @@ define(function(require, exports){
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
                     Count.updateGuide = data.guideArranges;
-                    //Count.guide = ;
                     tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
                     tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 					var html = updateTemplate(tmp);
@@ -6576,13 +6574,13 @@ define(function(require, exports){
 	//获取导游下拉数据
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
-			dataList = [];
-		if($parentObj.find('.countUpdate').length){
-			dataList = Count.updateGuide.listMap;
-		};//审核
+			dataList = Count.guide.listMap;
 		if($parentObj.find('.countReimbursement').length){
 			dataList = Count.reimbursementGuide.listMap;
 		};//报账
+		if($parentObj.find('.countUpdate').length){
+			dataList = Count.updateGuide.listMap;
+		};//审核
 		for(var i = 0;i<dataList.length;i++){
 			var guide = {
 				id:dataList[i].id,
@@ -6808,12 +6806,12 @@ define(function(require, exports){
 	//增加导游的html拼接
 	Count.addGuideHtml = function($parentObj){
 		var guideData = [];
-		if($parentObj.find('.countUpdate').length){
-			guideData = Count.updateGuide.listMap;
-		};//审核
 		if($parentObj.find('.countReimbursement').length){
 			guideData = Count.reimbursementGuide.listMap;
 		};//报账
+		if($parentObj.find('.countUpdate').length){
+			guideData = Count.updateGuide.listMap;
+		};//审核
 		var guideCount = guideData.length;
 		var guideTd = '';
 		if(guideCount>1){
@@ -6887,12 +6885,13 @@ define(function(require, exports){
 	//新增安排单导html拼接
 	Count.addArrangeGuideHtml = function(td,tdName,$parentObj){
 		var guideData = [];
-		if($parentObj.find('.countUpdate').length){
-			guideData = Count.updateGuide.listMap;
-		};//审核
+
 		if($parentObj.find('.countReimbursement').length){
 			guideData = Count.reimbursementGuide.listMap;
 		};//报账
+		if($parentObj.find('.countUpdate').length){
+			guideData = Count.updateGuide.listMap;
+		};//审核
 		var	guideCount = guideData.length,
 			guideName = guideData[0].guideName,
 			guideArrangeId = guideData[0].id,
