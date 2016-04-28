@@ -730,23 +730,16 @@ function FinRule(type) {
 FinRule.prototype.check = function($obj) {
     switch(this.type) {
         case 0:  // 对账
-            return $obj.formValidate([
-                {   //结算金额
-                    $ele: $obj.find('input[name=settlementMoney]'),
-                    rules: [
-                        {
-                            type: 'nonnegative-float',
-                            errMsg: '请输入非负数'
-                        }
-                    ]
-                }]);
+            name = 'settlementMoney';
         case 1: 
         case 2: 
         case 3: 
         case 4: // 财务收付款
+            name = name || 'payMoney';
+
             return $obj.formValidate([
                 {   
-                    $ele: $obj.find('input[name=payMoney]'),
+                    $ele: $obj.find('input[name='+ name +']'),
                     rules: [
                         {
                             type: 'float',
