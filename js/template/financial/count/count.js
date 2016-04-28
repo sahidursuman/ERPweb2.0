@@ -5331,8 +5331,6 @@ define(function(require, exports){
 	                		travelAgencyRate = Count.changeTwoDecimal(travelAgencyRate);
 	                		var guideRate = parseFloat(shopCostRebate.guideRate)*100;
 	                		guideRate = Count.changeTwoDecimal(guideRate);
-	                		var quanpeiRebate = parseFloat(shopCostRebate.quanpeiRebate)*100;
-	                		quanpeiRebate = Count.changeTwoDecimal(quanpeiRebate);
 	                		var $tr = $obj.closest('tr'),travelMoney = 0;
 	                		if(travelAgencyRate > 0) {
 	                			$tr.find("input[name=travelAgencyRate]").val(travelAgencyRate);
@@ -5346,8 +5344,6 @@ define(function(require, exports){
 	                	}else{
 	                	 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
 	                	 	$obj.closest('tr').find("input[name=guideRate]").val(0);
-	                	 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
-	                	 	$obj.closest('tr').find("input[name=quanpeiRebate]").val(0);
 	                	 	Count.autoShopSum($obj,$bodyObj);
 	                	 	Count.totalRebeatMoney($obj,$bodyObj);
 	                	};
