@@ -297,6 +297,16 @@ define(function(require, exports) {
 					}
 
 					$tab.find('.T-guidePayMoneyLabel').text(text.length?text.join(','): 0);
+
+					$tab.on('click', '.T-collapse', function(event) {
+						event.preventDefault();
+						var $this = $(this);
+						if($this.hasClass('collapsed')){
+							$this.text('[收起]');
+						} else {
+							$this.text('[展开]');
+						}
+					});
 				}
 			}
 		});
@@ -2835,7 +2845,7 @@ define(function(require, exports) {
                     },
                     success: function(data) {
 						if(showDialog(data)) {
-							$parents.find("input[name=price]").val(data.price);
+							$parents.find("input[name=price]").val(data.price).trigger('change');
 							tripPlan.calculatePrice($this.closest('#tripPlan_addPlan_scenic'));
 						}
                     }

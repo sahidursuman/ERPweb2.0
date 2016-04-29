@@ -10,15 +10,15 @@
 			<div class="col-xs-9{{if isTransfer != 1}} hidden{{/if}} T-internal">
 				<div class="col-xs-1 text-right no-padding-right control-label no-padding-left">部门</div>
 				<div class="col-xs-2">
-					<input type="text" class="col-xs-12" name="businessName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
+					<input type="text" class="col-xs-12" name="businessName"{{if isTransfer != 1}} value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}"{{/if}}>
 				</div>
 				<div class="col-xs-1 text-right no-padding-right control-label no-padding-left">子部门</div>
 				<div class="col-xs-2">
-					<input type="text" class="col-xs-12" name="groupName" value="{{dutySubDepartmentName}}" data-id="{{dutySubDepartmentId}}" data-type="1">
+					<input type="text" class="col-xs-12" name="groupName"{{if isTransfer != 1}} value="{{dutySubDepartmentName}}" data-id="{{dutySubDepartmentId}}"{{/if}} data-type="1">
 				</div>
 				<div class="col-xs-2 text-right no-padding-right control-label">责任计调</div>
 				<div class="col-xs-4">
-					<input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}" data-type="1">
+					<input type="text" class="col-xs-12" name="dutyUserName"{{if isTransfer != 1}} value="{{dutyUserName}}" data-id="{{dutyUserId}}"{{/if}} data-type="1">
 				</div>
 			</div>
 		</div>
@@ -48,19 +48,19 @@
 		<div class="col-xs-12 mar-t-10 {{if !isRestaurantRequired}}hidden {{/if}}T-ask-restaurant">
 			<div class="col-xs-1 text-right no-padding-right control-label"><span class="necessary">*</span>餐厅要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12" name="restaurantRequired"{{if !!restaurantRequired}} value="{{if isRestaurantRequired}}{{restaurantRequired.requireContent}}{{/if}}" data-id="{{restaurantRequired.id}}"{{/if}}>
+				<input type="text" class="col-xs-12" name="restaurantRequired" value="{{restaurantRequired}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10{{if !isTicketRequired}} hidden{{/if}} T-ask-ticket">
 			<div class="col-xs-1 text-right no-padding-right control-label"><span class="necessary">*</span>票务要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12" name="ticketRequired"{{if !!ticketRequired}} value="{{if isTicketRequired}}{{ticketRequired.requireContent}}{{/if}}" data-id="{{ticketRequired.id}}"{{/if}}>
+				<input type="text" class="col-xs-12" name="ticketRequired" value="{{ticketRequired}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10 {{if !isOtherRequired}}hidden {{/if}}T-ask-other">
 			<div class="col-xs-1 text-right no-padding-right control-label"><span class="necessary">*</span>其它要求</div>
 			<div class="col-xs-11">
-				<input type="text" class="col-xs-12" name="otherRequired"{{if !!otherRequired}} value="{{if isOtherRequired}}{{otherRequired.requireContent}}{{/if}}" data-id="{{otherRequired.id}}"{{/if}}>
+				<input type="text" class="col-xs-12" name="otherRequired" value="{{otherRequired}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">

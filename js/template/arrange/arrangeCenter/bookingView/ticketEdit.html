@@ -37,10 +37,15 @@
                 {{each arrangeList as rs}}
                     <tr data-id="{{rs.id}}">
                         <td>
-                            <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" />
+                            <div class="col-sm-12">
+                                <input name="ticketName" value="{{rs.ticketName}}" data-id="{{rs.ticketId}}" type="text" class="col-sm-12 bind-change" {{if !!rs.isConfirmAccount}} disabled{{/if}}/>
+                                {{if !rs.isConfirmAccount}}
+                                <span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+                                {{/if}}
+                            </div>
                         </td>
                         <td>
-                            <select name="type">
+                            <select name="type"{{if !!rs.isConfirmAccount}} disabled{{/if}}>
                                 <option {{if rs.type==1}}selected="selected" {{/if}} value="1">机票</option>
                                 <option {{if rs.type==2}}selected="selected" {{/if}} value="2">汽车票</option>
                                 <option {{if rs.type==3}}selected="selected" {{/if}} value="3">火车票</option>
@@ -48,47 +53,50 @@
                             </select>
                         </td>
                         <td>
-                            <input name="startCity" value="{{rs.startCity}}" type="text" class="col-sm-12" maxlength="30" />
+                            <input name="startCity" value="{{rs.startCity}}" type="text" class="col-sm-12" maxlength="30"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="arriveCity" value="{{rs.arriveCity}}" type="text" class="col-sm-12" maxlength="30" />
+                            <input name="arriveCity" value="{{rs.arriveCity}}" type="text" class="col-sm-12" maxlength="30"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="shift" value="{{rs.shift}}" type="text" class="col-sm-12" maxlength="50" />
+                            <input name="shift" value="{{rs.shift}}" type="text" class="col-sm-12" maxlength="50"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="startTime" value="{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" type="text" class="col-sm-12 datetimepicker" />
+                            <input name="startTime" value="{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}" type="text" class="col-sm-12 datetimepicker"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="seatLevel" value="{{rs.seatLevel}}" type="text" class="col-sm-12" maxlength="30" />
+                            <input name="seatLevel" value="{{rs.seatLevel}}" type="text" class="col-sm-12" maxlength="30"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
+                            <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur F-float F-money"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="roomCount" value="{{rs.roomCount}}" type="text" class="col-sm-12 T-action-blur F-float F-count" />
+                            <input name="roomCount" value="{{rs.roomCount}}" type="text" class="col-sm-12 T-action-blur F-float F-count"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="reduceMoney" value="{{rs.reduceMoney}}" type="text" class="col-sm-12 T-action-blur F-float F-money" />
+                            <input name="reduceMoney" value="{{rs.reduceMoney}}" type="text" class="col-sm-12 T-action-blur F-float F-money"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
                             <input name="sumCostMoney" value="{{rs.sumCostMoney}}" type="text" class="col-sm-12 F-float F-money" readonly />
                         </td>
                         <td>
-                            <input name="prePayMoney" value="{{rs.prePayMoney}}" type="text" class="col-sm-12 F-float F-money" />
+                            <input name="prePayMoney" value="{{rs.prePayMoney}}" type="text" class="col-sm-12 F-float F-money"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="remark" value="{{rs.remark}}" type="text" class="col-sm-12" />
+                            <input name="remark" value="{{rs.remark}}" type="text" class="col-sm-12"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <a class="cursor T-action T-ticket-delete">删除</a>
+                            <a class="cursor {{if !!rs.isConfirmAccount}} hct-color-BBB{{else}} T-action T-ticket-delete{{/if}}"{{if !!rs.isConfirmAccount}} title="已对账，不能删除！"{{/if}}>删除</a>
                         </td>
                     </tr>
                 {{/each}}
                 {{else}}
                     <tr>
                         <td>
-                            <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                            <div class="col-sm-12">
+                                <input name="ticketName" type="text" class="col-sm-12 bind-change" />
+                                <span class="addResourceBtn T-action T-add-ticketName" title="添加票务公司"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+                            </div>
                         </td>
                         <td>
                             <select name="type">

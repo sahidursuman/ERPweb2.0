@@ -13,6 +13,12 @@
             </div>
         </div>
         <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-2">
+                <select class="col-xs-12" disabled>
+                    <option value="0">本部操作</option>
+                    <option value="1" {{if opSide == 1}}selected{{/if}}>他部操作</option>
+                </select> 
+            </div>
             {{if opSide == 1}}
             <div class="col-xs-9">
                 <div class="col-xs-1 text-right no-padding-right control-label no-padding-left">部门</div>
@@ -33,7 +39,7 @@
         <div class="col-xs-12 mar-t-20">
             <div class="col-xs-8" style="padding-top: 4px;">
                 <label class="control-label pull-left" style="width: 35px;">应付</label>
-                <input type="text" readonly class="pull-left F-float F-money" value="{{needPayMoney}}">
+                <span class="pull-left F-float F-money">{{needPayMoney}}</span>
             </div>
         </div>
         <div class="col-xs-12 mar-t-20">

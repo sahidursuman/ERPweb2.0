@@ -1,0 +1,8 @@
+{{each subOrderInfoList as rs}}
+<tr>
+    <td>{{rs.lineProductName}}</td>
+    <td>{{rs.startTime}}</td>
+    <td>{{rs.endTime}}</td>
+    <td>{{rs.status | getPartGroupStatusText}}</td>
+</tr>
+{{/each}}

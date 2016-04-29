@@ -3,6 +3,194 @@
  */
 define(function(require, exports) {
     var rule = {
+        // 中转
+        //中转车
+        transferBusEditor : function($obj) {
+            var settings = [
+            {
+                //车队不能为空
+                $ele: $obj.find('[name="busCompanyName"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '车队不能为空'
+                }]
+            },
+            {
+                //用车时间不能为空
+                $ele: $obj.find('[name="useTime"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '用车时间不能为空'
+                }]
+            },
+            {
+                //上车地点不能为空
+                $ele: $obj.find('[name="boardLocation"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '上车地点不能为空'
+                }]
+            }];
+            return settings;
+        },
+        transferBusCheck : function($container){
+            this.$busContainer = $container;
+            return $container.formValidate(this.transferBusEditor($container));
+        },
+        transferBusUpdate : function(validator) {
+            if (!!validator)  {
+                validator.update(this.transferBusEditor(this.$busContainer));
+            }
+
+            return validator;
+        },
+        //中转房
+        transferHotelEditor : function($obj) {
+            var settings = [
+            {
+                //入住时间不能为空
+                $ele: $obj.find('[name="checkInTime"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '入住时间不能为空'
+                }]
+            },
+            {
+                //酒店名称不能为空
+                $ele: $obj.find('[name="hotelName"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '酒店名称不能为空'
+                }]
+            },
+            {
+                //离店日期不能为空
+                $ele: $obj.find('[name="checkOutTime"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '离店日期不能为空'
+                }]
+            },
+            {
+                //房型不能为空
+                $ele: $obj.find('[name="hotelRoomType"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '房型不能为空'
+                }]
+            }];
+            return settings;
+        },
+        transferHotelCheck : function($container){
+            this.$busContainer = $container;
+            return $container.formValidate(this.transferHotelEditor($container));
+        },
+        transferHotelUpdate : function(validator) {
+            if (!!validator)  {
+                validator.update(this.transferHotelEditor(this.$busContainer));
+            }
+
+            return validator;
+        },
+        //中转它
+        transferOthertEditor : function($obj) {
+            var settings = [
+            {
+                //日期不能为空
+                $ele: $obj.find('[name="startTime"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '日期不能为空'
+                }]
+            },
+            {
+                //餐厅名称不能为空
+                $ele: $obj.find('[name="restaurant"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '餐厅名称不能为空'
+                }]
+            },
+            {
+                //票务公司不能为空
+                $ele: $obj.find('[name="ticketName"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '票务公司不能为空'
+                }]
+            },
+            {
+                //日期不能为空
+                $ele: $obj.find('[name="startTime"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '日期不能为空'
+                }]
+            },
+            {
+                //班次不能为空
+                $ele: $obj.find('[name="shift"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '班次不能为空'
+                }]
+            },
+            {
+                //座位级别不能为空
+                $ele: $obj.find('[name="seatLevel"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '座位级别不能为空'
+                }]
+            },
+            {
+                //数量不能为空
+                $ele: $obj.find('[name="memberCount"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '数量不能为空'
+                }]
+            },
+            {
+                //项目名不能为空
+                $ele: $obj.find('[name="name"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '项目名不能为空'
+                }]
+            }];
+            return settings;
+        },
+        transferOtherCheck : function($container){
+            this.$busContainer = $container;
+            return $container.formValidate(this.transferOthertEditor($container));
+        },
+        transferOtherUpdate : function(validator) {
+            if (!!validator)  {
+                validator.update(this.transferOthertEditor(this.$busContainer));
+            }
+
+            return validator;
+        },
+        //票
+        transferTicketEditor : function($obj) {
+            var settings = [
+            
+            ];
+            return settings;
+        },
+        transferTicketCheck : function($container){
+            this.$busContainer = $container;
+            return $container.formValidate(this.transferTicketEditor($container));
+        },
+        transferTicketUpdate : function(validator) {
+            if (!!validator)  {
+                validator.update(this.transferTicketEditor(this.$busContainer));
+            }
+
+            return validator;
+        },
+        // 代订
         //车安排校验
         busEditor : function($obj) {
             var settings = [
@@ -254,7 +442,7 @@ define(function(require, exports) {
                     errMsg: '景区不能为空'
                 }]
             },
-            {
+           /* {
                 //出发城市
                 $ele: $obj.find('[name="startCity"]'),
                 rules : [{
@@ -269,7 +457,7 @@ define(function(require, exports) {
                     type: 'null',
                     errMsg: '到达城市不能为空'
                 }]
-            },
+            },*/
             {
                 //班次
                 $ele: $obj.find('[name="shift"]'),
@@ -329,12 +517,12 @@ define(function(require, exports) {
             return settings;
         },
         ticketCheck : function($container){
-            this.$scenicContainer = $container;
+            this.$ticketContainer = $container;
             return $container.formValidate(this.ticketEditor($container));
         },
         ticketUpdate : function(validator) {
             if (!!validator)  {
-                validator.update(this.ticketEditor(this.$scenicContainer));
+                validator.update(this.ticketEditor(this.$ticketContainer));
             }
 
             return validator;

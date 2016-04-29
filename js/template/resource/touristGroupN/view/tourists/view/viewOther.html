@@ -14,15 +14,15 @@
 		</div>
 		<div class="col-xs-12 mar-t-10 {{if isRestaurantRequired != 1}}hidden {{/if}}T-ask-restaurant">
 			<div class="col-xs-1 text-right no-padding-right control-label">餐厅要求</div>
-			<div class="col-xs-11 control-label">{{if !!restaurantRequired}}{{restaurantRequired.requireContent}}{{/if}}</div>
+			<div class="col-xs-11 control-label">{{restaurantRequired}}</div>
 		</div>
 		<div class="col-xs-12 mar-t-10{{if isTicketRequired != 1}} hidden{{/if}} T-ask-ticket">
 			<div class="col-xs-1 text-right no-padding-right control-label">票务要求</div>
-			<div class="col-xs-11 control-label">{{if !!ticketRequired}}{{ticketRequired.requireContent}}{{/if}}</div>
+			<div class="col-xs-11 control-label">{{ticketRequired}}</div>
 		</div>
 		<div class="col-xs-12 mar-t-10 {{if isOtherRequired != 1}}hidden {{/if}}T-ask-other">
 			<div class="col-xs-1 text-right no-padding-right control-label">其它要求</div>
-			<div class="col-xs-11 control-label">{{if !!otherRequired}}{{otherRequired.requireContent}}{{/if}}</div>
+			<div class="col-xs-11 control-label">{{otherRequired}}</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
 			<div class="col-xs-8" style="padding-left: 20px; padding-top: 4px;">
