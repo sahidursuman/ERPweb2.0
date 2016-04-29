@@ -50,11 +50,7 @@
                     </p>
                 </td>
                 <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
-                <td style="vertical-align:middle">
-                {{if !!rs.tripPlanDetails && !!rs.tripPlanDetails[0]}}
-                {{rs.tripPlanDetails[0].travelAgencyName}}
-                {{/if}}
-                </td>
+               <td style="vertical-align:middle">{{if !!rs.tripPlanTouristList[0]&&!!rs.tripPlanTouristList[0].touristGroup&&!!rs.tripPlanTouristList[0].touristGroup.partnerAgency}}{{rs.tripPlanTouristList[0].touristGroup.partnerAgency.travelAgencyName}}{{/if}}</td>
                 <td>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>
                 <td style="vertical-align:middle" class="R-right" data-right="1140011" data-target="#tripPlan_addPlan_guide"><i class="ace-icon fa {{rs.guideStatus | getArrangeIcon }}"></i></td>
                 <td style="vertical-align:middle" class="R-right" data-right="1140013" data-target="#tripPlan_addPlan_bus"><i class="ace-icon fa {{rs.busStatus | getArrangeIcon }}"></i></td>
