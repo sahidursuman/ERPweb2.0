@@ -459,8 +459,9 @@ define(function(require, exports) {
         });
 
         //绑定操作计划新增事件
-        $tab.find('.T-action-plan .T-add-all').on('change', 'input[type="checkbox"]', function(event){
-            var $this = $(this), $parent = $this.closest('div.T-action-plan'),checkBoxs = $parent.find('input[type="checkbox"]');
+        /*$tab.find('.T-action-plan .T-add-all').on('change', 'input[type="checkbox"]', function(event){
+            var $this = $(this), $parent = $this.closest('div.T-action-plan'),
+                checkBoxs = $parent.find('input[type="checkbox"]');
             if ($this.is(':checked')) {
                 checkBoxs.each(function(index) {
                     if (!checkBoxs.eq(index).is(':checked')) {
@@ -510,7 +511,7 @@ define(function(require, exports) {
                     });
                 }
             }
-        });
+        });*/
         $tab.find('.T-action-plan .T-add-action').on('change', 'input[type="checkbox"]', function(event){
             event.preventDefault();
             var $that = $(this), 
@@ -845,11 +846,48 @@ define(function(require, exports) {
     };
     singlePlan.tabTransition = function($tab,tabtype,$checked){
         var tab = $tab.find('.T-arrange-tabs').children('[tab-name='+tabtype+']');
+        var tabDiv = $tab.find('.T-tab-content').find('div');
+        var $aObj = tab.find('a');
+        var $divId = 'tripPlan_addPlan_';
         if(!$checked){
-           tab.addClass('hidden');
+          tab.addClass('hidden');
+          if(tabtype != 'all'){
+            $tab.find('.T-tab-content').find('#'+$divId+tabtype).removeClass('active in');
+          }else{
+            var checkBoxs = $tab.find('.T-action-plan').find('input[type=checkbox]');
+            checkBoxs.each(function(index, el) {
+                $(this).prop('checked',false);
+            });
 
+            var liList = $tab.find('.T-arrange-tabs').find('li');
+            liList.each(function(index, el) {
+                $(this).addClass('hidden');
+                var DivId = liList.eq(0).find('a').attr('href');
+                    $tab.find('.T-tab-content').find(''+DivId).removeClass('active in');
+            });
+            
+            
+          }
         }else{
-           tab.removeClass('hidden');
+            if(tabtype != 'all'){
+               tab.removeClass('hidden');
+               $aObj.trigger('click');
+               $tab.find('.T-tab-content').find('#'+$divId+tabtype).addClass('active in'); 
+            }else{
+                var checkBoxs = $tab.find('.T-action-plan').find('input[type=checkbox]');
+                checkBoxs.each(function(index, el) {
+                    $(this).prop('checked',true);
+                });
+
+                var liList = $tab.find('.T-arrange-tabs').find('li');
+                liList.each(function(index, el) {
+                    $(this).removeClass('hidden');
+                    liList.eq(0).find('a').trigger('click');
+                    var DivId = liList.eq(0).find('a').attr('href');
+                    $tab.find('.T-tab-content').find(''+DivId).addClass('active in');
+                });
+                
+            };
         }
         
     }
