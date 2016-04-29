@@ -69,11 +69,11 @@ define(function(require,exports){
 		});
 
 		//自定义团号
-		$teamTab.on('change', 'input[name=tripNumber]', function(event) {
+		$teamTab.off('click').on('click', '.T-save', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			 var $that = $(this),
-                tripNumber = $that.val();
+			var $that=$(this),$div=$that.closest('.form-inline');
+			    tripNumber = $div.find('[name=tripNumber]').val();
             $.ajax({
                 url: KingServices.buildTrave_url('travelAgency','updateTripNumberPrefix'),
                 type: 'POST',
