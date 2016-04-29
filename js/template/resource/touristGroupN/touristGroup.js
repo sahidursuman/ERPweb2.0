@@ -669,7 +669,13 @@ define(function(require, exports) {
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
             var $that = $(this);
             if($that.hasClass('T-single-group')){
-                $tab.find('.T-is-hidden, .T-join-group, .T-send-group, .T-add-join-group, .T-add-send-group').removeClass('hidden');
+                $tab.find('.T-is-hidden, .T-add-join-group, .T-add-send-group').removeClass('hidden');
+                if($tab.find(".T-join-group-list tr").length > 0){
+                    $tab.find('.T-join-group').removeClass('hidden');
+                }
+                if($tab.find(".T-send-group-list tr").length > 0){
+                    $tab.find('.T-send-group').removeClass('hidden');
+                }
                 $tab.find('.T-container').data('type', 'single');
                 $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 参团 ');
                 $tab.find('.T-part-group-text').text('参团');
