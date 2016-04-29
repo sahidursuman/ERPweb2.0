@@ -470,6 +470,7 @@ define(function(require, exports) {
                         var $busplanId = Transfer.$busplanId;
                         Transfer.$checkJson = Transfer.$busviewId;
                         Transfer.busplanclick($busplanId,'',shuttleType); //车安排事件
+                        Transfer.deleteOutBusIds = [];
                     }
                 }
             });
@@ -1218,6 +1219,7 @@ define(function(require, exports) {
                         Transfer.$hotelplanId = $("#tab-" + hotelplanId + "-content");
                         $hotelplanId = Transfer.$hotelplanId;
                         Transfer.hotelplanclick($hotelplanId);
+                        Transfer.deleteOutHotelIds = [];
                     }
                 }
             });
