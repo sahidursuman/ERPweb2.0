@@ -338,19 +338,25 @@ define(function(require, exports) {
             $that.html('<i class="ace-icon fa bigger-110 icon-only fa-plus"></i>');
             $tr.next('tr').addClass('hidden');
             $that.attr('index', "0");
-        }else{
+        }else if(!$that.data('ajax')){
             $.ajax({
                 url: KingServices.build_url('customerOrder','getSubOrderInfo'),
                 data: {id : id},
                 type: 'POST',
+                showLoading : false,
                 success: function(data) {
                     if(showDialog(data)){
                         $that.html('<i class="ace-icon fa bigger-110 icon-only fa-minus"></i>');
                         $tr.next('tr').removeClass('hidden').find('.T-part-group-list').html(T.listPartGroup(data));
                         $that.attr('index', "1");
+                        $that.data('ajax', true);
                     }
                 }
             });
+        }else{
+            $that.html('<i class="ace-icon fa bigger-110 icon-only fa-minus"></i>');
+            $tr.next('tr').removeClass('hidden');
+            $that.attr('index', "1");
         }
     };
 
