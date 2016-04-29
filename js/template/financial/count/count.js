@@ -1784,10 +1784,10 @@ define(function(require, exports){
 			'</td>'+
 			shopGuideHtml+
 			guideShopMoneyHtml+
-			'<td rowspan="2" name="travelAgencyRate">'+
+			'<td rowspan="2" name="twoRebate">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input type="text" name="travelAgencyRate" class="w-50" />'+
+					'<input type="text" name="twoRebate" class="w-50" />'+
 				'</div>'+
 			'</td >'+
 			'<td rowspan="2" name="twoRebateMoney">'+
