@@ -5325,8 +5325,6 @@ define(function(require, exports){
 	                			Count.setGuideRate(shopPolicyId,date,$tr,$bodyObj);
 	                		}                		
 	                	}else{
-	                	 	$obj.closest('tr').find("input[name=travelAgencyRate]").val(0);
-	                	 	$obj.closest('tr').find("input[name=guideRate]").val(0);
 	                	 	Count.autoShopSum($obj,$bodyObj);
 	                	 	Count.totalRebeatMoney($obj,$bodyObj);
 	                	};
