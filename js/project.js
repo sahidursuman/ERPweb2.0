@@ -1126,7 +1126,7 @@ var _statusText = {
 				if ( elem ) {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
-					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined && ret != null) {
 						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 
@@ -2761,7 +2761,7 @@ Tools.directionKeyControlFocus = function() {
 
 	function filterInput($obj) {
 		return $obj.find('input').filter(function() {
-			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') != 'hidden';
+			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') == 'text';
 		})
 	}
 	$(document).on('keydown.tableFocus','table', function() {
