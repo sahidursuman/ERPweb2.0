@@ -307,9 +307,6 @@ define(function(require, exports){
 		//显示隐藏
 		Count.showOrhideList($obj);
 		//显示计算公式
-		/*$obj.find('.T-formula').on('click',function(){
-			window.open('../share/formula.html');
-		});*/
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
 		});
@@ -517,12 +514,9 @@ define(function(require, exports){
 		Count.showOrhideList($obj);
 		
 		//显示计算公式
-		/*$obj.find('.T-formula').on('click',function(){
-			window.open('../share/formula.html');
-		});*/	
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
-		});	
+		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
@@ -977,9 +971,6 @@ define(function(require, exports){
 		//显示隐藏
 		Count.showOrhideList($obj);
 		//显示计算公式
-		/*$obj.find('.T-formula').on('click',function(){
-			window.open('../share/formula.html');
-		});*/
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
 		});
@@ -6621,6 +6612,7 @@ define(function(require, exports){
 				}
 			}
 		}).off('click').on('click', function() {
+
 			var obj = $(this);
 			if(guideList.length>0){
 				obj.autocomplete('option','source', guideList);
@@ -6884,6 +6876,7 @@ define(function(require, exports){
 		'<td name="billRemark">'+
 			'<div class="div-h-30"></div>'+
 			'<div class="div-h-30 mar-t-5" index="1">'+
+
 				'<input name="billRemark"  class="w-80" type="text"/>'
 			'</div>'+
 		'</td>';
@@ -6923,7 +6916,7 @@ define(function(require, exports){
 		};
 		if(guideCount>1){
 			guideHtml = td;
-		}
+		};
 		return guideHtml;
 	};
 	//购物人数返佣、停车返佣导游html
