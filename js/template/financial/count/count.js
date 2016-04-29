@@ -1186,8 +1186,8 @@ define(function(require, exports){
 		//房费处理--计算、新增
 		var $hotelObj = $listObj.find('.T-count-hotel');
 		$hotelObj.off('change').on('change','input',function(){
-			var $nameFlag = $(this).attr('name');
-			if($nameFlag != "hotelName"  && $nameFlag !="hotelRoom" && $nameFlag != "billRemark"){
+			var nameFlag = $(this).attr('name');
+			if(scenicNoneAutoFields.indexOf(nameFlag)<0){
 				Count.calculateCost($(this));
 				Count.autoScenicSum($(this),$obj);
 				Count.formatDays($(this),$obj);
