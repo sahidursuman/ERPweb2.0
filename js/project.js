@@ -2761,7 +2761,7 @@ Tools.directionKeyControlFocus = function() {
 
 	function filterInput($obj) {
 		return $obj.find('input').filter(function() {
-			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') != 'hidden';
+			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') == 'text';
 		})
 	}
 	$(document).on('keydown.tableFocus','table', function() {
