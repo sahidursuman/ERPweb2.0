@@ -452,12 +452,11 @@ define(function(require, exports) {
             if(showDialog(data)){
                 // 团队
                 var tabKey = menuKey + "_group_update";
-                data.touristGroup = JSON.parse(data.touristGroup);
                 data.isGuest = 1;
-                data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
-                data.isGuest = 1;
-                data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
-                data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+                data.touristGroup = JSON.parse(data.touristGroup || false);
+                data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList || false);
+                data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList || false);
+                data.tripPlanDayList = JSON.parse(data.tripPlanDayList );
                 data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
                 data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
                 tripPlan.processRepastDetail(data.tripPlanDayList);
