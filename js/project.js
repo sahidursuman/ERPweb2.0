@@ -1126,7 +1126,7 @@ var _statusText = {
 				if ( elem ) {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
-					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined && ret != null) {
 						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 

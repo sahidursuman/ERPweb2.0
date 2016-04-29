@@ -1182,7 +1182,7 @@ define(function(require, exports) {
                 if(!!groupData.buyInsurance){
                     $tab.find('[name="buyInsurance"]').attr('checked', 'checked');
                 }
-                $tab.find('[name="remark"]').val(groupData.remark)
+                $tab.find('textarea[name="touristGroupRemark"]').val(groupData.remark)
                 $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
                 $tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 
