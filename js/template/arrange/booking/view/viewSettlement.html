@@ -2,7 +2,7 @@
     <div class="form-inline" style="text-align:center;margin: 15px 0px 25px 0px;">
         <div class="form-group">
             <h4 style="margin: auto;">
-            <img src="{{imgUrl}}{{operateUser.companyLogo}}" class="imgViewAccount" alt=" " style="width: 35px;height: 35px"><span class="mar-l-5">{{operateUser.travelName}}</span>
+            {{if operateUser.companyLogo !=""}}<img src="{{imgUrl}}{{operateUser.companyLogo}}" class="imgViewAccount" alt=" " style="width: 35px;height: 35px">{{/if}}<span class="mar-l-5">{{operateUser.travelName}}</span>
         </h4>
         </div>
         <div class="form-group pull-right mar-r-20 globalAdd">
@@ -57,8 +57,8 @@
                                 <td class="textaR-paR" rowspan="{{bookingBusCompany.length}}">车辆</td>
                                 <td class="textaR-paL">
                                     <span>{{rs.needSeatCount}}&nbsp;座</span>,
-                                    <span>{{rs.needBusBrand}}</span>,
-                                    <span>用车时间：{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
+                                    {{if rs.needBusBrand != ""}}<span>{{rs.needBusBrand}}</span>,{{/if}}
+                                    <span>用车时间：{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}至{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
                             </tr>
                         {{else}}
@@ -66,7 +66,7 @@
                                 <td class="textaR-paL">
                                     <span>{{rs.needSeatCount}}&nbsp;座</span>,
                                     <span>{{rs.needBusBrand}}</span>,
-                                    <span>用车时间：{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
+                                    <span>用车时间：{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}至{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
                             </tr>
                         {{/if}}
@@ -81,7 +81,11 @@
                                 <td class="textaR-paL">
                                     <span>{{rs.name}}</span>,
                                     <span>{{rs.type}}</span>,
-                                    <span>住店时间：{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}</span>
+                                    <span>
+                                    住店时间：{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}
+                                    {{if rs.enterTime != ""}}
+                                        至{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}
+                                    {{/if}}</span>
                                 </td>
                             </tr>
                         {{else}}
@@ -89,7 +93,10 @@
                                 <td class="textaR-paL">
                                     <span>{{rs.name}}</span>,
                                     <span>{{rs.type}}</span>,
-                                    <span>住店时间：{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}</span>
+                                    <span>住店时间：{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}
+                                    {{if rs.enterTime != ""}}
+                                        至{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}
+                                    {{/if}}</span>
                                 </td>
                             </tr>
                         {{/if}}
@@ -140,8 +147,8 @@
                                     <span>
                                         {{rs.startCity}}{{if rs.arriveCity != ""}}-{{/if}}{{rs.arriveCity}},
                                     </span>
-                                    <span>{{rs.shift}}</span>,
-                                    <span>{{rs.seatLevel}}</span>,
+                                    {{if rs.shift != ""}}<span>{{rs.shift}}</span>,{{/if}}
+                                    {{if rs.seatLevel != ""}}<span>{{rs.seatLevel}}</span>,{{/if}}
                                     <span>时间：{{rs.startTime | dateTimeHSFormat}}</span>
                                 </td>
                             </tr>
@@ -163,8 +170,8 @@
                                     <span>
                                         {{rs.startCity}}{{if rs.arriveCity != ""}}-{{rs.arriveCity}},{{/if}}
                                     </span>
-                                    <span>{{rs.shift}}</span>,
-                                    <span>{{rs.seatLevel}}</span>,
+                                    {{if rs.shift != ""}}<span>{{rs.shift}}</span>,{{/if}}
+                                    {{if rs.seatLevel != ""}}<span>{{rs.seatLevel}}</span>,{{/if}}
                                     <span>时间：{{rs.startTime | dateTimeHSFormat}}</span>
                                 </td>
                             </tr>
@@ -190,7 +197,7 @@
                                         {{if !!rs.needBusBrand}}
                                             <span>{{rs.needBusBrand}}</span>,
                                         {{/if}}
-                                        <span>{{rs.needSeatCount}}</span>
+                                        <span>{{rs.needSeatCount}}&nbsp;座</span>
                                     </td>
                                     <td >
                                         {{rs.roomCount}}
