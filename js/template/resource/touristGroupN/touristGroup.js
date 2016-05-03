@@ -2578,11 +2578,6 @@ define(function(require, exports) {
             });
         }
 
-        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
-            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
-            showMessageDialog($("#confirm-dialog-message"), msg);
-            return false;
-        }
         if(!isCheckDate){
             showMessageDialog($("#confirm-dialog-message"), '送团日期不能等于接团日期！');
             return false;
@@ -2609,6 +2604,11 @@ define(function(require, exports) {
         if(!!id){
             data.id = id;
             method = "updateCustomerOrder";
+        }
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
+            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
+            showMessageDialog($("#confirm-dialog-message"), msg);
+            return false;
         }
         $.ajax({
             url : KingServices.build_url('customerOrder', method),
