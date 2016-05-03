@@ -56,7 +56,7 @@
                             <tr>
                                 <td class="textaR-paR" rowspan="{{bookingBusCompany.length}}">车辆</td>
                                 <td class="textaR-paL">
-                                    <span>{{rs.needSeatCount}}</span>,
+                                    <span>{{rs.needSeatCount}}&nbsp;座</span>,
                                     <span>{{rs.needBusBrand}}</span>,
                                     <span>用车时间：{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
@@ -64,7 +64,7 @@
                         {{else}}
                             <tr>
                                 <td class="textaR-paL">
-                                    <span>{{rs.needSeatCount}}</span>,
+                                    <span>{{rs.needSeatCount}}&nbsp;座</span>,
                                     <span>{{rs.needBusBrand}}</span>,
                                     <span>用车时间：{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
@@ -138,7 +138,7 @@
                                         {{/if}}
                                     </span>,
                                     <span>
-                                        {{rs.startCity}}-{{rs.arriveCity}},
+                                        {{rs.startCity}}{{if rs.arriveCity != ""}}-{{/if}}{{rs.arriveCity}},
                                     </span>
                                     <span>{{rs.shift}}</span>,
                                     <span>{{rs.seatLevel}}</span>,
@@ -161,7 +161,7 @@
                                         {{/if}}
                                     </span>,
                                     <span>
-                                        {{rs.startCity}}-{{rs.arriveCity}},
+                                        {{rs.startCity}}{{if rs.arriveCity != ""}}-{{rs.arriveCity}},{{/if}}
                                     </span>
                                     <span>{{rs.shift}}</span>,
                                     <span>{{rs.seatLevel}}</span>,
