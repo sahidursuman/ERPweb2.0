@@ -1086,12 +1086,12 @@ define(function(require, exports) {
      */
     singlePlan.addInsurance = function($obj,startTime, endTime,data) {
         var html = '<tr>'+
-                    '<td><input type="text" name="startTime" class=" T-datepicker"></td>'+
-                    '<td><input type="text" name="endTime" class=" T-datepicker"></td>'+
+                    '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
+                    '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
                     '<td><input type="text" name="requireContent" class="col-xs-12"></td>'+
-                    '<td><input type="text" name="dutyDepartmentName"><input type="hidden" name="dutyDepartmentId" value=""></td>'+
-                    '<td><input type="text" name="dutySubDepartmentName"><input type="hidden" name="dutySubDepartmentId" value=""></td>'+
-                    '<td><input type="text" name="dutyUserName" value=""><input type="hidden" name="dutyUserId" value=""></td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td>'+
                     '<a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a>'+
                     '</td>'+
@@ -1256,18 +1256,9 @@ define(function(require, exports) {
                     '<td>'+
                         '<input type="text" name="requireContent" value="" class="col-xs-12">'+
                     '</td>'+
-                    '<td>'+
-                        '<input type="hidden" name="dutyDepartmentId" >'+
-                        '<input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="hidden" name="dutySubDepartmentId" value="">'+
-                        '<input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'">'+
-                    '</td>'+
-                    '<td>'+
-                        '<input type="hidden" name="dutyUserId" value="'+(data.realName||"")+'">'+
-                        '<input type="text" name="dutyUserName" value="">'+
-                    '</td>'+
+                    '<td><input type="text" name="dutyDepartmentName" value="'+(data.businessGroupName||"")+'"><input  type="hidden" name="dutyDepartmentId" value="'+(data.businessGroupId||"")+'"/></td>'+
+                    '<td><input type="text" name="dutySubDepartmentName" value="'+(data.groupName||"")+'"><input name="dutySubDepartmentId" type="hidden" value="'+(data.groupId || "")+'" /></td>'+
+                    '<td><input type="text" name="dutyUserName" value="'+(data.realName||"")+'"><input name="dutyUserId" type="hidden"  value="'+(data.userId||"")+'"/></td>'+
                     '<td> <a class="cursor T-del-plan" data-entity-ispayed="0" data-entity-name="insurance" title="删除"> 删除 </a> </td>'+
                 '</tr>';
         var $tbody = $obj.find('.T-hotel-plan');
