@@ -126,18 +126,6 @@ define(function(require, exports) {
         tbl_start = $searchArea.find('[name="startTime"]').val();
         tbl_end = $searchArea.find('[name="endTime"]').val();
 
-        // for (var i = 0, len = guides.length; i < len; i++) {
-        //     guides[i].guideArrangeList.sort(function(x, y) {
-        //         GuideArrange._fetchRange(x);
-        //         GuideArrange._fetchRange(y);
-        //         return (x.startTime > y.startTime) ? 1 : -1;
-        //     });
-
-        //     if (guides[i].guideArrangeList.length === 1) {
-        //         GuideArrange._fetchRange(guides[i].guideArrangeList[0]);
-        //     }
-        // }
-
         // 组织th
         for (i = 0, date;; i++) {
             date = Tools.addDay(tbl_start, i);
@@ -227,21 +215,6 @@ define(function(require, exports) {
         } while (true);
 
         return color;
-    };
-
-    /**
-     * 获取最大时间与最小时间
-     * @param  {object} item 安排对象
-     * @return {[type]}      [description]
-     */
-    GuideArrange._fetchRange = function(item) {
-        if (!tbl_start || tbl_start > item.startTime) {
-            tbl_start = item.startTime;
-        }
-
-        if (!tbl_end || tbl_end < item.endTime) {
-            tbl_end = item.endTime;
-        }
     };
 
     /**
