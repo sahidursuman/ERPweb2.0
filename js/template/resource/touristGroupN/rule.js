@@ -89,7 +89,7 @@ define(function(require, exports) {
                     errMsg: '送离时间不能为空'
                 }]
 			},
-			{
+			/*{
 				//班次
 				$ele: $obj.find('[name="arriveShift"]'),
 				rules : [{
@@ -104,7 +104,7 @@ define(function(require, exports) {
                     type: 'null',
                     errMsg: '班次不能为空'
                 }]
-			},
+			},*/
 			{
 				//全陪电话
 				$ele: $obj.find('[name="accompanyGuideMobile"]'),
