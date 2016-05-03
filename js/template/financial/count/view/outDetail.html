@@ -285,6 +285,7 @@
                                                     <th class="th-border">单价 </th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -313,7 +314,13 @@
                                                                 <td>
                                                                     <span class="F-float F-money">{{selfIncome.reduceMoney}}</span>
                                                                 </td>
-
+                                                                <td>
+                                                                    {{if selfIncome.billImage != null && selfIncome.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
                                                                 <td>
                                                                     <span class="F-float F-money">{{selfIncome.needPayAllMoney}}</span>
                                                                 </td>
