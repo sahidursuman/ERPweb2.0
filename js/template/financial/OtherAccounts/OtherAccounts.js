@@ -225,9 +225,7 @@ define(function(require, exports) {
                 OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                var bigImg = $checkTab.find('input[name=WEB_IMG_URL_BIG]').val();
-                var smallImg = $checkTab.find('input[name=WEB_IMG_URL_SMALL]').val();
-                OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
+                OtherAccounts.viewInsuranceImg(this);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
@@ -548,9 +546,7 @@ define(function(require, exports) {
                 OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                var bigImg = $tab.find('input[name=WEB_IMG_URL_BIG]').val();
-                var smallImg = $tab.find('input[name=WEB_IMG_URL_SMALL]').val();
-                OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
+                OtherAccounts.viewInsuranceImg(this);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
@@ -674,7 +670,7 @@ define(function(require, exports) {
         });
     };
     //显示单据
-    OtherAccounts.viewInsuranceImg = function(obj, bigImg, smallImg) {
+    OtherAccounts.viewInsuranceImg = function(obj) {
         var data = {
             "images": []
         };
