@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="area.js"></script>
+</head>
+<body>
+    <input type="text" id="idcard">
+    <span></span>
+</body>
+<script>
+function checkID(ID) {
+    if (ID == "") {return '';}
+    if(typeof ID !== 'string') return '非法字符串';
+    var birthday = ID.substr(6, 4) + '/' + Number(ID.substr(10, 2)) + '/' + Number(ID.substr(12, 2)),
+        d = new Date(birthday),
+        newBirthday = d.getFullYear() + '/' + Number(d.getMonth() + 1) + '/' + Number(d.getDate()),
+        nowTime = new Date().getTime(),
+        time = d.getTime(),
+        arrBasic = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2],
+        arrLast = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'],
+        sum = 0, i, lastNum;
+
+    if(!/^\d{17}(\d|x)$/i.test(ID)) {
+        if (ID.length !== 18 && ID != null) {
+            return '身份证位数错误';
+        }
+        for (var i = ID.length - 1; i >= 0; i--) {
+            if(i == 17){
+                if (!/^(\d|x)/i.test(ID[i])) {
+                    return '第'+(i+1)+'位不合法（只能是数字或者x/X）';
+                }
+            }else {
+                if (!/^\d/.test(ID[i])) {
+                    return '第'+(i+1)+'位不合法（只能是数字）';
+                }
+            }
+        }
+        return '非法身份证';
+    }
+    if(areaList[ID.substr(0,6)] === undefined) return "地区不合法（前六位身份证号）";
+    if(time >= nowTime || birthday !== newBirthday) return '出生年月日不合法';
+    for(i=0; i<17; i++) {
+        sum += ID[i] * arrBasic[i];
+    }
+    lastNum = arrLast[sum % 11];
+    if (lastNum !== ID[17]) return '身份证不合法';
+
+    return areaList[ID.substr(0,6)]+","+birthday+","+(ID[16]%2?" 男":"女")
+}
+$(document).ready(function() {
+    $('#idcard').on('change', function(event) {
+        event.preventDefault();
+        var id = $('#idcard').val();
+        $('#idcard').next().text(checkID(id));
+    });
+});
+</script>
+</html>
