@@ -115,25 +115,28 @@ define(function(require, exports) {
      */
     GuideArrange.loadList = function(guides, total) {
         // 初始化数据
-        $table = GuideArrange.$tab.find('table'),
-            tbl_start = tbl_end = 0;
+        $table = GuideArrange.$tab.find('table');
         var data = {},
             thStr = [],
             tdStr = [],
             date,
-            len = guides.length;
+            len = guides.length,
+            $searchArea = GuideArrange.$tab.find('.T-search-area');
 
-        for (var i = 0, len = guides.length; i < len; i++) {
-            guides[i].guideArrangeList.sort(function(x, y) {
-                GuideArrange._fetchRange(x);
-                GuideArrange._fetchRange(y);
-                return (x.startTime > y.startTime) ? 1 : -1;
-            });
+        tbl_start = $searchArea.find('[name="startTime"]').val();
+        tbl_end = $searchArea.find('[name="endTime"]').val();
 
-            if (guides[i].guideArrangeList.length === 1) {
-                GuideArrange._fetchRange(guides[i].guideArrangeList[0]);
-            }
-        }
+        // for (var i = 0, len = guides.length; i < len; i++) {
+        //     guides[i].guideArrangeList.sort(function(x, y) {
+        //         GuideArrange._fetchRange(x);
+        //         GuideArrange._fetchRange(y);
+        //         return (x.startTime > y.startTime) ? 1 : -1;
+        //     });
+
+        //     if (guides[i].guideArrangeList.length === 1) {
+        //         GuideArrange._fetchRange(guides[i].guideArrangeList[0]);
+        //     }
+        // }
 
         // 组织th
         for (i = 0, date;; i++) {
