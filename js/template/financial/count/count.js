@@ -4463,7 +4463,6 @@ define(function(require, exports){
 							$CRmoneyObj = $obj.find('input[name=customerRebateMoney]');
 						$obj.find('input[name=marketPrice]').val(data.marketPrice);
 						$obj.find('input[name=price]').val(data.price);
-						$obj.find('input[name=price]').val(data.price);
 						$tRateObj.each(function(){
 							var $that = $(this);
 							$that.val(travelAgencyRate);
