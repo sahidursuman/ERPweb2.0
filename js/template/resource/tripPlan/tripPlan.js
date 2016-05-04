@@ -443,7 +443,6 @@ define(function(require, exports) {
 								data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson)
 							}
 						}
-						console.log(data.guideList)
 
 						if (Tools.addTab(menuKey + '-update', '编辑发团安排', filterUnAuth(addTemplate(data)))) {
 							var $tab = $("#tab-arrange_all-update-content"), validator = rule.listTripPlanCheckor($tab);
@@ -849,6 +848,12 @@ define(function(require, exports) {
 			});
 			$tab.find('.T-guidePlanAllPreMoney').text(guideAllPlanPreMoney);
 		});
+
+		
+		var isArranged = $tab.find('[name=isArranged]').val();
+		if (!isArranged) {
+			$tab.find('#tripPlan_addPlan_insurance').find('[name=memberCount]').trigger('change');
+		}
 
 		//选择已添加导游
 		/*$tab.find('.tab-content').on('click.chooseGuide', '.T-chooseGuide', function() {

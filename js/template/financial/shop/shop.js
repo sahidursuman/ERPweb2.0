@@ -726,15 +726,22 @@ define(function(require, exports) {
             var sumShopMoney = 0,
                 sumTravelMoney = 0,
                 sumGuideMoney = 0;
+                sumQuanpeiMoney = 0;
+                sumScenondMoney = 0;
+                
             for(var j = 2;j<$itemTr.length;j++){
                 var $thisTr = $itemTr.eq(j);
                 sumShopMoney += formatVal($thisTr.find('.T-consumeMoney').text());
                 sumTravelMoney += formatVal($thisTr.find('.T-travelAgencyRebateMoney').text());
                 sumGuideMoney += formatVal($thisTr.find('.T-guideRebateMoney').text());
+                sumQuanpeiMoney += formatVal($thisTr.find('.T-quanpeiRebateMoney').text());
+                sumScenondMoney = formatVal($trArr.find('.T-twoRebateMoney').text());
                 if($thisTr.hasClass('T-sumMoney')){
                     $thisTr.find('.T-shopMoney').text(sumShopMoney);
                     $thisTr.find('.T-travelMoney').text(sumTravelMoney);
                     $thisTr.find('.T-guideMoney').text(sumGuideMoney);
+                    $thisTr.find('.T-quanpeiMoney').text(sumQuanpeiMoney);
+                    $thisTr.find('.T-twoMoney').text(sumScenondMoney);
                     break;
                 }
             }
@@ -748,7 +755,6 @@ define(function(require, exports) {
             return newVal;
             }
     };
-
     /* 获取合计数据 */
     FinShop.getCheckSumData = function(args,$tab){
         $.ajax({
@@ -769,7 +775,7 @@ define(function(require, exports) {
          $tab.find(".T-sumConsumeMoney").text(total.sumConsumeMoney);
         $tab.find(".T-sumTravelAgencyRebateMoney").text(total.sumTravelAgencyRebateMoney);
         $tab.find(".T-sumGuideRebateMoney").text(total.sumGuideRebateMoney);
-        $tab.find(".T-quanpeiRebateMoney").text(total.sumQuanpeiRebateMoney);
+        $tab.find(".T-quanpeiRebatMoney").text(total.sumQuanpeiRebateMoney);
         $tab.find(".T-twoRebateMoney").text(total.sumTwoRebateMoney);
         $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
         $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);

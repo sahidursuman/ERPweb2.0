@@ -2847,4 +2847,5 @@ ul.billImageDowebok li span{display: inline-block;height: 65px;}
 ul.billImageDowebok li img{max-height:100%; max-width: 100%;vertical-align: middle;cursor: pointer;}
 
 /* 资源启用checkbox样式 */
-.resource_checkbox{margin-left:5px;margin-top: -6px !important;}
+.resource_checkbox{margin-left:5px;margin-top: -6px !important;padding:0px;}
+input.ace[type="checkbox"] + .lbl{white-space: nowrap;}

@@ -2603,6 +2603,8 @@ define(function(require, exports){
 		var ticketArrangeNeedPayMoney = $obj.find('.tripCost-ticketArrangeNeedPayMoney').text();
 		var otherArrangeNeedPayMoney = $obj.find('.tripCost-otherArrangeNeedPayMoney').text();
 		var selfArrangeNeedPayMoney = $obj.find('.tripCost-selfArrangeNeedPayMoney').text();
+		var quanpeiShopNeedPayMoney = $obj.find('.quanpei-shopFee').text();
+		var quanpeiSelfNeedPayMoney = $obj.find('.tripCostQuanpei-SelfFee').text();
 
 		var tripIncome = $obj.find('.tripIncome').text();
 		var tripTransitCost = $obj.find('.tripTransitCost').text();
@@ -2619,12 +2621,14 @@ define(function(require, exports){
 		ticketArrangeNeedPayMoney = Count.changeTwoDecimal(ticketArrangeNeedPayMoney);
 		otherArrangeNeedPayMoney = Count.changeTwoDecimal(otherArrangeNeedPayMoney);
 		selfArrangeNeedPayMoney = Count.changeTwoDecimal(selfArrangeNeedPayMoney);
+		quanpeiShopNeedPayMoney = Count.changeTwoDecimal(quanpeiShopNeedPayMoney);
+		quanpeiSelfNeedPayMoney = Count.changeTwoDecimal(quanpeiSelfNeedPayMoney);
 		tripIncome = Count.changeTwoDecimal(tripIncome);
 		tripTransitCost = Count.changeTwoDecimal(tripTransitCost);
 		allPerson = Count.changeTwoDecimal(allPerson);
 		//计算团成本
 		var tripSum = (guideArrangePrice+insuranceArrangeNeedPayMoney+busCompanyNeedPayMoney+guideshopFee+restaurantArrangeNeedPayMoney);
-		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney)
+		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney+quanpeiShopNeedPayMoney+quanpeiSelfNeedPayMoney);
 		tripSum = Count.changeTwoDecimal(tripSum);
 		tripCostSum = Count.changeTwoDecimal(tripCostSum);
 		var allSum = (tripSum+tripCostSum);
@@ -4438,7 +4442,6 @@ define(function(require, exports){
 						$obj.find('.customerRebateMoney').text(data.customerRebateMoney);
 						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
 							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
-							$qRateObj = $obj.find('td[name=quanpeiRebate]').find('input[name=quanpeiRebate]'),
 							$CRmoneyObj = $obj.find('input[name=customerRebateMoney]');
 						$obj.find('input[name=marketPrice]').val(data.marketPrice);
 						$obj.find('input[name=price]').val(data.price);
@@ -4451,10 +4454,7 @@ define(function(require, exports){
 							var $that = $(this);
 							$that.val(guideRate);
 						});
-						$qRateObj.each(function(){
-							var $that = $(this);
-							$that.val(quanpeiRebate);
-						});
+						
 
 						$CRmoneyObj.val(data.customerRebateMoney);
 						$obj.attr('guideRate',guideRate);
@@ -4464,7 +4464,6 @@ define(function(require, exports){
 					}else{
 						var $tRateObj = $obj.find('td[name=travelAgencyRate]').find('input[name=travelAgencyRate]'),
 							$gRateObj = $obj.find('td[name=guideRate]').find('input[name=guideRate]'),
-							$qRateObj = $obj.find('td[name=quanpeiRebate]').find('input[name=quanpeiRebate]'),
 							$CRmoneyObj = $obj.find('input[name=customerRebateMoney]');
 						$obj.find('input[name=marketPrice]').val(data.marketPrice);
 						$obj.find('input[name=price]').val(data.price);
@@ -4477,14 +4476,9 @@ define(function(require, exports){
 							var $that = $(this);
 							$that.val(guideRate);
 						});
-						$qRateObj.each(function(){
-							var $that = $(this);
-							$that.val(quanpeiRebate);
-						});
 						$CRmoneyObj.val(data.customerRebateMoney);
 						$obj.attr('guideRate',guideRate);
 						$obj.attr('travelAgencyRate',travelAgencyRate);
-						$obj.attr('quanpeiRebate',quanpeiRebate);
 						Count.autoSelfSum($td,$parentObj);
 					};
 				};
