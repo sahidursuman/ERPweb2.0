@@ -1139,7 +1139,7 @@ define(function(require, exports) {
 			    touristRealname : BookingArrange.getValue($that,"touristRealname"),
 			    touristMobileNumber : BookingArrange.getValue($that,"touristMobileNumber"),
 			    outOPUserName : BookingArrange.getValue($that,"outOPUserName"),
-			    outOPUserId : $that.find('[name="outOPUserName"]').data('id'),
+			    outOPUserId : $that.find('[name="outOPUserName"]').data('id') || $that.find('[name="outOPUserId"]').val(),
 			    sumNeedGetMoney : BookingArrange.getValue($that,"sumNeedGetMoney"),
 			    preIncomeMoney : BookingArrange.getValue($that,"preIncomeMoney"), 
 			    sumCostMoney : BookingArrange.getValue($that,"sumCostMoney"),
@@ -1242,6 +1242,9 @@ define(function(require, exports) {
 		// 	showMessageDialog($( "#confirm-dialog-message" ),"预付款发生改变，请通知财务！");
 		// 	return;
 		// }
+		
+
+		console.log(JSON.stringify(bookingOrder));
 		BookingArrange.ajax({
 			'url' : 'bookingOrder', 
 			'method' : 'saveBookingOrder', 
