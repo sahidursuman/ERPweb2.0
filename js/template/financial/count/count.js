@@ -1793,14 +1793,14 @@ define(function(require, exports){
 			'<td rowspan="2" name="twoRebateMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input type="text" name="twoRebateMoney" class="w-70" />'+
+					'<input type="text" name="twoRebateMoney" class="w-70 F-float F-money" />'+
 				'</div>'+
 			'</td>'+
 			cashGuideHtml+
 			'<td rowspan="2" name="currGuideMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input type="text" name="currGuideMoney" class="w-70" />'+
+					'<input type="text" name="currGuideMoney" class="w-70 F-float F-money" />'+
 				'</div>'+
 			'</td >'+
 			'<td rowspan="2" name="currGuideRemark">'+
@@ -1961,7 +1961,7 @@ define(function(require, exports){
 			'</div>';
 
 		var moneyHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name = "shopGuideMoney" class="w-70" type = "text" />'+
+			'<input name = "shopGuideMoney" class="w-70  F-float F-money" type = "text" />'+
 			'</div>';
 
 		var imgHtml = '<div style="margin-top:10px;" index = '+(index+1)+'>'+
@@ -1973,7 +1973,7 @@ define(function(require, exports){
 			'</div>';
 
 		var guideRabeMoneyHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name = "guideRateMoney" class="w-70" type = "text" />'+
+			'<input name = "guideRateMoney" class="w-70 F-float F-money" type = "text" />'+
 			'</div>';
 
 		var quanpeiRebateHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
@@ -1981,7 +1981,7 @@ define(function(require, exports){
 		'</div>';
 
 		var quanpeiRebateMoneyHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name = "quanpeiRebateMoney" class="w-70" type = "text" />'+
+			'<input name = "quanpeiRebateMoney" class="w-70 F-float F-money" type = "text" />'+
 			'</div>';
 
 		var remarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
@@ -1997,7 +1997,7 @@ define(function(require, exports){
 			/*'<a href="#" class="pull-right T-delShopGuide">删除</a>'+*/
 			'</div>';
 		var currMoneyHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name = "currGuideMoney" class="w-70" type = "text" />'+
+			'<input name = "currGuideMoney" class="w-70 F-float F-money" type = "text" />'+
 			'</div>';
 		var currRemarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
 			'<input name = "currGuideRemark" type = "text" />'+
@@ -3087,7 +3087,7 @@ define(function(require, exports){
 			'<td name="cashMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="cashMoney" class="w-70" type="text">'+
+					'<input name="cashMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td>'+
@@ -3103,7 +3103,7 @@ define(function(require, exports){
 			'<td name="realReduceMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="realReduceMoney" class="w-70" type="text">'+
+					'<input name="realReduceMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="realNeedPayMoney">'+
@@ -3122,7 +3122,7 @@ define(function(require, exports){
 			'<td name="guidePayedMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guidePayedMoney" class="w-70" type="text">'+
+					'<input name="guidePayedMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="payType">'+
@@ -3141,7 +3141,7 @@ define(function(require, exports){
 					'<span style="color:#bbb;">查看</span>'+
 				'</div>'+
 			'</td>'+
-			'<td><div class="div-h-30"></div><input name="customerRebateMoney" type="text" class="w-70"></td>'+
+			'<td><div class="div-h-30"></div><input name="customerRebateMoney" type="text" class="w-70 F-float F-money"></td>'+
 			'<td name="travelAgencyRate">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
@@ -3151,7 +3151,7 @@ define(function(require, exports){
 			'<td name="travelAgencyRebateMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="travelAgencyRebateMoney" class="w-70" type="text">'+
+					'<input name="travelAgencyRebateMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="guideRate">'+
@@ -3163,7 +3163,7 @@ define(function(require, exports){
 			'<td name="guideRebateMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guideRebateMoney" class="w-70" type="text">'+
+					'<input name="guideRebateMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="quanpeiRebate">'+
@@ -3175,7 +3175,7 @@ define(function(require, exports){
 			'<td name="quanpeiRebateMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="quanpeiRebateMoney" class="w-70" type="text">'+
+					'<input name="quanpeiRebateMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="billRemark">'+
@@ -3235,13 +3235,9 @@ define(function(require, exports){
 			if(!!$tr.attr('travelAgencyRate')){
 				tRate = $tr.attr('travelAgencyRate');
 			};
-			if(!!$tr.attr('quanpeiRebate')){
-				tRate = $tr.attr('quanpeiRebate');
-			};
 			if(!!$tr.attr('customerRebateMoney')){
 				CRmoney = $tr.attr('customerRebateMoney');
 			};
-			
 		}
 		var guideHtml ='<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="guideName" class="w-70"/>'+
@@ -3262,20 +3258,20 @@ define(function(require, exports){
 			'<input name="needIncome" type="hidden" />'+
 			'</div>';
 		var cashMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="cashMoney" class="w-70">'+
+			'<input type="text" name="cashMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var realCountHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="realCount" class="w-50">'+
 			'</div>';
 		var realReduceHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="realReduceMoney" class="w-70">'+
+			'<input type="text" name="realReduceMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var realNeedPayHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<span class="F-float F-money realNeedPayMoney">0</span>'+
 			'<input type="hidden" name="realNeedPayMoney">'+
 			'</div>';
 		var guidePayedHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="guidePayedMoney" class="w-70">'+
+			'<input type="text" name="guidePayedMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var payTypeHtml ='<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<select name="payType">'+
@@ -3291,19 +3287,19 @@ define(function(require, exports){
 			'<input type="text" name="travelAgencyRate" class="w-50" value="'+tRate+'">'+
 			'</div>';
 		var travelAgencyRebateMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="travelAgencyRebateMoney" class="w-70">'+
+			'<input type="text" name="travelAgencyRebateMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var guideRateHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="guideRate" class="w-50" value="'+gRate+'">'+
 			'</div>';
 		var guideRebateMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="guideRebateMoney" class="w-70">'+
+			'<input type="text" name="guideRebateMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var quanpeiRebateHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 		'<input type="text" name="quanpeiRebate" class="w-50" value="'+gRate+'">'+
 		'</div>';
 		var quanpeiRebateMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="quanpeiRebateMoney" class="w-70">'+
+			'<input type="text" name="quanpeiRebateMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var billRemarkHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="billRemark" class="w-70">'+
@@ -5786,7 +5782,7 @@ define(function(require, exports){
 						travelAgencyRate:Count.changeTwoDecimal(parseFloat($tr.find('input[name=travelAgencyRate]').val())/100),
 						travelAgencyRebateMoney:$tr.find('[name=travelAgencyRateMoney]').val(),
 						twoRebate:Count.changeTwoDecimal(parseFloat($tr.find('input[name=twoRebate]').val())/100),
-						twoRebateMoney:$tr.find('[name=twoRebateMoney]').val(),
+						twoRebateMoney:$tr.find('input[name=twoRebateMoney]').val(),
 						guideDetails:Count.getShopGuideData($tr),
 					};
 					return itemList;
