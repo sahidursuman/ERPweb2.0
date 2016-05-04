@@ -179,7 +179,12 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         if(!validator.form()){ return false;}
         var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1, //结算金额
             payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1,//已付
-            planPayMoney = ($that.val() || 0)*1; //代收
+            planPayMoney = (parseFloat($that.val()) || 0)*1; //代收
+        if (isNaN(planPayMoney)) {
+            $that.val("");
+        }else{
+            $that.val(planPayMoney);
+        }
 
         //未付金额的计算
         $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney - planPayMoney));
