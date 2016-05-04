@@ -417,7 +417,7 @@ define(function(require, exports){
 			Count.formatDays($(this),$obj);
 		});
 		//计算保险费用
-		$insureObj = $listObj.find('.T-count-insurance');
+		var $insureObj = $listObj.find('.T-count-insurance');
 		$insureObj.off('change').on('change','input',function(){
 			Count.autoInsureanceSum($(this),$obj);
 		});
@@ -831,7 +831,7 @@ define(function(require, exports){
 			Count.addOtherOut($otherOutObj,$obj);
 		});
 		//计算保险费用
-		$insureObj = $listObj.find('.T-count-insurance');
+		var $insureObj = $listObj.find('.T-count-insurance');
 		$insureObj.off('change').on('change','input',function(){
 			Count.autoInsureanceSum($(this),$obj);
 		});
@@ -1293,7 +1293,7 @@ define(function(require, exports){
 			Count.addOtherOut($otherOutObj,$obj);
 		});
 		//计算保险费用
-		$insureObj = $listObj.find('.T-count-insurance');
+		var $insureObj = $listObj.find('.T-count-insurance');
 		$insureObj.off('change').on('change','input',function(){
 			Count.autoInsureanceSum($(this),$obj);
 		});
@@ -4003,7 +4003,8 @@ define(function(require, exports){
 	//计算保险费用
 	Count.autoInsureanceSum = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),
-			$payObj = $tr.find('input[name=realNeedPayMoney]'),
+			$insureObj = $parentObj.find('.T-count-insurance'),
+			$payObj = $insureObj.find('input[name=realNeedPayMoney]'),
 			sumInsureCost = 0;
 		$payObj.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
