@@ -150,7 +150,7 @@
                                         <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.guideRebateMoney}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.cashMoney}}</span></td>
-                                        <td>{{if item.billImage != null && item.billImage !=""}}<a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
+                                        <td>{{if item.billImage != null && item.billImage !=""}}<a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                                     </tr>
                                     {{/each}}
                                     </tbody>
@@ -194,7 +194,7 @@
                                         <td><span class="F-float F-count">{{item.reduceMoney}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.guideGetMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}} 
                                     </tbody>
@@ -263,7 +263,7 @@
                                         <td><span class="F-float F-count">{{item.count}}</span></td>
                                         <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.needGetMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}} 
                                     </tbody>
@@ -310,7 +310,7 @@
                                                 <td>{{item.licenseNumber}}</td>
                                                 <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                                 <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                                <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                                <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                             </tr>
                                         {{/each}} 
                                     </tbody>
@@ -360,7 +360,7 @@
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}} 
                                     </tbody>
@@ -403,7 +403,7 @@
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}} 
                                     </tbody>
@@ -446,7 +446,7 @@
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}}
                                     </tbody>
@@ -489,7 +489,7 @@
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}}
                                     </tbody>
@@ -540,7 +540,7 @@
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}}
                                     </tbody>
@@ -580,7 +580,7 @@
                                         <td><span class="F-float F-count">{{item.realCount}}</span></td>
                                          <td><span class="F-float F-money">{{item.realPayType}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}}
                                     </tbody>
@@ -624,7 +624,7 @@
                                         <td><span class="F-float F-money">{{item.realPrice}}</span></td>
                                         <td><span class="F-float F-count">{{item.needIncomeCount}}</span></td>
                                         <td><span class="F-float F-money totalPayedMoney">{{item.guideRebateMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" data-fn="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
                                     </tr>
                                     {{/each}}
                                     </tbody>
