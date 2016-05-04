@@ -103,6 +103,24 @@ define(function(require, exports) {
                         event.preventDefault();
                         plan.listPlan(0);
                     });
+
+                    //导出报表事件 btn-hotelExport
+                    plan.$tab.find(".T-btn-export").click(function(){
+                        var argsData = {
+                            tripNumber : plan.$searchArea.find("input[name=tripNumber]").val(),
+                            lineProductName : plan.$searchArea.find("input[name=lineProductName]").val(),
+                            lineProductId : plan.$searchArea.find("input[name=lineProductId]").val(),
+                            guideName : plan.$searchArea.find("input[name=guideName]").val(),
+                            guideId : plan.$searchArea.find("input[name=guideId]").val(),
+                            tripPlanType : plan.$searchArea.find("select[name=tripPlanType]").val(),
+                            start : plan.$searchArea.find("input[name=startTime]").val(),
+                            end : plan.$searchArea.find("input[name=endTime]").val(),
+                            billStatus : plan.$searchArea.find(".T-status button").data("value"),
+                            operateCalculteOut : plan.$tab.find(".T-checkTurn").is(":checked") ? 1 : 0,
+                            sortType: 'auto'
+                        };
+                        FinancialService.exportReport(argsData,"exportPlanProfit");
+                    });
                 }
             }
         });
