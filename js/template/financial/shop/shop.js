@@ -588,7 +588,7 @@ define(function(require, exports) {
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
 
         FinShop.getOperationList(0, $tab);
-        $tab.data('isEdited', true);
+        $tab.data('isEdited', false);
         FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
     };
     /**
