@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":33,"md5":"bb66dac56ee1501a2aed1b09b0c76738"}*/
+/*TMODJS:{"debug":true,"version":35,"md5":"bb66dac56ee1501a2aed1b09b0c76738"}*/
 define(function(require){return require('../../../../template')('resource/touristGroupN/view/booking/add', function($data,$filename
 /**/) {
 try{'use strict';var $utils=this,$helpers=$utils.$helpers,$line=0,$escape=$utils.$escape,id=$data.id,orderNumber=$data.orderNumber,partnerAgencyName=$data.partnerAgencyName,partnerAgencyId=$data.partnerAgencyId,contactId=$data.contactId,hotel=$data.hotel,hotelNeedPayMoney=$data.hotelNeedPayMoney,hotelId=$data.hotelId,ticket=$data.ticket,ticketNeedPayMoney=$data.ticketNeedPayMoney,ticketId=$data.ticketId,scenic=$data.scenic,scenicNeedPayMoney=$data.scenicNeedPayMoney,scenicId=$data.scenicId,bus=$data.bus,busNeedPayMoney=$data.busNeedPayMoney,busId=$data.busId,needGet=$data.needGet,needGetNeedPayMoney=$data.needGetNeedPayMoney,tourist=$data.tourist,touristInfo=$data.touristInfo,touristMobileNumber=$data.touristMobileNumber,outOPUserName=$data.outOPUserName,outOPUserId=$data.outOPUserId,type=$data.type,$out='';$out+='<div class="container-fluid T-container" data-id="';
