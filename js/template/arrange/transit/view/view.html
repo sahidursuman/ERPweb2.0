@@ -20,7 +20,7 @@
             <label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{if arriveShift != null}}{{arriveShift}}{{/if}}</label>{{/if}} {{if arriveShiftTime != null}}
             <label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{if arriveShiftTime != null}}{{arriveShiftTime | dateTimeHSFormat}}{{/if}}</label>{{/if}}
         </div>
-        <div class="form-group  mar-t-10  row" style="margin-left: 23px">
+        <div class="form-group  mar-t-10  row">
             {{if leaveTime != null}}
             <label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}} {{if leavePosition != null && leavePosition != ""}}
             <label class="col-sm-2 control-label no-padding-right" style="text-align: left;margin-left: 10px">送团地点：{{leavePosition}}</label>{{/if}} {{if leaveShift != null}}
