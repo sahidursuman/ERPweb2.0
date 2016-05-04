@@ -1693,7 +1693,7 @@ Tools.inputCtrolFloat=function($inputCtrol){
 			    if (event.keyCode == 37 | event.keyCode == 39) {
 			        return;
 			    }
-			    if (isNaN($amountInput.val())) {
+			    if (isNaN($amountInput.val()) && $amountInput.attr('name')!='collection') {
 			    	setTimeout(function(){
 			    		 //先把非数字的都替换掉，除了数字和. 
 				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
@@ -1713,12 +1713,12 @@ Tools.inputCtrolFloat=function($inputCtrol){
 	}else{
 		$inputCtrol.on('input', function (event) {
 		    var $amountInput = $(this);
-		    //响应鼠标事件，允许左右方向键移动 
+		    //响应鼠标事件，允许左右方向键移动
 		    event = window.event || event;
 		    if (event.keyCode == 37 | event.keyCode == 39) {
 		        return;
 		    }
-		     if (isNaN($amountInput.val())) {
+		     if (isNaN($amountInput.val()) && $amountInput.attr('name')!='collection') {
 			    	setTimeout(function(){
 			    		 //先把非数字的都替换掉，除了数字和. 
 				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
@@ -2136,6 +2136,7 @@ Tools.addDay = function(date, days) {
  * @return {string}      格式化之后的日期/时间
  */
 Tools.getDateTimeFormat = function(date, fmt) {
+	date = date.split('-').join('/');
 	fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
 	return (new Date(date)).Format(fmt);
 };

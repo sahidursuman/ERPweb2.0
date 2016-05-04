@@ -70,7 +70,7 @@
         </div>
         <div class="form-group marginLeft-30">
             <label>全陪佣金合计：</label>
-            <label class="F-float F-money T-quanpeiRebateMoney"></label>
+            <label class="F-float F-money T-quanpeiRebatMoney"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label>二次返佣合计：</label>
@@ -180,7 +180,7 @@
                                 <td><span class="F-float F-money T-travelAgencyRebateMoney">{{list.travelAgencyRebateMoney}}</span></td>
                                 <td><span class="F-float F-money T-guideRebateMoney">{{list.guideRebateMoney}}</span></td>
                             
-                                <td><span class="F-float F-money T-quanpeiRebateMoney"  value="">{{if list.quanpeiRebateMoney !=null}}-{{else}}{{list.quanpeiRebateMoney}}{{/if}}</span></td>
+                                <td><span class="F-float F-money T-quanpeiRebateMoney"  value="">{{if !!list.quanpeiRebateMoney}}{{list.quanpeiRebateMoney}}{{else}}-{{/if}}</span></td>
                                 <td rowspan="{{rs.shopItem.length}}"><span class="F-float F-money T-twoRebateMoney">{{rs.twoRebateMoney}}</span></td>
                             </tr>
                             {{else}}
@@ -190,7 +190,7 @@
                                 <td><span class="F-float F-money T-consumeMoney">{{list.consumeMoney}}</span></td>
                                 <td><span class="F-float F-money T-travelAgencyRebateMoney">{{list.travelAgencyRebateMoney}}</span></td>
                                 <td><span class="F-float F-money T-guideRebateMoney">{{list.guideRebateMoney}}</span></td>
-                                <td><span class="F-float F-money T-quanpeiRebateMoney">{{if list.quanpeiRebateMoney !=null}}-{{else}}{{list.quanpeiRebateMoney}}{{/if}}</span></td>
+                                <td><span class="F-float F-money T-quanpeiRebateMoney">{{if !!list.quanpeiRebateMoney}}{{list.quanpeiRebateMoney}}{{else}}-{{/if}}</span></td>
                             </tr>
                             {{/if}}
                             {{/each}}
