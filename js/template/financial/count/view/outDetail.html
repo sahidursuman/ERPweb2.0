@@ -328,7 +328,7 @@
                                                                 </td>
                                                                 <td>
                                                                     {{if selfIncome.billImage != null && selfIncome.billImage != ""}}
-                                                                    <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
+                                                                    <a href="javascript:void(0);" url="{{selfIncome.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
                                                                         <span style="color:#bbb;">查看</span>
                                                                     {{/if}}
@@ -344,7 +344,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripIncomeMap.selfPayIncomeMap.sumNeedPayAllMoney}}
