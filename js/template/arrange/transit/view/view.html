@@ -20,7 +20,7 @@
             <label class="col-sm-2 control-label no-padding-right" style="text-align: left;">接团班次：{{if arriveShift != null}}{{arriveShift}}{{/if}}</label>{{/if}} {{if arriveShiftTime != null}}
             <label class="col-sm-3 control-label no-padding-right" style="text-align: left;">接团班次时间：{{if arriveShiftTime != null}}{{arriveShiftTime | dateTimeHSFormat}}{{/if}}</label>{{/if}}
         </div>
-        <div class="form-group  mar-t-10  row" style="margin-left: 23px">
+        <div class="form-group  mar-t-10  row">
             {{if leaveTime != null}}
             <label class="col-sm-2 control-label no-padding-right" style="text-align: left;">送团日期：{{leaveTime | dateFormat: 'yyyy-MM-dd'}}</label>{{/if}} {{if leavePosition != null && leavePosition != ""}}
             <label class="col-sm-2 control-label no-padding-right" style="text-align: left;margin-left: 10px">送团地点：{{leavePosition}}</label>{{/if}} {{if leaveShift != null}}
@@ -129,7 +129,7 @@
                                         <tbody>{{each receiveGroup.outHotelList as outHotel}} {{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
                                             <tr>
                                                 <td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-                                                <td>{{if outHotel.hotel.level == 1}} 三星以下 {{else if outHotel.hotel.level == 2}} 三星 {{else if outHotel.hotel.level == 3}} 准四星 {{else if outHotel.hotel.level == 4}} 四星 {{else if outHotel.hotel.level == 5}} 准五星 {{else if outHotel.hotel.level == 6}} 五星 {{else if outHotel.hotel.level == 7}} 五星以上星 {{/if}}
+                                                <td>{{if outHotel.hotel.level == 1}} 三星以下 {{else if outHotel.hotel.level == 2}} 三星 {{else if outHotel.hotel.level == 3}} 准四星 {{else if outHotel.hotel.level == 4}} 四星 {{else if outHotel.hotel.level == 5}} 准五星 {{else if outHotel.hotel.level == 6}} 五星 {{else if outHotel.hotel.level == 7}} 五星以上 {{/if}}
                                                 </td>
                                                 <td>{{outHotel.hotel.name}}</td>
                                                 <td>{{outHotel.hotel.managerName}}</td>
@@ -377,7 +377,7 @@
                                         <tbody>{{each sendGroup.outHotelList as outHotel}} {{if outHotel.id != null && outHotel.hotel != null && outHotel.hotelRoom != null}}
                                             <tr>
                                                 <td>{{if outHotel.checkInTime != null}}{{outHotel.checkInTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
-                                                <td>{{if outHotel.hotel.level == 1}} 三星以下 {{else if outHotel.hotel.level == 2}} 三星 {{else if outHotel.hotel.level == 3}} 准四星 {{else if outHotel.hotel.level == 4}} 四星 {{else if outHotel.hotel.level == 5}} 准五星 {{else if outHotel.hotel.level == 6}} 五星 {{else if outHotel.hotel.level == 7}} 五星以上星 {{/if}}
+                                                <td>{{if outHotel.hotel.level == 1}} 三星以下 {{else if outHotel.hotel.level == 2}} 三星 {{else if outHotel.hotel.level == 3}} 准四星 {{else if outHotel.hotel.level == 4}} 四星 {{else if outHotel.hotel.level == 5}} 准五星 {{else if outHotel.hotel.level == 6}} 五星 {{else if outHotel.hotel.level == 7}} 五星以上 {{/if}}
                                                 </td>
                                                 <td>{{outHotel.hotel.name}}</td>
                                                 <td>{{outHotel.hotel.managerName}}</td>
