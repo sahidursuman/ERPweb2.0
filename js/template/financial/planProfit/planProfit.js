@@ -103,6 +103,24 @@ define(function(require, exports) {
                         event.preventDefault();
                         plan.listPlan(0);
                     });
+
+                    //导出报表事件 btn-hotelExport
+                    plan.$tab.find(".T-btn-export").click(function(){
+                        var argsData = {
+                            tripNumber : tripNumber,
+                            lineProductName : lineProductName,
+                            lineProductId : lineProductId,
+                            guideName : guideName,
+                            guideId : guideId,
+                            tripPlanType : tripPlanType,
+                            start : startTime,
+                            end : endTime,
+                            billStatus : billStatus,
+                            operateCalculteOut : operateCalculteOut,
+                            sortType: 'auto'
+                        };
+                        FinancialService.exportReport(argsData,"exportPlanProfit");
+                    });
                 }
             }
         });
