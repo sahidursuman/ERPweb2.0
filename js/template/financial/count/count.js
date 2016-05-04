@@ -3296,7 +3296,7 @@ define(function(require, exports){
 			'<input type="text" name="guideRebateMoney" class="w-70 F-float F-money">'+
 			'</div>';
 		var quanpeiRebateHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-		'<input type="text" name="quanpeiRebate" class="w-50" value="'+gRate+'">'+
+		'<input type="text" name="quanpeiRebate" class="w-50">'+
 		'</div>';
 		var quanpeiRebateMoneyHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="quanpeiRebateMoney" class="w-70 F-float F-money">'+
