@@ -192,11 +192,7 @@
                                                                                         {{shopIncome.quanpeiRebateMoney}}
                                                                                     </span>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <span class="F-float F-money">
-                                                                                        {{shopIncome.twoRebateMoney}}
-                                                                                    </span>
-                                                                                </td>
+                                                                                
                                                                             {{/if}}
                                                                         {{/each}}
                                                                     {{else}}
@@ -208,6 +204,11 @@
                                                                         <td></td>
                                                                         <td></td>
                                                                     {{/if}}
+                                                                <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
+                                                                    <span class="F-float F-money">
+                                                                        {{shopIncome.twoRebateMoney}}
+                                                                    </span>
+                                                                </td>
                                                                 <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
                                                                     <span class="F-float F-money">{{shopIncome.needPayAllMoney}}</span>
                                                                 </td>
@@ -242,10 +243,7 @@
                                                                                 {{shopIncome.quanpeiRebateMoney}}
                                                                             </span>
                                                                         </td>
-                                                                        <td>
-                                                                            <span class="F-float F-money">{{shopIncome.twoRebateMoney}}</span>
-                                                                        </td>
-                                                                    </tr>
+                                                                                                                                            </tr>
                                                                     {{/if}}
                                                                 {{/each}}
                                                             {{else}}
