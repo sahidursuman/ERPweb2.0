@@ -25,15 +25,15 @@
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-10 T-action-plan">
 				<label class="control-label" data-type="restaurant">
-					<input type="checkbox" name="isRestaurantRequired" class="ace" {{if isRestaurantRequired}}checked{{/if}}>
+					<input type="checkbox" name="isRestaurantRequired" class="ace" {{if isRestaurantRequired}}checked{{/if}}{{if restaurantClearFlag == 1}} disabled{{/if}}>
 					<span class="lbl"> 餐厅</span>
 				</label>
 				<label class="control-label" data-type="ticket">
-					<input type="checkbox" name="isTicketRequired" class="ace" {{if isTicketRequired}}checked{{/if}}>
+					<input type="checkbox" name="isTicketRequired" class="ace" {{if isTicketRequired}}checked{{/if}}{{if ticketClearFlag == 1}} disabled{{/if}}>
 					<span class="lbl"> 票务</span>
 				</label>
 				<label class="control-label" data-type="other">
-					<input type="checkbox" name="isOtherRequired" class="ace" {{if isOtherRequired}}checked{{/if}}>
+					<input type="checkbox" name="isOtherRequired" class="ace" {{if isOtherRequired}}checked{{/if}}{{if otherClearFlag == 1}} disabled{{/if}}>
 					<span class="lbl"> 其它</span>
 				</label>
 			</div>

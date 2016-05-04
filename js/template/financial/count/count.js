@@ -27,6 +27,7 @@ define(function(require, exports){
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
 		formulaTemplate = require('./view/formulaList'),
+		transitDetailsTamplate = require('./view/viewTransitDetails'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -320,7 +321,9 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			KingServices.viewTransit(id);
+			//KingServices.viewTransit(id);
+			Count.viewTransitDetails(id);
+			
 		});
 		//按钮事件--单团核算表
 		$obj.find('.T-tripAccount').off('click').on('click',function(){
@@ -536,7 +539,8 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			KingServices.viewTransit(id);
+			//KingServices.viewTransit(id);
+			Count.viewTransitDetails(id);
 		});
 
 		//团款tripDetail checkTripCostStatus
@@ -999,7 +1003,8 @@ define(function(require, exports){
 		var $tripDetailObj = $listObj.find('.T-transit');
 		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
-			KingServices.viewTransit(id);
+			//KingServices.viewTransit(id);
+			Count.viewTransitDetails(id);
 		});
 		//团款tripDetail
 		var $tripCostObj = $listObj.find('.T-tripDetail');
@@ -6816,6 +6821,21 @@ define(function(require, exports){
 			}
 		};
 		return newRateArr;
+	};
+	Count.viewTransitDetails = function(id){
+		$.ajax({
+			url : KingServices.build_url("touristGroup","getOutRemarkArrange"),
+			data : {id : id}
+		}).done(function(data){
+			if(showDialog(data)){
+				var viewTransitMenuKey = listTabId + "_view_transit";
+				Tools.addTab(viewTransitMenuKey,'查看中转明细', transitDetailsTamplate(data));
+				var $tab = $("#tab-"+ viewTransitMenuKey + "-content");
+				$tab.find('.T-btn-close').on('click', function(){
+					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+				});				
+			}
+		});
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
