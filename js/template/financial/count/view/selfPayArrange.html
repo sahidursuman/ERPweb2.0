@@ -509,13 +509,14 @@
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="text" class="w-70" 
+                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="text" 
+                                                    class="w-70 F-float F-money" 
                                                     {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index = "1">
-                                                <input name="quanpeiRebateMoney" type="text" class="w-70" 
+                                                <input name="quanpeiRebateMoney" type="text" class="w-70 F-float F-money" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
                                         {{/if}}
@@ -991,7 +992,7 @@
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index = "1">
-                                                <input name="quanpeiRebateMoney" type="text" class="w-70" 
+                                                <input name="quanpeiRebateMoney" type="text" class="w-70 F-float F-money" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
                                         {{/if}}
