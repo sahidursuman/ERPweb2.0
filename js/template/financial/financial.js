@@ -179,7 +179,12 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         if(!validator.form()){ return false;}
         var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1, //结算金额
             payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1,//已付
-            planPayMoney = ($that.val() || 0)*1; //代收
+            planPayMoney = (parseFloat($that.val()) || 0)*1; //代收
+        if (isNaN(planPayMoney)) {
+            $that.val("");
+        }else{
+            $that.val(planPayMoney);
+        }
 
         //未付金额的计算
         $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney - planPayMoney));
@@ -1032,7 +1037,7 @@ FinancialService.closeTab = function(tab_id){
 };
 
 //查看单据公共方法
-FinancialService.viewBillImage = function(obj,bigImg,smallImg) {
+FinancialService.viewBillImage = function(obj) {
     var tHtml =  '<ul class="billImageDowebok">'
                     +    '{{each images as image}}'
                     +    '<li><span></span><img data-original="{{image.WEB_IMG_URL_BIG}}" src="{{image.WEB_IMG_URL_SMALL}}"></li>'

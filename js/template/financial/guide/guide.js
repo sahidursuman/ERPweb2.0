@@ -15,7 +15,6 @@ define(function(require, exports) {
         payingTableTemplate = require('./view/guidePayingTable'),
         // 费用明细
         costDetailTemplate = require("./view/costDetail"),
-        billImagesTemplate = require("./view/billImages"),
         paymentTemplate = require("./view/payment"),
         paymentDetailTemplate = require("./view/paymentDetail"),
         payResultTemplate = require("./view/payResult"),
@@ -848,7 +847,7 @@ define(function(require, exports) {
                         var $tab = $("#tab-" + menuKey + "-costDetail-content");
                         //查看图片事件
                         $tab.find(".T-view-bill").on('click',function(){
-                            FinGuide.viewBillImage($(this).data('fn'));
+                            FinancialService.viewBillImage(this);
                         })
                         //打印事件
                         $tab.find('.T-export').on('click',function(){
@@ -940,36 +939,6 @@ define(function(require, exports) {
         }
         var newVal = Math.round($val*100)/100;
         return newVal;
-    };
-    //显示单据
-    FinGuide.viewBillImage = function(fn) {
-        var data = {
-            "images": []
-        }, strs = fn.split(",");
-        for (var i = 0, str; i < strs.length; i++) {
-            str = strs[i];
-
-            if (!!str) {
-                data.images.push({
-                    WEB_IMG_URL_BIG: imgUrl + str,
-                    WEB_IMG_URL_SMALL: imgUrl + str + "?imageView2/2/w/150"
-                })
-            }
-        }
-        var html = billImagesTemplate(data);
-
-        layer.open({
-            type: 1,
-            title: "单据图片",
-            skin: 'layui-layer-rim', // 加上边框
-            area: '500px', // 宽高
-            zIndex: 1028,
-            content: html,
-            scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function() {
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-            }
-        });
     };
 
     //选择支付方式
