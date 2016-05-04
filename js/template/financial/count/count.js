@@ -5782,7 +5782,7 @@ define(function(require, exports){
 						travelAgencyRate:Count.changeTwoDecimal(parseFloat($tr.find('input[name=travelAgencyRate]').val())/100),
 						travelAgencyRebateMoney:$tr.find('[name=travelAgencyRateMoney]').val(),
 						twoRebate:Count.changeTwoDecimal(parseFloat($tr.find('input[name=twoRebate]').val())/100),
-						twoRebateMoney:$tr.find('[name=twoRebateMoney]').val(),
+						twoRebateMoney:$tr.find('input[name=twoRebateMoney]').val(),
 						guideDetails:Count.getShopGuideData($tr),
 					};
 					return itemList;
