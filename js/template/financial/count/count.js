@@ -2309,7 +2309,7 @@ define(function(require, exports){
 			$sumConsumeMoney.val(sumSGmoney)//金额小计
 			$showConsumeMoney.text(sumSGmoney);
 		};
-		sumMoney = Count.changeTwoDecimal(sumgMoney+sumtMoney+sumtwoRebateMoney);//购物收入
+		sumMoney = Count.changeTwoDecimal(sumgMoney+sumtMoney+sumtwoRebateMoney+sumgQuanpMoney);//购物收入
 
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
