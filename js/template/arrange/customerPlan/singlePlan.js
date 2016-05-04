@@ -779,38 +779,37 @@ define(function(require, exports) {
             }).done(function(data) {
                 if (showDialog(data)) {
                     // datas = JSON.parse(data.userList)
-                    console.log(data)
                     // console.log(data.tripPlan.dutyOPUser.businessGroup.name)
                     if ($that.hasClass('T-addInsurance')) {
                         //保险安排
-                        singlePlan.addInsurance($tab, startTime, endTime,data);
+                        singlePlan.addInsurance($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addGuide')) {
                         //导游安排
-                        singlePlan.addGuide($tab, startTime, endTime,data);
+                        singlePlan.addGuide($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addBus')) {
                         //车辆安排
-                        singlePlan.addBus($tab, startTime, endTime,data);
+                        singlePlan.addBus($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addRestaurant')) {
                         //餐厅安排
-                        singlePlan.addRestaurant($tab, startTime, endTime,data);
+                        singlePlan.addRestaurant($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addHotel')) {
                         //酒店安排
-                        singlePlan.addHotel($tab, startTime, endTime,data);
+                        singlePlan.addHotel($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addScenic')) {
                         //景区安排
-                        singlePlan.addScenic($tab, startTime, endTime,data);
+                        singlePlan.addScenic($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addShop')) {
                         //购物安排
-                        singlePlan.addShop($tab, startTime, endTime,data);
+                        singlePlan.addShop($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addSelfPay')) {
                         //自费安排
-                        singlePlan.addSelfPay($tab, startTime, endTime,data);
+                        singlePlan.addSelfPay($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addTicket')) {
                         //票务安排
-                        singlePlan.addTicket($tab, startTime, endTime,data);
+                        singlePlan.addTicket($tab, startTime, endTime,data,validate);
                     } else if ($that.hasClass('T-addOther')) {
                         //其它安排
-                        singlePlan.addOther($tab, startTime, endTime,data);
+                        singlePlan.addOther($tab, startTime, endTime,data,validate);
                     }
                 }
             });
@@ -1084,7 +1083,7 @@ define(function(require, exports) {
      * 添加保险安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addInsurance = function($obj,startTime, endTime,data) {
+    singlePlan.addInsurance = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1120,12 +1119,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加导游安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addGuide = function($obj,startTime, endTime,data) {
+    singlePlan.addGuide = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1156,12 +1157,14 @@ define(function(require, exports) {
         $obj.find('input[name="dutyUserName"]').each(function(index, el) {
             singlePlan.getDutyUserName($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加车安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addBus = function($obj,startTime, endTime,data) {
+    singlePlan.addBus = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1197,12 +1200,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加餐安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addRestaurant = function($obj,startTime, endTime,data) {
+    singlePlan.addRestaurant = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1238,12 +1243,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加酒店安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addHotel = function($obj,startTime, endTime,data) {
+    singlePlan.addHotel = function($obj,startTime, endTime,data,validate) {
         var html = '<tr entity-id="" arrangeType = "hotel">'+
                     '<td>'+
                         '<input type="hidden" name="id" value="">'+
@@ -1290,12 +1297,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.chooseHotel($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加景区安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addScenic = function($obj,startTime, endTime,data) {
+    singlePlan.addScenic = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1331,12 +1340,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加购物安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addShop = function($obj,startTime, endTime,data) {
+    singlePlan.addShop = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1372,12 +1383,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加自费安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addSelfPay = function($obj,startTime, endTime,data) {
+    singlePlan.addSelfPay = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1413,12 +1426,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加票务安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addTicket = function($obj,startTime, endTime,data) {
+    singlePlan.addTicket = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1454,12 +1469,14 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 添加其他安排
      * @param {[type]} validator [验证]
      */
-    singlePlan.addOther = function($obj,startTime, endTime,data) {
+    singlePlan.addOther = function($obj,startTime, endTime,data,validate) {
         var html = '<tr>'+
                     '<td><input type="text" name="startTime" class="T-datepicker" value="'+(startTime||"")+'"></td>'+
                     '<td><input type="text" name="endTime" class="T-datepicker" value="'+(endTime||"")+'"></td>'+
@@ -1495,6 +1512,8 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.deleteArrangePlan($(this));
         });
+        //验证
+        rule.update(validate);
     };
     /**
      * 自选酒店
