@@ -3235,13 +3235,9 @@ define(function(require, exports){
 			if(!!$tr.attr('travelAgencyRate')){
 				tRate = $tr.attr('travelAgencyRate');
 			};
-			if(!!$tr.attr('quanpeiRebate')){
-				tRate = $tr.attr('quanpeiRebate');
-			};
 			if(!!$tr.attr('customerRebateMoney')){
 				CRmoney = $tr.attr('customerRebateMoney');
 			};
-			
 		}
 		var guideHtml ='<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<input type="text" name="guideName" class="w-70"/>'+
