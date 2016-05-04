@@ -338,19 +338,25 @@ define(function(require, exports) {
             $that.html('<i class="ace-icon fa bigger-110 icon-only fa-plus"></i>');
             $tr.next('tr').addClass('hidden');
             $that.attr('index', "0");
-        }else{
+        }else if(!$that.data('ajax')){
             $.ajax({
                 url: KingServices.build_url('customerOrder','getSubOrderInfo'),
                 data: {id : id},
                 type: 'POST',
+                showLoading : false,
                 success: function(data) {
                     if(showDialog(data)){
                         $that.html('<i class="ace-icon fa bigger-110 icon-only fa-minus"></i>');
                         $tr.next('tr').removeClass('hidden').find('.T-part-group-list').html(T.listPartGroup(data));
                         $that.attr('index', "1");
+                        $that.data('ajax', true);
                     }
                 }
             });
+        }else{
+            $that.html('<i class="ace-icon fa bigger-110 icon-only fa-minus"></i>');
+            $tr.next('tr').removeClass('hidden');
+            $that.attr('index', "1");
         }
     };
 
@@ -669,7 +675,13 @@ define(function(require, exports) {
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
             var $that = $(this);
             if($that.hasClass('T-single-group')){
-                $tab.find('.T-is-hidden, .T-join-group, .T-send-group, .T-add-join-group, .T-add-send-group').removeClass('hidden');
+                $tab.find('.T-is-hidden, .T-add-join-group, .T-add-send-group').removeClass('hidden');
+                if($tab.find(".T-join-group-list tr").length > 0){
+                    $tab.find('.T-join-group').removeClass('hidden');
+                }
+                if($tab.find(".T-send-group-list tr").length > 0){
+                    $tab.find('.T-send-group').removeClass('hidden');
+                }
                 $tab.find('.T-container').data('type', 'single');
                 $tab.find('.T-add-part-group').html(' <i class="ace-icon fa fa-plus bigger-160"></i> 参团 ');
                 $tab.find('.T-part-group-text').text('参团');
@@ -2566,11 +2578,6 @@ define(function(require, exports) {
             });
         }
 
-        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
-            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
-            showMessageDialog($("#confirm-dialog-message"), msg);
-            return false;
-        }
         if(!isCheckDate){
             showMessageDialog($("#confirm-dialog-message"), '送团日期不能等于接团日期！');
             return false;
@@ -2597,6 +2604,11 @@ define(function(require, exports) {
         if(!!id){
             data.id = id;
             method = "updateCustomerOrder";
+        }
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
+            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
+            showMessageDialog($("#confirm-dialog-message"), msg);
+            return false;
         }
         $.ajax({
             url : KingServices.build_url('customerOrder', method),
