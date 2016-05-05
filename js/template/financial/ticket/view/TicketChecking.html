@@ -1,4 +1,4 @@
-<div class="row check globalAdd" data-big="{{WEB_IMG_URL_BIG}}" data-small="{{WEB_IMG_URL_SMALL}}">
+<div class="row check globalAdd">
     <div class="T-search-area">
         <form class="form-inline" role="form" onsubmit="return false">
             <div class="form-group mar-r-10">
@@ -111,7 +111,7 @@
                         {{if rs.isGuidePay != 1}}<span class="in-block">导付<span class="F-float F-money">{{rs.realGuidePayMoney}}</span></span>{{/if}}
                     </a>
                 </td>
-                <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billImage="{{rs.billImage}}">查看</a>{{/if}}</td>
+                <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" url="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td><input type="text" class="col-sm-12 F-float F-money"  name="settlementMoney" value="{{rs.settlementMoney}}"{{if !!rs.isConfirmAccount}}disabled{{/if}}></td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
                 <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000" {{if !!rs.isConfirmAccount}}disabled{{/if}}>{{rs.checkRemark}}</textarea></td>

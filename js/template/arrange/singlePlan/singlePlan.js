@@ -1025,7 +1025,7 @@ define(function(require, exports) {
                                             "</div>"+
                                             "</td>";
                                     $container.find(".T-group-list tr").find("input:checked").each(function(i){
-                                        var $tr = $(this).closest('tr').clone();
+                                        var $tr = $(this).closest('tr').clone().removeClass('success');
                                         // 构造所需的行
                                         $tr.children('td').eq(0).remove().end().last().remove().end().end().append(html);
                                         // 附加行

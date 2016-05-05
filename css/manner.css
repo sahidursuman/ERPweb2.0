@@ -535,7 +535,9 @@ table tr td {
 .font-w-bold{
     font-weight: bold;
 }
-
+.font-s-12{
+    font-size: 12px;
+}
 .label-inline-60 {
     display: inline-block;
     width: 60px;
@@ -679,7 +681,7 @@ table tr td {
 
 .whereQ td {
     border: 1px solid #ececec;
-    padding: 7px 0px 7px 0px;
+    padding: 7px 5px;
 }
 
 .whereQ .style-myself {
@@ -1152,14 +1154,21 @@ select {
 .bookingBtn {
     height: 24px;
     line-height: 9px;
-    position: absolute;
     right: 14px;
     top: 0px;
+    margin-left: 15px;
+}
+.settlement-Btn {
+   height: 24px;
+   line-height: 9px;
+   top: 0px;
+   
 }
 
 .addManagerRight {
     cursor: pointer;
-    left: -38px;
+    left: -22px;
+    margin-left: 0px;
 }
 
 
@@ -2858,6 +2867,7 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 
 /* 财务已收样式 */
 .in-block{display: inline-block;white-space:nowrap;}
+
 /*中转安排*/
 .hct-tab .hct-new-tab{
     height: 40px;
@@ -2898,3 +2908,13 @@ a.gray span, .gray, .gray:hover, .gray:focus{
     width: 90%;
     margin-left: 5%;
 }
+
+/*billImage style*/
+ul.billImageDowebok{list-style-type: none;}
+ul.billImageDowebok li{float:left; width:130px; height:130px; border:1px solid #ccc;margin:10px;text-align:center;vertical-align:middle;}
+ul.billImageDowebok li span{display: inline-block;height: 65px;}
+ul.billImageDowebok li img{max-height:100%; max-width: 100%;vertical-align: middle;cursor: pointer;}
+
+/* 资源启用checkbox样式 */
+.resource_checkbox{margin-left:5px;margin-top: -6px !important;padding:0px;}
+input.ace[type="checkbox"] + .lbl{white-space: nowrap;}
