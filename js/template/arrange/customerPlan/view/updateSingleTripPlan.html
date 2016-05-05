@@ -115,25 +115,25 @@
             </div>
         </div>
         <!-- <div class="row">
-			<div class="col-xs-6 T-executeTime">
-				<label class="control-label">确认发团后游客短信设置</label>
-				<label>
-					<input type="radio" class="ace T-immediate" name="executeTimeType" {{if tripPlan.executeTimeType == 0}}checked{{/if}}>
-					<span class="lbl">立即发送</span>
-				</label>
-				<label>
-					<input type="radio" class="ace T-timed" name="executeTimeType" {{if tripPlan.executeTimeType == 1}}checked{{/if}}>
-					<span class="lbl">定时发送</span>
-				</label>
-				<input type="text" class="datetimepicker {{if tripPlan.executeTimeType == 0}}hidden{{/if}}" name="executeTime"  value="{{tripPlan.executeTime}}">
-			</div>
-			<div class="col-xs-6">
-				<label class="col-xs-4 control-label text-right">短信签名</label>
-				<div class="col-xs-8">
-					<input type="text" class="col-xs-12" name="travelAgencyTag" value="{{tripPlan.travelAgencyTag}}">
-				</div>
-			</div>
-		</div> -->
+            <div class="col-xs-6 T-executeTime">
+                <label class="control-label">确认发团后游客短信设置</label>
+                <label>
+                    <input type="radio" class="ace T-immediate" name="executeTimeType" {{if tripPlan.executeTimeType == 0}}checked{{/if}}>
+                    <span class="lbl">立即发送</span>
+                </label>
+                <label>
+                    <input type="radio" class="ace T-timed" name="executeTimeType" {{if tripPlan.executeTimeType == 1}}checked{{/if}}>
+                    <span class="lbl">定时发送</span>
+                </label>
+                <input type="text" class="datetimepicker {{if tripPlan.executeTimeType == 0}}hidden{{/if}}" name="executeTime"  value="{{tripPlan.executeTime}}">
+            </div>
+            <div class="col-xs-6">
+                <label class="col-xs-4 control-label text-right">短信签名</label>
+                <div class="col-xs-8">
+                    <input type="text" class="col-xs-12" name="travelAgencyTag" value="{{tripPlan.travelAgencyTag}}">
+                </div>
+            </div>
+        </div> -->
     </form>
     <!-- 2. 行程安排 -->
     <div class="row">
@@ -188,12 +188,12 @@
                         </td>
                         <td>
                             <a class="cursor T-action T-update-detail" title="编辑行程详情" data-detail="{{rs.detail}}">
-				            编辑行程详情
-				            <label style="padding-left:10px;">|</label>
-				        </a>
+                            编辑行程详情
+                            <label style="padding-left:10px;">|</label>
+                        </a>
                             <a class="cursor T-action T-delete" title="删除">
-				            删除
-				        </a>
+                            删除
+                        </a>
                         </td>
                     </tr>
                     {{/each}}
@@ -259,12 +259,12 @@
                         <td>
                             <div class="btn-group">
                                 <a class="cursor T-action T-groupView">
-								查看
-							</a>
+                                查看
+                            </a>
                                 <a class='cursor'> </a>
                                 <a class="cursor T-action T-groupDelete">
-								删除
-							</a>
+                                删除
+                            </a>
                             </div>
                         </td>
                     </tr>
@@ -278,19 +278,86 @@
     <div class="row">
         <div class="col-xs-12 hd">
             <h3 class="pull-left">操作计划</h3>
+            <div class="pull-left mar-l-15 T-action-plan">
+                <label data-type="guide" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="guide" class="ace" {{if hasData.guide}}checked="true"{{/if}}>
+                    <span class="lbl">导游</span>
+                </label>
+                <label data-type="insurance" class="control-label T-add-action">
+                    <input type="checkbox" tab-type="insurance" class="ace" {{if hasData.insurance}}checked="true"{{/if}}>
+                    <span class="lbl">保险</span>
+                </label>
+                <label data-type="bus" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="bus" class="ace" {{if hasData.bus}}checked="true"{{/if}}>
+                    <span class="lbl">车辆</span>
+                </label>
+                <label data-type="restaurant" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="restaurant" class="ace" {{if hasData.restaurant}}checked="true"{{/if}}>
+                    <span class="lbl">餐饮</span>
+                </label>
+                <label data-type="hotel" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="hotel" class="ace" {{if hasData.hotel}}checked="true"{{/if}}>
+                    <span class="lbl">酒店</span>
+                </label>
+                <label data-type="scenic" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="scenic" class="ace" {{if hasData.scenic}}checked="true"{{/if}}>
+                    <span class="lbl">景区</span>
+                </label>
+                <label data-type="ticket" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="ticket" class="ace" {{if hasData.ticket}}checked="true"{{/if}}>
+                    <span class="lbl">票务</span>
+                </label>
+                <label data-type="shop" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="shop" class="ace" {{if hasData.shop}}checked="true"{{/if}}>
+                    <span class="lbl">购物</span>
+                </label>
+                <label data-type="selfPay" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="selfPay" class="ace" {{if hasData.selfPay}}checked="true"{{/if}}>
+                    <span class="lbl">自费</span>
+                </label>
+                <label data-type="other" class="control-label T-add-action mar-l-10">
+                    <input type="checkbox" tab-type="other" class="ace" {{if hasData.other}}checked="true"{{/if}}>
+                    <span class="lbl">其它</span>
+                </label>
+                <label data-type="all" class="control-label T-add-all mar-l-15">
+                    <input type="checkbox" tab-type="all" class="ace">
+                    <span class="lbl">全选</span>
+                </label>
+            </div>
         </div>
+    </div>
+    <div class="row">
         <div class="tabbable">
             <ul class="nav nav-tabs T-arrange-tabs">
-                <li class="col-sm-1 no-padding align-center R-right active" data-right="1140011"> <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="true">导游</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140012"> <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="false">保险</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140013"> <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140014"> <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="true">餐饮</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140015"> <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="true">酒店</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140016"> <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="true">景区</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140017"> <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="true">票务</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140018"> <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="true">购物</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019"> <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="true">自费</a> </li>
-                <li class="col-sm-1 no-padding align-center R-right" data-right="1140019"> <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="true">其他</a> </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="guide" data-right="1140011">   <a data-toggle="tab" href="#tripPlan_addPlan_guide" aria-expanded="true">导游</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="insurance" data-right="1140012"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_insurance" aria-expanded="false">保险</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="bus" data-right="1140013"> 
+                    <a class="T-busTarget" data-toggle="tab" href="#tripPlan_addPlan_bus" aria-expanded="false">车辆</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="restaurant" data-right="1140014">
+                     <a data-toggle="tab" href="#tripPlan_addPlan_restaurant" aria-expanded="true">餐饮</a> 
+                 </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="hotel" data-right="1140015"> 
+                    <a class="T-hotelTarget" data-toggle="tab" href="#tripPlan_addPlan_hotel" aria-expanded="true">酒店</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="scenic" data-right="1140016"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_scenic" aria-expanded="true">景区</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="ticket" data-right="1140017">
+                 <a data-toggle="tab" href="#tripPlan_addPlan_ticket" aria-expanded="true">票务</a>
+                  </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="shop" data-right="1140018"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_shop" aria-expanded="true">购物</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="selfPay" data-right="1140019"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_selfPay" aria-expanded="true">自费</a> 
+                </li>
+                <li class="col-sm-1 no-padding align-center R-right hidden" tab-name="other" data-right="1140019"> 
+                    <a data-toggle="tab" href="#tripPlan_addPlan_other" aria-expanded="true">其他</a>
+                </li>
             </ul>
             <div class="tab-content T-tab-content" style="position:relative;top: -2px">
                 <!-- 保险 -->
@@ -321,7 +388,7 @@
                                 </thead>
                                 <tbody class="T-insurance-plan">
                                     {{each requireJson.insuranceRequireList as insurance}}
-                                    <tr entity-id="{{insurance.id}}" arrangeType = "insurance">
+                                    <tr entity-id="{{insurance.id}}" arrangeType="insurance">
                                         <td>
                                             <input type="hidden" name="id" value="{{insurance.id}}">
                                             <input type="text" name="startTime" value="{{insurance.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -353,7 +420,7 @@
                     </div>
                 </div>
                 <!-- 导游 -->
-                <div id="tripPlan_addPlan_guide" class="tab-pane fade active in">
+                <div id="tripPlan_addPlan_guide" class="tab-pane fade ">
                     <div class=" ui-sortable-handle">
                         <h5 class="title-size"> <i class="ace-icon fa fa-user"></i> 导游计划 <button class="btn btn-sm btn-success T-addResource T-addGuide" style="margin-left: 20px"> <i class="ace-icon fa fa-plus"></i> 新增 </button> </h5>
                         <form class="T-guide-list">
@@ -380,7 +447,7 @@
                                 </thead>
                                 <tbody class="T-guide-plan">
                                     {{each requireJson.guideRequireList as guide}}
-                                    <tr entity-id="{{guide.id}}" arrangeType = "guide">
+                                    <tr entity-id="{{guide.id}}" arrangeType="guide">
                                         <td>
                                             <input type="hidden" name="id" value="{{guide.id}}">
                                             <input type="text" name="startTime" value="{{guide.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -439,7 +506,7 @@
                                 </thead>
                                 <tbody class="T-bus-plan">
                                     {{each requireJson.busRequireList as bus}}
-                                    <tr entity-id="{{bus.id}}" arrangeType = "bus">
+                                    <tr entity-id="{{bus.id}}" arrangeType="bus">
                                         <td>
                                             <input type="hidden" name="id" value="{{bus.id}}">
                                             <input type="text" name="startTime" value="{{bus.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -499,7 +566,7 @@
                                     </thead>
                                     <tbody class="T-restaurant-plan">
                                         {{each requireJson.restaurantRequireList as restaurant}}
-                                        <tr entity-id="{{restaurant.id}}" arrangeType = "restaurant">
+                                        <tr entity-id="{{restaurant.id}}" arrangeType="restaurant">
                                             <td>
                                                 <input type="hidden" name="id" value="{{restaurant.id}}">
                                                 <input type="text" name="startTime" value="{{restaurant.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -562,7 +629,7 @@
                                     </thead>
                                     <tbody class="T-hotel-plan">
                                         {{each requireJson.hotelRequireList as hotel}}
-                                        <tr entity-id="{{hotel.id}}" arrangeType = "hotel">
+                                        <tr entity-id="{{hotel.id}}" arrangeType="hotel">
                                             <td>
                                                 <input type="hidden" name="id" value="{{hotel.id}}">
                                                 <input type="text" name="startTime" value="{{hotel.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -570,7 +637,9 @@
                                             <td>
                                                 <input type="text" name="endTime" value="{{hotel.endTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
                                             </td>
-                                            <td><input type="text" name="hotel" class="T-choose-hotel col-xs-12" readonly="readonly" value=""></td>
+                                            <td>
+                                                <input type="text" name="hotel" class="T-choose-hotel col-xs-12" readonly="readonly" value="">
+                                            </td>
                                             <td>
                                                 <input type="text" name="requireContent" value="{{hotel.requireContent}}" class="col-xs-12">
                                             </td>
@@ -624,7 +693,7 @@
                                     </thead>
                                     <tbody class="T-scenic-plan">
                                         {{each requireJson.scenicRequireList as scenic}}
-                                        <tr entity-id="{{scenic.id}}" arrangeType = "scenic">
+                                        <tr entity-id="{{scenic.id}}" arrangeType="scenic">
                                             <td>
                                                 <input type="hidden" name="id" value="{{scenic.id}}">
                                                 <input type="text" name="startTime" value="{{scenic.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -684,7 +753,7 @@
                                 </thead>
                                 <tbody class="T-shop-plan">
                                     {{each requireJson.shopRequireList as shop}}
-                                    <tr entity-id="{{shop.id}}" arrangeType = "shop">
+                                    <tr entity-id="{{shop.id}}" arrangeType="shop">
                                         <td>
                                             <input type="hidden" name="id" value="{{shop.id}}">
                                             <input type="text" name="startTime" value="{{shop.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -744,7 +813,7 @@
                                     </thead>
                                     <tbody class="T-selfPay-plan">
                                         {{each requireJson.selfPayRequireList as selfPay}}
-                                        <tr entity-id="{{selfPay.id}}" arrangeType = "selfPay">
+                                        <tr entity-id="{{selfPay.id}}" arrangeType="selfPay">
                                             <td>
                                                 <input type="hidden" name="id" value="{{selfPay.id}}">
                                                 <input type="text" name="startTime" value="{{selfPay.startTime | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -805,7 +874,7 @@
                                     </thead>
                                     <tbody class="T-ticket-plan">
                                         {{each requireJson.ticketRequireList as ticket}}
-                                        <tr entity-id="{{ticket.id}}" arrangeType = "ticket">
+                                        <tr entity-id="{{ticket.id}}" arrangeType="ticket">
                                             <td>
                                                 <input type="hidden" name="id" value="{{ticket.id}}">
                                                 <input type="text" name="startTime" value="{{ticket.startTime  | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
@@ -866,7 +935,7 @@
                                     </thead>
                                     <tbody class="T-other-plan">
                                         {{each requireJson.otherRequireList as other}}
-                                        <tr entity-id="{{other.id}}" arrangeType = "other">
+                                        <tr entity-id="{{other.id}}" arrangeType="other">
                                             <td>
                                                 <input type="hidden" name="id" value="{{other.id}}">
                                                 <input type="text" name="startTime" value="{{other.startTime  | dateFormat: 'yyyy-MM-dd'}}" class="T-datepicker">
