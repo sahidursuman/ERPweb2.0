@@ -55,7 +55,7 @@ define(function(require, exports) {
 
                 tripPlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), data.lineProducts, 'name');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="partnerAgencyName"]'), data.partnerAgencies, 'travelAgencyName');
-                tripPlan.autocompleteSearch($searchArea.find('input[name="outOPUserName"]'), data.outOPUsers, 'realName');
+                //tripPlan.autocompleteSearch($searchArea.find('input[name="outOPUserName"]'), data.outOPUsers, 'realName');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="businessGroupName"]'), data.businessGroups, 'name');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="realname"]'), data.guides, 'realname');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="brand"]'), data.busCompanyArranges, 'licenseNumber');
@@ -452,15 +452,15 @@ define(function(require, exports) {
             if(showDialog(data)){
                 // 团队
                 var tabKey = menuKey + "_group_update";
-                data.touristGroup = JSON.parse(data.touristGroup);
                 data.isGuest = 1;
-                data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList);
-                data.isGuest = 1;
-                data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList);
-                data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
+                data.touristGroup = JSON.parse(data.touristGroup || false);
+                data.touristGroupFeeList = JSON.parse(data.touristGroupFeeList || false);
+                data.touristGroupMemberList = JSON.parse(data.touristGroupMemberList || false);
+                data.tripPlanDayList = JSON.parse(data.tripPlanDayList );
                 data.tripPlanRequireList = JSON.parse(data.tripPlanRequireList);
                 data.hasData = tripPlan.hasTripPlan(data.tripPlanRequireList);
                 tripPlan.processRepastDetail(data.tripPlanDayList);
+                console.log(data.touristGroup);
                 if(Tools.addTab(tabKey, "编辑团队计划", T.updateGroupTripPlan(data))){
                     tripPlan.initEdit($("#tab-"+tabKey+"-content"));
                 };
@@ -830,6 +830,7 @@ define(function(require, exports) {
         
         var arge = $tab.find('.T-basic-info').serializeJson();
         var tripPlanId = $tab.find('.T-tab').data("id");
+
         if(tripPlanId){
             arge.tripPlanId = tripPlanId;
         }
@@ -838,6 +839,7 @@ define(function(require, exports) {
         
         //游客成员json包
         arge.touristGroupMemberJson = [];
+        arge.tgRemark = $tab.find('textarea[name=touristGroupRemark]').val();
         if($tab.find('.T-tourists-list tr').length === 0){
             showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
             return ;
@@ -872,7 +874,7 @@ define(function(require, exports) {
                 idCardType : $that.find('[name="idCardType"]').val(),
                 isContactUser : $that.find('[name="isContactUser"]').is(":checked") ? 1 : 0,
                 mobileNumber : $that.find('[name="mobileNumber"]').val(),
-                name : $that.find('[name="name"]').val()
+                name : $that.find('[name="name"]').val(),
             });
         });
         if(!isMobileNumber){
@@ -883,7 +885,7 @@ define(function(require, exports) {
             showMessageDialog($( "#confirm-dialog-message" ), "至少选择一个联系人。");
             return ;
 
-        }
+        };
         //团计划要求json包
         arge.tripPlanRequireJson = tripPlan.getTripPlanRequest($tab);
         
@@ -1179,7 +1181,7 @@ define(function(require, exports) {
                 if(!!groupData.buyInsurance){
                     $tab.find('[name="buyInsurance"]').attr('checked', 'checked');
                 }
-                $tab.find('[name="remark"]').val(groupData.remark)
+                $tab.find('textarea[name="touristGroupRemark"]').val(groupData.remark)
                 $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
                 $tab.find('[name="travelAgencyName"]').attr('disabled','disabled').closest('div').find('.T-addPartner').hide();
 

@@ -47,6 +47,7 @@
                 <th rowspan="2">人数返佣</th>
                 <th colspan="2">社佣</th>
                 <th colspan="2">导佣</th>
+                <th colspan="2">全陪</th>
                 <th rowspan="2">导游报账备注</th>
                 <th rowspan="2">是否对账</th>
                 
@@ -70,6 +71,8 @@
                 <th>导付</th>
                 <th>付款方式</th>
                 <th>单据</th>
+                <th><span class="necessary">*</span>比例%</th>
+                <th>返佣</th>
                 <th><span class="necessary">*</span>比例%</th>
                 <th>返佣</th>
                 <th><span class="necessary">*</span>比例%</th>
@@ -482,6 +485,43 @@
                                             </div>
                                         {{/if}}<!-- 导游返佣 -->
                                     </td>
+                                    
+                                    <td name="quanpeiRebate">
+                                        <div class="div-h-30"></div>
+                                        {{if itemSet.guideDetails.length}}
+                                            {{each itemSet.guideDetails as rs index}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    <input name="quanpeiRebate" value="{{rs.quanpeiRebate}}" type="text" class="w-50" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                </div>
+                                            {{/each}}
+                                        {{else}}
+                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                <input name="quanpeiRebate" type="text" class="w-50" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                            </div>
+                                        {{/if}}
+                                    </td><!-- 全陪比例 -->
+                                        
+                                        
+                                    <td name="quanpeiRebateMoney">
+                                        <div class="div-h-30"></div>
+                                        {{if itemSet.guideDetails.length}}
+                                            {{each itemSet.guideDetails as rs index}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="text" 
+                                                    class="w-70 F-float F-money" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                </div>
+                                            {{/each}}
+                                        {{else}}
+                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                <input name="quanpeiRebateMoney" type="text" class="w-70 F-float F-money" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                            </div>
+                                        {{/if}}
+
+                                    </td><!-- 全陪金额 -->
 
                                     <td name="billRemark">
                                         <div class="div-h-30"></div>
@@ -922,6 +962,42 @@
                                             </div>
                                         {{/if}}<!-- 导游返佣 -->
                                     </td>
+
+                                    <td name="quanpeiRebate">
+                                        <div class="div-h-30"></div>
+                                        {{if itemSet.guideDetails.length}}
+                                            {{each itemSet.guideDetails as rs index}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    <input name="quanpeiRebate" value="{{rs.quanpeiRebate}}" type="text" class="w-50" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                </div>
+                                            {{/each}}
+                                        {{else}}
+                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                <input name="quanpeiRebate" type="text" class="w-50" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                            </div>
+                                        {{/if}}
+                                    </td><!-- 全陪比例 -->
+                                        
+                                        
+                                    <td name="quanpeiRebateMoney">
+                                        <div class="div-h-30"></div>
+                                        {{if itemSet.guideDetails.length}}
+                                            {{each itemSet.guideDetails as rs index}}
+                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="text" class="w-70" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                </div>
+                                            {{/each}}
+                                        {{else}}
+                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                <input name="quanpeiRebateMoney" type="text" class="w-70 F-float F-money" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                            </div>
+                                        {{/if}}
+
+                                    </td><!-- 全陪金额 -->
 
                                     <td name="billRemark">
                                         <div class="div-h-30"></div>

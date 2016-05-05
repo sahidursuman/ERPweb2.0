@@ -187,11 +187,13 @@ define(function(require, exports) {
                 $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
                 $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
                 $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
+                $tab.find('.T-travelIncome').text(data.sumAgencyMoney);
+                $tab.find('.T-guideIncome').text(data.sumGuideMoney);
                 $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
             }
         });
         
-    };
+    };  
 
     Client.ClientCheck = function(pageNo, args, $tab, isView){
         if(!!$tab){
@@ -1194,6 +1196,8 @@ define(function(require, exports) {
         $tab.find(".T-sumCount").text(total.sumCount);
         $tab.find(".T-sumContractMoney").text(total.sumContractMoney);
         $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
+        $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
+        $tab.find('.T-guideIncome').text(total.sumGuideMoney);
         $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
         $tab.find(".T-sumSettlementMoney").text(total.sumSettlementMoney);
         $tab.find(".T-sumUnReceivedMoney").text(total.sumUnReceivedMoney);

@@ -4,9 +4,9 @@
 			   <td colspan="4" class="HeadManage">酒店主体信息</td>
 		   </tr>
 		   <tr>
-			   <td class="style-myself">酒店名称：</td>
+			   <td class="style-myself">酒店名称</td>
 			   <td class="styleOne-self">{{hotel.name}}</td>
-			   <td class="style-myself">酒店星级：</td>
+			   <td class="style-myself">酒店星级</td>
 			   <td class="styleOne-self">{{if hotel.level==1 }}
 				   三星以下
 				   {{else if hotel.level==2 }}
@@ -24,19 +24,19 @@
 				   {{/if}}</td>
 		   </tr>
 		   <tr>
-			   <td class="style-myself">联系人：</td>
+			   <td class="style-myself">联系人</td>
 			   <td class="styleOne-self">{{hotel.managerName}}</td>
-			   <td class="style-myself">联系电话：</td>
+			   <td class="style-myself">联系电话</td>
 			   <td class="styleOne-self">{{hotel.mobileNumber}}</td>
 		   </tr>
 		   <tr>
-			   <td class="style-myself">座机号码：</td>
+			   <td class="style-myself">座机号码</td>
 			   <td class="styleOne-self">{{hotel.telNumber}}</td>
-			   <td class="style-myself">传真号码：</td>
+			   <td class="style-myself">传真号码</td>
 			   <td class="styleOne-self">{{hotel.faxNumber}}</td>
 		   </tr>
 		   <tr>
-			   <td class="style-myself">所在地区：</td>
+			   <td class="style-myself">所在地区</td>
 			   <td class="styleOne-self">{{if hotel.province != null}}
 				   {{hotel.province.name}}
 				   {{/if}}
@@ -46,7 +46,7 @@
 				   {{if hotel.district != null}}
 				   -{{hotel.district.name}}
 				   {{/if}}</td>
-			   <td class="style-myself">是否启用：</td>
+			   <td class="style-myself">是否启用</td>
 			   <td class="styleOne-self">	{{if hotel.status == 0}}
 				   已停用
 				   {{else}}
@@ -54,13 +54,13 @@
 				   {{/if}}</td>
 		   </tr>
 		   <tr>
-			   <td class="style-myself">详细地址：</td>
+			   <td class="style-myself">详细地址</td>
 			   <td class="styleOne-self" >{{hotel.street}}</td>
-			   <td class="style-myself">酒店设施：</td>
+			   <td class="style-myself">酒店设施</td>
 			   <td class="styleOne-self" >{{hotel.facility}}</td>
 		   </tr>
 		   <tr>
-			   <td class="style-myself">酒店简介：</td>
+			   <td class="style-myself">酒店简介</td>
 			   <td class="styleOne-self" colspan="4">{{hotel.remark}}</td>
 		   </tr>
 	   </table>

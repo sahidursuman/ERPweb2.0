@@ -225,9 +225,7 @@ define(function(require, exports) {
                 OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                var bigImg = $checkTab.find('input[name=WEB_IMG_URL_BIG]').val();
-                var smallImg = $checkTab.find('input[name=WEB_IMG_URL_SMALL]').val();
-                OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
+                FinancialService.viewBillImage(this);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
@@ -548,9 +546,7 @@ define(function(require, exports) {
                 OtherAccounts.lookDetail(id);
             } else if ($that.hasClass('T-viewInsuanceImg')) {
                 // 查看单据
-                var bigImg = $tab.find('input[name=WEB_IMG_URL_BIG]').val();
-                var smallImg = $tab.find('input[name=WEB_IMG_URL_SMALL]').val();
-                OtherAccounts.viewInsuranceImg(this, bigImg, smallImg);
+                FinancialService.viewBillImage(this);
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
@@ -673,39 +669,6 @@ define(function(require, exports) {
             }
         });
     };
-    //显示单据
-    OtherAccounts.viewInsuranceImg = function(obj, bigImg, smallImg) {
-        var data = {
-            "images": []
-        };
-        var str = $(obj).attr('url');
-        var strs = str.split(",");
-        for (var i = 0; i < strs.length; i++) {
-            var s = strs[i];
-            if (s != null && s != "" && s.length > 0) {
-                var image = {
-                    "WEB_IMG_URL_BIG": imgUrl + s,
-                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
-                }
-                data.images.push(image);
-            }
-        }
-        var html = viewImgCheckingTemplate(data);
-
-        layer.open({
-            type: 1,
-            title: "单据图片",
-            skin: 'layui-layer-rim', // 加上边框
-            area: '500px', // 宽高
-            zIndex: 1028,
-            content: html,
-            scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function() {
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-            }
-        });
-    };
-    //
     // // 查看已付金额a-1
     OtherAccounts.lookDetail = function(id) {
         // 对账查看明细页面

@@ -550,7 +550,7 @@ define(function(require, exports) {
 			args.sortType = 'startTime';
         	args.order='asc';
 			$.ajax({
-				url : KingServices.build_url('financial/bookingAccount', 'listReciveBookingAcccount'),
+				url : KingServices.build_url('financial/bookingAccount', 'listBookingAcccount'),
 				type : "POST",
 				data : args
 			}).done(function(data){
