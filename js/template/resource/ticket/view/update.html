@@ -7,7 +7,7 @@
 				<input type="text" name="name" class="col-sm-12" value="{{ticket.name}}" maxlength="32" />
 			</div>
 			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
-			<div class="col-sm-3 checkbox" style="margin-left:-10px;margin-top: -6px">
+			<div class="col-sm-3 checkbox resource_checkbox">
 				<label>
 					<input {{if ticket.status == 1}}checked="checked"{{/if}}  type="checkbox" class="ace T-ticket-start" value="1" />
 					<span class="lbl">

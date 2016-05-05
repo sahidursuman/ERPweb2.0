@@ -50,41 +50,49 @@
     <div class="form-inline">
         <div class="form-group">
             <label>人数合计：</label>
-            <label class="T-sumCount">{{totalList.sumCount}}</label>
+            <label class="T-sumCount"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-23">
             <label>打单金额合计：</label>
-            <label class="F-float F-money T-sumConsumeMoney">{{totalList.sumConsumeMoney}}</label>
+            <label class="F-float F-money T-sumConsumeMoney"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-23">
             <label>社佣合计：</label>
-            <label class="F-float F-money T-sumTravelAgencyRebateMoney">{{totalList.sumTravelAgencyRebateMoney}}</label>
+            <label class="F-float F-money T-sumTravelAgencyRebateMoney"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-23">
             <label>导佣合计：</label>
-            <label class="F-float F-money T-sumGuideRebateMoney">{{totalList.sumGuideRebateMoney}}</label>
+            <label class="F-float F-money T-sumGuideRebateMoney"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-23">
+            <label>全陪佣金合计：</label>
+            <label class="F-float F-money T-quanpeiRebatMoney"></label>
+        </div>
+        <div class="form-group mar-l-23">
+            <label>二次返佣合计：</label>
+            <label class="F-float F-money T-twoRebateMoney"></label>
+        </div>
+        <div class="form-group mar-l-23">
             <label>返佣金额合计：</label>
-            <label class="F-float F-money T-sumBackMoney">{{totalList.sumBackMoney}}</label>
+            <label class="F-float F-money T-sumBackMoney"></label>
         </div>
-        <div class="form-group marginLeft-30">
+        <div class="form-group mar-l-23">
             <label>已收金额合计：</label>
-            <label class="F-float F-money T-sumReceiveMoney">{{totalList.sumReceiveMoney}}</label>
+            <label class="F-float F-money T-sumReceiveMoney"></label>
         </div>
     </div>
     <div class="form-inline">
         <div class="form-group">
             <label>结算金额合计：</label>
-            <label class="F-float F-money T-sumSettlementMoney">{{totalList.sumSettlementMoney}}</label>
+            <label class="F-float F-money T-sumSettlementMoney"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计：</label>
-            <label class="F-float F-money T-sumUnReceiveMoney">{{totalList.sumUnReceiveMoney}}</label>
+            <label class="F-float F-money T-sumUnReceiveMoney"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label>未收金额合计(已对账)：</label>
-            <label class="T-unpayMoney F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
+            <label class="T-unpayMoney F-float F-money"></label>
         </div>
     </div>
 
@@ -160,6 +168,8 @@
                 <th>打单金额</th>
                 <th>社佣</th>
                 <th>导佣</th>
+                <th>全陪佣金</th>
+                <th>二次返佣</th>
                 <th>单据</th>
                 <th>返佣金额</th>
                 <th>已收金额</th>
@@ -182,7 +192,9 @@
                 <td><span class="F-float F-money">{{rs.consumeMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.travelAgencyRebateMoney}}</span></td>
                 <td><span class="F-float F-money">{{rs.guideRebateMoney}}</span></td>
-                <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" data-billimage="{{rs.billImage}}">查看</a>{{/if}}</td>
+                <td><span class="F-float F-money">{{rs.quanpeiRebateMoney}}</span></td>
+                <td><span class="F-float F-money">{{rs.twoRebateMoney}}</span></td>
+                <td style="white-space: nowrap;">{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" url="{{rs.billImage}}">查看</a>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.backMoney}}</span></td>
                 <td class="align-left">
                     <a class="T-action T-payDetails">
@@ -215,23 +227,40 @@
                                 <th class="th-border" style="min-width: 120px;">消费金额</th>
                                 <th class="th-border" style="min-width: 45px;">社佣</th>
                                 <th class="th-border" style="min-width: 45px;">导佣</th>
+                                <th class="th-border" style="min-width: 45px;">全陪佣金</th>
+                                <th class="th-border" style="min-width: 45px;">二次返佣</th>
                             </tr>
                         </thead>
                         <tbody class="T-shopItemList">
                             {{each rs.shopItem as list i}}
+                            {{if i == 0}}
                             <tr>
                                 <td>{{i + 1}}</td>
                                 <td>{{list.itemName}}</td>
                                 <td><span class="F-float F-money T-consumeMoney">{{list.consumeMoney}}</span></td>
                                 <td><span class="F-float F-money T-travelAgencyRebateMoney">{{list.travelAgencyRebateMoney}}</span></td>
                                 <td><span class="F-float F-money T-guideRebateMoney">{{list.guideRebateMoney}}</span></td>
+                                <td><span class="F-float F-money T-quanpeiRebateMoney">{{if !!list.quanpeiRebateMoney}}{{list.quanpeiRebateMoney}}{{else}}-{{/if}}</span></td>
+                                <td rowspan="{{rs.shopItem.length}}"><span class="F-float F-money T-twoRebateMoney">{{rs.twoRebateMoney}}</span></td>
                             </tr>
+                            {{else}}
+                                <tr>
+                                <td>{{i + 1}}</td>
+                                <td>{{list.itemName}}</td>
+                                <td><span class="F-float F-money T-consumeMoney">{{list.consumeMoney}}</span></td>
+                                <td><span class="F-float F-money T-travelAgencyRebateMoney">{{list.travelAgencyRebateMoney}}</span></td>
+                                <td><span class="F-float F-money T-guideRebateMoney">{{list.guideRebateMoney}}</span></td>
+                                <td><span class="F-float F-money T-quanpeiRebateMoney">{{if !!list.quanpeiRebateMoney}}{{list.quanpeiRebateMoney}}{{else}}-{{/if}}</span></td>
+                            </tr>
+                            {{/if}}
                             {{/each}}
                             <tr class="T-sumMoney">
                                 <td colspan="2" style="font-weight: bold;text-align:right;">佣金合计：</td>
                                 <td><span class="F-float F-money T-shopMoney" style="font-weight: bold;"></span></td>
                                 <td><span class="F-float F-money T-travelMoney" style="font-weight: bold;"></span></td>
                                 <td><span class="F-float F-money T-guideMoney" style="font-weight: bold;"></span></td>
+                                <td><span class="F-float F-money T-quanpeiMoney" style="font-weight: bold;"></span></td>
+                                <td><span class="F-float F-money T-twoMoney" style="font-weight: bold;"></span></td>
                             </tr>
                         </tbody>
                     </table>

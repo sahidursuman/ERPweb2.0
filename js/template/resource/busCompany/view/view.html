@@ -4,9 +4,9 @@
 			<td colspan="4" class="HeadManage">车队主体信息</td>
 		</tr>
 		<tr>
-			<td class="style-myself">车队名称：</td>
+			<td class="style-myself">车队名称</td>
 			<td class="styleOne-self">{{busCompany.companyName}}</td>
-			<td class="style-myself">车队类型：</td>
+			<td class="style-myself">车队类型</td>
 			<td class="styleOne-self">{{if busCompany.type == 0}}
 				个人
 				{{else}}
@@ -14,19 +14,19 @@
 				{{/if}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">联系人：</td>
+			<td class="style-myself">联系人</td>
 			<td class="styleOne-self">{{busCompany.managerName}}</td>
-			<td class="style-myself">联系电话：</td>
+			<td class="style-myself">联系电话</td>
 			<td class="styleOne-self">{{busCompany.mobileNumber}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">座机号码：</td>
+			<td class="style-myself">座机号码</td>
 			<td class="styleOne-self">{{busCompany.telNumber}}</td>
-			<td class="style-myself">传真号码：</td>
+			<td class="style-myself">传真号码</td>
 			<td class="styleOne-self">{{busCompany.faxNumber}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">所在地区：</td>
+			<td class="style-myself">所在地区</td>
 			<td class="styleOne-self">{{if busCompany.province != null}}
 				{{busCompany.province.name}}
 				{{/if}}
@@ -36,7 +36,7 @@
 				{{if busCompany.district != null}}
 				-{{busCompany.district.name}}
 				{{/if}}</td>
-			<td class="style-myself">是否启用：</td>
+			<td class="style-myself">是否启用</td>
 			<td class="styleOne-self">{{if busCompany.status == 0}}
 				已停用
 				{{else}}
@@ -44,11 +44,11 @@
 				{{/if}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">详细地址：</td>
+			<td class="style-myself">详细地址</td>
 			<td class="styleOne-self" colspan="3">{{busCompany.street}}</td>
 		</tr>
 		<tr>
-			<td class="style-myself">车队简介：</td>
+			<td class="style-myself">车队简介</td>
 			<td class="styleOne-self" colspan="4">{{busCompany.remark}}</td>
 		</tr>
 	</table>
