@@ -68,7 +68,9 @@ define(function(require, exports){
 			endTime = Count.$searchArea.find('input[name=endTime]').val();
 			startTime = Count.$searchArea.find('input[name=startTime]').val();
 			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value")
+			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value");
+			orderNumber = Count.$searchArea.find('input[name=orderNumber]').val();
+			contactInfo = Count.$searchArea.find('input[name=contactInfo]').val();
 		} 
 		timeStatus = timeStatus || 0
 		//修正页码
@@ -85,7 +87,9 @@ define(function(require, exports){
                 billStatus:status,
                 lineProductName:lineProductName,
                 guideName:guideName,
-                timeStatus : timeStatus
+                timeStatus : timeStatus,
+                orderNumber : orderNumber,
+                contactInfo : contactInfo
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -107,7 +111,9 @@ define(function(require, exports){
 		                billStatus:status,
 		                lineProductName:lineProductName,
 		                guideName:guideName,
-		                timeStatus : timeStatus
+		                timeStatus : timeStatus,
+		                orderNumber : orderNumber,
+		                contactInfo : contactInfo
 					};
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
