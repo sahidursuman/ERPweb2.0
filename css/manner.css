@@ -2813,26 +2813,29 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         margin-top: -16px !important;
     }
     .print-h5{
-        margin-bottom: 0px !important;
-        width: 30px;
-        height: auto;
-        position: absolute;
-        margin-left: -25px !important;
-        margin-top: -5px !important;
+        /*margin-bottom: 2px !important;*/
+        /*width: 30px;*/
+        /*height: auto;*/
+        /*position: absolute;*/
+        margin-left: -5px !important;
+        /*margin-top: -5px !important;*/
     }
     .print-Mh5{
-        margin-bottom: 0px !important;
-        width: 40px !important;
-        height: auto;
-        position: absolute;
-        margin-top: -5px !important;
-        margin-left: -40px !important;
+        /*margin-bottom: 2px !important;*/
+        /*width: 40px !important;*/
+        /*height: auto;*/
+        /*position: absolute;*/
+        /*margin-top: -5px !important;*/
+        margin-left: -5px !important;
     }
     .print-mar-t-5{
         margin-top: 10px;
     }
     .print-mar-l-10 label{
         margin-left: 10px !important;
+    }
+    .print-mar-t-F22{
+        margin-top: -22px;
     }
     
 }
