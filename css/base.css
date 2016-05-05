@@ -304,6 +304,9 @@ input.datepicker:not([class^="col-"]) {
 .busCompanyAddSubtractBtn tr .btn{
 	position: absolute;
 }
+.busCompanyupSubtractBtn span .btn{
+	position: absolute;
+}
 .hct-button-right{
 	margin-top: -4px;
     float: right;
@@ -932,6 +935,10 @@ input.datepicker:not([class^="col-"]) {
 }
 .min-w-200 {	
 	min-width: 200px;
+}
+
+.w-1200 {
+	min-width: 1200px;
 }
 
 /*自费table的宽度*/

@@ -1068,12 +1068,23 @@ var _statusText = {
 
 						fn.success(data, textStatus);
 					},
-					complete: function()  {
+					complete: function()  {			
+						// CNZZ超时记录
+						if (/^\/huochaitou\//.test(opt.url) && !!_czc && duration > 1000) {
+							var urls = opt.url.split('?'),
+								path = urls[0],
+								method = urls[1].split('&')[0].split('=')[1],
+								duration = (new Date()).getTime() - _startTime;
+
+							_czc.push( ["_trackEvent", 'AJAX', path,  method, duration, siteId]);
+						}
+
 						if (opt.removeLoading) {
 							layer.close(globalLoadingLayer);
-						}
+						}						
 					}
 				});
+			var _startTime = (new Date()).getTime();
 			return _ajax(opt);
 		}
 	};
@@ -2015,6 +2026,23 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
 };
 
 /**
+ * setDateHSTimePicker 控件日期时间方法
+ */
+
+Tools.setDateHSPicker = function($className){
+	if (!$className || !$className.length) {
+        console.log('元素为空，无法绑定日期控件');
+        return;
+    }
+    $className.datetimepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'YYYY-MM-DD HH:mm',
+        language: 'zh-CN'
+       });  
+};
+
+/**
  * 选择日期组件组
  * @param {object} $dateObjs 日期的Jquery对象
  */
@@ -2100,6 +2128,17 @@ Tools.addDay = function(date, days) {
 	}
 	return date;
 }
+
+/**
+ * 格式化日期时间
+ * @param  {string} date 时间、日期
+ * @param  {string} fmt  需要输出的格式
+ * @return {string}      格式化之后的日期/时间
+ */
+Tools.getDateTimeFormat = function(date, fmt) {
+	fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
+	return (new Date(date)).Format(fmt);
+};
 
 /**
  * 获取记录描述信息

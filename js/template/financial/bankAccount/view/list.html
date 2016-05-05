@@ -40,7 +40,7 @@
 			</thead>
 			<tbody class="T-bankAcc-list">
 				{{each newBankAccountList as rs}}
-					<tr bankid="{{rs.id}}" aliasName="{{rs.aliasName}}" bankMoney="{{rs.balance}}" beginningBalance="{{rs.beginningBalance}}" data-type="{{rs.type}}">
+					<tr data-bankid="{{rs.id}}" data-type="{{rs.type}}">
 						<td>{{if rs.type == 0}}现金账户{{else rs.type == 1}}银行账户{{/if}}</td>
 						<td>{{rs.aliasName}}</td>
 						<td>{{if rs.type == 0}}-{{else}}{{rs.bankAccountNumber}}{{/if}}</td>
@@ -53,7 +53,7 @@
 						<td>{{rs.balance}}</td>
 						<td>
 							<div class="btn-group">
-								<a class="T-action T-view cursor">
+								<a class="T-action T-view cursor" data-desc="账户：{{rs.aliasName}},余额：{{rs.balance}},期初余额：{{rs.beginningBalance}}" data-beginningBalance="{{rs.beginningBalance}}">
 									查看
 								</a>
 							</div>
