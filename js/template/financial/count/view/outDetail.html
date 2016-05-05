@@ -35,8 +35,6 @@
             </tr>
         </tbody>
     </table>
-    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" />
-    <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
     <div class="tabbable">
         <ul class="nav nav-tabs T-noprint">
             {{if !showJson.incomeShowFlag}}
@@ -142,8 +140,10 @@
                                             <thead>
                                                 <tr class="view-accountsPrint">
                                                     <th class="th-border" colspan="5">打单</th>
-                                                    <th class="th-border" colspan="2">社佣</th>
-                                                    <th class="th-border" colspan="2">导佣</th>
+                                                    <th class="th-border" rowspan="2">社佣</th>
+                                                    <th class="th-border" rowspan="2">导佣</th>
+                                                    <th class="th-border" rowspan="2">全陪</th>
+                                                    <th class="th-border" rowspan="2">二次返佣</th>
                                                     <th class="th-border" rowspan="2">应收</th>
                                                     <th class="th-border" rowspan="2">结算</th>
                                                 </tr>
@@ -153,10 +153,6 @@
                                                   <th class="th-border">商品</th>
                                                   <th class="th-border">打单金额</th>
                                                   <th class="th-border">单据</th>
-                                                  <th class="th-border">比例%</th>
-                                                  <th class="th-border">返佣</th>
-                                                  <th class="th-border">比例%</th>
-                                                  <th class="th-border">返佣</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -183,16 +179,20 @@
                                                                                         <span style="color:#bbb;">查看</span>
                                                                                     {{/if}}
                                                                                 </td>
-                                                                                <td>{{item.travelAgencyRate}}</td>
                                                                                 <td>
                                                                                     <span class="F-float F-money">
                                                                                         {{item.travelAgencyRebateMoney}}
                                                                                     </span>
                                                                                 </td>
-                                                                                <td>{{item.guideRate}}</td>
                                                                                 <td>
                                                                                     <span class="F-float F-money">{{item.guideRebateMoney}}</span>
                                                                                 </td>
+                                                                                <td>
+                                                                                    <span class="F-float F-money">
+                                                                                        {{item.quanpeiRebateMoney}}
+                                                                                    </span>
+                                                                                </td>
+                                                                                
                                                                             {{/if}}
                                                                         {{/each}}
                                                                     {{else}}
@@ -204,6 +204,11 @@
                                                                         <td></td>
                                                                         <td></td>
                                                                     {{/if}}
+                                                                <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
+                                                                    <span class="F-float F-money">
+                                                                        {{shopIncome.twoRebateMoney}}
+                                                                    </span>
+                                                                </td>
                                                                 <td rowspan="{{shopIncome.shopArrangeItemList.length}}">
                                                                     <span class="F-float F-money">{{shopIncome.needPayAllMoney}}</span>
                                                                 </td>
@@ -225,17 +230,20 @@
                                                                                 <span style="color:#bbb;">查看</span>
                                                                             {{/if}}
                                                                         </td>
-                                                                        <td>{{item.travelAgencyRate}}</td>
                                                                         <td>
                                                                             <span class="F-float F-money">
                                                                                 {{item.travelAgencyRebateMoney}}
                                                                             </span>
                                                                         </td>
-                                                                        <td>{{item.guideRate}}</td>
                                                                         <td>
                                                                             <span class="F-float F-money">{{item.guideRebateMoney}}</span>
                                                                         </td>
-                                                                    </tr>
+                                                                        <td>
+                                                                            <span class="F-float F-money">
+                                                                                {{item.quanpeiRebateMoney}}
+                                                                            </span>
+                                                                        </td>
+                                                                                                                                            </tr>
                                                                     {{/if}}
                                                                 {{/each}}
                                                             {{else}}
@@ -287,6 +295,7 @@
                                                     <th class="th-border">单价 </th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
+                                                    <th class="th-border">单据</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -315,7 +324,13 @@
                                                                 <td>
                                                                     <span class="F-float F-money">{{selfIncome.reduceMoney}}</span>
                                                                 </td>
-
+                                                                <td>
+                                                                    {{if selfIncome.billImage != null && selfIncome.billImage != ""}}
+                                                                    <a href="javascript:void(0);" url="{{selfIncome.billImage}}" class="btn-view">查看</a>
+                                                                    {{else}}
+                                                                        <span style="color:#bbb;">查看</span>
+                                                                    {{/if}}
+                                                                </td>
                                                                 <td>
                                                                     <span class="F-float F-money">{{selfIncome.needPayAllMoney}}</span>
                                                                 </td>
@@ -327,7 +342,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripIncomeMap.selfPayIncomeMap.sumNeedPayAllMoney}}
@@ -1164,7 +1179,7 @@
                         </div>
                     </div>
                 {{/if}}
-
+                
                 {{if tripPayMap.otherPayMap.otherPayMapList.length != 0}}
                     <!-- 其他支出-->
                     <div class="form-group otherOut">
@@ -1365,9 +1380,62 @@
                         </div>
                     </div>
                 {{/if}}
+                <!-- 全陪支出 -->
+                <div class="form-group quanpeiZ">
+                    <div class=" widget-container-col">
+                        <div class=" ui-sortable-handle">
+                                <h5 class="print-Mh5">
+                                    <label class="middle title-size">全陪支出</label>
+                                </h5>
+                            <div class="widget-body print-mar-t-F16">
+                                <div class="widget-main">
+                                    <table class="table table-striped table-bordered table-hover margin-top" >
+                                        <thead>
+                                            <tr class="view-accountsPrint">
+                                                <th class="th-border">开始日期</th>
+                                                <th class="th-border">结束日期</th>
+                                                <th class="th-border">购物全陪</th>
+                                                <th class="th-border">自费全陪</th>
+                                                <th class="th-border">应付</th>
+                                                <th class="th-border">结算</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="view-accountsPrint">
+                                                <td>{{tripPayMap.quanpeiMap.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+                                                <td>{{tripPayMap.quanpeiMap.endTime | dateFormat:'yyyy-MM-dd'}}</td>
+                                                <td>{{tripPayMap.quanpeiMap.shopQuanpeiRebateMoney}} </td>
+                                                <td>{{tripPayMap.quanpeiMap.selfPayQuanpeiRebateMoney}}</td>
+                                                <td>
+                                                    <span class="F-float F-money">{{tripPayMap.quanpeiMap.quanpeiRebateMoney}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="F-float F-money">{{tripPayMap.quanpeiMap.quanpeiRebateMoney}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="view-accountsPrint">
+                                                <td colspan="4" style="text-align:left">合计</td>
+                                                <td class="td-border">
+                                                    <span class="F-float F-money">
+                                                        {{tripPayMap.quanpeiMap.quanpeiRebateMoney}}
+                                                    </span>
+                                                </td>
+                                                <td class="td-border">
+                                                    <span class="F-float F-money">
+                                                        {{tripPayMap.quanpeiMap.quanpeiRebateMoney}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
                 <div style="clear:both;height:0px;line-height:0px;"></div>
             </div>
-
+              
             <!-- 中转成本明细 -->
             <div id="financial-count-transit-cost" class="tab-pane fade T-print">
                 {{if tripTransitPayMap.busTransitPayMap.busTransitPayMapList.length != 0}}

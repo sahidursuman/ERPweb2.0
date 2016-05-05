@@ -36,7 +36,7 @@
     <table class="table table-striped table-bordered table-hover all main-table T-main-table" style="margin-top: 5px;">
         <tbody>
         <tr >
-            <td colspan="8">
+            <td colspan="9">
             <div style="float: left;margin-left:10px;">
                 <input type="hidden" class="financial-tripPlanId" value="{{tripPlan.id}}" />
                 <input type="hidden" class="tripPlanAdultCount" value="{{tripPlan.adultCount}}" />
@@ -51,7 +51,7 @@
         </tr>
         <tr >
             <td colspan="2"><label style="font-weight: bold;">收入：<span class="F-float F-money tripIncome">0</span></label></td>
-            <td colspan="4"><label style="font-weight: bold;">团成本：<span class="F-float F-money tripCost">0</span></label></td>
+            <td colspan="5"><label style="font-weight: bold;">团成本：<span class="F-float F-money tripCost">0</span></label></td>
             <td colspan="2"><label style="font-weight: bold;">中转成本：<span class="F-float F-money tripTransitCost">0</span></label></td>
         </tr>
 
@@ -62,6 +62,7 @@
             <td style="text-align:left"><label>保险：<span class="F-float F-money tripCost-insuranceArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">0</span></label></td>
+            <td style="text-align:left"><label>全陪购物返佣：<span class="F-float F-money quanpei-shopFee">0</span></label></td>
             <td style="text-align:left"><label>车费：<span class="F-float F-money tripTransitCost-busCompanyNeedPayMoney">{{transfer.transferBusMoney}}</span></label></td>
             <td style="text-align:left"><label>餐费：<span class="F-float F-money tripTransitCost-outRestaurantMoney">{{transfer.transferRestaurantMoney}}</span></label></td>
         </tr>
@@ -72,6 +73,7 @@
             <td style="text-align:left"><label>房费：<span class="F-float F-money tripCost-hotelArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>景区费用：<span class="F-float F-money tripCost-scenicArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>导游自费返佣：<span class="F-float F-money tripCost-guideSelfMoney">0</span></label></td>
+            <td style="text-align:left"><label>全陪自费返佣：<span class="F-float F-money tripCostQuanpei-SelfFee">0</span></label></td>
             <td style="text-align:left"><label>房费：<span class="F-float F-money tripTransitCost-hotelArrangeNeedPayMoney">{{transfer.transferHotelMoney}}</span></label></td>
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{transfer.transferOtherMoney}}</span></label></td>
         </tr>
@@ -81,14 +83,12 @@
             <td style="text-align:left"><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>自费费用：<span class="F-float F-money tripCost-selfArrangeNeedPayMoney">0</span></label></td>
-            <td style="text-align:left"><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
+            <td style="text-align:left" colspan="2"><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
             <td style="text-align:left"><label>票务费用{{isOp}}：<span class="F-float F-money tripTransitCost-ticketArrangeNeedPayMoney">{{transfer.transferTicketMoney}}</span></label></td>
             <td></td>
         </tr>
         </tbody>
     </table>
-    <input type="hidden" value="{{WEB_IMG_URL_BIG}}" name="WEB_IMG_URL_BIG" /> 
-    <input type="hidden" value="{{WEB_IMG_URL_SMALL}}" name="WEB_IMG_URL_SMALL" />
     <div class="row" style="margin-bottom:15px;">
         <input name="financialTripPlanId" value="{{financialTripPlanId}}" type="hidden">
         <div style="float:left;width:90px;text-align:center;">
@@ -268,7 +268,9 @@
                             <th rowspan="2"><span class="necessary">*</span>购物店</th>
                             <th colspan="6">打单</th>
                             <th colspan="2">导佣</th>
+                            <th colspan="2">全陪</th>
                             <th colspan="2">社佣</th>
+                            <th colspan="2">二次返佣</th>
                             <th colspan="3">返佣现收</th>
                             <th rowspan="2">是否对账</th>
                         </tr>
@@ -287,7 +289,17 @@
                             <th><span class="necessary">*</span>比例%</th>
                             <th> 
                                 <span>返佣</span>
+                                <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="quanpeiRebateMoney">四舍五入</button>
+                            </th>
+                            <th><span class="necessary">*</span>比例%</th>
+                            <th> 
+                                <span>返佣</span>
                                 <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="travelAgencyRateMoney">四舍五入</button>
+                            </th>
+                            <th><span class="necessary">*</span>比例%</th>
+                            <th> 
+                                <span>返佣</span>
+                                <button class="btn btn-xs btn-primary pull-right T-math-round" data-target="twoRebateMoney">四舍五入</button>
                             </th>
                             <th>导游</th>
                             <th>金额</th>
@@ -314,12 +326,14 @@
                                             {{each arrange.itemList as itemSet index}}
                                                 {{if index == 0}}
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         <span class="shopPolicy">
                                                             {{itemSet.itemName}}
                                                         </span>
                                                     </td><!-- 商品 -->
 
                                                     <td>
+                                                        <div class="div-h-30"></div>
                                                         <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
                                                         <input name="sumConsumeMoney" type="hidden" value="{{itemSet.consumeMoney}}"/>
                                                     </td><!-- 金额小计 -->
@@ -418,20 +432,68 @@
                                                             </div>
                                                         {{/if}}
                                                     </td><!-- 导佣金额 -->
+                                                    
+                                                     <td name="quanpeiRebate">
+                                                        <div class="div-h-30"></div>
+                                                        {{if itemSet.guideDetails.length}}
+                                                            {{each itemSet.guideDetails as rs index}}
+                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                    <span>{{rs.quanpeiRebate}}</span>
+                                                                    <input name="quanpeiRebate" value="{{rs.quanpeiRebate}}" type="hidden" />
+                                                                </div>
+                                                            {{/each}}
+                                                        {{else}}
+                                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                                <input name="quanpeiRebate" type="hidden"/>
+                                                            </div>
+                                                        {{/if}}
+                                                    </td><!-- 全陪比例 -->
+                                                            
+                                                            
+                                                    <td name="quanpeiRebateMoney">
+                                                        <div class="div-h-30"></div>
+                                                        {{if itemSet.guideDetails.length}}
+                                                            {{each itemSet.guideDetails as rs index}}
+                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                    <span>{{rs.quanpeiRebateMoney}}</span>
+                                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="hidden"/>
+                                                                </div>
+                                                            {{/each}}
+                                                        {{else}}
+                                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                                <input name="quanpeiRebateMoney" type="hidden"/>
+                                                            </div>
+                                                        {{/if}}
+
+                                                    </td><!-- 全陪金额 -->
 
                                                     <td>
+                                                    <div class="div-h-30"></div>
                                                     <span class="F-float F-money travelAgencyRate">{{itemSet.travelAgencyRate}}</span>
                                                     <input name="travelAgencyRate" type="hidden" value="{{itemSet.travelAgencyRate}}"/>
                                                     </td><!-- 社佣比例 -->
                                             
                                                     <td>
+                                                    <div class="div-h-30"></div>
                                                     <span class="F-float F-money travelAgencyRebateMoney">{{itemSet.travelAgencyRebateMoney}}</span>
                                                     <input type="hidden" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}"/>
                                                     </td><!-- 社佣金额 -->
                                                 {{/if}}
                                             {{/each}}
                                         {{/if}}
+                                        <td rowspan="{{arrange.itemList.length}}" name="twoRebate" >
+                                            <div class="div-h-30"></div>
+                                            <span>{{arrange.twoRebate}}</span>
+                                            <input name="twoRebate" type="hidden" value="{{arrange.twoRebate}} " />
+                                        </td><!-- 二次返佣比例-->
                                         
+                                        
+                                        <td rowspan="{{arrange.itemList.length}}" name="twoRebateMoney">
+                                            <div class="div-h-30"></div>
+                                            <span>{{arrange.twoRebateMoney}}</span>
+                                            <input name="twoRebateMoney" type="hidden" value="{{arrange.twoRebateMoney}} " />
+                                        </td>
+                                        <!-- 二次返佣金额 -->
                                         <td rowspan="{{arrange.itemList.length}}" name="currGuide">
                                            
                                             <div class = "div-h-30">
@@ -633,7 +695,39 @@
                                                             {{/if}}
                                                         </td><!-- 导佣金额 -->
 
-                                                        
+                                                         <td name="quanpeiRebate">
+                                                            <div class="div-h-30"></div>
+                                                            {{if itemSet.guideDetails.length}}
+                                                                {{each itemSet.guideDetails as rs index}}
+                                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                        <span class="quanpeiRebate">{{rs.quanpeiRebate}}</span>
+                                                                        <input name="quanpeiRebate" value="{{rs.quanpeiRebate}}" type="hidden" />
+                                                                    </div>
+                                                                {{/each}}
+                                                            {{else}}
+                                                                <div class="mar-t-5 div-h-30" index = "1">
+                                                                    0
+                                                                </div>
+                                                            {{/if}}
+                                                        </td><!-- 全陪比例 -->
+                                                                
+                                                                
+                                                        <td name="quanpeiRebateMoney">
+                                                            <div class="div-h-30"></div>
+                                                            {{if itemSet.guideDetails.length}}
+                                                                {{each itemSet.guideDetails as rs index}}
+                                                                    <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                        <span class="F-float F-money quanpeiRebateMoney">{{rs.quanpeiRebateMoney}}</span>
+                                                                        <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="hidden"/>
+                                                                    </div>
+                                                                {{/each}}
+                                                            {{else}}
+                                                                 <div class="mar-t-5 div-h-30" index = "1">
+                                                                    0
+                                                                </div>
+                                                            {{/if}}
+
+                                                        </td><!-- 全陪金额 -->
 
                                                         <td>
                                                             <div class="div-h-30"></div>
@@ -657,8 +751,12 @@
                                         <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalMoney">0</span></td>
                                         <td style="font-weight: bold;text-align:right;" colspan="5">导佣小计：</td>
                                         <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalGuideMoney">0</span></td>
+                                        <td style="font-weight: bold;text-align:right;">全陪小计：</td>
+                                        <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-allTravelMoney">0</span></td>
                                         <td style="font-weight: bold;text-align:right;">社佣小计：</td>
                                         <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-totalTravelMoney">0</span></td>
+                                        <td style="font-weight: bold;text-align:right;">返佣小计：</td>
+                                        <td style="font-weight: bold;text-align:left;">&nbsp;&nbsp;<span class="F-float F-money T-secondaryTravelMoney">0</span></td>
                                         <td style="font-weight: bold;text-align:right;">佣金小计：</td>
                                         <td style="font-weight: bold;text-align:left;" colspan="3">
                                             &nbsp;&nbsp;
@@ -719,6 +817,7 @@
                             <th rowspan="2">人数返佣</th>
                             <th colspan="2">社佣</th>
                             <th colspan="2">导佣</th>
+                            <th colspan="2">全陪</th>
                             <th rowspan="2">导游报账备注</th>
                             <th rowspan="2">是否对账</th>
                             
@@ -741,6 +840,8 @@
                           <th>导付</th>
                           <th>付款方式</th>
                           <th>单据</th>
+                          <th><span class="necessary">*</span>比例%</th>
+                          <th>返佣</th>
                           <th><span class="necessary">*</span>比例%</th>
                           <th>返佣</th>
                           <th><span class="necessary">*</span>比例%</th>
@@ -1068,7 +1169,40 @@
                                                             </div>
                                                         {{/if}}<!-- 导游返佣 -->
                                                     </td>
+                                                    
+                                                    <td name="quanpeiRebate">
+                                                        <div class="div-h-30"></div>
+                                                        {{if itemSet.guideDetails.length}}
+                                                            {{each itemSet.guideDetails as rs index}}
+                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                    <span>{{rs.quanpeiRebate}}</span>
+                                                                    <input name="quanpeiRebate" value="{{rs.quanpeiRebate}}" type="hidden" />
+                                                                </div>
+                                                            {{/each}}
+                                                        {{else}}
+                                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                                <input name="quanpeiRebate" type="hidden"/>
+                                                            </div>
+                                                        {{/if}}
+                                                    </td><!-- 全陪比例 -->
+                                                            
+                                                            
+                                                    <td name="quanpeiRebateMoney">
+                                                        <div class="div-h-30"></div>
+                                                        {{if itemSet.guideDetails.length}}
+                                                            {{each itemSet.guideDetails as rs index}}
+                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                    <span>{{rs.quanpeiRebateMoney}}</span>
+                                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="hidden"/>
+                                                                </div>
+                                                            {{/each}}
+                                                        {{else}}
+                                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                                <input name="quanpeiRebateMoney" type="hidden"/>
+                                                            </div>
+                                                        {{/if}}
 
+                                                    </td><!-- 全陪金额 -->
                                                     <td name="billRemark">
                                                         <div class="div-h-30"></div>
                                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
@@ -1384,7 +1518,40 @@
                                                             </div>
                                                         {{/if}}<!-- 导游返佣 -->
                                                     </td>
+                                                    
+                                                    <td name="quanpeiRebate">
+                                                        <div class="div-h-30"></div>
+                                                        {{if itemSet.guideDetails.length}}
+                                                            {{each itemSet.guideDetails as rs index}}
+                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                    <span>{{rs.quanpeiRebate}}</span>
+                                                                    <input name="quanpeiRebate" value="{{rs.quanpeiRebate}}" type="hidden" />
+                                                                </div>
+                                                            {{/each}}
+                                                        {{else}}
+                                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                                <input name="quanpeiRebate" type="hidden"/>
+                                                            </div>
+                                                        {{/if}}
+                                                    </td><!-- 全陪比例 -->
+                                                            
+                                                            
+                                                    <td name="quanpeiRebateMoney">
+                                                        <div class="div-h-30"></div>
+                                                        {{if itemSet.guideDetails.length}}
+                                                            {{each itemSet.guideDetails as rs index}}
+                                                                <div class="mar-t-5 div-h-30" index = "{{index+1}}">
+                                                                    <span>{{rs.quanpeiRebateMoney}}</span>
+                                                                    <input name="quanpeiRebateMoney" value="{{rs.quanpeiRebateMoney}}" type="hidden"/>
+                                                                </div>
+                                                            {{/each}}
+                                                        {{else}}
+                                                            <div class="mar-t-5 div-h-30" index = "1">
+                                                                <input name="quanpeiRebateMoney" type="hidden"/>
+                                                            </div>
+                                                        {{/if}}
 
+                                                    </td><!-- 全陪金额 -->
                                                     <td name="billRemark">
                                                         <div class="div-h-30"></div>
                                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}

@@ -186,6 +186,7 @@
 		if ($(window).width() < 1367) {
 			$(document).find("#sidebar-collapse").trigger('click')
 		}
+		Tools.directionKeyControlFocus();
 	});
 
 	$(document).find("#sidebar-collapse").on('click', function(){
