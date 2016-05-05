@@ -236,6 +236,8 @@ template.helper("getPayTypeText", function(payType) {
             return '其他';
         case 6:
             return '冲抵';
+        case 7:
+            return '代收抵付';
         default:
             return '网付';
     }

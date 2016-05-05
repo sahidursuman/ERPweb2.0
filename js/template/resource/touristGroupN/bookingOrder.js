@@ -51,7 +51,7 @@ define(function(require, exports, module) {
         args.pageNo = page || 0;
         args.type = args.type || 0;
         if(!!$tab){
-            $tab.html(T.list());
+            $tab.html(filterUnAuth(T.list()));
             bookingOrder.init_events($tab);
             bookingOrder.getList(args, $tab);
         }

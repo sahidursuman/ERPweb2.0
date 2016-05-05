@@ -71,7 +71,7 @@ define(function(require, exports) {
         args.type = args.type || 0;
         args.statusSearch = args.statusSearch || 1;
         if(!!$tab){
-            $tab.html(T.list());
+            $tab.html(filterUnAuth(T.list()));
             touristGroup.init_events($tab);
             touristGroup.getList(args, $tab);
         }
@@ -2593,13 +2593,7 @@ define(function(require, exports) {
             sendPosition : $otherInfo.find('[name="sendPosition"]').val(),
             remark : $otherInfo.find('[name="remark"]').val(),
         };
-
-        data.baseInfo = JSON.stringify(data.baseInfo);
-        data.receiveTrip = JSON.stringify(data.receiveTrip);
-        data.joinTrip = JSON.stringify(data.joinTrip);
-        data.sendTrip = JSON.stringify(data.sendTrip);
-        data.otherInfo = JSON.stringify(data.otherInfo);
-
+        
         var id = $tab.find('.T-container').data('id'), method = "saveCustomerOrder";
         if(!!id){
             data.id = id;
@@ -2610,6 +2604,13 @@ define(function(require, exports) {
             showMessageDialog($("#confirm-dialog-message"), msg);
             return false;
         }
+
+        data.baseInfo = JSON.stringify(data.baseInfo);
+        data.receiveTrip = JSON.stringify(data.receiveTrip);
+        data.joinTrip = JSON.stringify(data.joinTrip);
+        data.sendTrip = JSON.stringify(data.sendTrip);
+        data.otherInfo = JSON.stringify(data.otherInfo);
+
         $.ajax({
             url : KingServices.build_url('customerOrder', method),
             data : data,

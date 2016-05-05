@@ -64,7 +64,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    var $container = $form.next().html(ListTemplate[temp](data));
+                    var $container = $form.next().html(filterUnAuth(ListTemplate[temp](data)));
                     BookingArrange.$searchArea = $form;
                     switch (args.item) {
                         case 'bus':

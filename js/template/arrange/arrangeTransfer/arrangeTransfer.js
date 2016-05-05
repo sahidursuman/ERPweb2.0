@@ -404,7 +404,9 @@ define(function(require, exports) {
 					transfer.transferOutConfirm(id,status);
 				} else if ($that.hasClass('T-returnTransfer-confirm'))  {
 					//确认退回
-					transfer.returnTransferOutConfirm(id);
+					showConfirmDialog($('#confirm-dialog-message'), '是否确认退回?', function() {
+	                    transfer.returnTransferOutConfirm(id)
+	                });
 				}
 		    });
 

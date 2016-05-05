@@ -3,9 +3,9 @@
 		<table class="whereQ" style="width: 96%">
 
 			<tr>
-				<td class="style-myself">票务公司：</td>
+				<td class="style-myself">票务公司</td>
 				<td class="styleOne-self">{{ticket.name}}</td>
-				<td class="style-myself">是否启用：</td>
+				<td class="style-myself">是否启用</td>
 				<td class="styleOne-self">{{if ticket.status == 0}}
 					已停用
 					{{else}}
@@ -13,20 +13,20 @@
 					{{/if}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">联系人：</td>
+				<td class="style-myself">联系人</td>
 				<td class="styleOne-self">{{ticket.managerName}}</td>
-				<td class="style-myself">联系电话：</td>
+				<td class="style-myself">联系电话</td>
 				<td class="styleOne-self">{{ticket.mobileNumber}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">座机号码：</td>
+				<td class="style-myself">座机号码</td>
 				<td class="styleOne-self">{{ticket.telNumber}}</td>
-				<td class="style-myself">传真号码：</td>
+				<td class="style-myself">传真号码</td>
 				<td class="styleOne-self">{{ticket.faxNumber}}</td>
 			</tr>
 
 			<tr>
-				<td class="style-myself style-myselfOne">所在地区：</td>
+				<td class="style-myself style-myselfOne">所在地区</td>
 				<td class="styleOne-self" colspan="3">{{if ticket.province != null}}
 					{{ticket.province.name}}
 					{{/if}}
@@ -38,11 +38,11 @@
 					{{/if}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">详细地址：</td>
+				<td class="style-myself">详细地址</td>
 				<td class="styleOne-self" colspan="3">{{ticket.street}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">公司简介：</td>
+				<td class="style-myself">公司简介</td>
 				<td class="styleOne-self" colspan="3">{{ticket.remark}}</td>
 			</tr>
 		</table>
