@@ -18,7 +18,7 @@
 			    <td><span class="F-float F-money">{{rs.payDifferenceMoney}}</span></td>
 			    <td>{{rs.remark}}</td>
 			    <td>{{if !rs.user}}-{{else}}{{rs.user.realName}}{{/if}}</td>
-			    <td>{{rs.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
+			    <td>{{rs.createTime | dateTimeFormat}}</td>
 			</tr>
 			{{/each}}
         </tbody>

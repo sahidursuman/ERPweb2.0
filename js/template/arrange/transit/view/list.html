@@ -74,7 +74,7 @@
               {{/if}}
               </p>
             </td>
-            <td>{{transit.arriveTime}}</td>
+            <td>{{transit.arriveTime | dateTimeHSFormat}}</td>
             <td>{{transit.arriveShift}}</td>
             <td>{{transit.receiveHotelRequire}}</td>
             <td data-target="transit_receive_bus" class="receiveBusStatus" data-status="{{transit.receiveBusStatus}}"><i class="ace-icon fa {{transit.receiveBusStatus | getArrangeIcon}}"></i></td>
@@ -82,7 +82,7 @@
             <td data-target="transit_receive_restaurant" class="receiveRestaurantStatus" data-status="{{transit.receiveRestaurantStatus}}"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_receive_ticket" class="receiveTicketStatus" data-status="{{transit.receiveTicketStatus}}"><i class="ace-icon fa {{transit.receiveTicketStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_receive_other" class="receiveOtherStatus" data-status="{{transit.receiveOtherStatus}}"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
-            <td>{{transit.leaveTime}}</td>
+            <td>{{transit.leaveTime | dateTimeHSFormat}}</td>
             <td>{{transit.leaveShift}}</td>
             <td>{{transit.sendHotelRequire}}</td>
             <td data-target="transit_send_bus" class="sendBusStatus" data-status="{{transit.sendBusStatus}}"><i class="ace-icon fa {{transit.sendBusStatus | getArrangeIcon}}"></i></td>

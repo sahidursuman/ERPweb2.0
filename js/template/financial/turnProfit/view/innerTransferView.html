@@ -10,11 +10,11 @@
 				<th class="th-border">操作时间</th>
 			</tr>
 		</thead>
-		<tbody
+		<tbody>
 		{{each financial as detail}}
 			<tr>
-				<td>{{detail.receivableType.name}}</td>
-				<td>{{detail.businessType.name}}</td>
+				<td>{{if detail.receivableType}}{{detail.receivableType.name}}{{/if}}</td>
+				<td>{{if detail.businessType}}{{detail.businessType.name}}{{/if}}</td>
 				<td><span class="F-float F-money">{{detail.payMoney}}</span></td>
 				<td>{{detail.remark}}</td>
 				<td>{{detail.user.realName}}</td>

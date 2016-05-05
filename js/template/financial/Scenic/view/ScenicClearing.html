@@ -80,7 +80,7 @@
             <div class="form-group mar-r-10">
                 <label class="control-label">付款方式：</label>
                 <select class="form-control T-sumPayType" name="sumPayType">
-                    {{#sumPayType | getPayTypeOptions: 5 }}
+                    {{#sumPayType | getPayTypeOptions:0,1 }}
                 </select>
             </div>
             <div class="form-group mar-r-10">
@@ -161,7 +161,7 @@
                 <td>{{rs.unPayedMoney}}</td>
                 <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money" maxlength="9" /></td>
                 <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
-                <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
+                <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td >
                     {{if rs.isConfirmAccount == 1}}已对账{{else if rs.isConfirmAccount == 0}}未对账{{/if}}

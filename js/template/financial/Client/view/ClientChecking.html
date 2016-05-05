@@ -74,31 +74,31 @@
     <div class="form-inline T-sum-area">
         <div class="form-group">
             <label class="control-label">人数合计：</label>
-            <label class="control-label F-float F-count">{{totalList.sumCount}}</label>
+            <label class="control-label F-float F-count T-sumCount"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">合同金额合计：</label>
-            <label class="control-label F-float F-money">{{totalList.sumContractMoney}}</label>
+            <label class="control-label F-float F-money T-sumContractMoney"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">已收金额合计：</label>
-            <label class="control-label F-float F-money">{{totalList.sumReceiveMoney}}</label>
+            <label class="control-label F-float F-money T-sumReceiveMoney"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">返款金额合计：</label>
-            <label class="control-label T-sumBackMoney F-float F-money">{{totalList.sumBackMoney}}</label>
+            <label class="control-label T-sumBackMoney F-float F-money"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">结算金额合计：</label>
-            <label class="control-label T-sumSettlementMoney F-float F-money">{{totalList.sumSettlementMoney}}</label>
+            <label class="control-label T-sumSettlementMoney F-float F-money"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">未收金额合计：</label>
-            <label class="control-label T-sumUnReceivedMoney F-float F-money">{{totalList.sumUnReceivedMoney}}</label>
+            <label class="control-label T-sumUnReceivedMoney F-float F-money"></label>
         </div>
         <div class="form-group marginLeft-30">
             <label class="control-label">未收金额合计(已对账)：</label>
-            <label class="control-label T-unpayMoney F-float F-money">{{totalList.checkedUnPayedMoney}}</label>
+            <label class="control-label T-unpayMoney F-float F-money"></label>
         </div>
     </div>
 </div>
@@ -144,7 +144,7 @@
                     </a>
                 </td>
                 <td rowspan="{{rs.rowLen}}">{{rs.creatorName}}</td>
-                <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateFormat:'yyyy-MM-dd hh:mm:ss'}}</td>
+                <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateTimeFormat}}</td>
                 <td rowspan="{{rs.rowLen}}" class="T-contractMoney F-float F-money">{{rs.contractMoney}}</td>
                 <td>{{if rs.detailList.transitFee.transitFeeList.length > 0}}
                     <!-- 若有中转结算价 -->

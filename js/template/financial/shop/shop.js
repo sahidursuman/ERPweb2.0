@@ -223,17 +223,13 @@ define(function(require, exports) {
         }
         args.sortType = 'accountTime';
         args.order = 'asc';
-        var method = 'listReciveShopAcccount';
-        if (!type) {
-            method = 'listCheckShopAcccount';
-        }
         
         if (args.shopId) {
             FinShop.settlementId = args.shopId;
         }
 
         $.ajax({
-            url: KingServices.build_url('financial/shopAccount', method),
+            url: KingServices.build_url('financial/shopAccount', "listShopAcccount"),
             type: "POST",
             data: args
         }).done(function(data) {
@@ -249,7 +245,6 @@ define(function(require, exports) {
                 } else {
                     if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                         data.shopAccountList = FinancialService.getCheckTempData(data.shopAccountList,FinShop.checkTemp);
-                        data.totalList.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
                     };
                     
                     data.name = args.shopName;
@@ -271,10 +266,18 @@ define(function(require, exports) {
                         FinShop.$checkingTab = $theTab;
                         if(FinShop.checkTemp && FinShop.checkTemp.length > 0){
                             FinShop.$checkingTab.data('isEdited',true);
+                            var total = $theTab.data('total');
+                            total.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
+                            $theTab.data('total',total);
                         };
                         //取消对账权限过滤
                         checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
                         FinShop.sumShopMoney(FinShop.$checkingTab);
+                    }
+                    if($theTab.data("total")){
+                        FinShop.loadSumData($theTab);
+                    } else {
+                        FinShop.getCheckSumData(args,$theTab);
                     }
                     FinShop.initOperationEvent($theTab,args,type);
                     $theTab.data('id', args.shopId);
@@ -331,11 +334,13 @@ define(function(require, exports) {
             var $this = $(this);
             // 设置选择的效果
             $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            $tab.data("total","");
             args.pageNo = 0;
             FinShop.initOperationList(args, type, $tab);
         });
         $searchArea.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
+            $tab.data("total","");
             args.pageNo = 0;
             FinShop.initOperationList(args, type, $tab);
         });
@@ -359,6 +364,7 @@ define(function(require, exports) {
             } else {
                 FinShop.checkTemp = false;
             }
+            $tab.data("total","");
             FinShop.initOperationList($tab.data("next"), type,false);
         })
         // 监听保存，并切换tab
@@ -378,6 +384,7 @@ define(function(require, exports) {
             } else {
                 FinShop.checkTemp = false;
             }
+            $tab.data("total","");
         });
 
         if (type) {
@@ -553,6 +560,7 @@ define(function(require, exports) {
                 showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                     FinShop.checkTemp = false;
                     $tab.data('isEdited', false);
+                    $tab.data("total","");
                     if (argLen === 1) {
                         Tools.closeTab(checkMenuKey);
                         FinShop.getList(FinShop.listPageNo);
@@ -640,7 +648,7 @@ define(function(require, exports) {
             };
 
             $.ajax({
-                    url: KingServices.build_url('financial/shopAccount', 'listReciveShopAcccount'),
+                    url: KingServices.build_url('financial/shopAccount', 'listShopAcccount'),
                     type: "POST",
                     data: args
                 })
@@ -706,6 +714,7 @@ define(function(require, exports) {
             showMessageDialog($('#confirm-dialog-message'), data.message, function() {
                 $tab.data('isEdited', false);
                 FinShop.payingJson = false;
+                $tab.data("total","");
                 if (argLen === 1) {
                     Tools.closeTab(settMenuKey);
                     FinShop.getList(FinShop.listPageNo);
@@ -773,6 +782,42 @@ define(function(require, exports) {
             return newVal;
             }
     };
+
+    /* 获取合计数据 */
+    FinShop.getCheckSumData = function(args,$tab){
+        $.ajax({
+            url: KingServices.build_url('financial/shopAccount', "listShopAcccountTotal"),
+            type: 'POST',
+            data: args,
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                $tab.data("total",data);
+                FinShop.loadSumData($tab);
+            }
+        });
+    };
+    FinShop.loadSumData = function($tab){
+        var total = $tab.data("total");
+        $tab.find(".T-sumCount").text(total.sumCount);
+         $tab.find(".T-sumConsumeMoney").text(total.sumConsumeMoney);
+        $tab.find(".T-sumTravelAgencyRebateMoney").text(total.sumTravelAgencyRebateMoney);
+        $tab.find(".T-sumGuideRebateMoney").text(total.sumGuideRebateMoney);
+        $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
+        $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
+        $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);
+        $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
+
+        if($tab.find('.T-checkedUnPayedMoney').length > 0){
+            $tab.find(".T-unpayMoney").text(total.sumUnReceiveMoney);
+            $tab.find(".T-checkedUnPayedMoney").text(total.checkedUnPayedMoney);
+        } else {
+            $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
+            $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);
+            $tab.find('.T-sumSettlementMoney').text(total.sumSettlementMoney);
+        }
+    };
+
     // 暴露方法
     exports.init = FinShop.initModule;
     exports.initIncome = FinShop.initPay;

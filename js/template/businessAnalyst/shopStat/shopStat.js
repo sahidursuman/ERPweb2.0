@@ -16,7 +16,8 @@ define(function(require, exports) {
 	var shopStat={
 		$searchArea:false,
 		$tab:false,
-		autocompleteDate:{}
+		autocompleteDate:{},
+		totalData : false
 	};
 
 	/**
@@ -32,7 +33,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	shopStat.listMain_init = function() {
-		Tools.addTab(menuKey, '购物统计', listMainTemplate());
+		Tools.addTab(menuKey, '购物统计', listMainTemplate(FinancialService.getInitDate()));
 		shopStat.$tab = $('#tab-business_analyst_shopStat-content');
 		shopStat.$searchArea = shopStat.$tab.find('.T-search-shopStatArea');
 		//shopStat.datepicker(shopStat.$searchArea)
@@ -83,9 +84,15 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
-					data.totalShop = data.totalShop[0];
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
+		       		//翻页不请求合计数据
+		       		if(searchData.pageNo > 0){
+		       			shopStat.loadSumHtml();
+		       		} else{
+		       			shopStat.getSumData(searchData);
+		       		}
+		       		
 		       		//绑定页面事件
 		       		shopStat.initEvent();
 		       		//设置记录条数
@@ -108,6 +115,36 @@ define(function(require, exports) {
 	};
 
 	/**
+	 * 获取合计数据
+	 */
+	shopStat.getSumData = function(args){
+		$.ajax({
+			url: KingServices.build_url("financial/shopAccount","shopStatisticsTotal"),
+			type: 'POST',
+			data: args,
+		})
+		.done(function(data) {
+			if(showDialog(data)){
+				shopStat.totalData = data.totalShop[0];
+				shopStat.loadSumHtml();
+			}
+		});
+	};
+
+	shopStat.loadSumHtml = function(){
+		if(shopStat.totalData){
+			var total = shopStat.totalData;
+			var sumHtml = '<tr style="background: #e0effd;"><td colspan="2" class="T-fontSize" style="text-align:right">合计</td>' +
+				'<td class="P-tdFontSize" >' + total.touristAdultCount + '大' + total.touristChildCount + '小</td><td class="P-tdFontSize" >-</td><td class="P-tdFontSize" >-</td>' +
+	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.consumeMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.avgConsumeMoney + '</span></td>' +
+	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.guideRebateMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.travelAgencyRebateMoney + '</span></td>' +
+	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.sumRebateMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.avgRebateMoney + '</span></td></tr>';
+	    	shopStat.$tab.find('.T-tourguidPer-list').append(sumHtml);
+		}
+		
+	};
+
+	/**
 	 * 列表事件
 	 */
 	shopStat.initEvent = function(){
@@ -115,6 +152,7 @@ define(function(require, exports) {
 		//搜索事件 T-shopStat-outToexcel
 		shopStat.$searchArea.off('click').on('click','.T-shopStat-search',function(){
 			//搜索事件
+			shopStat.totalData = false;
 			shopStat.listShopStat(0);
 		}).on('click','.T-shopStat-export',function(){
 			var $obj = shopStat.$tab;
