@@ -1720,9 +1720,23 @@ define(function(require, exports){
 	};
 	//打印页面
 	Count.exportsOutDetail = function($obj){
+
 		$obj.print({
 			globalStyles:true,
+			deferred:Count.setPrintStyle($obj)
 		});
+	};
+	//设置打印时的样式T-img-th
+	Count.setPrintStyle = function($obj){
+
+		var thLen = $obj.find('th[colspan]').attr('colspan'),
+			trLen = $obj.find('.T-img-td').attr('colspan'),
+			newTrColspan = trLen - 1;
+			nweThColspan = thLen - 1;
+			$obj.find('th[colspan]').attr('colspan',nweThColspan);
+			$obj.find('.T-img-td').attr('colspan',newTrColspan);
+
+
 	};
 	//质量统计
 	Count.getquality = function(id){

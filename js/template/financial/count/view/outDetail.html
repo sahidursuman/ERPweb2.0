@@ -152,7 +152,7 @@
                                                   <th class="th-border">购物店</th>
                                                   <th class="th-border">商品</th>
                                                   <th class="th-border">打单金额</th>
-                                                  <th class="th-border">单据</th>
+                                                  <th class="th-border T-noprint">单据</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -172,7 +172,7 @@
                                                                             {{if index == 0}}
                                                                                 <td>{{item.name}}</td>
                                                                                 <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
-                                                                                <td>
+                                                                                <td class="T-noprint">
                                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                                     {{else}}
@@ -223,7 +223,7 @@
                                                                     <tr rowspan = "{{shopIncome.shopArrangeItemList.length}}" class="view-accountsPrint">
                                                                         <td>{{item.name}}</td>
                                                                         <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
-                                                                        <td>
+                                                                        <td class="T-noprint ">
                                                                             {{if item.billImage != null && item.billImage != ""}}
                                                                             <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                             {{else}}
@@ -259,7 +259,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr  class="view-accountsPrint">
-                                                    <td colspan="9" style="text-align:left">合计</td>
+                                                    <td colspan="9" style="text-align:left" class="T-img-td">合计</td>
                                                     <td>
                                                         <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumNeedPayAllMoney}}</span>
                                                     </td>
