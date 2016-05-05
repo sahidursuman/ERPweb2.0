@@ -6,7 +6,6 @@
 define(function(require, exports) {
     var listTemplate = require("./view/list"),
         shopCheckingTemplate = require("./view/shopChecking"),
-        billImagesTemplate = require("./view/shopLookImg"),
         shopClearingTemplate = require("./view/shopClearing"),
         viewReceivedTemplate = require("./view/viewReceived"),
         viewAccountTemplate = require('./view/viewAccount'),
@@ -438,7 +437,8 @@ define(function(require, exports) {
             if ($that.hasClass('T-see-group')) {
                 FinShop.unfold($that);
             } else if ($that.hasClass('T-view-receipts')) {
-                FinShop.viewImage($tab, $that.data('billimage'));
+                // 查看单据
+                FinancialService.viewBillImage(this);
             } else if ($that.hasClass('T-payDetails')) {
                 FinShop.viewOperationDetail(id, 0);
             } else if ($that.hasClass('T-view-details')) {
@@ -510,40 +510,6 @@ define(function(require, exports) {
             $that.data('is-show', 'true');
             $that.closest('tr').next().removeClass('hide');
         }
-    };
-
-    FinShop.viewImage = function($tab, strImage) {
-        if (!strImage) return;
-        var WEB_IMG_URL_BIG = $tab.find(".globalAdd").data('big'),
-            WEB_IMG_URL_SMALL = $tab.find(".globalAdd").data('small'),
-            data = {
-                "images": []
-            },
-            str = strImage,
-            strs = str.split(",");
-        for (var i = 0; i < strs.length; i++) {
-            var s = strs[i];
-            if (s != null && s != "" && s.length > 0) {
-                var image = {
-                    "WEB_IMG_URL_BIG": imgUrl + s,
-                    "WEB_IMG_URL_SMALL": imgUrl + s + "?imageView2/2/w/150",
-                }
-                data.images.push(image);
-            }
-        }
-        var $overflow = null;
-        layer.open({
-            type: 1,
-            title: "单据图片",
-            skin: 'layui-layer-rim', // 加上边框
-            area: '500px', // 宽高
-            zIndex: 1028,
-            content: billImagesTemplate(data),
-            scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function() {
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-            }
-        });
     };
 
     FinShop.saveChecking = function($tab,args,tabArgs) {
@@ -622,7 +588,7 @@ define(function(require, exports) {
         $tab.find('.T-btn-autofill').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');;
 
         FinShop.getOperationList(0, $tab);
-        $tab.data('isEdited', true);
+        $tab.data('isEdited', false);
         FinancialService.updateSumPayMoney($tab, new FinRule(FinShop.isBalanceSource ? 3 : 1));
     };
     /**
@@ -760,15 +726,22 @@ define(function(require, exports) {
             var sumShopMoney = 0,
                 sumTravelMoney = 0,
                 sumGuideMoney = 0;
+                sumQuanpeiMoney = 0;
+                sumScenondMoney = 0;
+                
             for(var j = 2;j<$itemTr.length;j++){
                 var $thisTr = $itemTr.eq(j);
                 sumShopMoney += formatVal($thisTr.find('.T-consumeMoney').text());
                 sumTravelMoney += formatVal($thisTr.find('.T-travelAgencyRebateMoney').text());
                 sumGuideMoney += formatVal($thisTr.find('.T-guideRebateMoney').text());
+                sumQuanpeiMoney += formatVal($thisTr.find('.T-quanpeiRebateMoney').text());
+                sumScenondMoney = formatVal($trArr.find('.T-twoRebateMoney').text());
                 if($thisTr.hasClass('T-sumMoney')){
                     $thisTr.find('.T-shopMoney').text(sumShopMoney);
                     $thisTr.find('.T-travelMoney').text(sumTravelMoney);
                     $thisTr.find('.T-guideMoney').text(sumGuideMoney);
+                    $thisTr.find('.T-quanpeiMoney').text(sumQuanpeiMoney);
+                    $thisTr.find('.T-twoMoney').text(sumScenondMoney);
                     break;
                 }
             }
@@ -782,7 +755,6 @@ define(function(require, exports) {
             return newVal;
             }
     };
-
     /* 获取合计数据 */
     FinShop.getCheckSumData = function(args,$tab){
         $.ajax({
@@ -803,6 +775,8 @@ define(function(require, exports) {
          $tab.find(".T-sumConsumeMoney").text(total.sumConsumeMoney);
         $tab.find(".T-sumTravelAgencyRebateMoney").text(total.sumTravelAgencyRebateMoney);
         $tab.find(".T-sumGuideRebateMoney").text(total.sumGuideRebateMoney);
+        $tab.find(".T-quanpeiRebatMoney").text(total.sumQuanpeiRebateMoney);
+        $tab.find(".T-twoRebateMoney").text(total.sumTwoRebateMoney);
         $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
         $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
         $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);

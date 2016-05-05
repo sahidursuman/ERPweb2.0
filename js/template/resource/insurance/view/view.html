@@ -1,35 +1,35 @@
 <form class="form-horizontal insuranceMainForm" role="form" style="margin-top:10px" onsubmit="return false">
     <table class="whereQ" style="width: 96%">
         <tr>
-            <td class="style-myself">公司名称：</td>
+            <td class="style-myself">公司名称</td>
             <td class="styleOne-self">{{insurance.name}}</td>
-            <td class="style-myself">是否启用：</td>
+            <td class="style-myself">是否启用</td>
             <td class="styleOne-self">{{if insurance.status == 0}} 已停用 {{else}} 已启用 {{/if}}
             </td>
         </tr>
         <tr>
-            <td class="style-myself">联系人：</td>
+            <td class="style-myself">联系人</td>
             <td class="styleOne-self">{{insurance.managerName}}</td>
-            <td class="style-myself">联系电话：</td>
+            <td class="style-myself">联系电话</td>
             <td class="styleOne-self">{{insurance.mobileNumber}}</td>
         </tr>
         <tr>
-            <td class="style-myself">座机号码：</td>
+            <td class="style-myself">座机号码</td>
             <td class="styleOne-self">{{insurance.telNumber}}</td>
-            <td class="style-myself">传真号码：</td>
+            <td class="style-myself">传真号码</td>
             <td class="styleOne-self">{{insurance.faxNumber}}</td>
         </tr>
         <tr>
-            <td class="style-myself style-myselfOne">所在地区：</td>
+            <td class="style-myself style-myselfOne">所在地区</td>
             <td class="styleOne-self" colspan="3"> {{if insurance.province != null}} {{insurance.province.name}} {{/if}} {{if insurance.city != null}} -{{insurance.city.name}} {{/if}} {{if insurance.district != null}} -{{insurance.district.name}} {{/if}}
             </td>
         </tr>
         <tr>
-            <td class="style-myself">详细地址：</td>
+            <td class="style-myself">详细地址</td>
             <td class="styleOne-self" colspan="3">{{insurance.street}}</td>
         </tr>
         <tr>
-            <td class="style-myself">公司简介：</td>
+            <td class="style-myself">公司简介</td>
             <td class="styleOne-self" colspan="3">{{insurance.remark}}</td>
         </tr>
     </table>

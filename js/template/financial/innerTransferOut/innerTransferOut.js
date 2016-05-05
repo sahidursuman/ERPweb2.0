@@ -461,6 +461,7 @@ define(function(require,exports) {
             data:{
             	checkJson: JSON.stringify(JsonStr)
             },
+            type:'POST',
 			success:function(data){
 				var result = showDialog(data);
 				if(result){

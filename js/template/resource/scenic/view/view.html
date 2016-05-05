@@ -5,9 +5,9 @@
 				<td colspan="4" class="HeadManage">景区主体信息</td>
 			</tr>
 			<tr>
-				<td class="style-myself">景区名称：</td>
+				<td class="style-myself">景区名称</td>
 				<td class="styleOne-self">{{scenic.name}}</td>
-				<td class="style-myself">是否启用：</td>
+				<td class="style-myself">是否启用</td>
 				<td class="styleOne-self">{{if scenic.status == 0}}
 					已停用
 					{{else}}
@@ -15,20 +15,20 @@
 					{{/if}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">联系人：</td>
+				<td class="style-myself">联系人</td>
 				<td class="styleOne-self">{{scenic.managerName}}</td>
-				<td class="style-myself">联系电话：</td>
+				<td class="style-myself">联系电话</td>
 				<td class="styleOne-self">{{scenic.mobileNumber}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">座机号码：</td>
+				<td class="style-myself">座机号码</td>
 				<td class="styleOne-self">{{scenic.telNumber}}</td>
-				<td class="style-myself">传真号码：</td>
+				<td class="style-myself">传真号码</td>
 				<td class="styleOne-self">{{scenic.faxNumber}}</td>
 			</tr>
 
 			<tr>
-				<td class="style-myself">所在地区：</td>
+				<td class="style-myself">所在地区</td>
 				<td class="styleOne-self" colspan="3">{{if scenic.province != null}}
 					{{scenic.province.name}}
 					{{/if}}
@@ -40,11 +40,11 @@
 					{{/if}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">景区政策：</td>
+				<td class="style-myself">景区政策</td>
 				<td class="styleOne-self" colspan="3">{{scenic.seasonPolicy}}</td>
 			</tr>
 			<tr>
-				<td class="style-myself">景区简介：</td>
+				<td class="style-myself">景区简介</td>
 				<td class="styleOne-self" colspan="3">{{scenic.remark}}</td>
 			</tr>
 		</table>
