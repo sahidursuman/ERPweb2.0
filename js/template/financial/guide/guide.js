@@ -15,7 +15,6 @@ define(function(require, exports) {
         payingTableTemplate = require('./view/guidePayingTable'),
         // 费用明细
         costDetailTemplate = require("./view/costDetail"),
-        billImagesTemplate = require("./view/billImages"),
         paymentTemplate = require("./view/payment"),
         paymentDetailTemplate = require("./view/paymentDetail"),
         payResultTemplate = require("./view/payResult"),
@@ -848,7 +847,7 @@ define(function(require, exports) {
                         var $tab = $("#tab-" + menuKey + "-costDetail-content");
                         //查看图片事件
                         $tab.find(".T-view-bill").on('click',function(){
-                            FinGuide.viewBillImage($(this).data('fn'));
+                            FinancialService.viewBillImage(this);
                         })
                         //打印事件
                         $tab.find('.T-export').on('click',function(){
@@ -856,42 +855,90 @@ define(function(require, exports) {
                                 globalStyles:true
                             });
                         });
+
+                        //计算导游报账表单项合计费
+                        var $tbody = $tab.find('.T-nowHotelMoney');//找到对应的tbody,如果找到同样的tbody多个，说明有多个导游，现付房费;
+                        var $tbodyGroup = $tab.find('.T-nowGroupMoney');//现收团款
+                        var $tbodyPayShop = $tab.find('.T-nowPayShopMoney');//现收购物
+                        var $tbodyGuide = $tab.find('.T-nowGuideMoney');//现收自费
+                        var $tbodyOther = $tab.find('.T-nowOtherMoney');//其它收入
+                        var $tbodyBus = $tab.find('.T-nowBusMoney');//现付车费
+                        var $tbodyRest = $tab.find('.T-nowRestMoney');//现付餐费
+                        var $tbodyScenic = $tab.find('.T-nowScenicMoney');//现付景区费用
+                        var $tbodyTicket = $tab.find('.T-nowTicketMoney');//现付票务费
+                        var $tbodySelf = $tab.find('.T-nowSelfMoney');//现付自费
+                        var $tbodyPayOth = $tab.find('.T-nowPayOthMoney');//现付其他费用
+                        var $tbodySelfReba = $tab.find('.T-nowSelfRebaMoney');//自费导佣
+
+                        var $costObj = $tab.find('.T-NowpayHoteltMoney');//找到对应的合计对象//现付房费;
+                        var $costObjGroup = $tab.find('.T-NowpayGroupMoney');//现收团款
+                        var $costObjShop = $tab.find('.T-NowpayShopMoney');//现收购物
+                        var $costObjpaySelf = $tab.find('.T-NowpaySelfMoney');//现收自费
+                        var $costObjOther = $tab.find('.T-NowpayOtherMoney');//其它收入
+                        var $costObjBus = $tab.find('.T-NowpayBusMoney');//现付车费
+                        var $costObjRest = $tab.find('.T-NowpayRestMoney');//现付餐费
+                        var $costObjScenic = $tab.find('.T-NowpayScenicMoney');//现付景区
+                        var $costObjTickrt = $tab.find('.T-NowpayTickrtMoney');//现付票务
+                        var $costObjSelf = $tab.find('.T-NowpaySelfpayMoney');//现付自费
+                        var $costObjOthpay = $tab.find('.T-NowpayOthpayMoney');//现付其它费用
+                        var $costObjSelfRebate = $tab.find('.T-NowpaySelfRebateMoney');//自费导佣
+
+                        FinGuide.findTbody($tbody,$costObj);
+                        FinGuide.findTbody($tbodyGroup,$costObjGroup);
+                        FinGuide.findTbody($tbodyPayShop,$costObjShop);
+                        FinGuide.findTbody($tbodyGuide,$costObjpaySelf);
+                        FinGuide.findTbody($tbodyOther,$costObjOther);
+                        FinGuide.findTbody($tbodyBus,$costObjBus);
+                        FinGuide.findTbody($tbodyRest,$costObjRest);
+                        FinGuide.findTbody($tbodyScenic,$costObjScenic);
+                        FinGuide.findTbody($tbodyTicket,$costObjTickrt);
+                        FinGuide.findTbody($tbodySelf,$costObjSelf);
+                        FinGuide.findTbody($tbodyPayOth,$costObjOthpay);
+                        FinGuide.findTbody($tbodySelfReba,$costObjSelfRebate);
+
                     }
                 });
-
         }
     }
 
+    //导游报账表合计计算事件
+    FinGuide.findTbody= function($tbody,$costObj){
+        
+        if($tbody.length>1){
+            $tbody.each(function(index, val) {
+                var thisIndex = $(this).attr('index'),
+                cost = FinGuide.sumCost($(this));
+                $costObj.each(function(index, el) {
+                    var costIndex = $(this).attr('index');
+                    if(thisIndex == costIndex){
+                        $(this).text(cost);
+                    }
+                });
+            });
+        }else{
+            var cost = 0;
+            cost = FinGuide.sumCost($tbody);
+            $costObj.text(cost);
+        }; 
 
-    //显示单据
-    FinGuide.viewBillImage = function(fn) {
-        var data = {
-            "images": []
-        }, strs = fn.split(",");
-        for (var i = 0, str; i < strs.length; i++) {
-            str = strs[i];
-
-            if (!!str) {
-                data.images.push({
-                    WEB_IMG_URL_BIG: imgUrl + str,
-                    WEB_IMG_URL_SMALL: imgUrl + str + "?imageView2/2/w/150"
-                })
-            }
-        }
-        var html = billImagesTemplate(data);
-
-        layer.open({
-            type: 1,
-            title: "单据图片",
-            skin: 'layui-layer-rim', // 加上边框
-            area: '500px', // 宽高
-            zIndex: 1028,
-            content: html,
-            scrollbar: false, // 推荐禁用浏览器外部滚动条
-            success: function() {
-                $('#layer-photos-financial-count [data-rel="colorbox"]').colorbox(Tools.colorbox_params);
-            }
+    };
+    FinGuide.sumCost = function($tbody){
+        var sum = 0;
+        var $td = $tbody.find('.totalPayedMoney');//
+        $td.each(function(index, el) {
+            sum += FinGuide.changeTwoDecimal($(this).text());
         });
+       return sum;
+     };
+     //规范输入的数字数据
+    FinGuide.changeTwoDecimal = function($val){
+        var newVal = parseFloat($val);
+
+        if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+            return 0;
+        }
+        var newVal = Math.round($val*100)/100;
+        return newVal;
     };
 
     //选择支付方式

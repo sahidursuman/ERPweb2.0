@@ -63,6 +63,16 @@ define(function(require, exports) {
 					});
 
 					settings.push({
+						$ele: $that.find('input[name="collection"]'),
+						rules: [
+							{
+								type: 'float',
+								errMsg: '数据格式不正确'
+							}	
+						]
+					});
+
+					settings.push({
 						$ele: $that.find('input[name="busReduceMoney"]'),
 						rules: [
 							{
@@ -115,6 +125,16 @@ define(function(require, exports) {
 							{
 								type: 'float',
 								errMsg: '单价格式不正确'
+							}	
+						]
+					});
+
+					settings.push({
+						$ele: $that.find('input[name="collection"]'),
+						rules: [
+							{
+								type: 'float',
+								errMsg: '数据格式不正确'
 							}	
 						]
 					});

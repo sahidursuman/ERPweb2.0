@@ -1126,7 +1126,7 @@ var _statusText = {
 				if ( elem ) {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
-					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined ) {
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined && ret != null) {
 						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 
@@ -1693,7 +1693,7 @@ Tools.inputCtrolFloat=function($inputCtrol){
 			    if (event.keyCode == 37 | event.keyCode == 39) {
 			        return;
 			    }
-			    if (isNaN($amountInput.val())) {
+			    if (isNaN($amountInput.val()) && $amountInput.attr('name')!='collection') {
 			    	setTimeout(function(){
 			    		 //先把非数字的都替换掉，除了数字和. 
 				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
@@ -1713,12 +1713,12 @@ Tools.inputCtrolFloat=function($inputCtrol){
 	}else{
 		$inputCtrol.on('input', function (event) {
 		    var $amountInput = $(this);
-		    //响应鼠标事件，允许左右方向键移动 
+		    //响应鼠标事件，允许左右方向键移动
 		    event = window.event || event;
 		    if (event.keyCode == 37 | event.keyCode == 39) {
 		        return;
 		    }
-		     if (isNaN($amountInput.val())) {
+		     if (isNaN($amountInput.val()) && $amountInput.attr('name')!='collection') {
 			    	setTimeout(function(){
 			    		 //先把非数字的都替换掉，除了数字和. 
 				        $amountInput.val($amountInput.val().replace(/[^\d.]/g, "").
@@ -2136,6 +2136,7 @@ Tools.addDay = function(date, days) {
  * @return {string}      格式化之后的日期/时间
  */
 Tools.getDateTimeFormat = function(date, fmt) {
+	date = date.split('-').join('/');
 	fmt = fmt || 'yyyy-MM-dd hh:mm:ss';
 	return (new Date(date)).Format(fmt);
 };
@@ -2168,6 +2169,17 @@ var KingServices = {};
  */
 KingServices.build_url = function(path,method){
     return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
+};
+
+
+/**
+ * 构建请求的URL
+ * @param  {[type]} path   [description]
+ * @param  {[type]} method [description]
+ * @return {[type]}        [description]
+ */
+KingServices.buildTrave_url = function(path,method){
+    return APP_ROOT+path +'.do?method='+method+'&token='+$.cookie('token');
 };
 
 /**
@@ -2743,6 +2755,110 @@ Tools.loadPluginScript = function(pluginKey){
 	if (!!pluginKey && !!modulePlugin[pluginKey])  {
 		$.getScript(modulePlugin[pluginKey]);
 	}
+};
+
+//方向键控制table中input焦点
+Tools.directionKeyControlFocus = function() {
+
+	function filterInput($obj) {
+		return $obj.find('input').filter(function() {
+			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') == 'text';
+		})
+	}
+	$(document).on('keydown.tableFocus','table', function() {
+		var $this = $(this),
+			keyCode = event.which,
+			$focusInput = $this.find('input:focus'),
+			$parentTd = $focusInput.closest('td'),
+			$parentTr = $focusInput.closest('tr'),
+			$parentTbody = $focusInput.closest('tbody'),
+			inputIndex = filterInput($parentTd).index($focusInput),
+			tdIndex = $parentTr.find('td').index($parentTd),
+			trIndex = $parentTbody.find('tr').index($parentTr),
+			inputsLength = filterInput($parentTd).length;
+
+		function findInput(tri, tdi, inputi) {
+			if (!!inputi || inputi === 0) {
+				return filterInput($parentTbody.find('tr').eq(tri).find('td').eq(tdi)).eq(inputi);
+			}else {
+				return filterInput($parentTbody.find('tr').eq(tri).find('td').eq(tdi));
+			}
+		}
+		switch(keyCode){
+			case 37://左
+				if (!!$focusInput.data('datepicker')) {
+				 	$focusInput.datepicker('hide');
+				 }
+				if (findInput(trIndex, tdIndex-1).length > 0) {
+					if (findInput(trIndex, tdIndex-1, inputIndex).length > 0) {
+						findInput(trIndex, tdIndex-1, inputIndex).focus();
+					}else {
+						findInput(trIndex, tdIndex-1, findInput(trIndex, tdIndex-1).length-1).focus();
+					}
+				}else{
+					for (var i = tdIndex-1; i >= 0; i--) {
+						if (findInput(trIndex, i).length > 0) {
+							if (findInput(trIndex, i, inputIndex).length > 0) {
+								findInput(trIndex, i, inputIndex).focus();
+							}else {
+								findInput(trIndex, i, findInput(trIndex, i).length-1).focus();
+							}
+							break;
+						}
+					}
+				}
+				break;
+			case 38://上
+				if (!!$focusInput.data('datepicker')) {
+			 		$focusInput.datepicker('hide');
+			 	}
+				if (inputIndex > 0) {
+					findInput(trIndex, tdIndex, inputIndex-1).focus();
+				}else if (inputIndex == 0) {
+					if (trIndex > 0) {
+						findInput(trIndex-1, tdIndex, findInput(trIndex-1, tdIndex).length-1).focus();
+					}
+				}
+				break;
+			case 39://右
+				if (!!$focusInput.data('datepicker')) {
+				 	$focusInput.datepicker('hide');
+				 }
+				if (findInput(trIndex, tdIndex+1).length > 0) {
+					if (findInput(trIndex, tdIndex+1, inputIndex).length > 0) {
+						findInput(trIndex, tdIndex+1, inputIndex).focus();
+					}else {
+						findInput(trIndex, tdIndex+1, findInput(trIndex, tdIndex+1).length-1).focus();
+					}
+				}else{
+					for (var i = tdIndex+1; i < $parentTr.find('td').length; i++) {
+						if (findInput(trIndex, i).length > 0) {
+							if (findInput(trIndex, i, inputIndex).length > 0) {
+								findInput(trIndex, i, inputIndex).focus();
+							}else {
+								findInput(trIndex, i, findInput(trIndex, i).length-1).focus();
+							}
+							break;
+						}
+					}
+				}
+				break;
+			case 40://下
+				if (!!$focusInput.data('datepicker')) {
+				 	$focusInput.datepicker('hide');
+				 }
+				if (inputIndex < inputsLength-1) {
+					findInput(trIndex, tdIndex, inputIndex+1).focus();
+				}else if (inputIndex == inputsLength-1) {
+					if (trIndex < $parentTbody.find('tr').length-1) {
+						findInput(trIndex+1, tdIndex, 0).focus();
+					}
+				}
+				break;
+			default:
+				return;
+		}
+	})
 };
 
 window.onbeforeunload=function(e){

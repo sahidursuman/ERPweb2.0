@@ -48,6 +48,7 @@
                         <label class="col-sm-1 control-label no-padding-right">外联销售:</label>
                         <div class="col-sm-2">
                             <input type="text" name="outOPUserName" class="col-sm-12 T-outOPUserName" value="{{if bookingOrder.outOPUser}}{{bookingOrder.outOPUser.realName}}{{/if}}" maxlength="11">
+                            <input type="hidden"  name="outOPUserId" value="{{bookingOrder.outOPUserId}}">
                         </div>
                     </div>
                     <div class="form-group">

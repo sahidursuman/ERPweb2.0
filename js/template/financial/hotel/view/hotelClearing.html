@@ -138,6 +138,7 @@
                 <th>已付金额</th>
                 <th width="45">单据</th>
                 <th>结算金额</th>
+                <th>代收</th>
                 <th>未付金额</th>
                 <th><span class="necessary">*</span>本次付款金额</th>
                 <th style="width: 100px">备注</th>
@@ -170,7 +171,8 @@
                     </a>
                 </td> 
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>  
+                <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td> 
+                <td><span class="F-float F-money">{{if rs.serviceType==1}}{{rs.collection}}{{else}}-{{/if}}</span></td>
                 <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
                 <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money F-float F-money" maxlength="9" /></td>
                 <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
