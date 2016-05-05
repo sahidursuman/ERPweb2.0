@@ -266,7 +266,7 @@ define(function(require, exports) {
 
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
-                    var $container = $searchFrom.next().html(html);
+                    var $container = $searchFrom.next().html(filterUnAuth(html));
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -323,7 +323,7 @@ define(function(require, exports) {
 
                     var html = args.status == '1' ? HotelArrangedListTemplate(data) : HotelListTemplate(data);
 
-                    var $container = $searchFrom.next().html(html);
+                    var $container = $searchFrom.next().html(filterUnAuth(html));
 
                     laypage({
                         cont: $container.find('.T-pagenation'),
@@ -380,7 +380,7 @@ define(function(require, exports) {
 
                     var html = args.status == '1' ? HotelArrangedListTemplate(data) : HotelListTemplate(data);
 
-                    var $container = $searchFrom.next().html(html);
+                    var $container = $searchFrom.next().html(filterUnAuth(html));
 
                     laypage({
                         cont: $container.find('.T-pagenation'),

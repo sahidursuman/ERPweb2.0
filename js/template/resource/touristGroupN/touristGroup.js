@@ -71,7 +71,7 @@ define(function(require, exports) {
         args.type = args.type || 0;
         args.statusSearch = args.statusSearch || 1;
         if(!!$tab){
-            $tab.html(T.list());
+            $tab.html(filterUnAuth(T.list()));
             touristGroup.init_events($tab);
             touristGroup.getList(args, $tab);
         }
