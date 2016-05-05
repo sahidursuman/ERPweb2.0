@@ -1103,6 +1103,7 @@ define(function(require, exports) {
                                 $this.closest('tr').remove();
                                 touristGroup.memberNumber($tbody);
                             }
+                            touristGroup.memberNumber($tbody);
                         }
                     });
                     $tbody.on('change', '[name="idCardType"]', function(event){
