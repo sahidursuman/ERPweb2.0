@@ -40,7 +40,7 @@ define(function(require, exports) {
 
     singlePlan.getAutocompleteData = function(type){
         $.ajax({
-            url: KingServices.build_url('v2/tripController','findSelectValue'),
+            url: KingServices.build_url('tripController','findSelectValue'),
             type : "POST",
             data : {tripPlanType : type}
         }).done(function(data){
@@ -185,7 +185,7 @@ define(function(require, exports) {
             arge.status = "";
         }
         $.ajax({
-            url : KingServices.build_url('v2/tripController', 'findPager'),
+            url : KingServices.build_url('tripController', 'findPager'),
             type : "POST",
             data : {searchParam : JSON.stringify(arge)}
         }).done(function(data){
