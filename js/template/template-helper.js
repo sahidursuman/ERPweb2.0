@@ -186,18 +186,16 @@ template.helper("getPayTypeText", function(payType) {
             return '现金';
         case 1:
             return '银行转账';
-        case 2:
-            return '网上支付';
         case 3:
             return '支票';
-        case 4:
-            return '其他';
+        case 5:
+            return '网付';
         case 6:
             return '冲抵';
         case 7:
             return '代收抵付';
         default:
-            return '网付';
+            return '其他';
     }
 });      
 template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
