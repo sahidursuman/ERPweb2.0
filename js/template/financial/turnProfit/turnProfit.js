@@ -57,6 +57,15 @@ define(function(require, exports) {
         }
         // 修正页码
         page = page || 0;
+        if (page == -1) {
+            if (!TurnProfit.searchParam.startTime || !TurnProfit.searchParam.endTime) {
+                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                    return;
+                }); 
+            }
+            exportXLS( APP_ROOT + 'back/export.do?method=exportArrangeTransferProfit&token='+ $.cookie("token") + $.param(TurnProfit.searchParam));
+            return;
+        }
         $.ajax({
             url:KingServices.build_url("profitTransfer","listProfitTransfer"),
             type: "POST",
@@ -98,6 +107,11 @@ define(function(require, exports) {
             event.preventDefault();
             TurnProfit.listTurnProfit(0);
         });
+
+        //导出
+        TurnProfit.$tab.find('.T-export').on('click', function() {
+            TurnProfit.listTurnProfit(-1);
+        })
 
         //核算中转
         TurnProfit.$tab.find(".T-checkTurn").on("click",function(){
