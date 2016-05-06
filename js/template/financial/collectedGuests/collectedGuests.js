@@ -116,7 +116,7 @@ define(function(require, exports) {
                             ColGuest.$searchArea.find("input[name=businessName]").data('id'));
                     });
                     //导出
-                    $tab.find('.T-export').off().on('click', function(event) {
+                    $tab.find('.T-search').off().on('click', function(event) {
                         ColGuest.listGuest(-1)
                     });
                 }
