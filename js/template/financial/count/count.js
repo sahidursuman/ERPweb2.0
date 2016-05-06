@@ -2665,6 +2665,7 @@ define(function(require, exports){
 		var selfArrangeNeedPayMoney = $obj.find('.tripCost-selfArrangeNeedPayMoney').text();
 		var quanpeiShopNeedPayMoney = $obj.find('.quanpei-shopFee').text();
 		var quanpeiSelfNeedPayMoney = $obj.find('.tripCostQuanpei-SelfFee').text();
+		var guidePunishMoney = $obj.find('.tripCost-guidePunishMoney').text();
 
 		var tripIncome = $obj.find('.tripIncome').text();
 		var tripTransitCost = $obj.find('.tripTransitCost').text();
@@ -2683,12 +2684,13 @@ define(function(require, exports){
 		selfArrangeNeedPayMoney = Count.changeTwoDecimal(selfArrangeNeedPayMoney);
 		quanpeiShopNeedPayMoney = Count.changeTwoDecimal(quanpeiShopNeedPayMoney);
 		quanpeiSelfNeedPayMoney = Count.changeTwoDecimal(quanpeiSelfNeedPayMoney);
+		guidePunishMoney = Count.changeTwoDecimal(guidePunishMoney);
 		tripIncome = Count.changeTwoDecimal(tripIncome);
 		tripTransitCost = Count.changeTwoDecimal(tripTransitCost);
 		allPerson = Count.changeTwoDecimal(allPerson);
 		//计算团成本
 		var tripSum = (guideArrangePrice+insuranceArrangeNeedPayMoney+busCompanyNeedPayMoney+guideshopFee+restaurantArrangeNeedPayMoney);
-		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney+quanpeiShopNeedPayMoney+quanpeiSelfNeedPayMoney);
+		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney+quanpeiShopNeedPayMoney+quanpeiSelfNeedPayMoney+guidePunishMoney);
 		tripSum = Count.changeTwoDecimal(tripSum);
 		tripCostSum = Count.changeTwoDecimal(tripCostSum);
 		var allSum = (tripSum+tripCostSum);
