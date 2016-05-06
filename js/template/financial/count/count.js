@@ -1725,16 +1725,30 @@ define(function(require, exports){
 			globalStyles:true,
 			deferred:Count.setPrintStyle($obj)
 		});
+		var thLen = parseFloat($obj.find('th[colspan]').attr('colspan')),
+			sumTr = $obj.find('.T-sum-td'),
+			nweThColspan = thLen + 1;
+			sumTr.each(function(){
+				var $that = $(this),
+					thisColspan = parseFloat($that.attr('colspan')),
+					newThisCol = thisColspan + 1
+				$that.attr('colspan',newThisCol);
+			});
+		$obj.find('th[colspan]').attr('colspan',nweThColspan);
 	};
 	//设置打印时的样式T-img-th
 	Count.setPrintStyle = function($obj){
 
 		var thLen = $obj.find('th[colspan]').attr('colspan'),
-			trLen = $obj.find('.T-img-td').attr('colspan'),
-			newTrColspan = trLen - 1;
+			sumTr = $obj.find('.T-sum-td'),
 			nweThColspan = thLen - 1;
+			sumTr.each(function(){
+				var $that = $(this),
+					thisColspan = $that.attr('colspan'),
+					newThisCol = thisColspan - 1
+				$that.attr('colspan',newThisCol);
+			});
 			$obj.find('th[colspan]').attr('colspan',nweThColspan);
-			$obj.find('.T-img-td').attr('colspan',newTrColspan);
 
 
 	};
