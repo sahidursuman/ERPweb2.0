@@ -1073,8 +1073,6 @@ define(function(require, exports) {
                     group[i].ageData+'</td><td>'+
                     group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
                     group[i].currentNeedPayMoney+'</td><td>'+
-                    hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
-                    (!!group[i].includeSelfPay?group[i].includeSelfPay:"")+'</td><td>'+
                     (!!group[i].accompanyGuideName?group[i].accompanyGuideName:"")+'</td><td>'+
                     (!!group[i].accompanyGuideMobile?group[i].accompanyGuideMobile:"")+'</td><td>'+
                     (!!group[i].welcomeBoard?group[i].welcomeBoard:"")+'</td><td>'+
@@ -1084,6 +1082,10 @@ define(function(require, exports) {
                     '<a class="cursor T-action T-groupView">查看</a>'+
                     '<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
                 }
+
+                console.log(html);
+
+
                 $tab.find('.T-touristGroup-list').append(html);
             }
         });
