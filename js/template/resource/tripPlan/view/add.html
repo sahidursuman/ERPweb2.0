@@ -549,7 +549,15 @@
                                                 <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" style="width: 60px;" class="price F-float F-money" maxlength="9" {{if busCompany.isConfirmAccount}}disabled{{/if}}/></div>
                                             </td>
                                             <td><div class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption: busCompany.isConfirmAccount}}
-                                                <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/></div>
+                                                <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                                <span class="label-inline-40">{{if !busCompany.payType2}}<button class="T-addBusguidePay btn btn-success btn-sm btn-white show mar-l-5" index="0"> <i class="fa bigger-110 icon-only fa-plus"></i> </button>{{/if}}</span>
+                                                </div>
+                                                {{if !!busCompany.payType2}}
+                                                <div class="inline-flex mar-t-5">{{#busCompany.payType2 | getPlanPayTypeOption: busCompany.isConfirmAccount, 2}}
+                                                <input name="guidePayMoney2" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType2 == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                                <span class="label-inline-40"><button class="T-delBusguidePay btn btn-danger btn-sm btn-white show mar-l-5" index="0"> <i class="fa bigger-110 icon-only fa-minus"></i> </button></span>
+                                                </div>
+                                                {{/if}}
                                             </td>
                                             <td>
                                                 <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
