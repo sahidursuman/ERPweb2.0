@@ -53,10 +53,10 @@ define(function(require, exports){
 	};
 	//暴露的方法--初始化列表
 	Count.initModule = function(){
-		Count.listCountHeader(0,'','','','','','','')
+		Count.listCountHeader(0,'','','','','','','','','','')
 	};
 	//列表头部
-	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+	Count.listCountHeader = function(pageNo,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status,orderNumber,contactInfo){
 
 		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
