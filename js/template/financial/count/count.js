@@ -2973,25 +2973,40 @@ define(function(require, exports){
 	Count.autoSelfSum = function($obj,$parentObj){
 			Count.computeSelfCost($obj,$parentObj);
 			//计算团收入--自费收入
-			var $bodyObj = $parentObj.find('.T-main-table');
-			var shopRebateMoney = 0;
-			var selfMoney = 0;
-			var guideRebateMoney = 0;
-			var quanpeiSelfRebateMoney = 0;
-			var $mainTr = $parentObj.find('.T-count-selfPay');
-			$mainTr.find('input[name=realNeedPayMoney]').each(function() {
-				var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
-				selfMoney += totalSum;
+			var $bodyObj = $parentObj.find('.T-main-table'),
+				selfIn = 0,selfCost = 0,selfGCost = 0,
+				shopRebateMoney = 0 ,quanpeiSelfRebateMoney = 0,guideRebateMoney = 0,
+				$tbodyObj = $parentObj.find('.T-count-selfPay'),
+				oldDataTr = $tbodyObj.find('.oldData');
+			oldDataTr.each(function(){
+				var $that = $(this),
+					itemSelfCost = 0,
+					rowspan = $that.children('td[rowspan]').eq(0).attr('rowspan');
+				if(rowspan == 1){
+					var isConfirmAccount = $that.find('input[name=isConfirmAccount]').val();
+					if(isConfirmAccount == 1 && !!isConfirmAccount){
+						itemSelfCost += Count.changeTwoDecimal($that.find('input[name=settlementMoney]').val());
+					}else{
+						var $realNeedPayMoney = $that.find('input[name=realNeedPayMoney]')
+						$realNeedPayMoney.each(function(){
+							itemSelfCost += Count.changeTwoDecimal($(this).val());
+						});
+					}
+				}else{
+					itemSelfCost += Count.sumNotAccSelfMoney($that);
+				}
+				selfCost += itemSelfCost;
 			});
-			$mainTr.find('input[name=needIncome]').each(function() {
+			
+			$tbodyObj.find('input[name=needIncome]').each(function() {
 				var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
 				shopRebateMoney += totalSum;
 			});
-			$mainTr.find('input[name=guideRebateMoney]').each(function() {
+			$tbodyObj.find('input[name=guideRebateMoney]').each(function() {
 				var t = Count.changeTwoDecimal(parseFloat($(this).val()));
 				guideRebateMoney += t;
 			});
-			$mainTr.find('input[name=quanpeiRebateMoney]').each(function() {
+			$tbodyObj.find('input[name=quanpeiRebateMoney]').each(function() {
 				var t = Count.changeTwoDecimal(parseFloat($(this).val()));
 				quanpeiSelfRebateMoney += t;
 			});
@@ -3006,7 +3021,39 @@ define(function(require, exports){
 			//计算全陪自费导佣
 			$parentObj.find('.tripCostQuanpei-SelfFee').text(quanpeiSelfRebateMoney);
 			//计算自费费用
-			$parentObj.find('.tripCost-selfArrangeNeedPayMoney').text(selfMoney);
+			$parentObj.find('.tripCost-selfArrangeNeedPayMoney').text(selfCost);
+	};
+	//计算未对账的自费金额
+	Count.sumNotAccSelfMoney = function($trObj){
+		var $nextTr = $trObj.nextAll(),selfMoney = 0;
+		if($nextTr.length>1){
+			for(var i = 0;i<$nextTr.length;i++){
+				var $that = $nextTr.eq(i);
+				selfMoney += sumMoney($that);
+				if($that.hasClass('breakFlag')){
+					selfMoney += sumMoney($trObj);
+					break;
+				}
+			};
+		}else{
+			selfMoney += sumMoney($nextTr.eq(0));
+			selfMoney += sumMoney($trObj);
+		}
+		
+		function sumMoney ($tr){
+			var isConfirmAccount = $tr.find('input[name=isConfirmAccount]').val(),
+				sum = 0;
+			if(isConfirmAccount == 1 && !!isConfirmAccount){
+				sum += Count.changeTwoDecimal($tr.find('input[name=settlementMoney]').val());
+			}else{
+				var $realNeedPayMoney = $tr.find('input[name=realNeedPayMoney]')
+				$realNeedPayMoney.each(function(){
+					sum += Count.changeTwoDecimal($(this).val());
+				});
+			}
+			return sum;
+		};
+		return selfMoney;
 	};
 	Count.computeSelfCost = function($obj,$parentObj){
 		/*
@@ -3125,7 +3172,7 @@ define(function(require, exports){
 				'</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"selfGuideName",$parentObj);
-		var html = '<tr arrangeType="selfArrange">'+
+		var html = '<tr arrangeType="selfArrange" class="oldData">'+
 			'<td class="countWhichDaysContainer"><div class="div-h-30"></div></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="selfPayName" class="w-70"><input type="hidden" name="selfPayId"></td>'+
 			'<td><div class="div-h-30"></div><input name="selfPayItem" class="w-70" type="text"><input type="hidden" name="selfPayItemId"></td>'+
