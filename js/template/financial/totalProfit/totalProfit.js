@@ -91,7 +91,7 @@ define(function(require, exports) {
                     return;
                 }); 
             }
-            exportXLS( APP_ROOT + 'back/export.do?method=exportTotalProfit&token='+ $.cookie("token") + $.param(args));
+            exportXLS( APP_ROOT + 'back/export.do?method=exportTotalProfit&token='+ $.cookie("token") +'&'+ $.param(args));
             return;
         }
 

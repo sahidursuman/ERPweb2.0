@@ -180,7 +180,7 @@ define(function(require, exports) {
                     return;
                 }); 
             }
-            exportXLS( APP_ROOT + 'back/export.do?method=exportBookingOrderProfit&token='+ $.cookie("token") + $.param(replace.searchData));
+            exportXLS( APP_ROOT + 'back/export.do?method=exportBookingOrderProfit&token='+ $.cookie("token") +'&'+ $.param(replace.searchData));
             return;
         }
         $.ajax({

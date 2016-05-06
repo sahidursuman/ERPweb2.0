@@ -63,7 +63,7 @@ define(function(require, exports) {
                     return;
                 }); 
             }
-            exportXLS( APP_ROOT + 'back/export.do?method=exportArrangeTransferProfit&token='+ $.cookie("token") + $.param(TurnProfit.searchParam));
+            exportXLS( APP_ROOT + 'back/export.do?method=exportArrangeTransferProfit&token='+ $.cookie("token") + '&' + $.param(TurnProfit.searchParam));
             return;
         }
         $.ajax({

@@ -116,7 +116,7 @@ define(function(require, exports) {
                             ColGuest.$searchArea.find("input[name=businessName]").data('id'));
                     });
                     //导出
-                    $tab.find('.T-search').off().on('click', function(event) {
+                    $tab.find('.T-export').off().on('click', function(event) {
                         ColGuest.listGuest(-1)
                     });
                 }
@@ -174,7 +174,7 @@ define(function(require, exports) {
                     return;
                 }); 
             }
-            exportXLS( APP_ROOT + 'back/export.do?method=exportReceiveProfit&token='+ $.cookie("token") + $.param(ColGuest.searchData));
+            exportXLS( APP_ROOT + 'back/export.do?method=exportReceiveProfit&token='+ $.cookie("token") +'&'+ $.param(ColGuest.searchData));
             return;
         }
         $.ajax({
