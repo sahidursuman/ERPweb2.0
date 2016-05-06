@@ -152,7 +152,7 @@
                                                   <th class="th-border">购物店</th>
                                                   <th class="th-border">商品</th>
                                                   <th class="th-border">打单金额</th>
-                                                  <th class="th-border">单据</th>
+                                                  <th class="th-border T-noprint">单据</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -172,7 +172,7 @@
                                                                             {{if index == 0}}
                                                                                 <td>{{item.name}}</td>
                                                                                 <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
-                                                                                <td>
+                                                                                <td class="T-noprint">
                                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                                     {{else}}
@@ -223,7 +223,7 @@
                                                                     <tr rowspan = "{{shopIncome.shopArrangeItemList.length}}" class="view-accountsPrint">
                                                                         <td>{{item.name}}</td>
                                                                         <td><span class="F-float F-money">{{item.consumeMoney}}</span></td>
-                                                                        <td>
+                                                                        <td class="T-noprint ">
                                                                             {{if item.billImage != null && item.billImage != ""}}
                                                                             <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                             {{else}}
@@ -243,7 +243,7 @@
                                                                                 {{item.quanpeiRebateMoney}}
                                                                             </span>
                                                                         </td>
-                                                                                                                                            </tr>
+                                                                    </tr>
                                                                     {{/if}}
                                                                 {{/each}}
                                                             {{else}}
@@ -259,12 +259,13 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr  class="view-accountsPrint">
-                                                    <td colspan="9" style="text-align:left">合计</td>
+                                                    <td colspan="9" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td>
                                                         <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumNeedPayAllMoney}}</span>
                                                     </td>
                                                     <td>
-                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumSettlementMoney}}</span>
+                                                        <span cla
+                                                        ss="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumSettlementMoney}}</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -295,7 +296,7 @@
                                                     <th class="th-border">单价 </th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -324,7 +325,7 @@
                                                                 <td>
                                                                     <span class="F-float F-money">{{selfIncome.reduceMoney}}</span>
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if selfIncome.billImage != null && selfIncome.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{selfIncome.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -342,7 +343,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripIncomeMap.selfPayIncomeMap.sumNeedPayAllMoney}}
@@ -490,7 +491,7 @@
                                                     <th class="th-border">项目</th>
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -513,7 +514,7 @@
                                                                 <td>
                                                                     {{item.count}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                         <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">    查看
                                                                         </a>
@@ -532,7 +533,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="5" style="text-align:left">合计</td>
+                                                    <td colspan="5" style="text-align:left"  class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripIncomeMap.otherIncomeMap.sumNeedPayAllMoney}}
@@ -648,7 +649,7 @@
                                                     <th class="th-border">车牌号</th>
                                                     <th class="th-border">司机</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -691,7 +692,7 @@
                                                                 <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -709,7 +710,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="8" style="text-align:left">合计</td>
+                                                    <td colspan="8" style="text-align:left"  class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.busPayMap.sumNeedPayAllMoney}}
@@ -749,7 +750,7 @@
                                                     <th class="th-border">餐标(元/人)</th>
                                                     <th class="th-border">人数</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -777,7 +778,7 @@
                                                                 <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -795,7 +796,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.restaurantPayMap.sumNeedPayAllMoney}}
@@ -835,7 +836,7 @@
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -863,7 +864,7 @@
                                                                 <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -881,7 +882,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.hotelPayMap.sumNeedPayAllMoney}}
@@ -921,7 +922,7 @@
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -949,7 +950,7 @@
                                                                  <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                 <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -967,7 +968,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.scenicPayMap.sumNeedPayAllMoney}}
@@ -1011,7 +1012,7 @@
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">票数</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -1055,7 +1056,7 @@
                                                                 <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -1073,7 +1074,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="11" style="text-align:left">合计</td>
+                                                    <td colspan="11" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.ticketPayMap.sumNeedPayAllMoney}}
@@ -1113,7 +1114,7 @@
                                                     <th class="th-border">底价</th>
                                                     <th class="th-border">应付数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -1141,7 +1142,7 @@
                                                                 <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint ">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -1159,7 +1160,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="7" style="text-align:left">合计</td>
+                                                    <td colspan="7" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.selfPayPayMap.sumNeedPayAllMoney}}
@@ -1198,7 +1199,7 @@
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">单据</th>
+                                                    <th class="th-border T-noprint">单据</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -1223,7 +1224,7 @@
                                                                 <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>
+                                                                <td class="T-noprint">
                                                                     {{if item.billImage != null && item.billImage != ""}}
                                                                     <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
                                                                     {{else}}
@@ -1241,7 +1242,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td colspan="6" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.otherPayMap.sumNeedPayAllMoney}}
@@ -1450,17 +1451,17 @@
                                     <div class="widget-main">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
                                                     <th class="th-border">用车时间</th>
                                                     <th class="th-border">车队</th>
                                                     <th class="th-border">车牌号</th>
                                                     <th class="th-border">司机</th>
                                                     <th class="th-border">车费</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">中转单号</th>
-                                                    <th class="th-border">客户</th>
-                                                    <th class="th-border">游客联系人</th>
-                                                    <th class="th-border">人数</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -1469,40 +1470,44 @@
                                                 {{if tripTransitPayMap.busTransitPayMap != null}}
                                                     {{if tripTransitPayMap.busTransitPayMap.busTransitPayMapList != null}}
                                                         {{each tripTransitPayMap.busTransitPayMap.busTransitPayMapList as item}}
-                                                            <tr>
-                                                                <td rowspan="{{item.outRemarkList.length}}">{{item.useTime}}</td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">{{item.busCompanyName}}</td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">{{item.licenseNumber}}</td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">{{item.driverName}}</td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">{{item.price}}</td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">{{item.reduceMoney}}</td>
-                                                                <td>{{item.outRemarkList[0].orderNumber}}</td>
-                                                                <td>{{item.outRemarkList[0].partnerAgencyName}}</td>
-                                                                <td>{{item.outRemarkList[0].touristContactName}}</td>
-                                                                <td>{{item.outRemarkList[0].adultCount}}大{{item.outRemarkList[0].childCount}}小</td>
+                                                            <tr class="view-accountsPrint">
                                                                 <td>
-                                                                    <span class="F-float F-money">{{item.outRemarkList[0].needPayAllMoney}}</span>
+                                                                    {{item.orderNumber}}
                                                                 </td>
-                                                                <td >
-                                                                    <span class="F-float F-money">{{item.outRemarkList[0].settlementMoney}}</span>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
+                                                                    {{item.useTime}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.busCompanyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.licenseNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.driverName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.reduceMoney}}
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
                                                                 </td>
                                                             </tr>
-                                                            {{each item.outRemarkList as rs index}}
-                                                            {{if index > 0}}
-                                                            <tr>
-                                                                <td>{{rs.orderNumber}}</td>
-                                                                <td>{{rs.partnerAgencyName}}</td>
-                                                                <td>{{rs.touristContactName}}</td>
-                                                                <td>{{rs.adultCount}}大{{rs.childCount}}小</td>
-                                                                <td>
-                                                                    <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
-                                                                </td>
-                                                                <td >
-                                                                    <span class="F-float F-money">{{rs.settlementMoney}}</span>
-                                                                </td>
-                                                            </tr>
-                                                            {{/if}}
-                                                            {{/each}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
@@ -1540,17 +1545,17 @@
                                     <div class="widget-main print-mar-t-F16">
                                         <table class="table table-striped table-bordered table-hover" >
                                             <thead>
-                                                <tr>
+                                                <tr class="view-accountsPrint">
+                                                    <th class="th-border">中转单号</th>
+                                                    <th class="th-border">客户</th>
+                                                    <th class="th-border">游客联系人</th>
+                                                    <th class="th-border">人数</th>
                                                     <th class="th-border">日期</th>
                                                     <th class="th-border">酒店</th>
                                                     <th class="th-border">房型</th>
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
-                                                    <th class="th-border">中转单号</th>
-                                                    <th class="th-border">客户</th>
-                                                    <th class="th-border">游客联系人</th>
-                                                    <th class="th-border">人数</th>
                                                     <th class="th-border">应付</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -1559,53 +1564,44 @@
                                                 {{if tripTransitPayMap.hotelTransitPayMap != null}}
                                                     {{if tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList != null}}
                                                         {{each tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList as item}}
-                                                            <tr>
-                                                                <td rowspan="{{item.outRemarkList.length}}">
+                                                            <tr class="view-accountsPrint">
+                                                                <td>
+                                                                    {{item.orderNumber}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.partnerAgencyName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.touristContactName}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.adultCount}}大{{item.childCount}}小
+                                                                </td>
+                                                                <td>
                                                                     {{item.checkInTime}}
                                                                 </td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">
+                                                                <td>
                                                                     {{item.hotelName}}
                                                                 </td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">
+                                                                <td>
                                                                     {{item.roomType}}
                                                                 </td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">
+                                                                <td>
                                                                     {{item.price}}
                                                                 </td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">
+                                                                <td>
                                                                     {{item.hotelMemberCount}}
                                                                 </td>
-                                                                <td rowspan="{{item.outRemarkList.length}}">
+                                                                <td>
                                                                     {{item.reduceMoney}}
                                                                 </td>
-                                                                <td>{{item.outRemarkList[0].orderNumber}}</td>
-                                                                <td>{{item.outRemarkList[0].partnerAgencyName}}</td>
-                                                                <td>{{item.outRemarkList[0].touristContactName}}</td>
-                                                                <td>{{item.outRemarkList[0].adultCount}}大{{item.outRemarkList[0].childCount}}小</td>
                                                                 <td>
-                                                                    <span class="F-float F-money">{{item.outRemarkList[0].needPayAllMoney}}</span>
+                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
                                                                 </td>
                                                                 <td>
-                                                                    <span class="F-float F-money">{{item.outRemarkList[0].settlementMoney}}</span>
+                                                                    <span class="F-float F-money">{{item.settlementMoney}}</span>
                                                                 </td>
                                                             </tr>
-
-                                                            {{each item.outRemarkList as rs index}}
-                                                            {{if index > 0}}
-                                                            <tr>
-                                                                <td>{{rs.orderNumber}}</td>
-                                                                <td>{{rs.partnerAgencyName}}</td>
-                                                                <td>{{rs.touristContactName}}</td>
-                                                                <td>{{rs.adultCount}}大{{rs.childCount}}小</td>
-                                                                <td>
-                                                                    <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="F-float F-money">{{rs.settlementMoney}}</span>
-                                                                </td>
-                                                            </tr>
-                                                            {{/if}}
-                                                            {{/each}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
