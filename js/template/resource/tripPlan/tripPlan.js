@@ -22,6 +22,7 @@ define(function(require, exports) {
 		selectTouristTemplate = require("./view/selectTourist"),
 		noticeTemplate = require("./view/notice"),
 		viewGroupTemplate = require("./view/viewGroup"),
+		preTypeHtml = '<select name="preType"><option value="0" selected="">现金</option><option value="1">银行转账</option><option value="2">网付</option><option value="3">支票</option><option value="4">其他</option></select>';
 		payTypeHtml = '<select name="payType"><option value="0" selected="">现金</option><option value="1">刷卡</option><option value="2">签单</option></select>';
 	/**
 	 * 自定义发团安排对象
@@ -1457,7 +1458,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="price" maxlength="6" class="col-sm-12 price F-float F-money"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
-		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9"/></div></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList"  data-entity-name="insurance" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1543,8 +1544,8 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"><input type="hidden" name="memberCount" value="1"></td>'
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
-					+ '<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
-					+ '<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
+					+ '<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" style="width: 60px;"></div></td>'
+					+ '<td><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></div></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -1573,8 +1574,8 @@ define(function(require, exports) {
 		'<td><input name="memberCount" type="text" class="col-sm-12 F-float F-count" style="width: 60px;" maxlength="4" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input name="reduceMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
-		'<td><input name="prePayMoney" type="text" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input name="prePayMoney" type="text" class="price F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
+		'<td><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
 		'<td><input name="remark" type="text" class="col-sm-12"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
@@ -1600,8 +1601,8 @@ define(function(require, exports) {
 		'<td><input type="text" class="col-sm-12 F-float F-count" name="memberCount" style="width: 60px;" maxlength="6"  value="'+ (tripPlan.touristCount/2) +'"/></td>' +
 		'<td><input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" class="col-sm-12 F-float F-money" name="needPayMoney" readonly="readonly" style="width: 60px;"/></td>' +
-		'<td><input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input type="text" class="price F-float F-money" name="prePayMoney" style="width: 60px;" maxlength="9"/></div></td>' +
+		'<td><div class="inline-flex">'+ payTypeHtml +'<input type="text" class="F-float F-money" name="guidePayMoney" style="width: 60px;" maxlength="9"/></div></td>' +
 		'<td><input type="text" class="col-sm-12" name="remark" maxlength="500"/></td>' +
 		'<td><select name="orderStatus"><option value="1">未预定</option><option value="2">预定中</option><option value="3">已预订</option><option value="0">无需预订</option></select></td>'+
 		'<td><a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>'+
@@ -1631,8 +1632,8 @@ define(function(require, exports) {
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
 		'<td><input type="text" name="orderNumber" class="col-sm-12" value="" maxlength="20"/></td>'+
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
-		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
+		'<td><div class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="scenic" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1679,8 +1680,8 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" maxlength="9"/></td>' +
-		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" style="width: 60px;"/></div></td>' +
+		'<td><div class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></div></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="selfpay" title="删除">删除</a></td></tr>';
 		tableContainer.append(filterUnAuth(html));
@@ -1709,8 +1710,8 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
-		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9"/></div></td>' +
+		'<td><div class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money w-80" maxlength="9"/></div></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="ticket" title="删除">删除</a></td></tr>';
 
@@ -1737,8 +1738,8 @@ define(function(require, exports) {
 		'<td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8"/></td>' +
 		'<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
 		'<td><input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money"/></td>' +
-		'<td><input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9"/></td>' +
-		'<td class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></td>' +
+		'<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9"/></div></td>' +
+		'<td><div class="inline-flex">'+ payTypeHtml +'<input type="text" name="guidePayMoney" class="F-float F-money" maxlength="9"/></div></td>' +
 		'<td><input type="text" name="remark" class="col-sm-12" maxlength="500"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="other" title="删除">删除</a></td></tr>';
 
@@ -3515,7 +3516,8 @@ define(function(require, exports) {
 						price: tripPlan.getVal(bus.eq(i), "price"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
 						annouceTouristGroupIds: annouceTouristGroupIds,
-						offerId: offerId
+						offerId: offerId,
+						preType: tripPlan.getVal(bus.eq(i),"preType")
 
 					}
 					busCompanyArrange.push(busJson);
@@ -3552,6 +3554,7 @@ define(function(require, exports) {
 						prePayMoney : tripPlan.getVal(restaurant.eq(i), "prePayMoney"),
 						guidePayMoney : tripPlan.getVal(restaurant.eq(i), "guidePayMoney"),
 						payType : tripPlan.getVal(restaurant.eq(i), "payType"),
+						preType : tripPlan.getVal(restaurant.eq(i), "preType"),
 						remark : tripPlan.getVal(restaurant.eq(i), "remark"),
 						type : restaurant.eq(i).find("[name=type]").val(),
 						isChoose : isChoose,
