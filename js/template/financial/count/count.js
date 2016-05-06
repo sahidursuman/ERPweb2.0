@@ -2701,7 +2701,8 @@ define(function(require, exports){
 	Count.autoGuideSum = function($obj,$parentObj){
 		var	$priceObj = $obj.find('input[name=price]'),
 			$manageFeeObj = $obj.find('input[name=manageFee]'),
-			sumPrice = 0,sumManageFee = 0;
+			$guidePushMoneyObj = $obj.find('.guidePunishMoney'),
+			sumPrice = 0,sumManageFee = 0,punishMoney = 0;
 		$priceObj.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumPrice += sum;
@@ -2712,6 +2713,12 @@ define(function(require, exports){
 			sumManageFee += sum;
 		});
 
+		$guidePushMoneyObj.each(function(){
+			var sum = Count.changeTwoDecimal($(this).text());
+			punishMoney += sum;
+		});
+
+		$parentObj.find('.tripCost-guidePunishMoney').text(punishMoney);
 		$parentObj.find('.tripCost-guideArrangePrice').text(sumPrice);
 		$parentObj.find('.tripIncome-guideManageMoney').text(sumManageFee);
 		//计算团收入
