@@ -3157,7 +3157,7 @@ define(function(require, exports){
 	//新增自费安排
 	Count.addSelf = function($obj,$parentObj){
 		
-		var td = '<td name="selfGuideName">'+
+		var td = '<td name="selfGuideName" >'+
 				'<div class="div-h-30">'+
 					'<button class="btn btn-success  btn-sm btn-white T-addSelfGuide pull-right">'+
 	                    '<i class="ace-icon fa fa-plus  bigger-110 icon-only"></i>'+
@@ -3173,7 +3173,7 @@ define(function(require, exports){
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"selfGuideName",$parentObj);
 		var html = '<tr arrangeType="selfArrange" class="oldData">'+
-			'<td class="countWhichDaysContainer"><div class="div-h-30"></div></td>'+
+			'<td class="countWhichDaysContainer" rowspan="1"><div class="div-h-30"></div></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="selfPayName" class="w-70"><input type="hidden" name="selfPayId"></td>'+
 			'<td><div class="div-h-30"></div><input name="selfPayItem" class="w-70" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 			'<td><div class="div-h-30"></div><input name="marketPrice" class="w-50" type="text"></td>'+
