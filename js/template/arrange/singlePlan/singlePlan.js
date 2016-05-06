@@ -1068,7 +1068,7 @@ define(function(require, exports) {
                     group[i].lineProduct.name+'</td><td>'+
                     group[i].partnerAgency.travelAgencyName+'</td><td>'+
                     group[i].contactMember.name+'</td><td>'+
-                    group[i].contactMember.mobileNumber+'</td><td>'+
+                    group[i].contactMember.mobileNumber+'</td><td>'+  
                     group[i].areaData+'</td><td>'+
                     group[i].ageData+'</td><td>'+
                     group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
@@ -1082,10 +1082,6 @@ define(function(require, exports) {
                     '<a class="cursor T-action T-groupView">查看</a>'+
                     '<a class="cursor"> </a><a class="cursor T-action T-groupDelete">删除</a></div></td></tr>';
                 }
-
-                console.log(html);
-
-
                 $tab.find('.T-touristGroup-list').append(html);
             }
         });
