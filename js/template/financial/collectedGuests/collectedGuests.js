@@ -115,6 +115,10 @@ define(function(require, exports) {
                             ColGuest.$searchArea.find("input[name=businessName]").val(),
                             ColGuest.$searchArea.find("input[name=businessName]").data('id'));
                     });
+                    //导出
+                    $tab.find('.T-export').off().on('click', function(event) {
+                        ColGuest.listGuest(-1)
+                    });
                 }
             }
         });
@@ -164,6 +168,15 @@ define(function(require, exports) {
             order : "desc",
             sortType: 'startTime'
         };
+        if (pageNo == -1) {
+            if (!ColGuest.searchData.startTime || !ColGuest.searchData.endTime) {
+                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                    return;
+                }); 
+            }
+            exportXLS( APP_ROOT + 'back/export.do?method=exportReceiveProfit&token='+ $.cookie("token") +'&'+ $.param(ColGuest.searchData));
+            return;
+        }
         $.ajax({
             url:KingServices.build_url("receiveProfit","findPager"),
             type: "POST",

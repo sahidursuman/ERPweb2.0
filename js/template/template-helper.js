@@ -168,16 +168,30 @@ template.helper("getPlanPayTypeText", function(payType) {
             return '其他';
     }
 }); 
-template.helper("getPlanPayTypeOption", function(status, isDisabled) {
+template.helper("getPlanPayTypeOption", function(status, isDisabled, type) {
     var res = '',
         dis = '';
     if (isDisabled) {
         dis = 'disabled';
     }
     status = status || 0;
-    res += '<select name="payType" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
+    res += '<select name="payType'+type+'" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
     res += '<option value="1" '+(status == 1?'selected':'')+'>刷卡</option>';
     res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
+    return res;
+});
+template.helper("getPlanPreTypeOption", function(status, isDisabled) {
+    var res = '',
+        dis = '';
+    if (isDisabled) {
+        dis = 'disabled';
+    }
+    status = status || 0;
+    res += '<select name="preType" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
+    res += '<option value="1" '+(status == 1?'selected':'')+'>银行转账</option>';
+    res += '<option value="2" '+(status == 2?'selected':'')+'>网付</option>';
+    res += '<option value="3" '+(status == 3?'selected':'')+'>支票</option>';
+    res += '<option value="4" '+(status == 4?'selected':'')+'>其他</option></select>';
     return res;
 });
 template.helper("getPayTypeText", function(payType) {

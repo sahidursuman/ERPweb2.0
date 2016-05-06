@@ -550,6 +550,10 @@ table tr td {
     display: inline-block;
     width: 60px;
 }
+.label-inline-40 {
+    display: inline-block;
+    width: 40px;
+}
 
 .widget-main {
     padding: 0!important;

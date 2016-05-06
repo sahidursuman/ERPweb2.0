@@ -193,11 +193,18 @@
           default:
             return "其他";
         }
-    }), template.helper("getPlanPayTypeOption", function(status, isDisabled) {
+    }), template.helper("getPlanPayTypeOption", function(status, isDisabled, type) {
         var res = "", dis = "";
-        return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="payType" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
+        return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="payType' + type + '" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
         res += '<option value="1" ' + (1 == status ? "selected" : "") + ">刷卡</option>", 
         res += '<option value="2" ' + (2 == status ? "selected" : "") + ">签单</option></select>";
+    }), template.helper("getPlanPreTypeOption", function(status, isDisabled) {
+        var res = "", dis = "";
+        return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="preType" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
+        res += '<option value="1" ' + (1 == status ? "selected" : "") + ">银行转账</option>", 
+        res += '<option value="2" ' + (2 == status ? "selected" : "") + ">网付</option>", 
+        res += '<option value="3" ' + (3 == status ? "selected" : "") + ">支票</option>", 
+        res += '<option value="4" ' + (4 == status ? "selected" : "") + ">其他</option></select>";
     }), template.helper("getPayTypeText", function(payType) {
         switch (1 * payType) {
           case 0:
