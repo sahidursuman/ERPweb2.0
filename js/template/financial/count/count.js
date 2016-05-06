@@ -26,7 +26,7 @@ define(function(require, exports){
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
 		formulaTemplate = require('./view/formulaList'),
-		transitDetailsTamplate = require('./view/viewTransitDetails'),
+		//transitDetailsTamplate = require('./view/viewTransitDetails'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -313,14 +313,6 @@ define(function(require, exports){
 		});
 		var $listObj = $obj.find('.T-list');
 		
-		//中转明细
-		var $tripDetailObj = $listObj.find('.T-transit');
-		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
-			var id = $(this).attr('data-entity-id');
-			//KingServices.viewTransit(id);
-			Count.viewTransitDetails(id);
-			
-		});
 		//按钮事件--单团核算表
 		$obj.find('.T-tripAccount').off('click').on('click',function(){
 			var id = $obj.find('[name=financialTripPlanId]').val();
@@ -426,8 +418,6 @@ define(function(require, exports){
 		});
 		//触发页面的change事件
 		$obj.find('input[type=hidden]').trigger('change');
-		//计算中转成本
-		Count.tripTransferCost($obj);
 		//计算团收入
 		Count.tripIncome($obj);
 		//计算成本
@@ -496,7 +486,7 @@ define(function(require, exports){
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 	                var html = Reimbursement(tmp);
-	                console.log(tmp);
+	                
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -523,14 +513,6 @@ define(function(require, exports){
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
-			
-		//中转明细
-		var $tripDetailObj = $listObj.find('.T-transit');
-		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
-			var id = $(this).attr('data-entity-id');
-			//KingServices.viewTransit(id);
-			Count.viewTransitDetails(id);
-		});
 
 		//团款tripDetail checkTripCostStatus
 		var $tripCostObj = $listObj.find('.T-tripDetail');
@@ -839,8 +821,6 @@ define(function(require, exports){
 		$insureObj.off('change').on('change','input',function(){
 			Count.autoInsureanceSum($(this),$obj);
 		});
-		//计算中转成本
-		Count.tripTransferCost($obj);
 		//计算团收入
 		Count.tripIncome($obj);
 		//触发页面的change事件
@@ -981,13 +961,6 @@ define(function(require, exports){
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
-		//中转明细
-		var $tripDetailObj = $listObj.find('.T-transit');
-		$tripDetailObj.find('.T-viewTripTransit').off('click').on('click',function(){
-			var id = $(this).attr('data-entity-id');
-			//KingServices.viewTransit(id);
-			Count.viewTransitDetails(id);
-		});
 		//团款tripDetail
 		var $tripCostObj = $listObj.find('.T-tripDetail');
 		//获取导游
@@ -1304,8 +1277,7 @@ define(function(require, exports){
 		});
 		//触发页面的change事件
 		$obj.find('input').trigger('change');
-		//计算中转成本
-		Count.tripTransferCost($obj);
+
 		//计算团收入
 		Count.tripIncome($obj);
 		//按钮事件--保存信息
@@ -1411,9 +1383,7 @@ define(function(require, exports){
 		//其他支出费用列表列表  guideTamplate
 		var otherOutHtml = otherOutTemplate(data);
 		$obj.find('.T-otherOut').html(otherOutHtml);
-		//中转
-		var transitHtml = transitTemplate(data);
-		$obj.find('.T-transit').html(transitHtml);
+
 		//导游列表
 		var guideHtml = guideTamplate(data);
 		$obj.find('.T-guide').html(guideHtml);
@@ -1694,10 +1664,6 @@ define(function(require, exports){
 			showJson.costMapCount += 1;
 		};
 
-		//判断中转成本明细
-		if(tripTransitPayMap.busTransitPayMap.busTransitPayMapList.length == 0){
-			showJson.transitMapCount += 1;
-		};
 		if(tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList.length == 0){
 			showJson.transitMapCount += 1;
 		};
@@ -2667,11 +2633,6 @@ define(function(require, exports){
 		hotelArrangeNeedPayMoney = Count.changeTwoDecimal(hotelArrangeNeedPayMoney);
 		outOtherMoney = Count.changeTwoDecimal(outOtherMoney);
 		ticketArrangeNeedPayMoney = Count.changeTwoDecimal(ticketArrangeNeedPayMoney);
-		//计算中转成本
-		var transfetCost = (busCompanyNeedPayMoney+outRestaurantMoney+hotelArrangeNeedPayMoney+outOtherMoney+ticketArrangeNeedPayMoney);
-		transfetCost =Count.changeTwoDecimal(transfetCost);
-		transfetCost = Tools.toFixed(transfetCost,2);
-		tripTransitCost.text(transfetCost);
 	};
 	//导游金额计算
 	Count.autoGuideSum = function($obj,$parentObj){
@@ -7081,21 +7042,6 @@ define(function(require, exports){
 			}
 		};
 		return newRateArr;
-	};
-	Count.viewTransitDetails = function(id){
-		$.ajax({
-			url : KingServices.build_url("touristGroup","getOutRemarkArrange"),
-			data : {id : id}
-		}).done(function(data){
-			if(showDialog(data)){
-				var viewTransitMenuKey = listTabId + "_view_transit";
-				Tools.addTab(viewTransitMenuKey,'查看中转明细', transitDetailsTamplate(data));
-				var $tab = $("#tab-"+ viewTransitMenuKey + "-content");
-				$tab.find('.T-btn-close').on('click', function(){
-					Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-				});				
-			}
-		});
 	};
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
