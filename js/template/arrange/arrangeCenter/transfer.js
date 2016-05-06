@@ -1896,6 +1896,10 @@ define(function(require, exports) {
         $tbody.append($line);
         Transfer.addResource($line);  
         Transfer.setDate($line);
+        //删除餐
+        $tbody.find('.T-arrange-delete').on('click', function() {
+            Transfer.deleteRestaurant($(this));
+        });
         //校验
         rule.transferOtherUpdate(validate);
     };
@@ -1924,6 +1928,10 @@ define(function(require, exports) {
         $tbody.append($line);
         Transfer.addResource($line);
         Transfer.setDate($line);
+        //删除票务
+        $tbody.find('.T-arrange-delete').on('click', function() {
+            Transfer.deleteTicket($(this));
+        });
         //校验
         rule.transferOtherUpdate(validate);
     };
@@ -1946,6 +1954,10 @@ define(function(require, exports) {
         $line = filterUnAuth(html);
         $tbody.append($line);
         Transfer.setDate($line);
+        //删除其他
+        $tbody.find('.T-arrange-delete').on('click', function() {
+            Transfer.deleteOther($(this));
+        });
         rule.transferOtherUpdate(validate);
     };
 
