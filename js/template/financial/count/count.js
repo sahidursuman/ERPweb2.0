@@ -1749,8 +1749,6 @@ define(function(require, exports){
 				$that.attr('colspan',newThisCol);
 			});
 			$obj.find('th[colspan]').attr('colspan',nweThColspan);
-
-
 	};
 	//质量统计
 	Count.getquality = function(id){
@@ -2306,18 +2304,31 @@ define(function(require, exports){
 			$sumConsumeMoney = $tr.find('input[name=sumConsumeMoney]'),
 			$showConsumeMoney = $tr.find('.sumConsumeMoney'),
 			$shopGuideMoney = $tr.find('input[name=shopGuideMoney]'),
-			$guideRateMoney = $shopList.find('input[name=guideRateMoney]'),
-			$travelMoney = $shopList.find('input[name=travelAgencyRateMoney]');
-			$twoRebateMoney = $shopList.find('input[name=twoRebateMoney]');
-			$quanpeiRebateMoney = $shopList.find('input[name=quanpeiRebateMoney]');
+			
+			//isConfirmAccount = $tr.attr('isConfirmAccount'),
+			$oldDataTr = $shopList.find('.oldData');
 
-		var sumMoney = 0,sumSGmoney = 0,sumgMoney = 0,sumtMoney = 0,sumtwoRebateMoney = 0,sumgQuanpMoney = 0;
+		var sumMoney = 0,sumSGmoney = 0,sumgMoney = 0,sumtMoney = 0,sumtwoRebateMoney = 0,sumgQuanpMoney = 0,
+			sumShopMoney = 0;
 		$shopGuideMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumSGmoney += sum;
 		});
-		
-		$guideRateMoney.each(function(){
+
+		$oldDataTr.each(function(){
+			var $that = $(this),
+				isConfirmAccount = $that.attr('isConfirmAccount'),
+				shopMoney = 0;
+				
+			if(!!isConfirmAccount && isConfirmAccount == 1){
+				var m = $that.find('input[name=settlementMoney]').val();
+				shopMoney =Count.changeTwoDecimal(m);
+			}else{
+				var shopMoney = Count.getShopMoney($that);
+			};
+			sumShopMoney += shopMoney
+		});
+		/*$guideRateMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgMoney += sum;
 		});
@@ -2326,18 +2337,19 @@ define(function(require, exports){
 			sumgQuanpMoney += sum;
 		});
 		$travelMoney.each(function(){
-			var sum = Count.changeTwoDecimal($(this).val());
+			
 			sumtMoney += sum;
 		});
 		$twoRebateMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumtwoRebateMoney += sum;
-		});
+		});*/
 		if(!$tr.hasClass('noSumRate')){
 			$sumConsumeMoney.val(sumSGmoney)//金额小计
 			$showConsumeMoney.text(sumSGmoney);
 		};
-		sumMoney = Count.changeTwoDecimal(sumgMoney+sumtMoney+sumtwoRebateMoney+sumgQuanpMoney);//购物收入
+		console.log(sumShopMoney);
+		sumMoney = Count.changeTwoDecimal(sumShopMoney);//购物收入
 
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
@@ -2353,6 +2365,41 @@ define(function(require, exports){
 		//计算金额合计
 		Count.totalRebeatMoney($obj,$parentObj);
 	};
+	//获取未对账的购物店的购物金额
+	Count.getShopMoney = function($tr){
+		var $nextTr = $tr.nextAll(),itemShopMoney = 0,
+			twoMoney = Count.changeTwoDecimal($tr.find('input[name=twoRebateMoney]').val()),
+			gMoney = Count.changeTwoDecimal($tr.find('input[name=guideRateMoney]').val()),
+			qMoney = Count.changeTwoDecimal($tr.find('input[name=quanpeiRebateMoney]').val()),
+			tMoney = Count.changeTwoDecimal($tr.find('input[name=travelAgencyRateMoney]').val());
+			
+		for(var i = 0;i<$nextTr.length;i++){
+
+			var $that = $nextTr.eq(i),
+				$guideRateMoney = $that.find('input[name=guideRateMoney]'),
+				$quanpeiRebateMoney = $that.find('input[name=quanpeiRebateMoney]'),
+				$travelMoney = $that.find('input[name=travelAgencyRateMoney]');
+
+			$guideRateMoney.each(function(){
+				var sum =Count.changeTwoDecimal($(this).val());
+				gMoney += sum;
+			});
+			$quanpeiRebateMoney.each(function(){
+				var sum =Count.changeTwoDecimal($(this).val());
+				qMoney += sum;
+			});
+			$travelMoney.each(function(){
+				var sum =Count.changeTwoDecimal($(this).val());	
+				tMoney += sum;
+			});
+			if($that.hasClass('sumMoney')){
+				var sumItemShopMoney = Count.changeTwoDecimal(gMoney+qMoney+tMoney+twoMoney);
+				itemShopMoney = sumItemShopMoney;
+				break;
+			}
+		}
+		return itemShopMoney;
+	};
 	//购物--计算金额合计
 	Count.totalRebeatMoney = function($obj,$parentObj){
 		var $thisTr = $obj.closest('tr');
@@ -2360,7 +2407,6 @@ define(function(require, exports){
 		var sumTd_cnt = 0,sumScenondMoney = 0,sumRebeMoney = 0;//二次返佣合计;
 		if($thisTr.hasClass('oldData')){
 			td_cnt = $thisTr.children('td').length;
-			
 		};
 		var thisTdLen = $thisTr.children('td').length;
 
