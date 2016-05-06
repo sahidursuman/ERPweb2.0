@@ -2304,12 +2304,10 @@ define(function(require, exports){
 			$sumConsumeMoney = $tr.find('input[name=sumConsumeMoney]'),
 			$showConsumeMoney = $tr.find('.sumConsumeMoney'),
 			$shopGuideMoney = $tr.find('input[name=shopGuideMoney]'),
-			
-			//isConfirmAccount = $tr.attr('isConfirmAccount'),
-			$oldDataTr = $shopList.find('.oldData');
-
-		var sumMoney = 0,sumSGmoney = 0,sumgMoney = 0,sumtMoney = 0,sumtwoRebateMoney = 0,sumgQuanpMoney = 0,
-			sumShopMoney = 0;
+			$guideRateMoney = $shopList.find('input[name=guideRateMoney]'),
+			$quanpeiRebateMoney = $shopList.find('input[name=quanpeiRebateMoney]'),
+			$oldDataTr = $shopList.find('.oldData'),
+			sumShopMoney = 0,sumgMoney = 0,sumgQuanpMoney = 0,sumSGmoney = 0;
 		$shopGuideMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumSGmoney += sum;
@@ -2328,7 +2326,7 @@ define(function(require, exports){
 			};
 			sumShopMoney += shopMoney
 		});
-		/*$guideRateMoney.each(function(){
+		$guideRateMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgMoney += sum;
 		});
@@ -2336,21 +2334,11 @@ define(function(require, exports){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgQuanpMoney += sum;
 		});
-		$travelMoney.each(function(){
-			
-			sumtMoney += sum;
-		});
-		$twoRebateMoney.each(function(){
-			var sum = Count.changeTwoDecimal($(this).val());
-			sumtwoRebateMoney += sum;
-		});*/
 		if(!$tr.hasClass('noSumRate')){
 			$sumConsumeMoney.val(sumSGmoney)//金额小计
 			$showConsumeMoney.text(sumSGmoney);
 		};
-		console.log(sumShopMoney);
 		sumMoney = Count.changeTwoDecimal(sumShopMoney);//购物收入
-
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
 		$mainTable.find('.tripIncome-shopIncomeMoney').text(sumMoney);
@@ -2374,7 +2362,6 @@ define(function(require, exports){
 			tMoney = Count.changeTwoDecimal($tr.find('input[name=travelAgencyRateMoney]').val());
 			
 		for(var i = 0;i<$nextTr.length;i++){
-
 			var $that = $nextTr.eq(i),
 				$guideRateMoney = $that.find('input[name=guideRateMoney]'),
 				$quanpeiRebateMoney = $that.find('input[name=quanpeiRebateMoney]'),
@@ -2393,8 +2380,7 @@ define(function(require, exports){
 				tMoney += sum;
 			});
 			if($that.hasClass('sumMoney')){
-				var sumItemShopMoney = Count.changeTwoDecimal(gMoney+qMoney+tMoney+twoMoney);
-				itemShopMoney = sumItemShopMoney;
+				itemShopMoney  += Count.changeTwoDecimal(gMoney+qMoney+tMoney+twoMoney);
 				break;
 			}
 		}
@@ -4181,8 +4167,18 @@ define(function(require, exports){
 					var $mainTr = $parentObj.find('.T-count-restaurant');
 					var sum = 0;
 					$mainTr.find('.realNeedPayMoney').each(function() {
-						var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
-						sum += totalSum;
+						var $tr = $(this).closest('tr'),
+							isChoose = $tr.attr('ischoose');
+						if(isChoose == 1 && !!isChoose){
+							var $guideMoney = $tr.find('input[name=guidePayedMoney]');
+								$guideMoney.each(function(){
+									var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
+									sum += totalSum;
+								});
+						}else{
+							var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
+							sum += totalSum;
+						}
 					});
 					sum = Count.changeTwoDecimal(sum);
 					$parentObj.find('.tripCost-restaurantArrangeNeedPayMoney').text(sum);
