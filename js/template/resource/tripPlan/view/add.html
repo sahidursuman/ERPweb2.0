@@ -424,13 +424,10 @@
                                         <col style="width:60px;">
                                         <col style="width:110px;">
                                         <col style="width:110px;">
+                                        <col style="width:160px;">
                                         <col style="width:110px;">
                                         <col style="width:110px;">
-                                        <col style="width:150px;">
-                                        <col style="width:150px;">
                                         <col style="width:80px;">
-                                        <col style="width:100px;">
-                                        <col style="width:110px;">
                                         <col style="width:120px;">
                                         <col style="width:80px;">
                                         <col style="width:80px;">
@@ -449,13 +446,10 @@
                                             <th class="th-border">车座数</th>
                                             <th class="th-border">车辆品牌</th>
                                             <th class="th-border">车牌号</th>
+                                            <th class="th-border">司机</th>
                                             <th class="th-border"><span class="necessary">*</span>所属车队</th>
                                             <th class="th-border">联系电话</th>
-                                            <th class="th-border">集合时间</th>
-                                            <th class="th-border">集合地点</th>
                                             <th class="th-border" width="70">通知游客</th>
-                                            <th class="th-border">司机</th>
-                                            <th class="th-border">司机电话</th>
                                             <th class="th-border">合同号</th>
                                             <th class="th-border">车费</th>
                                             <th class="th-border">优惠</th>
@@ -496,6 +490,17 @@
                                             </td>
                                             <td>
                                                 <div class="col-xs-12 feild-relative">
+                                                    <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-xs-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                                    <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
+                                                    {{if !busCompany.isConfirmAccount}}
+                                                    <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
+                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                        </span>
+                                                    {{/if}}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-xs-12 feild-relative">
                                                     <input type="text" name="companyName" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12" />
                                                     <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}">
                                                     <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}" />
@@ -509,29 +514,9 @@
                                             <td>
                                                 <input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12" />
                                             </td>
-                                            <td> 
-                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime | dateTimeHSFormat}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
-                                            </td>
                                             <td>
                                             {{if busCompany.isConfirmAccount}}
-                                            <span style="color:#bbb;" class="T-setUp" touristgroup = "{{busCompany.annouceTouristGroupIds}}"></span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a>{{/if}}</td>
-                                            <td>
-                                                <div class="col-xs-12 feild-relative">
-                                                    <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
-                                                    <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
-                                                    {{if !busCompany.isConfirmAccount}}
-                                                    <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
-                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                        </span>
-                                                    {{/if}}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="driverMobileNumber" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-sm-12" />
-                                            </td>
+                                            <span style="color:#bbb;" class="T-setUp" touristgroup = "{{busCompany.annouceTouristGroupIds}}"></span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}" data-entity-setplacetime="{{busCompany.setPlaceTime}}"  data-entity-setplaceposition="{{busCompany.setPlacePosition}}">点击设置</a>{{/if}}</td>
                                             <td>
                                                 <input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>

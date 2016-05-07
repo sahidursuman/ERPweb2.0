@@ -564,9 +564,10 @@ define(function(require, exports) {
 			var $this = $(this), $parent = $this.closest('tr'),
 				busData = {
 					taskType: $parent.find('[name=taskType]').val(),
-					setPlaceTime: $parent.find('[name=setPlaceTime]').val(),
-					setPlacePosition: $parent.find('[name=setPlacePosition]').val()
+					setPlaceTime: $this.data('entity-setplacetime'),
+					setPlacePosition: $this.data('entity-setplaceposition')
 				}
+				console.log(busData)
 			tripPlan.noticeTourists($this,id,busData);
 		})
 		tripPlan.taskTypeOperation($tab);
@@ -610,29 +611,31 @@ define(function(require, exports) {
 		var noticeTourists = $tab.find('.T-noticeTourists')
 		noticeTourists.each(function(i) {
 			var $this = noticeTourists.eq(i),
-				noticeJson = $this.data('entity-touristgroup');
+				noticeJson = $this.data('entity-touristgroup'),
+				setTime = $this.data('entity-setplacetime'),
+				setPosition = $this.data('entity-setplaceposition');
 			if (!!noticeJson && typeof noticeJson == 'string') {
 				noticeJson = JSON.parse(noticeJson);
 			}
-			if (noticeJson.length > 0) {
+			if (noticeJson.length > 0 || !!setTime || !!setPosition) {
 				$this.text('已设置');
 			}
 		})
 
-		var setUpTourists = $tab.find('.T-setUp')
-		setUpTourists.each(function(i) {
-			var $this = setUpTourists.eq(i),
-				noticeJson = $this.attr('touristgroup');
+		// var setUpTourists = $tab.find('.T-setUp')
+		// setUpTourists.each(function(i) {
+		// 	var $this = setUpTourists.eq(i),
+		// 		noticeJson = $this.attr('touristgroup');
 				
-			if (!!noticeJson && typeof noticeJson == 'string') {
-				noticeJson = JSON.parse(noticeJson);
-			}
-			if (noticeJson.length > 0) {
-				$this.text('已设置');
-			}else{
-				$this.text('点击设置');
-			}
-		})
+		// 	if (!!noticeJson && typeof noticeJson == 'string') {
+		// 		noticeJson = JSON.parse(noticeJson);
+		// 	}
+		// 	if (noticeJson.length > 0) {
+		// 		$this.text('已设置');
+		// 	}else{
+		// 		$this.text('点击设置');
+		// 	}
+		// })
 
 		$tab.find('.T-touristGroupList').on('click', '.T-groupView', function() {
 			var $this = $(this), $parent = $this.closest('tr'), id = $parent.data('id');
@@ -942,6 +945,7 @@ define(function(require, exports) {
 				if (showDialog(data)) {
 					data.touristGroupList = JSON.parse(data.touristGroupList);
 					data.busData = busData;
+					console.log(data)
 					var noticeTouristsLayer = layer.open({
 						type: 1,
 					    title:"选择游客小组",
@@ -1016,7 +1020,9 @@ define(function(require, exports) {
 								}
 								touristGroupJson = JSON.stringify(touristGroupJson);
 								$that.data('entity-touristgroup',touristGroupJson);
-								if (!!hasJson) {
+								$that.data('entity-setplacetime', $container.find('[name=setPlaceTimeTotal]').val())
+								$that.data('entity-setplaceposition', $container.find('[name=setPlacePositionTotal]').val())
+								if (!!hasJson || !!$container.find('[name=setPlaceTimeTotal]').val() || $container.find('[name=setPlacePositionTotal]').val()) {
 									$that.text('已设置');
 								}else{
 									$that.text('点击设置');
@@ -2420,13 +2426,11 @@ define(function(require, exports) {
 					var $this = $(this),parents = $(this).closest('tr');
 					$this.val("");
 					parents.find("input[name=driverId]").val("");
-					parents.find("input[name=driverMobileNumber]").val("");
 				}
 			},
 			select :function(event, ui){
 				var $this = $(this),parents = $(this).closest('tr');
 				parents.find("input[name=driverId]").val(ui.item.id).trigger('change');
-				parents.find("input[name=driverMobileNumber]").val(ui.item.mobileNumber);
 			}
 		}).unbind("click").click(function(){
 			var obj = this,
@@ -2443,7 +2447,7 @@ define(function(require, exports) {
 						var driverList = JSON.parse(data.driverList);
 						if(driverList && driverList.length > 0){
 							for(var i=0; i < driverList.length; i++){
-								driverList[i].value = driverList[i].name;
+								driverList[i].value = driverList[i].name+driverList[i].mobileNumber;
 							}
 							$(obj).autocomplete('option','source', driverList);
 							$(obj).autocomplete('search', '');
@@ -3506,10 +3510,10 @@ define(function(require, exports) {
 						brand : tripPlan.getVal(bus.eq(i), "brand"),
 						busId : tripPlan.getVal(bus.eq(i), "busId"),
 						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
-						setPlaceTime : tripPlan.getVal(bus.eq(i), "setPlaceTime"),
+						setPlaceTime : bus.eq(i).find('.T-noticeTourists').data('entity-setplacetime'),
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
 						payType2 : tripPlan.getVal(bus.eq(i), "payType2"),
-						setPlacePosition : tripPlan.getVal(bus.eq(i), "setPlacePosition"),
+						setPlacePosition : bus.eq(i).find('.T-noticeTourists').data('entity-setplaceposition'),
 						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
 						memberCount: tripPlan.getVal(bus.eq(i), "memberCount"),
@@ -3830,7 +3834,7 @@ define(function(require, exports) {
 			seatCount : "needSeatCount",
 			driverName : "driverName",
 			driverId : "driverId",
-			driverMobileNumber : "driverMobileNumber",
+			driverMobileNumber : "withName",
 			type : "tr"
 		}, KingServices.addBusDriverFunction);
 	};
