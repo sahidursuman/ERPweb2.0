@@ -100,7 +100,6 @@ define(function(require, exports) {
                         event.preventDefault();
 
                         ColGuest.listMain(
-                            '',
                             ColGuest.$searchArea.find('input[name="lineProductName"]').val(),
                             ColGuest.$searchArea.find('input[name="lineProductId"]').val(),
                             ColGuest.$searchArea.find('input[name="fromPartnerAgencyName"]').val(),

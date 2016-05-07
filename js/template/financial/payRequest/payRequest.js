@@ -51,8 +51,6 @@ define(function(require, exports) {
 					Pay.initList();
 				}
 
-				// 设置记录条数及页面
-                Pay.$tab.find('.T-sumItem').text('共计' + data.searchParam.totalCount + '条记录');
 				// 绑定翻页组件
                 laypage({
                     cont: Pay.$tab.find('.T-pagenation'),
@@ -133,8 +131,7 @@ define(function(require, exports) {
             event.preventDefault();
             $tab.data('isEdited', true);
         });
-        $tab.off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+        $tab.off().on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             Pay.savePayment($tab,$tab.data('next'));
         })
