@@ -1548,7 +1548,7 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" style="width: 60px;"></div></td>'
-					+ '<td><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"><button class="btn btn-success btn-sm btn-white show mar-l-5 T-addBusguidePay" index="0"><i class="fa bigger-110 icon-only fa-plus"></i></button></div></td>'
+					+ '<td style="text-align: left;"><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"><button class="btn btn-success btn-sm btn-white show mar-l-5 T-addBusguidePay" index="0"><i class="fa bigger-110 icon-only fa-plus"></i></button></div></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -2464,7 +2464,7 @@ define(function(require, exports) {
 		var restauranTyp = $tab.find(".T-restauranType");
 		restauranTyp.off("change").on("change", function(){
 			var parents = $(this).closest('tr');
-			parents.find("input[name=price]").val("");
+			parents.find("input[name=price]").val("").trigger('change');
 		});
 		var restaurantChoose = $tab.find(".T-chooseRestaurant");
 		restaurantChoose.autocomplete({

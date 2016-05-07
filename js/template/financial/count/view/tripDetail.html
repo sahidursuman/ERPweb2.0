@@ -24,7 +24,7 @@
             </tr>
         </tbody>
     </table>
-    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount+tripPlan.childCount}}"/>
+    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArranges.listMap.length}}">
     <input type="hidden" name='maxDay' value="{{tripPlan.maxDay}}">
     <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
@@ -83,7 +83,8 @@
             <td style="text-align:left"><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>自费费用：<span class="F-float F-money tripCost-selfArrangeNeedPayMoney">0</span></label></td>
-            <td style="text-align:left" colspan="2"><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
+            <td style="text-align:left"><label>导游结算扣款：<span class="F-float F-money tripCost-guidePunishMoney">0</span></label></td>
+            <td style="text-align:left"></td>
             <td style="text-align:left"><label>票务费用{{isOp}}：<span class="F-float F-money tripTransitCost-ticketArrangeNeedPayMoney">{{transfer.transferTicketMoney}}</span></label></td>
             <td></td>
         </tr>
@@ -311,7 +312,7 @@
                             {{if !!shopArrange.listMap &&shopArrange.listMap.length}}
                                 {{each shopArrange.listMap as arrange index}}
                                     {{if arrange != null}}
-                                    <tr class="oldData noSumRate " shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange">
+                                    <tr class="oldData noSumRate " shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange" isConfirmAccount = "{{arrange.isConfirmAccount}}">
                                         <td rowspan="{{arrange.itemList.length}}">
                                             <span>{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> 
                                         </td>
@@ -321,7 +322,8 @@
                                             {{arrange.shopName}}
                                             <input type="hidden" name="shopId" value="{{arrange.shopId}}">
                                         </td><!-- 购物店 -->
-                                        
+                                        <input value="{{arrange.settlementMoney}}" name="settlementMoney" type="hidden">
+                                        <!-- 用于当已对账时计算购物返佣的取值 -->
                                         {{if arrange.itemList != null}}
                                             {{each arrange.itemList as itemSet index}}
                                                 {{if index == 0}}
@@ -853,7 +855,7 @@
                         {{if selfpayArrange != null}}
                             {{if selfpayArrange.listMap.length}}
                                 {{each selfpayArrange.listMap as arrange index}}
-                                    <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}" arrangeType="selfArrange">
+                                    <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}" arrangeType="selfArrange" class="oldData">
                                         <td rowspan="{{arrange.selfPayItem.length}}">
                                         <div class="div-h-30"></div>
                                         <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
@@ -869,7 +871,8 @@
                                                         <div class="div-h-30"></div>
                                                         <span class="itemName">{{itemSet.itemName}}</span><!-- 自费项目 -->
                                                     </td>
-
+                                                    <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
+                                                    <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                                     <td>
                                                         <div class="div-h-30"></div>
                                                         <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->
@@ -1235,10 +1238,12 @@
                                             {{if index >0}}
                                                 <tr  badStatus = "{{itemSet.badStatus}}" whichDay = "{{arrange.whichDay}}"
                                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
-                                                    <td>
+                                                    <td class="{{if index+1 == arrange.selfPayItem.length}}breakFlag{{/if}}">
                                                         <div class="div-h-30"></div>
                                                         <span class="itemName">{{itemSet.itemName}}<input name="selfArrangeId" value="{{itemSet.id}}" type="hidden" /></span><!-- 自费项目 -->
                                                     </td>
+                                                    <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
+                                                    <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                                     <td>
                                                         <div class="div-h-30"></div>
                                                         <span class="realMarketPrice">{{itemSet.realMarketPrice}}</span><!-- 单价 -->

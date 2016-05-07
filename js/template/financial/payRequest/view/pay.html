@@ -1,0 +1,103 @@
+<div class="row T-search-area">
+    <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group mar-r-10">
+            <label class="control-label">对方单位：{{recored.unitName}}</label>
+            <label class="control-label marginLeft-30">账期：{{recored.startTime | dateFormat:"yyyy-MM-dd"}} — {{recored.endTime | dateFormat:"yyyy-MM-dd"}}</label>
+            <label class="control-label marginLeft-30">预付请款金额合计：<span class="T-unpayMoney F-float F-money">{{recored.needPay}}</span></label>
+            <label class="control-label marginLeft-30">已付金额合计：<span class="T-unpayMoney F-float F-money">{{recored.payed}}</span></label>
+            <label class="control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney F-float F-money">{{recored.unpay}}</span></label>
+        </div>
+        <div>
+            <div class="form-group mar-r-10 ">
+                <label class="control-label">本次付款金额合计：</label>
+                <label class="control-label">
+                    <input type="text" name="sumPayMoney" class="money F-float F-money" value="" disabled>
+                </label>
+            </div>
+            <div class="form-group mar-r-10">
+                <label class="control-label">付款方式：</label>
+                <select class="form-control" name="sumPayType">
+                   {{#recored.payType | getPayTypeOptions}}
+                </select>
+            </div>
+            <div class="form-group mar-r-10">
+                <label class="control-label">现金账号：</label>
+                <label class="control-label">
+                    <input type="text" name="cash-number"  class="money" style="width:300px;">
+                    <input type="hidden" name="cash-id"  />
+                </label>
+            </div>
+            <div class="form-group mar-r-10 T-bankDiv">
+                <label class="control-label">银行账号：</label>
+                <label class="control-label">
+                    <input type="text" name="card-number"  class="money" style="width:300px;">
+                    <input type="hidden" name="card-id"  />
+                </label>
+            </div>
+            <div class="form-group mar-r-10">
+                <label class="control-label">凭证编号：</label>
+                <label class="control-label">
+                    <input type="text" name="credentials-number" value="" />
+                </label>
+            </div>
+            <div class="form-group mar-r-10">
+                <label class="control-label">记账日期：</label>
+                <label class="control-label">
+                    <input type="text" name="tally-date" value="" style="width:140px;">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="control-label">备注：</label>
+                <label class="control-label">
+                    <input type="text" name="remark" value="" style="width:900px;">
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <table class="table table-striped table-bordered table-hover T-showHighLight T-contanier">
+        <thead>
+            <tr class='bg-blur T-tr-fixed'>
+                <th>账务类别</th>
+                <th>{{if recored.type == 1}}用餐{{else if recored.type == 2}}入住{{else if recored.type == 3}}用车{{else if recored.type == 4}}游玩{{else if recored.type == 5 || recored.type == 7 || recored.type == 8}}消费{{else if recored.type == 6}}发生{{/if}}日期(账期)
+                </th>
+                <th>人数</th>
+                <th>资源信息</th>
+                <th>预付请款金额</th>
+                <th>已付金额</th>
+                <th>未付金额</th>
+                <th>本次付款金额</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>{{if recored.number !=null && recored.number != ""}}{{recored.number}}
+                        {{if recored.lineName || recored.memberName}}，{{/if}}
+                    {{/if}}
+                    {{if recored.lineName != null && recored.lineName != ""}}{{recored.lineName}}
+                        {{if recored.memberName}}，{{/if}}
+                    {{/if}}
+                    {{if recored.memberName != null && recored.memberName != ""}}{{recored.memberName}}{{/if}}
+                </td>
+                <td>{{recored.startTime | dateFormat:"yyyy-MM-dd"}}{{if recored.type == 3}} ~ {{recored.endTime | dateFormat:"yyyy-MM-dd"}}{{/if}}</td>
+                <td>{{recored.adultCount}} 大 {{recored.childCount}} 小</td>
+                <td>{{recored.resourceName}}</td>
+                <td><span class="F-float F-money">{{recored.needPay}}</span></td>
+                <td><a class='F-float F-money T-action T-payedDetail'>{{recored.payed}}</a></td>
+                <td><span class="F-float F-money">{{recored.unpay}}</span></td>
+                <td><input name='payMoney' type='text' class='F-float F-money' maxlength='9' style="width：200px;" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <form class="form-horizontal" role="form" onsubmit="return false">
+        <div class="form-group" style="text-align: center;">
+            <button class="btn btn-xs btn-primary T-btn-close">
+                <i class="ace-icon fa fa-times-circle"></i>关闭
+            </button>
+            <button class="btn btn-xs btn-primary T-action T-savePayment" data-id="{{recored.id}}">
+                <i class="ace-icon fa fa-check-circle"></i>确认
+            </button>
+        </div>
+    </form>
+</div>
