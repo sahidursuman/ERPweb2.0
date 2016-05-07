@@ -1587,7 +1587,7 @@ define(function(require, exports){
 					};
 					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
-					console.log(data);
+					
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
