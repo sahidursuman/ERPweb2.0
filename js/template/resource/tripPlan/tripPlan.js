@@ -2464,7 +2464,7 @@ define(function(require, exports) {
 		var restauranTyp = $tab.find(".T-restauranType");
 		restauranTyp.off("change").on("change", function(){
 			var parents = $(this).closest('tr');
-			parents.find("input[name=price]").val("");
+			parents.find("input[name=price]").val("").trigger('change');
 		});
 		var restaurantChoose = $tab.find(".T-chooseRestaurant");
 		restaurantChoose.autocomplete({
