@@ -131,8 +131,7 @@ define(function(require, exports) {
             event.preventDefault();
             $tab.data('isEdited', true);
         });
-        $tab.off(SWITCH_TAB_SAVE).off(CLOSE_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT)
-        .on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
+        $tab.off().on(SWITCH_TAB_SAVE, function(event, tab_id, title, html) {
             event.preventDefault();
             Pay.savePayment($tab,$tab.data('next'));
         })

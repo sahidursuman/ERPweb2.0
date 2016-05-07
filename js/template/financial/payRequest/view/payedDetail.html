@@ -13,17 +13,17 @@
             </tr>
         </thead>
         <tbody>
-            {{each bookingAcountDetailList as item}}
+            {{each payedMoneyDetailList as item}}
             <tr>
-                <td>{{item.resourceType}}</td>
+                <td>{{item.receivableType}}</td>
                 <td>{{item.businessType}}</td>
-                <td>{{item.incomeOrPayParty}}</td>
-                <td><span class="F-float F-money">{{item.incomeMoney}}</span></td>
+                <td>{{item.payParty}}</td>
+                <td><span class="F-float F-money">{{item.payDifferenceMoney}}</span></td>
                 <td>{{if item.payType == 0}}现金{{else if item.payType == 1}}银行转账{{else if item.payType == 2}}网上支付{{else if item.payType == 3}}支票{{else}}其它{{/if}}</td>
                 <td>{{if item.accountName == null || item.accountName == ""}}-{{else}}{{item.accountName}}{{/if}}</td>
                 <td>{{item.remark}}</td>
-                <td>{{item.creatorName}}</td>
-                <td>{{item.createTime}}</td>
+                <td>{{item.checkRealname}}</td>
+                <td>{{item.checkTime}}</td>
             </tr>
             {{/each}}
         </tbody>
