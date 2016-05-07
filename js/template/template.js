@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -195,7 +195,8 @@
         }
     }), template.helper("getPlanPayTypeOption", function(status, isDisabled, type) {
         var res = "", dis = "";
-        return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="payType' + type + '" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
+        return isDisabled && (dis = "disabled"), type = type ? type : "", status = status || 0, 
+        res += '<select name="payType' + type + '" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
         res += '<option value="1" ' + (1 == status ? "selected" : "") + ">刷卡</option>", 
         res += '<option value="2" ' + (2 == status ? "selected" : "") + ">签单</option></select>";
     }), template.helper("getPlanPreTypeOption", function(status, isDisabled) {
@@ -216,8 +217,8 @@
           case 3:
             return "支票";
 
-          case 4:
-            return "其他";
+          case 5:
+            return "网付";
 
           case 6:
             return "冲抵";
@@ -226,7 +227,7 @@
             return "代收抵付";
 
           default:
-            return "网付";
+            return "其他";
         }
     }), template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
         switch (1 * billStatus) {

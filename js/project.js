@@ -2548,6 +2548,9 @@ KingServices.addBusDriverFunction = function(e){
 			if (!!data.driverData.name && !!driverName) {$parents.find('input[name='+driverName+']').val(data.driverData.name);}
 			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id).trigger('change');}
 			if (!!data.driverData.mobileNumber && !!driverMobileNumber) {$parents.find('input[name='+driverMobileNumber+']').val(data.driverData.mobileNumber);}
+			if (!!data.driverData.mobileNumber && driverMobileNumber == 'withName' && !!data.driverData.name && !!driverName) {
+				$parents.find('input[name='+driverName+']').val(data.driverData.name+data.driverData.mobileNumber);
+			}
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }
