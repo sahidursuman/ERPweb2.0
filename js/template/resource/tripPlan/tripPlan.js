@@ -3526,6 +3526,10 @@ define(function(require, exports) {
 						preType: tripPlan.getVal(bus.eq(i),"preType")
 
 					}
+					if (busJson.payType == busJson.payType2) {
+						showMessageDialog($("#confirm-dialog-message"),'第'+(i+1)+'个车安排计划导付付款方式相同，请修改')
+						return;
+					}
 					busCompanyArrange.push(busJson);
 				}else {
 					showMessageDialog($("#confirm-dialog-message"),'车辆安排中所属车队不能为空')

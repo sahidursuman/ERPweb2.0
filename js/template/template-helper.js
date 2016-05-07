@@ -174,6 +174,11 @@ template.helper("getPlanPayTypeOption", function(status, isDisabled, type) {
     if (isDisabled) {
         dis = 'disabled';
     }
+    if (!!type) {
+        type = type
+    }else{
+        type = '';
+    }
     status = status || 0;
     res += '<select name="payType'+type+'" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
     res += '<option value="1" '+(status == 1?'selected':'')+'>刷卡</option>';
