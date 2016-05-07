@@ -434,6 +434,7 @@
                                         <col style="width:80px;">
                                         <col style="width:80px;">
                                         <col style="width:150px;">
+                                        <col style="width:60px;">
                                         <col>
                                         <col style="width:100px;">
                                         <col style="width:140px;">
@@ -456,6 +457,7 @@
                                             <th class="th-border">应付</th>
                                             <th class="th-border">预付款</th>
                                             <th class="th-border">计划导付</th>
+                                            <th class="th-border">签单金额</th>
                                             <th class="th-border">备注</th>
                                             <th class="th-border">状态</th>
                                             <th class="th-border" width="160px;">操作</th>
@@ -535,15 +537,9 @@
                                             </td>
                                             <td class="text-left"><div class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption: busCompany.isConfirmAccount}}
                                                 <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
-                                                <span class="label-inline-40">{{if !busCompany.payType2}}<button class="T-addBusguidePay btn btn-success btn-sm btn-white show mar-l-5" index="0"> <i class="fa bigger-110 icon-only fa-plus"></i> </button>{{/if}}</span>
                                                 </div>
-                                                {{if !!busCompany.payType2}}
-                                                <div class="inline-flex mar-t-5">{{#busCompany.payType2 | getPlanPayTypeOption: busCompany.isConfirmAccount, 2}}
-                                                <input name="guidePayMoney2" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType2 == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
-                                                <span class="label-inline-40"><button class="T-delBusguidePay btn btn-danger btn-sm btn-white show mar-l-5" index="0"> <i class="fa bigger-110 icon-only fa-minus"></i> </button></span>
-                                                </div>
-                                                {{/if}}
                                             </td>
+                                            <td><input type="text" readonly name="signBillMoney" class="F-float F-money"></td>
                                             <td>
                                                 <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
