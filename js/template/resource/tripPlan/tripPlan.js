@@ -3524,7 +3524,7 @@ define(function(require, exports) {
 						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
 						setPlaceTime : bus.eq(i).find('.T-noticeTourists').data('entity-setplacetime'),
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
-						payType2 : tripPlan.getVal(bus.eq(i), "payType2"),
+						signBillMoney : tripPlan.getVal(bus.eq(i), "signBillMoney"),
 						setPlacePosition : bus.eq(i).find('.T-noticeTourists').data('entity-setplaceposition'),
 						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
@@ -3533,7 +3533,6 @@ define(function(require, exports) {
 						needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
 						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
 						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-						guidePayMoney2: tripPlan.getVal(bus.eq(i), "guidePayMoney2"),
 						remark: tripPlan.getVal(bus.eq(i), "remark"),
 						price: tripPlan.getVal(bus.eq(i), "price"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
@@ -3541,10 +3540,6 @@ define(function(require, exports) {
 						offerId: offerId,
 						preType: tripPlan.getVal(bus.eq(i),"preType")
 
-					}
-					if (busJson.payType == busJson.payType2) {
-						showMessageDialog($("#confirm-dialog-message"),'第'+(i+1)+'个车安排计划导付付款方式相同，请修改')
-						return;
 					}
 					busCompanyArrange.push(busJson);
 				}else {
