@@ -1602,10 +1602,22 @@ define(function(require, exports) {
             }
             F.calcWhicDay($tab);
             if (!!$tab.find('[name=startTime]').val()/* && !$tab.find('[name=endTime]').val()*/) {
-                $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
+                $tab.find('[name=startTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
             }
             $(this).data("clicked",true);
         }).trigger('change'); 
+         $tab.find('[name="endTime"]').off('changeDate').on('changeDate', function(){
+            //F.arrangeDate($tab);
+            if (!$(this).data('clicked') && $(this).data('add')) {
+                F.arrangeDate($tab);
+            }
+            F.calcWhicDay($tab);
+            if (!!$tab.find('[name=endTime]').val()/* && !$tab.find('[name=endTime]').val()*/) {
+                $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="endTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
+            }
+            $(this).data("clicked",true);
+        }).trigger('change'); 
+
         F.arrangeDate($tab);
         $tab.off('changeDate.whichDayDate').on('changeDate.whichDayDate', '[name=whichDayDate]', function() {
             F.calcWhicDay($tab);
