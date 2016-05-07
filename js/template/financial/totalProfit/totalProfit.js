@@ -59,6 +59,11 @@ define(function(require, exports) {
             TotalProfit.getCountData(args);
         }).trigger('click');
 
+        //导出
+        TotalProfit.$searchArea.find('.T-export').off().on('click', function(){
+            TotalProfit.getListData(-1)
+        })
+
         TotalProfit.getOPUserList(TotalProfit.$searchArea.find('[name="outOPUserName"]'));
         TotalProfit.getGroupMapList(TotalProfit.$searchArea.find('[name="groupName"]'));
         TotalProfit.getBusinessList(TotalProfit.$searchArea.find('[name="businessName"]'));
@@ -80,6 +85,16 @@ define(function(require, exports) {
                 pageNo: page || 0
             }
         }
+        if (page == -1) {
+            if (!args.startTime || !args.endTime) {
+                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                    return;
+                }); 
+            }
+            exportXLS( APP_ROOT + 'back/export.do?method=exportTotalProfit&token='+ $.cookie("token") +'&'+ $.param(args));
+            return;
+        }
+
         $.ajax({
             url:KingServices.build_url("financialTotal","findPager"),
             data:args,

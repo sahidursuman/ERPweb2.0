@@ -53,10 +53,10 @@ define(function(require, exports){
 	};
 	//暴露的方法--初始化列表
 	Count.initModule = function(){
-		Count.listCountHeader(0,'','','','','','','')
+		Count.listCountHeader(0,'','','','','','','','','','')
 	};
 	//列表头部
-	Count.listCountHeader = function(pageNo,id,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status){
+	Count.listCountHeader = function(pageNo,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status,orderNumber,contactInfo){
 
 		var timeStatus;
 		if(Count.$searchArea && arguments.length === 1){
@@ -68,7 +68,9 @@ define(function(require, exports){
 			endTime = Count.$searchArea.find('input[name=endTime]').val();
 			startTime = Count.$searchArea.find('input[name=startTime]').val();
 			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value")
+			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value");
+			orderNumber = Count.$searchArea.find('input[name=orderNumber]').val();
+			contactInfo = Count.$searchArea.find('input[name=contactInfo]').val();
 		} 
 		timeStatus = timeStatus || 0
 		//修正页码
@@ -85,7 +87,9 @@ define(function(require, exports){
                 billStatus:status,
                 lineProductName:lineProductName,
                 guideName:guideName,
-                timeStatus : timeStatus
+                timeStatus : timeStatus,
+                orderNumber : orderNumber,
+                contactInfo : contactInfo
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -107,7 +111,9 @@ define(function(require, exports){
 		                billStatus:status,
 		                lineProductName:lineProductName,
 		                guideName:guideName,
-		                timeStatus : timeStatus
+		                timeStatus : timeStatus,
+		                orderNumber : orderNumber,
+		                contactInfo : contactInfo
 					};
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
@@ -1720,9 +1726,35 @@ define(function(require, exports){
 	};
 	//打印页面
 	Count.exportsOutDetail = function($obj){
+
 		$obj.print({
 			globalStyles:true,
+			deferred:Count.setPrintStyle($obj)
 		});
+		var thLen = parseFloat($obj.find('th[colspan]').attr('colspan')),
+			sumTr = $obj.find('.T-sum-td'),
+			nweThColspan = thLen + 1;
+			sumTr.each(function(){
+				var $that = $(this),
+					thisColspan = parseFloat($that.attr('colspan')),
+					newThisCol = thisColspan + 1
+				$that.attr('colspan',newThisCol);
+			});
+		$obj.find('th[colspan]').attr('colspan',nweThColspan);
+	};
+	//设置打印时的样式T-img-th
+	Count.setPrintStyle = function($obj){
+
+		var thLen = $obj.find('th[colspan]').attr('colspan'),
+			sumTr = $obj.find('.T-sum-td'),
+			nweThColspan = thLen - 1;
+			sumTr.each(function(){
+				var $that = $(this),
+					thisColspan = $that.attr('colspan'),
+					newThisCol = thisColspan - 1
+				$that.attr('colspan',newThisCol);
+			});
+			$obj.find('th[colspan]').attr('colspan',nweThColspan);
 	};
 	//质量统计
 	Count.getquality = function(id){
@@ -2279,16 +2311,27 @@ define(function(require, exports){
 			$showConsumeMoney = $tr.find('.sumConsumeMoney'),
 			$shopGuideMoney = $tr.find('input[name=shopGuideMoney]'),
 			$guideRateMoney = $shopList.find('input[name=guideRateMoney]'),
-			$travelMoney = $shopList.find('input[name=travelAgencyRateMoney]');
-			$twoRebateMoney = $shopList.find('input[name=twoRebateMoney]');
-			$quanpeiRebateMoney = $shopList.find('input[name=quanpeiRebateMoney]');
-
-		var sumMoney = 0,sumSGmoney = 0,sumgMoney = 0,sumtMoney = 0,sumtwoRebateMoney = 0,sumgQuanpMoney = 0;
+			$quanpeiRebateMoney = $shopList.find('input[name=quanpeiRebateMoney]'),
+			$oldDataTr = $shopList.find('.oldData'),
+			sumShopMoney = 0,sumgMoney = 0,sumgQuanpMoney = 0,sumSGmoney = 0;
 		$shopGuideMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumSGmoney += sum;
 		});
-		
+
+		$oldDataTr.each(function(){
+			var $that = $(this),
+				isConfirmAccount = $that.attr('isConfirmAccount'),
+				shopMoney = 0;
+				
+			if(!!isConfirmAccount && isConfirmAccount == 1){
+				var m = $that.find('input[name=settlementMoney]').val();
+				shopMoney =Count.changeTwoDecimal(m);
+			}else{
+				var shopMoney = Count.getShopMoney($that);
+			};
+			sumShopMoney += shopMoney
+		});
 		$guideRateMoney.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgMoney += sum;
@@ -2297,20 +2340,11 @@ define(function(require, exports){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgQuanpMoney += sum;
 		});
-		$travelMoney.each(function(){
-			var sum = Count.changeTwoDecimal($(this).val());
-			sumtMoney += sum;
-		});
-		$twoRebateMoney.each(function(){
-			var sum = Count.changeTwoDecimal($(this).val());
-			sumtwoRebateMoney += sum;
-		});
 		if(!$tr.hasClass('noSumRate')){
 			$sumConsumeMoney.val(sumSGmoney)//金额小计
 			$showConsumeMoney.text(sumSGmoney);
 		};
-		sumMoney = Count.changeTwoDecimal(sumgMoney+sumtMoney+sumtwoRebateMoney+sumgQuanpMoney);//购物收入
-
+		sumMoney = Count.changeTwoDecimal(sumShopMoney);//购物收入
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
 		$mainTable.find('.tripIncome-shopIncomeMoney').text(sumMoney);
@@ -2325,6 +2359,39 @@ define(function(require, exports){
 		//计算金额合计
 		Count.totalRebeatMoney($obj,$parentObj);
 	};
+	//获取未对账的购物店的购物金额
+	Count.getShopMoney = function($tr){
+		var $nextTr = $tr.nextAll(),itemShopMoney = 0,
+			twoMoney = Count.changeTwoDecimal($tr.find('input[name=twoRebateMoney]').val()),
+			gMoney = Count.changeTwoDecimal($tr.find('input[name=guideRateMoney]').val()),
+			qMoney = Count.changeTwoDecimal($tr.find('input[name=quanpeiRebateMoney]').val()),
+			tMoney = Count.changeTwoDecimal($tr.find('input[name=travelAgencyRateMoney]').val());
+			
+		for(var i = 0;i<$nextTr.length;i++){
+			var $that = $nextTr.eq(i),
+				$guideRateMoney = $that.find('input[name=guideRateMoney]'),
+				$quanpeiRebateMoney = $that.find('input[name=quanpeiRebateMoney]'),
+				$travelMoney = $that.find('input[name=travelAgencyRateMoney]');
+
+			$guideRateMoney.each(function(){
+				var sum =Count.changeTwoDecimal($(this).val());
+				gMoney += sum;
+			});
+			$quanpeiRebateMoney.each(function(){
+				var sum =Count.changeTwoDecimal($(this).val());
+				qMoney += sum;
+			});
+			$travelMoney.each(function(){
+				var sum =Count.changeTwoDecimal($(this).val());	
+				tMoney += sum;
+			});
+			if($that.hasClass('sumMoney')){
+				itemShopMoney  += Count.changeTwoDecimal(gMoney+qMoney+tMoney+twoMoney);
+				break;
+			}
+		}
+		return itemShopMoney;
+	};
 	//购物--计算金额合计
 	Count.totalRebeatMoney = function($obj,$parentObj){
 		var $thisTr = $obj.closest('tr');
@@ -2332,7 +2399,6 @@ define(function(require, exports){
 		var sumTd_cnt = 0,sumScenondMoney = 0,sumRebeMoney = 0;//二次返佣合计;
 		if($thisTr.hasClass('oldData')){
 			td_cnt = $thisTr.children('td').length;
-			
 		};
 		var thisTdLen = $thisTr.children('td').length;
 
@@ -2605,6 +2671,7 @@ define(function(require, exports){
 		var selfArrangeNeedPayMoney = $obj.find('.tripCost-selfArrangeNeedPayMoney').text();
 		var quanpeiShopNeedPayMoney = $obj.find('.quanpei-shopFee').text();
 		var quanpeiSelfNeedPayMoney = $obj.find('.tripCostQuanpei-SelfFee').text();
+		var guidePunishMoney = $obj.find('.tripCost-guidePunishMoney').text();
 
 		var tripIncome = $obj.find('.tripIncome').text();
 		var tripTransitCost = $obj.find('.tripTransitCost').text();
@@ -2623,12 +2690,13 @@ define(function(require, exports){
 		selfArrangeNeedPayMoney = Count.changeTwoDecimal(selfArrangeNeedPayMoney);
 		quanpeiShopNeedPayMoney = Count.changeTwoDecimal(quanpeiShopNeedPayMoney);
 		quanpeiSelfNeedPayMoney = Count.changeTwoDecimal(quanpeiSelfNeedPayMoney);
+		guidePunishMoney = Count.changeTwoDecimal(guidePunishMoney);
 		tripIncome = Count.changeTwoDecimal(tripIncome);
 		tripTransitCost = Count.changeTwoDecimal(tripTransitCost);
 		allPerson = Count.changeTwoDecimal(allPerson);
 		//计算团成本
 		var tripSum = (guideArrangePrice+insuranceArrangeNeedPayMoney+busCompanyNeedPayMoney+guideshopFee+restaurantArrangeNeedPayMoney);
-		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney+quanpeiShopNeedPayMoney+quanpeiSelfNeedPayMoney);
+		var tripCostSum = (hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+guideSelfMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney+selfArrangeNeedPayMoney+quanpeiShopNeedPayMoney+quanpeiSelfNeedPayMoney+guidePunishMoney);
 		tripSum = Count.changeTwoDecimal(tripSum);
 		tripCostSum = Count.changeTwoDecimal(tripCostSum);
 		var allSum = (tripSum+tripCostSum);
@@ -2673,7 +2741,8 @@ define(function(require, exports){
 	Count.autoGuideSum = function($obj,$parentObj){
 		var	$priceObj = $obj.find('input[name=price]'),
 			$manageFeeObj = $obj.find('input[name=manageFee]'),
-			sumPrice = 0,sumManageFee = 0;
+			$guidePushMoneyObj = $obj.find('.guidePunishMoney'),
+			sumPrice = 0,sumManageFee = 0,punishMoney = 0;
 		$priceObj.each(function(){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumPrice += sum;
@@ -2684,6 +2753,12 @@ define(function(require, exports){
 			sumManageFee += sum;
 		});
 
+		$guidePushMoneyObj.each(function(){
+			var sum = Count.changeTwoDecimal($(this).text());
+			punishMoney += sum;
+		});
+
+		$parentObj.find('.tripCost-guidePunishMoney').text(punishMoney);
 		$parentObj.find('.tripCost-guideArrangePrice').text(sumPrice);
 		$parentObj.find('.tripIncome-guideManageMoney').text(sumManageFee);
 		//计算团收入
@@ -2906,25 +2981,40 @@ define(function(require, exports){
 	Count.autoSelfSum = function($obj,$parentObj){
 			Count.computeSelfCost($obj,$parentObj);
 			//计算团收入--自费收入
-			var $bodyObj = $parentObj.find('.T-main-table');
-			var shopRebateMoney = 0;
-			var selfMoney = 0;
-			var guideRebateMoney = 0;
-			var quanpeiSelfRebateMoney = 0;
-			var $mainTr = $parentObj.find('.T-count-selfPay');
-			$mainTr.find('input[name=realNeedPayMoney]').each(function() {
-				var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
-				selfMoney += totalSum;
+			var $bodyObj = $parentObj.find('.T-main-table'),
+				selfIn = 0,selfCost = 0,selfGCost = 0,
+				shopRebateMoney = 0 ,quanpeiSelfRebateMoney = 0,guideRebateMoney = 0,
+				$tbodyObj = $parentObj.find('.T-count-selfPay'),
+				oldDataTr = $tbodyObj.find('.oldData');
+			oldDataTr.each(function(){
+				var $that = $(this),
+					itemSelfCost = 0,
+					rowspan = $that.children('td[rowspan]').eq(0).attr('rowspan');
+				if(rowspan == 1){
+					var isConfirmAccount = $that.find('input[name=isConfirmAccount]').val();
+					if(isConfirmAccount == 1 && !!isConfirmAccount){
+						itemSelfCost += Count.changeTwoDecimal($that.find('input[name=settlementMoney]').val());
+					}else{
+						var $realNeedPayMoney = $that.find('input[name=realNeedPayMoney]')
+						$realNeedPayMoney.each(function(){
+							itemSelfCost += Count.changeTwoDecimal($(this).val());
+						});
+					}
+				}else{
+					itemSelfCost += Count.sumNotAccSelfMoney($that);
+				}
+				selfCost += itemSelfCost;
 			});
-			$mainTr.find('input[name=needIncome]').each(function() {
+			
+			$tbodyObj.find('input[name=needIncome]').each(function() {
 				var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
 				shopRebateMoney += totalSum;
 			});
-			$mainTr.find('input[name=guideRebateMoney]').each(function() {
+			$tbodyObj.find('input[name=guideRebateMoney]').each(function() {
 				var t = Count.changeTwoDecimal(parseFloat($(this).val()));
 				guideRebateMoney += t;
 			});
-			$mainTr.find('input[name=quanpeiRebateMoney]').each(function() {
+			$tbodyObj.find('input[name=quanpeiRebateMoney]').each(function() {
 				var t = Count.changeTwoDecimal(parseFloat($(this).val()));
 				quanpeiSelfRebateMoney += t;
 			});
@@ -2939,7 +3029,39 @@ define(function(require, exports){
 			//计算全陪自费导佣
 			$parentObj.find('.tripCostQuanpei-SelfFee').text(quanpeiSelfRebateMoney);
 			//计算自费费用
-			$parentObj.find('.tripCost-selfArrangeNeedPayMoney').text(selfMoney);
+			$parentObj.find('.tripCost-selfArrangeNeedPayMoney').text(selfCost);
+	};
+	//计算未对账的自费金额
+	Count.sumNotAccSelfMoney = function($trObj){
+		var $nextTr = $trObj.nextAll(),selfMoney = 0;
+		if($nextTr.length>1){
+			for(var i = 0;i<$nextTr.length;i++){
+				var $that = $nextTr.eq(i);
+				selfMoney += sumMoney($that);
+				if($that.hasClass('breakFlag')){
+					selfMoney += sumMoney($trObj);
+					break;
+				}
+			};
+		}else{
+			selfMoney += sumMoney($nextTr.eq(0));
+			selfMoney += sumMoney($trObj);
+		}
+		
+		function sumMoney ($tr){
+			var isConfirmAccount = $tr.find('input[name=isConfirmAccount]').val(),
+				sum = 0;
+			if(isConfirmAccount == 1 && !!isConfirmAccount){
+				sum += Count.changeTwoDecimal($tr.find('input[name=settlementMoney]').val());
+			}else{
+				var $realNeedPayMoney = $tr.find('input[name=realNeedPayMoney]')
+				$realNeedPayMoney.each(function(){
+					sum += Count.changeTwoDecimal($(this).val());
+				});
+			}
+			return sum;
+		};
+		return selfMoney;
 	};
 	Count.computeSelfCost = function($obj,$parentObj){
 		/*
@@ -3043,7 +3165,7 @@ define(function(require, exports){
 	//新增自费安排
 	Count.addSelf = function($obj,$parentObj){
 		
-		var td = '<td name="selfGuideName">'+
+		var td = '<td name="selfGuideName" >'+
 				'<div class="div-h-30">'+
 					'<button class="btn btn-success  btn-sm btn-white T-addSelfGuide pull-right">'+
 	                    '<i class="ace-icon fa fa-plus  bigger-110 icon-only"></i>'+
@@ -3058,8 +3180,8 @@ define(function(require, exports){
 				'</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"selfGuideName",$parentObj);
-		var html = '<tr arrangeType="selfArrange">'+
-			'<td class="countWhichDaysContainer"><div class="div-h-30"></div></td>'+
+		var html = '<tr arrangeType="selfArrange" class="oldData">'+
+			'<td class="countWhichDaysContainer" rowspan="1"><div class="div-h-30"></div></td>'+
 			'<td><div class="div-h-30"></div><input type="text" name="selfPayName" class="w-70"><input type="hidden" name="selfPayId"></td>'+
 			'<td><div class="div-h-30"></div><input name="selfPayItem" class="w-70" type="text"><input type="hidden" name="selfPayItemId"></td>'+
 			'<td><div class="div-h-30"></div><input name="marketPrice" class="w-50" type="text"></td>'+
@@ -4100,8 +4222,18 @@ define(function(require, exports){
 					var $mainTr = $parentObj.find('.T-count-restaurant');
 					var sum = 0;
 					$mainTr.find('.realNeedPayMoney').each(function() {
-						var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
-						sum += totalSum;
+						var $tr = $(this).closest('tr'),
+							isChoose = $tr.attr('ischoose');
+						if(isChoose == 1 && !!isChoose){
+							var $guideMoney = $tr.find('input[name=guidePayedMoney]');
+								$guideMoney.each(function(){
+									var totalSum = Count.changeTwoDecimal(parseFloat($(this).val()));
+									sum += totalSum;
+								});
+						}else{
+							var totalSum = Count.changeTwoDecimal(parseFloat($(this).text()));
+							sum += totalSum;
+						}
 					});
 					sum = Count.changeTwoDecimal(sum);
 					$parentObj.find('.tripCost-restaurantArrangeNeedPayMoney').text(sum);

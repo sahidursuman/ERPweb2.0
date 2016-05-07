@@ -174,6 +174,15 @@ define(function(require, exports) {
             sortType: 'auto'
         };
 
+        if (page == -1) {
+            if (!replace.searchData.startTime || !replace.searchData.endTime) {
+                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                    return;
+                }); 
+            }
+            exportXLS( APP_ROOT + 'back/export.do?method=exportBookingOrderProfit&token='+ $.cookie("token") +'&'+ $.param(replace.searchData));
+            return;
+        }
         $.ajax({
             url : KingServices.build_url("profitBooking","listFinancialBookingOrder"),
             type  :"POST",
@@ -198,6 +207,11 @@ define(function(require, exports) {
                     replace.$tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
                         replace.listReplace(0);
+                    });
+                    //导出 
+                     replace.$tab.find('.T-export').off().on('click', function(event) {
+                        event.preventDefault();
+                        replace.listReplace(-1);
                     });
                     replace.getOPUserList(replace.$tab.find('[name="outOPUserName"]'), replace.outOPUserList);
                     replace.getGroupMapList(replace.$tab.find('[name="groupName"]'));

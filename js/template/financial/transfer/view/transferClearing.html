@@ -133,6 +133,7 @@
                 <th>出游日期</th>
                 <th>客户</th>
                 <th>人数</th>
+                <th>游客联系人</th>
                 <th>操作人</th>
                 <th>操作时间</th>
                 <th>外转金额</th>
@@ -160,6 +161,7 @@
                         <span class="F-float F-count">{{rs.childCount}}</span> 小
                     </a>
                 </td>
+                <td rowspan="{{rs.rowLen}}">{{if !!rs.touristContact}}{{rs.touristContact.name}}{{/if}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.operateName}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
                 <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
