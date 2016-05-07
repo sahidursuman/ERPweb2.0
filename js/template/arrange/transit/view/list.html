@@ -13,34 +13,25 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight">
     <thead>
         <tr class="bg-blur T-tr-fixed">
-            <th rowspan="2">中转信息</th>
-            <th colspan="8">接团</th>
-            <th colspan="8">送团</th>
-            <th rowspan="2">安排人</th>
-            <th rowspan="2">状态</th>
-            <th rowspan="2">操作</th>
+            <th>中转信息</th>
+            <th>时间</th>
+            <th>班次</th>
+            <th>酒店要求</th>
+            <th>车</th>
+            <th>房</th>
+            <th>餐</th>
+            <th>票</th>
+            <th>它</th>
+            <th>接送团</th>
+            <th>安排人</th>
+            <th>状态</th>
+            <th>操作</th>
         </tr>
         <tr class="bg-blur T-tr-fixed">
-            <th>时间</th>
-            <th>班次</th>
-            <th>酒店要求</th>
-            <th>车</th>
-            <th>房</th>
-            <th>餐</th>
-            <th>票</th>
-            <th>它</th>
-            <th>时间</th>
-            <th>班次</th>
-            <th>酒店要求</th>
-            <th>车</th>
-            <th>房</th>
-            <th>餐</th>
-            <th>票</th>
-            <th>它</th>
         </tr>
     </thead>
     <tbody>{{each outRemarkArrangeList as transit}}
-        <tr data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" data-isEdit="{{transit.touristGroupOutRemark.isEdit}}">
+        <tr data-entity-id="{{if transit.touristGroupOutRemark != null}}{{transit.touristGroupOutRemark.id}}{{/if}}" data-out-remark-id="{{transit.id}}" data-isEdit="{{transit.touristGroupOutRemark.isEdit}}">
             <td class="h-touristGroupInfo">
               {{if !!transit.orderNumber}}
                 <p><span class="h-orderNumber">中转单号：{{transit.orderNumber}}</span></p>
@@ -74,6 +65,7 @@
               {{/if}}
               </p>
             </td>
+            {{if transit.shuttleType == 1}}
             <td>{{transit.arriveTime | dateTimeHSFormat}}</td>
             <td>{{transit.arriveShift}}</td>
             <td>{{transit.receiveHotelRequire}}</td>
@@ -82,6 +74,7 @@
             <td data-target="transit_receive_restaurant" class="receiveRestaurantStatus" data-status="{{transit.receiveRestaurantStatus}}"><i class="ace-icon fa {{transit.receiveRestaurantStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_receive_ticket" class="receiveTicketStatus" data-status="{{transit.receiveTicketStatus}}"><i class="ace-icon fa {{transit.receiveTicketStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_receive_other" class="receiveOtherStatus" data-status="{{transit.receiveOtherStatus}}"><i class="ace-icon fa {{transit.receiveOtherStatus | getArrangeIcon}}"></i></td>
+            {{else}}
             <td>{{transit.leaveTime | dateTimeHSFormat}}</td>
             <td>{{transit.leaveShift}}</td>
             <td>{{transit.sendHotelRequire}}</td>
@@ -90,6 +83,8 @@
             <td data-target="transit_send_restaurant" class="sendRestaurantStatus" data-status="{{transit.sendRestaurantStatus}}"><i class="ace-icon fa {{transit.sendRestaurantStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_send_ticket" class="sendTicketStatus" data-status="{{transit.sendTicketStatus}}"><i class="ace-icon fa {{transit.sendTicketStatus | getArrangeIcon}}"></i></td>
             <td data-target="transit_send_other" class="sendOtherStatus" data-status="{{transit.sendOtherStatus}}"><i class="ace-icon fa {{transit.sendOtherStatus | getArrangeIcon}}"></i></td>
+            {{/if}}
+            <td>{{if transit.shuttleType == 1}}接团{{else if transit.shuttleType == 2}}送团{{else}}-{{/if}}</td>
             <td>{{if transit.arrangeUser != null}}{{transit.arrangeUser.realName}}{{else}}-{{/if}}</td>
             <td style="width: 100px;">{{if transit.status == 1}}
                 <i class="ace-icon fa fa-check green bigger-130"></i> 已安排 {{else if transit.status == 0}}

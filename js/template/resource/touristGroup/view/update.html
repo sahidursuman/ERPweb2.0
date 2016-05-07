@@ -420,9 +420,11 @@
 
 						            <div class="col-xs-12 T-action-require-list T-receive-list">
 						            {{if touristGroupDetail.outTransferRequire.reciveTrip.length>0}}
+
+                                        {{if !!touristGroupDetail.outRemarkArrange}}
+                                        {{each touristGroupDetail.outRemarkArrange as rs}}
+                                        {{if rs.shuttleType == 1}}
 							            <div class="require-commons">
-                                            {{each touristGroupDetail.outRemarkArrange as rs}}
-                                            {{if rs.shuttleType == 1}}
 										    <div class="form-inline" style="padding:14px 0 7px 14px;">
 										        <div class="fixed-width">
 										        	<span class="necessary">*</span><label class="mar-r-10">接团时间</label>
@@ -449,7 +451,9 @@
 										    </div>
 										</div>
                                         {{/if}}
-                                    {{/each}}
+                                        {{/each}}
+                                        {{/if}}
+                                        
 									 {{each touristGroupDetail.outTransferRequire.reciveTrip as recive}}
 	                                    {{if recive.requireType =='receiveBus'}}
 		                                 <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{recive.id}}" data-type="{{recive.requireType}}">
@@ -576,7 +580,9 @@
 						            {{/if}}
 
 						            <div class="col-xs-12 T-action-require-list T-leave-list">
-						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}\
+						            {{if touristGroupDetail.outTransferRequire.sendTrip.length>0}}
+
+                                    {{if !!touristGroupDetail.outRemarkArrange}}
                                     {{each touristGroupDetail.outRemarkArrange as rs}}
                                     {{if rs.shuttleType == 2}}
 								       <div class="require-commons">
@@ -607,6 +613,8 @@
 										</div>
                                         {{/if}}
                                         {{/each}}
+                                        {{/if}}
+
 									      {{each touristGroupDetail.outTransferRequire.sendTrip as send}}
 		                                    {{if send.requireType =='sendBus'}}
 			                                 <div class="col-xs-10 hct-plan-ask" style="padding-bottom:0px;" data-id="{{send.id}}" data-type="{{send.requireType}}">

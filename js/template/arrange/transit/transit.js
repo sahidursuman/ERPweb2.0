@@ -172,7 +172,11 @@ define(function(require, exports) {
 					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));
 
 					transit.$tab.find('tbody').off('click').on('click', '.T-action', function() {
-						var $this = $(this),id = $this.closest('tr').data('entity-id'), $parents = $this.closest('tr');
+						var $this = $(this),
+							$tr = $this.closest('tr'),
+							touristGroupId = $tr.data('entity-id'),
+							outRemarkId = $tr.data('out-remark-id'),
+							$parents = $this.closest('tr');
 						if ($this.hasClass('T-send')) {
 							//通知
 							var status = {
@@ -187,17 +191,17 @@ define(function(require, exports) {
 								sendTicketStatus: $parents.find('.sendTicketStatus').data('status'),
 								sendOtherStatus: $parents.find('.sendOtherStatus').data('status')
 							}
-							transit.sendTransit(id, status);
+							transit.sendTransit(touristGroupId, status);
 						}else if ($this.hasClass('T-edit')) {
 							//编辑
 							transit.pageNo = page;
-							transit.updateTransit(id);
+							transit.updateTransit(touristGroupId, false, false, false, outRemarkId);
 						}else if ($this.hasClass('T-view')) {
 							//查看
-							transit.viewTransit(id);
+							transit.viewTransit(touristGroupId);
 						}else if ($this.hasClass('T-export')) {
 							//导出
-							transit.exportTransit(id);
+							transit.exportTransit(touristGroupId);
 						}
 					});
 					// 绑定翻页组件
@@ -217,7 +221,7 @@ define(function(require, exports) {
 						var $this = $(this).find('.ace-icon');
 						if(!$this.hasClass('fa-minus') && $this.length > 0){
 							transit.pageNo = page;
-							transit.updateTransit($this.closest('tr').data('entity-id'),'','',$this.closest('td').data("target"));
+							transit.updateTransit($this.closest('tr').data('entity-id'),'','',$this.closest('td').data("target"), $this.closest('tr').data('out-remark-id'));
 						}
 					});	
 				}
@@ -365,13 +369,14 @@ define(function(require, exports) {
 	 * @param  {[type]} id [安排ID]
 	 * @return {[type]}    [description]
 	 */
-	transit.updateTransit = function(id, isOuter,$tab,target) {
+	transit.updateTransit = function(id, isOuter,$tab,target, outRemarkId) {
 		$.ajax({
 			url: KingServices.build_url('touristGroup','getTouristGroupTransitArrange'),
 			type:"POST",
-			data:"id="+id,
+			data: {touristGroupId: id, outRemarkId: outRemarkId},
 			success:function(data){
 				if(showDialog(data)){
+					data.outRemarkId = outRemarkId;
 					data.bus = JSON.parse(data.bus);
 					data.receiveGroup.outBusList = JSON.parse(data.receiveGroup.outBusList);
 					data.receiveGroup.outHotelList = JSON.parse(data.receiveGroup.outHotelList);
@@ -1592,9 +1597,8 @@ define(function(require, exports) {
 		})
 		touristGroupArrange.receiveUserIdList = transit.receiveUserIdList;
 		//小组ID
-		touristGroupArrange.touristGroup = {
-			id : $tab.find('[name=touristGroup]').val()
-		};
+		touristGroupArrange.touristGroupId = $tab.find('[name=touristGroup]').val();
+		touristGroupArrange.outRemarkId = $tab.find('[name=outRemarkId]').val();
 		//接送车安排 JSON
 		var receptionOutBusTr = $tab.find(".busListTable tbody tr");
 		transit.outBusJson(receptionOutBusTr,touristGroupArrange.outBusList);
@@ -1631,7 +1635,7 @@ define(function(require, exports) {
 							}else{
 								$tab.data('isEdited',false);
 								Tools.addTab(tab_id, title, html)
-								transit.updateTransit($tab.find('[name=touristGroup]').val());
+								transit.updateTransit($tab.find('[name=touristGroup]').val(), false, false, false, $tab.find('[name=outRemarkId]').val());
 							}
 						}else {
 							Tools.closeTab(menuKey+"-update");
@@ -1775,7 +1779,5 @@ define(function(require, exports) {
 
 	exports.init = transit.initModule;
 	exports.viewTransit = transit.viewTransit;
-	exports.updateTransit = function(id, isOuter) {
-		transit.updateTransit(id, isOuter);
-	}
+	exports.updateTransit = transit.updateTransit;
 })
