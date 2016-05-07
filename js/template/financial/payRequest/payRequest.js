@@ -51,8 +51,6 @@ define(function(require, exports) {
 					Pay.initList();
 				}
 
-				// 设置记录条数及页面
-                Pay.$tab.find('.T-sumItem').text('共计' + data.searchParam.totalCount + '条记录');
 				// 绑定翻页组件
                 laypage({
                     cont: Pay.$tab.find('.T-pagenation'),
