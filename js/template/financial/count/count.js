@@ -3654,18 +3654,11 @@ define(function(require, exports){
 		var $busFee = parseFloat($tr.find('input[name=price]').val());
 		var $realReduceMoney = parseFloat($tr.find('input[name=realReduceMoney]').val());
 		var $planNeedpay = $tr.find('input[name=needPayMoney]').val();
-		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount'),
-			payedMoney = $tr.find('[name=payedMoney]').text()*1,
-			guidePayedMoney = $tr.find('[name=guidePayedMoney]'),
-			guidePayedAll = 0;
+		var badStatus = $tr.attr('badStatus'),isConfirmAccount = $tr.attr('isConfirmAccount');
 		//规范数据
 		$busFee = Count.changeTwoDecimal($busFee);
 		$realReduceMoney = Count.changeTwoDecimal($realReduceMoney);
 		$planNeedpay = Count.changeTwoDecimal($planNeedpay);
-		guidePayedMoney.each(function(index) {
-			var $this = guidePayedMoney.eq(index);
-			guidePayedAll += $this.val()*1;
-		});
 		//计算应付
 		var needPay = 0;
 		needPay = parseFloat($busFee-$realReduceMoney);
@@ -3673,7 +3666,6 @@ define(function(require, exports){
 		if((badStatus == 0  || badStatus == undefined) && (isConfirmAccount == 0  || isConfirmAccount == undefined)){
 			$tr.find('.BusneedPayMoney').text(needPay);
 		}
-		$tr.find('[name=signBillMoney]').text(needPay - payedMoney - guidePayedAll);
 		//计算团成本--车费
 		var $bodyObj = $parentObj.find('.T-main-table');
 		var shopRebateMoney = 0;

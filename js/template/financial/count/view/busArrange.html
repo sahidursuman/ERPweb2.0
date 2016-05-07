@@ -26,7 +26,6 @@
             <th rowspan="2">应付</th>
             <th rowspan="2">社付</th>
             <th colspan="5">导游实销</th>
-            <th rowspan="2">签单金额</th>
             <th rowspan="2">操作</th>
         </tr>
         <tr class="bg-blur">
@@ -140,7 +139,7 @@
                         
                         <td name="guideName">
                             <div class="div-h-30">
-                                {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                                {{if editStatus != 2 && guideCount > 0 && arrange.isConfirmAccount != 1 }}
                                     <button class="btn btn-success btn-sm btn-white T-addGuide pull-right"> 
                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                     </button>
@@ -154,7 +153,7 @@
                                             <span class="guideName">{{rs.guideName}}</span>
                                         {{else}}
                                             {{if rs.guideName == '' || rs.guideName == null}}
-                                                {{if guideCount > 1}}
+                                                {{if guideCount > 0}}
                                                     <input name="guideArrangeId" type="hidden" />
                                                     <input name="guideName"  type="text" class="w-80" 
                                                     {{if arrange.isConfirmAccount==1 }}disabled="disabled" {{/if}}/>
@@ -317,8 +316,6 @@
                                 </div>
                             {{/if}}
                         </td><!-- 备注 -->
-
-                        <td><span class="F-float F-money" name="signBillMoney">0</span></td>
 
                         <td>
                             {{if arrange.isConfirmAccount == 0}}
