@@ -69,7 +69,8 @@
             {{if !!shopArrange.listMap &&shopArrange.listMap.length}}
                 {{each shopArrange.listMap as arrange index}}
                     {{if arrange != null}}
-                        <tr class=" oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange">
+                        <tr class=" oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange" 
+                        isConfirmAccount = "{{arrange.isConfirmAccount}}">
 
                             <td rowspan="{{arrange.itemList.length}}"><span>{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> </td><!-- 日期 -->
                             
@@ -77,7 +78,7 @@
                                 {{arrange.shopName}}
                                 <input type="hidden" name="shopId" value="{{arrange.shopId}}">
                             </td><!-- 购物店 -->
-                            
+                            <input value="{{arrange.settlementMoney}}" name="settlementMoney" type="hidden"><!-- 用于当已对账时计算购物返佣的取值 -->
                             {{if arrange.itemList != null}}
                                 {{each arrange.itemList as itemSet index}}
                                     {{if index == 0}}

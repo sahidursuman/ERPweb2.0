@@ -52,7 +52,7 @@
                                 {{if arrange.isChoose == 1}}
                                     {{if editStatus != 2}}
                                         <select name="chooseRest">
-                                            <option value="-1">导游自选</option>
+                                            <option value="">导游自选</option>
                                             {{each arrange.restaurantItem as rs}}
                                                 <option value="{{rs.id}}">{{rs.restaurantName}}</option>
                                             {{/each}}
@@ -68,7 +68,7 @@
                                     {{if editStatus != 2}}
                                         {{if arrange.restaurantItem.length > 0}}
                                             <select name="chooseRest">
-                                                <option value="-1">导游自选</option>
+                                                <option value="">导游自选</option>
                                                 {{each arrange.restaurantItem as rs}}
                                                     <option value="{{rs.id}}">{{rs.restaurantName}}</option>
                                                 {{/each}}
