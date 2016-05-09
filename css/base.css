@@ -1278,6 +1278,9 @@ input.datepicker:not([class^="col-"]) {
 	text-align: left;
 	word-wrap:break-word;
 }
+.hct-pos-inherit{
+	position: inherit;
+}
 @media (max-width: 1485px){
 	.financial-search-planProfit{
 		display: inline-block;
