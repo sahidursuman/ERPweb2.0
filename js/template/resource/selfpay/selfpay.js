@@ -349,7 +349,6 @@ define(function(require, exports) {
 		var $listTr = $this.closest('tr'),
 			$id = $listTr.data("entity-id");
 		if (!!$id) {
-			var $conDiaMes = $( "#confirm-dialog-message" );
 			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -432,7 +431,6 @@ define(function(require, exports) {
 		    index = $this.closest('.T-dateTimeArea').index(), 
 		    id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
-			var $conDiaMes = $( "#confirm-dialog-message" );
 			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",

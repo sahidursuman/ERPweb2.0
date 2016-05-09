@@ -1322,7 +1322,6 @@ define(function(require, exports) {
 	 */
 	BookingArrange.deleteBooking = function(id, $that){
 		var $parent = $that.closest('tr');
-		var $conDiaMes = $( "#confirm-dialog-message");
 		$conDiaMes.removeClass('hide').dialog({
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -1460,7 +1459,6 @@ define(function(require, exports) {
 		var $parent = $this.closest("tr"),
 			id = $parent.data("entity-id");
 		if(id){
-			var $conDiaMes = $( "#confirm-dialog-message" );
 			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",

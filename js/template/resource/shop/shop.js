@@ -629,7 +629,6 @@ define(function(require, exports) {
 	 */
 	shop.deletePolicy = function(obj){
 		var $that = $(obj), 
-			$conDiaMes = $( "#confirm-dialog-message" ), 
 			id=$that.data("entity-id");
 
 		if(id){
@@ -706,7 +705,6 @@ define(function(require, exports) {
 			var $tr = $delBtn.closest('tr'),
 				id = $tr.data('entity-id');
 			if(id){
-				var $conDiaMes = $( "#confirm-dialog-message" )
 				$conDiaMes.removeClass('hide').dialog({
 					modal: true,
 					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
@@ -762,7 +760,6 @@ define(function(require, exports) {
 	shop.deletePolicyPriceArea = function(btn){
 		var obj = $(btn), id= obj.attr("data-entity-id"), div = obj.parent().parent(),divIndex = div.attr("data-index");
 		if(id){
-			var $conDiaMes = $( "#confirm-dialog-message" );
 			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
