@@ -262,6 +262,7 @@
                                         </select>
                                     </div>
                                 <td>
+                                {{if !!touristGroup.feeList}}
                                     {{if touristGroup.feeList.length}}
                                     <a href="#" class="T-viewCostDetail">
                                         {{each touristGroup.feeList as touristGroupFee}}
@@ -280,6 +281,7 @@
                                     {{if touristGroup.isConfirmAccount == 0}}
                                         <a data-status="1" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
                                     {{/if}}
+                                {{/if}}
                                 </td>
                                 <td>
                                     {{if touristGroup.isConfirmAccount == 0}}
