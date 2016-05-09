@@ -278,7 +278,7 @@
                 {{if !!busCompany.guidePayMoney2}}
                     <br /><span class="F-float F-money">{{if busCompany.payType2 == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney2}}{{/if}}</span>
                 {{/if}}</td>
-                <td class="F-float F-money">{{busCompany.signBillMoney}}</td>
+                <td class="F-float F-money">{{if busCompany.payType2 == 2}}-{{else}}{{busCompany.signMoney}}{{/if}}</td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}

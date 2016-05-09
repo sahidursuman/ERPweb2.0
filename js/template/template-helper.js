@@ -168,7 +168,7 @@ template.helper("getPlanPayTypeText", function(payType) {
             return '其他';
     }
 }); 
-template.helper("getPlanPayTypeOption", function(status, isDisabled, nosign) {
+template.helper("getPlanPayTypeOption", function(status, isDisabled) {
     var res = '',
         dis = '';
     if (isDisabled) {
@@ -177,9 +177,7 @@ template.helper("getPlanPayTypeOption", function(status, isDisabled, nosign) {
     status = status || 0;
     res += '<select name="payType" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
     res += '<option value="1" '+(status == 1?'selected':'')+'>刷卡</option>';
-    if (nosign != 'nosign') {
-        res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
-    }
+    res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
     return res;
 });
 template.helper("getPlanPreTypeOption", function(status, isDisabled) {

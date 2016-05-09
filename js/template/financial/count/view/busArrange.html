@@ -139,7 +139,7 @@
                         
                         <td name="guideName">
                             <div class="div-h-30">
-                                {{if editStatus != 2 && guideCount > 0 && arrange.isConfirmAccount != 1 }}
+                                {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
                                     <button class="btn btn-success btn-sm btn-white T-addGuide pull-right"> 
                                         <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                     </button>
@@ -153,7 +153,7 @@
                                             <span class="guideName">{{rs.guideName}}</span>
                                         {{else}}
                                             {{if rs.guideName == '' || rs.guideName == null}}
-                                                {{if guideCount > 0}}
+                                                {{if guideCount > 1}}
                                                     <input name="guideArrangeId" type="hidden" />
                                                     <input name="guideName"  type="text" class="w-80" 
                                                     {{if arrange.isConfirmAccount==1 }}disabled="disabled" {{/if}}/>

@@ -3718,7 +3718,7 @@ define(function(require, exports){
 			'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-70"/></td>'+
 			'<td><div class="div-h-30"></div><span class="BusneedPayMoney">0</span></td>'+
 			'<td><div class="div-h-30"></div>0</td>'+
-			td+
+			guideHtml+
 			'<td name="guidePayedMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
