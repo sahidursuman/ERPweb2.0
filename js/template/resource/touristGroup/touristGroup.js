@@ -188,7 +188,7 @@ define(function(require, exports) {
                 //window.location.href=exportUrl;
                 exportXLS(exportUrl);
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "请选择出游时间");
+                showMessageDialog("请选择出游时间");
                 return;
             };
         });
@@ -250,7 +250,7 @@ define(function(require, exports) {
             };
             if ($that.hasClass('T-del')) {
                 //删除小组
-                showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
+                showConfirmDialog("确定删除该条数据?", function() {
                     touristGroup.deleteGroup(touristGroupId);
                 });
             };
@@ -461,7 +461,7 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             if($updateTabId.find('.T-isEditStatus').val()==0 || $updateTabId.find('.T-isEditStatus').val()==2){
-               showMessageDialog($("#confirm-dialog-message"), "该游客小组已生成发团计划不可修改");
+               showMessageDialog("该游客小组已生成发团计划不可修改");
                return;
             }
         });       
@@ -684,7 +684,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         touristGroup.listTouristGroup(touristGroup.args);
                     });
                 }
@@ -875,7 +875,7 @@ define(function(require, exports) {
                 lineProductId = $tr.data('id');
 
             if (lineProductId == null || lineProductId == '' || lineProductId == undefined) {
-                showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
+                showMessageDialog("请选择线路产品");
                 return;
             };
 
@@ -1000,7 +1000,7 @@ define(function(require, exports) {
                                 data: {requireId: id},
                             })
                             .done(function(data) {
-                                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                                showMessageDialog(data.message, function() {
                                     if (data.success!=0) { //没有有中转安排,可以删除
                                         $inputParent.remove();
                                     }else{
@@ -1273,7 +1273,7 @@ define(function(require, exports) {
                 layer.close(touristGroup.chooseQuoteProlayer);
 
             } else {
-                showMessageDialog($("#confirm-dialog-message"), "请选择报价线路产品", function() {});
+                showMessageDialog("请选择报价线路产品", function() {});
             };
         });
     };
@@ -1286,7 +1286,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         touristGroup.listTouristGroup(touristGroup.args);
                     });
                 }
@@ -2111,18 +2111,18 @@ define(function(require, exports) {
             $endTime = $lineInfoForm.find('input[name=endTime]');
 
         if ($startTime.val() == '') {
-            showMessageDialog($("#confirm-dialog-message"), "出游日期不能为空！");
+            showMessageDialog("出游日期不能为空！");
             return;
         };
 
         if ($endTime.val() == '') {
-            showMessageDialog($("#confirm-dialog-message"), "完团日期不能为空！");
+            showMessageDialog("完团日期不能为空！");
             return;
         };
 
 
-        if ($receptionObj.find('input[name=arriveTime]').val() == '') {showMessageDialog($("#confirm-dialog-message"), "接团时间不能为空！"); return;};
-        if ($sendObj.find('input[name=leaveTime]').val() == '') {showMessageDialog($("#confirm-dialog-message"), "送团时间不能为空！"); return;};
+        if ($receptionObj.find('input[name=arriveTime]').val() == '') {showMessageDialog("接团时间不能为空！"); return;};
+        if ($sendObj.find('input[name=leaveTime]').val() == '') {showMessageDialog("送团时间不能为空！"); return;};
 
         // for 出游日期
         if ($startTime.prop('disabled')) {
@@ -2200,11 +2200,11 @@ define(function(require, exports) {
         });
 
         if (isReturn) {
-            showMessageDialog($("#confirm-dialog-message"), "数量或单价不能为空！");
+            showMessageDialog("数量或单价不能为空！");
             return;
         };
         if(touristGroupFeeJsonAdd.length < 1){
-            showMessageDialog($("#confirm-dialog-message"), "至少填写一条费用项！");
+            showMessageDialog("至少填写一条费用项！");
             return;
         }
 
@@ -2244,7 +2244,7 @@ define(function(require, exports) {
             return;
         }
         if (touristGroupMemberJsonAdd.length == 0) {
-            showMessageDialog($("#confirm-dialog-message"), "请添加游客成员");
+            showMessageDialog("请添加游客成员");
             return;
         }
         //删除游客小组
@@ -2302,7 +2302,7 @@ define(function(require, exports) {
 
         //客户来源不能是地接社
         if (!!type && type == "0") {
-            showMessageDialog($("#confirm-dialog-message"), "客户来源不能是地接社");
+            showMessageDialog("客户来源不能是地接社");
             return;
         };
 
@@ -2362,7 +2362,7 @@ define(function(require, exports) {
      * @param {[type]} typeInner  
      */
     touristGroup.TransitInfo = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
-        $("#confirm-dialog-message").removeClass('hide').dialog({
+        $conDiaMes.removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
             title_html: true,
@@ -2390,7 +2390,7 @@ define(function(require, exports) {
 
     //预收款和计划现收之和大于应收金额，是否继续
     touristGroup.preNeedPayMoneyInfo = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
-        $("#confirm-dialog-message").removeClass('hide').dialog({
+        $conDiaMes.removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
             title_html: true,
@@ -2430,7 +2430,7 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     $obj.data('isEdited', false);
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         if (data.success == 1) {
                             if (!!tabArgs && tabArgs.length === 3) {
                                 Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
@@ -2492,11 +2492,11 @@ define(function(require, exports) {
                 isContactUser = 1;
             }
             if (isContactUser && mobileNumber == "") {
-                showMessageDialog($("#confirm-dialog-message"), "请填写名单中联系人的手机号码！");
+                showMessageDialog("请填写名单中联系人的手机号码！");
                 erroFlag = 1;
                 return;
             } else if (!mobileNumber && !idCardNumber) {
-                showMessageDialog($("#confirm-dialog-message"), "手机号码或证件号码必填一项！");
+                showMessageDialog("手机号码或证件号码必填一项！");
                 erroFlag = 2;
                 return;
             }

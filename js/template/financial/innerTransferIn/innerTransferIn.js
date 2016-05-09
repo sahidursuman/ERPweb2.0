@@ -572,7 +572,7 @@ define(function(require, exports) {
 	FinTransIn.viewGroup = function($obj){
 		var data = { memberList : $obj.data("list") };
         if(!data){
-			showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+			showMessageDialog("游客小组不存在，请检查！");
             return false;
 		}
 		layer.open({
@@ -641,7 +641,7 @@ define(function(require, exports) {
             data: { reconciliation: json }
         }).done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     FinTransIn.checkTemp = false;
                     $tab.data('isEdited', false);
                     if (argLen === 1) {
@@ -676,7 +676,7 @@ define(function(require, exports) {
             if (showDialog(data)) {
                 $tab.data('isEdited', false);
                 FinTransIn.clearTempData = false;
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     if (argLen === 1) {
                         Tools.closeTab(menuKey + "-clearing");
                         FinTransIn.getList({pageNo : FinTransIn.listPageNo},FinTransIn.$tab);

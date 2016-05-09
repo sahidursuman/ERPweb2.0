@@ -141,7 +141,7 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data)) {
-				showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+				showMessageDialog(data.message, function() {
 					message.listMsg();
 					$("#msgCountSpan").text(0);
 					$('#unReadCountStr').text('当前没有未读消息');

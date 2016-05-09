@@ -59,7 +59,7 @@ define(function(require, exports) {
         page = page || 0;
         if (page == -1) {
             if (!TurnProfit.searchParam.startTime || !TurnProfit.searchParam.endTime) {
-                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                showMessageDialog("请选择时间区间", function() {
                     return;
                 }); 
             }

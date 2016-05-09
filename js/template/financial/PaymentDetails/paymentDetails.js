@@ -66,7 +66,7 @@ define(function(require, exports) {
             .on('click', '.T-delete', function(event) {
                 event.preventDefault();
                 var id = $(this).closest('tr').data("id");
-                showConfirmMsg($("#confirm-dialog-message"), "是否确认删除该条数据？", function() {
+                showConfirmMsg("是否确认删除该条数据？", function() {
                     PaymentDetailUtil.deletePayment(id);
                 }, function() {}, "放弃", "删除");
             });
@@ -213,7 +213,7 @@ define(function(require, exports) {
                                         var subjectName = $container.find('.T-subject').find("option:selected").text(),
                                             resourceName = $container.find('[name=resourceName]').val();
                                         if ((subjectName === "预收账款" || subjectName === "预付账款") && !resourceName) {
-                                            showMessageDialog($("#confirm-dialog-message"), "对方单位不能为空");
+                                            showMessageDialog("对方单位不能为空");
                                             return;
                                         }
                                         if (!validator.form()) {
@@ -305,7 +305,7 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         $(".T-addPayment-container .T-close-payment").trigger('click');
                         PaymentDetailUtil.getList();
                     });
@@ -355,7 +355,7 @@ define(function(require, exports) {
                 data: { id: id },
                 success: function(data) {
                     if (showDialog(data)) {
-                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        showMessageDialog(data.message, function() {
                             PaymentDetailUtil.getList();
                         });
                     }
@@ -510,7 +510,7 @@ define(function(require, exports) {
             $container.find("input[name=subjectName]").val(subList[0].subjectName);
             PaymentDetailUtil.loadResTypeSelect(subList[0].subjectName, $container);
         } else {
-            showMessageDialog($("#confirm-dialog-message"),"会计科目列表为空，请先进行添加！",function(){
+            showMessageDialog("会计科目列表为空，请先进行添加！",function(){
                 $container.find(".T-subject").html("");
                 $container.find("input[name=subjectName]").val("");
             });

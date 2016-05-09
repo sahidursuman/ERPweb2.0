@@ -87,7 +87,7 @@ define(function(require, exports) {
         }
         if (page == -1) {
             if (!args.startTime || !args.endTime) {
-                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                showMessageDialog("请选择时间区间", function() {
                     return;
                 }); 
             }

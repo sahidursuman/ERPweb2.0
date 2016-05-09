@@ -426,7 +426,7 @@ define(function(require, exports) {
 
     Client.viewGroup = function(id){
         if ('undefined' === id)  {
-            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            showMessageDialog("游客小组不存在，请检查！");
             return false;
         }
 
@@ -824,7 +824,7 @@ define(function(require, exports) {
             },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Client.checkTemp = false;
                         $tab.data("total","");
@@ -869,7 +869,7 @@ define(function(require, exports) {
             },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Client.clearDataArray = false;
                         $tab.data("total","");

@@ -478,7 +478,7 @@ define(function(require, exports) {
             data:{ checkJson : checkSaveJson },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         Self.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
@@ -511,7 +511,7 @@ define(function(require, exports) {
             },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         Self.clearTempData = false;
                         Self.clearTempSumDate = false;
                         $tab.data('isEdited',false);

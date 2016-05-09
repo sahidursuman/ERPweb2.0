@@ -672,8 +672,8 @@ define(function(require, exports) {
 			id:id
 		};
 		orderManage.$delJson.ids.push(orderManage.id);
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
+		var $conDiaMes = $( "#confirm-dialog-message" );
+		$conDiaMes.removeClass('hide').dialog({
 			modal: true,
 			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 			title_html: true,
