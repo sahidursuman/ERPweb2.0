@@ -672,52 +672,28 @@ define(function(require, exports) {
 			id:id
 		};
 		orderManage.$delJson.ids.push(orderManage.id);
-		var dialogObj = $( "#confirm-dialog-message" );
-		dialogObj.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "否",
-					"class" : "btn btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
+
+		showConfirmDialog("是否撤销？",function() {
+			if (type==1) {//车队订单
+				$.ajax({
+					url:KingServices.build_url("busInquiry","revokeOrder"),
+					type:"POST",
+					data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
+					success:function(data){
+						orderManage.listBusCompanyOrder(0);
 					}
-				},
-				{
-					text: "是",
-					"class" : "btn btn-primary btn-minier btn-heightMall",
-					click: function() {
-						if (type==1) {//车队订单
-							$.ajax({
-								url:KingServices.build_url("busInquiry","revokeOrder"),
-								type:"POST",
-								data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
-								success:function(data){
-									orderManage.listBusCompanyOrder(0);
-								}
-							});
-						}else if(type==2){
-							$.ajax({//酒店订单
-								url:KingServices.build_url("hotelInquiry","revokeOrder"),
-								type:"POST",
-								data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
-								success:function(data){
-									orderManage.listHotelOrder(0);
-								}
-							});
-						};
-						
-						$( this ).dialog( "close" );
+				});
+			}else if(type==2){
+				$.ajax({//酒店订单
+					url:KingServices.build_url("hotelInquiry","revokeOrder"),
+					type:"POST",
+					data: "delJson="+encodeURIComponent(JSON.stringify(orderManage.$delJson)),
+					success:function(data){
+						orderManage.listHotelOrder(0);
 					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("是否撤销？");
-			}
-		});
+				});
+			};
+		})
 	};
 
    /**

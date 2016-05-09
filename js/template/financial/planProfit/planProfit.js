@@ -144,7 +144,7 @@ define(function(require, exports) {
             billStatus = plan.$searchArea.find(".T-status button").data("value")
         }
         if(startTime > endTime){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
             return false;
         }
         tripNumber = (tripNumber == "全部") ? "" : tripNumber;

@@ -371,7 +371,7 @@ define(function(require, exports) {
 						},
 						success: function(data) {
 							if (showDialog(data)) {
-								showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+								showMessageDialog(data.message, function() {
 									layer.close(noticeLayer);
 								})
 							}
@@ -410,9 +410,9 @@ define(function(require, exports) {
 	 */
 	tripPlan.updateTripPlanArrange = function(id, $billStatus, target, tabId) {
 		if($billStatus == '1' || $billStatus == '2'){
-			showMessageDialog($( "#confirm-dialog-message" ), '该团已审核，无法编辑')
+			showMessageDialog('该团已审核，无法编辑')
 		}else if($billStatus == '0'){
-			showMessageDialog($( "#confirm-dialog-message" ), '该团导游已报账，无法编辑')
+			showMessageDialog('该团导游已报账，无法编辑')
 		}else{
 			$.ajax({
 				url: KingServices.build_url('tripPlan','getTripPlanArrange'),
@@ -585,7 +585,7 @@ define(function(require, exports) {
 			}else if ($this.hasClass('T-del')) {
 				var id = $parentDiv.data('entity-id');
 				if (!!id) {
-					showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条商品？', function() {
+					showConfirmDialog('你确定要删除该条商品？', function() {
 						$.ajax({
 							url: KingServices.build_url('tripPlan','deleteTripPlanInfoByCategoryId'),
 							type: 'POST',
@@ -696,7 +696,7 @@ define(function(require, exports) {
 			if ($this.hasClass('T-bus-askPrice')) {
 				//询价
 				if (!!saveJson.brand == false || !!saveJson.busCompanyId == false || !!saveJson.needSeatCount == false) {
-					showMessageDialog($( "#confirm-dialog-message" ), '请完善车队信息');
+					showMessageDialog('请完善车队信息');
 				}else {
 					tripPlan.busAskPrice($this, $tab, saveJson);
 				}
@@ -748,7 +748,7 @@ define(function(require, exports) {
 			if ($this.hasClass('T-hotel-askPrice')) {
 				//询价
 				if (!!saveJson.count == false || !!saveJson.hotelId == false || !!saveJson.type == false) {
-					showMessageDialog($( "#confirm-dialog-message" ), '请完善酒店信息');
+					showMessageDialog('请完善酒店信息');
 				}else {
 					tripPlan.hotelOfferStatus($this, $tab, saveJson, 'ask');
 				}
@@ -783,7 +783,7 @@ define(function(require, exports) {
 						hotelRoomId: $tr.eq(i).find('[name=hotelRoomId]').val()
 					}
 					if (!!json.count == false || !!json.hotelId == false || !!json.price == false || !!json.type == false || !!json.whichDay == false) {
-						showMessageDialog($( "#confirm-dialog-message" ), '请完善酒店信息');
+						showMessageDialog('请完善酒店信息');
 						isAgree = 0;
 					}
 				saveJson.hotelJson.push(json);
@@ -1083,7 +1083,7 @@ define(function(require, exports) {
 							data: {saveJson: JSON.stringify(saveJson)},
 							success: function(data) {
 								if (showDialog(data)) {
-									showMessageDialog($( "#confirm-dialog-message" ), data.message,function() {
+									showMessageDialog(data.message,function() {
 										$parent.attr('data-entity-offerId', data.offerId);
 										layer.close(tripPlan.$expiryTimeLayer);
 									});
@@ -1091,7 +1091,7 @@ define(function(require, exports) {
 							}
 						})
 					}else{
-						showMessageDialog($( "#confirm-dialog-message" ), '请选择询价截止时间');
+						showMessageDialog('请选择询价截止时间');
 					}
 		    	});
 		    }
@@ -1111,7 +1111,7 @@ define(function(require, exports) {
 			data: {saveJson: JSON.stringify(saveJson)},
 			success: function(data) {
 				if (showDialog(data)) {
-					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+					showMessageDialog(data.message);
 					$this.closest('tr').find('[name=orderStatus]').val(2);
 					$this.closest('tr').find('.T-bus-bookingStatus').addClass('T-bus-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
@@ -1152,13 +1152,13 @@ define(function(require, exports) {
 							data: {saveJson: JSON.stringify(saveJson)},
 							success: function(data) {
 								if (showDialog(data)) {
-									showMessageDialog($( "#confirm-dialog-message" ), data.message);
+									showMessageDialog(data.message);
 									layer.close(tripPlan.$expiryTimeLayer);
 								}
 							}
 						})
 					}else{
-						showMessageDialog($( "#confirm-dialog-message" ), '请选择询价截止时间');
+						showMessageDialog('请选择询价截止时间');
 					}
 		    	});
 		    }
@@ -1178,7 +1178,7 @@ define(function(require, exports) {
 			data: {saveJson: JSON.stringify(saveJson)},
 			success: function(data) {
 				if (showDialog(data)) {
-					showMessageDialog($( "#confirm-dialog-message" ), data.message);
+					showMessageDialog(data.message);
 					$this.closest('tr').find('[name=hotelOrder]').val(2);
 					$this.closest('tr').find('.T-hotel-bookingStatus').addClass('T-hotel-booking').css('color','#337ab7');
 					$this.closest('tr').find('[name=id]').val(data.arrangeId);
@@ -1221,7 +1221,7 @@ define(function(require, exports) {
 								}
 							}
 							if (isAlert == 1) {
-								showConfirmDialog($( "#confirm-dialog-message" ), '存在有效询价，可直接预订，是否继续询价', function() {
+								showConfirmDialog('存在有效询价，可直接预订，是否继续询价', function() {
 									tripPlan.hotelAskPrice($this, $tab, saveJson);
 								})
 							}else {
@@ -1376,13 +1376,13 @@ define(function(require, exports) {
 							data: {saveJson: JSON.stringify(saveJson)},
 							success: function(data) {
 								if (showDialog(data)) {
-									showMessageDialog($( "#confirm-dialog-message" ), data.message);
+									showMessageDialog(data.message);
 									layer.close(tripPlan.$expiryTimeLayer);
 								}
 							}
 						})
 					}else{
-						showMessageDialog($( "#confirm-dialog-message" ), '请选择询价截止时间');
+						showMessageDialog('请选择询价截止时间');
 					}
 		    	});
 		    }
@@ -1404,7 +1404,7 @@ define(function(require, exports) {
 			success: function(data) {
 				if (showDialog(data)) {
 					var hotelList = JSON.parse(data.hotelOrderJson);
-					showMessageDialog($( "#confirm-dialog-message" ), data.message,function() {
+					showMessageDialog(data.message,function() {
 						for (var i = 0, len = hotelList.length; i < len; i++) {
 							var arrangeId = hotelList[i].arrangeId,
 								hotelId = hotelList[i].hotelId,
@@ -1820,7 +1820,7 @@ define(function(require, exports) {
 			var isArranged = $('#isArranged').val() == "1";
 			
 			if(isArranged || !!isBooking) {
-				showConfirmDialog($( "#confirm-dialog-message" ), text, function() {
+				showConfirmDialog(text, function() {
 					$.ajax({
 						url: KingServices.build_url("tripPlan","deleteTripPlanInfoByCategoryId"),
 	                    type: "post",
@@ -3286,7 +3286,7 @@ define(function(require, exports) {
 			        			}
 			        		}
 			        		if(optionalArray.length >= 5){
-								showMessageDialog($("#confirm-dialog-message"),"最多只能添加5个自选餐厅");
+								showMessageDialog("最多只能添加5个自选餐厅");
 		        				$this.prop("checked",false);
 			        		}else{
 								var json = {
@@ -3463,6 +3463,12 @@ define(function(require, exports) {
 			}
 			guidePayMoney.push(guideMoney);
 		}
+		//计算车辆安排签单金额
+		var $signBillMoney = $tab.find('#tripPlan_addPlan_bus [name=signBillMoney]'),signBillMoney = 0;
+		$signBillMoney.each(function(si) {
+			signBillMoney += $(this).val()*1;
+		});
+		detail[2] += signBillMoney;
 		$tab.find(".T-guidePayedMoney").html(guideAllPayMoney);
 
 		var text = [], label = ['现金', '刷卡', '签单'];
@@ -3542,7 +3548,7 @@ define(function(require, exports) {
 					}
 					busCompanyArrange.push(busJson);
 				}else {
-					showMessageDialog($("#confirm-dialog-message"),'车辆安排中所属车队不能为空')
+					showMessageDialog('车辆安排中所属车队不能为空')
 					return;
 				}
 			}
@@ -3610,7 +3616,7 @@ define(function(require, exports) {
 				if (i > 0) {
 					for (var j = 0; j < shopArrangeList.length; j++) {
 						if(shopJson.whichDay == shopArrangeList[j].whichDay && shopJson.shopId == shopArrangeList[j].shopId) {
-							showMessageDialog($("#confirm-dialog-message"),'购物安排中同一天安排了相同的商店')
+							showMessageDialog('购物安排中同一天安排了相同的商店')
 							return;
 						}else{
 							hasSameShop = 1;
@@ -3656,7 +3662,7 @@ define(function(require, exports) {
 				guideArrangeList.push(guideJson);
 			}
 		}else if ($tab.find('.T-status').text() == 1) {
-			showMessageDialog($("#confirm-dialog-message"),'至少安排一个导游')
+			showMessageDialog('至少安排一个导游')
 			return;
 		}
 		
@@ -3720,7 +3726,7 @@ define(function(require, exports) {
 
 					Tools.refreshTab($tab.find('.T-tab-id').text());
 
-					showMessageDialog($("#confirm-dialog-message"),data.message, function(){
+					showMessageDialog(data.message, function(){
 						if (isClose == 1) {
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey + "-update");

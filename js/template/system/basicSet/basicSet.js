@@ -85,7 +85,7 @@ define(function(require,exports){
             .done(function(data) {
                 var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){});
+					showMessageDialog(data.message,function(){});
 				}
             })
 		});
@@ -169,7 +169,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					layer.close(Infrastructure.addAccLayer);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						Infrastructure.listInfrastructure(args);
 					});
 				}
@@ -222,7 +222,7 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						Infrastructure.listInfrastructure(args);
 					});
 				}
@@ -304,7 +304,7 @@ define(function(require,exports){
 				Infrastructure.updateBankAccount(id,args,$obj);
 			} else if ($that.hasClass('T-delete'))  {
 				// 删除账户
-				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+				showConfirmDialog("你确定要删除该条记录？", function() {
 					Infrastructure.deleteBnakAccount(id,args,$obj);
 				});
 				
@@ -423,7 +423,7 @@ define(function(require,exports){
 					if(result){
 						var closeLayer = typeFlag == 2?Infrastructure.updateLayer:Infrastructure.addLayer;
 						layer.close(closeLayer);
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						showMessageDialog(data.message,function(){
 							Infrastructure.listBankAcc(args,$parentObj,'search');
 						});
 					}
@@ -478,7 +478,7 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						Infrastructure.listBankAcc(args,$obj,'search');
 					});
 				};

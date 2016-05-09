@@ -441,7 +441,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         busCompany.checkTemp = false;
                         $tab.data('isEdited', false);
                         if (argumentsLen == 1) {
@@ -480,7 +480,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         busCompany.clearTempData = false;
                         busCompany.clearTempSumDate = false;
                         $tab.data('isEdited', false);

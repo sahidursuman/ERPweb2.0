@@ -390,7 +390,7 @@ define(function(require, exports) {
         }).done(function(data) {
             if (showDialog(data)) {
                 
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     OtherAccounts.checkTemp = false;
                     $tab.data('isEdited', false);
                     if (argumentLen === 1) {
@@ -656,7 +656,7 @@ define(function(require, exports) {
             },
         }).done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     $tab.data('isEdited', false);
                     OtherAccounts.saveJson = {};
                     if (arguementLen === 1) {

@@ -711,7 +711,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                     	$tab.data('isEdited', false);
                     	Replace.checkTemp = false;
                     	$tab.data("total","");
@@ -857,7 +857,7 @@ define(function(require, exports) {
             $tab.data('isEdited', false);
             Replace.payingJson = false;
             $tab.data("total","");
-            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            showMessageDialog(data.message, function() {
                 if (argLen === 1) {
                 	Tools.closeTab(blanceMenuKey);
                     Replace.getList(Replace.listPageNo);                            
