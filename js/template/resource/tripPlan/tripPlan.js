@@ -1542,19 +1542,17 @@ define(function(require, exports) {
 					+ '<td><input type="text" name="needSeatCount" class="col-sm-12" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="brand" class="col-sm-12"></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="licenseNumber"  class="col-sm-12 T-busPriceC"><input type="hidden" name="busId"><span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
+					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="driverName" class="col-sm-12"><input type="hidden" name="driverId"><span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="companyName" class="col-sm-12 chooseBusCompany"><input type="hidden" name="busCompanyId"><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
 					+ '<td><input type="text" name="mobileNumber" readonly="readonly" class="col-sm-12"></td>'
-					+ '<td><input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker"></td>'
-                    + '<td><input type="text" name="setPlacePosition" class="col-xs-12"></td>'
                     + '<td><a class="T-noticeTourists">点击设置</a></td>'
-					+ '<td><div class="col-xs-12 feild-relative"><input type="text" name="driverName" class="col-sm-12"><input type="hidden" name="driverId"><span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'
-					+ '<td><input type="text" name="driverMobileNumber" readonly="readonly" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="contractNumber" maxlength="20" class="col-sm-12"></td>'
 					+ '<td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"><input type="hidden" name="memberCount" value="1"></td>'
 					+ '<td><input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;"></td>'
 					+ '<td><input type="text" name="needPayMoney" readonly="readonly"maxlength="9" class="col-sm-12 F-float F-money" style="width: 60px;"></td>'
 					+ '<td><div class="inline-flex">'+preTypeHtml+'<input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" style="width: 60px;"></div></td>'
-					+ '<td style="text-align: left;"><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"><button class="btn btn-success btn-sm btn-white show mar-l-5 T-addBusguidePay" index="0"><i class="fa bigger-110 icon-only fa-plus"></i></button></div></td>'
+					+ '<td style="text-align: left;"><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" maxlength="9" class="F-float F-money"></td>'
+					+ '<td><input type="text" readonly name="signBillMoney" class="F-float F-money"></td>'
 					+ '<td><input name="remark" type="text" class="col-sm-12" maxlength="500"></td>'
 					+ '<td> <select name="orderStatus"> <option value="1">未预定</option> <option value="2">预定中</option> <option value="3">已预订</option> <option value="0">无需预定</option> </select> </td>'
 					+ '<td> <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a> <a class="cursor T-bus-action T-bus-bookingStatus " style="color: #bbb">预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" title="删除" data-entity-name="busCompany">删除</a></td></tr>',
@@ -3373,7 +3371,7 @@ define(function(require, exports) {
 	 * 单价  底价 数量 房间数 预付款 优惠 支付方式
 	 * @type {Array}
 	 */
-	var _feilds = ['price', 'lowestPrice', 'memberCount', 'needRoomCount', 'prePayMoney', 'reduceMoney', 'payType'];
+	var _feilds = ['price', 'lowestPrice', 'memberCount', 'needRoomCount', 'prePayMoney', 'reduceMoney', 'payType', 'guidePayMoney'];
 	tripPlan.bindAutoCalcPrice = function($tab) {
 		function getValue($obj) {
 			return ($obj.val() || 0)*1;
@@ -3381,7 +3379,13 @@ define(function(require, exports) {
 	    $tab.find('.arrange-area').on('change', 'input,select', function(event) {
 	        event.preventDefault();
 	        var $that = $(this),
-	            name = $that.prop('name');
+	            name = $that.prop('name'),
+	            isGuidePayMoney = (name == 'guidePayMoney'),
+	            hasSignBillMoney = $that.closest('tr').find('[name=signBillMoney]').length;
+	        //如果改的是计划导付，但是没有签单金额，则不计算
+	        if (isGuidePayMoney && hasSignBillMoney == 0) {
+	        	return;
+	        }
 
 	        if (_feilds.indexOf(name) >= 0) {
 	            var $tr = $that.closest('tr'),
@@ -3412,10 +3416,18 @@ define(function(require, exports) {
                 // 计算应付
                 needPay = price * count - reduce;
                 $tr.find("input[name=needPayMoney]").val(needPay);
-                // 导付
-            	$tr.find("input[name=guidePayMoney]").val(needPay-prePay);
 
-        		tripPlan.calcSummary($tab);            	
+                //如果改的不是计划导付，则计算计划导付
+	        	if (!isGuidePayMoney) {
+            		$tr.find("input[name=guidePayMoney]").val(needPay-prePay);
+	        	}
+		        //如果tr里有签单金额，则计算签单金额
+		        if (hasSignBillMoney > 0) {
+		        	//签单金额
+            		$tr.find('input[name=signBillMoney]').val(needPay-prePay-($tr.find("input[name=guidePayMoney]").val()))
+		        }            	
+
+        		tripPlan.calcSummary($tab);
 	        } else if(name === 'guidePlanPreMoney') {
 	        	tripPlan.calcSummary($tab);  
 	        }
@@ -3512,7 +3524,7 @@ define(function(require, exports) {
 						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
 						setPlaceTime : bus.eq(i).find('.T-noticeTourists').data('entity-setplacetime'),
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
-						payType2 : tripPlan.getVal(bus.eq(i), "payType2"),
+						signBillMoney : tripPlan.getVal(bus.eq(i), "signBillMoney"),
 						setPlacePosition : bus.eq(i).find('.T-noticeTourists').data('entity-setplaceposition'),
 						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
@@ -3521,7 +3533,6 @@ define(function(require, exports) {
 						needPayMoney: tripPlan.getVal(bus.eq(i), "needPayMoney"),
 						prePayMoney: tripPlan.getVal(bus.eq(i), "prePayMoney"),
 						guidePayMoney: tripPlan.getVal(bus.eq(i), "guidePayMoney"),
-						guidePayMoney2: tripPlan.getVal(bus.eq(i), "guidePayMoney2"),
 						remark: tripPlan.getVal(bus.eq(i), "remark"),
 						price: tripPlan.getVal(bus.eq(i), "price"),
 						orderStatus: tripPlan.getVal(bus.eq(i), "orderStatus"),
@@ -3529,10 +3540,6 @@ define(function(require, exports) {
 						offerId: offerId,
 						preType: tripPlan.getVal(bus.eq(i),"preType")
 
-					}
-					if (busJson.payType == busJson.payType2) {
-						showMessageDialog($("#confirm-dialog-message"),'第'+(i+1)+'个车安排计划导付付款方式相同，请修改')
-						return;
 					}
 					busCompanyArrange.push(busJson);
 				}else {

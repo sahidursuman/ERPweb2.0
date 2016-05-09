@@ -3747,6 +3747,7 @@ define(function(require, exports){
 					'<input name="billRemark"  class="w-80" type="text"/>'+
 				'</div>'+
 			'</td>'+
+			'<td><span class="F-float F-money"></span></td>'+
 			'<td>未对账<a href="javascript:void(0)" class="T-busArrDel" style="margin-left:13px;">删除</a></td>'+
 			'</tr>';
 		$obj.append(html);
