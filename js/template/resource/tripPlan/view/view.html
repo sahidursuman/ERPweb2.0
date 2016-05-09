@@ -251,6 +251,7 @@
         <th class="th-border">预付款</th>
         <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
+        <th class="th-border">签单金额</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -277,6 +278,7 @@
                 {{if !!busCompany.guidePayMoney2}}
                     <br /><span class="F-float F-money">{{if busCompany.payType2 == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney2}}{{/if}}</span>
                 {{/if}}</td>
+                <td class="F-float F-money">{{busCompany.signBillMoney}}</td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}
