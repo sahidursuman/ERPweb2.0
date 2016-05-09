@@ -564,7 +564,7 @@ function login(){
 										var result = showDialog(data);
 										if(result){
 											layer.close(updatePasswordLayer);
-											showMessageDialog($( "#dialog-message" ),"修改成功，请用新密码登陆");
+											showMessageDialog("修改成功，请用新密码登陆");
 											window.location.href = "login.html";
 										}else{
 											$loginObj.find("input[name='newPassword']").val("");
@@ -587,7 +587,7 @@ function login(){
 				});
 			}
 			else{
-				showMessageDialog($( "#dialog-message" ),data.message);
+				showMessageDialog(data.message);
 				window.forbiddenError = true;
 			}
 		}
