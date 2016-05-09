@@ -1883,7 +1883,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-11" name="manager" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>' +
             '<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>' +
-            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="price" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />' +
+            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="price" type="text" value="" maxlength="9" />' +
             '</td><td><input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
