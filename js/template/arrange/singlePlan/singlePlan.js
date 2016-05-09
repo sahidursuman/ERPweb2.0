@@ -1068,13 +1068,11 @@ define(function(require, exports) {
                     group[i].lineProduct.name+'</td><td>'+
                     group[i].partnerAgency.travelAgencyName+'</td><td>'+
                     group[i].contactMember.name+'</td><td>'+
-                    group[i].contactMember.mobileNumber+'</td><td>'+
+                    group[i].contactMember.mobileNumber+'</td><td>'+  
                     group[i].areaData+'</td><td>'+
                     group[i].ageData+'</td><td>'+
                     group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
                     group[i].currentNeedPayMoney+'</td><td>'+
-                    hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
-                    (!!group[i].includeSelfPay?group[i].includeSelfPay:"")+'</td><td>'+
                     (!!group[i].accompanyGuideName?group[i].accompanyGuideName:"")+'</td><td>'+
                     (!!group[i].accompanyGuideMobile?group[i].accompanyGuideMobile:"")+'</td><td>'+
                     (!!group[i].welcomeBoard?group[i].welcomeBoard:"")+'</td><td>'+

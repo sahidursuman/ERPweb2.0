@@ -400,8 +400,20 @@ define(function(require, exports) {
                 F.arrangeDate($tab);
             }
             F.calcWhicDay($tab);
-            if (!!$tab.find('[name=startTime]').val()/* && !$tab.find('[name=endTime]').val()*/) {
-                $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
+            if (!!$tab.find('[name=startTime]').val()) {
+
+                $tab.find('[name=startTime]').val(Tools.addDay($tab.find('[name="startTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
+            }
+            
+            $(this).data("clicked",true);
+        }).trigger('change');
+        $tab.find('[name="endTime"]').off('changeDate').on('changeDate', function(){
+            if(!$(this).data("clicked") && $(this).data('add')){
+                F.arrangeDate($tab);
+            }
+            F.calcWhicDay($tab);
+            if(!!$tab.find('[name=endTime]').val()){
+                $tab.find('[name=endTime]').val(Tools.addDay($tab.find('[name="endTime"]').val(), $tab.find('[name="lineProductName"]').data('entity-days')-1 || 0));
             }
             $(this).data("clicked",true);
         }).trigger('change');
@@ -836,17 +848,21 @@ define(function(require, exports) {
             event.preventDefault();
             singlePlan.chooseHotel($(this));
         });
-        //
+        //显示table
         $tab.find('.T-action-plan').find('input[type=checkbox]').on('click', function(event) {
             var $that = $(this),tabtype = $that.attr('tab-type');
-            var $checked = $that.is(":checked")
+            var $checked = $that.is(":checked");
+            singlePlan.checkeds($tab)
             singlePlan.tabTransition($tab,tabtype,$checked);
+
         });
     };
     singlePlan.tabTransition = function($tab,tabtype,$checked){
         var tab = $tab.find('.T-arrange-tabs').children('[tab-name='+tabtype+']');
         var tabDiv = $tab.find('.T-tab-content').find('div');
         var $aObj = tab.find('a');
+        
+
         var $divId = 'tripPlan_addPlan_';
         if(!$checked){
           tab.addClass('hidden');
@@ -857,11 +873,10 @@ define(function(require, exports) {
             checkBoxs.each(function(index, el) {
                 $(this).prop('checked',false);
             });
-
             var liList = $tab.find('.T-arrange-tabs').find('li');
             liList.each(function(index, el) {
                 $(this).addClass('hidden');
-                var DivId = liList.eq(0).find('a').attr('href');
+                var DivId = $(this).find('a').attr('href');
                     $tab.find('.T-tab-content').find(''+DivId).removeClass('active in');
             });
             
@@ -889,6 +904,19 @@ define(function(require, exports) {
             };
         }
         
+    }
+    //判断选中状态
+    singlePlan.checkeds = function($tab){
+        var checkdes = $tab.find('.T-add-action').find('input[type=checkbox]');
+        var all = $tab.find('.T-add-all').find('input[type=checkbox]');
+        checkdes.each(function(index, el) {
+            if(!$(this).is(':checked')){
+                all.prop('checked', false)
+                return false
+            }else{
+                all.prop('checked', true) 
+            }
+        });
     }
     /**
      * 绑定部门
@@ -1259,7 +1287,7 @@ define(function(require, exports) {
                     '<td>'+
                         '<input type="text" name="endTime" value="'+(endTime||"")+'" class="T-datepicker">'+
                     '</td>'+
-                    '<td><input type="text" class="T-choose-hotel col-xs-12" name="hotel" readonly="readonly"></td>'+
+                    '<td><input type="text" class="T-choose-hotel col-xs-12" name="arrangeHotel" readonly="readonly" value=""></td>'+
                     '<td>'+
                         '<input type="text" name="requireContent" value="" class="col-xs-12">'+
                     '</td>'+
@@ -2583,7 +2611,7 @@ define(function(require, exports) {
     //导出发团计划
     singlePlan.exportTripPlan = function(id){
         checkLogin(function(){
-            var url = KingServices.build_url("v2/export","exportTripPlan") + "&tripPlanId="+id+"";
+            var url = KingServices.build_url("export","exportTripPlan") + "&tripPlanId="+id+"";
             exportXLS(url);
         });
     };
