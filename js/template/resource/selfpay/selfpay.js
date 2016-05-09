@@ -349,45 +349,21 @@ define(function(require, exports) {
 		var $listTr = $this.closest('tr'),
 			$id = $listTr.data("entity-id");
 		if (!!$id) {
-			var $conDiaMes = $( "#confirm-dialog-message" );
-			$conDiaMes.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url:selfpay.url("deleteSelfPay","delete"),
-								type:"POST",
-								data:"id="+$id+"&cateName=selfitem"+"",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										$listTr.fadeOut(function(){
-											$(this).remove();
-										});
-									}
-								}
+			showConfirmDialog('你确定要删除该项目价格？', function() {
+				$.ajax({
+					url:selfpay.url("deleteSelfPay","delete"),
+					type:"POST",
+					data:"id="+$id+"&cateName=selfitem"+"",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							$listTr.fadeOut(function(){
+								$(this).remove();
 							});
 						}
 					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该项目价格？");
-				}
-			});
+				});
+			})
 		}else{
 			$listTr.fadeOut(function(){
 				$(this).remove();
@@ -432,51 +408,27 @@ define(function(require, exports) {
 		    index = $this.closest('.T-dateTimeArea').index(), 
 		    id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
-			var $conDiaMes = $( "#confirm-dialog-message" );
-			$conDiaMes.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url:selfpay.url("deleteSelfPay","delete"),
-								type:"POST",
-								data:"id="+id+"&cateName=selfrebate",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										for(var i=2; i < 8; i++){
-											var $children =  td.eq(i).children("div");
-											$children.eq(index).fadeOut(function(){
-												$(this).remove();
-												for(var j=0; j<$parents.find(".T-dateTimeArea").length;j++){
-													$parents.find(".T-dateTimeArea").eq(j).attr("data-index", j+1)
-												}
-											});
-										}
+			showConfirmDialog('你确定要删除该时间区间？', function() {
+				$.ajax({
+					url:selfpay.url("deleteSelfPay","delete"),
+					type:"POST",
+					data:"id="+id+"&cateName=selfrebate",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							for(var i=2; i < 8; i++){
+								var $children =  td.eq(i).children("div");
+								$children.eq(index).fadeOut(function(){
+									$(this).remove();
+									for(var j=0; j<$parents.find(".T-dateTimeArea").length;j++){
+										$parents.find(".T-dateTimeArea").eq(j).attr("data-index", j+1)
 									}
-								}
-							});
+								});
+							}
 						}
 					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该时间区间？");
-				}
-			});
+				});
+			})
 		}else{
 			for(var i=2; i < 8; i++){
 				var $children =  td.eq(i).children("div");

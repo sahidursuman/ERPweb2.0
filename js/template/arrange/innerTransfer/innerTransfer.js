@@ -704,84 +704,41 @@ define(function(require, exports) {
      * @return {[type]}    [description]
      */
     innerTransfer.saveTransferIn = function(id) {
-        var $conDiaMes = $("#confirm-dialog-message");
-        $conDiaMes.removeClass('hide').dialog({
-            modal: true,
-            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-            title_html: true,
-            draggable: false,
-            buttons: [{
-                text: "否",
-                "class": "btn btn-minier btn-heightMall",
-                click: function() {
-                    $(this).dialog("close");
+        showConfirmDialog("是否接收", function() {
+            $.ajax({
+                url: KingServices.build_url("innerTransfer", "save"),
+                type: "POST",
+                data: "id=" + id + "&isDelete=1"
+            }).done(function(data) {
+                var result = showDialog(data);
+                if (result) {
+                    var touristGroupId = data.touristGroupId,
+                        isTransferIn = 'inner';
+                    //查看内转
+                    KingServices.viewTouristGroup(touristGroupId, isTransferIn);
+                    innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
                 }
-            }, {
-                text: "是",
-                "class": "btn btn-primary btn-minier btn-heightMall",
-                click: function() {
-                    $.ajax({
-                            url: KingServices.build_url("innerTransfer", "save"),
-                            type: "POST",
-                            data: "id=" + id + "&isDelete=1"
-                        })
-                        .done(function(data) {
-                            var result = showDialog(data);
-                            if (result) {
-                                var touristGroupId = data.touristGroupId,
-                                    isTransferIn = 'inner';
-                                //查看内转
-                                KingServices.viewTouristGroup(touristGroupId, isTransferIn);
-                                innerTransfer.$tab.find('.T-transferIn-search').trigger('click');
-                            }
-                        })
-                    $(this).dialog("close");
-                }
-            }],
-            open: function(event, ui) {
-                $(this).find("p").text("是否接收");
-            }
-        });
+            })
+        })
     };
 
     innerTransfer.deleteTransferIn = function(id) {
-        var $conDiaMes = $("#confirm-dialog-message");
-        $conDiaMes.removeClass('hide').dialog({
-            modal: true,
-            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-            title_html: true,
-            draggable: false,
-            buttons: [{
-                text: "否",
-                "class": "btn btn-minier btn-heightMall",
-                click: function() {
-                    $(this).dialog("close");
+        showConfirmDialog("是否拒绝转入操作？", function() {
+            $.ajax({
+                url: KingServices.build_url("innerTransfer", "refuse"),
+                type: "POST",
+                data: "id=" + id + "&isDelete=1",
+                success: function(data) {
+                    var result = showDialog(data);
+                    if (result) {
+                        var divId = "inner-TransferIn",
+                            type = "2";
+                        innerTransfer.getSearchParam(divId, type);
+                        innerTransfer.innerList(divId, type, 0);
+                    }
                 }
-            }, {
-                text: "是",
-                "class": "btn btn-primary btn-minier btn-heightMall",
-                click: function() {
-                    $.ajax({
-                        url: KingServices.build_url("innerTransfer", "refuse"),
-                        type: "POST",
-                        data: "id=" + id + "&isDelete=1",
-                        success: function(data) {
-                            var result = showDialog(data);
-                            if (result) {
-                                var divId = "inner-TransferIn",
-                                    type = "2";
-                                innerTransfer.getSearchParam(divId, type);
-                                innerTransfer.innerList(divId, type, 0);
-                            }
-                        }
-                    });
-                    $(this).dialog("close");
-                }
-            }],
-            open: function(event, ui) {
-                $(this).find("p").text("是否拒绝转入操作？");
-            }
-        });
+            });
+        })
     };
      
     /**

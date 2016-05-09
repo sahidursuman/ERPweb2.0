@@ -1562,8 +1562,7 @@ define(function(require, exports) {
 		});	
 	};
 	ResLineProduct.deleteLineProductDaysArrange = function(){
-		var $conDiaMes = $( "#confirm-dialog-message" ), $obj = $(this);
-
+		var $obj = $(this);
 		if($obj.hasClass('T-delTr')) {
 			var id = $obj.data('entity-id'),$parents = $obj.closest('tr'), catName = $obj.data('entity-name'),templateJsonDel = {name:catName, id:id + ""}
 			if (!!id) {

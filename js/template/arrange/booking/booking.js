@@ -1322,70 +1322,27 @@ define(function(require, exports) {
 	 */
 	BookingArrange.deleteBooking = function(id, $that){
 		var $parent = $that.closest('tr');
-		var $conDiaMes = $( "#confirm-dialog-message");
-		$conDiaMes.removeClass('hide').dialog({
-			modal: true,
-			title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-			title_html: true,
-			draggable:false,
-			buttons: [ 
-				{
-					text: "取消",
-					"class" : "btn btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
-					}
-				},
-				{
-					text: "确定",
-					"class" : "btn btn-primary btn-minier btn-heightMall",
-					click: function() {
-						$( this ).dialog( "close" );
-						BookingArrange.ajax({
-							'url' : 'bookingOrder',
-							'method' : 'deleteBookingOrder',
-							'menuKey' : menuKey,
-							'operation' : 'delete',
-							'cateName' : 'order',
-							'id' : id
-						}, function(data){
-							showMessageDialog(data.message,function(){
-								$parent.fadeOut(function(){
-									var len = $parent.closest('tbody.T-list').find('tr').length;
-									$parent.remove();
-									if(len <= 1 && BookingArrange.searchData.pageNo - 1 >=0){
-										BookingArrange.listBooking(BookingArrange.searchData.pageNo - 1);
-									}
-								})
-							});
-						});
-					}
-				}
-			],
-			open:function(event,ui){
-				$(this).find("p").text("你确定要删除该项目代订？");
-			}
-		});
+		showConfirmDialog('你确定要删除该项目代订？',function() {
+			BookingArrange.ajax({
+				'url' : 'bookingOrder',
+				'method' : 'deleteBookingOrder',
+				'menuKey' : menuKey,
+				'operation' : 'delete',
+				'cateName' : 'order',
+				'id' : id
+			}, function(data){
+				showMessageDialog(data.message,function(){
+					$parent.fadeOut(function(){
+						var len = $parent.closest('tbody.T-list').find('tr').length;
+						$parent.remove();
+						if(len <= 1 && BookingArrange.searchData.pageNo - 1 >=0){
+							BookingArrange.listBooking(BookingArrange.searchData.pageNo - 1);
+						}
+					})
+				});
+			});
+		})
 	};
-
-		// BookingArrange.deleteBooking = function(id, $that){
-		// 	if(!!id){
-		// 		showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该项目代订？",function(){
-		// 			$.ajax({
-		// 					'url' : 'bookingOrder',
-	 // 						'method' : 'deleteBookingOrderByIdAndCateName',
-	 // 						'menuKey' : menuKey,
-	 // 						'operation' : 'delete',
-	 // 						'cateName' : 'order',
-	 // 						'id' : id	
-		// 			}).done(function(data){
-		// 				if(showDialog(data)){
-		// 					BookingArrange.listBooking(0);
-		// 				}
-		// 			})
-		// 		});
-		// 	}
-		// }
 
 	/**
 	 * 导出项目代订信息
@@ -1460,47 +1417,23 @@ define(function(require, exports) {
 		var $parent = $this.closest("tr"),
 			id = $parent.data("entity-id");
 		if(id){
-			var $conDiaMes = $( "#confirm-dialog-message" );
-			$conDiaMes.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-							BookingArrange.ajax({
-								'url' : 'bookingOrder', 
-								'method' : 'deleteBookingOrder',
-								'operation': 'delete', 
-								'cateName' : $list, 
-								'id' : id
-							}, function(data){
-								showMessageDialog(data.message,function(){
-									$parent.fadeOut(function(){
-										var $thatPar = $parent.parents('[class*="Booking"]');
-										$parent.remove();
-		    							BookingArrange.calculation($thatPar);
-							    	});
-								});
-							});
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该项目代订？");
-				}
-			});
+			showConfirmDialog("你确定要删除该项目代订？", function() {
+				BookingArrange.ajax({
+					'url' : 'bookingOrder', 
+					'method' : 'deleteBookingOrder',
+					'operation': 'delete', 
+					'cateName' : $list, 
+					'id' : id
+				}, function(data){
+					showMessageDialog(data.message,function(){
+						$parent.fadeOut(function(){
+							var $thatPar = $parent.parents('[class*="Booking"]');
+							$parent.remove();
+							BookingArrange.calculation($thatPar);
+				    	});
+					});
+				});
+			})
 		}else{
 			$parent.fadeOut(function(){
 				var $thatPar = $parent.parents('[class*="Booking"]');

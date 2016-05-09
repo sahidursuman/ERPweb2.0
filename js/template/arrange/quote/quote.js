@@ -3122,7 +3122,6 @@ define(function(require, exports) {
 
 	//删除日程安排
 	quote.deleteLineProductDaysArrange = function($obj, $container){
-		var $conDiaMes = $( "#confirm-dialog-message" );
 		if($obj.hasClass('T-delTr')) {
 			var id = $obj.data('entity-id'),$parents = $obj.closest('tr'), type = $obj.data('entity-type');
 			if (!!id) {
