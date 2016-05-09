@@ -2014,7 +2014,7 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
          	 }
              var $end = $obj.eq(1).datepicker('setStartDate', start);
 
-             if ($end.val() < start) {
+             if ($end.val() && ($end.val() < start)) {
                  $end.val(start);
              }
          });

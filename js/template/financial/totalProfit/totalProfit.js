@@ -75,13 +75,17 @@ define(function(require, exports) {
             args.pageNo = page || 0;
         } else if (TotalProfit.$searchArea) {
             args = {
+                orderNumber: TotalProfit.$searchArea.find("input[name=orderNumber]").val(),
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
+                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
+                outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
+                businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
                 pageNo: page || 0
             }
         }

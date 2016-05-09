@@ -434,7 +434,7 @@
                                         <col style="width:80px;">
                                         <col style="width:80px;">
                                         <col style="width:150px;">
-                                        <col style="width:60px;">
+                                        <col style="width:70px;">
                                         <col>
                                         <col style="width:100px;">
                                         <col style="width:140px;">
@@ -539,7 +539,7 @@
                                                 <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                                 </div>
                                             </td>
-                                            <td><input type="text" readonly name="signBillMoney" class="F-float F-money"></td>
+                                            <td>{{if busCompany.payType == 2}}-{{else}}<input type="text" readonly name="signBillMoney" class="F-float F-money" value="{{busCompany.signMoney}}">{{/if}}</td>
                                             <td>
                                                 <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>

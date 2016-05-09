@@ -94,6 +94,7 @@ define(function(require, exports) {
         tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+        tabId.find('.T-sumSignMoney').text(data.unPayedMoneySum);
     };
     busCompany.initList = function(startDate, endDate,accountStatus) {
         busCompany.getQueryList();
