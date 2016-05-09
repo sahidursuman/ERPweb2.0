@@ -3463,6 +3463,12 @@ define(function(require, exports) {
 			}
 			guidePayMoney.push(guideMoney);
 		}
+		//计算车辆安排签单金额
+		var $signBillMoney = $tab.find('#tripPlan_addPlan_bus [name=signBillMoney]'),signBillMoney = 0;
+		$signBillMoney.each(function(si) {
+			signBillMoney += $(this).val()*1;
+		});
+		detail[2] += signBillMoney;
 		$tab.find(".T-guidePayedMoney").html(guideAllPayMoney);
 
 		var text = [], label = ['现金', '刷卡', '签单'];
