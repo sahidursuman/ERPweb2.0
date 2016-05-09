@@ -86,7 +86,7 @@ define(function(require, exports) {
             billStatus = transfer.$searchArea.find(".T-status button").data("value")
         }
         if(startTime > endTime){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
             return false;
         }
         lineProductName = (lineProductName == "全部") ? "" : lineProductName;

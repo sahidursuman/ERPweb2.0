@@ -250,7 +250,7 @@ define(function(require, exports) {
 
 	shop.deleteShop = function(id){
 		if(!!id){
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+			showConfirmDialog("你确定要删除该条记录？",function(){
 					$.ajax({
 							url: KingServices.build_url('shop', 'deleteShop'),
 	 						type:"POST",
@@ -408,7 +408,7 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						showMessageDialog(data.message,function(){
 							if (type === 1) {
 								shop.listShop(shop.currentPage);
 							} else {
@@ -599,15 +599,15 @@ define(function(require, exports) {
 		    		if( modiPolicyValidator != undefined){
 		    			if(!modiPolicyValidator.form()){return;}
 		    		}else{
-		    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
+		    			showMessageDialog("政策不能为空");
 		    			return;
 		    		}
 		    		if(!shop.checkTimeAndPriceArea()){
-		    			showMessageDialog($( "#confirm-dialog-message" ),"时间范围不能重复");
+		    			showMessageDialog("时间范围不能重复");
 		    			return;
 		    		}
 		    		if(!shop.checkMoneyScope()){
-		    			showMessageDialog($( "#confirm-dialog-message" ),"消费金额范围同一段时间内不能重复");
+		    			showMessageDialog("消费金额范围同一段时间内不能重复");
 		    			return;
 		    		}
 		    		var result = shop.submitShopPolicy(obj);
@@ -629,11 +629,11 @@ define(function(require, exports) {
 	 */
 	shop.deletePolicy = function(obj){
 		var $that = $(obj), 
-			dialogObj = $( "#confirm-dialog-message" ), 
+			$conDiaMes = $( "#confirm-dialog-message" ), 
 			id=$that.data("entity-id");
 
 		if(id){
-			dialogObj.removeClass('hide').dialog({
+			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
@@ -706,8 +706,8 @@ define(function(require, exports) {
 			var $tr = $delBtn.closest('tr'),
 				id = $tr.data('entity-id');
 			if(id){
-				var dialogObj = $( "#confirm-dialog-message" )
-				dialogObj.removeClass('hide').dialog({
+				var $conDiaMes = $( "#confirm-dialog-message" )
+				$conDiaMes.removeClass('hide').dialog({
 					modal: true,
 					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 					title_html: true,
@@ -762,8 +762,8 @@ define(function(require, exports) {
 	shop.deletePolicyPriceArea = function(btn){
 		var obj = $(btn), id= obj.attr("data-entity-id"), div = obj.parent().parent(),divIndex = div.attr("data-index");
 		if(id){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
+			var $conDiaMes = $( "#confirm-dialog-message" );
+			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
@@ -858,11 +858,11 @@ define(function(require, exports) {
 		var startTime = getValue($form.eq(0), "startTime");
 		var endTime = getValue($form.eq(0), "endTime");
 		if(trim(startTime) == ""){
-			showMessageDialog($( "#confirm-dialog-message" ), "请输入起始日期");
+			showMessageDialog("请输入起始日期");
 			return false;
 		}
 		if(trim(endTime) == ""){
-			showMessageDialog($( "#confirm-dialog-message" ), "请输入截止日期");
+			showMessageDialog("请输入截止日期");
 			return false;
 		}
 		var shopPolicyList = [];

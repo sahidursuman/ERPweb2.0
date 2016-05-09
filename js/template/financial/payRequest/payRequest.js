@@ -203,7 +203,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), "保存成功！", function() {
+                    showMessageDialog("保存成功！", function() {
                         $tab.data('isEdited', false);
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_pay");

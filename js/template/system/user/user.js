@@ -440,7 +440,7 @@ define(function(require, exports) {
 				if(result){
 					// layer.close(user.$updateAuth);
 					
-					showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+					showMessageDialog(data.message, function() {
 						Tools.closeTab(tabId);
 						user.listUser(0, "", 1);	
 						if (IndexData.userInfo.userName === username) {
@@ -507,7 +507,7 @@ define(function(require, exports) {
 												user.openOP(id, 10);
 											}
 											layer.close(updateUserLayer);
-											showMessageDialog($("#confirm-dialog-message"),data.message);
+											showMessageDialog(data.message);
 											user.listUser(0, "", 1);
 										}
 									}

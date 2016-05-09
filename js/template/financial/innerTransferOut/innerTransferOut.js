@@ -386,10 +386,10 @@ define(function(require,exports) {
 				}
 				
 				if(message){
-					showMessageDialog($("#confirm-dialog-message"),message);
+					showMessageDialog(message);
 					return false;
 				}
-        		showConfirmDialog($( "#confirm-dialog-message" ), "是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+        		showConfirmDialog("是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
 	        		//自动下账函数
 	        		args.autoPayMoney = payMoney;
 	        		InnerTransferOut.autoAcountMoney($tab,args);
@@ -466,7 +466,7 @@ define(function(require,exports) {
 				var result = showDialog(data);
 				if(result){
 					$tab.data('isEdited', false);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-checking");
                             InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);
@@ -536,7 +536,7 @@ define(function(require,exports) {
 		};
 
 		if(!data){
-			showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+			showMessageDialog("游客小组不存在，请检查！");
             return false;
 		}
 		var html = viewGroupTemplate(data);
@@ -627,7 +627,7 @@ define(function(require,exports) {
                 	$tab.data('isEdited', false);
                 	InnerTransferOut.saveJson = [];
                 	InnerTransferOut.btnSatus = 0;
-                	showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                	showMessageDialog(data.message,function(){
                 		if(argumentsLen === 1){
                             Tools.closeTab(menuKey + "-settlement");
                             InnerTransferOut.listInnerTransfer(InnerTransferOut.listPage);

@@ -141,7 +141,7 @@ define(function(require, exports) {
             businessGroupId = ColGuest.$searchArea.find("input[name=businessName]").data('id');
         }
         if(startTime > endTime){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
             return false;
         }
         lineProductName = (lineProductName == "全部") ? "" : lineProductName;
@@ -169,7 +169,7 @@ define(function(require, exports) {
         };
         if (pageNo == -1) {
             if (!ColGuest.searchData.startTime || !ColGuest.searchData.endTime) {
-                showMessageDialog($( "#confirm-dialog-message" ), "请选择时间区间", function() {
+                showMessageDialog("请选择时间区间", function() {
                     return;
                 }); 
             }

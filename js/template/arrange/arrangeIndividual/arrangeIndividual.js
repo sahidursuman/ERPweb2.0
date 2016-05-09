@@ -207,7 +207,7 @@ define(function(require, exports) {
                 /* Act on the event */
                 arrangeIndividual.initChosenMergenTripPlan();
             } else {
-                showMessageDialog($("#confirm-dialog-message"), "你还没有勾选任何并团小组");
+                showMessageDialog("你还没有勾选任何并团小组");
             };
         });
         //全选功能
@@ -393,7 +393,7 @@ define(function(require, exports) {
                 //数据刷新
                 arrangeIndividual.listArrangeTourist(0);
             } else {
-                showMessageDialog($("#confirm-dialog-message"), "请选择计划");
+                showMessageDialog("请选择计划");
             };
         });
 
@@ -460,7 +460,7 @@ define(function(require, exports) {
                 //数据刷新
                 arrangeIndividual.listArrangeTourist(0);
             } else {
-                showMessageDialog($("#confirm-dialog-message"), "请选择线路产品");
+                showMessageDialog("请选择线路产品");
             };
         });
     };
@@ -491,7 +491,7 @@ define(function(require, exports) {
 
         if (memberCount == 0) {
             $(this).prop("checked", false);
-            showMessageDialog($("#confirm-dialog-message"), "未分团人数为0，不能加入并团选择");
+            showMessageDialog("未分团人数为0，不能加入并团选择");
             return;
         }
         var lineProductId = $parents.attr("data-id"),
