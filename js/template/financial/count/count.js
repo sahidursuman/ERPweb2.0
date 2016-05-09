@@ -198,10 +198,10 @@ define(function(require, exports){
 				
 				//未报账
 				if(billStatus == -1){
-					showMessageDialog($( "#confirm-dialog-message" ), "导游未报账，不能做审核操作");	
+					showMessageDialog("导游未报账，不能做审核操作");	
 				}else if(guideFinancialExamine == 1){
 					//导游已报账
-					showMessageDialog($( "#confirm-dialog-message" ), '该团导游账务已对账，不能修改！');
+					showMessageDialog('该团导游账务已对账，不能修改！');
 				}else{
 					//审核事件
 					Count.updateExamine(id);
@@ -213,7 +213,7 @@ define(function(require, exports){
             	if(billStatus == -1 || billStatus == "-1") {
             		Count.Reimbursement(id);
             	} else {
-            		showMessageDialog($( "#confirm-dialog-message" ), "本团已报账，不能重复操作！", function(){});
+            		showMessageDialog("本团已报账，不能重复操作！", function(){});
             	}
 			}else if($that.hasClass('T-quality')){
 				//质量统计事件绑定
@@ -864,8 +864,7 @@ define(function(require, exports){
 			var checkTripIsReceived = Count.checkTripIsReceived($obj);
 			var financialTripPlanId = $(this).attr('data-entity-financial-id');
 			if(checkTripIsReceived){
-				showConfirmDialog($( "#confirm-dialog-message" ), 
-					'提交报账，团款现收将默认为已收到', function() {
+				showConfirmDialog('提交报账，团款现收将默认为已收到', function() {
 					Count.saveTripCount(id,financialTripPlanId,$obj,3);
 				});
 			}else{
@@ -1329,7 +1328,7 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			var billStatus = $(this).attr('data-entity-billStatus');
 			var financialTripPlanId = $(this).attr('data-entity-financial-id');
-			showConfirmDialog($( "#confirm-dialog-message" ), "退回计调后，将需要等计调审核过后您才能再次操作，您确定要这样做吗？", function(){
+			showConfirmDialog("退回计调后，将需要等计调审核过后您才能再次操作，您确定要这样做吗？", function(){
 				Count.reback(id, billStatus, financialTripPlanId);
 			});
 		});
@@ -1338,7 +1337,7 @@ define(function(require, exports){
 			var id = $(this).attr('data-entity-id');
 			var billStatus = $(this).attr('data-entity-billStatus');
 			var financialTripPlanId = $(this).attr('data-entity-financial-id');
-			showConfirmDialog($( "#confirm-dialog-message" ), "退回导游后，将需要等导游报账过后您才能再次操作，您确定要这样做吗？", function(){
+			showConfirmDialog("退回导游后，将需要等导游报账过后您才能再次操作，您确定要这样做吗？", function(){
 				Count.reback(id, billStatus, financialTripPlanId);
 			});
 		});
@@ -1489,7 +1488,7 @@ define(function(require, exports){
         	success:function(data){
         		var result = showDialog(data);
         		if(result){
-        			showMessageDialog($( "#confirm-dialog-message" ),data.message);
+        			showMessageDialog(data.message);
         			Count.updateExamine(financialTripPlanId);
         			Count.listCountHeader(0);
         		}
@@ -1510,7 +1509,7 @@ define(function(require, exports){
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                	showMessageDialog($( "#confirm-dialog-message" ),data.message);
+                	showMessageDialog(data.message);
                 	if(billStatus == 0) {
                 		Tools.closeTab(updateTabId);
                 		Count.listCountHeader(0);
@@ -2095,7 +2094,7 @@ define(function(require, exports){
 			cateName = 'shopGuideCashDetail'
 		};
 		if(!!guideId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(guideId,cateName,removeGuide);
 			});
 		}else{
@@ -2126,7 +2125,7 @@ define(function(require, exports){
 		var shopItemArrangeId = $tr.find('input[name=shopPolicyArrId]').val();
 
 		if(!!shopItemArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(shopItemArrangeId,'shopItem',removeItem);
 			});
 		}else{
@@ -2158,7 +2157,7 @@ define(function(require, exports){
 			td_cnt = $tr.children('td').length,
 			shopArrangeId = $tr.attr('shopArrangeId');
 		if(!!shopArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(shopArrangeId,'shop',removeItem);
 			});
 		}else{
@@ -3479,7 +3478,7 @@ define(function(require, exports){
 			index = $thisDiv.attr('index'),
 			guideId = $thisDiv.attr('guideId');
 			if(!!guideId){
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog('你确定要删除该条记录？', function() {
 					Count.delArrangeData(guideId,'selfpayGuideDetail',removeGuide);
 				});
 			}else{
@@ -3511,7 +3510,7 @@ define(function(require, exports){
 	Count.delSelfArrange = function($obj,$parentObj){
 		var selfPayArrangeId = $obj.closest('tr').find('input[name=selfPayArrangeId]').val();
 		if(!!selfPayArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(selfPayArrangeId,'selfpay',removeItem);
 			});
 		}else{
@@ -3630,7 +3629,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 			otherInId = $tr.attr('otherInId');
 		if(!!otherInId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(otherInId,'otherIncome',removeItem);
 			});
 		}else{
@@ -3768,7 +3767,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr'),
 			busArrangeId = $tr.attr('busArrangeId');
 		if(!!busArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(busArrangeId,'busCompany',removeItems);
 			});
 		}else{
@@ -3840,7 +3839,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 		var restArrId = $tr.find('input[name=restaurantArrangeId]').val();
 		if(!!restArrId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(restArrId,'restaurant',removeItem);
 			});
 		}else{
@@ -3900,7 +3899,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 		var hotelArrangeId = $tr.find('input[name=hotelArrangeId]').val();
 		if(!!hotelArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(hotelArrangeId,'hotel',removeItem);
 			});
 		}else{
@@ -3961,7 +3960,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 		var scenicArrangeId = $tr.find('input[name=scenicArrangeId]').val();
 		if(!!scenicArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(scenicArrangeId,'scenic',removeItem);
 			});
 		}else{
@@ -4041,7 +4040,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 		var ticketArrangeId = $tr.attr('ticketArrangeId');
 		if(!!ticketArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(ticketArrangeId,'ticket',removeItem);
 			});
 		}else{
@@ -4099,7 +4098,7 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr');
 		var otherArrangeId = $tr.attr('otherArrangeId');
 		if(!!otherArrangeId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(otherArrangeId,'other',removeItem);
 			});
 		}else{
@@ -5524,7 +5523,7 @@ define(function(require, exports){
 		//校验同一天不能安排同一家购物店
 		var submitStatus =  Count.checkShopArrange(saveJsonStr);
 		if(submitStatus.submitStatus){
-			showMessageDialog($("#confirm-dialog-message"),submitStatus.submitMeaasge);
+			showMessageDialog(submitStatus.submitMeaasge);
 			return;
 		}
 		var addSelfList = saveJsonStr.addSelfPayArrangeList;
@@ -5538,7 +5537,7 @@ define(function(require, exports){
 						message="请选择自费项目"
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5551,7 +5550,7 @@ define(function(require, exports){
 				if(addRestList[i].restaurantId == ""){
 					message = "请选择餐厅"
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5561,7 +5560,7 @@ define(function(require, exports){
 			for(var i = 0;i<restaurantList.length;i++){
 				if(restaurantList[i].isChoose == 1 && restaurantList[i].restaurantId==0){
 					message = "请选择导游自选餐厅";
-					showMessageDialog($("#confirm-dialog-message"),message);
+					showMessageDialog(message);
 					return;
 				}
 			}
@@ -5573,7 +5572,7 @@ define(function(require, exports){
 				if(addBusList[i].busCompanyId == ""){
 					message = "请选择车队"
 				}
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		};
@@ -5588,7 +5587,7 @@ define(function(require, exports){
 						message="请选择房型"
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		};
@@ -5604,7 +5603,7 @@ define(function(require, exports){
 						message="请选择景区收费项目"
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5620,7 +5619,7 @@ define(function(require, exports){
 						message="请选择日期"
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5640,7 +5639,7 @@ define(function(require, exports){
 						}
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5660,7 +5659,7 @@ define(function(require, exports){
 						}
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5676,7 +5675,7 @@ define(function(require, exports){
 						message="请选择日期"
 					}
 				};
-				showMessageDialog($("#confirm-dialog-message"),message);
+				showMessageDialog(message);
 				return;
 			}
 		}
@@ -5696,7 +5695,7 @@ define(function(require, exports){
 			success:function(data){
 				var result = showDialog(data);
 				if (result) {
-					showMessageDialog($( "#confirm-dialog-message" ),data.message);
+					showMessageDialog(data.message);
 					if(data.success == 1){
 						if(typeFlag == 1){
 							Count.updateExamine(financialTripPlanId);
@@ -5724,7 +5723,7 @@ define(function(require, exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message);
+					showMessageDialog(data.message);
         			Count.listCountHeader(0);
             		Tools.closeTab(ReimbursementId);
 				}
@@ -6519,7 +6518,7 @@ define(function(require, exports){
             data:"cateName="+nameFlag+"&cateId="+id,
             success: function(data) {
 				if(showDialog(data)){
-					showMessageDialog($( "#confirm-dialog-message" ),"删除成功!");
+					showMessageDialog("删除成功!");
 					fn();
 				}
             }
@@ -6663,7 +6662,7 @@ define(function(require, exports){
 			break;
 		};
 		if(!!guideId){
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				Count.delArrangeData(guideId,cateName,removeGuide);
 			});
 		}else{

@@ -478,7 +478,7 @@ define(function(require, exports) {
             data:{ insuranceJson : checkSaveJson },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         Insure.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
@@ -517,7 +517,7 @@ define(function(require, exports) {
             },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         Insure.clearTempData = false;
                         Insure.clearTempSumDate = false;
                         $tab.data('isEdited',false);

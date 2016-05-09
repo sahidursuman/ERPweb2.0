@@ -523,7 +523,7 @@ define(function(require, exports) {
             data: { checkAccountList: json }
         }).done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     FinShop.checkTemp = false;
                     $tab.data('isEdited', false);
                     $tab.data("total","");
@@ -677,7 +677,7 @@ define(function(require, exports) {
             data: saveArgs,
         })
         .done(function(data) {
-            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            showMessageDialog(data.message, function() {
                 $tab.data('isEdited', false);
                 FinShop.payingJson = false;
                 $tab.data("total","");

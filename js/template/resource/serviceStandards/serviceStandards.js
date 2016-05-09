@@ -85,7 +85,7 @@ define(function(require, exports){
 				ServiceStandards.getDataById(id);
 			} else if ($that.hasClass('T-delete'))  {
 				// 删除账户
-				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+				showConfirmDialog("你确定要删除该条记录？", function() {
 					ServiceStandards.deleteService(id);
 				});
 				
@@ -150,10 +150,10 @@ define(function(require, exports){
 			success:function(data){
 				if(showDialog(data)){
 					if(!!args.form){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						showMessageDialog(data.message);
 					}else{
 						layer.close(closeLayer);
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						showMessageDialog(data.message,function(){
 							ServiceStandards.listService(0,'',1);
 						});
 					};
@@ -169,7 +169,7 @@ define(function(require, exports){
 			type:'POST',
 			success:function(data){
 				if(showDialog(data)){
-				showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+				showMessageDialog(data.message,function(){
 					ServiceStandards.listService(0,'',1);
 				});
 			}

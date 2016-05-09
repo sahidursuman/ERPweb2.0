@@ -212,7 +212,7 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
 
     if(!$tab.data('isEdited')){
         if(isSave && !tempJson){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+            showMessageDialog("您未进行任何操作！");
             return false;
         } else {
             // return tempJson;
@@ -277,7 +277,7 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
     });
     if(isSave){
         if(saveJson.length == 0){
-            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            showMessageDialog("没有可提交的数据！");
             return false;
         }
         //保存数据处理,
@@ -377,7 +377,7 @@ FinancialService.changeUncheck = function(trList,fn,minTdLen){
             }
         ];
 
-        $("#confirm-dialog-message").removeClass('hide').dialog({
+        $conDiaMes.removeClass('hide').dialog({
             modal: true,
             title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>提示</h4></div>",
             title_html: true,
@@ -492,13 +492,13 @@ FinancialService.clearSaveJson = function($tab,clearSaveJson,rule,isSave){
         if(!FinancialService.isClearSave($tab,rule)){
             return false;
         } else if(clearSaveJson.length == 0){
-            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            showMessageDialog("没有可提交的数据！");
             return false;
         } else {
             var $saveBtn = $tab.find('.T-saveClear'),
                 saveZero = $saveBtn.data('save-zero');
             if (!saveZero && parseFloat($tab.find('input[name=sumPayMoney]').val()) == 0) {
-                showConfirmDialog($('#confirm-dialog-message'), '本次收款金额合计为0，是否继续?', function() {
+                showConfirmDialog('本次收款金额合计为0，是否继续?', function() {
                     $saveBtn.data('save-zero', true).trigger('click');
                 })
 
@@ -522,7 +522,7 @@ FinancialService.isClearSave = function($tab,rule){
     }
 
     if(!$tab.data('isEdited')){
-        showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+        showMessageDialog("您未进行任何操作！");
         return false;
     };
     var sumPayMoney = parseFloat($tab.find('input[name=sumPayMoney]').val()),
@@ -533,7 +533,7 @@ FinancialService.isClearSave = function($tab,rule){
         sumListMoney = parseFloat($tab.find('input[name=sumPayMoney]').val());
     }
     if(!Tools.Math.isFloatEqual(sumPayMoney,sumListMoney)){
-        showMessageDialog($("#confirm-dialog-message"),"本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
+        showMessageDialog("本次付款金额合计与单条记录本次付款金额的累计值不相等，请检查！");
         return false;
     };
     return true;
@@ -560,22 +560,22 @@ FinancialService.autoPayJson = function(id,$tab,rule, type){
         sumPayRemark = $tab.find('input[name=sumPayRemark]').val(),
         unpayMoney = parseFloat($tab.find('.T-unpayMoney').text());
     if(startDate > endDate){
-        showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+        showMessageDialog("开始时间不能大于结束时间，请重新选择！");
         return false;
     }
     if(sumPayMoney <= 0 || sumPayMoney == ""){
-        showMessageDialog($("#confirm-dialog-message"),key + "款金额需大于0！");
+        showMessageDialog(key + "款金额需大于0！");
         return false;
     }
 
     if(isNaN(sumPayMoney)){ sumPayMoney = 0; }
     if(isNaN(unpayMoney)){ unpayMoney = 0; }
     if(unpayMoney < 0){
-        showMessageDialog($("#confirm-dialog-message"),"已对账未" + key + "总额为负，不能进行自动下账！");
+        showMessageDialog("已对账未" + key + "总额为负，不能进行自动下账！");
         return false;
     }
     if(sumPayMoney > unpayMoney){
-        showMessageDialog($("#confirm-dialog-message"),"本次"+ key + "款金额合计大于未"+ key + "金额合计（已对账），请先进行对账！");
+        showMessageDialog("本次"+ key + "款金额合计大于未"+ key + "金额合计（已对账），请先进行对账！");
         return false;
     }
 
@@ -665,7 +665,7 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
 
 //自动下账提示
 FinancialService.autoPayConfirm = function(startDate,endDate,fn){
-    showConfirmMsg($("#confirm-dialog-message"),"是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
+    showConfirmMsg("是否按当前账期 " + startDate + " 至 " + endDate + " 下账？",function(){
         if ('function' === typeof fn) {
             fn();
         }
@@ -846,7 +846,7 @@ FinancialService.saveJson_checking = function($tab,tempJson,rule,isSave){
 
     if(!$tab.data('isEdited')){
         if(isSave && !tempJson){
-            showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+            showMessageDialog("您未进行任何操作！");
             return false;
         } else {
             // return tempJson;
@@ -931,7 +931,7 @@ FinancialService.saveJson_checking = function($tab,tempJson,rule,isSave){
     });
     if(isSave){
         if(saveJson.length == 0){
-            showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+            showMessageDialog("没有可提交的数据！");
             return false;
         }
         //保存数据处理,
@@ -1007,7 +1007,7 @@ FinancialService.unfinishedBill = function(args,listFn){
         }
     ];
 
-    $("#confirm-dialog-message").removeClass('hide').dialog({
+    $conDiaMes.removeClass('hide').dialog({
         modal: true,
         title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>提示</h4></div>",
         title_html: true,
@@ -1025,7 +1025,7 @@ FinancialService.closeTab = function(tab_id){
     var $tab = $('#tab-' + tab_id + '-content');
     $tab.find(".T-btn-close").click(function(){
         if ($tab.data('isEdited'))  {
-            showSaveConfirmDialog($("#confirm-dialog-message"),"数据已经被修改，是否保存?",function(){
+            showSaveConfirmDialog("数据已经被修改，是否保存?",function(){
                 $tab.trigger(CLOSE_TAB_SAVE);
             },function(){
                 Tools.closeTab(tab_id);
@@ -1058,7 +1058,7 @@ FinancialService.viewBillImage = function(obj) {
         }
     }
     if(data.images.length == 0) {
-        showMessageDialog($( "#confirm-dialog-message" ), "没有回传单据", function(){});
+        showMessageDialog("没有回传单据", function(){});
         return;
     }
     var html = KingServices.inlineTemplate(tHtml, data);
