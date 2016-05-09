@@ -2362,57 +2362,17 @@ define(function(require, exports) {
      * @param {[type]} typeInner  
      */
     touristGroup.TransitInfo = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
-        $conDiaMes.removeClass('hide').dialog({
-            modal: true,
-            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-            title_html: true,
-            draggable: false,
-            buttons: [{
-                text: "否",
-                "class": "btn btn-minier btn-heightMall",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }, {
-                text: "是",
-                "class": "btn btn-primary btn-minier btn-heightMall",
-                click: function() {
-                    touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
-                    $(this).dialog("close");
-                }
-            }],
-            open: function(event, ui) {
-                $(this).find("p").text("该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！");
-            }
-        });
+        showConfirmDialog('该游客小组需要中转安排，但未填写中转结算价，会影响核算单团利润和中转利润，是否继续！', function() {
+            touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
+        })
     };
 
 
     //预收款和计划现收之和大于应收金额，是否继续
     touristGroup.preNeedPayMoneyInfo = function($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm) {
-        $conDiaMes.removeClass('hide').dialog({
-            modal: true,
-            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-            title_html: true,
-            draggable: false,
-            buttons: [{
-                text: "否",
-                "class": "btn btn-minier btn-heightMall",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }, {
-                text: "是",
-                "class": "btn btn-primary btn-minier btn-heightMall",
-                click: function() {
-                    touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
-                    $(this).dialog("close");
-                }
-            }],
-            open: function(event, ui) {
-                $(this).find("p").text("预收款和计划现收之和大于应收金额，是否继续！");
-            }
-        });
+        showConfirmDialog('预收款和计划现收之和大于应收金额，是否继续！', function() {
+            touristGroup.submitData($obj, url, data, form, innerStatus, tabId, tabArgs, typeFlag, typeInner,status, $lineInfoForm);
+        })
     };
 
 
