@@ -24,7 +24,6 @@ define(function(require, exports) {
 		viewGroupTemplate = require("./view/viewGroup"),
 		preTypeHtml = '<select name="preType"><option value="0" selected="">现金</option><option value="1">银行转账</option><option value="2">网付</option><option value="3">支票</option><option value="4">其他</option></select>';
 		payTypeHtml = '<select name="payType"><option value="0" selected="">现金</option><option value="1">刷卡</option><option value="2">签单</option></select>';
-		payTypeHtml2 = '<select name="payType2"><option value="0" selected="">现金</option><option value="1">刷卡</option><option value="2">签单</option></select>';
 	/**
 	 * 自定义发团安排对象
 	 * @type {Object}
@@ -826,8 +825,8 @@ define(function(require, exports) {
 		});
 		//所有autocomplete
 		tripPlan.bindAutocomplete($tab);
-		//车队添加计划导付
-		tripPlan.addDelGuidePay($tab);
+		//车队修改计划导付付款方式
+		tripPlan.changePayType($tab);
 		//查看浮动自选餐厅
 		tripPlan.viewOptionalRestaurant($tab.find('.T-chooseRestaurant'));
 		// 绑定费用计算
@@ -1568,7 +1567,7 @@ define(function(require, exports) {
 		validator = rule.update(validator);
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindBusCompanyChoose($tr);
-		tripPlan.addDelGuidePay($tab);
+		tripPlan.changePayType($tab);
 	}
 
 	//添加餐饮安排
@@ -3524,7 +3523,7 @@ define(function(require, exports) {
 						busCompanyId : tripPlan.getVal(bus.eq(i), "busCompanyId"),
 						setPlaceTime : bus.eq(i).find('.T-noticeTourists').data('entity-setplacetime'),
 						payType : tripPlan.getVal(bus.eq(i), "payType"),
-						signBillMoney : tripPlan.getVal(bus.eq(i), "signBillMoney"),
+						signMoney : tripPlan.getVal(bus.eq(i), "signBillMoney"),
 						setPlacePosition : bus.eq(i).find('.T-noticeTourists').data('entity-setplaceposition'),
 						driverId : tripPlan.getVal(bus.eq(i), "driverId"),
 						contractNumber : tripPlan.getVal(bus.eq(i), "contractNumber"),
@@ -3847,19 +3846,20 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * 添加计划导付（车辆安排）
+	 * 修改计划导付付款方式（车辆安排）
 	 */
-	tripPlan.addDelGuidePay = function($tab) {
-		$tab.find('#tripPlan_addPlan_bus').on('click', '.T-addBusguidePay', function() {
+	tripPlan.changePayType = function($tab) {
+		$tab.find('#tripPlan_addPlan_bus').on('click', '[name=payType]', function() {
 			var $this = $(this),
 				$div = $this.closest('div'),
 				$td = $this.closest('td'),
-				html = '<div class="inline-flex mar-t-5">'+ payTypeHtml2
-                        +'<input name="guidePayMoney2" type="text" value="" maxlength="9" class="F-float F-money"/>'
-                    	+'<span class="label-inline-40"><button class="btn btn-danger btn-sm btn-white show mar-l-5 T-delBusguidePay" index="0"> <i class="fa bigger-110 icon-only fa-minus"></i> </button></span>'
-                        +'</div>'
-			$td.append(html);
-			$this.remove();
+				html = '<input type="text" readonly name="signBillMoney" class="F-float F-money" value="">'
+			if ($this.val() == 2) {
+				$td.next('td').html('-');
+			}else{
+				$td.next('td').html(html);
+				$td.find('[name=guidePayMoney]').trigger('change');
+			}
 		})
 		$tab.find('#tripPlan_addPlan_bus').on('click', '.T-delBusguidePay', function() {
 			var $this = $(this),
