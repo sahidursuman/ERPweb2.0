@@ -3718,7 +3718,7 @@ define(function(require, exports){
 			'<td><div class="div-h-30"></div><input type="text" name="realReduceMoney" class="w-70"/></td>'+
 			'<td><div class="div-h-30"></div><span class="BusneedPayMoney">0</span></td>'+
 			'<td><div class="div-h-30"></div>0</td>'+
-			guideHtml+
+			td+
 			'<td name="guidePayedMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
@@ -3747,7 +3747,6 @@ define(function(require, exports){
 					'<input name="billRemark"  class="w-80" type="text"/>'+
 				'</div>'+
 			'</td>'+
-			'<td><span class="F-float F-money"></span></td>'+
 			'<td>未对账<a href="javascript:void(0)" class="T-busArrDel" style="margin-left:13px;">删除</a></td>'+
 			'</tr>';
 		$obj.append(html);
