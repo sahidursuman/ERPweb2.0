@@ -44,10 +44,6 @@
             <label class="control-label marginLeft-30">内转成本合计：<span class="F-float F-money">{{sumInnerCost}}</span></label>
             <label class="control-label marginLeft-30">毛利合计：<span class="F-float F-money">{{sumProfit}}</span></label>
             <label class="control-label marginLeft-30">人均毛利合计：<span class="F-float F-money">{{sumAverProfit }}</span></label>
-            <label class="pos-rel pull-right">
-                <input type="checkbox" class="ace T-checkTurn" {{if searchParam.isSelectTransfer == "1"}}checked="checked"{{/if}}/> 
-                <span class="lbl"> 核算中转</span>
-            </label>
         </div>
     </div>
     <div class="row ticketList">
@@ -63,11 +59,7 @@
                 <th>客户</th>
                 <!-- <th>组团社</th> -->
                 <th>收客部门</th>   
-                <th>团款应收</th> 
-                {{if searchParam.isSelectTransfer == "1"}}
-                <th>中转</th>
-                <th>中转成本</th>
-                {{/if}}
+                <th>团款应收</th>
                 <th>接收部门</th>
                 <th>内转成本</th>  
                 <th>毛利</th>
@@ -94,13 +86,6 @@
                         <span class="F-float F-money">{{innerTransferList.needInComeMoney}}</span>
                     </a>
                 </td>
-                {{if searchParam.isSelectTransfer == "1"}}
-                <td>{{if innerTransferList.change == null || innerTransferList.change == ""}}-{{else}}{{innerTransferList.change}}{{/if}}</td> 
-                <td><a href="javascript:void(0)" class="T-option T-showChangePay">
-                        <span class="F-float F-money">{{innerTransferList.totalPaySettlementMoney}}</span>
-                    </a>
-                </td>
-                {{/if}}
                 <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
                 <td><a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">
                         <span class="F-float F-money">{{innerTransferList.transNeedPayAllMoney}}</span>
