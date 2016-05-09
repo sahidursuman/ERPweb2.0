@@ -790,7 +790,7 @@ define(function(require, exports) {
                 lineData = JSON.parse(lineData || "{}");
             }
             if($that.val() != "" && !!lineData.days){
-                $endTime.val(Tools.addDay($that.val(), lineData.days));
+                $endTime.val(Tools.addDay($that.val(), lineData.days)).trigger('blur');
             }
         });
     	//送团表内操作
@@ -1432,7 +1432,7 @@ define(function(require, exports) {
         if(typeof data !== "object"){
             data = JSON.parse(data || "{}");
         }
-        data.otherFeeDel = JSON.stringify(data.otherFeeDel || []);
+        data.otherFeeDel = JSON.stringify(data.otherFeeDel || null);
         if(optionType === 1){
             html = T.viewOther(data);
             html = Tools.filterMoney(html);
@@ -2555,28 +2555,32 @@ define(function(require, exports) {
             });
             data.sendTripDel = $tab.find('.T-send-group-list').data('del-json');
             if(typeof data.sendTripDel === "object"){
-                data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
+                data.sendTripDel = JSON.stringify(data.sendTripDel || null);
             }
         }
         if(data.baseInfo.customerType === 1){
-            data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
-            if(typeof data.receiveTripDel === "object"){
-                data.receiveTripDel = JSON.stringify(data.receiveTripDel || "[]");
+            data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json') || [];
+            if(typeof data.receiveTripDel !== "object"){
+                data.receiveTripDel = JSON.parse(data.receiveTripDel);
             }
             $joinGroup.find('tr').each(function(index){
                 data.receiveTripDel.push({
                     id : $(this).data('id')
                 });
             });
-            data.sendTripDel = $tab.find('.T-send-group-list').data('del-json');
-            if(typeof data.sendTripDel === "object"){
-                data.sendTripDel = JSON.stringify(data.sendTripDel || "[]");
-            }
+
+            if(data.receiveTripDel.length > 0) data.receiveTripDel = JSON.stringify(data.receiveTripDel);
+            else data.receiveTripDel = null;
+
+            data.sendTripDel = $tab.find('.T-send-group-list').data('del-json') || [];
+            if(typeof data.sendTripDel !== "object") data.sendTripDel = JSON.parse(data.sendTripDel);
             $sendGroup.find('tr').each(function(index){
                 data.sendTripDel.push({
                     id : $(this).data('id')
                 });
             });
+            if(data.sendTripDel.length > 0) data.sendTripDel = JSON.stringify(data.sendTripDel);
+            else data.sendTripDel = null;
         }
 
         if(!isCheckDate){
