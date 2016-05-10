@@ -864,7 +864,7 @@ define(function(require, exports) {
 
 		
 		var isArranged = $tab.find('#isArranged').val();
-		if (!isArranged) {
+		if (isArranged == 0) {
 			$tab.find('[name=price]').trigger('change');
 		}
 

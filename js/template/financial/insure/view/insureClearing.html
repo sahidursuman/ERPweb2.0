@@ -151,6 +151,7 @@
                         -
                     {{else}}
                         {{rs.accountTime | dateFormat:'yyyy-MM-dd'}}
+                        {{if rs.endTime}} ~ {{rs.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}
                     {{/if}}
                 </td>
                 <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
