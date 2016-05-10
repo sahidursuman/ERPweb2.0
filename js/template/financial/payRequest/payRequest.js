@@ -195,7 +195,7 @@ define(function(require, exports) {
             data: {
                 id : $tab.find('.T-savePayment').data('id'),
                 payed : $tab.find('input[name=payMoney]').val(),
-                payType : $tab.find('select[name=sumPayType]').val(),
+                payType : $tab.find('select[name=preType]').val(),
                 remark : $tab.find('input[name=remark]').val(),
                 bankId : $tab.find('input[name=cash-id]').val() || $tab.find('input[name=card-id]').val(),
                 number : $tab.find('input[name=credentials-number]').val(),
