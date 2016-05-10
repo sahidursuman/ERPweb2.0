@@ -50,7 +50,7 @@
         <thead>
             <tr class='bg-blur T-tr-fixed'>
                 <th>账务类别</th>
-                <th>{{if recored.type == 1}}用餐{{else if recored.type == 2}}入住{{else if recored.type == 3}}用车{{else if recored.type == 4}}游玩{{else if recored.type == 5 || recored.type == 7 || recored.type == 8}}消费{{else if recored.type == 6}}发生{{/if}}日期(账期)
+                <th>{{if recored.type == 3}}用餐{{else if recored.type == 4}}入住{{else if recored.type == 2}}用车{{else if recored.type == 5}}游玩{{else if recored.type == 12 || recored.type == 7 || recored.type == 10}}消费{{else if recored.type == 8}}发生{{/if}}日期(账期)
                 </th>
                 <th>人数</th>
                 <th>资源信息</th>
@@ -69,7 +69,7 @@
                     {{/if}}
                     {{if recored.memberName != null && recored.memberName != ""}}{{recored.memberName}}{{/if}}
                 </td>
-                <td>{{recored.startTime | dateFormat:"yyyy-MM-dd"}}{{if recored.type == 3}} ~ {{recored.endTime | dateFormat:"yyyy-MM-dd"}}{{/if}}</td>
+                <td>{{recored.startTime | dateFormat:"yyyy-MM-dd"}}{{if recored.endTime}} ~ {{recored.endTime | dateFormat:"yyyy-MM-dd"}}{{/if}}</td>
                 <td>{{recored.adultCount}} 大 {{recored.childCount}} 小</td>
                 <td>{{recored.resourceName}}</td>
                 <td><span class="F-float F-money">{{recored.needPay}}</span></td>
