@@ -5,7 +5,8 @@
  */
 define(function(require, exports) {
 	var menuKey = "funancial_paymentRequisition",
-		listTemplate = require("./view/list"),
+		listHeaderTemplate = require("./view/listHeader"),
+		listTableTemplate = require("./view/listTable"),
 		payTemplate = require("./view/pay"),
 		payedDetailTempLate = require("./view/payedDetail");
 
@@ -18,24 +19,19 @@ define(function(require, exports) {
 	 */
 	Pay.initModule = function(){
 		var dateJson = FinancialService.getInitDate();
-		Pay.getList(0,{startTime : dateJson.startDate,endTime : dateJson.endDate,accountStatus:2});
+		Pay.getListHeader(0,{startTime : dateJson.startDate,endTime : dateJson.endDate,accountStatus:2});
 	};
 
-	Pay.getList = function(page,args){
-		var args = args || [];
-		if(Pay.$tab && arguments.length === 1){
-			args = {
-				type : Pay.$tab.find('.T-business-type').val(),
-				accountType : Pay.$tab.find('.T-accountType').val(),
-				startTime : Pay.$tab.find('.T-startTime').val(),
-				endTime : Pay.$tab.find('.T-endTime').val(),
-				unitName : Pay.$tab.find('.T-unitName').val(),
-				resourceName : Pay.$tab.find('.T-resourceName').val(),
-				accountStatus : Pay.$tab.find(".T-finance-status").find("button").data("value")
-			}
-		}
-		args.pageNo = page || 0;
+    Pay.getListHeader = function(page,args){
+        args = Pay.getArgs(page,args);
+        var data = {};
+        data.searchParam = args;
+        Tools.addTab(menuKey,"付款申请",listHeaderTemplate(data));
+        Pay.getList(page,args);
+    }
 
+	Pay.getList = function(page,args){
+        args = Pay.getArgs(page,args);
 		$.ajax({
 			url: KingServices.build_url("account/paymentRecored", "findPager"),
 			type: 'POST',
@@ -44,8 +40,9 @@ define(function(require, exports) {
 		.done(function(data) {
 			if(showDialog(data)){
 				Pay.searchData = args;
-				Tools.addTab(menuKey,"付款申请",listTemplate(data));
 				Pay.$tab = $("#tab-" + menuKey + "-content");
+                Pay.$tab.find('.T-list').html(listTableTemplate(data));
+                Pay.$tab.find('.T-sumItem').text("共计 " + data.searchParam.totalCount + " 条记录");
 				Pay.getSumData(args);
 				if(args.pageNo == 0){
 					Pay.initList();
@@ -65,6 +62,23 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+    Pay.getArgs = function(page,args){
+        args = args || [];
+        if(Pay.$tab && args){
+            args = {
+                type : Pay.$tab.find('.T-business-type').val(),
+                accountType : Pay.$tab.find('.T-accountType').val(),
+                startTime : Pay.$tab.find('.T-startTime').val(),
+                endTime : Pay.$tab.find('.T-endTime').val(),
+                unitName : Pay.$tab.find('.T-unitName').val(),
+                resourceName : Pay.$tab.find('.T-resourceName').val(),
+                accountStatus : Pay.$tab.find(".T-finance-status").find("button").data("value")
+            }
+        }
+        args.pageNo = page || 0;
+        return args;
+    };
 
 	//获取统计数据
 	Pay.getSumData = function(args){
@@ -195,7 +209,7 @@ define(function(require, exports) {
             data: {
                 id : $tab.find('.T-savePayment').data('id'),
                 payed : $tab.find('input[name=payMoney]').val(),
-                payType : $tab.find('select[name=sumPayType]').val(),
+                payType : $tab.find('select[name=preType]').val(),
                 remark : $tab.find('input[name=remark]').val(),
                 bankId : $tab.find('input[name=cash-id]').val() || $tab.find('input[name=card-id]').val(),
                 number : $tab.find('input[name=credentials-number]').val(),
@@ -205,9 +219,9 @@ define(function(require, exports) {
                 if (showDialog(data)) {
                     showMessageDialog("保存成功！", function() {
                         $tab.data('isEdited', false);
+                        Pay.getList(Pay.searchData.pageNo);
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_pay");
-                            Pay.getList(Pay.searchData.pageNo);
                         } else {
                             Pay.getPayment(id);
                         }
