@@ -858,7 +858,7 @@ define(function(require, exports) {
 		
 		var isArranged = $tab.find('[name=isArranged]').val();
 		if (!isArranged) {
-			$tab.find('#tripPlan_addPlan_insurance').find('[name=memberCount]').trigger('change');
+			$tab.find('[name=price]').trigger('change');
 		}
 
 		//选择已添加导游
