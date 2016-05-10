@@ -279,6 +279,13 @@ define(function(require, exports) {
 							detail[type] += money;
 						}
 					});
+
+					//计算车辆安排签单金额
+					var $signBillMoney = $tab.find('.T-signBillMoney'),signBillMoney = 0;
+					$signBillMoney.each(function(si) {
+						signBillMoney += $(this).text()*1;
+					});
+					detail[2] += signBillMoney;
 					
 					var text = [], label = ['现金', '刷卡', '签单'];
 					for (var i = 0; i < 3;i ++) {
@@ -856,9 +863,9 @@ define(function(require, exports) {
 		});
 
 		
-		var isArranged = $tab.find('[name=isArranged]').val();
+		var isArranged = $tab.find('#isArranged').val();
 		if (!isArranged) {
-			$tab.find('#tripPlan_addPlan_insurance').find('[name=memberCount]').trigger('change');
+			$tab.find('[name=price]').trigger('change');
 		}
 
 		//选择已添加导游

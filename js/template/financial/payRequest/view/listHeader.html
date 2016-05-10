@@ -4,14 +4,14 @@
             <label>业务类别 </label>
             <select name="T-business-type" class="T-business-type">
                 <option value="" {{ if !searchParam.type}}selected{{/if}}>全部</option>
-                <option value="1" {{ if searchParam.type == 1}}selected{{/if}}>餐厅</option>
-                <option value="2" {{ if searchParam.type == 2}}selected{{/if}}>酒店</option>
-                <option value="3" {{ if searchParam.type == 3}}selected{{/if}}>车队</option>
-                <option value="4" {{ if searchParam.type == 4}}selected{{/if}}>景区</option>
-                <option value="5" {{ if searchParam.type == 5}}selected{{/if}}>保险</option>
-                <option value="6" {{ if searchParam.type == 6}}selected{{/if}}>票务</option>                
+                <option value="3" {{ if searchParam.type == 3}}selected{{/if}}>餐厅</option>
+                <option value="4" {{ if searchParam.type == 4}}selected{{/if}}>酒店</option>
+                <option value="2" {{ if searchParam.type == 2}}selected{{/if}}>车队</option>
+                <option value="5" {{ if searchParam.type == 5}}selected{{/if}}>景区</option>
+                <option value="12" {{ if searchParam.type == 12}}selected{{/if}}>保险</option>
+                <option value="8" {{ if searchParam.type == 8}}selected{{/if}}>票务</option>                
                 <option value="7" {{ if searchParam.type == 7}}selected{{/if}}>自费</option>                
-                <option value="8" {{ if searchParam.type == 8}}selected{{/if}}>其它</option>
+                <option value="10" {{ if searchParam.type == 10}}selected{{/if}}>其它</option>
             </select>
         </div>
         <div class="form-group mar-r-10">
@@ -82,25 +82,12 @@
             </tr>
         </thead>
         <tbody class="T-list">
-            {{each result as rs}}
-            <tr data-id="{{rs.id}}" data-type="{{rs.type}}">
-                <td>{{rs.type}}</td>
-                <td>{{rs.accountType}}</td>
-                <td>{{rs.accountTime}}</td>
-                <td>{{rs.count}}</td>
-                <td>{{rs.unitName}}</td>
-                <td>{{rs.resourceName}}</td>
-                <td><span class="F-float F-money">{{rs.needPay}}</span></td>
-                <td><span class="F-float F-money">{{rs.payed}}</span></td>
-                <td><span class="F-float F-money">{{rs.unpay}}</span></td>
-                <td><a class="cursor T-pay">付款</a></td>
-            </tr>
-            {{/each}}
+            
         </tbody>
     </table>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small class="T-sumItem">共计 {{searchParam.totalCount}} 条记录</small>
+            <small class="T-sumItem">没有查询到相关记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">

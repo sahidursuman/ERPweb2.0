@@ -25,6 +25,9 @@ FinancialService.initPayEvent = function($container,rule)  {
     if($select.length == 0){
         $select = $container.find('select[name=payType]');
     }
+    if($select.length == 0){
+        $select = $container.find('select[name=preType]');
+    }
     $select.on('change', function(event) {
         event.preventDefault();
         var val = $(this).val();

@@ -273,12 +273,9 @@
 				<td class="F-float F-money">{{busCompany.reduceMoney}}</td>
 				<td class="F-float F-money">{{busCompany.needPayMoney}}</td>
 				<td class="F-float F-money">{{busCompany.prePayMoney}}</td>
-                <td>{{busCompany.payType | getPlanPayTypeText}}{{if busCompany.payType2}}<br />{{busCompany.payType2 | getPlanPayTypeText}}{{/if}}</td>
-				<td class="T-guidePayFeild" data-type={{busCompany.payType}}><span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span>
-                {{if !!busCompany.guidePayMoney2}}
-                    <br /><span class="F-float F-money">{{if busCompany.payType2 == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney2}}{{/if}}</span>
-                {{/if}}</td>
-                <td class="F-float F-money">{{if busCompany.payType2 == 2}}-{{else}}{{busCompany.signMoney}}{{/if}}</td>
+                <td>{{busCompany.payType | getPlanPayTypeText}}</td>
+				<td class="T-guidePayFeild" data-type={{busCompany.payType}}><span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span></td>
+                <td>{{if busCompany.payType == 2}}-{{else}}<span class="T-signBillMoney F-float F-money">{{busCompany.signMoney || 0}}</span>{{/if}}</td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}

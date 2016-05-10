@@ -2,17 +2,15 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label class="control-label">对方单位：{{recored.unitName}}</label>
-            <label class="control-label marginLeft-30">账期：{{recored.startTime | dateFormat:"yyyy-MM-dd"}} — {{recored.endTime | dateFormat:"yyyy-MM-dd"}}</label>
+            <label class="control-label marginLeft-30">账期：{{recored.startTime | dateFormat:"yyyy-MM-dd"}}{{if recored.endTime}} — {{recored.endTime | dateFormat:"yyyy-MM-dd"}}{{/if}}</label>
             <label class="control-label marginLeft-30">预付请款金额合计：<span class="T-unpayMoney F-float F-money">{{recored.needPay}}</span></label>
             <label class="control-label marginLeft-30">已付金额合计：<span class="T-unpayMoney F-float F-money">{{recored.payed}}</span></label>
             <label class="control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney F-float F-money">{{recored.unpay}}</span></label>
         </div>
         <div>
             <div class="form-group mar-r-10">
-                <label class="control-label">付款方式：</label>
-                <select class="form-control" name="sumPayType">
-                   {{#recored.payType | getPayTypeOptions}}
-                </select>
+                <label class="control-label" style="margin-top: -4px;">付款方式：</label>
+                {{#recored.payType | getPlanPreTypeOption}}
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label">现金账号：</label>
