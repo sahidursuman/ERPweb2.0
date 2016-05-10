@@ -532,7 +532,7 @@
                                             <td>
                                                 <input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12 F-float F-money" />
                                             </td>
-                                            <td><div class="inline-flex">{{#busCompany.preType | getPlanPreTypeOption: busCompany.isConfirmAccount}}
+                                            <td><div class="inline-flex">{{#busCompany.preType | getPlanPreTypeOption: busCompany.isConfirmAccount,true}}
                                                 <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" style="width: 60px;" class="price F-float F-money" maxlength="9" {{if busCompany.isConfirmAccount}}disabled{{/if}}/></div>
                                             </td>
                                             <td class="text-left"><div class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption: busCompany.isConfirmAccount}}
@@ -914,7 +914,7 @@
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{scenic.needPayMoney}}" style="width: 60px;" />
                                         </td>
-                                        <td><div class="inline-flex">{{#scenic.preType | getPlanPreTypeOption: scenic.isConfirmAccount}}
+                                        <td><div class="inline-flex">{{#scenic.preType | getPlanPreTypeOption: scenic.isConfirmAccount,true}}
                                             <input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
                                         <td><div class="inline-flex">

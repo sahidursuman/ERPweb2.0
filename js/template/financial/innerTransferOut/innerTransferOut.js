@@ -36,8 +36,8 @@ define(function(require,exports) {
 			var $toBusinessGroupName = InnerTransferOut.$tab.find('input[name=toBusinessGroupName]').val(),
 			toBusinessGroupId = $toBusinessGroupId;
 			toBusinessGroupName = $toBusinessGroupId==""?"":$toBusinessGroupName;
-			startDate = InnerTransferOut.getValueForInput(InnerTransferOut.$tab,'input',"startDate");
-			endDate = InnerTransferOut.getValueForInput(InnerTransferOut.$tab,'input',"endDate");
+			startDate = InnerTransferOut.$tab.find('input[name=startDate]').val();
+			endDate = InnerTransferOut.$tab.find('input[name=endDate]').val();
 			accountStatus = InnerTransferOut.$tab.find(".T-finance-status").find("button").data("value");
 		};
 		pageNo = pageNo || 0;
@@ -758,14 +758,6 @@ define(function(require,exports) {
 			obj.autocomplete('option','source', lineProductList);
 			obj.autocomplete('search','');
 		});
-	};
-	//获取input框的数据('input[name=a]').val();
-	InnerTransferOut.getValueForInput = function($obj,$inputType,$name){
-		var result = $obj.find($inputType+'[name='+$name+']').val();
-		if (result == "") {//所有空字符串变成0
-        	result = 0;
-    	}
-		return result;
 	};
 	//规范输入的数字数据
 	InnerTransferOut.changeTwoDecimal = function($val){

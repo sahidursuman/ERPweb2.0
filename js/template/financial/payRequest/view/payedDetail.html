@@ -19,7 +19,7 @@
                 <td>{{item.businessType}}</td>
                 <td>{{item.payParty}}</td>
                 <td><span class="F-float F-money">{{item.payDifferenceMoney}}</span></td>
-                <td>{{if item.payType == 0}}现金{{else if item.payType == 1}}银行转账{{else if item.payType == 2}}网上支付{{else if item.payType == 3}}支票{{else}}其它{{/if}}</td>
+                <td>{{#item.payType | getPayTypeText}}</td>
                 <td>{{if item.accountName == null || item.accountName == ""}}-{{else}}{{item.accountName}}{{/if}}</td>
                 <td>{{item.remark}}</td>
                 <td>{{item.checkRealname}}</td>

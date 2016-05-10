@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":7,"md5":"cfdc91f54ab8030020eda5fe78ef889b"}*/
+/*TMODJS:{"debug":true,"version":8,"md5":"cfdc91f54ab8030020eda5fe78ef889b"}*/
 define(function(require) {
     return require("../../../template")("financial/payRequest/view/listHeader", function($data, $filename) {
         try {
