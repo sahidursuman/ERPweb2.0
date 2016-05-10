@@ -176,9 +176,8 @@ define(function(require, exports) {
 
         if (page == -1) {
             if (!replace.searchData.startTime || !replace.searchData.endTime) {
-                showMessageDialog("请选择时间区间", function() {
-                    return;
-                }); 
+                showMessageDialog("请选择时间区间"); 
+                return false;
             }
             exportXLS( APP_ROOT + 'back/export.do?method=exportBookingOrderProfit&token='+ $.cookie("token") +'&'+ $.param(replace.searchData));
             return;

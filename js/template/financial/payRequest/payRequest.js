@@ -113,7 +113,7 @@ define(function(require, exports) {
             Pay.getList(0);
         });
 
-        Pay.$tab.find(".T-list").on('click',".T-pay",function(event) {
+        Pay.$tab.find(".T-list").off().on('click',".T-pay",function(event) {
             event.preventDefault();
             Pay.getPayment($(this).closest('tr').data('id'));
         });

@@ -59,9 +59,8 @@ define(function(require, exports) {
         page = page || 0;
         if (page == -1) {
             if (!TurnProfit.searchParam.startTime || !TurnProfit.searchParam.endTime) {
-                showMessageDialog("请选择时间区间", function() {
-                    return;
-                }); 
+                showMessageDialog("请选择时间区间"); 
+                return false;
             }
             exportXLS( APP_ROOT + 'back/export.do?method=exportArrangeTransferProfit&token='+ $.cookie("token") + '&' + $.param(TurnProfit.searchParam));
             return;

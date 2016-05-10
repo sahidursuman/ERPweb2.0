@@ -620,6 +620,7 @@ define(function(require, exports) {
                             if (ui.item == null) {
                                 var $that = $(this),
                                     $parents = $that.closest('div');
+                                $that.val("");
                                 $parents.find("input[name=outOPUserId]").val("");
                             }
                         },
