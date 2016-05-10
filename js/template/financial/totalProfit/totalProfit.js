@@ -91,9 +91,8 @@ define(function(require, exports) {
         }
         if (page == -1) {
             if (!args.startTime || !args.endTime) {
-                showMessageDialog("请选择时间区间", function() {
-                    return;
-                }); 
+                showMessageDialog("请选择时间区间"); 
+                return false;
             }
             exportXLS( APP_ROOT + 'back/export.do?method=exportTotalProfit&token='+ $.cookie("token") +'&'+ $.param(args));
             return;

@@ -169,9 +169,8 @@ define(function(require, exports) {
         };
         if (pageNo == -1) {
             if (!ColGuest.searchData.startTime || !ColGuest.searchData.endTime) {
-                showMessageDialog("请选择时间区间", function() {
-                    return;
-                }); 
+                showMessageDialog("请选择时间区间");
+                return false; 
             }
             exportXLS( APP_ROOT + 'back/export.do?method=exportReceiveProfit&token='+ $.cookie("token") +'&'+ $.param(ColGuest.searchData));
             return;
