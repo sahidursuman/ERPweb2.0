@@ -3,9 +3,6 @@
         <div class="form-group mar-r-10">
             <label class="control-label">对方单位：{{recored.unitName}}</label>
             <label class="control-label marginLeft-30">账期：{{recored.startTime | dateFormat:"yyyy-MM-dd"}}{{if recored.endTime}} — {{recored.endTime | dateFormat:"yyyy-MM-dd"}}{{/if}}</label>
-            <label class="control-label marginLeft-30">预付请款金额合计：<span class="T-unpayMoney F-float F-money">{{recored.needPay}}</span></label>
-            <label class="control-label marginLeft-30">已付金额合计：<span class="T-unpayMoney F-float F-money">{{recored.payed}}</span></label>
-            <label class="control-label marginLeft-30">未付金额合计：<span class="T-unpayMoney F-float F-money">{{recored.unpay}}</span></label>
         </div>
         <div>
             <div class="form-group mar-r-10">
