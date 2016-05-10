@@ -82,25 +82,12 @@
             </tr>
         </thead>
         <tbody class="T-list">
-            {{each result as rs}}
-            <tr data-id="{{rs.id}}" data-type="{{rs.type}}">
-                <td>{{rs.type}}</td>
-                <td>{{rs.accountType}}</td>
-                <td>{{rs.accountTime}}</td>
-                <td>{{rs.count}}</td>
-                <td>{{rs.unitName}}</td>
-                <td>{{rs.resourceName}}</td>
-                <td><span class="F-float F-money">{{rs.needPay}}</span></td>
-                <td><span class="F-float F-money">{{rs.payed}}</span></td>
-                <td><span class="F-float F-money">{{rs.unpay}}</span></td>
-                <td><a class="cursor T-pay">付款</a></td>
-            </tr>
-            {{/each}}
+            
         </tbody>
     </table>
     <div class="row pageMode">
         <div class="col-xs-6">
-            <small class="T-sumItem">共计 {{searchParam.totalCount}} 条记录</small>
+            <small class="T-sumItem">没有查询到相关记录</small>
         </div>
         <div class="col-xs-6">
             <div class="dataTables_paginate paging_simple_numbers T-pagenation">
