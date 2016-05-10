@@ -275,7 +275,7 @@
 				<td class="F-float F-money">{{busCompany.prePayMoney}}</td>
                 <td>{{busCompany.payType | getPlanPayTypeText}}</td>
 				<td class="T-guidePayFeild" data-type={{busCompany.payType}}><span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span></td>
-                <td class="F-float F-money">{{if busCompany.payType == 2}}-{{else}}{{busCompany.signMoney || 0}}{{/if}}</td>
+                <td>{{if busCompany.payType == 2}}-{{else}}<span class="T-signBillMoney F-float F-money">{{busCompany.signMoney || 0}}</span>{{/if}}</td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}
