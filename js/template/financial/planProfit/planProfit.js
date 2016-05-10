@@ -119,6 +119,10 @@ define(function(require, exports) {
                             operateCalculteOut : plan.$tab.find(".T-checkTurn").is(":checked") ? 1 : 0,
                             sortType: 'auto'
                         };
+                        if(!argsData.start || !argsData.end){
+                            showMessageDialog("请选择时间区间");
+                            return false;
+                        }
                         FinancialService.exportReport(argsData,"exportPlanProfit");
                     });
                 }
