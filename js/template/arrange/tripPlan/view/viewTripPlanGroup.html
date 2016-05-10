@@ -273,7 +273,7 @@
 												<td class="F-float F-money">{{busCompanyList.needPayMoney}}</td>
 												<td class="F-float F-money">{{busCompanyList.prePayMoney}}</td>
 												<td>{{busCompanyList.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if busCompanyList.payType == 2}}{{busCompanyList.signMoney}}{{else}}{{busCompanyList.guidePayMoney}}{{/if}}</span></td>
-												<td class="F-float F-money">{{if busCompanyList.payType == 2}}-{{else}}{{busCompanyList.signBillMoney}}{{/if}}</td>
+												<td class="F-float F-money">{{if busCompanyList.payType == 2}}-{{else}}{{busCompanyList.signBillMoney || 0}}{{/if}}</td>
 												<td>{{busCompanyList.remark}}</td>
 											</tr>
 											{{/each}}
