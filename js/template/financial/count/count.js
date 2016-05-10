@@ -3005,6 +3005,7 @@ define(function(require, exports){
 					itemSelfCost += Count.sumNotAccSelfMoney($that);
 				}
 				selfCost += itemSelfCost;
+				console.log(selfCost);
 			});
 			
 			$tbodyObj.find('input[name=needIncome]').each(function() {
@@ -3038,10 +3039,12 @@ define(function(require, exports){
 		if($nextTr.length>1){
 			for(var i = 0;i<$nextTr.length;i++){
 				var $that = $nextTr.eq(i);
-				selfMoney += sumMoney($that);
-				if($that.hasClass('breakFlag')){
+				
+				if($that.children('td').eq(0).hasClass('breakFlag')){
 					selfMoney += sumMoney($trObj);
 					break;
+				}else{
+					selfMoney += sumMoney($that);
 				}
 			};
 		}else{
