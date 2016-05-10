@@ -43,21 +43,21 @@
                     <tr busArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}"
                     isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="busArrange">
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{arrange.startTime | dateFormat: 'yyyy-MM-dd'}}
                         </td><!-- 开始时间 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{arrange.endTime | dateFormat: 'yyyy-MM-dd'}}
                         </td><!-- 结束时间 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{ if arrange.taskType == 0}}
@@ -76,54 +76,54 @@
                         </td><!-- 任务 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             <span class="companyName">{{arrange.companyName}}</span>
                         </td><!-- 车队 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{arrange.licenseNumber}}
                         </td><!-- 车牌号 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             <span calss="F-float F-count">{{arrange.seatCount}}</span>
                         </td>
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if editStatus == 2}}
                                 <span class="F-float F-money realPrice">{{arrange.realPrice}}</span>
                                 <input type="hidden" name="price" value="{{arrange.realPrice}}" />
                             {{else}}
-                                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-80 F-float F-money" 
+                                <input type="text" name="price" value="{{arrange.realPrice}}" class="w-70 F-float F-money" 
                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                             {{/if}}
                         </td><!-- 车费 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if editStatus == 2}}
                                 <span class="F-float F-money">{{arrange.realReduceMoney}}</span>
                                 <input type="hidden" name="realReduceMoney" value="{{arrange.realReduceMoney}}" />
                             {{else}}
-                                <input type="text" class="w-80 F-float F-money" name="realReduceMoney" value="{{arrange.realReduceMoney}}" 
+                                <input type="text" class="w-70 F-float F-money" name="realReduceMoney" value="{{arrange.realReduceMoney}}" 
                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                             {{/if}}
                         </td><!-- 优惠 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if arrange.badStatus == 1}}
@@ -141,7 +141,7 @@
                         </td><!-- 应付 -->
 
                         <td>
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             <span class="F-float F-money" name="payedMoney">{{arrange.payedMoney}}</span>
@@ -165,7 +165,7 @@
                                             {{if rs.guideName == '' || rs.guideName == null}}
                                                 {{if guideCount > 1}}
                                                     <input name="guideArrangeId" type="hidden" />
-                                                    <input name="guideName"  type="text" class="w-80" 
+                                                    <input name="guideName"  type="text" class="w-70" 
                                                     {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled" {{/if}}/>
                                                 {{else}}
                                                     <span>{{guideArrange.listMap[0].guideName}}</span>
@@ -198,7 +198,7 @@
                                                     </button>
                                                 {{/if}}
                                                 <input name="guideArrangeId" type="hidden" />
-                                                <input name="guideName"  type="text" class="w-80" 
+                                                <input name="guideName"  type="text" class="w-70" 
                                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled" {{/if}}/>
                                             {{else}}
                                                 <span>{{guideArrange.listMap[0].guideName}}</span>
@@ -215,7 +215,7 @@
                         
                         
                         <td name="guidePayedMoney">
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if !!arrange.guideDetails && arrange.guideDetails.length}}
@@ -226,7 +226,7 @@
                                             <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
                                         {{else}}
                                             <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
-                                            class="F-float F-money w-80" 
+                                            class="F-float F-money w-70" 
                                             {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly" {{/if}}/>
                                         {{/if}}
                                     </div>
@@ -236,7 +236,7 @@
                                     {{if editStatus == 2}}
                                        0
                                     {{else}}
-                                        <input name="guidePayedMoney" type="text" class="w-80" 
+                                        <input name="guidePayedMoney" type="text" class="w-70" 
                                         {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly" {{/if}}/>
                                     {{/if}}
                                 </div>
@@ -244,7 +244,7 @@
                         </td><!-- 金额 -->
 
                         <td name="payType">
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if !!arrange.guideDetails && arrange.guideDetails.length}}
@@ -283,7 +283,7 @@
                         </td><!-- 付款方式 -->
                         
                         <td name="billImage">
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if !!arrange.guideDetails && arrange.guideDetails.length}}
@@ -310,7 +310,7 @@
                         </td><!-- 单据 -->
                         
                         <td name="billRemark">
-                            {{if editStatus != 2 && guideCount > 1 && arrange.isConfirmAccount != 1 }}
+                            {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{if !!arrange.guideDetails && arrange.guideDetails.length}}
