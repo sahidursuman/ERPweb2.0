@@ -3005,7 +3005,6 @@ define(function(require, exports){
 					itemSelfCost += Count.sumNotAccSelfMoney($that);
 				}
 				selfCost += itemSelfCost;
-				console.log(selfCost);
 			});
 			
 			$tbodyObj.find('input[name=needIncome]').each(function() {
