@@ -36,7 +36,7 @@
 		<th>购物全陪</th>
 		<th>自费导佣</th>
 		<th>自费全陪</th>
-		<th style="min-width:50px;">导游结算扣款</th>
+		<th>导游结算扣款</th>
 		{{if isTurn}}
 		<th>车费</th>
 		<th>餐费</th>
@@ -50,12 +50,17 @@
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
 		<td rowspan="3">
-			<a href="javascript:void(0)" class="{{if rs.billStatus >= 0}}T-toTripAccount{{/if}} h-touristGroupInfo" {{if rs.billStatus < 0}}style="color:#000;"{{/if}}>
+			{{if rs.billStatus != -1}}
+				<a href="javascript:void(0)" class="T-toTripAccount h-touristGroupInfo">
+			{{/if}}
+
 				<p>{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span></p>
 				<p>{{rs.lineProductName}}</p>
 				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}} <span class="F-float F-count" style="padding-left: 10px;">{{rs.adultCount}}</span>大<span class="F-float F-count">{{rs.childCount}}</span>小</p>
 				<p>导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span></p>
-			</a>
+			{{if rs.billStatus != -1}}
+				</a>
+			{{/if}}
 		</td>
 		<td rowspan="3">
 			{{if rs.billStatus == -1}}
