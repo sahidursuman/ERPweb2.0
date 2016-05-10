@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="T-search-area">
+        <div class="form-horizontal form-group ">
+            <label>收客单号 </label>
+            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="" />
+            <label>客户 </label>
+            <input class="mar-r-10 w100" type="text" placeholder="客户" name="fromPartnerAgencyName" value="" />
+            <input type="hidden" name="fromPartnerAgencyId" value="" />
+            <label>团散标识 </label>
+            <select name="customerType" class="mar-r-10 w100">
+                <option value="">全部</option>
+                <option value="0">散客</option>
+                <option value="1">团队</option>
+            </select>
+            <label>外联销售 </label>
+            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="" />
+            <input type="hidden" name="lineProductId" value="" />
+            <label>部门 </label>
+            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="" />
+            <input type="hidden" name="businessNameId" value="" />
+            <label>子部门 </label>
+            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="" />
+            <label>类别 </label>
+            <select name="customerType" class="mar-r-10">
+                <option value="">全部</option>
+                <option value="0">散客</option>
+                <option value="1">团队</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>开始日期 </label>
+            <input class="date-picker mar-r-10 w100" name="startTime" placeholder="开始日期" type="text" value=""/>
+            <label>结束日期 </label>
+            <input class="date-picker mar-r-10 w100" name="endTime" placeholder="结束日期" type="text" value="" />
+            <button class="btn-sm search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button>
+        </div>
+
+        <div>
+            <label class="mar-r-20">总人数：<span class="T-totalCount"></span></label>
+            <label class="mar-r-20">收入合计：<span class="F-float F-money T-totalNeed"></span></label>
+            <label class="mar-r-20">支出合计：<span class="F-float F-money T-totalCost"></span></label>
+            <label class="mar-r-20 T-turn">毛利合计：<span class="F-float F-money T-totalProfit"></span></label>
+        </div>
+    </div>
+    <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight">
+        <thead>
+            <tr class="bg-blur T-tr-fixed">
+                <th>收客单号/代订单号</th>
+                <th>线路产品</th>
+                <th>出游日期/代订日期</th>
+                <th>游客</th>
+                <th>人数</th>
+                <th>客户</th>
+                <th>外联销售</th>
+                <th>部门</th>
+                <th>团款收入</th>
+                <th>代订收入</th>
+                <th>中转成本</th>
+                <th>发团成本</th>
+                <th>外转成本</th>
+                <th>内转成本</th>
+                <th>代订成本</th>
+                <th>收入小计</th>
+                <th>支出小计</th>
+                <th>毛利</th>
+                <th>人均毛利</th>
+            </tr>
+        </thead>
+        <tbody class="T-salesProfit-list">
+        </tbody>
+    </table>
+</div>
+<div class="row pageMode">
+    <div class="col-xs-6">
+        <small class="T-recordSize">没有查询到相关记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>
