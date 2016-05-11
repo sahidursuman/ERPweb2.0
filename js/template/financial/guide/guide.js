@@ -503,7 +503,7 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                        showMessageDialog(data.message, function() {
                             $tab.data('isEdited', false);
                             FinGuide.checkTemp = false;
                             if (argsLen === 1) {
@@ -567,7 +567,7 @@ define(function(require, exports) {
                 .done(function(data) {
                     $tab.data('isEdited', false);
                     FinGuide.payingJson = false;
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         if (argsLen === 2) {
                             FinGuide.getList(FinGuide.listPageNo);
                         } else {
@@ -576,7 +576,7 @@ define(function(require, exports) {
                     })
                 });
         } else {
-            showMessageDialog($('#confirm-dialog-message'), '您当前未进行任何操作！');
+            showMessageDialog('您当前未进行任何操作！');
         }
     };
 
@@ -1019,7 +1019,7 @@ define(function(require, exports) {
                                     data: args,
                                 })
                                 .done(function(data) {
-                                    showMessageDialog($("#confirm-dialog-message"),data.message);
+                                    showMessageDialog(data.message);
                                     if(type == 0){
                                         $('#tab-financial_guide-paying-content').data("isEdited",false);
                                         listFn();
@@ -1173,7 +1173,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if(data.success == 0){
-                    showMessageDialog($("#confirm-dialog-message"),data.message);
+                    showMessageDialog(data.message);
                     $container.find(".T-guideInfo").addClass('hide');
                     $container.find(".T-payType").eq(0).prop("checked",true);
                     $container.find(".T-payType").prop("disabled",true);

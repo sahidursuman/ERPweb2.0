@@ -98,7 +98,7 @@
                             <span class="F-float F-count">{{rs.childCount}}</span> 小
                         </a>
                     </td>
-                    <td rowspan="{{rs.rowLen}}">{{if !!rs.touristContact}}{{rs.touristContact.name}}{{/if}}</td>
+                    <td rowspan="{{rs.rowLen}}">{{rs.contactName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.operateName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
                     <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.needPayMoney}}</span></td>

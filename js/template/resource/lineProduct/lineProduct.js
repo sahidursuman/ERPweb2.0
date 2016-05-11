@@ -608,7 +608,7 @@ define(function(require, exports) {
 	ResLineProduct.delService = function($obj){
 		var $tr = $obj.closest('tr');
 		if(!!$tr.attr('serviceId')){
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+			showConfirmDialog("你确定要删除该条记录？", function() {
 				$.ajax({
 					url:KingServices.build_url('serviceStandardController','deleteServiceStandard'),
 					data:{
@@ -616,7 +616,7 @@ define(function(require, exports) {
 					},
 					type:'POST',
 					success:function(data){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						showMessageDialog(data.message);
 						$tr.remove();
 					}
 				});
@@ -644,17 +644,17 @@ define(function(require, exports) {
 			for(var i = 0;i<serviceStandardList.length;i++){
 				if(!!val){
 					if(serviceStandardList[i].serviceTitle == val){
-						showMessageDialog($( "#confirm-dialog-message" ),'【'+val+'】'+"服务标准已存在，请检查");
+						showMessageDialog('【'+val+'】'+"服务标准已存在，请检查");
 					}
 				}else{
 					if(i+1 !=serviceStandardList.length){
 						if(serviceStandardList[i].serviceTitle == serviceStandardList[i+1].serviceTitle){
-							showMessageDialog($( "#confirm-dialog-message" ),'【'+serviceStandardList[i+1].serviceTitle+'】'+"服务标准已存在，请检查");
+							showMessageDialog('【'+serviceStandardList[i+1].serviceTitle+'】'+"服务标准已存在，请检查");
 							return;
 						}
 					}else{
 						if(serviceStandardList[i-1].serviceTitle == serviceStandardList[i].serviceTitle){
-							showMessageDialog($( "#confirm-dialog-message" ),'【'+serviceStandardList[i].serviceTitle+'】'+"服务标准已存在，请检查");
+							showMessageDialog('【'+serviceStandardList[i].serviceTitle+'】'+"服务标准已存在，请检查");
 							return;
 						}
 					}
@@ -840,7 +840,7 @@ define(function(require, exports) {
 		        			}
 		        		}
 		        		if(shopArray.length >= 50){
-							showMessageDialog($("#confirm-dialog-message"),"最多只能添加50个购物商家");
+							showMessageDialog("最多只能添加50个购物商家");
 	        				$that.prop("checked",false);
 		        		}else{
 							var json = {
@@ -1562,12 +1562,11 @@ define(function(require, exports) {
 		});	
 	};
 	ResLineProduct.deleteLineProductDaysArrange = function(){
-		var dialogObj = $( "#confirm-dialog-message" ), $obj = $(this);
-
+		var $obj = $(this);
 		if($obj.hasClass('T-delTr')) {
 			var id = $obj.data('entity-id'),$parents = $obj.closest('tr'), catName = $obj.data('entity-name'),templateJsonDel = {name:catName, id:id + ""}
 			if (!!id) {
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog('你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url('lineProduct', 'deleteLineProductArrangeTemplate'),
 						type:"POST",
@@ -1607,7 +1606,7 @@ define(function(require, exports) {
 			}
 		} else {
 			if (!!$obj.data("entity-id")) {
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog('你确定要删除该条记录？', function() {
 					var id = $obj.data("entity-id"), objParents = $obj.closest('.T-timeline-item'), 
 					    name = $obj.data("entity-name"),
 					    templateJsonDel = {name:name, id:id + ""};
@@ -1638,7 +1637,7 @@ define(function(require, exports) {
 	// 删除线路产品
 		ResLineProduct.deleteLineProduct = function(id){
 			if(!!id){
-				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+				showConfirmDialog("你确定要删除该条记录？",function(){
 				 $.ajax({
 				 	url: KingServices.build_url('lineProduct', 'deleteLineProduct'),
 				 	type:"POST",
@@ -2640,10 +2639,10 @@ define(function(require, exports) {
 		var name = getValue($form.eq(0), "name"),
 			type = getValue($form.eq(0), "type");
 		if(trim(name) == ""){
-			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路产品名称");
+			showMessageDialog("请输入线路产品名称");
 			return false;
 		} else if(trim(type) == ""){
-			showMessageDialog($( "#confirm-dialog-message" ), "请输入线路类型");
+			showMessageDialog("请输入线路类型");
 			return false;
 		}		
 
@@ -2733,7 +2732,7 @@ define(function(require, exports) {
 		for (var i = 0;i < len ;i ++ ) {
 			for (var j = i-1; j >= 0; j --)  {
 				if (checkArr[i].serviceTitle === checkArr[j].serviceTitle) {
-					showMessageDialog($( "#confirm-dialog-message" ),'【'+checkArr[i].serviceTitle+'】'+"服务标准已重复，请去重之后再提交");
+					showMessageDialog('【'+checkArr[i].serviceTitle+'】'+"服务标准已重复，请去重之后再提交");
 					return;
 				}
 			}
@@ -2787,7 +2786,7 @@ define(function(require, exports) {
 					if(hotelId){
 						var hotelRoomId = $item.find("[name=hotelRoomId]").val();
 						if(!hotelRoomId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择房型！");
+							showMessageDialog("请选择房型！");
 							isAjax = false;
 							return false;
 						}
@@ -2812,7 +2811,7 @@ define(function(require, exports) {
 					if(scenicId){
 						var itemId = $item.find("[name=chargingId]").val();
 						if(!itemId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费项目！");
+							showMessageDialog("请选择收费项目！");
 							isAjax = false;
 							return false;
 						}
@@ -2897,7 +2896,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					$tab.data('isEdited', false);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message, function(){
+					showMessageDialog(data.message, function(){
 						if (!!tabArgs && tabArgs.length === 3) {
 							// 切换tab，就不做数据更新
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
@@ -3012,7 +3011,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					layer.close(addLineProductLayer);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message);
+					showMessageDialog(data.message);
 					ResLineProduct.listLineProduct(0,"","");
 				}
 			}

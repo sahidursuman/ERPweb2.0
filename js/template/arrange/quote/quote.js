@@ -227,7 +227,7 @@ define(function(require, exports) {
 		}
 
 		function bindCopy() {
-			$( "#confirm-dialog-message" ).removeClass('hide').dialog({
+			$conDiaMes.removeClass('hide').dialog({
 				modal: true,
 				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 				title_html: true,
@@ -246,7 +246,7 @@ define(function(require, exports) {
 						'data-clipboard-text': url,
 						click: function() {
 							$( this ).dialog( "close" );
-							showMessageDialog($("#confirm-dialog-message" ),"复制成功！",function(){});
+							showMessageDialog("复制成功！",function(){});
 						}
 					}
 				],
@@ -375,7 +375,7 @@ define(function(require, exports) {
 							success: function(data){
 								var result = showDialog(data);
 								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									showMessageDialog(data.message,function(){
 										quote.busStatusList(quoteId,$container, $a);
 									});
 								}
@@ -436,7 +436,7 @@ define(function(require, exports) {
 							success: function(data){
 								var result = showDialog(data);
 								if(result){
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									showMessageDialog(data.message,function(){
 										quote.hotelStatusList(quoteId,$container,$a);
 									});
 								}
@@ -457,7 +457,7 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						var $obj = $container.find(".T-arrangeBusCompanyList"),
 							offer = data.sumListInquiryBusAdd[0];
 						if (offer.brand == null) {
@@ -494,7 +494,7 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 
 						var whichDays = data.hotelList[0].whichDays;
 							whichDays = JSON.parse(whichDays),
@@ -751,7 +751,7 @@ define(function(require, exports) {
 			$container.find('.inquiryContent').on("click",function(){
 				var quoteId = $container.find('[name=quoteId]').val();
 				if(!!quoteId == false){
-					showMessageDialog($( "#confirm-dialog-message" ),"请先询价！");
+					showMessageDialog("请先询价！");
 					return false;
 				} 
 				quote.quoteStatus(quoteId,$container,$a.a,$a.tag);
@@ -890,12 +890,12 @@ define(function(require, exports) {
 			var $this = $(this), $time;
 			var $table = $container.find('.T-daylist table.table-striped');
 			if ($table.length > 0) {
-				showNndoConfirmDialog($( "#confirm-dialog-message" ), '是否重置行程安排成本价', function() {
+				showNndoConfirmDialog('是否重置行程安排成本价', function() {
 					$time = $this.val();
 					if (!!$time) {
 						quote.changeStartTime($container, $time, $a);
 					}else{
-						showMessageDialog($( "#confirm-dialog-message" ), '出游时间为空');
+						showMessageDialog('出游时间为空');
 					}
 				})
 			}
@@ -943,15 +943,15 @@ define(function(require, exports) {
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId && !!lineProductInfo.adultCount && !!lineProductInfo.childCount){
 				quote.busInquiry(quoteId,lineProductInfo,$container);
 			}else if (!!lineProductInfo.startTime != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
+				showMessageDialog("请选择出游日期");
 			}else if (!!lineProductInfo.partnerAgencyId != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户");
+				showMessageDialog("请选择客户");
 			}else if (!!lineProductInfo.partnerAgencyContactId != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
+				showMessageDialog("请选择客户联系人");
 			}else if (!!lineProductInfo.adultCount != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请填写大人数");
+				showMessageDialog("请填写大人数");
 			}else if (!!lineProductInfo.childCount != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请填写小孩数");
+				showMessageDialog("请填写小孩数");
 			}
 		});
 		//酒店询价
@@ -977,15 +977,15 @@ define(function(require, exports) {
 			if(!!lineProductInfo.startTime && !!lineProductInfo.partnerAgencyId && !!lineProductInfo.partnerAgencyContactId && !!lineProductInfo.adultCount && !!lineProductInfo.childCount){
 				quote.hotelInquiry(lineProductInfo,whichDay,quoteId,$container);
 			}else if (!!lineProductInfo.startTime != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请选择出游日期");
+				showMessageDialog("请选择出游日期");
 			}else if (!!lineProductInfo.partnerAgencyId != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户");
+				showMessageDialog("请选择客户");
 			}else if (!!lineProductInfo.partnerAgencyContactId != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请选择客户联系人");
+				showMessageDialog("请选择客户联系人");
 			}else if (!!lineProductInfo.adultCount != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请填写大人数");
+				showMessageDialog("请填写大人数");
 			}else if (!!lineProductInfo.childCount != true){
-				showMessageDialog($( "#confirm-dialog-message" ),"请填写小孩数");
+				showMessageDialog("请填写小孩数");
 			}
 		});
 		//保存报价
@@ -1181,7 +1181,7 @@ define(function(require, exports) {
 										quote.addQuote(id);
 										layer.close(lineProductChooseLayer);
 									}else{
-										showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
+										showMessageDialog("请选择线路产品");
 									}
 								})
 							}
@@ -1264,7 +1264,7 @@ define(function(require, exports) {
 					    					success: function(data){
 					    						var result = showDialog(data);
 					    						if (result) {
-													showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
+													showMessageDialog("询价信息发送成功");
 													$container.find('[name=quoteId]').val(data.quoteId);
 													$container.find('[name=startTime]').attr('disabled','disabled');
 													layer.close(busInquiryLayer);
@@ -1272,10 +1272,10 @@ define(function(require, exports) {
 					    					}
 					    				})
 				    				}else{
-				    					showMessageDialog($( "#confirm-dialog-message" ),"至少选择一个车队");
+				    					showMessageDialog("至少选择一个车队");
 				    				}
 				    			}else{
-				    				showMessageDialog($( "#confirm-dialog-message" ),"车座数小于总人数，请选择更大车座数");
+				    				showMessageDialog("车座数小于总人数，请选择更大车座数");
 				    			}
 			    			})
 							//关闭酒店询价
@@ -1300,7 +1300,7 @@ define(function(require, exports) {
 			startTime: lineProductInfo.startTime
 		}
 		if (!!searchParam.seatCount == false) {
-			showMessageDialog($( "#confirm-dialog-message" ),"车座数不能为空");
+			showMessageDialog("车座数不能为空");
 			isSearch = false;
 		}
 		searchParam = JSON.stringify(searchParam);
@@ -1498,14 +1498,14 @@ define(function(require, exports) {
 										success: function(data){
 											var result = showDialog(data);
 											if (result) {
-												showMessageDialog($( "#confirm-dialog-message" ),"询价信息发送成功");
+												showMessageDialog("询价信息发送成功");
 												$container.find('[name=quoteId]').val(data.quoteId);
 												$container.find('[name=startTime]').attr('disabled','disabled');												layer.close(hotelInquiryLayer);
 											}
 										}
 									})
 								}else{
-									showMessageDialog($( "#confirm-dialog-message" ),"至少选择一个酒店");
+									showMessageDialog("至少选择一个酒店");
 								}
 							})
 							//关闭酒店询价
@@ -1710,7 +1710,7 @@ define(function(require, exports) {
 				}
 				searchJson.params.push(json);
 			}else{
-				showMessageDialog($( "#confirm-dialog-message" ), "要求不能为空");
+				showMessageDialog("要求不能为空");
 				isSearch =  false;
 				return;
 			}
@@ -3122,11 +3122,10 @@ define(function(require, exports) {
 
 	//删除日程安排
 	quote.deleteLineProductDaysArrange = function($obj, $container){
-		var dialogObj = $( "#confirm-dialog-message" );
 		if($obj.hasClass('T-delTr')) {
 			var id = $obj.data('entity-id'),$parents = $obj.closest('tr'), type = $obj.data('entity-type');
 			if (!!id) {
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog('你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url('quote', 'deleteItem'),
 						type:"POST",
@@ -3169,7 +3168,7 @@ define(function(require, exports) {
 			}
 		} else {
 			if (!!$obj.data("entity-id")) {
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog('你确定要删除该条记录？', function() {
 					var id = $obj.data("entity-id"), objParents = $obj.closest('.T-timeline-item'), 
 					    type = $obj.data("entity-type");
 					
@@ -3555,7 +3554,7 @@ define(function(require, exports) {
 					if(hotelId){
 						var hotelRoomId = $item.find("[name=hotelRoomId]").val();
 						if(!hotelRoomId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择房型！");
+							showMessageDialog("请选择房型！");
 							return false;
 						}
 						var hotelJson = {
@@ -3581,7 +3580,7 @@ define(function(require, exports) {
 					if(scenicId){
 						var itemId = $item.find("[name=chargingId]").val();
 						if(!itemId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择收费房型！");
+							showMessageDialog("请选择收费房型！");
 							return false;
 						}
 						var scenicJson= {
@@ -3608,7 +3607,7 @@ define(function(require, exports) {
 					if(shopId){
 						var policyId = $item.find("[name=shopPolicyId]").val();
 						if(!policyId){
-							showMessageDialog($( "#confirm-dialog-message" ), "请选择商品政策！");
+							showMessageDialog("请选择商品政策！");
 							return false;
 						}
 						var shopJson = {
@@ -3695,7 +3694,7 @@ define(function(require, exports) {
 			success: function(data){
 				var result = showDialog(data);
 				if (result) {
-					showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
+					showMessageDialog(data.message,function(){
 						var idString = $container.attr("id");
 						if(argumentsLen === 3){
 							if (idString == "tab-arrange_quote-add-content") {
@@ -3882,7 +3881,7 @@ define(function(require, exports) {
 	 */
 	quote.deleteItem = function(quoteId) {
 		if (!!quoteId) {
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该报价？", function() {
+			showConfirmDialog("你确定要删除该报价？", function() {
 				$.ajax({
 					url: KingServices.build_url('quote', 'deleteQuote'),
 					type: 'post',

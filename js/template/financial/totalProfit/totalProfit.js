@@ -59,6 +59,11 @@ define(function(require, exports) {
             TotalProfit.getCountData(args);
         }).trigger('click');
 
+        //导出
+        TotalProfit.$searchArea.find('.T-export').off().on('click', function(){
+            TotalProfit.getListData(-1)
+        })
+
         TotalProfit.getOPUserList(TotalProfit.$searchArea.find('[name="outOPUserName"]'));
         TotalProfit.getGroupMapList(TotalProfit.$searchArea.find('[name="groupName"]'));
         TotalProfit.getBusinessList(TotalProfit.$searchArea.find('[name="businessName"]'));
@@ -70,16 +75,29 @@ define(function(require, exports) {
             args.pageNo = page || 0;
         } else if (TotalProfit.$searchArea) {
             args = {
+                orderNumber: TotalProfit.$searchArea.find("input[name=orderNumber]").val(),
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
+                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
+                outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
+                businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
                 pageNo: page || 0
             }
         }
+        if (page == -1) {
+            if (!args.startTime || !args.endTime) {
+                showMessageDialog("请选择时间区间"); 
+                return false;
+            }
+            exportXLS( APP_ROOT + 'back/export.do?method=exportTotalProfit&token='+ $.cookie("token") +'&'+ $.param(args));
+            return;
+        }
+
         $.ajax({
             url:KingServices.build_url("financialTotal","findPager"),
             data:args,

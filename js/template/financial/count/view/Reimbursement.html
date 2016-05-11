@@ -24,7 +24,7 @@
             </tr>
         </tbody>
     </table>
-    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount+tripPlan.childCount}}"/>
+    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArranges.listMap.length}}">
     <input type="hidden" name='maxDay' value="{{tripPlan.maxDay}}">
     <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
@@ -216,19 +216,21 @@
                                         </select>
                                     </div>
                                 <td>
-                                    {{if touristGroup.feeList.length}}
-                                    <a href="#" class="T-viewCostDetail">
-                                        {{each touristGroup.feeList as touristGroupFee}}
-                                            {{touristGroupFee.name}} ：
-                                            <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                            <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
-                                        {{/each}}
-                                    {{else}}
-                                        {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
-                                            {{touristGroupFee.name}} ：
-                                            <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                            <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
-                                        {{/each}}
+                                    {{if !!touristGroup.feeList}}
+                                        {{if touristGroup.feeList.length}}
+                                        <a href="#" class="T-viewCostDetail">
+                                            {{each touristGroup.feeList as touristGroupFee}}
+                                                {{touristGroupFee.name}} ：
+                                                <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                            {{/each}}
+                                        {{else}}
+                                            {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
+                                                {{touristGroupFee.name}} ：
+                                                <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
+                                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                            {{/each}}
+                                        {{/if}}
                                     {{/if}}
                                 </a>
                                 {{if touristGroup.isConfirmAccount == 0}}

@@ -277,7 +277,7 @@ define(function(require, exports) {
                 }
             })
         } else {
-            showMessageDialog($("#confirm-dialog-message"), "请选择游客小组", function() {});
+            showMessageDialog("请选择游客小组", function() {});
         };
     };
 
@@ -405,9 +405,9 @@ define(function(require, exports) {
         });
         var partnerAgencyId = arrangeGroupTransfer.getVal($outTransfer, "partnerAgencyId") || 0;
         if (touristGroupId.length == 0) {
-            showMessageDialog($("#confirm-dialog-message"), "请勾选小组")
+            showMessageDialog("请勾选小组")
         } else if (partnerAgencyId == 0) {
-            showMessageDialog($("#confirm-dialog-message"), "请选择同行地接")
+            showMessageDialog("请选择同行地接")
         } else {
             $.ajax({
                 url: KingServices.build_url("transTourist", "saveTransfer"),
@@ -418,7 +418,7 @@ define(function(require, exports) {
                 },
                 success: function(data) {
                     if (showDialog(data)) {
-                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        showMessageDialog(data.message, function() {
                             Tools.closeTab(menuKey + "-outTransfer");
                             arrangeGroupTransfer.transferId = [];
                             arrangeGroupTransfer.listArrangeTourist(0);
@@ -823,7 +823,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                showMessageDialog(data.message, function() {
                     layer.close(arrangeGroupTransfer.innerEditFeeLayer);
                     if (data.success == 1) {
                         var inTransferTr = $(".T-transferTouristGroup-list").find("tr");
@@ -894,7 +894,7 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                showMessageDialog(data.message, function() {
                     layer.close(arrangeGroupTransfer.outEditFeeLayer);
                     if (data.success == 1) {
                         var transferTr = $(".T-transferTouristGroup").find("tr");
@@ -927,11 +927,11 @@ define(function(require, exports) {
         var businessGroupId = arrangeGroupTransfer.getVal($innerTransfer, "businessGroupId") || 0,
             opUserId = arrangeGroupTransfer.getVal($innerTransfer, "opUserId") || 0;
         if (touristGroupIds.length == 0) {
-            showMessageDialog($("#confirm-dialog-message"), "请勾选小组");
+            showMessageDialog("请勾选小组");
         } else if (businessGroupId == 0) {
-            showMessageDialog($("#confirm-dialog-message"), "请选择部门");
+            showMessageDialog("请选择部门");
         } else if (opUserId == 0) {
-            showMessageDialog($("#confirm-dialog-message"), "请选择责任计调");
+            showMessageDialog("请选择责任计调");
         } else {
             $.ajax({
                 url: KingServices.build_url("innerTransferOperation", "saveInTransfer"),
@@ -940,7 +940,7 @@ define(function(require, exports) {
                 success: function(data) {
                     var result = showDialog(data);
                     if (result) {
-                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        showMessageDialog(data.message, function() {
                             Tools.closeTab(menuKey + "-innerTransfer");
                             arrangeGroupTransfer.transferId = [];
                             arrangeGroupTransfer.listArrangeTourist(0);
