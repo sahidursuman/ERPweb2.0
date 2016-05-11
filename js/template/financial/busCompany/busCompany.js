@@ -94,6 +94,7 @@ define(function(require, exports) {
         tabId.find('.T-sumStMoney').text(data.settlementMoneySum);
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
+        tabId.find('.T-sumSignMoney').text(data.unPayedMoneySum);
     };
     busCompany.initList = function(startDate, endDate,accountStatus) {
         busCompany.getQueryList();
@@ -440,7 +441,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         busCompany.checkTemp = false;
                         $tab.data('isEdited', false);
                         if (argumentsLen == 1) {
@@ -479,7 +480,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         busCompany.clearTempData = false;
                         busCompany.clearTempSumDate = false;
                         $tab.data('isEdited', false);

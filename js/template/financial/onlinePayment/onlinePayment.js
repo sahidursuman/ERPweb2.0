@@ -114,7 +114,7 @@ define(function(require, exports) {
             data: {orderId: orderId},
         })
         .done(function(data) {
-            showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+            showMessageDialog(data.message,function(){
                 Payment.listPayment(0);
             });
         });

@@ -426,7 +426,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					layer.close(addScenicLayer);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if (typeof fn === "function") {
 							data.scenic = JSON.parse(data.scenic);
 							formData.id = data.scenic.id;
@@ -520,7 +520,7 @@ define(function(require,exports){
 					var result = showDialog(data);
 					if(result){
 						layer.close(updateScenicLayer);
-						showMessageDialog($( "#confirm-dialog-message" ),data.message);
+						showMessageDialog(data.message);
 						ScenicResource.listScenic(0);
 					}
 				}
@@ -558,7 +558,7 @@ define(function(require,exports){
 	
 	ScenicResource.deleteScenic=function(id){
 			if(!!id){
-				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+				showConfirmDialog("你确定要删除该条记录？",function(){
 					$.ajax({
 						url:""+APP_ROOT+"back/scenic.do?method=deleteScenic&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 						type:"POST",

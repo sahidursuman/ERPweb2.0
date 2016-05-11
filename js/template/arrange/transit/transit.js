@@ -76,7 +76,7 @@ define(function(require, exports) {
 		//导出安排
 		transit.$searchArea.on('click', '.T-transit-export', function() {
 			var recordSize =  transit.$tab.find('.T-recordSize').text();
-			showConfirmDialog($( "#confirm-dialog-message" ), '确定要导出'+ recordSize +'条中转安排？', function() {
+			showConfirmDialog('确定要导出'+ recordSize +'条中转安排？', function() {
 				transit.listTransit(-1);//page == -1，导出安排
 			})
 		})
@@ -328,7 +328,7 @@ define(function(require, exports) {
 						},
 						success: function(data) {
 							if (showDialog(data)) {
-								showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+								showMessageDialog(data.message, function() {
 									layer.close(noticeLayer);
 								})
 							}
@@ -841,14 +841,14 @@ define(function(require, exports) {
 	 */
 	transit.deleteArrange = function($obj, $id, $cateName) {
 		if (!!$id) {
-			showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
+			showConfirmDialog('确定要删除该安排？', function(){
 				$.ajax({
 					url: KingServices.build_url('touristGroup','deleteTouristGroupArrange'),
 					type: "POST",
 					data: "cateName="+$cateName+"&id="+$id+"",
 					success: function(data){
 						if(showDialog(data)){
-							showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+							showMessageDialog(data.message,function(){
 								$obj.closest('tr').fadeOut(function(){
 									$obj.closest('tr').remove();
 								});
@@ -1624,7 +1624,7 @@ define(function(require, exports) {
 			data:"touristGroupArrange="+encodeURIComponent(touristGroupArrange),
 			success:function(data){
 				if(showDialog(data)){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if(isClose ==1){
 							if (argumentsLen == 3) {
 								Tools.closeTab(menuKey+"-update");

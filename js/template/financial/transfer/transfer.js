@@ -34,7 +34,7 @@ define(function(require, exports) {
             accountStatus = Transfer.$searchArea.find(".T-finance-status").find("button").data("value")
         }
         if(startDate > endDate){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
             return false;
         }
         partnerAgencyName = (partnerAgencyName == "全部") ? "" : partnerAgencyName;
@@ -551,7 +551,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Transfer.checkTemp = false;
                         if(argLen === 1){
@@ -594,7 +594,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         Transfer.clearTempData = false;
                         Transfer.clearTempSumDate = false;
                         $tab.data('isEdited', false);
@@ -791,7 +791,7 @@ define(function(require, exports) {
         };
 
         if(!data){
-            showMessageDialog($("#confirm-dialog-message"),"游客小组不存在，请检查！");
+            showMessageDialog("游客小组不存在，请检查！");
             return false;
         }
         var html = viewGroupTemplate(data);
@@ -814,7 +814,7 @@ define(function(require, exports) {
 
         if(!$tab.data('isEdited')){
             if(isSave && !Transfer.checkTemp){
-                showMessageDialog($("#confirm-dialog-message"),"您未进行任何操作！");
+                showMessageDialog("您未进行任何操作！");
                 return false;
             } else {
                 // return tempJson;
@@ -895,7 +895,7 @@ define(function(require, exports) {
         });
         if(isSave){
             if(saveJson.length == 0){
-                showMessageDialog($("#confirm-dialog-message"),"没有可提交的数据！");
+                showMessageDialog("没有可提交的数据！");
                 return false;
             }
             //保存数据处理,

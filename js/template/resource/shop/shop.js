@@ -250,7 +250,7 @@ define(function(require, exports) {
 
 	shop.deleteShop = function(id){
 		if(!!id){
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+			showConfirmDialog("你确定要删除该条记录？",function(){
 					$.ajax({
 							url: KingServices.build_url('shop', 'deleteShop'),
 	 						type:"POST",
@@ -408,7 +408,7 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+						showMessageDialog(data.message,function(){
 							if (type === 1) {
 								shop.listShop(shop.currentPage);
 							} else {
@@ -599,15 +599,15 @@ define(function(require, exports) {
 		    		if( modiPolicyValidator != undefined){
 		    			if(!modiPolicyValidator.form()){return;}
 		    		}else{
-		    			showMessageDialog($( "#confirm-dialog-message" ),"政策不能为空");
+		    			showMessageDialog("政策不能为空");
 		    			return;
 		    		}
 		    		if(!shop.checkTimeAndPriceArea()){
-		    			showMessageDialog($( "#confirm-dialog-message" ),"时间范围不能重复");
+		    			showMessageDialog("时间范围不能重复");
 		    			return;
 		    		}
 		    		if(!shop.checkMoneyScope()){
-		    			showMessageDialog($( "#confirm-dialog-message" ),"消费金额范围同一段时间内不能重复");
+		    			showMessageDialog("消费金额范围同一段时间内不能重复");
 		    			return;
 		    		}
 		    		var result = shop.submitShopPolicy(obj);
@@ -629,49 +629,24 @@ define(function(require, exports) {
 	 */
 	shop.deletePolicy = function(obj){
 		var $that = $(obj), 
-			dialogObj = $( "#confirm-dialog-message" ), 
 			id=$that.data("entity-id");
 
 		if(id){
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
+			showConfirmDialog('你确定要删除该条记录？', function() {
+				$.ajax({
+					url: KingServices.build_url('shop', 'deleteShopTimeArea'),
+                    dataType: "json",
+                    data:"id="+id,
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+			    			$that.closest('tr').remove();
+							layer.msg(data.message || "删除成功");
 						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$.ajax({
-    							url: KingServices.build_url('shop', 'deleteShopTimeArea'),
-			                    dataType: "json",
-			                    data:"id="+id,
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-						    			$that.closest('tr').remove();
-										layer.msg(data.message || "删除成功");
-									}
-			                    }
-			                });
-							$( this ).dialog( "close" );
-							
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+                    }
+                });
+			})
 		}else{
 			$that.closest('tr').remove();
 		}
@@ -706,46 +681,22 @@ define(function(require, exports) {
 			var $tr = $delBtn.closest('tr'),
 				id = $tr.data('entity-id');
 			if(id){
-				var dialogObj = $( "#confirm-dialog-message" )
-				dialogObj.removeClass('hide').dialog({
-					modal: true,
-					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-					title_html: true,
-					draggable:false,
-					buttons: [ 
-						{
-							text: "取消",
-							"class" : "btn btn-minier",
-							click: function() {
-								$( this ).dialog( "close" );
+				showConfirmDialog('你确定要删除该条记录？', function() {
+					$.ajax({
+						url: KingServices.build_url('shop', 'deleteShopPolicy'),
+	                    dataType: "json",
+	                    data: {id: id},
+	                    success: function(data) {
+	                    	layer.close(globalLoadingLayer);
+							if(showDialog(data)){
+					    		$tr.fadeOut(function(){
+					    			$(this).remove();
+					    		});
+								layer.msg(data.message || "删除成功");
 							}
-						},
-						{
-							text: "确定",
-							"class" : "btn btn-primary btn-minier",
-							click: function() {
-								$( this ).dialog( "close" );
-								$.ajax({
-									url: KingServices.build_url('shop', 'deleteShopPolicy'),
-				                    dataType: "json",
-				                    data: {id: id},
-				                    success: function(data) {
-				                    	layer.close(globalLoadingLayer);
-										if(showDialog(data)){
-								    		$tr.fadeOut(function(){
-								    			$(this).remove();
-								    		});
-											layer.msg(data.message || "删除成功");
-										}
-				                    }
-				                });
-							}
-						}
-					],
-					open:function(event,ui){
-						$(this).find("p").text("你确定要删除该条记录？");
-					}
-				});
+	                    }
+	                });
+				})
 			}else{
 				$tr.fadeOut(function(){
 					$(this).remove();
@@ -762,53 +713,29 @@ define(function(require, exports) {
 	shop.deletePolicyPriceArea = function(btn){
 		var obj = $(btn), id= obj.attr("data-entity-id"), div = obj.parent().parent(),divIndex = div.attr("data-index");
 		if(id){
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
+			showConfirmDialog('你确定要删除该条记录？', function() {
+				$.ajax({
+					url: KingServices.build_url('shop', 'deleteShopCostRebate'),
+                    dataType: "json",
+                    data:"id="+id,
+                    success: function(data) {
+                    	layer.close(globalLoadingLayer);
+						var result = showDialog(data);
+						if(result){
+							div.fadeOut(function(){
+								$(this).remove();
+							});
+							div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
+								$(this).remove();
+							});
+							div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
+								$(this).remove();
+							});
+							layer.msg(data.message || "删除成功");
 						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$.ajax({
-								url: KingServices.build_url('shop', 'deleteShopCostRebate'),
-			                    dataType: "json",
-			                    data:"id="+id,
-			                    success: function(data) {
-			                    	layer.close(globalLoadingLayer);
-									var result = showDialog(data);
-									if(result){
-										div.fadeOut(function(){
-											$(this).remove();
-										});
-										div.parent().next().find(".div-"+divIndex+"").fadeOut(function(){
-											$(this).remove();
-										});
-										div.parent().next().next().find(".div-"+divIndex+"").fadeOut(function(){
-											$(this).remove();
-										});
-										layer.msg(data.message || "删除成功");
-									}
-			                    }
-			                });
-							$( this ).dialog( "close" );
-						}
-					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该条记录？");
-				}
-			});
+                    }
+                });
+			})
 		}else{
 			index = div.closest('td').find("div:not(.delete)").index(div);
 			div.fadeOut(function(){
@@ -858,11 +785,11 @@ define(function(require, exports) {
 		var startTime = getValue($form.eq(0), "startTime");
 		var endTime = getValue($form.eq(0), "endTime");
 		if(trim(startTime) == ""){
-			showMessageDialog($( "#confirm-dialog-message" ), "请输入起始日期");
+			showMessageDialog("请输入起始日期");
 			return false;
 		}
 		if(trim(endTime) == ""){
-			showMessageDialog($( "#confirm-dialog-message" ), "请输入截止日期");
+			showMessageDialog("请输入截止日期");
 			return false;
 		}
 		var shopPolicyList = [];
