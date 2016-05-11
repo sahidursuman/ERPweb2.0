@@ -232,7 +232,7 @@ define(function(require, exports) {
 	 */
 		insurance.deleteInsurance = function(id,$that){
 				if (!!id) {
-				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+				showConfirmDialog("你确定要删除该条记录？", function() {
 					$.ajax({
 						url:insurance.url("deleteInsurance","delete"),
 						type: 'post',
@@ -333,7 +333,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					if (type == 1) {layer.close(insurance.$addLayer)}else if(type == 2){layer.close(insurance.$updateLayer)}
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if (typeof fn === "function") {
 							data.insurance = JSON.parse(data.insurance);
 							formData.id = data.insurance.id;

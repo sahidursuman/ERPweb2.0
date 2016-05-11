@@ -241,7 +241,7 @@ define(function(require, exports) {
 	
 		selfpay.deleteSelfpay = function(id,$this){
 			if(!!id){
-				showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该自费项目？",function(){
+				showConfirmDialog("你确定要删除该自费项目？",function(){
 					$.ajax({
 							url:selfpay.url("deleteSelfPay","delete"),
 							type:"POST",
@@ -349,45 +349,21 @@ define(function(require, exports) {
 		var $listTr = $this.closest('tr'),
 			$id = $listTr.data("entity-id");
 		if (!!$id) {
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url:selfpay.url("deleteSelfPay","delete"),
-								type:"POST",
-								data:"id="+$id+"&cateName=selfitem"+"",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										$listTr.fadeOut(function(){
-											$(this).remove();
-										});
-									}
-								}
+			showConfirmDialog('你确定要删除该项目价格？', function() {
+				$.ajax({
+					url:selfpay.url("deleteSelfPay","delete"),
+					type:"POST",
+					data:"id="+$id+"&cateName=selfitem"+"",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							$listTr.fadeOut(function(){
+								$(this).remove();
 							});
 						}
 					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该项目价格？");
-				}
-			});
+				});
+			})
 		}else{
 			$listTr.fadeOut(function(){
 				$(this).remove();
@@ -432,51 +408,27 @@ define(function(require, exports) {
 		    index = $this.closest('.T-dateTimeArea').index(), 
 		    id = $this.closest('div').find("input[name=rebateListId]").val();
 		if (!!id) {
-			var dialogObj = $( "#confirm-dialog-message" );
-			dialogObj.removeClass('hide').dialog({
-				modal: true,
-				title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
-				title_html: true,
-				draggable:false,
-				buttons: [ 
-					{
-						text: "取消",
-						"class" : "btn btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-						}
-					},
-					{
-						text: "确定",
-						"class" : "btn btn-primary btn-minier btn-heightMall",
-						click: function() {
-							$( this ).dialog( "close" );
-							$.ajax({
-								url:selfpay.url("deleteSelfPay","delete"),
-								type:"POST",
-								data:"id="+id+"&cateName=selfrebate",
-								success:function(data){
-									var result = showDialog(data);
-									if(result){
-										for(var i=2; i < 8; i++){
-											var $children =  td.eq(i).children("div");
-											$children.eq(index).fadeOut(function(){
-												$(this).remove();
-												for(var j=0; j<$parents.find(".T-dateTimeArea").length;j++){
-													$parents.find(".T-dateTimeArea").eq(j).attr("data-index", j+1)
-												}
-											});
-										}
+			showConfirmDialog('你确定要删除该时间区间？', function() {
+				$.ajax({
+					url:selfpay.url("deleteSelfPay","delete"),
+					type:"POST",
+					data:"id="+id+"&cateName=selfrebate",
+					success:function(data){
+						var result = showDialog(data);
+						if(result){
+							for(var i=2; i < 8; i++){
+								var $children =  td.eq(i).children("div");
+								$children.eq(index).fadeOut(function(){
+									$(this).remove();
+									for(var j=0; j<$parents.find(".T-dateTimeArea").length;j++){
+										$parents.find(".T-dateTimeArea").eq(j).attr("data-index", j+1)
 									}
-								}
-							});
+								});
+							}
 						}
 					}
-				],
-				open:function(event,ui){
-					$(this).find("p").text("你确定要删除该时间区间？");
-				}
-			});
+				});
+			})
 		}else{
 			for(var i=2; i < 8; i++){
 				var $children =  td.eq(i).children("div");
@@ -514,8 +466,8 @@ define(function(require, exports) {
 		    	if (!!customerVal || !!contractVal || !!guideVal ||  !!travelVal ) {
 		    		if ( customerVal > marketVal || contractVal > marketVal ||  guideVal > 100 || travelVal > 100 ) {
 		    			isTrue = true;
-		    			if (guideVal>100) {showMessageDialog($("#confirm-dialog-message"),"导游返佣不能大于100")};
-						if (travelVal>100) {showMessageDialog($("#confirm-dialog-message"),"旅行社返佣不能大于100")};
+		    			if (guideVal>100) {showMessageDialog("导游返佣不能大于100")};
+						if (travelVal>100) {showMessageDialog("旅行社返佣不能大于100")};
 
 		    		};
 		    	};
@@ -598,7 +550,7 @@ define(function(require, exports) {
 				if(result){
 					if(type == 1){layer.close(selfpay.$addLayer);}
 					else if(type == 2){layer.close(selfpay.$updateLayer);}
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if (typeof fn === "function") {
 							data.selfPay = JSON.parse(data.selfPay);
 							formData.id = data.selfPay.id; 
@@ -637,7 +589,7 @@ define(function(require, exports) {
 							$tr.find('.T-contractPrice').eq(index).val(innerPrice);
 					}else if(marketVal < customerVal){
 						$tr.find(".T-marketPrice").eq(index).focus();
-						showMessageDialog($( "#confirm-dialog-message" ),"市场价格不能小于人数返佣");
+						showMessageDialog("市场价格不能小于人数返佣");
 
 					}
 
@@ -682,12 +634,12 @@ define(function(require, exports) {
 				 var guideVal = $tr.find('.T-guideRate').eq(index).val();
 				    if ( guideVal!=null && guideVal!="" && guideVal < 0 ) {
 				    	 $tr.find('.T-guideRate').eq(index).focus();
-				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能是负数");
+				    	 showMessageDialog("导游返佣不能是负数");
 				    }else if(guideVal!=null && guideVal!="" && guideVal <= 100){
 				    	    $tr.find('.T-travelAgencyRate').eq(index).val(100-guideVal);
 				    }else if(guideVal!=null && guideVal!="" && guideVal > 100){
 				    	 $tr.find('.T-guideRate').eq(index).focus();
-				    	 showMessageDialog($( "#confirm-dialog-message" ),"导游返佣不能大于100");
+				    	 showMessageDialog("导游返佣不能大于100");
 				    };
 				
 			} else if ($that.hasClass('T-travelAgencyRate')) {
@@ -695,12 +647,12 @@ define(function(require, exports) {
 				var traveVal = $tr.find('.T-travelAgencyRate').eq(index).val();
 				    if (traveVal!=null && traveVal!="" && traveVal < 0 ) {
 				    	$tr.find('.T-travelAgencyRate').eq(index).focus();
-				    	 showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能是负数");
+				    	 showMessageDialog("旅行社返佣不能是负数");
 				    }else if(traveVal!=null && traveVal!="" && traveVal <= 100){
 				    	$tr.find('.T-guideRate').eq(index).val(100-traveVal);
 				    }else if(traveVal!=null && traveVal!="" && traveVal > 100){
 				    	$tr.find('.T-travelAgencyRate').eq(index).focus();
-				    	showMessageDialog($( "#confirm-dialog-message" ),"旅行社返佣不能大于100");
+				    	showMessageDialog("旅行社返佣不能大于100");
 				    };
 				
 			} 

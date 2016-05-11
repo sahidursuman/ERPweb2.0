@@ -492,7 +492,7 @@ define(function(require, exports) {
             data:{ scenicJson : checkSaveJson },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         scenic.checkTemp = false;
                         $tab.data('isEdited',false);
                         if(argumentsLen === 1){
@@ -529,7 +529,7 @@ define(function(require, exports) {
             },
             success:function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         scenic.clearTempData = false;
                         scenic.clearTempSumDate = false;
                         $tab.data('isEdited',false);

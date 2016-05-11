@@ -6,6 +6,14 @@
                 <input type="text" value="{{searchParam.tripNumber}}" name="chooseTripNumber" class="T-tripNumber" placeholder="请输入团号" />
             </div>
             <div class="form-group mar-r-10">
+                <label class="control-label pull-left"><span>收客单号&nbsp;</span> </label>
+                <input type="text" value="{{searchParam.orderNumber}}" name="orderNumber" class="T-orderNumber" placeholder="请输入收客单号" />
+            </div>
+            <div class="form-group mar-r-10">
+                <label class="control-label pull-left"><span>游客&nbsp;</span> </label>
+                <input type="text" value="{{searchParam.contactInfo}}" name="contactInfo" class="T-contactInfo" placeholder="联系人或联系电话" />
+            </div>
+            <div class="form-group mar-r-10">
                 <label class="control-label"><span>线路产品 </span></label>
                 <input type="text" value="{{searchParam.lineProductName}}" name="chooseLineProductName" placeholder="全部线路产品" />
                 <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />

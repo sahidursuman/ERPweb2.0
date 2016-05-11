@@ -218,7 +218,7 @@ define(function(require, exports) {
 
     //删除
     restaurant.deleteRestaurant = function(id) {
-        showConfirmMsg($("#confirm-dialog-message"), "你确定要删除该条记录?", function() {
+        showConfirmMsg("你确定要删除该条记录?", function() {
             $.ajax({
             	url:restaurant.url("deleteRestaurant","delete"),
                 type: "POST",
@@ -307,7 +307,7 @@ define(function(require, exports) {
                 	} else if(option == "update"){
                 		layer.close(restaurant.$updateLayer);
                 	}
-                    showMessageDialog($("#confirm-dialog-message"), data.message,function(){
+                    showMessageDialog(data.message,function(){
                         if (typeof fn === "function") {
                             data.restaurant = JSON.parse(data.restaurant);
                             formData.id = data.restaurant.id;
