@@ -241,10 +241,9 @@
         <th class="th-border">车座数</th>
         <th class="th-border">车辆品牌</th>
         <th class="th-border">车牌号</th>
+        <th class="th-border">司机</th>
         <th class="th-border">所属车队</th>
         <th class="th-border">联系电话</th>
-        <th class="th-border">司机</th>
-        <th class="th-border">司机电话</th>
         <th class="th-border">合同号</th>
         <th class="th-border">车费</th>
         <th class="th-border">优惠</th>
@@ -252,6 +251,7 @@
         <th class="th-border">预付款</th>
         <th class="th-border">支付类型</th>
         <th class="th-border">计划导付</th>
+        <th class="th-border">签单金额</th>
         <th class="th-border">备注</th>
     </tr>
     </thead>
@@ -265,10 +265,9 @@
                 <td class="F-float F-mcount">{{busCompany.needSeatCount}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.brand}}{{else}}{{busCompany.brand}}{{/if}}</td>
                 <td>{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}</td>
+                <td>{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}</td>
                 <td>{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}</td>
-                <td>{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}</td>
-				<td>{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}</td>
 				<td>{{busCompany.contractNumber}}</td>
 				<td class="F-float F-money">{{busCompany.price}}</td>
 				<td class="F-float F-money">{{busCompany.reduceMoney}}</td>
@@ -276,6 +275,7 @@
 				<td class="F-float F-money">{{busCompany.prePayMoney}}</td>
                 <td>{{busCompany.payType | getPlanPayTypeText}}</td>
 				<td class="T-guidePayFeild" data-type={{busCompany.payType}}><span class="F-float F-money">{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}</span></td>
+                <td>{{if busCompany.payType == 2}}-{{else}}<span class="T-signBillMoney F-float F-money">{{busCompany.signMoney || 0}}</span>{{/if}}</td>
 				<td>{{busCompany.remark}}</td>
             </tr>
             {{/if}}

@@ -83,7 +83,9 @@
                                 {{each arrange.itemList as itemSet index}}
                                     {{if index == 0}}
                                         <td>
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
                                             <span class="shopPolicy">
                                                 {{itemSet.itemName}}
                                             </span>
@@ -92,20 +94,22 @@
                                         </td><!-- 商品 -->
 
                                         <td>
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
                                             <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
                                             <input name="sumConsumeMoney" type="hidden" value="{{itemSet.consumeMoney}}" />
                                         </td><!-- 金额小计 -->
 
                                         <td name="shopGuideName">
-                                            <div class="div-h-30">
                                             {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
-                                                <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
-                                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                </button>
+                                                <div class="div-h-30">
+                                                    <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
+                                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                    </button>
+                                                    <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
+                                                </div>
                                             {{/if}}
-                                                <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
-                                            </div>
                                         
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
@@ -161,7 +165,10 @@
                                         </td><!-- 导游 -->
                                         
                                         <td name="shopGuideMoney">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -176,7 +183,10 @@
                                         </td><!-- 金额 -->
                                             
                                         <td name="imgTd">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -191,7 +201,10 @@
                                         </td><!-- 单据 -->
 
                                         <td name="billRemark">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -206,7 +219,10 @@
                                         </td><!-- 打单备注 -->
 
                                         <td name="guideRate">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -223,7 +239,10 @@
                                         </td><!-- 导佣比例 -->
                                         
                                         <td name="guideRateMoney">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -240,7 +259,10 @@
                                         </td><!-- 导佣金额 -->
 
                                         <td name="quanpeiRebate">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -258,7 +280,10 @@
                                         
                                         
                                         <td name="quanpeiRebateMoney">
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -276,13 +301,19 @@
                                         </td><!-- 全陪金额 -->
 
                                         <td>
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
                                         </td><!-- 社佣比例 -->
 
                                         
                                         <td>
-                                            <div class="div-h-30"></div>
+                                            {{if guideCount > 1}}
+                                                <div class="div-h-30"></div>
+                                            {{/if}}
+
                                             <input type="text" class="w-70" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" 
                                             {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
 
@@ -308,29 +339,33 @@
                                <td></td>
                             {{/if}}
                             <td rowspan="{{arrange.itemList.length}}" name="twoRebate" >
-                                <div class="div-h-30"></div>
+                                {{if guideCount > 1}}
+                                    <div class="div-h-30"></div>
+                                {{/if}}
+
                                 <input name="twoRebate" type="text" value="{{arrange.twoRebate}} " maxlength="5" class="w-50" 
                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} />
                             </td><!-- 二次返佣比例-->
                             
                             
                             <td rowspan="{{arrange.itemList.length}}" name="twoRebateMoney">
-                                <div class="div-h-30"></div>
+                                {{if guideCount > 1}}
+                                    <div class="div-h-30"></div>
+                                {{/if}}
+
                                 <input type="text" class="w-70" name="twoRebateMoney" value="{{arrange.twoRebateMoney}}"
                                  {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} />
                             </td>
                             <!-- 二次返佣金额 -->
                             <td rowspan="{{arrange.itemList.length}}" name="currGuide">
-                               
-                                <div class = "div-h-30">
-                                    {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                               {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                                    <div class = "div-h-30">
                                         <button class="btn btn-success btn-sm btn-white T-currGuide pull-right"> 
                                             <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
                                         </button>
-                                    {{/if}}
-                                    <!-- <a href="#" class="T-currGuide pull-right">增加</a>增加导游 -->
-                                </div>
-                                
+                                        <!-- <a href="#" class="T-currGuide pull-right">增加</a>增加导游 -->
+                                    </div>
+                                {{/if}}
                                 {{if arrange.cashList.length}}
                                     {{each arrange.cashList as cash index}}
                                         <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{cash.id}}">
@@ -365,7 +400,9 @@
                             </td><!-- 现收_导游 -->
 
                             <td rowspan="{{arrange.itemList.length}}" name="currGuideMoney">
-                                <div class="div-h-30"></div>
+                                {{if guideCount > 1}}
+                                    <div class="div-h-30"></div>
+                                {{/if}}
                                 {{if arrange.cashList.length}}
                                     {{each arrange.cashList as cash index}}
                                         <div class="mar-t-5 div-h-30" index="{{index+1}}">
@@ -386,7 +423,9 @@
                             </td><!-- 现收_金额 -->
 
                             <td rowspan="{{arrange.itemList.length}}" name="currGuideRemark">
-                                <div class="div-h-30"></div>
+                                {{if guideCount > 1}}
+                                    <div class="div-h-30"></div>
+                                {{/if}}
                                 {{if arrange.cashList.length}}
                                     {{each arrange.cashList as cash index}}
                                         <div class="mar-t-5 div-h-30" index="{{index+1}}">
@@ -408,7 +447,9 @@
                             </td><!-- 现收_备注 -->
 
                             <td rowspan="{{arrange.itemList.length}}">
-                                <div class="div-h-30"></div>
+                                {{if guideCount > 1}}
+                                    <div class="div-h-30"></div>
+                                {{/if}}
                                 {{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}
                                 &nbsp;&nbsp;
                                 {{if arrange.incomeStatus == 0 && arrange.isConfirmAccount == 0}}
@@ -425,7 +466,9 @@
                                 {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}
                                 arrangeType="shopArrange">
                                 <td>
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     <span class="shopPolicy">
                                         {{itemSet.itemName}}
                                         <input name="shopPolicyId" value="{{itemSet.itemId}}" type="hidden" />
@@ -446,7 +489,9 @@
                                 </td><!-- 商品 -->
                                 
                                 <td>
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if index == 1}}
                                         <span class="F-float F-money sumConsumeMoney">{{itemSet.consumeMoney}}</span>
                                         <input name="sumConsumeMoney" type="hidden" value="{{itemSet.consumeMoney}}" />
@@ -457,15 +502,15 @@
                                 </td><!-- 金额小计 -->
 
                                  <td name="shopGuideName">
-                                    <div class="div-h-30">
-                                    {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
-                                        <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
-                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                        </button>
+                                     {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
+                                        <div class="div-h-30">
+                                        
+                                            <button class="btn btn-success btn-sm btn-white T-shopGuide pull-right "> 
+                                                <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                            </button>
+                                            <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
+                                        </div>
                                     {{/if}}
-                                        <!-- <a href="#" class="T-shopGuide pull-right">增加</a> --><!-- 增加导游 -->
-                                    </div>
-                                
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs index}}
                                             <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
@@ -520,7 +565,9 @@
                                 </td><!-- 导游 -->
                                 
                                 <td name="shopGuideMoney">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs i}}
                                             <div class="mar-t-5 div-h-30" index = "{{i+1}}">
@@ -549,7 +596,9 @@
                                 </td><!-- 金额 -->
                                     
                                 <td name="imgTd">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs i}}
                                             <div class="mar-t-5 div-h-30" index = "{{i+1}}">
@@ -576,7 +625,9 @@
                                 </td><!-- 单据 -->
 
                                 <td name="billRemark">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs i}}
                                             <div class="mar-t-5 div-h-30" index = "{{i+1}}">
@@ -606,7 +657,9 @@
                                 </td><!-- 打单备注 -->
 
                                 <td name="guideRate">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs index}}
                                             <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -623,7 +676,9 @@
                                 </td><!-- 导佣比例 -->
                                 
                                 <td name="guideRateMoney">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs index}}
                                             <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -640,7 +695,9 @@
                                 </td><!-- 导佣金额 -->
 
                                 <td name="quanpeiRebate">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs index}}
                                             <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -658,7 +715,9 @@
                                         
                                         
                                 <td name="quanpeiRebateMoney">
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs index}}
                                             <div class="mar-t-5 div-h-30" index = "{{index+1}}">
@@ -676,12 +735,16 @@
                                 </td><!-- 全陪金额 -->
 
                                 <td>
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     <input name="travelAgencyRate" type="text" value="{{itemSet.travelAgencyRate}}" maxlength="5" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} readOnly="readOnly" {{/if}} class="w-50" />
                                 </td><!-- 社佣比例 -->
                                 
                                 <td>
-                                    <div class="div-h-30"></div>
+                                    {{if guideCount > 1}}
+                                        <div class="div-h-30"></div>
+                                    {{/if}}
                                     <input type="text" class="w-70" name="travelAgencyRateMoney" value="{{itemSet.travelAgencyRebateMoney}}" 
                                     {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}} />
 
