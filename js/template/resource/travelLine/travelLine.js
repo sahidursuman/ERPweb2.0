@@ -283,7 +283,7 @@ define(function(require, exports) {
 	ResTravelLine.delete = function(id) {
 		if (!!id)  {
 			if (!!id)  {
-				showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+				showConfirmDialog('你确定要删除该条记录？', function() {
 					$.ajax({
 						url: KingServices.build_url('travelLine', 'deleteTravelLine'),
 						type:"POST",
@@ -664,7 +664,7 @@ define(function(require, exports) {
 	ResTravelLine.deleteSchedule = function($this) {
 		var $tr = $this.closest('tr'), id = $tr.data('entity-id');
 		if (!!id)  {
-			showConfirmDialog($( "#confirm-dialog-message" ), '你确定要删除该条记录？', function() {
+			showConfirmDialog('你确定要删除该条记录？', function() {
 				$tr.addClass('deleted').fadeOut(function(){
 					$tr.addClass('hidden');
 				});
@@ -688,7 +688,7 @@ define(function(require, exports) {
 		if (!validator.form()) return;
 
 		if (!ResTravelLine.isScheduleInOrder($tab)) {
-			showMessageDialog($( "#confirm-dialog-message" ), '日程安排不连续，请您补充完整!');
+			showMessageDialog('日程安排不连续，请您补充完整!');
 			return;
 		}
 		var args = $tab.find('.T-main-form').serializeJson();
@@ -741,7 +741,7 @@ define(function(require, exports) {
 			}
 		});
 		if (addJson.length === 0) {
-			showMessageDialog($( "#confirm-dialog-message" ), '至少录入一天的日程!');
+			showMessageDialog('至少录入一天的日程!');
 			return;
 		}
 		args.travelLineJsonAdd = JSON.stringify(addJson);
@@ -761,7 +761,7 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if (showDialog(data))  {
-				showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+				showMessageDialog(data.message, function() {
 
 					if (!!tab_array) {
 						Tools.addTab(tab_array[0], tab_array[1], tab_array[2]);

@@ -190,7 +190,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								layer.close(addGuideLayer);
-								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+								showMessageDialog(data.message,function(){
 									if (typeof fn === "function") {
 										data.guide = JSON.parse(data.guide);
 										formData.id = data.guide.id;
@@ -261,7 +261,7 @@ define(function(require, exports) {
 										var result = showDialog(data);
 										if(result){
 											layer.close(addGuide);
-											showMessageDialog($( "#confirm-dialog-message" ),data.message);
+											showMessageDialog(data.message);
 											GuideResource.listGuide(GuideResource.searchData.pageNo);
 										}
 									}
@@ -284,7 +284,7 @@ define(function(require, exports) {
 	
 		GuideResource.deleteGuide = function(id){
 		if (!!id) {
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+			showConfirmDialog("你确定要删除该条记录？", function() {
 				$.ajax({
 					url:""+APP_ROOT+"back/guide.do?method=deleteGuide&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 					type: 'post',

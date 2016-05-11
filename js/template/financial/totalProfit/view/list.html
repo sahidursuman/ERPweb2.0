@@ -1,4 +1,4 @@
- <div class="row" >
+ <div class="row globalAdd" >
     <form class="form-inline T-search-area" role="form" onsubmit="return false">
         <div class="mar-r-10">
             <label>单号 </label>
@@ -24,10 +24,11 @@
             <input class="date-picker mar-r-10" name="startTime" value = "{{startDate}}" placeholder="开始日期" type="text" style="width:100px;" /> 
             <label >结束时间 </label>
             <input class="date-picker mar-r-10" name="endTime" value = "{{endDate}}" placeholder="结束日期"  type="text" style="width:100px;" />    
-            <button class="btn-height btn-sm search-btn T-search ">
+            <button class="btn-height btn-sm search-btn T-search mar-r-10">
                 <i class="ace-icon fa fa-search"></i>
                    搜索
             </button>
+            <button class="btn btn-sm btn-success T-export">导出</button>
         </div>
     </form>
     <div class="form-group mar-t-10">

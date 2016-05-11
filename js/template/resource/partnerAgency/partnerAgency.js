@@ -106,7 +106,7 @@ define(function(require,exports){
 				PartnerAgency.viewPartnerAgency(id);
 			}else if($that.hasClass('T-partnerAgency-delete')){
 				//删除同行
-				showConfirmDialog($( "#confirm-dialog-message" ), "确定删除该条数据?",function(){
+				showConfirmDialog("确定删除该条数据?",function(){
 	        		PartnerAgency.deletePartnerAgency(id);
 	        	});
 				
@@ -202,7 +202,7 @@ define(function(require,exports){
 							$contactList.find('tbody .needConfirm').on('click',function(){
 								var $obj = $(this);
 								var id = $obj.attr("data-entity-id");
-								showConfirmDialog($( "#confirm-dialog-message" ), "确定删除该条数据?",function(){
+								showConfirmDialog("确定删除该条数据?",function(){
 				            		PartnerAgency.deleteContact($obj,id);
 				            	});
 							});
@@ -251,7 +251,7 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						PartnerAgency.listPartnerAgency(0);	
 					});
 				}
@@ -334,7 +334,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					layer.close($obj);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						var formData = {};
 						console.log(data);
                         if (typeof fn === "function") {
@@ -377,7 +377,7 @@ define(function(require,exports){
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 							$obj.closest('tr').remove();
 					});
 				}
@@ -432,7 +432,7 @@ define(function(require,exports){
 									$obj.find("select[name=headPartnerAgency]").append(option);
 								layer.close(addHeaderAgencyLayer);
 							}
-							showMessageDialog($( "#confirm-dialog-message" ),data.message);
+							showMessageDialog(data.message);
 						}
 					});
 				});

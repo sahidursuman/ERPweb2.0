@@ -14,7 +14,8 @@ var SWITCH_TAB_SAVE = 'switch.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
 	REFRESH_TAB_EVENT = 'refresh.tab.event',
 	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
-
+	//申明showMessgeageDialog的全局变量
+	var $conDiaMes = $("#confirm-dialog-message");
 var KingSettings = {
 	// 询价服务的开关
 	pusher: false,
@@ -52,7 +53,7 @@ function addTab(tabId,tabName,html){
 				var modal = modals[str[0]];
 				if(str.length > 1 && str[1] != "view" && !!modal && !!modal.isEdited && modal.isEdited(str[1])){//非列表、查看,且有修改
 					if(str[1] == "add"){
-						showConfirmMsg($( "#confirm-dialog-message" ), "未保存的数据，是否放弃?",function(){
+						showConfirmMsg( "未保存的数据，是否放弃?",function(){
 							console.log("留在当前页");
 						},function(){
 							closeTab(tabId);
@@ -60,7 +61,7 @@ function addTab(tabId,tabName,html){
 						},"放弃","留在此页");
 					} else{
 						console.log(str[1]);
-						showConfirmMsg($( "#confirm-dialog-message" ), "是否保存已修改的数据?",function(){
+						showConfirmMsg( "是否保存已修改的数据?",function(){
 							modal.save(str[1]);
 							closeTab(tabId);
 						}, function(){
@@ -210,21 +211,21 @@ function init_editor(ue_key,options, height)  {
 
 function showDialog(data){
 	if(data.success == 0){
-		showMessageDialog($( "#confirm-dialog-message" ),data.message);
+		showMessageDialog(data.message);
 		return false;
 	}
 	else if(data.success == -1){
-		showLogoutDialog($( "#confirm-dialog-message" ),data.message);
+		showLogoutDialog(data.message);
 		return false;
 	}
 	else if(data.success == -2){
-		showAutoLoginDialog($( "#confirm-dialog-message" ),data.message);
+		showAutoLoginDialog(data.message);
 		return false;
 	}
 	return true;
 }
-function showMessageDialog(dialogObj,message,fn,isNotClose){
-	var showDiolog=dialogObj.removeClass('hide').dialog({
+function showMessageDialog(message,fn,isNotClose){
+	var showDiolog=$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -258,7 +259,7 @@ function showMessageDialog(dialogObj,message,fn,isNotClose){
 		}
 	}
 }
-function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
+function showConfirmMsg(message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	var buttons;
 	if(!!btnStr1 && btnStr1 != "" && !!btnStr2 && btnStr2 != ""){
 		buttons = [
@@ -307,7 +308,7 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 			}
 		]
 	}
-	dialogObj.removeClass('hide').dialog({
+	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -319,7 +320,7 @@ function showConfirmMsg(dialogObj,message,confirmFn ,cancelFn,btnStr1,btnStr2){
 	});
 }
 
-function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
+function showSaveConfirmDialog(message, yes_fn, no_fn, cacel_fn)  {
 	var buttons = [
 			{
 				text: '是',
@@ -353,7 +354,7 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 			}
 		]
 
-	$dialog.removeClass('hide').dialog({
+	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i>数据保存</h4></div>",
 		title_html: true,
@@ -364,8 +365,8 @@ function showSaveConfirmDialog($dialog, message, yes_fn, no_fn, cacel_fn)  {
 		}
 	});
 }
-function showConfirmDialog(dialogObj,message, fn, closeFn){
-	dialogObj.removeClass('hide').dialog({
+function showConfirmDialog(message, fn, closeFn){
+	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -398,8 +399,8 @@ function showConfirmDialog(dialogObj,message, fn, closeFn){
 	});
 }
 // 撤销 undo 
-function showNndoConfirmDialog(dialogObj,message, fn){
-	dialogObj.removeClass('hide').dialog({
+function showNndoConfirmDialog(message, fn){
+	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -429,8 +430,8 @@ function showNndoConfirmDialog(dialogObj,message, fn){
 	});
 }
 
-function showLogoutDialog(dialogObj,message){
-	dialogObj.removeClass('hide').dialog({
+function showLogoutDialog(message){
+	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -464,13 +465,13 @@ function checkLogin(fn){
 				fn();
 			}
 			else{
-				showLogoutDialog($( "#confirm-dialog-message" ),"当前账号登陆状态已失效，请重新登录");
+				showLogoutDialog("当前账号登陆状态已失效，请重新登录");
 			}
 		}
 	});
 }
-function showAutoLoginDialog(dialogObj,message){
-	dialogObj.removeClass('hide').dialog({
+function showAutoLoginDialog(message){
+	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -487,12 +488,12 @@ function showAutoLoginDialog(dialogObj,message){
 						dataType:"json",
 						success:function(data){
 							if(data.success == 1){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+								showMessageDialog(data.message);
 								//获取登陆后token
 								KingServices.token = $.cookie('token');
 							}
 							else{
-								showLogoutDialog($( "#confirm-dialog-message" ),data.message);
+								showLogoutDialog(data.message);
 							}
 						}
 					});
@@ -563,7 +564,7 @@ function login(){
 										var result = showDialog(data);
 										if(result){
 											layer.close(updatePasswordLayer);
-											showMessageDialog($( "#dialog-message" ),"修改成功，请用新密码登陆");
+											showMessageDialog("修改成功，请用新密码登陆");
 											window.location.href = "login.html";
 										}else{
 											$loginObj.find("input[name='newPassword']").val("");
@@ -586,7 +587,7 @@ function login(){
 				});
 			}
 			else{
-				showMessageDialog($( "#dialog-message" ),data.message);
+				showMessageDialog(data.message);
 				window.forbiddenError = true;
 			}
 		}
@@ -594,7 +595,7 @@ function login(){
 }
 
 function logout(){
-	var dialog = $( "#confirm-dialog-message" ).removeClass('hide').dialog({
+	var dialog = $conDiaMes.removeClass('hide').dialog({
 		modal: true,
 		title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-info-circle'></i> 消息提示</h4></div>",
 		title_html: true,
@@ -624,7 +625,7 @@ function logout(){
 						success:function(data){
 							layer.close(globalLoadingLayer);
 							if(data.success == 0){
-								showMessageDialog($( "#confirm-dialog-message" ),data.message);
+								showMessageDialog(data.message);
 							}
 							else{
 								window.location.href = "login.html";
@@ -726,6 +727,7 @@ var modalScripts = {
 	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
 	'financial_guide_borrow_money':"js/template/financial/guideBorrow/guideBorrow.js",//导游借款
 	'financial_offsetByDetail':"js/template/financial/offsetByDetail/offsetByDetail.js",//冲抵明细
+	'funancial_paymentRequisition':"js/template/financial/payRequest/payRequest.js",//付款申请
     //---------------------------------------------------------------------------------------------------------------
     'public_message': "js/template/system/message/message.js",
     'system_information': "js/template/system/information/information.js",
@@ -997,7 +999,7 @@ var _statusText = {
 		//判断当前token与登陆时token是否相同
 		var token = $.cookie('token');
 		if (KingServices.token != token && !!token && !!KingServices.token) {
-			showConfirmDialog($( "#confirm-dialog-message" ), '当前登陆状态已失效，请重新登录', function() {
+			showConfirmDialog('当前登陆状态已失效，请重新登录', function() {
 				window.location.reload();
 			},function() {
 				return;
@@ -1048,14 +1050,14 @@ var _statusText = {
 									status = XMLHttpRequest.status;
 								}
 
-								showMessageDialog($( "#confirm-dialog-message" ),getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
+								showMessageDialog(getAjaxErrorInfo(XMLHttpRequest), closeGlobalLayer);
 
 							}
 							fn.error(XMLHttpRequest, textStatus, errorThrown);
 						}
 						else {
 							console.info(opt.url + "请求异常:readyState = " + XMLHttpRequest.readyState);
-							showMessageDialog($( "#confirm-dialog-message" ), '服务器开小差了，请您稍后再试', closeGlobalLayer);
+							showMessageDialog('服务器开小差了，请您稍后再试', closeGlobalLayer);
 						}
 					},
 					beforeSend:function(){
@@ -1477,7 +1479,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 		// 页面已经编辑
 		if ($content.data('isEdited'))  {
-			showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
+			showSaveConfirmDialog( "数据已经被修改，是否保存?",
 								function(){	// 保存
 									$content.trigger(SWITCH_TAB_SAVE, [tab_id, tab_name, html]);
 								},
@@ -1522,7 +1524,7 @@ Tools.addTab = function(tab_id, tab_name, html)  {
 
 				// 页面已经编辑
 				if ($content.data('isEdited'))  {
-					showSaveConfirmDialog($( "#confirm-dialog-message" ), "数据已经被修改，是否保存?",
+					showSaveConfirmDialog("数据已经被修改，是否保存?",
 										function(){	// 保存
 											$content.trigger(CLOSE_TAB_SAVE);
 										},
@@ -2012,7 +2014,7 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
          	 }
              var $end = $obj.eq(1).datepicker('setStartDate', start);
 
-             if ($end.val() < start) {
+             if ($end.val() && ($end.val() < start)) {
                  $end.val(start);
              }
          });
@@ -2547,6 +2549,9 @@ KingServices.addBusDriverFunction = function(e){
 			if (!!data.driverData.name && !!driverName) {$parents.find('input[name='+driverName+']').val(data.driverData.name);}
 			if (!!data.driverData.id && !!driverId) {$parents.find('input[name='+driverId+']').val(data.driverData.id).trigger('change');}
 			if (!!data.driverData.mobileNumber && !!driverMobileNumber) {$parents.find('input[name='+driverMobileNumber+']').val(data.driverData.mobileNumber);}
+			if (!!data.driverData.mobileNumber && driverMobileNumber == 'withName' && !!data.driverData.name && !!driverName) {
+				$parents.find('input[name='+driverName+']').val(data.driverData.name+data.driverData.mobileNumber);
+			}
 		}
 	$function(fn,$busCompany,$busCompanyId);
 }

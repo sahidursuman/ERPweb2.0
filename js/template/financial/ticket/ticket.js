@@ -356,7 +356,7 @@ define(function(require, exports) {
 			}).done(function(data){
 				if(showDialog(data)){
 					
-	                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+	                showMessageDialog(data.message, function() {
 	                	Ticket.checkTemp = false;
 	                	$tab.data('isEdited', false);
 	                    if (argLen === 1) {
@@ -369,7 +369,7 @@ define(function(require, exports) {
 	            }
 			});
 		}else{
-			showMessageDialog($('#confirm-dialog-message'), '没有可提交的数据！');
+			showMessageDialog('没有可提交的数据！');
 		}
 	};
 
@@ -653,7 +653,7 @@ define(function(require, exports) {
             },
         })
         .done(function(data) {
-            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            showMessageDialog(data.message, function() {
             	$tab.data('isEdited', false);
             	Ticket.payingJson = false;
                 if (argLen === 1) {
