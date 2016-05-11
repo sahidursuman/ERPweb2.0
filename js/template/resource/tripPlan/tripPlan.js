@@ -466,7 +466,7 @@ define(function(require, exports) {
 						data.tarId = tabId;
 						tripPlan.dayWhich = data.dayWhich;
 
-						if (bs === '-2' && !!target) {
+						if ($billStatus === '-2' && !!target) {
 							// 来自安排中心的安排
 							var _type = target.split('_')[2];
 
@@ -3425,7 +3425,9 @@ define(function(require, exports) {
 	            isGuidePayMoney = (name == 'guidePayMoney'),
 	            hasSignBillMoney = $that.closest('tr').find('[name=signBillMoney]').length;
 	        //如果改的是计划导付，但是没有签单金额，则不计算
+	        
 	        if (isGuidePayMoney && hasSignBillMoney == 0) {
+	        	tripPlan.calcSummary($tab);
 	        	return;
 	        }
 
