@@ -110,7 +110,6 @@ define(function(require, exports) {
             arrangeEndTime = transit.$searchArea.find("input[name=arrangeEndTime]").val(),
             status = transit.$searchArea.find(".T-transitState").val(),
             tgOrderNumber = transit.$searchArea.find(".T-tgOrderNumber").val(),
-            orderNumber = transit.$searchArea.find(".T-orderNumber").val(),
             shuttleType = transit.$searchArea.find("[name=shuttleType]").val(),
             shuttleTime = transit.$searchArea.find("input[name=shuttleTime]").val(),
             arrangeItem = transit.$searchArea.find("[name=arrangeItem]").val(),
@@ -131,7 +130,6 @@ define(function(require, exports) {
 			arrangeEndTime: arrangeEndTime,
 			status: status,
 			tgOrderNumber: tgOrderNumber,
-			orderNumber: orderNumber,
 			shuttleType: shuttleType,
 			shuttleTime: shuttleTime,
 			arrangeItem: arrangeItem,
@@ -166,7 +164,6 @@ define(function(require, exports) {
 			success:function(data){
 				//根据返回值判断下一步操作，或者已出现错误
 				if(showDialog(data)){
-					data.outRemarkArrangeList = JSON.parse(data.outRemarkArrangeList);
 					var html = listTemplate(data);
 
 					transit.$tab.find('.T-arrangeTransitList').html(filterUnAuth(html));

@@ -52,7 +52,6 @@
         <tr >
             <td colspan="2"><label style="font-weight: bold;">收入：<span class="F-float F-money tripIncome">0</span></label></td>
             <td colspan="5"><label style="font-weight: bold;">团成本：<span class="F-float F-money tripCost">0</span></label></td>
-            <td colspan="2"><label style="font-weight: bold;">中转成本：<span class="F-float F-money tripTransitCost">0</span></label></td>
         </tr>
 
         <tr>
@@ -63,8 +62,6 @@
             <td style="text-align:left"><label>车费：<span class="F-float F-money tripCost-busCompanyNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>导游购物返佣：<span class="F-float F-money tripCost-guideshopFee">0</span></label></td>
             <td style="text-align:left"><label>全陪购物返佣：<span class="F-float F-money quanpei-shopFee">0</span></label></td>
-            <td style="text-align:left"><label>车费：<span class="F-float F-money tripTransitCost-busCompanyNeedPayMoney">{{transfer.transferBusMoney}}</span></label></td>
-            <td style="text-align:left"><label>餐费：<span class="F-float F-money tripTransitCost-outRestaurantMoney">{{transfer.transferRestaurantMoney}}</span></label></td>
         </tr>
         <tr> 
             <td style="text-align:left"><label>购物返佣：<span class="F-float F-money tripIncome-shopIncomeMoney">0</span></label></td>
@@ -74,8 +71,6 @@
             <td style="text-align:left"><label>景区费用：<span class="F-float F-money tripCost-scenicArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>导游自费返佣：<span class="F-float F-money tripCost-guideSelfMoney">0</span></label></td>
             <td style="text-align:left"><label>全陪自费返佣：<span class="F-float F-money tripCostQuanpei-SelfFee">0</span></label></td>
-            <td style="text-align:left"><label>房费：<span class="F-float F-money tripTransitCost-hotelArrangeNeedPayMoney">{{transfer.transferHotelMoney}}</span></label></td>
-            <td style="text-align:left"><label>其它费用：<span class="F-float F-money tripTransitCost-outOtherMoney">{{transfer.transferOtherMoney}}</span></label></td>
         </tr>
         <tr>
             <td style="text-align:left"><label>导游管理费：<span class="F-float F-money tripIncome-guideManageMoney">0</span></label></td>
@@ -84,8 +79,6 @@
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>自费费用：<span class="F-float F-money tripCost-selfArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left" colspan="2"><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
-            <td style="text-align:left"><label>票务费用{{isOp}}：<span class="F-float F-money tripTransitCost-ticketArrangeNeedPayMoney">{{transfer.transferTicketMoney}}</span></label></td>
-            <td></td>
         </tr>
         </tbody>
     </table>
@@ -139,11 +132,6 @@
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-tripdetail-otherpay" aria-expanded="true">其它支出</a>
             </li>
-            {{if touristGroup != null}}
-            <li class="col-sm-1 no-padding align-center" style="width:100px;">
-                <a data-toggle="tab" href="#financial-count-tripdetail-outarrangepay" aria-expanded="true">中转</a>
-            </li>
-            {{/if}}
             <li class="col-sm-1 no-padding align-center" style="width:100px;">
                 <a data-toggle="tab" href="#financial-count-tripdetail-insurance" aria-expanded="true">保险</a>
             </li>
@@ -1623,10 +1611,6 @@
             </div>
             <!-- 其它支出 -->
             <div id="financial-count-tripdetail-otherpay" class="tab-pane fade T-otherOut">
-                
-            </div>
-            <!-- 中转 -->
-            <div id="financial-count-tripdetail-outarrangepay" class="tab-pane fade T-transit">
                 
             </div>
 

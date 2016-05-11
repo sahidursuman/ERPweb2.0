@@ -227,8 +227,8 @@ define(function(require, exports) {
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
 					for(var i=0; i<detailList.length; i++){
-						var formula = detailList[i].count + "×" + (detailList[i].days ? detailList[i].days + "×" : "") + detailList[i].price;
-						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + formula + "=" + (detailList[i].count * detailList[i].price * (detailList[i].days || 0)) + '，';
+						var formula = detailList[i].count + "×" + detailList[i].price;
+						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + formula + "=" + (detailList[i].count * detailList[i].price) + '，';
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}

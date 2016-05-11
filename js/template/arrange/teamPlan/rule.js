@@ -199,6 +199,37 @@ define(function(require, exports) {
                     type: 'positive-int',
                     errMsg: '计划人数必须为正整数'
                 }]
+            },{
+                //要求不能为空
+                $ele: $obj.find('[name="requireContent"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '要求不能为空'
+                }]
+            },
+            {
+                //子部门不能为空
+                $ele: $obj.find('[name="dutySubDepartmentName"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '子部门不能为空'
+                }]
+            },
+            {
+                //责任部门不能为空
+                $ele: $obj.find('[name="dutyDepartmentName"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '责任部门不能为空'
+                }]
+            },
+            {
+                //责任计调不能为空
+                $ele: $obj.find('[name="dutyUserName"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '责任计调不能为空'
+                }]
             }];
 
             if ($obj.find('.T-timed').prop('checked')) {

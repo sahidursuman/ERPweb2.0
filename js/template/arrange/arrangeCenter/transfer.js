@@ -266,7 +266,7 @@ define(function(require, exports) {
 
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
-                    var $container = $searchFrom.next().html(html);
+                    var $container = $searchFrom.next().html(filterUnAuth(html));
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -323,7 +323,7 @@ define(function(require, exports) {
 
                     var html = args.status == '1' ? HotelArrangedListTemplate(data) : HotelListTemplate(data);
 
-                    var $container = $searchFrom.next().html(html);
+                    var $container = $searchFrom.next().html(filterUnAuth(html));
 
                     laypage({
                         cont: $container.find('.T-pagenation'),
@@ -380,7 +380,7 @@ define(function(require, exports) {
 
                     var html = args.status == '1' ? HotelArrangedListTemplate(data) : HotelListTemplate(data);
 
-                    var $container = $searchFrom.next().html(html);
+                    var $container = $searchFrom.next().html(filterUnAuth(html));
 
                     laypage({
                         cont: $container.find('.T-pagenation'),
@@ -1883,7 +1883,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-11" name="manager" readonly="readonly" type="text" value="" /></td>' +
             '<td><input class="col-sm-12" name="mobileNumber" readonly="readonly" type="text" value="" /></td>' +
             '<td><select name="standardType"><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="晚餐">晚餐</option></select>' +
-            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="price" type="text" value="" maxlength="9" /><input type="hidden" name="price" value="" />' +
+            '</td><td><input class="col-sm-12 T-chooseStandard price F-float F-money" name="price" type="text" value="" maxlength="9" />' +
             '</td><td><input class="col-sm-12 count F-float F-count" name="memberCount" maxlength="6" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney" maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number needPay F-float F-money" name="needPayMoney" readonly="readonly" type="text" value="" /></td>' +
@@ -1896,6 +1896,10 @@ define(function(require, exports) {
         $tbody.append($line);
         Transfer.addResource($line);  
         Transfer.setDate($line);
+        //删除餐
+        $tbody.find('.T-arrange-delete').on('click', function() {
+            Transfer.deleteRestaurant($(this));
+        });
         //校验
         rule.transferOtherUpdate(validate);
     };
@@ -1924,6 +1928,10 @@ define(function(require, exports) {
         $tbody.append($line);
         Transfer.addResource($line);
         Transfer.setDate($line);
+        //删除票务
+        $tbody.find('.T-arrange-delete').on('click', function() {
+            Transfer.deleteTicket($(this));
+        });
         //校验
         rule.transferOtherUpdate(validate);
     };
@@ -1946,6 +1954,10 @@ define(function(require, exports) {
         $line = filterUnAuth(html);
         $tbody.append($line);
         Transfer.setDate($line);
+        //删除其他
+        $tbody.find('.T-arrange-delete').on('click', function() {
+            Transfer.deleteOther($(this));
+        });
         rule.transferOtherUpdate(validate);
     };
 
