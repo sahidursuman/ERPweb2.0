@@ -1172,9 +1172,9 @@ define(function(require, exports) {
             data.lineData = lineData;
             data.lineData.startTime = $tr.find('[name="tripStartTime"]').val() || $tr.find('[name="tripStartTime"]').text();
             data.needPayMoney = receivable.currentNeedPayMoney || 0;
-            moneyData.lineFeeDel = JSON.stringify(moneyData.lineFeeDel || null);
+            if(!!moneyData.lineFeeDel) moneyData.lineFeeDel = JSON.stringify(moneyData.lineFeeDel);
         }else{
-            moneyData.touristGroupFeeJsonDel = JSON.stringify(moneyData.touristGroupFeeJsonDel || null);
+            if(!!moneyData.touristGroupFeeJsonDel)moneyData.touristGroupFeeJsonDel = JSON.stringify(moneyData.touristGroupFeeJsonDel);
         }
         data.groupType = groupType;
         $.extend(data, moneyData);
@@ -1432,7 +1432,8 @@ define(function(require, exports) {
         if(typeof data !== "object"){
             data = JSON.parse(data || "{}");
         }
-        data.otherFeeDel = JSON.stringify(data.otherFeeDel || null);
+        if(!!data.otherFeeDel)data.otherFeeDel = JSON.stringify(data.otherFeeDel);
+        
         if(optionType === 1){
             html = T.viewOther(data);
             html = Tools.filterMoney(html);
@@ -2417,8 +2418,8 @@ define(function(require, exports) {
                 data.receiveTrip.push(receiveTripData);
             });
             data.receiveTripDel = $tab.find('.T-join-group-list').data('del-json');
-            if(typeof data.receiveTripDel === "object"){
-                data.receiveTripDel = JSON.stringify(data.receiveTripDel || null);
+            if(typeof data.receiveTripDel === "object" && !!data.receiveTripDel){
+                data.receiveTripDel = JSON.stringify(data.receiveTripDel);
             }
         }
 
@@ -2479,8 +2480,8 @@ define(function(require, exports) {
             }
         });
         data.joinTripDel = $tab.find('.T-part-group-list').data('del-json');
-        if(typeof data.joinTripDel === "object"){
-            data.joinTripDel = JSON.stringify(data.joinTripDel || "[]");
+        if(typeof data.joinTripDel === "object" && !!data.joinTripDel){
+            data.joinTripDel = JSON.stringify(data.joinTripDel);
         }
         /*if(data.joinTrip.length === 0){
             var tripMsg = data.baseInfo.customerType === 0 ? '至少填写一条参团信息！' : '至少填写一条转团信息！';
@@ -2554,8 +2555,8 @@ define(function(require, exports) {
                 data.sendTrip.push(sendTripData);
             });
             data.sendTripDel = $tab.find('.T-send-group-list').data('del-json');
-            if(typeof data.sendTripDel === "object"){
-                data.sendTripDel = JSON.stringify(data.sendTripDel || null);
+            if(typeof data.sendTripDel === "object" && !!data.sendTripDel){
+                data.sendTripDel = JSON.stringify(data.sendTripDel);
             }
         }
         if(data.baseInfo.customerType === 1){
