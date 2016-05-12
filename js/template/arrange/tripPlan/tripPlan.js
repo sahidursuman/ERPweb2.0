@@ -963,6 +963,9 @@ define(function(require, exports) {
         }
     };
 
+
+
+
     /**
      * 处理要求数据
      * @param  {[type]}  require [description]
@@ -1792,16 +1795,6 @@ define(function(require, exports) {
                 }
             });
         },function(){},"取消","确定");
-    };
-
-    tripPlan.tripPlanAllMemberCount = function($tab){
-        var tr = $tab.find(".T-tourist-list tr"),
-            trMemberCount = 0;
-        tr.each(function(){
-            trMemberCount += parseInt($(this).find(".T-memberCount").text());
-        })
-        $tab.find(".T-groupMemberCount").text(trMemberCount);
-        trMemberCount = 0;
     };
 
     //游客名单成员添加自动序号函数  tripPlan.MenberNumber(oClass);
