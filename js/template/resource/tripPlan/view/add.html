@@ -216,7 +216,7 @@
                                 <col style="width:80px;" />
                                 <col style="width:80px;" />
                                 <col style="width:80px;" />
-                                <col/>
+                                <col style="min-width: 100px;" />
                                 <col style="width:50px;" />
                             </colgroup>
                             <thead>
@@ -297,8 +297,8 @@
                                 <col style="width:80px;">
                                 <col style="width:80px;">
                                 <col style="width:80px;">
-                                <col>
-                                <col style="width:50px;">
+                                <col style="min-width: 100px;">
+                                <col style="width:60px;">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -435,7 +435,7 @@
                                         <col style="width:80px;">
                                         <col style="width:150px;">
                                         <col style="width:70px;">
-                                        <col>
+                                        <col style="min-width: 100px;">
                                         <col style="width:100px;">
                                         <col style="width:140px;">
                                     </colgroup>
@@ -597,8 +597,8 @@
                                     <col style="width:60px;">
                                     <col style="width:60px;">
                                     <col style="width:150px;">
-                                    <col>
-                                    <col style="width:50px;">
+                                    <col style="min-width: 100px;">
+                                    <col style="width:60px;">
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -716,7 +716,7 @@
                                     <col style="width:60px;">
                                     <col style="width:60px;">
                                     <col style="width:150px;">
-                                    <col>
+                                    <col style="min-width: 100px;">
                                     <col style="width:80px;">
                                     <col style="width:110px;">
                                 </colgroup>
@@ -848,7 +848,7 @@
                                     <col style="width:60px;">
                                     <col style="width:60px;">
                                     <col style="width:150px;">
-                                    <col>
+                                    <col style="min-width: 100px;">
                                     <col style="width:60px;">
                                 </colgroup>
                                 <thead>
@@ -956,7 +956,7 @@
                                 <col style="width:90px;">
                                 <col style="width:110px;">
                                 <col style="width:160px;">
-                                <col>
+                                <col style="min-width: 100px;">
                                 <col style="width:60px;">
                             </colgroup>
                             <thead>
@@ -1054,7 +1054,7 @@
                                     <col style="width:80px">
                                     <col style="width:80px">
                                     <col style="width:150px">
-                                    <col>
+                                    <col style="min-width: 100px;">
                                     <col style="width:60px;">
                                 </colgroup>
                                 <thead>
@@ -1154,15 +1154,15 @@
                                     <col style="width:120px;">
                                     <col style="width:120px;">
                                     <col style="width:100px;">
+                                    <col style="width:130px">
+                                    <col style="width:50px">
+                                    <col style="width:70px">
+                                    <col style="width:60px">
+                                    <col style="width:70px">
+                                    <col style="width:80px">
+                                    <col style="width:80px">
                                     <col style="width:150px">
-                                    <col style="width:80px">
-                                    <col style="width:80px">
-                                    <col style="width:80px">
-                                    <col style="width:80px">
-                                    <col style="width:80px">
-                                    <col style="width:80px">
-                                    <col style="width:150px">
-                                    <col>
+                                    <col style="min-width: 100px;">
                                     <col style="width:60px;">
                                 </colgroup>
                                 <thead>
@@ -1217,7 +1217,7 @@
                                             <input type="text" name="shift" maxlength="9" class="col-sm-12" value="{{ticket.shift}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="startTime" class="col-sm-13 T-dateTimePicker" value="{{ticket.startTime | dateTimeHSFormat}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="startTime" class="col-sm-12 T-dateTimePicker" value="{{ticket.startTime | dateTimeHSFormat}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="seatLevel" maxlength="32" value="{{ticket.seatLevel}}" class="col-sm-12" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1235,7 +1235,7 @@
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{ticket.needPayMoney}}" />
                                         </td>
                                         <td><div class="inline-flex">{{#ticket.preType | getPlanPreTypeOption: ticket.isConfirmAccount}}
-                                            <input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
+                                            <input type="text" name="prePayMoney" class="price F-float F-money w-80" maxlength="9" value="{{ticket.prePayMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
                                         <td><div class="inline-flex">{{#ticket.payType | getPlanPayTypeOption: ticket.isConfirmAccount}}
                                             <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
@@ -1283,7 +1283,7 @@
                                     <col style="width:80px">
                                     <col style="width:80px">
                                     <col style="width:150px">
-                                    <col>
+                                    <col style="min-width: 100px;">
                                     <col style="width:60px;">
                                 </colgroup>
                                 <thead>
