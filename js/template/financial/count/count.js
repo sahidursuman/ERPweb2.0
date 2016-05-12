@@ -3247,19 +3247,17 @@ define(function(require, exports){
 			'<td name="guidePayedMoney">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guidePayedMoney" class="w-70 F-float F-money" type="text">'+
+					'<p class="inline-flex">'+
+						'<select name="payType">'+
+							'<option value="0">现金</option>'+
+							'<option value="1">刷卡</option>'+
+							'<option value="2">签单</option>'+
+						'</select>'+
+						'<input name="guidePayedMoney" class="w-70 F-float F-money" type="text">'+
+					'</p>'+
 				'</div>'+
 			'</td>'+
-			'<td name="payType">'+
-				'<div class="div-h-30"></div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<select name="payType">'+
-						'<option value="0">现金</option>'+
-						'<option value="1">刷卡</option>'+
-						'<option value="2">签单</option>'+
-					'</select>'+
-				'</div>'+
-			'</td>'+
+			
 			'<td name="billImage">'+
 				'<div class="div-h-30"></div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
