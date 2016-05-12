@@ -1,3 +1,4 @@
+<div class="globalAdd">
 <div class="base-info" data-id="{{bookingOrder.id}}">
     <div class="hct-view-container">
         <table class="table table-bordered">
@@ -35,13 +36,13 @@
     </div>
 </div>
 <div class=" ui-sortable-handle">
-    <h5 class="">
-        <label class="middle title-size">景区</label>
+    <div class="form-group form-inline">
+        <label class="middle mar-r-10 title-size">景区</label>
         <button class="btn btn-sm btn-success mar-l-20 T-action T-scenic-add">
             <i class="ace-icon fa fa-plus"></i>
             新增
         </button>
-    </h5>
+    </div>
     <p class="panel hct-mh-required">现景区计划要求：{{required}}</p>
     <div class="widget-body">
         <div class="widget-main no-padding">
@@ -172,7 +173,6 @@
         </div>
     </div>
 </div>
-
 <div class="text-center mar-t-20">
     <button class="btn btn-sm btn-primary T-cancel mar-r-20"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
     <button class="btn btn-sm btn-primary mar-r-20 T-scenic-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
@@ -182,4 +182,5 @@
             <span class="lbl font-w"> 景区安排完成</span>
         </label>
     </span>
+</div>
 </div>

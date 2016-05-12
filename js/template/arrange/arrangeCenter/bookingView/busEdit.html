@@ -1,3 +1,4 @@
+<div class="globalAdd">
 <div class="base-info container-fluid" data-id="{{bookingOrder.id}}">
     <div class="hct-view-container">
         <table class="table table-bordered">
@@ -20,15 +21,15 @@
         </table>
     </div>
 </div>
-<div class=" ui-sortable-handle">
-    <h5 class="">
-        <label class="middle title-size">车</label>
+<div class="ui-sortable-handle">
+        <div class="form-group form-inline">
+        <label class="middle mar-r-10 title-size">车</label>
         <button class="btn btn-sm  btn-success T-action T-bus-add mar-l-20">
             <i class="ace-icon fa fa-plus"></i>
             新增
         </button>
-    </h5>
-    <p class="panel hct-mh-required">现车辆计划要求：{{required}}</p>
+        </div>
+    <p class="panel mar-t-20 hct-mh-required">现车辆计划要求：{{required}}</p>
     <div class="widget-body">
         <div class="widget-main no-padding">
             <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
@@ -136,7 +137,6 @@
         </div>
     </div>
 </div>
-
 <div class="text-center mar-t-20">
     <button class="btn btn-sm btn-primary mar-r-20 T-cancel"> <i class="ace-icon fa fa-times-circle"></i> 取消 </button>
     <button class="btn btn-sm btn-primary mar-r-20 T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
@@ -146,4 +146,5 @@
             <span class="lbl font-w"> 车辆安排完成</span>
         </label>
     </span>
+</div>
 </div>
