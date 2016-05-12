@@ -3335,7 +3335,6 @@ define(function(require, exports){
 			realReduceMoney = $tr.find('td[name=realReduceMoney]'),
 			realNeedPayMoney = $tr.find('td[name=realNeedPayMoney]'),
 			guidePayedMoney = $tr.find('td[name=guidePayedMoney]'),
-			payType = $tr.find('td[name=payType]'),
 			billImage = $tr.find('td[name=billImage]'),
 			travelAgencyRate = $tr.find('td[name=travelAgencyRate]'),
 			travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
@@ -3396,15 +3395,16 @@ define(function(require, exports){
 			'<input type="hidden" name="realNeedPayMoney">'+
 			'</div>';
 		var guidePayedHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
-			'<input type="text" name="guidePayedMoney" class="w-70 F-float F-money">'+
-			'</div>';
-		var payTypeHtml ='<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
+			'<p class="inline-flex" style="margin:0px;">'+
 			'<select name="payType">'+
 				'<option value="0">现金</option>'+
 				'<option value="1">刷卡</option>'+
 				'<option value="2">签单</option>'+
 			'</select>'+
+			'<input type="text" name="guidePayedMoney" class="w-70 F-float F-money">'+
+			'</p>'+
 			'</div>';
+		
 		var imgHtml = '<div class="div-h-30 mar-t-5" index="'+(index+1)+'">'+
 			'<span style="color:#bbb;">查看</span>'+
 			'</div>';
@@ -3439,7 +3439,6 @@ define(function(require, exports){
 		realReduceMoney.append(realReduceHtml);
 		realNeedPayMoney.append(realNeedPayHtml);
 		guidePayedMoney.append(guidePayedHtml);
-		payType.append(payTypeHtml);
 		billImage.append(imgHtml);
 		travelAgencyRate.append(travelAgencyRateHtml);
 		travelAgencyRebateMoney.append(travelAgencyRebateMoneyHtml);
@@ -3468,7 +3467,6 @@ define(function(require, exports){
 			realReduceMoney = $tr.find('td[name=realReduceMoney]'),
 			realNeedPayMoney = $tr.find('td[name=realNeedPayMoney]'),
 			guidePayedMoney = $tr.find('td[name=guidePayedMoney]'),
-			payType = $tr.find('td[name=payType]'),
 			billImage = $tr.find('td[name=billImage]'),
 			travelAgencyRate = $tr.find('td[name=travelAgencyRate]'),
 			travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]'),
@@ -3499,7 +3497,6 @@ define(function(require, exports){
 			Count.delDiv(realReduceMoney,index,$parentObj);
 			Count.delDiv(realNeedPayMoney,index,$parentObj);
 			Count.delDiv(guidePayedMoney,index,$parentObj);
-			Count.delDiv(payType,index,$parentObj);
 			Count.delDiv(billImage,index,$parentObj);
 			Count.delDiv(travelAgencyRate,index,$parentObj);
 			Count.delDiv(travelAgencyRebateMoney,index,$parentObj);
@@ -3727,17 +3724,20 @@ define(function(require, exports){
 			'<td name="guidePayedMoney">'+
 				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="guidePayedMoney" type="text" class="w-50"/>'+
-				'</div>'+
-			'</td>'+
-			'<td name="payType">'+
-				divHtml+
-				'<div class="div-h-30 mar-t-5" index="1">'+
+					'<p class="inline-flex" style="margin:0px;">'
 					'<select name="payType">'+
 						'<option value="0">现金</option>'+
 						'<option value="1">刷卡</option>'+
 						'<option value="2">签单</option>'+
 					'</select>'+
+					'<input name="guidePayedMoney" type="text" class="w-50"/>'+
+					'</p>'+
+				'</div>'+
+			'</td>'+
+			'<td name="payType">'+
+				divHtml+
+				'<div class="div-h-30 mar-t-5" index="1">'+
+					
 				'</div>'+
 			'</td>'+
 			'<td name="billImage">'+
@@ -6605,7 +6605,6 @@ define(function(require, exports){
 	Count.addArrangeGuide = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),$thisTd = $obj.closest('td'),
 			$countTd = $tr.find('td[name=guideRealCount]'),
-			$payTypeTd = $tr.find('td[name=payType]'),
 			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
 			$billImageTd = $tr.find('td[name=billImage]'),
 			$billRemarkTd = $tr.find('td[name=billRemark]'),
@@ -6624,16 +6623,17 @@ define(function(require, exports){
 			'<input name="guideRealCount" class="w-50" type="text">'+
 			'</div>';
 
-		var payTypeHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<select name="payType">'+
-			'<option value="0">现金</option>'+
-			'<option value="1">刷卡</option>'+
-			'<option value="2">签单</option>'+
-			'</select>'+
-			'</div>';
+		
 
 		var moneyHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name="guidePayedMoney" class="w-70" type="text">'+
+			'<p class="inline-flex" style="margin:0px;">'+
+				'<select name="payType" >'+
+				'<option value="0">现金</option>'+
+				'<option value="1">刷卡</option>'+
+				'<option value="2">签单</option>'+
+				'</select>'+
+				'<input name="guidePayedMoney" class="w-70" type="text">'+
+			'</p>'+
 			'</div>';
 
 		var billImageHtml = '<div style="margin-top:'+marTop+'px;height:24px;" index = '+(index+1)+'>'+
@@ -6645,7 +6645,6 @@ define(function(require, exports){
 			'</div>';
 		$thisTd.append(guideHtml);
 		$countTd.append(countHtml);
-		$payTypeTd.append(payTypeHtml);
 		$guidePayedMoneyTd.append(moneyHtml);
 		$billImageTd.append(billImageHtml);
 		$billRemarkTd.append(billRemarkHtml);
@@ -6659,7 +6658,6 @@ define(function(require, exports){
 		var $tr = $obj.closest('tr'),$thisTd = $obj.closest('td'),
 			$thisDiv = $obj.closest('div'),
 			$countTd = $tr.find('td[name=guideRealCount]'),
-			$payTypeTd = $tr.find('td[name=payType]'),
 			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
 			$billImageTd = $tr.find('td[name=billImage]'),
 			$billRemarkTd = $tr.find('td[name=billRemark]');
@@ -6697,7 +6695,6 @@ define(function(require, exports){
 		function removeGuide (){
 			Count.delDiv($thisTd,index,$parentObj);
 			Count.delDiv($countTd,index,$parentObj);
-			Count.delDiv($payTypeTd,index,$parentObj);
 			Count.delDiv($guidePayedMoneyTd,index,$parentObj);
 			Count.delDiv($billImageTd,index,$parentObj);
 			Count.delDiv($billRemarkTd,index,$parentObj);
@@ -6864,7 +6861,6 @@ define(function(require, exports){
 			realReduceMoney = $tr.find('td[name=realReduceMoney]').find('div'),
 			realNeedPayMoney = $tr.find('td[name=realNeedPayMoney]').find('div'),
 			guidePayedMoney = $tr.find('td[name=guidePayedMoney]').find('div'),
-			payType = $tr.find('td[name=payType]').find('div'),
 			travelAgencyRate = $tr.find('td[name=travelAgencyRate]').find('div'),
 			travelAgencyRebateMoney = $tr.find('td[name=travelAgencyRebateMoney]').find('div'),
 			twoRebate = $tr.find('td[name=twoRebate]').find('div'),
@@ -6894,7 +6890,7 @@ define(function(require, exports){
 						realReduceMoney:realReduceMoney.eq(i).find('[name=realReduceMoney]').val(),
 						realNeedPayMoney:realNeedPayMoney.eq(i).find('[name=realNeedPayMoney]').val(),
 						realGuidePayMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
-						realPayType:payType.eq(i).find('[name=payType]').val(),
+						realPayType:guidePayedMoney.eq(i).find('[name=payType]').val(),
 						travelAgencyRate:parseFloat(travelAgencyRate.eq(i).find('[name=travelAgencyRate]').val()/100),
 						travelAgencyRebateMoney:travelAgencyRebateMoney.eq(i).find('[name=travelAgencyRebateMoney]').val(),
 						twoRebate:parseFloat(twoRebate.eq(i).find('[name=twoRebate]').val()/100),
@@ -6915,14 +6911,12 @@ define(function(require, exports){
 	Count.installGuide = function($tr){
 		var $guideTd = $tr.find('td[name=guideName]'),
 			$countTd = $tr.find('td[name=guideRealCount]'),
-			$payTypeTd = $tr.find('td[name=payType]'),
 			$guidePayedMoneyTd = $tr.find('td[name=guidePayedMoney]'),
 			$billImageTd = $tr.find('td[name=billImage]'),
 			$billRemarkTd = $tr.find('td[name=billRemark]'),
 			guideDetail = [];
 		var guideDiv = $guideTd.find('div'),
 			counteDiv = $countTd.find('div'),
-			payTypeDiv = $payTypeTd.find('div'),
 			moneyDiv = $guidePayedMoneyTd.find('div'),
 			remarkDiv = $billRemarkTd.find('div'),
 			divLen = counteDiv.length;
@@ -6940,7 +6934,7 @@ define(function(require, exports){
 						id:guideId,
 						guideArrangeId:guideArrangeId,
 						realCount:counteDiv.eq(j).find('[name=guideRealCount]').val(),
-						realPayType:payTypeDiv.eq(j).find('[name=payType]').val(),
+						realPayType:moneyDiv.eq(j).find('[name=payType]').val(),
 						realGuidePayMoney:moneyDiv.eq(j).find('[name=guidePayedMoney]').val(),
 						billRemark:remarkDiv.eq(j).find('[name=billRemark]').val(),
 					};
@@ -6997,18 +6991,13 @@ define(function(require, exports){
 		'</td>'+
 		'<td name="guidePayedMoney">'+
 			divHtml+
-			'<div class="div-h-30 mar-t-5" index="1">'+
-				'<input name="guidePayedMoney" type="text" class="w-70"/>'+
-			'</div>'+
-		'</td>'+
-		'<td name="payType">'+
-			divHtml+
-			'<div class="div-h-30 mar-t-5" index="1">'+
+			'<div class="div-h-30 mar-t-5 inline-flex" index="1">'+
 				'<select name="payType">'+
 					'<option value="0">现金</option>'+
 					'<option value="1">刷卡</option>'+
 					'<option value="2">签单</option>'+
 				'</select>'+
+				'<input name="guidePayedMoney" type="text" class="w-70"/>'+
 			'</div>'+
 		'</td>'+
 		'<td name="billImage">'+
