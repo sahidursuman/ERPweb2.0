@@ -1718,7 +1718,7 @@ define(function(require, exports) {
 		'<td><input type="text" name="startingCity" class="col-sm-12" maxlength="32"/></td>' +
 		'<td><input type="text" name="arriveCity" class="col-sm-12" maxlength="32"/></td>' +
 		'<td><input type="text" name="shift" class="col-sm-12" maxlength="9"/></td>' +
-		'<td><input type="text" name="startTime" class="col-sm-13 col-xs-12 T-dateTimePicker"/></td>' +
+		'<td><input type="text" name="startTime" class="col-xs-12 T-dateTimePicker"/></td>' +
 		'<td><input type="text" name="seatLevel" class="col-sm-12" maxlength="32"/></td>' +
 		'<td><input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="6"/></td>' +
 		'<td><input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="'+ tripPlan.touristCount +'"/></td>' +
