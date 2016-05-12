@@ -2,36 +2,35 @@
     <div class="T-search-area">
         <div class="form-horizontal form-group ">
             <label>收客单号 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="" />
+            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
             <label>客户 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="客户" name="fromPartnerAgencyName" value="" />
-            <input type="hidden" name="fromPartnerAgencyId" value="" />
+            <input class="mar-r-10 w100" type="text" placeholder="客户" name="partnerAgencyName" value="{{searchParam.partnerAgencyName}}" />
+            <input type="hidden" name="partnerAgencyId" value="" />
             <label>团散标识 </label>
             <select name="customerType" class="mar-r-10 w100">
-                <option value="">全部</option>
-                <option value="0">散客</option>
-                <option value="1">团队</option>
+                <option {{if !searchParam.customerType}}selected{{/if}}  value="">全部</option>
+                <option {{if searchParam.customerType=="0"}}selected{{/if}} value="0">散客</option>
+                <option {{if searchParam.customerType=="1"}}selected{{/if}} value="1">团队</option>
             </select>
             <label>外联销售 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="" />
-            <input type="hidden" name="lineProductId" value="" />
+            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="{{searchParam.outOPUserName}}" />
             <label>部门 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="" />
+            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="{{searchParam.businessName}}" />
             <input type="hidden" name="businessNameId" value="" />
             <label>子部门 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="" />
+            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="{{searchParam.groupName}}" />
             <label>类别 </label>
-            <select name="customerType" class="mar-r-10">
-                <option value="">全部</option>
-                <option value="0">散客</option>
-                <option value="1">团队</option>
+            <select name="type" class="mar-r-10">
+                <option {{if !searchParam.type}}selected{{/if}} value="">全部</option>
+                <option {{if searchParam.type == 'tourist'}}selected{{/if}} value="tourist">收客利润</option>
+                <option {{if searchParam.type == 'booking'}}selected{{/if}} value="booking">代订利润</option>
             </select>
         </div>
         <div class="form-group">
             <label>开始日期 </label>
-            <input class="date-picker mar-r-10 w100" name="startTime" placeholder="开始日期" type="text" value=""/>
+            <input class="date-picker mar-r-10 w100" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startDate}}"/>
             <label>结束日期 </label>
-            <input class="date-picker mar-r-10 w100" name="endTime" placeholder="结束日期" type="text" value="" />
+            <input class="date-picker mar-r-10 w100" name="endTime" placeholder="结束日期" type="text" value="{{searchParam.endDate}}" />
             <button class="btn-sm search-btn T-search"> <i class="ace-icon fa fa-search"></i>搜索</button>
         </div>
 

@@ -23,30 +23,30 @@ define(function(require, exports) {
         var args= FinancialService.getInitDate() || {};
         args.pageNo=page;
         if (!!salesProfit.$tab) { //封装查询参数
-            args={
+            args = {
                 pageNo: (page || 0),
                 orderNumber: salesProfit.$tab.find('[name=orderNumber]').val(),
                 partnerAgencyName: salesProfit.$tab.find('[name=partnerAgencyName]').val(),
                 customerType: salesProfit.$tab.find('[name=customerType]').val(),
                 outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
                 businessName: salesProfit.$tab.find('[name=businessName]').val(),
-                businessNameId: salesProfit.$tab.find('[name=businessNameId]').val(),
                 groupName: salesProfit.$tab.find('[name=groupName]').val(),
                 outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
-                startTime: salesProfit.$tab.find('[name=startTime]').val(),
-                endTime: salesProfit.$tab.find('[name=endTime]').val()
+                type: salesProfit.$tab.find('[name=type]').val(),
+                startDate: salesProfit.$tab.find('[name=startTime]').val(),
+                endDate: salesProfit.$tab.find('[name=endTime]').val()
             }
         }
 
         $.ajax({
-            url:KingServices.build_url("financialTotal","findPager"),
+            url:KingServices.build_url("saleProfit","findPager"),
             data:args,
             type:'POST',
         })
         .done(function(data) {
             if(showDialog(data)){
 
-                Tools.addTab(menuKey,"销售利润",listMainTemp());
+                Tools.addTab(menuKey,"销售利润",listMainTemp(data));
                 salesProfit.$tab=$("#tab-"+menuKey+"-content");
                 salesProfit._initMain_event($("#tab-"+menuKey+"-content"));
                 //获取统计数据
@@ -63,7 +63,7 @@ define(function(require, exports) {
                     curr: (data.searchParam.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-                            salesProfit.getListMain(obj.curr -1);
+                            salesProfit._getListMain(obj.curr -1);
                         }
                     }
                 }); 
@@ -91,7 +91,7 @@ define(function(require, exports) {
 
         //格式化时间控件
         Tools.setDatePicker(salesProfit.$tab.find(".date-picker"),true);
-        salesProfit.getPartnerList(salesProfit.$tab.find('[name=fromPartnerAgencyName]'));
+        salesProfit.getPartnerList(salesProfit.$tab.find('[name=partnerAgencyName]'));
         salesProfit.getBusinessList(salesProfit.$tab.find('[name=businessName]'));
         salesProfit.getGroupMapList(salesProfit.$tab.find('[name=groupName]'));
         salesProfit.getOPUserList(salesProfit.$tab.find('[name=outOPUserName]'));
@@ -101,55 +101,62 @@ define(function(require, exports) {
     //获取统计数据
     salesProfit._getTotalData = function(args){
         $.ajax({
-            url:KingServices.build_url("financialTotal","findTotal"),
+            url:KingServices.build_url("saleProfit","findTotal"),
             data:args,
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
-                    salesProfit.$tab.find('.T-totalCount').text(data.total.income);
-                    salesProfit.$tab.find('.T-totalNeed').text(data.total.cost);
-                    salesProfit.$tab.find('.T-totalCost').text(data.total.profit);
+                    salesProfit.$tab.find('.T-totalCount').text(data.total.sumAdultCount+'大'+data.total.sumChildCount+'小');
+                    salesProfit.$tab.find('.T-totalNeed').text(data.total.sumIncome);
+                    salesProfit.$tab.find('.T-totalCost').text(data.total.sumCost);
+                    salesProfit.$tab.find('.T-totalProfit').text(data.total.sumProfit);
                 }
             }
         });
     };
 
-    salesProfit.getPartnerList = function($obj){
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (!ui.item)  {
-                    $(this).val("");
-                    $(this).nextAll('input[name=fromPartnerAgencyId]').val('');
+
+    //getPartnerList 获取客户的下拉数据
+    salesProfit.getPartnerList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
                 }
             },
-            select: function(event, ui) {
-                $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id);
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
             }
-        }).one("click",function(){
+        }).one('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
             $.ajax({
-                url:KingServices.build_url("partnerAgency","getPartnerAnencyList"),
-                data:"",
-                showLoading:false,
-                type:'POST',
-                success:function(data){
+                url: KingServices.build_url('partnerAgency', 'getPartnerAnencyList'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
                     if(showDialog(data)){
                         var partnerList = JSON.parse(data.partnerAgencyList);
                         for(var i = 0; i < partnerList.length; i++){
                             partnerList[i].value = partnerList[i].travelAgencyName;
                         }
-
-                        $obj.autocomplete('option', 'source', partnerList).data('ajax', true);
-                        $obj.autocomplete('search', '');
+                        $target.autocomplete('option', 'source', partnerList).data('ajax', true);
+                        $target.autocomplete('search', '');
                     }
                 }
             });
-        }).on("click",function(){
-            if ($obj.data('ajax')) {
-                $obj.autocomplete('search', '');
+        })
+        .on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
             }
-        });
+        })
     };
+
 
     /**
      * 绑定责任计调的选择
