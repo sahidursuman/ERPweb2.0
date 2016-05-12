@@ -1102,7 +1102,6 @@ define(function(require, exports) {
                             showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
                                 obj.closest('tr').remove();
                                 singlePlan.MenberNumber($tab);
-                                singlePlan.tripPlanAllMemberCount($tab);
                             });
                         }
                     }
@@ -1110,7 +1109,6 @@ define(function(require, exports) {
             } else{
                 obj.closest('tr').remove();
                 singlePlan.MenberNumber($tab);
-                singlePlan.tripPlanAllMemberCount($tab);
             }
         },function(){},"取消","确定");
     };
@@ -1420,16 +1418,6 @@ define(function(require, exports) {
                 }
             });
         },function(){},"取消","确定");
-    };
-
-    singlePlan.tripPlanAllMemberCount = function($tab){
-        var tr = $tab.find(".T-tourist-list tr"),
-            trMemberCount = 0;
-        tr.each(function(){
-            trMemberCount += parseInt($(this).find(".T-memberCount").text());
-        })
-        $tab.find(".T-groupMemberCount").text(trMemberCount);
-        trMemberCount = 0;
     };
 
     //游客名单成员添加自动序号函数  singlePlan.MenberNumber(oClass);-
