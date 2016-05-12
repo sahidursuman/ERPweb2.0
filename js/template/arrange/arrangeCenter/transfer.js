@@ -906,9 +906,13 @@ define(function(require, exports) {
                     }
                 },
                 select: function(event, ui) {
+
                     var $this = $(this),
                         parents = $(this).closest('tr');
-                    checkBusCompay($(this).blur().closest('tr'), 'brand');
+                    checkBusCompay($(this).blur().closest('tr'), 'brand'),$tr = $this.closest('tr');
+                    $tr.find('input[name=seatCount]').val('');
+                    $tr.find('input[name=brand]').val('');
+                    $tr.find('input[name=licenseNumber]').val('');
                 }
             }).unbind("click").click(function() {
                 var obj = this,
@@ -1065,6 +1069,11 @@ define(function(require, exports) {
                 checkBusCompay($tr, 'driverName');
                 $tr.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
                 $tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+                $tr.find('input[name=seatCount]').val('');
+                $tr.find('input[name=brand]').val('');
+                $tr.find('input[name=licenseNumber]').val('');
+                $tr.find('input[name=driverName]').val('');
+                $tr.find('input[name=MobileNumber]').val('');
                 $.ajax({
                         url: KingServices.build_url('busCompany', 'findBusCompanyById'),
                         type: 'post',
@@ -1093,11 +1102,6 @@ define(function(require, exports) {
                 busBrand = parents.find("[name=busbrand]").val();
             $.ajax({
                 url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
-                data: {
-                    seatCount: parents.find("[name=seatCount]").val(),
-                    brand: parents.find("[name=busbrand]").val(),
-                    busId: parents.find('input[name="busLicenseNumberId"]').val()
-                },
                 showLoading: false,
                 type: "POST",
                 success: function(data) {
@@ -1144,7 +1148,10 @@ define(function(require, exports) {
                 $tr = $(this).closest('tr'); //busCompanyId
             var busLicenseNumberId = $tr.find("input[name=busLicenseNumberId]").val();
             var busCompanyId = $tr.find("input[name=busCompanyId]").val();
-            $.ajax({
+            if(busCompanyId == '' || busCompanyId == null){
+                showMessageDialog($('#confirm-dialog-message'), "请选择车队");
+            }else{
+                $.ajax({
                 url: KingServices.build_url('busCompany', 'getDrivers'),
                 data: "busCompanyId=" + busCompanyId + "",
                 showLoading: false,
@@ -1167,6 +1174,8 @@ define(function(require, exports) {
                     }
                 }
             })
+            }
+            
         });
     };
 
