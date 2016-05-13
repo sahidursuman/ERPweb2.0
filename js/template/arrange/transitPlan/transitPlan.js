@@ -278,7 +278,7 @@ define(function(require, exports) {
             data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outBusList)+"&unifyId="+unifyId,
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         
                         transitPlan.listTransitBusPlan(transitPlan.listPageNo);
                     });
@@ -330,7 +330,7 @@ define(function(require, exports) {
             data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outBusList="+JSON.stringify(outBusList),
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         
                         transitPlan.listTransitBusPlan(transitPlan.listPageNo);
                     });
@@ -776,7 +776,7 @@ define(function(require, exports) {
         .done(function(res) {
             if (showDialog(res)) {
                 // 刷新其他的安排列表
-                showMessageDialog($( "#confirm-dialog-message" ),res.message,function(){
+                showMessageDialog(res.message,function(){
                     Tools.closeTab(Tools.getTabKey($tab));
                 });
             }
@@ -926,7 +926,7 @@ define(function(require, exports) {
                 }
             })
         } else {
-            showMessageDialog($('#confirm-dialog-message'), "请勾选中转安排记录" )
+            showMessageDialog("请勾选中转安排记录" )
         }
     }
      /**
@@ -1683,7 +1683,7 @@ define(function(require, exports) {
                 }
             })
         } else {
-            showMessageDialog($('#confirm-dialog-message'), "请勾选中转安排记录" )
+            showMessageDialog("请勾选中转安排记录" )
         }
     }
        // 房安排事件
@@ -1780,7 +1780,7 @@ define(function(require, exports) {
             data : 'unifyId='+JSON.stringify(unifyId)+"&outRemarkList="+JSON.stringify(outRemarkList)+"&outHotelList="+JSON.stringify(outHotelList),
         }).done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     transitPlan.arranged(transitPlan.listPageNo)
                 });
                 Tools.closeTab(hotelplanId)
@@ -1847,7 +1847,7 @@ define(function(require, exports) {
             data : "outRemarkList="+JSON.stringify(outRemarkList)+"&outHotelList="+JSON.stringify(outHotelList),
             success: function(data){
                 if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     transitPlan.listTransitHoutelPlan(transitPlan.listPageNo);
                 });
                 Tools.closeTab(hotelplanId);
@@ -1866,14 +1866,14 @@ define(function(require, exports) {
         var $bus = "hotel",
             $id = $tr.data('entity-id');
         if (!!$id) {
-            showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
+            showConfirmDialog('确定要删除该安排？', function(){
                 $.ajax({
                     url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
                     data: "cateName="+$bus+"&id="+$id+"",
                     success: function(data){
                         if(showDialog(data)){
-                            showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                            showMessageDialog(data.message,function(){
                                 $tr.remove();
                             });
                         }
@@ -2019,7 +2019,7 @@ define(function(require, exports) {
 
 
         if (!!id) {
-            showConfirmDialog($( "#confirm-dialog-message" ), '确定要删除该安排？', function(){
+            showConfirmDialog('确定要删除该安排？', function(){
                 $.ajax({
                     url: KingServices.build_url(service_name,'deleteTransferArrange'),
                     type: "POST",
@@ -2029,7 +2029,7 @@ define(function(require, exports) {
                     },
                     success: function(data){
                         if(showDialog(data)){
-                            showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                            showMessageDialog(data.message,function(){
                                     $tr.remove();
                             });
                         }
@@ -2145,7 +2145,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                    showMessageDialog(data.message, function() {
                         layer.close(noticeLayer);
                     })
                 }
