@@ -1616,10 +1616,8 @@ define(function(require, exports){
 		var showJson = {};
 		showJson.incomeShowFlag = false;
 		showJson.costShowFlag = false;
-		showJson.transitShowFlag = false;
 		showJson.tripInMapCount = 0;
 		showJson.costMapCount = 0;
-		showJson.transitMapCount = 0
 		var tripInMap = data.tripIncomeMap;
 		var tripPayMap = data.tripPayMap;
 		var tripTransitPayMap = data.tripTransitPayMap;
@@ -1669,18 +1667,7 @@ define(function(require, exports){
 			showJson.costMapCount += 1;
 		};
 
-		if(tripTransitPayMap.hotelTransitPayMap.hotelTransitPayMapList.length == 0){
-			showJson.transitMapCount += 1;
-		};
-		if(tripTransitPayMap.otherTransitPayMap.otherTransitPayMapList.length == 0){
-			showJson.transitMapCount += 1;
-		};
-		if(tripTransitPayMap.restaurantTransitPayMap.restaurantTransitPayMapList.length == 0){
-			showJson.transitMapCount += 1;
-		};
-		if(tripTransitPayMap.ticketTransitPayMap.ticketTransitPayMapList.length == 0){
-			showJson.transitMapCount += 1;
-		};
+		
 		//判断赋值
 		if(showJson.tripInMapCount == 5){
 			showJson.incomeShowFlag = true;
@@ -1688,9 +1675,7 @@ define(function(require, exports){
 		if(showJson.costMapCount == 9){
 			showJson.costShowFlag = true;
 		};
-		if(showJson.transitMapCount == 5){
-			showJson.transitShowFlag = true;
-		};
+		
 		return showJson;
 	};
 	//打印页面
