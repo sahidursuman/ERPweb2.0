@@ -38,7 +38,7 @@
         {{if hotelArrange!= null}}
             {{if hotelArrange.listMap.length}}
                 {{each hotelArrange.listMap as arrange index}}
-                    <tr whichDay = "{{arrange.whichDay}}"  arrangeType="hotelArrange">
+                    <tr whichDay = "{{arrange.whichDay}}"  arrangeType="hotelArrange" class="oldData">
                         
                         <td rowspan="{{arrange.items.length}}">
                         {{if guideCount > 1}}

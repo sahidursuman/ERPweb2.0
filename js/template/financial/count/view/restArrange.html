@@ -38,7 +38,7 @@
     {{if restaurantArrange != null}}
         {{if restaurantArrange.listMap.length}}
             {{each restaurantArrange.listMap as arrange index}}
-                <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange">
+                <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange" class="oldData">
                         <td rowspan="{{arrange.items.length}}">
                             {{if guideCount > 1}}
                                 <div class="div-h-30"></div>
