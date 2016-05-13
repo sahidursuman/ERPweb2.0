@@ -1,0 +1,31 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+	<table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr><th class="th-border">付款类别</th>
+                <th class="th-border">发生业务</th>
+                <th class="th-border">付款方</th>
+                <th class="th-border">金额</th>
+                <th class="th-border">付款方式</th>
+                <th class="th-border">账户名称</th>
+                <th class="th-border">备注</th>
+                <th class="th-border">操作人</th>
+                <th class="th-border">操作时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each payedMoneyDetailList as item}}
+            <tr>
+                <td>{{item.receivableType}}</td>
+                <td>{{item.businessType}}</td>
+                <td>{{item.payParty}}</td>
+                <td><span class="F-float F-money">{{item.payDifferenceMoney}}</span></td>
+                <td>{{#item.payType | getPayTypeText}}</td>
+                <td>{{if item.accountName == null || item.accountName == ""}}-{{else}}{{item.accountName}}{{/if}}</td>
+                <td>{{item.remark}}</td>
+                <td>{{item.checkRealname}}</td>
+                <td>{{item.checkTime}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

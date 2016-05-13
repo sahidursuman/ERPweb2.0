@@ -267,6 +267,14 @@
         return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="payType" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
         res += '<option value="1" ' + (1 == status ? "selected" : "") + ">刷卡</option>", 
         res += '<option value="2" ' + (2 == status ? "selected" : "") + ">签单</option></select>";
+    }), template.helper("getPlanPreTypeOption", function(status, isDisabled, isNetPay) {
+        var res = "", dis = "";
+        return isDisabled && (dis = "disabled"), status = status || 0, res += '<select name="preType" ' + dis + '><option value="0" ' + (0 == status ? "selected" : "") + ">现金</option>", 
+        res += '<option value="1" ' + (1 == status ? "selected" : "") + ">银行转账</option>", 
+        res += '<option value="3" ' + (3 == status ? "selected" : "") + ">支票</option>", 
+        res += '<option value="4" ' + (4 == status ? "selected" : "") + ">其他</option>", 
+        isNetPay && (res += '<option value="5" ' + (5 == status ? "selected" : "") + ">网付</option>"), 
+        res += "</select>";
     }), template.helper("getPayTypeText", function(payType) {
         switch (1 * payType) {
           case 0:
@@ -275,14 +283,11 @@
           case 1:
             return "银行转账";
 
-          case 2:
-            return "网上支付";
-
           case 3:
             return "支票";
 
-          case 4:
-            return "其他";
+          case 5:
+            return "网付";
 
           case 6:
             return "冲抵";
@@ -291,7 +296,7 @@
             return "代收抵付";
 
           default:
-            return "网付";
+            return "其他";
         }
     }), template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {
         switch (1 * billStatus) {

@@ -100,7 +100,6 @@ define(function(require, exports) {
                         event.preventDefault();
 
                         ColGuest.listMain(
-                            '',
                             ColGuest.$searchArea.find('input[name="lineProductName"]').val(),
                             ColGuest.$searchArea.find('input[name="lineProductId"]').val(),
                             ColGuest.$searchArea.find('input[name="fromPartnerAgencyName"]').val(),
@@ -114,6 +113,10 @@ define(function(require, exports) {
                             ColGuest.$searchArea.find("input[name=groupName]").data('id'),
                             ColGuest.$searchArea.find("input[name=businessName]").val(),
                             ColGuest.$searchArea.find("input[name=businessName]").data('id'));
+                    });
+                    //导出
+                    $tab.find('.T-export').off().on('click', function(event) {
+                        ColGuest.listGuest(-1)
                     });
                 }
             }
@@ -138,7 +141,7 @@ define(function(require, exports) {
             businessGroupId = ColGuest.$searchArea.find("input[name=businessName]").data('id');
         }
         if(startTime > endTime){
-            showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
+            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
             return false;
         }
         lineProductName = (lineProductName == "全部") ? "" : lineProductName;
@@ -164,6 +167,14 @@ define(function(require, exports) {
             order : "desc",
             sortType: 'startTime'
         };
+        if (pageNo == -1) {
+            if (!ColGuest.searchData.startTime || !ColGuest.searchData.endTime) {
+                showMessageDialog("请选择时间区间");
+                return false; 
+            }
+            exportXLS( APP_ROOT + 'back/export.do?method=exportReceiveProfit&token='+ $.cookie("token") +'&'+ $.param(ColGuest.searchData));
+            return;
+        }
         $.ajax({
             url:KingServices.build_url("receiveProfit","findPager"),
             type: "POST",

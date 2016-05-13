@@ -200,7 +200,7 @@ define(function(require, exports) {
 									success:function(data){
 										var result = showDialog(data);
 											if (result) {
-											showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+											showMessageDialog(data.message, function() {
 											accountSetting.newPhoneChange();
 											layer.close(newPhoneLayer);
 											});
@@ -274,7 +274,7 @@ define(function(require, exports) {
 										success:function(data){
 											var result = showDialog(data);
 											if (result) {
-												showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+												showMessageDialog(data.message, function() {
 												layer.close(addPhoneLayer);
 												accountSetting.accountSeList();
 											});
@@ -347,7 +347,7 @@ define(function(require, exports) {
 											success:function(data){
 												var result = showDialog(data);
 												if (result) {
-													showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+													showMessageDialog(data.message, function() {
 													layer.close(changePhoneLayer);
 													accountSetting.accountSeList();
 													});
@@ -465,7 +465,7 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 					if(result){
-						showMessageDialog($("#confirm-dialog-message"),data.message, function() {
+						showMessageDialog(data.message, function() {
 							Tools.closeTab(sKey);
 							accountSetting.accountSeList();
 							});

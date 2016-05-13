@@ -82,7 +82,7 @@
                     {{/if}}
                     {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
                 </td>
-                <td>{{if rs.accountTime == null || rs.accountTime == ""}} - {{else}} {{rs.accountTime | dateFormat:'yyyy-MM-dd'}} {{/if}}
+                <td>{{if rs.accountTime == null || rs.accountTime == ""}} - {{else}} {{rs.accountTime | dateFormat:'yyyy-MM-dd'}}{{if rs.endTime}} ~ {{rs.endTime | dateFormat:'yyyy-MM-dd'}}{{/if}}{{/if}}
                 </td>
                 <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
                 <td class="F-float F-money">{{rs.price}}</td>

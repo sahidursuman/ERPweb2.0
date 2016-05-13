@@ -258,8 +258,8 @@
                                     <td>
                                         <input type="text" name="needPayMoney" readonly="readonly" value="{{insurance.needPayMoney}}" class="col-sm-12 F-float F-money" maxlength="9" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/>
                                     </td>
-                                    <td>
-                                        <input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/>
+                                    <td><div class="inline-flex">{{#insurance.preType | getPlanPreTypeOption:insurance.isConfirmAccount}}
+                                        <input type="text" name="prePayMoney" value="{{insurance.prePayMoney}}" class="price F-float F-money" maxlength="9" {{if insurance.isConfirmAccount}} disabled="disabled" {{/if}}/></div>
                                     </td>
                                     </td>
                                     <td>
@@ -424,19 +424,17 @@
                                         <col style="width:60px;">
                                         <col style="width:110px;">
                                         <col style="width:110px;">
+                                        <col style="width:160px;">
                                         <col style="width:110px;">
                                         <col style="width:110px;">
-                                        <col style="width:150px;">
-                                        <col style="width:150px;">
                                         <col style="width:80px;">
-                                        <col style="width:100px;">
-                                        <col style="width:110px;">
                                         <col style="width:120px;">
                                         <col style="width:80px;">
                                         <col style="width:80px;">
                                         <col style="width:80px;">
                                         <col style="width:80px;">
                                         <col style="width:150px;">
+                                        <col style="width:70px;">
                                         <col>
                                         <col style="width:100px;">
                                         <col style="width:140px;">
@@ -449,19 +447,17 @@
                                             <th class="th-border">车座数</th>
                                             <th class="th-border">车辆品牌</th>
                                             <th class="th-border">车牌号</th>
+                                            <th class="th-border">司机</th>
                                             <th class="th-border"><span class="necessary">*</span>所属车队</th>
                                             <th class="th-border">联系电话</th>
-                                            <th class="th-border">集合时间</th>
-                                            <th class="th-border">集合地点</th>
                                             <th class="th-border" width="70">通知游客</th>
-                                            <th class="th-border">司机</th>
-                                            <th class="th-border">司机电话</th>
                                             <th class="th-border">合同号</th>
                                             <th class="th-border">车费</th>
                                             <th class="th-border">优惠</th>
                                             <th class="th-border">应付</th>
                                             <th class="th-border">预付款</th>
                                             <th class="th-border">计划导付</th>
+                                            <th class="th-border">签单金额</th>
                                             <th class="th-border">备注</th>
                                             <th class="th-border">状态</th>
                                             <th class="th-border" width="160px;">操作</th>
@@ -496,6 +492,17 @@
                                             </td>
                                             <td>
                                                 <div class="col-xs-12 feild-relative">
+                                                    <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-xs-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                                    <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
+                                                    {{if !busCompany.isConfirmAccount}}
+                                                    <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
+                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                                        </span>
+                                                    {{/if}}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-xs-12 feild-relative">
                                                     <input type="text" name="companyName" {{if busCompany.isConfirmAccount || !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12" />
                                                     <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}">
                                                     <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}" />
@@ -509,29 +516,9 @@
                                             <td>
                                                 <input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12" />
                                             </td>
-                                            <td> 
-                                                <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime | dateTimeHSFormat}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.isConfirmAccount || busCompany.taskType==6 }}disabled{{/if}}>
-                                            </td>
                                             <td>
                                             {{if busCompany.isConfirmAccount}}
-                                            <span style="color:#bbb;" class="T-setUp" touristgroup = "{{busCompany.annouceTouristGroupIds}}"></span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a>{{/if}}</td>
-                                            <td>
-                                                <div class="col-xs-12 feild-relative">
-                                                    <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
-                                                    <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
-                                                    {{if !busCompany.isConfirmAccount}}
-                                                    <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
-                                                            <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
-                                                        </span>
-                                                    {{/if}}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="driverMobileNumber" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-sm-12" />
-                                            </td>
+                                            <span style="color:#bbb;" class="T-setUp" touristgroup = "{{busCompany.annouceTouristGroupIds}}"></span>{{else}}<a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}" data-entity-setplacetime="{{busCompany.setPlaceTime}}"  data-entity-setplaceposition="{{busCompany.setPlacePosition}}">点击设置</a>{{/if}}</td>
                                             <td>
                                                 <input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
@@ -545,12 +532,14 @@
                                             <td>
                                                 <input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12 F-float F-money" />
                                             </td>
-                                            <td>
-                                                <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                            <td><div class="inline-flex">{{#busCompany.preType | getPlanPreTypeOption: busCompany.isConfirmAccount,true}}
+                                                <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" style="width: 60px;" class="price F-float F-money" maxlength="9" {{if busCompany.isConfirmAccount}}disabled{{/if}}/></div>
                                             </td>
-                                            <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption: busCompany.isConfirmAccount}}
+                                            <td class="text-left"><div class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption: busCompany.isConfirmAccount}}
                                                 <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
+                                                </div>
                                             </td>
+                                            <td>{{if busCompany.payType == 2}}-{{else}}<input type="text" readonly name="signBillMoney" class="F-float F-money" value="{{busCompany.signMoney}}">{{/if}}</td>
                                             <td>
                                                 <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" {{if busCompany.isConfirmAccount}}disabled{{/if}}/>
                                             </td>
@@ -664,7 +653,7 @@
                                             <input type="hidden" name="restaurantStandardId" value="0" />
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" maxlength="8" value="{{restaurant.memberCount}}" class="col-sm-12 F-float F-count" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
+                                            <input type="text" name="memberCount" maxlength="8" value="{{if restaurant.memberCount}}{{restaurant.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" class="col-sm-12 F-float F-count" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="reduceMoney" maxlength="9" value="{{restaurant.reduceMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
@@ -672,11 +661,11 @@
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" value="{{restaurant.needPayMoney}}" class="col-sm-12 F-float F-money" style="width: 60px;" />
                                         </td>
-                                        <td>
-                                            <input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="col-sm-12 price F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
+                                        <td><div class="inline-flex">{{#restaurant.preType | getPlanPreTypeOption: restaurant.isConfirmAccount}}
+                                            <input type="text" name="prePayMoney" maxlength="9" value="{{restaurant.prePayMoney}}" class="price F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/></div>
                                         </td>
-                                        <td class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption: restaurant.isConfirmAccount}}
-                                            <input name="guidePayMoney" type="text" value="{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
+                                        <td><div class="inline-flex">{{#restaurant.payType | getPlanPayTypeOption: restaurant.isConfirmAccount}}
+                                            <input name="guidePayMoney" type="text" value="{{if restaurant.payType == 2}}{{restaurant.signMoney}}{{else}}{{restaurant.guidePayMoney}}{{/if}}" maxlength="9" class="F-float F-money" style="width: 60px;" {{if restaurant.isConfirmAccount}}disabled{{/if}}/></div>
                                         </td>
                                         <td>
                                             <input name="remark" type="text" value="{{restaurant.remark}}" maxlength="500" class="col-sm-12" {{if restaurant.isConfirmAccount}}disabled{{/if}}/>
@@ -790,7 +779,7 @@
                                             <input type="text" class="col-sm-12 price F-float F-money" name="price" maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" class="col-sm-12 F-float F-count" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                            <input type="text" class="col-sm-12 F-float F-count" name="memberCount" maxlength="8" value="{{if hotel.memberCount}}{{hotel.memberCount}}{{else}}{{(basicInfo.touristAdultCount + basicInfo.touristChildCount)/2}}{{/if}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
@@ -798,11 +787,11 @@
                                         <td>
                                             <input type="text" class="col-sm-12 F-float F-money" readonly="readonly" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" />
                                         </td>
-                                        <td>
-                                            <input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        <td><div class="inline-flex">{{#hotel.preType | getPlanPreTypeOption: hotel.isConfirmAccount}}
+                                            <input type="text" class="price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/></div>
                                         </td>
-                                        <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption: hotel.isConfirmAccount}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
+                                        <td><div class="inline-flex">{{#hotel.payType | getPlanPayTypeOption: hotel.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/></div>
                                         </td>
                                         <td>
                                             <input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500" {{if hotel.isConfirmAccount}}disabled="disabled" {{/if}}/>
@@ -914,7 +903,7 @@
                                             <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{scenic.price}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{scenic.memberCount}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{if scenic.memberCount}}{{scenic.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -925,12 +914,12 @@
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{scenic.needPayMoney}}" style="width: 60px;" />
                                         </td>
-                                        <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#scenic.preType | getPlanPreTypeOption: scenic.isConfirmAccount,true}}
+                                            <input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" value="{{scenic.prePayMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
-                                        <td class="inline-flex">
+                                        <td><div class="inline-flex">
                                             {{#scenic.payType | getPlanPayTypeOption: scenic.isConfirmAccount}}
-                                            <input name="guidePayMoney" type="text" class="F-float F-money" value="{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}" maxlength="9" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input name="guidePayMoney" type="text" class="F-float F-money" value="{{if scenic.payType == 2}}{{scenic.signMoney}}{{else}}{{scenic.guidePayMoney}}{{/if}}" maxlength="9" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
                                         <td>
                                             <input name="remark" type="text" class="col-sm-12" value="{{scenic.remark}}" maxlength="500" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1115,7 +1104,7 @@
                                             <input type="text" name="lowestPrice" class="col-sm-12 price F-float F-money" maxlength="8" value="{{selfPay.price}}" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{selfPay.memberCount}}" maxlength="8" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{if selfPay.memberCount}}{{selfPay.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" maxlength="8" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.reduceMoney}}" maxlength="9" style="width: 60px;" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1123,11 +1112,11 @@
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{selfPay.needPayMoney}}" style="width: 60px;" />
                                         </td>
-                                        <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#selfPay.preType | getPlanPreTypeOption: selfPay.isConfirmAccount}}
+                                            <input type="text" name="prePayMoney" class="price F-float F-money" value="{{selfPay.prePayMoney}}" style="width: 60px;" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
-                                        <td class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption: selfPay.isConfirmAccount}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#selfPay.payType | getPlanPayTypeOption: selfPay.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if selfPay.payType == 2}}{{selfPay.signMoney}}{{else}}{{selfPay.guidePayMoney}}{{/if}}" maxlength="9" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
                                         <td>
                                             <input type="text" name="remark" class="col-sm-12" value="{{selfPay.remark}}" maxlength="500" {{if selfPay.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1237,7 +1226,7 @@
                                             <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="6" value="{{ticket.price}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{ticket.memberCount}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{if ticket.memberCount}}{{ticket.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.reduceMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1245,11 +1234,11 @@
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{ticket.needPayMoney}}" />
                                         </td>
-                                        <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#ticket.preType | getPlanPreTypeOption: ticket.isConfirmAccount}}
+                                            <input type="text" name="prePayMoney" class="price F-float F-money" maxlength="9" value="{{ticket.prePayMoney}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
-                                        <td class="inline-flex">{{#ticket.payType | getPlanPayTypeOption: ticket.isConfirmAccount}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#ticket.payType | getPlanPayTypeOption: ticket.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money w-80" value="{{if ticket.payType == 2}}{{ticket.signMoney}}{{else}}{{ticket.guidePayMoney}}{{/if}}" maxlength="9" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
                                         <td>
                                             <input type="text" name="remark" class="col-sm-12" value="{{ticket.remark}}" maxlength="500" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1331,7 +1320,7 @@
                                             <input type="text" name="price" class="col-sm-12 price F-float F-money" value="{{other.price}}" maxlength="6" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{other.memberCount}}" maxlength="8" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{if other.memberCount}}{{other.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" maxlength="8" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" value="{{other.reduceMoney}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1339,11 +1328,11 @@
                                         <td>
                                             <input type="text" name="needPayMoney" readonly="readonly" class="col-sm-12 F-float F-money" value="{{other.needPayMoney}}" maxlength="9" />
                                         </td>
-                                        <td>
-                                            <input type="text" name="prePayMoney" class="col-sm-12 price F-float F-money" value="{{other.prePayMoney}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#other.preType | getPlanPreTypeOption: other.isConfirmAccount}}
+                                            <input type="text" name="prePayMoney" class="price F-float F-money" value="{{other.prePayMoney}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
-                                        <td class="inline-flex">{{#other.payType | getPlanPayTypeOption: other.isConfirmAccount}}
-                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                        <td><div class="inline-flex">{{#other.payType | getPlanPayTypeOption: other.isConfirmAccount}}
+                                            <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if other.payType == 2}}{{other.signMoney}}{{else}}{{other.guidePayMoney}}{{/if}}" maxlength="9" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/></div>
                                         </td>
                                         <td>
                                             <input type="text" name="remark" class="col-sm-12" value="{{other.remark}}" maxlength="500" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>

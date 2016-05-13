@@ -523,7 +523,7 @@ define(function(require, exports) {
             data: { checkAccountList: json }
         }).done(function(data) {
             if (showDialog(data)) {
-                showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                showMessageDialog(data.message, function() {
                     FinShop.checkTemp = false;
                     $tab.data('isEdited', false);
                     $tab.data("total","");
@@ -677,7 +677,7 @@ define(function(require, exports) {
             data: saveArgs,
         })
         .done(function(data) {
-            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            showMessageDialog(data.message, function() {
                 $tab.data('isEdited', false);
                 FinShop.payingJson = false;
                 $tab.data("total","");
@@ -772,12 +772,13 @@ define(function(require, exports) {
     FinShop.loadSumData = function($tab){
         var total = $tab.data("total");
         $tab.find(".T-sumCount").text(total.sumCount);
-         $tab.find(".T-sumConsumeMoney").text(total.sumConsumeMoney);
+        $tab.find(".T-sumConsumeMoney").text(total.sumConsumeMoney);
         $tab.find(".T-sumTravelAgencyRebateMoney").text(total.sumTravelAgencyRebateMoney);
         $tab.find(".T-sumGuideRebateMoney").text(total.sumGuideRebateMoney);
         $tab.find(".T-quanpeiRebatMoney").text(total.sumQuanpeiRebateMoney);
         $tab.find(".T-twoRebateMoney").text(total.sumTwoRebateMoney);
-        $tab.find(".T-sumBackMoney").text(total.sumBackMoney);
+        var sumBackMoney = total.sumBackMoney+total.sumQuanpeiRebateMoney+total.sumTwoRebateMoney;
+        $tab.find(".T-sumBackMoney").text(sumBackMoney);
         $tab.find(".T-sumReceiveMoney").text(total.sumReceiveMoney);
         $tab.find(".T-sumUnReceiveMoney").text(total.sumUnReceiveMoney);
         $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);

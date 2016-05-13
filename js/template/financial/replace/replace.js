@@ -711,7 +711,7 @@ define(function(require, exports) {
             })
             .done(function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                     	$tab.data('isEdited', false);
                     	Replace.checkTemp = false;
                     	$tab.data("total","");
@@ -793,7 +793,14 @@ define(function(require, exports) {
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
 					for(var i=0; i<detailList.length; i++){
-						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
+                        var gs = '';
+                        if (!!detailList[i].days) {
+                            gs = detailList[i].count + "×" + detailList[i].days + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price * detailList[i].days)
+                        }else{
+                            gs = detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price)
+                        }
+						data.bookinAccountList[j].newDetail +=  detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' +
+                                                                detailList[i].level + '，' + gs + '，';
 					}
 					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
@@ -857,7 +864,7 @@ define(function(require, exports) {
             $tab.data('isEdited', false);
             Replace.payingJson = false;
             $tab.data("total","");
-            showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+            showMessageDialog(data.message, function() {
                 if (argLen === 1) {
                 	Tools.closeTab(blanceMenuKey);
                     Replace.getList(Replace.listPageNo);                            
