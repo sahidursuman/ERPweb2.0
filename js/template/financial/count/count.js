@@ -6825,7 +6825,7 @@ define(function(require, exports){
 			}else if(!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()){
 				arrangeTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
 			}else if(!!$tr.find('input[name=startTime]').val()){
-				arrangeTime = $tr.$tr.find('input[name=startTime]').val();
+				arrangeTime = $tr.find('input[name=startTime]').val();
 			}
 		}else{
 			var preTr = $tr.prevAll();
