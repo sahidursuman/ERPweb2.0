@@ -790,7 +790,7 @@ define(function(require, exports) {
                 lineData = JSON.parse(lineData || "{}");
             }
             if($that.val() != "" && !!lineData.days){
-                $endTime.val(Tools.addDay($that.val(), lineData.days)).trigger('blur');
+                $endTime.val(Tools.addDay($that.val(), lineData.days-1)).trigger('blur');
             }
         });
     	//送团表内操作
