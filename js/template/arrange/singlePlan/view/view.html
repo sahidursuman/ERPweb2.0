@@ -204,6 +204,7 @@
 												<th class="th-border">应付</th>
 												<th class="th-border">预付款</th>
 												<th class="th-border">计划导付</th>
+												<th class="th-border">签单金额</th>
 												<th class="th-border">备注</th>
 											</tr>
 										</thead>
@@ -226,6 +227,7 @@
 												<td class="F-float F-money">{{busList.needPayMoney}}</td>
 												<td class="F-float F-money">{{busList.prePayMoney}}</td>
 												<td>{{busList.payType | getPlanPayTypeText}}<span class="F-float F-money">{{if busList.payType == 2}}{{busList.signMoney}}{{else}}{{busList.guidePayMoney}}{{/if}}</span></td>
+												<td class="F-float F-money">{{if busList.payType == 2}}-{{else}}{{busList.signMoney || 0}}{{/if}}</td>
 												<td>{{busList.remark}}</td>
 											</tr>
 											{{/each}}

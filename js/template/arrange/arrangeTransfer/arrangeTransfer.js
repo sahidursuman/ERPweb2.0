@@ -404,7 +404,7 @@ define(function(require, exports) {
 					transfer.transferOutConfirm(id,status);
 				} else if ($that.hasClass('T-returnTransfer-confirm'))  {
 					//确认退回
-					showConfirmDialog($('#confirm-dialog-message'), '是否确认退回?', function() {
+					showConfirmDialog('是否确认退回?', function() {
 	                    transfer.returnTransferOutConfirm(id)
 	                });
 				}
@@ -508,7 +508,7 @@ define(function(require, exports) {
 
 		transfer.deleteTransferOut = function(id){
 			if(!!id){
-				showNndoConfirmDialog($("#confirm-dialog-message"),"是否撤销转客操作？",function(){
+				showNndoConfirmDialog("是否撤销转客操作？",function(){
 					$.ajax({
 							url:KingServices.build_url("transfer","delete"),
 	 						type:"POST",
@@ -516,7 +516,7 @@ define(function(require, exports) {
 					})
 					.done(function(data) {
 						if(showDialog(data)){
-							showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+							showMessageDialog(data.message, function() {
 								transfer.$tab.find('.T-transferOut-search').trigger('click');
 							})
 							
@@ -573,7 +573,7 @@ define(function(require, exports) {
 				data: 'id='+ id +"&status="+status,
 			})
 			.done(function(data) {
-				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+				showMessageDialog(data.message, function() {
 					var divId="Transfer-Out",
 						type="1";
 						transfer.getSearchParam(divId,type);
@@ -594,7 +594,7 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				if (showDialog(data)) {
-					showMessageDialog($( "#confirm-dialog-message" ), '退回成功', function() {
+					showMessageDialog('退回成功', function() {
 						var divId="Transfer-Out",
 							type="1";
 							transfer.getSearchParam(divId,type);
@@ -951,7 +951,7 @@ define(function(require, exports) {
 			})
 			.done(function(data) {
 				if (showDialog(data)) {
-					showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+					showMessageDialog(data.message, function() {
 						$tab.data('isEdited', false);
 						if (!!tabArgs && tabArgs.length === 3) {
 							// 切换tab，就不做数据更新
@@ -1026,7 +1026,7 @@ define(function(require, exports) {
      */
 	transfer.deleteTransferIn = function(id){
 		if(!!id){
-			showNndoConfirmDialog($("#confirm-dialog-message"),"是否拒收？",function(){
+			showNndoConfirmDialog("是否拒收？",function(){
 				$.ajax({
 					url:KingServices.build_url("transfer","refuse"),
 					type:"POST",
@@ -1034,7 +1034,7 @@ define(function(require, exports) {
 				})
 				.done(function(data) {
 					if(showDialog(data)){
-						showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+						showMessageDialog(data.message, function() {
 							transfer.$tab.find('.T-transferIn-search').trigger('click');
 						})
 					}
@@ -1067,13 +1067,13 @@ define(function(require, exports) {
 	 * @return {[type]}    [description]
 	 */
 	transfer.returnTransferIn=function(id){
-		 showNndoConfirmDialog($("#confirm-dialog-message"), "是否确认", function() {
+		 showNndoConfirmDialog("是否确认", function() {
 		 	$.ajax({
 				url:KingServices.build_url("transfer","transferBack"),
 				data:"outTransferId="+id+"",
 			})
 			.done(function(data) {
-				showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+				showMessageDialog(data.message, function() {
 					transfer.$tab.find('.T-transferIn-search').trigger('click');
 				})
 			});

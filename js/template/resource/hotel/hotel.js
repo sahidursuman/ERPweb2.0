@@ -220,7 +220,7 @@ define(function(require, exports) {
   //删除酒店消息 
 	hotel.deleteHotel = function(id,$this){
 		if (!!id) {
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该酒店？", function() {
+			showConfirmDialog("你确定要删除该酒店？", function() {
 				$.ajax({
 					url:hotel.url("deleteHotel","delete"),
 					type: 'post',
@@ -512,7 +512,7 @@ define(function(require, exports) {
 				if(result){
 					layer.close(hotel.$addLayer);
 					layer.close(hotel.$updateLayer);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if (typeof fn === "function") {
 							data.hotel = JSON.parse(data.hotel);
 							formData.id = data.hotel.id;

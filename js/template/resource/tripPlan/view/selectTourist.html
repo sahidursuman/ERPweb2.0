@@ -1,5 +1,15 @@
 <div class="col-sm-12" style="margin-top:10px;">
 	<div class="tabbable T-addtourist-TripPlanBus globalAdd" data-tasktype="{{busData.taskType}}">
+		<form class="form-inline" role="form" onsubmit="return false">
+	        <div class="form-group mar-r-10 mar-l-23">
+	            <label>集合时间</label>
+	            <input type="text" name="setPlaceTimeTotal" class="form-control T-dateTimePicker" value="{{if busData.taskType != 6}}{{busData.setPlaceTime | dateTimeHSFormat}}{{/if}}" {{if busData.isConfirmAccount || busData.taskType==6 }}disabled{{/if}} />
+	        </div>
+	        <div class="form-group mar-r-10 mar-l-23">
+	            <label>集合地点</label>
+		    	<input type="text" name="setPlacePositionTotal" class="form-control" value="{{if busData.taskType != 6}}{{busData.setPlacePosition}}{{/if}}" {{if busData.isConfirmAccount || busData.taskType==6 }}disabled{{/if}}>
+	        </div>
+	    </form>
 		<div class=" col-xs-12" style="padding:10px 0 0 0;">
 			<div class="tab-pane fade active in">
 				<div class="col-xs-12" class="search-TravelLineList">
@@ -51,8 +61,8 @@
 								<td>{{rs.welcomeBoard}}</td>
 								<td>{{rs.sendPosition}}</td>
 								<td>{{rs.remark}}</td>
-								<td><input type="text" name="setPlaceTime" class="T-dateTimePicker col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlaceTime}}{{else}}{{busData.setPlaceTime}}{{/if}}"></td>
-								<td><input type="text" name="setPlacePosition" class="col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlacePosition}}{{else}}{{busData.setPlacePosition}}{{/if}}"></td>
+								<td><input type="text" name="setPlaceTime" class="T-dateTimePicker col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlaceTime}}{{else}}-{{/if}}"></td>
+								<td><input type="text" name="setPlacePosition" class="col-xs-12" {{if busData.taskType == 6}}{{else}}disabled{{/if}} value="{{if busData.taskType == 6}}{{rs.setPlacePosition}}{{else}}-{{/if}}"></td>
 								<td>
 									<a class="cursor T-groupView">
 										查看

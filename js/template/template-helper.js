@@ -222,24 +222,40 @@ template.helper("getPlanPayTypeOption", function(status, isDisabled) {
     res += '<option value="2" '+(status == 2?'selected':'')+'>签单</option></select>';
     return res;
 });
+template.helper("getPlanPreTypeOption", function(status, isDisabled,isNetPay) {
+    var res = '',
+        dis = '';
+    if (isDisabled) {
+        dis = 'disabled';
+    }
+    status = status || 0;
+    res += '<select name="preType" '+dis+'><option value="0" '+(status == 0?'selected':'')+'>现金</option>';
+    res += '<option value="1" '+(status == 1?'selected':'')+'>银行转账</option>';
+    
+    res += '<option value="3" '+(status == 3?'selected':'')+'>支票</option>';
+    res += '<option value="4" '+(status == 4?'selected':'')+'>其他</option>';
+    if(isNetPay){
+        res += '<option value="5" '+(status == 5?'selected':'')+'>网付</option>';
+    }
+    res += '</select>';
+    return res;
+});
 template.helper("getPayTypeText", function(payType) {
     switch (payType * 1) {
         case 0:
             return '现金';
         case 1:
             return '银行转账';
-        case 2:
-            return '网上支付';
         case 3:
             return '支票';
-        case 4:
-            return '其他';
+        case 5:
+            return '网付';
         case 6:
             return '冲抵';
         case 7:
             return '代收抵付';
         default:
-            return '网付';
+            return '其他';
     }
 });      
 template.helper("getBillStatusText", function(billStatus, tripPlanStatus) {

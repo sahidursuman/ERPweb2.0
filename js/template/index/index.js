@@ -411,7 +411,7 @@ define(function(require, exports) {
             data: "user=" + encodeURIComponent(JSON.stringify(user)),
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         // 关闭对话框
                         layer.close(index.updateUserinfoLayer);
 
@@ -449,13 +449,13 @@ define(function(require, exports) {
                 success: function(data) {
                     layer.close(index.updateUserinfoLayer);
                     if (showDialog(data)) {
-                        showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                        showMessageDialog(data.message, function() {
                             $.ajax({
                                 url: APP_ROOT + "base.do?method=logOut&token=" + $.cookie("token") + "&operation=self",
                                 type: "POST",
                                 success: function(data) {
                                     if (data.success == 0) {
-                                        showMessageDialog($("#confirm-dialog-message"), data.message);
+                                        showMessageDialog(data.message);
                                     } else {
                                         window.location.href = "login.html";
                                     }
