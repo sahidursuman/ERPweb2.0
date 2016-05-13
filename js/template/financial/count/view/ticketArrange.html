@@ -42,7 +42,7 @@
     {{if !!ticketArrange.listMap && ticketArrange.listMap.length}}
     {{each ticketArrange.listMap as arrange index}}
     <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}"
-    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="ticketArrange">
+    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="ticketArrange" class="oldData">
 
         <td rowspan="1">
         {{if guideCount > 1}}

@@ -38,7 +38,7 @@
             {{if scenicArrange != null}} 
                 {{if scenicArrange.listMap.length}} 
                     {{each scenicArrange.listMap as arrange index}}
-                    <tr whichDay="{{arrange.whichDay}}" arrangeType="scenicArrange">
+                    <tr whichDay="{{arrange.whichDay}}" arrangeType="scenicArrange" class="oldData">
                         <td rowspan="{{arrange.items.length}}">
                             {{if guideCount > 1}}
                                 <div class="div-h-30"></div>

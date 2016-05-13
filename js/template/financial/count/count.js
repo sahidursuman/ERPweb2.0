@@ -3603,7 +3603,7 @@ define(function(require, exports){
 	            '</div>'+
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,'',$parentObj);
-		var html = '<tr>'+
+		var html = '<tr class="oldData">'+
 			'<td class="countWhichDaysContainer"></td>'+
 			'<td>'+divHtml+'<input type="text" name="title" class="w-70"/></td>'+
 			'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
@@ -3698,7 +3698,7 @@ define(function(require, exports){
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"guideName",$parentObj);
 		
-		var html = '<tr arrangeType="busArrange">'+
+		var html = '<tr arrangeType="busArrange" class="oldData">'+
 			'<td>'+divHtml+'<input name="startTime" type="text" class="datepicker"></td>'+
 			'<td>'+divHtml+'<input name="endTime" type="text" class="datepicker"></td>'+
 			'<td>'+divHtml+
@@ -3798,7 +3798,7 @@ define(function(require, exports){
 	Count.addRest = function($obj,$parentObj){
 		var guideTdHtml = Count.addGuideHtml($parentObj);
 		var divHtml = Count.returnDivHtml($parentObj);
-		var html = '<tr arrangeType="restArrange">'+
+		var html = '<tr arrangeType="restArrange" class="oldData">'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'</div><input type="text" name="restaurantName" style="width:90px;"/><input type="hidden" name="restaurantId"></td>'+
 		'<td>'+divHtml+
@@ -3876,7 +3876,7 @@ define(function(require, exports){
 	Count.addHotel = function($obj,$parentObj){
 		var guideTdHtml = Count.addGuideHtml($parentObj);
 		var divHtml = Count.returnDivHtml($parentObj);
-		var html = '<tr arrangeType="hotelArrange">'+
+		var html = '<tr arrangeType="hotelArrange" class="oldData">'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
 		'<td>'+divHtml+'<input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
@@ -3937,7 +3937,7 @@ define(function(require, exports){
 	Count.addScenic = function($obj,$parentObj){
 		var guideTdHtml = Count.addGuideHtml($parentObj);
 		var divHtml = Count.returnDivHtml($parentObj);
-		var html = '<tr arrangeType="scenicArrange">'+
+		var html = '<tr arrangeType="scenicArrange" class="oldData">'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
 		'<td>'+divHtml+'<input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
@@ -3999,7 +3999,7 @@ define(function(require, exports){
 	Count.addTicket = function($obj,$parentObj){
 		var guideTdHtml = Count.addGuideHtml($parentObj);
 		var divHtml = Count.returnDivHtml($parentObj);
-		var html = '<tr arrangeType="ticketArrange">'+
+		var html = '<tr arrangeType="ticketArrange" class="oldData">'+
 		'<td>'+divHtml+'<input type="text" name="ticketName"><input type="hidden" name="ticketId"></td>'+
 		'<td>'+divHtml+
 		'<select name="ticketType">'+
@@ -4080,7 +4080,7 @@ define(function(require, exports){
 	Count.addOtherOut = function($obj,$parentObj){
 		var guideTdHtml = Count.addGuideHtml($parentObj);
 		var divHtml = Count.returnDivHtml($parentObj);
-		var html = '<tr arrangeType="otherArrange">'+
+		var html = '<tr arrangeType="otherArrange" class="oldData">'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="addOtherOutName" class="w-80"/></td>'+
 		'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
@@ -6716,20 +6716,14 @@ define(function(require, exports){
 	Count.getAccoutnGuide = function($obj,$parentObj){
 		var guideList = [],
 			dataList = Count.guide.listMap;
+			
 		if($parentObj.find('.countReimbursement').length){
 			dataList = Count.reimbursementGuide.listMap;
 		};//报账
 		if($parentObj.find('.countUpdate').length){
 			dataList = Count.updateGuide.listMap;
 		};//审核
-		for(var i = 0;i<dataList.length;i++){
-			var guide = {
-				id:dataList[i].id,
-				guideName:dataList[i].guideName,
-				value:dataList[i].guideName
-			};
-			guideList.push(guide);
-		};
+
 		$obj.autocomplete({
 			minLength:0,
 			change:function(event,ui){
@@ -6744,28 +6738,110 @@ define(function(require, exports){
 				if(ui.item != null){
 					var $div = $(this).closest('div'),$tr = $(this).closest('tr'),
 						receiveStatus = $tr.find('select[name=receiveStatus]');
-					$div.find('input[name=guideArrangeId]').val(ui.item.id);
-					$div.find('input[name=shopGuideArrangeId]').val(ui.item.id);
-					if(receiveStatus.length){
-						receiveStatus.val(1);
-					};
-
+						$div.find('input[name=guideArrangeId]').val(ui.item.id);
+						$div.find('input[name=shopGuideArrangeId]').val(ui.item.id);
+						if(receiveStatus.length){
+							receiveStatus.val(1);
+						};
 				}
 			}
 		}).off('click').on('click', function() {
-
+			guideList = Count.clearGuideData($obj,dataList);
+			console.log(guideList);
 			var obj = $(this);
+				
 			if(guideList.length>0){
 				obj.autocomplete('option','source', guideList);
 				obj.autocomplete('search', '');
 			}else{
-				layer.tips('无数据', obj, {
+				layer.tips('您安排的日期不在导游的带团时间内，请到安排中更改!', obj, {
 				    tips: [1, '#3595CC'],
 				    time: 2000
 				});
 			}
 			
 		});
+	};
+	//过滤导游数据
+	Count.clearGuideData = function($obj,guideList){
+		var arrangeTime = Count.getArrangeTime($obj),
+			list = [];
+		for(var j = 0;j<guideList.length;j++){
+			var taskJson = guideList[j].taskJson;
+			
+			if(taskJson.length>1){
+				var smallTime = '',
+					bigTime = '';
+					
+				for(var k = 0;k<taskJson.length;k++){
+					for(var l = k+1;l<taskJson.length;l++){
+						if(taskJson[k].sTime<taskJson[l].sTime){
+							smallTime = taskJson[k].sTime;
+						}else{
+							smallTime = taskJson[l].sTime;
+						};
+						if(taskJson[k].eTime<taskJson[l].eTime){
+							bigTime = taskJson[l].eTime;
+						}else{
+							bigTime = taskJson[k].eTime;
+						};
+					}
+				};
+				console.log(smallTime);
+				console.log(bigTime);
+				if(smallTime<=arrangeTime){
+					if(bigTime>=arrangeTime){
+						var guide = {
+							id:guideList[j].id,
+							guideName:guideList[j].guideName,
+							value:guideList[j].guideName
+						};
+						list.push(guide);
+					}
+				}
+			}else{
+				if(taskJson[0].sTime<=arrangeTime){
+					if(taskJson[0].eTime>=arrangeTime){
+						var guide = {
+							id:guideList[j].id,
+							guideName:guideList[j].guideName,
+							value:guideList[j].guideName
+						};
+						list.push(guide);
+					}
+				}
+			}
+		};
+		return list;
+	};
+	//获取安排时间
+	Count.getArrangeTime = function($obj){
+		var $tr = $obj.closest('tr'),
+			arrangeTime = '';
+
+		if($tr.hasClass('oldData')){
+			if(!!$tr.find('.whichDay').text()){
+				arrangeTime = $tr.find('.whichDay').text();
+			}else if(!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()){
+				arrangeTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
+			}else if(!!$tr.find('input[name=startTime]').val()){
+				arrangeTime = $tr.$tr.find('input[name=startTime]').val();
+			}
+		}else{
+			var preTr = $tr.prevAll();
+			for(var i = 0;i<preTr.length;i++){
+				var $that = preTr.eq(i);
+				if($that.hasClass('oldData')){
+					if(!!$that.find('.whichDay').text()){
+						arrangeTime = $that.find('.whichDay').text();
+					}else{
+						arrangeTime = $that.find('select[name=whichDay]').find('option:selected').eq(0).text();
+					}
+					break;
+				}
+			}
+		}
+		return arrangeTime;
 	};
 	//获取购物导游数据
 	Count.getShopGuideData = function($tr){
