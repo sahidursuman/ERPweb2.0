@@ -127,7 +127,7 @@ define(function(require, exports) {
         });
     };
 
-    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName,groupId,businessGroupName,businessGroupId){
+    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName,groupId,businessGroupName,businessGroupId,orderNumber){
         if (replace.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             partnerAgencyName = replace.$searchArea.find("input[name=partnerAgencyName]").val(),
@@ -144,7 +144,8 @@ define(function(require, exports) {
             groupName = replace.$searchArea.find("input[name=groupName]").val(),
             groupId = replace.$searchArea.find("input[name=groupName]").data('id'),
             businessGroupName = replace.$searchArea.find("input[name=businessName]").val(),
-            businessGroupId = replace.$searchArea.find("input[name=businessGroupName]").data('id')
+            businessGroupId = replace.$searchArea.find("input[name=businessGroupName]").data('id');
+            orderNumber = replace.$searchArea.find("input[name=orderNumber]").val();
         }
         if(startDate > endDate){
             showMessageDialog($("#confirm-dialog-message"),"开始时间不能大于结束时间，请重新选择！");
@@ -171,6 +172,7 @@ define(function(require, exports) {
             groupName : groupName,
             businessGroupName : businessGroupName,
             outOPUserName : outOPUserName,
+            orderNumber : orderNumber,
             sortType: 'auto'
         };
 
