@@ -135,7 +135,7 @@ define(function(require, exports, module) {
             }else if($that.hasClass('T-update')){
                 bookingOrder.getUpdateBooking(id, 1);
             }else if($that.hasClass('T-delete')){
-                showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
+                showConfirmDialog("确定删除该条数据?", function() {
                     bookingOrder.deleteBooking(id, $tab);
                 });
             }
@@ -236,7 +236,7 @@ define(function(require, exports, module) {
             type: 'POST',
             success : function(data){
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         bookingOrder.getList(bookingOrder.pageNo, $tab);
                     });
                 }
@@ -325,7 +325,7 @@ define(function(require, exports, module) {
                     break;
             }
             if($that.prevAll('input[type="text"]').val() !== ""){
-                showConfirmDialog($("#confirm-dialog-message"), tps, function() {
+                showConfirmDialog(tps, function() {
                     var $text = $that.prevAll('input[type="text"]'),
                         clearId = $text.data('id');
                     if(!!clearId){
@@ -334,7 +334,7 @@ define(function(require, exports, module) {
                     $text.val('').data('json', '').data('clear', '1');
                 });
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "数据已经清空！");
+                showMessageDialog("数据已经清空！");
             }
         }
     };
@@ -612,7 +612,7 @@ define(function(require, exports, module) {
                     if(!validate.form())return;
                     var moneyData = F.assemblyLayerData($layer);
                     if(moneyData.feeList.length === 0){
-                        showMessageDialog($("#confirm-dialog-message"), '至少填写一条费用项！');
+                        showMessageDialog('至少填写一条费用项！');
                         return false;
                     }
                     $that.val(moneyData.sumNeedGetMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
@@ -917,7 +917,7 @@ define(function(require, exports, module) {
             type: 'POST',
             success : function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         if(!!tabArgs){
                             if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
                                 bookingOrder.init_events($("#tab-"+tabArgs[0]+"-content"));

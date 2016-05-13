@@ -278,7 +278,7 @@ define(function(require, exports) {
     		}else if($that.hasClass('T-view')){
                 touristGroup.touristGroupView(id);
             }else if($that.hasClass('T-del')){
-                showConfirmDialog($("#confirm-dialog-message"), "确定删除该条数据?", function() {
+                showConfirmDialog("确定删除该条数据?", function() {
                     touristGroup.touristGroupDelete(id, $tab);
                 });
             }else if($that.hasClass('T-show-part-group')){
@@ -295,7 +295,7 @@ define(function(require, exports) {
             if (!!startTime && dateType == "0") {
                 exportXLS(KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(getArgs($searchArea)));
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "请在高级选项里选择接团日期！");
+                showMessageDialog("请在高级选项里选择接团日期！");
                 return;
             };
         });
@@ -635,7 +635,7 @@ define(function(require, exports) {
             type: 'POST',
             success : function(data){
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         touristGroup.getList(0, $tab);
                     });
                 }
@@ -727,7 +727,7 @@ define(function(require, exports) {
                 touristGroup.saveData($tab);
             });
             $tab.find('.T-refresh').on('click', function(){
-                showConfirmDialog($("#confirm-dialog-message"), "确定重新加载当前小组信息?", function() {
+                showConfirmDialog("确定重新加载当前小组信息?", function() {
                     touristGroup.touristGroupUpdate(touristId);
                 });
             });
@@ -865,12 +865,12 @@ define(function(require, exports) {
                     break;
             }
             if($that.prevAll('input[type="text"]').val() !== ""){
-                showConfirmDialog($("#confirm-dialog-message"), tps, function() {
+                showConfirmDialog(tps, function() {
                     $that.prevAll('input[type="text"]').val('').data('json', '').data('clear', '1');
                     F.subtotal($that.closest('tr'), status === "partHotel" || status === "partLine" ? 1 : 0);
                 });
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "数据已经清空！");
+                showMessageDialog("数据已经清空！");
             }
         }
     };
@@ -901,7 +901,7 @@ define(function(require, exports) {
                     var $clientRadio = $layer.find('.T-client-list').find('[name="chooseClient"]:checked'),
                         $tr = $clientRadio.closest('tr');
                     if($clientRadio.length === 0){
-                        showMessageDialog($("#confirm-dialog-message"), '请选择一个客户！');
+                        showMessageDialog('请选择一个客户！');
                         return false;
                     }
                     $that.val($tr.find('[name="travelAgencyName"]').text()+"（"+$tr.find('[name="travelAgencyContactName"]').text()+"）").data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
@@ -1114,17 +1114,17 @@ define(function(require, exports) {
                         if(!validate.form())return;
                         var infoData = F.guestInfoData($layer);
                         if(!infoData){
-                            showMessageDialog($("#confirm-dialog-message"), '至少设置一个联系人！');
+                            showMessageDialog('至少设置一个联系人！');
                             return false;
                         }
                         for(var i=0; i<infoData.touristGroupMemberJsonAdd.length; i++){
                             var jsonAdd = infoData.touristGroupMemberJsonAdd[i];
                             if(!!jsonAdd.isContactUser && jsonAdd.mobileNumber == ""){
-                                showMessageDialog($("#confirm-dialog-message"), '联系人的手机号码不能为空！');
+                                showMessageDialog('联系人的手机号码不能为空！');
                                 return false;
                             }
                             if(jsonAdd.mobileNumber == "" && jsonAdd.idCardNumber == ""){
-                                showMessageDialog($("#confirm-dialog-message"), '手机号码和证件号必填一项！');
+                                showMessageDialog('手机号码和证件号必填一项！');
                                 return false;
                             }
                         }
@@ -1211,7 +1211,7 @@ define(function(require, exports) {
                     if(!validate.form())return;
                     var moneyData = F.assemblyMoneyData($layer);
                     if(moneyData.touristGroupFeeJsonAdd.length === 0){
-                        showMessageDialog($("#confirm-dialog-message"), '至少填写一条费用项！');
+                        showMessageDialog('至少填写一条费用项！');
                         return false;
                     }
                     if(!!type){
@@ -1830,7 +1830,7 @@ define(function(require, exports) {
                     var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked'),
                         $tr = $lineRadio.closest('tr');
                     if($lineRadio.length === 0){
-                        showMessageDialog($("#confirm-dialog-message"), '请选择一条线路产品！');
+                        showMessageDialog('请选择一条线路产品！');
                         return false;
                     }
                     var lineData = {
@@ -2586,7 +2586,7 @@ define(function(require, exports) {
         }
 
         if(!isCheckDate){
-            showMessageDialog($("#confirm-dialog-message"), '送团日期不能等于接团日期！');
+            showMessageDialog('送团日期不能等于接团日期！');
             return false;
         }
 
@@ -2608,7 +2608,7 @@ define(function(require, exports) {
         }
         if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
             var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
-            showMessageDialog($("#confirm-dialog-message"), msg);
+            showMessageDialog(msg);
             return false;
         }
 
@@ -2624,7 +2624,7 @@ define(function(require, exports) {
             type: 'POST',
             success : function(data){
                 if(showDialog(data)){
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         if(!!tabArgs){
                             if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
                                 touristGroup.init_events($("#tab-"+tabArgs[0]+"-content"));
