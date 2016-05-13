@@ -159,7 +159,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								layer.close(addTicketLayer);
-								showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+								showMessageDialog(data.message,function(){
 									if (typeof fn === "function") {
 										data.ticket = JSON.parse(data.ticket);
 										formData.id = data.ticket.id;
@@ -230,7 +230,7 @@ define(function(require, exports) {
 										var result = showDialog(data);
 										if(result){
 											layer.close(updateTicket);
-											showMessageDialog($( "#confirm-dialog-message" ),data.message);
+											showMessageDialog(data.message);
 											TicketResource.listTicket(0,"","");
 										}
 									}
@@ -254,7 +254,7 @@ define(function(require, exports) {
 	
 	TicketResource.deleteTicket = function(id){
 		if(!!id){
-			showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？",function(){
+			showConfirmDialog("你确定要删除该条记录？",function(){
 					$.ajax({
 							url:""+APP_ROOT+"back/ticket.do?method=deleteTicket&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 	 						type:"POST",

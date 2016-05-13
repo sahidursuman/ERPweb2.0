@@ -24,7 +24,7 @@
             </tr>
         </tbody>
     </table>
-    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount+tripPlan.childCount}}"/>
+    <input type="hidden" name="totalPersonCount" value="{{tripPlan.adultCount}}"/>
     <input type="hidden" name='busNumber' class="busNumber" value="{{busCompanyArranges.listMap.length}}">
     <input type="hidden" name='maxDay' value="{{tripPlan.maxDay}}">
     <input type="hidden" name='minDay' value="{{tripPlan.minDay}}">
@@ -80,7 +80,10 @@
             <td style="text-align:left"><label>票务费用：<span class="F-float F-money tripCost-ticketArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>其它费用：<span class="F-float F-money F-float F-money tripCost-otherArrangeNeedPayMoney">0</span></label></td>
             <td style="text-align:left"><label>自费费用：<span class="F-float F-money tripCost-selfArrangeNeedPayMoney">0</span></label></td>
-            <td style="text-align:left" colspan="2"><label style="display: none;">地接费用：<span class="F-float F-money tripCost-groundArrangeNeedPayMoney"></span></label></td>
+            <td style="text-align:left"><label>导游结算扣款：<span class="F-float F-money tripCost-guidePunishMoney">0</span></label></td>
+            <td style="text-align:left"></td>
+            <td style="text-align:left"><label>票务费用{{isOp}}：<span class="F-float F-money tripTransitCost-ticketArrangeNeedPayMoney">{{transfer.transferTicketMoney}}</span></label></td>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -250,6 +253,7 @@
                                         </select>
                                     </div>
                                 <td>
+                                {{if !!touristGroup.feeList}}
                                     {{if touristGroup.feeList.length}}
                                     <a href="#" class="T-viewCostDetail">
                                         {{each touristGroup.feeList as touristGroupFee}}
@@ -268,6 +272,7 @@
                                     {{if touristGroup.isConfirmAccount == 0}}
                                         <a data-status="1" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
                                     {{/if}}
+                                {{/if}}
                                 </td>
                                 <td>
                                     {{if touristGroup.isConfirmAccount == 0}}

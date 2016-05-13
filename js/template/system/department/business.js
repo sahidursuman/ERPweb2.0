@@ -132,7 +132,7 @@ define(function(require, exports) {
 							var result = showDialog(data);
 							if(result){
 								layer.close(addBusinessGroupLayer);
-								showMessageDialog($("#confirm-dialog-message"),data.message);
+								showMessageDialog(data.message);
 								business.departmentList();
 							}
 						}
@@ -176,7 +176,7 @@ define(function(require, exports) {
 										var result = showDialog(data);
 										if(result){
 											layer.close(addGroupLayer);
-											showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+											showMessageDialog(data.message,function(){
 												business.departmentList();
 											});
 										}

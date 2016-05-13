@@ -461,7 +461,7 @@ define(function(require, exports) {
 
 				//及时删除
 				if (entityId != null && entityId != "") {
-					showNndoConfirmDialog($("#confirm-dialog-message"),"你确定要删除费用项吗？",function(){
+					showNndoConfirmDialog("你确定要删除费用项吗？",function(){
 						$.ajax({
 								url:KingServices.build_url("innerTransferOperation","deleteTouristGroupFee"),
 		 						type:"POST",
@@ -469,7 +469,7 @@ define(function(require, exports) {
 						})
 						.done(function(data) {
 							if(showDialog(data)){
-								showMessageDialog($( "#confirm-dialog-message" ), data.message, function() {
+								showMessageDialog(data.message, function() {
 									$div.fadeOut(function(){
 										//节点移除计算
 										subsection.nodeRemoveCaculate($div, divIndex, $(this));
@@ -575,7 +575,7 @@ define(function(require, exports) {
 	subsection.deleteOperation = function(id,$this) {
 		var $parents = $this.closest("tr");
 		if (!!id) {
-			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要删除该分段？",function(){
+			showConfirmDialog("你确定要删除该分段？",function(){
 				$parents.addClass("del");
 				$parents.fadeOut(function(){
 					$parents.hide();
@@ -699,7 +699,7 @@ define(function(require, exports) {
 
 
         if(operateCurPayLength==0 && subsection.$tabSub.find('.T-currentNeedPayMoney').val()!=0){
-        	showMessageDialog($( "#confirm-dialog-message" ),"小组现收不为0时,请选择本段现收团款");
+        	showMessageDialog("小组现收不为0时,请选择本段现收团款");
 			return;
         }
 
@@ -707,11 +707,11 @@ define(function(require, exports) {
 			isCheckNeedPayMoney = 1;
 		}
 		if(isCheckNeedPayMoney == 0 && currentNeedPayMoney > 0){
-			showMessageDialog($( "#confirm-dialog-message" ),"请选择在哪一分段现收团款");
+			showMessageDialog("请选择在哪一分段现收团款");
 			return;
 		}
 		if (isError == 1) {
-			showMessageDialog($( "#confirm-dialog-message" ),"分段游客小组有已内转/已外转/已发团，不能修改");
+			showMessageDialog("分段游客小组有已内转/已外转/已发团，不能修改");
 			return;
 		}
 
@@ -726,7 +726,7 @@ define(function(require, exports) {
 			});
 		};
 		if ($tbody.data('neepayallmoney')-needTransitFee != receivables) {
-			showMessageDialog($( "#confirm-dialog-message" ),"分段后的应收金额与总应收金额不相等", false, true);
+			showMessageDialog("分段后的应收金额与总应收金额不相等", false, true);
 			return;
 		}
 		subTouristGroup = JSON.stringify(subTouristGroup);
@@ -739,7 +739,7 @@ define(function(require, exports) {
 				var result = showDialog(data);
 				if(result){
 					subsection.$tabSub.data('isEdited', false);
-					showMessageDialog($( "#confirm-dialog-message" ), data.message,function(){
+					showMessageDialog(data.message,function(){
 						if (!!tabArgs) {
 							Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2]);
 							subsection.init_section_event();
@@ -834,7 +834,7 @@ define(function(require, exports) {
 					});
 					//若没有选中线路
 					if (!lineProductJson.lineProductId) {
-						showMessageDialog($( "#confirm-dialog-message" ),"请选择选择线路产品");
+						showMessageDialog("请选择选择线路产品");
 			            return;
 					}else{
 						layer.close(subsection.searchTravelLinelayer);
@@ -888,7 +888,7 @@ define(function(require, exports) {
 
      subsection.subsectionRevoke = function(id) {
 		if(!!id){
-			showConfirmDialog($( "#confirm-dialog-message" ),"你确定要撤销该分段？",function(){
+			showConfirmDialog("你确定要撤销该分段？",function(){
 					$.ajax({
 							url: KingServices.build_url('innerTransferOperation', "revokeSubTouristGroup"),
 							type:"POST",

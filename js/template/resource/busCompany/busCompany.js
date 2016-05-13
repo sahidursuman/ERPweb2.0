@@ -185,7 +185,7 @@ define(function(require,exports){
 						var isChartered = busJsonAddTr.eq(i).find("select[name=isChartered]").val();
 			
 						if(buyTime && !(new Date() > getDate(buyTime))){
-							showMessageDialog($( "#confirm-dialog-message" ), "第"+(i+1)+"个车辆，购买时间不能大于当前时间");
+							showMessageDialog("第"+(i+1)+"个车辆，购买时间不能大于当前时间");
 							isBuyTime = false;
 							return false;
 						}
@@ -486,7 +486,7 @@ define(function(require,exports){
 				var result = showDialog(data);
 				if(result){
 					layer.close($obj);
-					showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+					showMessageDialog(data.message,function(){
 						if (typeof fn === "function") {
 							data.busCompany = JSON.parse(data.busCompany);
 							formData.id = data.busCompany.id;
@@ -803,7 +803,7 @@ define(function(require,exports){
 	//删除车队
 		BusCompany.deletebusCompany = function($id){
 				if (!!$id) {
-					showConfirmDialog($("#confirm-dialog-message"),"你确定要删除该条记录？", function() {
+					showConfirmDialog("你确定要删除该条记录？", function() {
 						$.ajax({
 							url:""+APP_ROOT+"back/busCompany.do?method=deleteBusCompany&token="+$.cookie("token")+"&menuKey="+menuKey+"&operation=delete",
 							type: 'post',
@@ -874,7 +874,7 @@ define(function(require,exports){
 							time: 2000
 						});
 					}else if(formData.busData.licenseNumber == "" && formData.busData.brand == "" && formData.busData.seatCount == "" && formData.driverData.name == "" && formData.driverData.mobileNumber == "" && formData.driverData.licenseId == "" && formData.driverData.driveYears == ""){
-						showMessageDialog($( "#confirm-dialog-message" ),"车辆和司机至少添加一个。");
+						showMessageDialog("车辆和司机至少添加一个。");
 					}else{
 						if(formData.busData.brand != "" || formData.busData.licenseNumber != "" || formData.busData.seatCount != ""){
 							var validatorBus = rule.busComCheckor($container.find('.busTable'));
@@ -898,7 +898,7 @@ define(function(require,exports){
 								var result = showDialog(data);
 								if(result){
 									layer.close(addBusDriverLayer);
-									showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+									showMessageDialog(data.message,function(){
 										if (typeof fn === "function") {
 											formData.busData.id = data.busId;
 											formData.driverData.id = data.driverId;

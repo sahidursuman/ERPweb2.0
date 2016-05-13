@@ -805,7 +805,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         Transfer.busArrangeIdArray = [];
                         Transfer._refreshList('bus');
                         Tools.closeTab(busplanId);
@@ -906,9 +906,13 @@ define(function(require, exports) {
                     }
                 },
                 select: function(event, ui) {
+
                     var $this = $(this),
                         parents = $(this).closest('tr');
-                    checkBusCompay($(this).blur().closest('tr'), 'brand');
+                    checkBusCompay($(this).blur().closest('tr'), 'brand'),$tr = $this.closest('tr');
+                    $tr.find('input[name=seatCount]').val('');
+                    $tr.find('input[name=brand]').val('');
+                    $tr.find('input[name=licenseNumber]').val('');
                 }
             }).unbind("click").click(function() {
                 var obj = this,
@@ -1065,6 +1069,11 @@ define(function(require, exports) {
                 checkBusCompay($tr, 'driverName');
                 $tr.find("input[name=busCompanyName]").val(ui.item.busCompanyName);
                 $tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
+                $tr.find('input[name=seatCount]').val('');
+                $tr.find('input[name=brand]').val('');
+                $tr.find('input[name=licenseNumber]').val('');
+                $tr.find('input[name=driverName]').val('');
+                $tr.find('input[name=MobileNumber]').val('');
                 $.ajax({
                         url: KingServices.build_url('busCompany', 'findBusCompanyById'),
                         type: 'post',
@@ -1093,11 +1102,6 @@ define(function(require, exports) {
                 busBrand = parents.find("[name=busbrand]").val();
             $.ajax({
                 url: KingServices.build_url('busCompany', 'getAllBusCompanyList'),
-                data: {
-                    seatCount: parents.find("[name=seatCount]").val(),
-                    brand: parents.find("[name=busbrand]").val(),
-                    busId: parents.find('input[name="busLicenseNumberId"]').val()
-                },
                 showLoading: false,
                 type: "POST",
                 success: function(data) {
@@ -1144,7 +1148,10 @@ define(function(require, exports) {
                 $tr = $(this).closest('tr'); //busCompanyId
             var busLicenseNumberId = $tr.find("input[name=busLicenseNumberId]").val();
             var busCompanyId = $tr.find("input[name=busCompanyId]").val();
-            $.ajax({
+            if(busCompanyId == '' || busCompanyId == null){
+                showMessageDialog("请选择车队");
+            }else{
+                $.ajax({
                 url: KingServices.build_url('busCompany', 'getDrivers'),
                 data: "busCompanyId=" + busCompanyId + "",
                 showLoading: false,
@@ -1167,6 +1174,8 @@ define(function(require, exports) {
                     }
                 }
             })
+            }
+            
         });
     };
 
@@ -1470,7 +1479,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         Transfer.hotelArrangeIdArray = [];
                         Transfer._refreshList('hotel');
                         Tools.closeTab(hotelplanId);
@@ -1804,7 +1813,7 @@ define(function(require, exports) {
         //添加车安排
     Transfer.addbus = function($obj,validate) {
         var html = '<tr data-entity-id="">' +
-            '<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="" /><input type="hidden" name="busId" value="{{}}" />' +
+            '<td><div class="col-sm-12"><input type="hidden" name="serviceType" value="" /><input type="hidden" name="busId" value="" />' +
             '<input class="col-sm-12 bind-change T-busCompanyName" name="busCompanyName"  type="text" value="" />' +
             '<input type="hidden" name="busCompanyId" value="" /><span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>' +
             '<td><input type="text" class="col-sm-12 T-chooseSeatCount" name="seatCount" value="" /></td>' +
@@ -2005,7 +2014,7 @@ define(function(require, exports) {
             .done(function(res) {
                 if (showDialog(res)) {
                     // 刷新其他的安排列表
-                    showMessageDialog($("#confirm-dialog-message"), res.message, function() {
+                    showMessageDialog(res.message, function() {
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                         Transfer._refreshList('other');
                     });

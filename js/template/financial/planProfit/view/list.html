@@ -8,9 +8,6 @@
 		<th rowspan="2">导游退补小计</th>
 		<th rowspan="2">收入小计</th>
 		<th rowspan="2">发团成本小计</th>
-		{{if isTurn == 1}}
-		<th rowspan="2">中转成本小计</th>
-		{{/if}}
 		<th rowspan="2">毛利</th>
 		<th width="80" rowspan="2">人均毛利</th>
 	</tr>
@@ -33,19 +30,24 @@
 		<th>购物全陪</th>
 		<th>自费导佣</th>
 		<th>自费全陪</th>
-		<th>导游结算扣款</th>
+		<th style="min-width:50px;">导游结算扣款</th>
 	</tr>
 </thead>
 <tbody>
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
 		<td rowspan="3">
-			<a href="javascript:void(0)" class="T-toTripAccount h-touristGroupInfo">
+			{{if rs.billStatus != -1}}
+				<a href="javascript:void(0)" class="T-toTripAccount h-touristGroupInfo">
+			{{/if}}
+
 				<p>{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span></p>
 				<p>{{rs.lineProductName}}</p>
 				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}} <span class="F-float F-count" style="padding-left: 10px;">{{rs.adultCount}}</span>大<span class="F-float F-count">{{rs.childCount}}</span>小</p>
 				<p>导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span></p>
-			</a>
+			{{if rs.billStatus != -1}}
+				</a>
+			{{/if}}
 		</td>
 		<td rowspan="3">
 			{{if rs.billStatus == -1}}
@@ -91,7 +93,7 @@
 	{{each rs.list as list index}}
 		{{if index > 0}}
 		<tr><td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
-			<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
+			<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 			<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.selfIncome}}{{/if}}</span></td>
 			<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.incomeMoney}}{{/if}}</span></td>
@@ -155,7 +157,7 @@
 		{{if index > 0}}
 			<tr style="background: #fcf8e4;">
 				<td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
-				<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
+				<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 				<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.selfIncome}}{{/if}}</span></td>
 				<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.incomeMoney}}{{/if}}</span></td>

@@ -486,7 +486,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         restaurant.checkTemp = false;
                         restaurant.$checkTab.data('isEdited',false);
                         if(argumentsLen == 1){
@@ -526,7 +526,7 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    showMessageDialog($("#confirm-dialog-message"),data.message,function(){
+                    showMessageDialog(data.message,function(){
                         $tab.data('isEdited',false);
                         restaurant.clearTempData = false;
                         restaurant.clearTempSumDate = false;
