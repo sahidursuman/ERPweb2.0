@@ -805,7 +805,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         Transfer.busArrangeIdArray = [];
                         Transfer._refreshList('bus');
                         Tools.closeTab(busplanId);
@@ -1149,7 +1149,7 @@ define(function(require, exports) {
             var busLicenseNumberId = $tr.find("input[name=busLicenseNumberId]").val();
             var busCompanyId = $tr.find("input[name=busCompanyId]").val();
             if(busCompanyId == '' || busCompanyId == null){
-                showMessageDialog($('#confirm-dialog-message'), "请选择车队");
+                showMessageDialog("请选择车队");
             }else{
                 $.ajax({
                 url: KingServices.build_url('busCompany', 'getDrivers'),
@@ -1479,7 +1479,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($('#confirm-dialog-message'), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         Transfer.hotelArrangeIdArray = [];
                         Transfer._refreshList('hotel');
                         Tools.closeTab(hotelplanId);
@@ -2014,7 +2014,7 @@ define(function(require, exports) {
             .done(function(res) {
                 if (showDialog(res)) {
                     // 刷新其他的安排列表
-                    showMessageDialog($("#confirm-dialog-message"), res.message, function() {
+                    showMessageDialog(res.message, function() {
                         Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                         Transfer._refreshList('other');
                     });
