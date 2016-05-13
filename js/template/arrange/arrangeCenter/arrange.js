@@ -200,7 +200,7 @@ define(function(require, exports) {
             },
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                    showMessageDialog(data.message, function() {
                         layer.close(noticeLayer);
                     })
                 }
@@ -212,14 +212,14 @@ define(function(require, exports) {
         // data-catename
         var id = $that.closest('tr').data('id');
         id = JSON.stringify(id);   
-        showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该中转安排信息？",function(){         
+        showConfirmMsg("你确定要取消该中转安排信息？",function(){         
         $.ajax({
             url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutBusArrange"),     
             type: 'POST',
             data: 'id='+id,
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                    showMessageDialog(data.message, function() {
                         TransferFun._refreshList('bus');
                     })
                 }
@@ -232,14 +232,14 @@ define(function(require, exports) {
         // data-catename
         var id = $that.closest('tr').data('id');
         id = JSON.stringify(id);   
-        showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该中转安排信息？",function(){         
+        showConfirmMsg("你确定要取消该中转安排信息？",function(){         
         $.ajax({
             url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutHotelArrange"),     
             type: 'POST',
             data: 'id='+id,
             success: function(data) {
                 if (showDialog(data)) {
-                    showMessageDialog($( "#confirm-dialog-message" ),data.message, function() {
+                    showMessageDialog(data.message, function() {
                        TransferFun._refreshList('hotel');
                     })
                 }

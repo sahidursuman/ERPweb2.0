@@ -370,7 +370,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $tr = $(this).closest('tr'), id = $tr.data("id");
             if(!!id){
-                showConfirmDialog($('#confirm-dialog-message'), '是否删除该条游客名单？', function() {
+                showConfirmDialog('是否删除该条游客名单？', function() {
                     $.ajax({
                         url:KingServices.build_url("touristGroup","deleteMemberById"),
                         data:{ 
@@ -379,7 +379,7 @@ define(function(require, exports) {
                         success: function(data) {
                             var result =showDialog(data);
                             if(result){
-                                showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                                showMessageDialog(data.message,function(){
                                     $tr.remove();
                                     tripPlan.MenberNumber($tab, 1);
                                 });
@@ -399,7 +399,7 @@ define(function(require, exports) {
             var $tr = $(this).closest('tr'), id = $tr.data("id");
             
             if(!!id){
-                showConfirmDialog($('#confirm-dialog-message'), '是否删除该条费用项？', function() {
+                showConfirmDialog('是否删除该条费用项？', function() {
                     $tr.remove();
                     $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
                     var $fee = $tab.find('.T-fee-list');
@@ -1667,7 +1667,7 @@ define(function(require, exports) {
                 });
                 if (isAlert == 1) {
                     var tripPlanId = $tab.find('.T-tab').data('id');
-                    showConfirmDialog($('#confirm-dialog-message'), '您将删除所有计划，是否继续？', function() {
+                    showConfirmDialog('您将删除所有计划，是否继续？', function() {
                         $.ajax({
                             url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequireByBatch'),
                             type: 'post',
@@ -1675,7 +1675,7 @@ define(function(require, exports) {
                         })
                         .done(function(data) {
                             if (showDialog(data)) {
-                                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                                showMessageDialog(data.message, function() {
                                     $tab.find('.T-action-plan-list .hct-plan-ask').each(function(index) {
                                         var $that = $(this), id = $that.data('id');
                                         if (!!id) {
@@ -1722,7 +1722,7 @@ define(function(require, exports) {
                             id = $obj.data('id');
                         if(type === thisType){
                             if(!!id){
-                                showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
+                                showConfirmDialog('您将删除'+ title +'，是否继续？', function() {
                                     $.ajax({
                                         url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequire'),
                                         type: 'post',
@@ -1730,7 +1730,7 @@ define(function(require, exports) {
                                     })
                                     .done(function(data) {
                                         if (showDialog(data)) {
-                                            showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                                            showMessageDialog(data.message, function() {
                                                 $obj.remove();
                                             });
                                         }
@@ -1755,7 +1755,7 @@ define(function(require, exports) {
                 id = $require.data('id');
 
             if (!!id) {
-                showConfirmDialog($('#confirm-dialog-message'), '您将删除'+ title +'，是否继续？', function() {
+                showConfirmDialog('您将删除'+ title +'，是否继续？', function() {
                     $.ajax({
                         url: KingServices.build_url('v2/tripPlan', 'deleteTripPlanRequire'),
                         type: 'post',
@@ -1763,7 +1763,7 @@ define(function(require, exports) {
                     })
                     .done(function(data) {
                         if (showDialog(data)) {
-                            showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                            showMessageDialog(data.message, function() {
                                 removeRequire();
                             });
                         }
@@ -1797,7 +1797,7 @@ define(function(require, exports) {
                     // }
                 }
                 if (!!id) {
-                    showConfirmDialog($('#confirm-dialog-message'), '您将删除一天的行程，是否继续？', function() {
+                    showConfirmDialog('您将删除一天的行程，是否继续？', function() {
                         $.ajax({
                             url: KingServices.build_url('v2/tripController', 'deletePlanDay'),
                             type: 'post',
@@ -1805,7 +1805,7 @@ define(function(require, exports) {
                         })
                         .done(function(data) {
                             if (showDialog(data)) {
-                                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                                showMessageDialog(data.message, function() {
                                     removeDay();
                                 });
                             }
@@ -1881,7 +1881,7 @@ define(function(require, exports) {
         //游客成员json包
         arge.touristGroupMemberJson = [];
         if($tab.find('.T-tourists-list tr').length === 0){
-            showMessageDialog($( "#confirm-dialog-message" ), "至少添加一个成员。");
+            showMessageDialog("至少添加一个成员。");
             return ;
         }
         var isDateRepear = 0,
@@ -1894,7 +1894,7 @@ define(function(require, exports) {
         var dateArray2 = dateArray.sort();
         for (var i = dateArray.length - 1; i >= 0; i--) {
             if (dateArray[i] == dateArray2[i+1]) {
-                showMessageDialog($( "#confirm-dialog-message" ), "行程安排中日期重复");
+                showMessageDialog("行程安排中日期重复");
                 return;
             }
         }
@@ -1918,11 +1918,11 @@ define(function(require, exports) {
             });
         });
         if(!isMobileNumber){
-            showMessageDialog($( "#confirm-dialog-message" ), "手机号码和身份证号码必须选填一个！");
+            showMessageDialog("手机号码和身份证号码必须选填一个！");
             return ;
         }
         if(!isSetContact){
-            showMessageDialog($( "#confirm-dialog-message" ), "至少选择一个联系人。");
+            showMessageDialog("至少选择一个联系人。");
             return ;
 
         }
@@ -1942,7 +1942,7 @@ define(function(require, exports) {
             });
         });
         if ($tab.find('.T-fee-list tr').length == 0) {
-            showMessageDialog($( "#confirm-dialog-message" ), "至少添加一条费用项。");
+            showMessageDialog("至少添加一条费用项。");
             return ;
         }
         //购物&自费商家ID集
@@ -1969,7 +1969,7 @@ define(function(require, exports) {
         arge.touristGroupFeeDelJson = $tab.find('.T-fee-list').data('deleteIds');
 
         if (arge.needPayAllMoney < ( arge.preIncomeMoney +  arge.currentNeedPayMoney)) {
-            showConfirmMsg($( "#confirm-dialog-message" ), "预收款和计划现收之和大于应收金额，是否继续?",function(){
+            showConfirmMsg("预收款和计划现收之和大于应收金额，是否继续?",function(){
                 saveAjax();
             },function(){
             },'否','是')
@@ -1985,7 +1985,7 @@ define(function(require, exports) {
             .done(function(data){
                 if(showDialog(data)){
                     $tab.data('isEdited', false);
-                    showMessageDialog($( "#confirm-dialog-message" ), data.message, function(){
+                    showMessageDialog(data.message, function(){
                         tripPlan.busRequireListDel = [];
                         tripPlan.shopRequireListDel = [];
                         tripPlan.guideRequireListDel = [];
@@ -2452,7 +2452,7 @@ define(function(require, exports) {
 
     tripPlan.confirmTripPlan = function(id,statusValue,billStatus, $that){
         if(billStatus != -1){
-            showMessageDialog($( "#confirm-dialog-message" ),"该团已审核，无法确认");
+            showMessageDialog("该团已审核，无法确认");
         }else{
             if(statusValue==0){
                 $.ajax({
@@ -2462,14 +2462,14 @@ define(function(require, exports) {
                         var result =showDialog(data);
                         var dataD = data;
                         if(result){
-                            showMessageDialog($("#confirm-dialog-message" ),data.message, function(){
+                            showMessageDialog(data.message, function(){
                                 $that.closest('.tab-pane').find('.T-btn-tripPlan-search').trigger('click');
                             });
                         }
                     }
                 });
             }else{
-                showConfirmMsg($( "#confirm-dialog-message" ), "是否给导游发送短信？",function(){
+                showConfirmMsg("是否给导游发送短信？",function(){
                     $.ajax({
                         url:KingServices.build_url("v2/tripPlan","noticeGuideTripPlanAfterConfirmTripPlanAgain"),
                         data:{ id : id + "" },
@@ -2477,7 +2477,7 @@ define(function(require, exports) {
                             var result =showDialog(data);
                             var dataD = data;
                             if(result){
-                                showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                                showMessageDialog(data.message,function(){
                                     $that.closest('.tab-pane').find('.T-btn-tripPlan-search').trigger('click');
                                 });
                             }
@@ -2548,7 +2548,7 @@ define(function(require, exports) {
                 quoteId = "";
 
             if (!$tr.length) {
-                showMessageDialog($( "#confirm-dialog-message" ),"请选择线路产品");
+                showMessageDialog("请选择线路产品");
                 return;
             }
             var lineId = $tr.data('id');
@@ -2820,7 +2820,7 @@ define(function(require, exports) {
 
     //取消计划
     tripPlan.cancelTripPlan = function(id, $that){
-        showConfirmMsg($( "#confirm-dialog-message" ), "你确定要取消该发团计划信息？",function(){
+        showConfirmMsg("你确定要取消该发团计划信息？",function(){
             $.ajax({
                 url:KingServices.build_url("v2/tripPlan","cancelTripPlan"),
                 data:{ tripPlanId : id + "" },
@@ -2828,7 +2828,7 @@ define(function(require, exports) {
                     var result =showDialog(data);
                     var dataD = data;
                     if(result){
-                        showMessageDialog($( "#confirm-dialog-message" ),data.message,function(){
+                        showMessageDialog(data.message,function(){
                             $that.closest('.tab-pane.active').find('.T-btn-tripPlan-search').trigger('click');
                         });
                     }
@@ -2973,14 +2973,14 @@ define(function(require, exports) {
                     }
                 }
             }else{
-                showMessageDialog($("#confirm-dialog-message"), "请输入要添加的数据");
+                showMessageDialog("请输入要添加的数据");
             }
         },
         judgmentTimeInterval: function(startTime, endTime, $planObj) {
             var res = true, len = Tools.getDateDiff(startTime, endTime) + 1
 
             if (!startTime || !endTime || !$planObj.length) {
-                showMessageDialog($( "#confirm-dialog-message" ), '请添加行程安排');
+                showMessageDialog('请添加行程安排');
                 return false;
             }
             /*if (len != $planObj.length) {

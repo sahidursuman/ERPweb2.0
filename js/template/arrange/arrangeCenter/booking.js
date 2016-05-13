@@ -622,7 +622,7 @@ define(function(require, exports) {
             type: 'post',
         }).done(function(data){
             if (showDialog(data)) {
-                showMessageDialog($("#confirm-dialog-message"), data.message, function() {
+                showMessageDialog(data.message, function() {
                     Tools.closeTab(Tools.getTabKey($tab.prop('id')));
                     var pageNo = 0;
                     switch (item) {

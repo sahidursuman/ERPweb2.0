@@ -478,7 +478,7 @@ define(function(require, exports) {
 
 								data.arrangeItemsStauts[_type + 'Status'] = 1;
 							} else {
-								showMessageDialog($( "#confirm-dialog-message" ), '数据异常，请联系火柴头');
+								showMessageDialog('数据异常，请联系火柴头');
 								return;
 							}
 						}
