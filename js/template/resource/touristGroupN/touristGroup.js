@@ -1037,7 +1037,7 @@ define(function(require, exports) {
             '<td><input name="mobileNumber" type="text" class="col-sm-12  no-padding-right T-mobileNumber"  maxlength="11"  /></td>' +
             '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
-            '<td><div class="checkbox"><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></div></td>' +
+            '<td><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></td>' +
             '<td><a class="cursor T-action T-delete">删除</a></td>' +
             '</tr>';
         var $tbody = $obj.find('.T-addTouristTbody')
@@ -1416,6 +1416,7 @@ define(function(require, exports) {
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                        F.subtotal($that.closest('tr'), 0);
                     }
                     layer.close(index);
                 });
