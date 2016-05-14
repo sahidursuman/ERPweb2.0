@@ -157,17 +157,6 @@
 						<div class="col-sm-2">
 							<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
 						</div>
-
-						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
-						<div class="col-sm-2">
-							<select name="getType" class="col-sm-12" disabled="disabled">
-								<option{{if innerTransfer.touristGroup.getType==1 }} selected="selected" {{/if}} value="1">旅行社系统</option>
-								<option{{if innerTransfer.touristGroup.getType==2 }} selected="selected" {{/if}} value="2">传真</option>
-								<option{{if innerTransfer.touristGroup.getType==3 }} selected="selected" {{/if}} value="3">短信</option>
-								<option{{if innerTransfer.touristGroup.getType==4 }} selected="selected" {{/if}} value="4">电话</option>
-								<option{{if innerTransfer.touristGroup.getType==5 }} selected="selected" {{/if}} value="5">QQ</option>
-							</select>
-						</div>
 					</div>
 				</div>
 
