@@ -190,7 +190,7 @@ define(function(require, exports) {
 				args.pageNo = args.pageNo || 0;
 				args.partnerAgencyId = Replace.$checkingTab.find('input[name=partnerAgencyId]').val();
 				args.name = Replace.$checkingTab.find('input[name=partnerAgencyName]').val();
-				args.orderNumber = order == '全部' ? '' : order;
+				args.orderNumber = order;
 				args.startDate = Replace.$checkingTab.find(".T-search-start-date").val();
 				args.endDate = Replace.$checkingTab.find(".T-search-end-date").val();
 				args.projects = Replace.$checkingTab.find(".T-search-project").val();
@@ -332,7 +332,7 @@ define(function(require, exports) {
 		var $searchArea = $tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 		Tools.setDatePicker($datepicker, true);
-		Replace.chooseOrder($searchArea.find('.T-search-order'));
+
 		Replace.chooseProject($searchArea.find('.T-search-project'));
 
 		//搜索下拉事件
@@ -395,7 +395,7 @@ define(function(require, exports) {
 	                    accountStatus : args.accountStatus,
 	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
 	                };
-	            argsData.orderNumber = argsData.orderNumber === "全部" ? "" : argsData.orderNumber;
+	            argsData.orderNumber = argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
 	        	if(project.length > 0){
 					for(var i=0; i<project.length; i++){
@@ -466,7 +466,7 @@ define(function(require, exports) {
 			var order = $tab.find('.T-search-order').val();
 			args = {
                 partnerAgencyId : Replace.balanceId,
-                orderNumber : order == '全部' ? '' : order,
+                orderNumber : order,
                 busCompanyOrderStatus : bus,
                 hotelOrderStatus : hotel,
                 scenicOrderStatus : scenic,
@@ -528,7 +528,7 @@ define(function(require, exports) {
 			args = {
 				pageNo : (args.pageNo || 0),
 				partnerAgencyId : $tab.find('input[name="partnerAgencyId"]').val(),
-				orderNumber : order == '全部' ? '' : order,
+				orderNumber : order,
 				endDate : Replace.$balanceTab.find(".T-search-end-date").val(),
 				startDate : Replace.$balanceTab.find(".T-search-start-date").val(),
 				accountStatus : Replace.$balanceTab.find("input[name=accountStatus]").val(),
@@ -630,39 +630,6 @@ define(function(require, exports) {
 		});
 	};
 
-	Replace.chooseOrder = function($obj){
-		$obj.autocomplete({
-			minLength: 0,
-		    change: function(event, ui) {
-		        if (!ui.item)  {
-		            $(this).data('id', '');
-		        }
-		    },
-		    select: function(event, ui) {
-		        $(this).blur().data('id', ui.item.id);
-		    }
-		}).on('click', function(){
-			if (!$obj.data('ajax')) {  // 避免重复请求
-				$.ajax({
-					url : KingServices.build_url('financial/bookingAccount', 'selectCheckOrder'),
-					type : "POST",
-					data : {partnerAgencyId : Replace.checkingId}
-				}).done(function(data){
-					for(var i=0; i<data.orderList.length; i++){
-		                data.orderList[i].value = data.orderList[i].orderNumber;
-		            }
-		            data.orderList.unshift({id:'', value: '全部'});
-		            $obj.autocomplete('option', 'source', data.orderList);
-		            $obj.autocomplete('search', '');
-
-		            $obj.data('ajax', true);
-				});
-			} else {
-		        $obj.autocomplete('search', '');
-		    }
-		});
-	};
-
 	Replace.viewOperationDetail = function(id, type){
 		if (!!id) {
 			var method = 'findCheckAccountDetail',
@@ -757,7 +724,7 @@ define(function(require, exports) {
 				pageNo : args.pageNo || 0,
 				partnerAgencyId : $tab.find("input[name=partnerAgencyId]").val(),
 				name : $tab.find("input[name=partnerAgencyName]").val(),
-				orderNumber : order == '全部' ? '' : order,
+				orderNumber : order,
 				startDate : $tab.find(".T-search-start-date").val(),
 				endDate : $tab.find(".T-search-end-date").val(),
 				projects : $tab.find(".T-search-project").val(),

@@ -32,10 +32,9 @@ define(function(require,exports) {
 	 */
 	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate,accountStatus){
 		if(InnerTransferOut.$tab && arguments.length === 1){
-			var $toBusinessGroupId = InnerTransferOut.$tab.find('input[name=toBusinessGroupId]').val();
-			var $toBusinessGroupName = InnerTransferOut.$tab.find('input[name=toBusinessGroupName]').val(),
-			toBusinessGroupId = $toBusinessGroupId;
-			toBusinessGroupName = $toBusinessGroupId==""?"":$toBusinessGroupName;
+			toBusinessGroupId = InnerTransferOut.$tab.find('input[name=toBusinessGroupId]').val();
+			toBusinessGroupName = InnerTransferOut.$tab.find('input[name=toBusinessGroupName]').val();
+			
 			startDate = InnerTransferOut.$tab.find('input[name=startDate]').val();
 			endDate = InnerTransferOut.$tab.find('input[name=endDate]').val();
 			accountStatus = InnerTransferOut.$tab.find(".T-finance-status").find("button").data("value");
