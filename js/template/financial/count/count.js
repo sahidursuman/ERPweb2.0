@@ -499,7 +499,7 @@ define(function(require, exports){
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
 	                var html = Reimbursement(tmp);
-	                console.log(tmp);
+	                // console.log(tmp);
 	                Tools.addTab(ReimbursementId,'单团报账',html);
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
@@ -1618,7 +1618,7 @@ define(function(require, exports){
 					};
 					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
-					console.log(data);
+					// console.log(data);
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -5543,7 +5543,7 @@ define(function(require, exports){
 		Count.shopClickCount = 0;
 		//组装数据
 		var saveJsonStr = Count.installData(id,$obj);
-		console.log(saveJsonStr);
+		// console.log(saveJsonStr);
 		//校验同一天不能安排同一家购物店
 		var submitStatus =  Count.checkShopArrange(saveJsonStr);
 		if(submitStatus.submitStatus){
@@ -6144,7 +6144,7 @@ define(function(require, exports){
 				saveJson.addHotelArrangeList.push(addArange);
 			}
 		});
-		console.log(saveJson.hotelArrangeList);
+		// console.log(saveJson.hotelArrangeList);
 		//景区数据
 		var $scenicObj = $obj.find('.T-count-scenic'),
 		$tr = $scenicObj.find('tr');
@@ -6713,136 +6713,117 @@ define(function(require, exports){
 		
 	};
 	//获取导游下拉数据
-	Count.getAccoutnGuide = function($obj,$parentObj){
-		var guideList = [],
-			dataList = Count.guide.listMap;
-			
-		if($parentObj.find('.countReimbursement').length){
-			dataList = Count.reimbursementGuide.listMap;
-		};//报账
-		if($parentObj.find('.countUpdate').length){
-			dataList = Count.updateGuide.listMap;
-		};//审核
+	Count.getAccoutnGuide = function($obj, $parentObj) {
+	    var guideList = [],
+	        dataList = Count.guide.listMap;
 
-		$obj.autocomplete({
-			minLength:0,
-			change:function(event,ui){
-				if(ui.item == null){
-					var $div = $(this).closest('div');
-					$(this).val('');
-					$div.find('input[name=guideArrangeId]').val('');
-					$div.find('input[name=shopGuideArrangeId]').val('');
-				}
-			},
-			select:function(event,ui){
-				if(ui.item != null){
-					var $div = $(this).closest('div'),$tr = $(this).closest('tr'),
-						receiveStatus = $tr.find('select[name=receiveStatus]');
-						$div.find('input[name=guideArrangeId]').val(ui.item.id);
-						$div.find('input[name=shopGuideArrangeId]').val(ui.item.id);
-						if(receiveStatus.length){
-							receiveStatus.val(1);
-						};
-				}
-			}
-		}).off('click').on('click', function() {
-			guideList = Count.clearGuideData($obj,dataList);
-			console.log(guideList);
-			var obj = $(this);
-				
-			if(guideList.length>0){
-				obj.autocomplete('option','source', guideList);
-				obj.autocomplete('search', '');
-			}else{
-				layer.tips('您安排的日期不在导游的带团时间内，请到安排中更改!', obj, {
-				    tips: [1, '#3595CC'],
-				    time: 2000
-				});
-			}
-			
-		});
+	    if ($parentObj.find('.countReimbursement').length) {
+	        dataList = Count.reimbursementGuide.listMap;
+	    }; //报账
+	    if ($parentObj.find('.countUpdate').length) {
+	        dataList = Count.updateGuide.listMap;
+	    }; //审核
+
+	    for (var i = 0, len = dataList.length; i < len; i++) {
+	        dataList[i].value = dataList[i].guideName;
+	    }
+
+	    $obj.autocomplete({
+	        minLength: 0,
+	        change: function(event, ui) {
+	            if (ui.item == null) {
+	                var $div = $(this).closest('div');
+	                $(this).val('');
+	                $div.find('input[name=guideArrangeId]').val('');
+	                $div.find('input[name=shopGuideArrangeId]').val('');
+	            }
+	        },
+	        select: function(event, ui) {
+	            if (ui.item != null) {
+	                var arrangeTime = Count.getArrangeTime($obj);
+
+	                var $parent = $(this).closest('div'),
+	                    $tr = $(this).closest('tr'),
+	                    receiveStatus = $tr.find('select[name=receiveStatus]');
+
+	                if (Count.isInArrangeTime(arrangeTime, ui.item.taskJson)) {
+	                    $parent.find('input[name=guideArrangeId]').val(ui.item.id);
+	                    $parent.find('input[name=shopGuideArrangeId]').val(ui.item.id);
+	                    receiveStatus.val(1);
+	                } else {
+	                    $parent.find('input[name=guideArrangeId]').val('');
+	                    $parent.find('input[name=shopGuideArrangeId]').val('');
+	                    receiveStatus.val(0);
+	                    layer.tips('您安排的日期不在导游的带团时间内，请到安排中更改!', $obj, {
+	                        tips: [1, '#3595CC'],
+	                        time: 2500
+	                    });
+
+	                    // 将导游置空
+	                    setTimeout(function() {
+	                        $obj.val('');
+	                    }, 0);
+	                }
+	            }
+	        }
+	    }).off('click').on('click', function() {
+	        $obj.autocomplete('option', 'source', dataList);
+	        $obj.autocomplete('search', '');
+	    });
 	};
-	//过滤导游数据
-	Count.clearGuideData = function($obj,guideList){
-		var arrangeTime = Count.getArrangeTime($obj),
-			list = [];
-		for(var j = 0;j<guideList.length;j++){
-			var taskJson = guideList[j].taskJson;
-			
-			if(taskJson.length>1){
-				var smallTime = '',
-					bigTime = '';
-					
-				for(var k = 0;k<taskJson.length;k++){
-					for(var l = k+1;l<taskJson.length;l++){
-						if(taskJson[k].sTime<taskJson[l].sTime){
-							smallTime = taskJson[k].sTime;
-						}else{
-							smallTime = taskJson[l].sTime;
-						};
-						if(taskJson[k].eTime<taskJson[l].eTime){
-							bigTime = taskJson[l].eTime;
-						}else{
-							bigTime = taskJson[k].eTime;
-						};
-					}
-				};
-				console.log(smallTime);
-				console.log(bigTime);
-				if(smallTime<=arrangeTime){
-					if(bigTime>=arrangeTime){
-						var guide = {
-							id:guideList[j].id,
-							guideName:guideList[j].guideName,
-							value:guideList[j].guideName
-						};
-						list.push(guide);
-					}
-				}
-			}else{
-				if(taskJson[0].sTime<=arrangeTime){
-					if(taskJson[0].eTime>=arrangeTime){
-						var guide = {
-							id:guideList[j].id,
-							guideName:guideList[j].guideName,
-							value:guideList[j].guideName
-						};
-						list.push(guide);
-					}
-				}
-			}
-		};
-		return list;
+
+	/**
+	 * 判断日期是否在安排时间内
+	 * @param  {string}  date     安排日期
+	 * @param  {object}  taskJson 导游的任务安排时间数据
+	 * @return {Boolean}          true：在安排内，false：不在安排内
+	 */
+	Count.isInArrangeTime = function(date, taskJson) {
+	    var ret = false;
+
+	    if (!!date && !!taskJson && typeof taskJson === 'object') {
+	        for (var i = 0, len = taskJson.length, tmp; i < len; i++) {
+	            tmp = taskJson[i];
+
+	            if (tmp.sTime <= date && tmp.eTime >= date) {
+	                ret = true;
+	                break;
+	            }
+	        }
+	    }
+
+	    return ret;
 	};
 	//获取安排时间
-	Count.getArrangeTime = function($obj){
-		var $tr = $obj.closest('tr'),
-			arrangeTime = '';
+	Count.getArrangeTime = function($obj) {
+	    var $tr = $obj.closest('tr'),
+	        arrangeTime = '';
 
-		if($tr.hasClass('oldData')){
-			if(!!$tr.find('.whichDay').text()){
-				arrangeTime = $tr.find('.whichDay').text();
-			}else if(!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()){
-				arrangeTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
-			}else if(!!$tr.find('input[name=startTime]').val()){
-				arrangeTime = $tr.find('input[name=startTime]').val();
-			}
-		}else{
-			var preTr = $tr.prevAll();
-			for(var i = 0;i<preTr.length;i++){
-				var $that = preTr.eq(i);
-				if($that.hasClass('oldData')){
-					if(!!$that.find('.whichDay').text()){
-						arrangeTime = $that.find('.whichDay').text();
-					}else{
-						arrangeTime = $that.find('select[name=whichDay]').find('option:selected').eq(0).text();
-					}
-					break;
-				}
-			}
-		}
-		return arrangeTime;
+	    if ($tr.hasClass('oldData')) {
+	        if (!!$tr.find('.whichDay').text()) {
+	            arrangeTime = $tr.find('.whichDay').text();
+	        } else if (!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()) {
+	            arrangeTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
+	        } else if (!!$tr.find('input[name=startTime]').val()) {
+	            arrangeTime = $tr.find('input[name=startTime]').val();
+	        }
+	    } else {
+	        var preTr = $tr.prevAll();
+	        for (var i = 0; i < preTr.length; i++) {
+	            var $that = preTr.eq(i);
+	            if ($that.hasClass('oldData')) {
+	                if (!!$that.find('.whichDay').text()) {
+	                    arrangeTime = $that.find('.whichDay').text();
+	                } else {
+	                    arrangeTime = $that.find('select[name=whichDay]').find('option:selected').eq(0).text();
+	                }
+	                break;
+	            }
+	        }
+	    }
+	    return arrangeTime;
 	};
+
 	//获取购物导游数据
 	Count.getShopGuideData = function($tr){
 		var $guideTd = $tr.find('td[name=shopGuideName]'),
