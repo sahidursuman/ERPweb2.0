@@ -24,6 +24,7 @@ define(function(require, exports) {
         OtherListTemplate = require('./transferView/otherList'),
         OtherArrangeTemplate = require('./transferView/otherArrange'),
         ViewOtherTemplate = require('./transferView/viewOther'),
+        planCollectionTemplate = require('./transferView/planCollection'),
 
         Transfer = {
             transitIds: [],
@@ -539,6 +540,10 @@ define(function(require, exports) {
             //删除车
             $busplanId.find('.T-arrange-delete').on('click', function() {
                 Transfer.deleteBusArrange($(this));
+            });
+            //计划代收
+            $busplanId.find('.T-collection').on('click', function() {
+                Transfer.planCollection($(this));
             });
             //添加中转数据
             $busplanId.find('.T-add-BusTransfersId').on('click', function() {
@@ -1828,7 +1833,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number discount F-float F-count" name="reduceMoney"  maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney"  maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>' +
-            '<td>7</td>'+
+            '<td><input type="text"></td>'+
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
             '<td>--</td>'+
             '<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>' +
@@ -2026,7 +2031,24 @@ define(function(require, exports) {
             });
 
     };
+    /**
+     * 计划代收
+     * @param  {object} $obj 删除按钮
+     * @return {[type]}      [description]
+     */
+     Transfer.planCollection = function(){
+        var html = planCollectionTemplate();
+        var viewAccountsLayer = layer.open({
+            type: 1,
+            title:"编辑计划代收",
+            skin: 'layui-layer-rim',
+            area: '750px', 
+            zIndex:1028,
+            content: html,
+            scrollbar: false
+        });
 
+     }
     /**
      * 删除车安排
      * @param  {object} $obj 删除按钮
@@ -2037,7 +2059,6 @@ define(function(require, exports) {
         $tr.fadeOut(function(){
             $obj.parents('tr').remove()
         })
-        console.log(id)
         Transfer.deleteOutBusIds.push(id);
     };
     /**
