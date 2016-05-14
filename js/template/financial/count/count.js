@@ -3682,20 +3682,20 @@ define(function(require, exports){
 	Count.addBus = function($obj,$parentObj){
 		var divHtml = Count.returnDivHtml($parentObj);
 		var td = '<td name="guideName">'+
-					divHtml+
-					'<button class="btn btn-success btn-sm btn-white T-addGuide pull-right">'+
-	                    '<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
-	                '</button>'+
-		            /*'<a href="#" class="T-addGuide pull-right">增加</a><!-- 增加导游 -->'+*/
-		        '</div>'+
-		        '<div class="div-h-30 mar-t-5" index="1">'+
-		        	'<input type="text" class="w-70" name="guideName"/>'+
-					'<input type="hidden" name="guideArrangeId">'+
-					'<button class="btn btn-danger btn-sm btn-white T-delGuide pull-right">'+
-	                    '<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
-	                '</button>'+/*删除导游*/
-		        '</div>'+
-			'</td>';
+						'<div class="div-h-30 mar-t-5">'+
+						'<button class="btn btn-success btn-sm btn-white T-addGuide pull-right">'+
+		                    '<i class="ace-icon fa fa-plus bigger-110 icon-only"></i>'+
+		                '</button>'+
+			            /*'<a href="#" class="T-addGuide pull-right">增加</a><!-- 增加导游 -->'+*/
+			        '</div>'+
+			        '<div class="div-h-30 mar-t-5" index="1">'+
+			        	'<input type="text" class="w-70" name="guideName"/>'+
+						'<input type="hidden" name="guideArrangeId">'+
+						'<button class="btn btn-danger btn-sm btn-white T-delGuide pull-right">'+
+		                    '<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
+		                '</button>'+/*删除导游*/
+			        '</div>'+
+				'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"guideName",$parentObj);
 		
 		var html = '<tr arrangeType="busArrange" class="oldData">'+
@@ -3722,7 +3722,7 @@ define(function(require, exports){
 			'<td name="guidePayedMoney">'+
 				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<p class="inline-flex" style="margin:0px;">'
+					'<p class="inline-flex" style="margin:0px;">' +
 					'<select name="payType">'+
 						'<option value="0">现金</option>'+
 						'<option value="1">刷卡</option>'+
@@ -3730,12 +3730,6 @@ define(function(require, exports){
 					'</select>'+
 					'<input name="guidePayedMoney" type="text" class="w-50"/>'+
 					'</p>'+
-				'</div>'+
-			'</td>'+
-			'<td name="payType">'+
-				divHtml+
-				'<div class="div-h-30 mar-t-5" index="1">'+
-					
 				'</div>'+
 			'</td>'+
 			'<td name="billImage">'+
