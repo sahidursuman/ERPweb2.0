@@ -6740,8 +6740,8 @@ define(function(require, exports){
 	                    $tr = $(this).closest('tr'),
 	                    receiveStatus = $tr.find('select[name=receiveStatus]');
 
-	                if (!!arrangeTime 
-	                	&& (!!arrangeTime.startTime && Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
+	                if (!arrangeTime 
+	                	|| (!!arrangeTime.startTime && Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
 	                    $parent.find('input[name=guideArrangeId]').val(ui.item.id);
 	                    $parent.find('input[name=shopGuideArrangeId]').val(ui.item.id);
 	                    receiveStatus.val(1);
@@ -6752,7 +6752,7 @@ define(function(require, exports){
 
 	                    // 设置提示消息
 	                    var msg = '您安排的日期不在导游的带团时间内，请到安排中更改!', $target = $obj;
-	                    if (!arrangeTime && (!arrangeTime.startTime || !arrangeTime.endTime)) {
+	                    if (!!arrangeTime && (!arrangeTime.startTime || !arrangeTime.endTime)) {
 	                    	msg = '请选择安排日期';
 	                    	if (!arrangeTime.startTime) {
 	                    		$target = $obj.closest('tr').find('[name="startTime"]');	                    		
@@ -6792,7 +6792,7 @@ define(function(require, exports){
 	        for (var i = 0, len = taskJson.length, tmp; i < len; i++) {
 	            tmp = taskJson[i];
 
-	            if (tmp.eTime >= date.endTime && tmp.sTime <= date.startTime) {  // 当时间存在交集的时候，通过
+	            if (!(tmp.eTime < date.startTime || tmp.sTime > date.endTime)) {  // 当时间存在交集的时候，通过
 	                ret = true;
 	                break;
 	            }
@@ -6806,36 +6806,39 @@ define(function(require, exports){
 	/**
 	 * 获取安排日期
 	 * @param  {object} $obj 焦点元素
-	 * @return {object}      返回起始日期，只有开始日期时，结束日期设置为开始日期
+	 * @return {object}      当arrangeTime===false时，适用于团款这种无安排日期；当startTime/endTime是空字符串时候，用于提示；
+	 *         				 有日期的对象，用于判断。返回起始日期，只有开始日期时，结束日期设置为开始日期
 	 */
 	Count.getArrangeTime = function($obj) {
 	    var $tr = $obj.closest('tr'),
 	        startTime = '',
 	        arrangeTime = false;
 
-        while(!$tr.hasClass('oldData')) {
+        while(!$tr.hasClass('oldData') && $tr.length) {
         	$tr = $tr.prev();
         };
 
-	    if (!!$tr.find('.whichDay').text()) {
-	        startTime = $tr.find('.whichDay').text();
-	    } else if (!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()) {
-	        startTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
-	    } else if (!!$tr.find('input[name=startTime]').val()) {
-	        startTime = $tr.find('input[name=startTime]').val().substring(0,10);
-	    }
+        if ($tr.length && $tr.hasClass('oldData')) {
+		    if (!!$tr.find('.whichDay').text()) {
+		        startTime = $tr.find('.whichDay').text();
+		    } else if (!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()) {
+		        startTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
+		    } else if (!!$tr.find('input[name=startTime]').length) {
+		        startTime = $tr.find('input[name=startTime]').val().substring(0,10);
+		    }
 
-	    if ($tr.find('[name=endTime]').length) {
-	    	arrangeTime = {
-	    		startTime: startTime,
-	    		endTime: $tr.find('[name=endTime]').val()
-	    	}
-	    } else if (!!startTime) {
-	    	arrangeTime = {
-	    		startTime: startTime,
-	    		endTime: startTime
-	    	}
-	    }
+		    if ($tr.find('[name=endTime]').length) {
+		    	arrangeTime = {
+		    		startTime: startTime,
+		    		endTime: $tr.find('[name=endTime]').val()
+		    	}
+		    } else if (startTime !== false) {
+		    	arrangeTime = {
+		    		startTime: startTime,
+		    		endTime: startTime
+		    	}
+		    }
+        }
 
 	    return arrangeTime;
 	};

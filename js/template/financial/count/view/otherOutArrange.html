@@ -222,74 +222,50 @@
                             {{/if}}
                             {{if !!arrange.guideDetails && arrange.guideDetails.length}}
                                 {{each arrange.guideDetails as rs index}}
-                                    <div class="div-h-30 mar-t-5 inline-flex" index="{{index+1}}">
-                                        {{if editStatus == 2}}
-                                            {{if rs.realPayType == 0}}
-                                                现金
-                                            {{else if rs.realPayType == 1}}
-                                                刷卡
-                                            {{else if rs.realPayType == 2}}
-                                                签单
+                                    <div class="div-h-30 mar-t-5 " index="{{index+1}}">
+                                        <p class="inline-flex">
+                                            {{if editStatus == 2}}
+                                                {{if rs.realPayType == 0}}
+                                                    现金
+                                                {{else if rs.realPayType == 1}}
+                                                    刷卡
+                                                {{else if rs.realPayType == 2}}
+                                                    签单
+                                                {{/if}}
+                                                &nbsp;&nbsp;
+                                                <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
+                                                <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
+                                            {{else}}
+                                                <select name="payType" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled"{{/if}}>
+                                                    <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
+                                                    <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
+                                                    <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                </select>
+                                                <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
+                                                class="F-float F-money w-70" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
                                             {{/if}}
-                                            <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
-                                            <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
+                                        </p>
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                <div class="div-h-30 mar-t-5" index="1">
+                                    <p class="inline-flex">
+                                        {{if editStatus == 2}}
+                                           0
                                         {{else}}
                                             <select name="payType" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled"{{/if}}>
                                                 <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
                                                 <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
                                                 <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
                                             </select>
-                                            <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
-                                            class="F-float F-money w-70" 
-                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
+                                            <input name="guidePayedMoney" type="text" class="w-70" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
                                         {{/if}}
-                                    </div>
-                                {{/each}}
-                            {{else}}
-                                <div class="div-h-30 mar-t-5 inline-flex" index="1">
-                                    {{if editStatus == 2}}
-                                       0
-                                    {{else}}
-                                        <select name="payType" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled"{{/if}}>
-                                            <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
-                                            <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
-                                            <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
-                                        </select>
-                                        <input name="guidePayedMoney" type="text" class="w-70" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
-                                    {{/if}}
+                                    </p>
+                                    
                                 </div>
                             {{/if}}
                         </td><!-- 金额 -->
-
-                        <!-- <td name="payType">
-                            {{if guideCount > 1}}
-                                <div class="div-h-30"></div>
-                            {{/if}}
-                            {{if !!arrange.guideDetails && arrange.guideDetails.length}}
-                                {{each arrange.guideDetails as rs index}}
-                                    <div class="div-h-30 mar-t-5" index="{{index+1}}">
-                                        {{if editStatus == 2}}
-                                           
-                                        {{else}}
-                                           
-                                        {{/if}}
-                                    </div>
-                                {{/each}}
-                            {{else}}
-                                <div class="div-h-30 mar-t-5" index="1" >
-                                    {{if editStatus == 2}}
-                                        -
-                                    {{else}}
-                                        <select name="payType" 
-                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled"{{/if}}>
-                                            <option value="0" >现金</option>
-                                            <option value="1" >刷卡</option>
-                                            <option value="2" >签单</option>
-                                        </select>
-                                    {{/if}}
-                                </div>
-                            {{/if}}
-                        </td>付款方式 -->
                         
                         <td name="billImage">
                             {{if guideCount > 1}}
