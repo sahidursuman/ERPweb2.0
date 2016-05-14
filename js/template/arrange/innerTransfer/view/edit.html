@@ -35,21 +35,14 @@
 						<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12 F-float F-money" />
 					</div>
 
-					<label class="col-xs-1 control-label no-padding-right">计划现收：</label>
-					<div class="col-xs-1">
-					    {{if cashFlag==1}}
-							<input name="currentNeedPayMoney" value="{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}" readonly="readonly" maxlength="9" type="text" class=" col-xs-12 F-float F-money" />
-							{{else}}
-							<input name="currentNeedPayMoney" value="0" readonly="readonly" maxlength="9" type="text" class=" col-xs-12 F-float F-money" />
-					    {{/if}}
+                    <label class=" pull-left">
+						<input  type="checkbox" class="ace" {{if cashFlag==1}}checked="checked"{{/if}} name="cashFlag" />
+						<span class="lbl"> 对方现收</span>
+					</label>					
+					<div class="T-cashFlag mar-l-15 pull-left {{if cashFlag==0}}hidden{{/if}}">
+						<label class="control-label pad-l-5">对方现收金额：</label>
+						<input name="currentNeedPayMoney" value="{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}" maxlength="9" type="text" class="F-float F-money" />
 					</div>
-
-                    <label>
-						<input  type="checkbox" class="ace" {{if cashFlag==1}}checked="checked"{{/if}} disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
-						<span class="lbl">
-						</span>
-					</label>
-					<label class="control-label no-padding-right">对方现收</label>
 
 					<div class="col-xs-1">
 						<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" readonly="readonly" maxlength="9" type="hidden" class="col-xs-12 F-float F-money" />
