@@ -72,7 +72,8 @@
                         <tr class=" oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange" 
                         isConfirmAccount = "{{arrange.isConfirmAccount}}">
 
-                            <td rowspan="{{arrange.itemList.length}}"><span>{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> </td><!-- 日期 -->
+                            <td rowspan="{{arrange.itemList.length}}">
+                            <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> </td><!-- 日期 -->
                             
                             <td rowspan="{{arrange.itemList.length}}">
                                 {{arrange.shopName}}
