@@ -46,6 +46,7 @@
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{arrange.startTime | dateFormat: 'yyyy-MM-dd'}}
+                            <input type="hidden" name="startTime" value="{{arrange.startTime | dateFormat: 'yyyy-MM-dd'}}">
                         </td><!-- 开始时间 -->
 
                         <td>
@@ -53,6 +54,7 @@
                             <div class="div-h-30"></div>
                             {{/if}}
                             {{arrange.endTime | dateFormat: 'yyyy-MM-dd'}}
+                            <input type="hidden" name="endTime" value="{{arrange.endTime | dateFormat: 'yyyy-MM-dd'}}">
                         </td><!-- 结束时间 -->
 
                         <td>

@@ -6776,10 +6776,11 @@ define(function(require, exports){
 	    var ret = false;
 
 	    if (!!date && !!taskJson && typeof taskJson === 'object') {
+
 	        for (var i = 0, len = taskJson.length, tmp; i < len; i++) {
 	            tmp = taskJson[i];
 
-	            if (tmp.sTime <= date && tmp.eTime >= date) {
+	            if (!(tmp.eTime < date.startTime || tmp.sTime > date.endTime)) {  // 当时间存在交集的时候，通过
 	                ret = true;
 	                break;
 	            }
@@ -6788,33 +6789,43 @@ define(function(require, exports){
 
 	    return ret;
 	};
-	//获取安排时间
+
+	
+	/**
+	 * 获取安排日期
+	 * @param  {object} $obj 焦点元素
+	 * @return {object}      返回起始日期，只有开始日期时，结束日期设置为开始日期
+	 */
 	Count.getArrangeTime = function($obj) {
 	    var $tr = $obj.closest('tr'),
-	        arrangeTime = '';
+	        startTime = '',
+	        arrangeTime = false;
 
-	    if ($tr.hasClass('oldData')) {
-	        if (!!$tr.find('.whichDay').text()) {
-	            arrangeTime = $tr.find('.whichDay').text();
-	        } else if (!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()) {
-	            arrangeTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
-	        } else if (!!$tr.find('input[name=startTime]').val()) {
-	            arrangeTime = $tr.find('input[name=startTime]').val();
-	        }
-	    } else {
-	        var preTr = $tr.prevAll();
-	        for (var i = 0; i < preTr.length; i++) {
-	            var $that = preTr.eq(i);
-	            if ($that.hasClass('oldData')) {
-	                if (!!$that.find('.whichDay').text()) {
-	                    arrangeTime = $that.find('.whichDay').text();
-	                } else {
-	                    arrangeTime = $that.find('select[name=whichDay]').find('option:selected').eq(0).text();
-	                }
-	                break;
-	            }
-	        }
+
+	    if (!$tr.hasClass('oldData')) {
+	    	$tr = $tr.prevUntil('.oldData').prev();
 	    }
+
+	    if (!!$tr.find('.whichDay').text()) {
+	        startTime = $tr.find('.whichDay').text();
+	    } else if (!!$tr.find('select[name=whichDay]').find('option:selected').eq(0).text()) {
+	        startTime = $tr.find('select[name=whichDay]').find('option:selected').eq(0).text();
+	    } else if (!!$tr.find('input[name=startTime]').val()) {
+	        startTime = $tr.find('input[name=startTime]').val();
+	    }
+
+	    if ($tr.find('[name=endTime]').length) {
+	    	arrangeTime = {
+	    		startTime: startTime,
+	    		endTime: $tr.find('[name=endTime]').val()
+	    	}
+	    } else if (!!startTime) {
+	    	arrangeTime = {
+	    		startTime: startTime,
+	    		endTime: startTime
+	    	}
+	    }
+
 	    return arrangeTime;
 	};
 
