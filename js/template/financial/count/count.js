@@ -6740,7 +6740,8 @@ define(function(require, exports){
 	                    $tr = $(this).closest('tr'),
 	                    receiveStatus = $tr.find('select[name=receiveStatus]');
 
-	                if (Count.isInArrangeTime(arrangeTime, ui.item.taskJson)) {
+	                if (!arrangeTime 
+	                	|| (!!arrangeTime.startTime && Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
 	                    $parent.find('input[name=guideArrangeId]').val(ui.item.id);
 	                    $parent.find('input[name=shopGuideArrangeId]').val(ui.item.id);
 	                    receiveStatus.val(1);
@@ -6748,7 +6749,18 @@ define(function(require, exports){
 	                    $parent.find('input[name=guideArrangeId]').val('');
 	                    $parent.find('input[name=shopGuideArrangeId]').val('');
 	                    receiveStatus.val(0);
-	                    layer.tips('您安排的日期不在导游的带团时间内，请到安排中更改!', $obj, {
+
+	                    // 设置提示消息
+	                    var msg = '您安排的日期不在导游的带团时间内，请到安排中更改!', $target = $obj;
+	                    if (!!arrangeTime && (!arrangeTime.startTime || !arrangeTime.endTime)) {
+	                    	msg = '请选择安排日期';
+	                    	if (!arrangeTime.startTime) {
+	                    		$target = $obj.closest('tr').find('[name="startTime"]');	                    		
+	                    	} else {
+	                    		$target = $obj.closest('tr').find('[name="endTime"]');
+	                    	}
+	                    }
+	                    layer.tips(msg , $target, {
 	                        tips: [1, '#3595CC'],
 	                        time: 2500
 	                    });
