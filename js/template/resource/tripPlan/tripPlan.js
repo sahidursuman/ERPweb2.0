@@ -601,6 +601,22 @@ define(function(require, exports) {
 			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
 		});
 
+		//当导游任务选择全程时，自动填写相应的日期
+		$tab.find('#tripPlan_addPlan_guide').on('change', '[name=taskType]', function() {
+			var $this = $(this),
+				$tr = $this.closest('tr'),
+				$starts = $tr.find('[name=startTime]'),
+				$ends = $tr.find('[name=endTime]'),
+				index = $this.closest('.T-guideAddTask').data('index'),
+				startTime = $tab.find('.T-startTime').text(),
+				endTime = $tab.find('.T-endTime').text();
+
+			if ($this.val() == 0) {
+				$starts.eq(index).val(startTime);
+				$ends.eq(index).val(endTime);
+			}
+		})
+
 		//车辆安排通知游客
 		$tab.find('#tripPlan_addPlan_bus').off('click.noticeTourists').on('click.noticeTourists', '.T-noticeTourists', function() {
 			var $this = $(this), $parent = $this.closest('tr'),
