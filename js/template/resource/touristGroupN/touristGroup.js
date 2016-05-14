@@ -904,7 +904,15 @@ define(function(require, exports) {
                         showMessageDialog('请选择一个客户！');
                         return false;
                     }
-                    $that.val($tr.find('[name="travelAgencyName"]').text()+"（"+$tr.find('[name="travelAgencyContactName"]').text()+"）").data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
+                    var travelAgencyName = $tr.data('agency-name'),
+                        travelAgencyContactName = $tr.find('[name="travelAgencyContactName"]').text(), 
+                        str = "";
+                    if(!!travelAgencyContactName){
+                        str = travelAgencyName + " （"+travelAgencyContactName+"）";
+                    }else{
+                        str = travelAgencyName;
+                    }
+                    $that.val(str).data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
                     layer.close(index);
                 });
                 //关闭
@@ -1240,7 +1248,11 @@ define(function(require, exports) {
                         moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
                         delete moneyData.touristGroupFeeJsonAdd;
                         delete moneyData.touristGroupFeeJsonDel;
-                        $that.closest('tr').find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
+                        var $tr = $that.closest('tr');
+                        $tr.find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
+                        if($tr.find('[name="subNeedPayMoney"]').val() === ""){
+                            $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
+                        }
                         var str = moneyData.needPayAllMoney;
                         if(moneyData.isTransfer === 1){
                             str = "他部　" + moneyData.dutyDepartmentName + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
@@ -1249,6 +1261,12 @@ define(function(require, exports) {
                         }
                         $that.val(str).data('json', JSON.stringify(moneyData)).trigger('blur');
                     }else{
+                        if(parseFloat(moneyData.needPayAllMoney) < 
+                            parseFloat(moneyData.preIncomeMoney) + 
+                            parseFloat(moneyData.currentNeedPayMoney)){
+                            showMessageDialog('预收款+计划现收不能大于应收！');
+                            return false;
+                        }
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                     }
                     layer.close(index);
