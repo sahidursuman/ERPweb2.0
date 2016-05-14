@@ -2625,7 +2625,7 @@ define(function(require, exports) {
             method = "updateCustomerOrder";
         }
         if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
-            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
+            var msg = data.baseInfo.customerType === 0 ? '请选择行程或添加参团信息！' : '请选择行程或添加转团信息！';
             showMessageDialog(msg);
             return false;
         }
