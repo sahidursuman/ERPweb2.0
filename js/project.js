@@ -1871,7 +1871,7 @@ Tools.filterUnPoint = function(obj){
  * 需要排序的数组
  * @param  {arr} arr 排序对象
  * @param  {string} key 排序字段的key。若无，则排序数组本身
- * @return {[type]}     [description]
+ * @return {Array}     返回排序后的数组
  */
 Tools.sortByPinYin = function(arr, key) {
     if (!!arr && arr.length) {
@@ -1885,6 +1885,8 @@ Tools.sortByPinYin = function(arr, key) {
             });
         }
     }
+
+    return arr;
 };
 
 //千分位
