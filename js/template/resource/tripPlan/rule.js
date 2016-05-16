@@ -138,6 +138,14 @@ define(function(require, exports) {
 								errMsg: '结束日期不能为空'
 							}
 						]
+					},{
+						$ele: $that.find('input[name="guideName"]'),
+						rules: [
+							{
+								type: 'null',
+								errMsg: '导游不能为空'
+							}
+						]
 					}
 				);
 		});  		
