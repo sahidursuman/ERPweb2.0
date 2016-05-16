@@ -6688,10 +6688,11 @@ define(function(require, exports){
 
 	                var $parent = $(this).closest('div'),
 	                    $tr = $(this).closest('tr'),
-	                    receiveStatus = $tr.find('select[name=receiveStatus]');
+	                    receiveStatus = $tr.find('select[name=receiveStatus]'),
+	                    chooseStatus = Count.isChooseGuide($obj,ui.item.id);
 
 	                if (!arrangeTime 
-	                	|| (!!arrangeTime.startTime && Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
+	                	|| (!!arrangeTime.startTime && !chooseStatus &&Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
 	                    $parent.find('input[name=guideArrangeId]').val(ui.item.id);
 	                    $parent.find('input[name=shopGuideArrangeId]').val(ui.item.id);
 	                    receiveStatus.val(1);
@@ -6709,7 +6710,10 @@ define(function(require, exports){
 	                    	} else {
 	                    		$target = $obj.closest('tr').find('[name="endTime"]');
 	                    	}
-	                    }
+	                    };
+	                    if(chooseStatus){
+	                    	msg = '您已经选择了该导游';
+	                    };
 	                    layer.tips(msg , $target, {
 	                        tips: [1, '#3595CC'],
 	                        time: 2500
@@ -6727,7 +6731,25 @@ define(function(require, exports){
 	        $obj.autocomplete('search', '');
 	    });
 	};
+	/**
+	 * 判断已选择导游
+	 * @param  {object} $obj 焦点元素
+	 * @param  {object} guideId 导游id
+	 * @return {object} true:已选择，false：未选择  
+	 */
+	Count.isChooseGuide = function($obj,guideId){
+		var $td = $obj.closest('td'),guideArrObj = $td.find('input[name=guideArrangeId]'),
+			choose = false;
 
+		for(var i = 0;i<guideArrObj.length;i++){
+			var $that = guideArrObj.eq(i);
+			if(!$obj.val() && !!$that.val() && guideId == $that.val()){
+				choose = true;
+				break;
+			}
+		}
+		return choose;
+	};
 	/**
 	 * 判断日期是否在安排时间内
 	 * @param  {string}  date     安排日期
