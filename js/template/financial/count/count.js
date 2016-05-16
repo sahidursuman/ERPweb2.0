@@ -6735,7 +6735,7 @@ define(function(require, exports){
 	 * 判断已选择导游
 	 * @param  {object} $obj 焦点元素
 	 * @param  {object} guideId 导游id
-	 * @return {object} true:还未选择，false：已选择  
+	 * @return {object} true:已选择，false：未选择  
 	 */
 	Count.isChooseGuide = function($obj,guideId){
 		var $td = $obj.closest('td'),guideArrObj = $td.find('input[name=guideArrangeId]'),
