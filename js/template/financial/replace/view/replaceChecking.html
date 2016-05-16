@@ -111,7 +111,7 @@
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.projectName}}</td>
-                <td class="T-ctrl-tip" title="{{rs.newDetail}}"><span>{{rs.newDetail}}</span></td>
+                <td class="T-ctrl-tip" title="{{#rs.newDetail}}"><span>{{#rs.newDetail}}</span></td>
                 <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
                 <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-xs-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>

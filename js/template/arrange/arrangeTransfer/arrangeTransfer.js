@@ -1057,7 +1057,7 @@ define(function(require, exports) {
 		.done(function(data) {
 			var touristGroupId = data.touristGroupId;
 		    //跳转游客小组新增页面
-			KingServices.updateTransfer(touristGroupId,id);
+			//KingServices.updateTransfer(touristGroupId,id);
 		})
 	};
 
