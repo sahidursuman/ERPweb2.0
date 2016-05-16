@@ -11,32 +11,35 @@
                 <th>代收类型</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="T-transfer-bus">
         {{each collectionList as item}}
-            <tr>
+            <tr data-entity-id="" >
                 <td>
+                <input type="hidden" name="id" value="{{item.id}}">
+                    <input type="hidden" name="touristGroupId" value="{{item.touristGroupId}}">
+                    <input type="hidden" name="collection" value="{{item.collection}}">
                     <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
                     <p><span><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></span></p>
-                    <p><span class="startTime">{{item.startTime}}</span>
+                    <p><span name="startTime">{{item.startTime}}</span>
                 </td>
                 <td>
-                    <p><span cals="tgMemberName">{{item.tgMemberName}}</span></p>
+                    <p><span name="tgMemberName">{{item.tgMemberName}}</span></p>
                 <p>
-                    <span class="adultCount">{{item.adultCount}}</span>大
-                    <span class="childCount">{{item.childCount}}</span>小
+                    <span name="adultCount">{{item.adultCount}}</span>大
+                    <span name="childCount">{{item.childCount}}</span>小
                 </p>
-                <p><span class="tgMemberMobileNumber ">{{item.tgMemberMobileNumber}}</span></p>
+                <p><span name="tgMemberMobileNumber ">{{item.tgMemberMobileNumber}}</span></p>
                 </td>
                 <td>{{item.partnerAgencyName}}</td>
                 <td>{{item.outOPUser}}</td>
-                <td><input type="text" name="collection " value="{{item.collection}}"></td>
+                <td><input type="text" name="collection" value="{{item.collection}}"></td>
                 <td>
                     <label class="pos-rel mar-r-10">
-                        <input type="radio" {{if item.collectionType == 0}} checked="checked" {{/if}} class="ace ridioCheck" name=""> <span class="lbl"></span> 
+                        <input type="radio" {{if item.collectionType == 0}} checked="checked"  value="0" {{/if}} name="collectionType" class="ace ridioCheck T-assign-check" class="T-assign-check"> <span class="lbl"></span> 
                         代收团款
                     </label>
                     <label class="pos-rel">
-                        <input type="radio" {{if item.collectionType == 1}} checked="checked" {{/if}} class="ace ridioCheck" name=""> <span class="lbl"></span> 代收增项
+                        <input type="radio" {{if item.collectionType == 1}} checked="checked" value="1" {{/if}} name="collectionType"  class="ace ridioCheck T-assign-check" class="T-assign-check"> <span class="lbl"></span> 代收增项
                     </label>
                 </td>
             </tr>
