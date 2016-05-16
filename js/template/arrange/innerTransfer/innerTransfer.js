@@ -414,7 +414,13 @@ define(function(require, exports) {
             Tools.inputCtrolFloat($childPrice);
             Tools.inputCtrolFloat($count);
 
-
+            $tab.find('[name="cashFlag"]').on('change', function(){
+                if($(this).is(':checked')){
+                    $tab.find('.T-cashFlag').removeClass("hidden")
+                }else{
+                    $tab.find('.T-cashFlag').addClass("hidden")
+                }
+            });
             //绑定分团转客信息
             $tab.find('.T-saveTransoutInfo').on('click', function(event) {
                 event.preventDefault();
@@ -587,7 +593,7 @@ define(function(require, exports) {
             showMessageDialog("计算应付值过大，请确认数据是否有误");
             return false;
         }
-        var cashFlag = getValParam("cashFlag");
+        var cashFlag = $tab.find('input[name="cashFlag"]').is(":checked");
         var innerTransferJson = {
             id: getValParam("id"), //	内转ID		
             innerTransferFeeSet: [], //内转的其他费用	array<object>	
@@ -598,6 +604,9 @@ define(function(require, exports) {
             transPayedMoney: getValParam("transPayedMoney"), //已付		填写
             transRemark: getValParam("transRemark"),
             isCurrent: getValParam("isCurrent")
+        }
+        if(cashFlag){
+            innerTransferJson.currentNeedPayMoney = getValParam("currentNeedPayMoney");
         }
 
         //获取新增费用项目

@@ -21,7 +21,6 @@
             <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="{{searchParam.groupName}}" />
             <label>类别 </label>
             <select name="type" class="mar-r-10">
-                <option {{if !searchParam.type}}selected{{/if}} value="">全部</option>
                 <option {{if searchParam.type == 'tourist'}}selected{{/if}} value="tourist">收客利润</option>
                 <option {{if searchParam.type == 'booking'}}selected{{/if}} value="booking">代订利润</option>
             </select>
@@ -54,11 +53,11 @@
                 <th>部门</th>
                 <th>团款收入</th>
                 <th>代订收入</th>
-                <th>中转成本</th>
-                <th>发团成本</th>
-                <th>外转成本</th>
-                <th>内转成本</th>
-                <th>代订成本</th>
+                <th>中转支出</th>
+                <th>发团支出</th>
+                <th>外转支出</th>
+                <th>内转支出</th>
+                <th>代订支出</th>
                 <th>收入小计</th>
                 <th>支出小计</th>
                 <th>毛利</th>

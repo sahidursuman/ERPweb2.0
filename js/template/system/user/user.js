@@ -186,9 +186,6 @@ define(function(require, exports) {
 			url: KingServices.build_url("user","openApp"),
 			type: 'POST',
 			data: {id: userId, type : type},
-		})
-		.done(function() {
-			var result = showDialog(data);
 		});
 	};
 	
