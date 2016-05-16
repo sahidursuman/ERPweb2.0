@@ -1004,8 +1004,8 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
-                        '<td><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
+                        '<td><input type="text" class="min-w-200 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
@@ -1253,7 +1253,7 @@ define(function(require, exports) {
                         if($tr.find('[name="subNeedPayMoney"]').val() === ""){
                             $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
                         }
-                        var str = moneyData.needPayAllMoney;
+                        var str = Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         if(moneyData.isTransfer === 1){
                             str = "他部　" + moneyData.dutyDepartmentName + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }else if(moneyData.isTransfer === 2){
@@ -1429,8 +1429,9 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require.requireContent;
+                        var str = baseInfo.hotelName || baseInfo.require;
                         str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                        console.log(Tools.thousandPoint(moneyData.needPayAllMoney, 2));
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
