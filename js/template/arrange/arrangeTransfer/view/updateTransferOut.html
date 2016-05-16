@@ -112,9 +112,9 @@
     <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
         <div class=" ui-sortable-handle">
             <h5 class="">
-						<span class="badge badge-primary">2</span>
-						<label class="middle title-size">线路产品信息</label>
-					</h5>
+				<span class="badge badge-primary">2</span>
+				<label class="middle title-size">线路产品信息</label>
+			</h5>
             <div class="widget-body clearfix">
                 <div class="widget-main">
                     <div class="form-group col-sm-12">
@@ -161,72 +161,37 @@
     </form>
     <!-- 收客信息start-->
     <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
-        <div class="form-group">
-            <div class="col-sm-12 widget-container-col" style="margin-top:-15px">
-                <div class=" ui-sortable-handle">
-                    <h5 class="">
-							<span class="badge badge-primary">4</span>
-							<label class="middle title-size">收客信息</label>
-					</h5>
-                    <div class="search-area col-sm-12">
-                        {{if isParent==1}}
-                        <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收</label>
-                        <div class="col-sm-1">
-                            <input name="needPayAllMoney" value="{{parentTouristGroup.subsectionNeedPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
-                        </div>
-                        <label class="col-sm-1 control-label no-padding-right">已收</label>
-                        <div class="col-sm-1">
-                            <input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
-                        </div>
-                        <label class="col-sm-1 control-label no-padding-right">计划现收</label>
-                        <div class="col-sm-1">
-                            {{if cashFlag==1}}
-                            <input name="currentNeedPayMoney" value="{{parentTouristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" /> {{else}}
-                            <input name="currentNeedPayMoney" value="0" readonly="readonly" type="text" class="col-xs-12 F-float F-money" /> {{/if}}
-                        </div>
-                        {{else}}
-                        <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收</label>
-                        <div class="col-sm-1">
-                            <input name="needPayAllMoney" value="{{touristGroupTransfer.touristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
-                        </div>
-                        <label class="col-sm-1 control-label no-padding-right">已收</label>
-                        <div class="col-sm-1">
-                            <input name="payedMoney" value="{{touristGroupTransfer.touristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
-                        </div>
-                        <label class="col-sm-1 control-label no-padding-right">计划现收</label>
-                        <div class="col-sm-1">
-                            {{if cashFlag==1}}
-                            <input name="currentNeedPayMoney" value="{{touristGroupTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" /> {{else}}
-                            <input name="currentNeedPayMoney" value="0" readonly="readonly" type="text" class="col-xs-12 F-float F-money" /> {{/if}}
-                        </div>
-                        {{/if}}
-                    </div>
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th class="th-border col-sm-3">费用项</th>
-                                <th class="th-border">数量</th>
-                                <th class="th-border">单价</th>
-                                <th class="th-border">金额</th>
-                                <th class="th-border">说明</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{each touristGroupTransfer.touristGroup.touristGroupFeeList as transferFeeList}}
-                            <tr>
-                                <td>
-                                    <input value="{{transferFeeList.name}}" readonly="readonly" type="text" name="type">
-                                </td>
-                                <td><span class="F-float F-count">{{transferFeeList.count}}</span></td>
-                                <td><span class="F-float F-money">{{transferFeeList.price}}</span></td>
-                                <td><span class="F-float F-money">{{transferFeeList.count*transferFeeList.price}}</span></td>
-                                <td>{{transferFeeList.remark}}</td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class=" ui-sortable-handle">
+           <h5 class="">
+                <span class="badge badge-primary">4</span>
+                <label class="middle title-size">收客信息</label>
+            </h5>
+
+            {{if isParent==1}}
+            <table class="whereQ whereTwo" style="width: 100%">
+                <tr>
+                    <td class="style-myself CheckPlan">本段团款：</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{parentTouristGroup.subsectionNeedPayAllMoney}}</span></td>
+                    <td class="style-myself CheckPlan">对方现收：</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px">
+                        {{if cashFlag==1}}
+                        <span class="F-float F-money">{{parentTouristGroup.currentNeedPayMoney}}</span> {{else}}0 {{/if}}
+                    </td>
+                </tr>
+            </table>
+            {{else}}
+            <table class="whereQ whereTwo" style="width: 100%">
+                <tr>
+                    <td class="style-myself CheckPlan">本段团款：</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
+                    <td class="style-myself CheckPlan">对方现收：</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px">
+                        {{if cashFlag==1}}
+                        <span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span> {{else}}0 {{/if}}
+                    </td>
+                </tr>
+            </table>
+            {{/if}}
         </div>
     </form>
     <!-- 收客信息end -->
