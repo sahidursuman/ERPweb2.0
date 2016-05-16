@@ -1,5 +1,6 @@
-<div class="row" style="margin: 0; padding: 10px 10px 0;">
-    <table class="table table-striped table-bordered table-hover">
+<div class="row T-transfer-bus-planCollectionLayer" style="margin: 0; padding: 10px 10px 0;">
+    <div >提示：代收团款计入客户账务，代收增项不计入客户账务。</div>
+    <table class="table table-striped table-bordered table-hover mar-t-10">
         <thead>
             <tr>
                 <th>收客信息</th>
@@ -11,19 +12,35 @@
             </tr>
         </thead>
         <tbody>
+        {{each collectionList as item}}
             <tr>
-                <td>1</td>
-                <td>熊祖瑶</td>
-                <td>15618746517</td>
-                <td>身份证</td>
-                <td>450100198809308778</td>
+                <td>
+                    <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
+                    <p><span><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></span></p>
+                    <p><span class="startTime">{{item.startTime}}</span>
+                </td>
+                <td>
+                    <p><span cals="tgMemberName">{{item.tgMemberName}}</span></p>
+                <p>
+                    <span class="adultCount">{{item.adultCount}}</span>大
+                    <span class="childCount">{{item.childCount}}</span>小
+                </p>
+                <p><span class="tgMemberMobileNumber ">{{item.tgMemberMobileNumber}}</span></p>
+                </td>
+                <td>{{item.partnerAgencyName}}</td>
+                <td>{{item.outOPUser}}</td>
+                <td><input type="text" name="collection " value="{{item.collection}}"></td>
                 <td>
                     <label class="pos-rel mar-r-10">
-                        <input type="radio" class="ace ridioCheck" name="form-field-radio"> <span class="lbl"></span> 代收团款</label>
+                        <input type="radio" {{if item.collectionType == 0}} checked="checked" {{/if}} class="ace ridioCheck" name=""> <span class="lbl"></span> 
+                        代收团款
+                    </label>
                     <label class="pos-rel">
-                        <input type="radio" class="ace ridioCheck" name="form-field-radio"> <span class="lbl"></span> 代收增项</label>
+                        <input type="radio" {{if item.collectionType == 1}} checked="checked" {{/if}} class="ace ridioCheck" name=""> <span class="lbl"></span> 代收增项
+                    </label>
                 </td>
             </tr>
+        {{/each}}
         </tbody>
     </table>
     <div class="col-xs-12 mar-t-20 mar-b-10 text-center">
