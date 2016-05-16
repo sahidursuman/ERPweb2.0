@@ -488,6 +488,9 @@ define(function(require, exports){
 	                    id: $id,
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
+	                // 按拼音排序
+					Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
+
 	                Count.reimbursementGuide = data.guideArranges;
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
@@ -915,6 +918,8 @@ define(function(require, exports){
                         tmp.isFinance = true;
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
+                    // 按拼音排序
+    				Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
                     Count.updateGuide = data.guideArranges;
                     tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
                     tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
@@ -1988,7 +1993,7 @@ define(function(require, exports){
 			'<input name = "currGuideMoney" class="w-70 F-float F-money" type = "text" />'+
 			'</div>';
 		var currRemarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name = "currGuideRemark" type = "text" />'+
+			'<input name = "currGuideRemark" class="w-100" type = "text" />'+
 			'</div>';
 
 		if($tr.hasClass('noSumRate')){
@@ -5236,43 +5241,47 @@ define(function(require, exports){
 		});
 	};
 	//获取搜索区域数据--导游
-	Count.getGuideData = function($obj){
-        	$obj.autocomplete({
-				minLength:0,
-				change:function(event,ui){
-					if(ui.item == null){
-						$(this).closest('div').find('input[name="guideId"]').val('');
-					}
-				},
-				select:function(event,ui){
-					$(this).blur();
-					$(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
-				}
-			}).off("click").on("click", function(){
-				var obj = this;
-				$.ajax({
-					url:KingServices.build_url("guide","findAll"),
-					type:'POST',
-					data:{
-						menuKey:"resource_guide"
-					},
-                    showLoading:false,
-                    success: function(data) {
-						var result = showDialog(data);
-						if(result){
-							var guideList = JSON.parse(data.guideList);
-							if(guideList != null && guideList.length > 0){
-								for(var i=0;i<guideList.length;i++){
-									guideList[i].value = guideList[i].realname;
-								}
-							}
-							$(obj).autocomplete('option','source', guideList);
-							$(obj).autocomplete('search', '');
-						}
-                    }
-                });
-			});
+	Count.getGuideData = function($obj) {
+	    $obj.autocomplete({
+	        minLength: 0,
+	        change: function(event, ui) {
+	            if (ui.item == null) {
+	                $(this).closest('div').find('input[name="guideId"]').val('');
+	            }
+	        },
+	        select: function(event, ui) {
+	            $(this).blur();
+	            $(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
+	        }
+	    }).off("click").on("click", function() {
+	        var obj = this;
+	        $.ajax({
+	            url: KingServices.build_url("guide", "findAll"),
+	            type: 'POST',
+	            data: {
+	                menuKey: "resource_guide"
+	            },
+	            showLoading: false,
+	            success: function(data) {
+	                var result = showDialog(data);
+	                if (result) {
+	                    var guideList = JSON.parse(data.guideList);
+	                    if (guideList != null && guideList.length > 0) {
+	                        // 按拼音排序
+	                        Tools.sortByPinYin(guideList, 'realname');
+
+	                        for (var i = 0; i < guideList.length; i++) {
+	                            guideList[i].value = guideList[i].realname;
+	                        }
+	                    }
+	                    $(obj).autocomplete('option', 'source', guideList);
+	                    $(obj).autocomplete('search', '');
+	                }
+	            }
+	        });
+	    });
 	};
+
 	//格式化日期控件
 	Count.formatDate = function($obj){
 		$obj.find('.datepicker').datepicker({
@@ -6582,8 +6591,9 @@ define(function(require, exports){
 			'<span style="color:#bbb;">查看</span>'+
 			'</div>';
 
-		var billRemarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name="billRemark"  class="w-80" type="text">'+
+		var billRemarkHtml = '';
+		'<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
+			'<input name="billRemark" type="text">'+
 			'</div>';
 		$thisTd.append(guideHtml);
 		$countTd.append(countHtml);
@@ -6688,10 +6698,11 @@ define(function(require, exports){
 
 	                var $parent = $(this).closest('div'),
 	                    $tr = $(this).closest('tr'),
-	                    receiveStatus = $tr.find('select[name=receiveStatus]');
+	                    receiveStatus = $tr.find('select[name=receiveStatus]'),
+	                    chooseStatus = Count.isChooseGuide($obj,ui.item.id);
 
 	                if (!arrangeTime 
-	                	|| (!!arrangeTime.startTime && Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
+	                	|| (!!arrangeTime.startTime && !chooseStatus &&Count.isInArrangeTime(arrangeTime, ui.item.taskJson))) {
 	                    $parent.find('input[name=guideArrangeId]').val(ui.item.id);
 	                    $parent.find('input[name=shopGuideArrangeId]').val(ui.item.id);
 	                    receiveStatus.val(1);
@@ -6709,7 +6720,10 @@ define(function(require, exports){
 	                    	} else {
 	                    		$target = $obj.closest('tr').find('[name="endTime"]');
 	                    	}
-	                    }
+	                    };
+	                    if(chooseStatus){
+	                    	msg = '您已经选择了该导游';
+	                    };
 	                    layer.tips(msg , $target, {
 	                        tips: [1, '#3595CC'],
 	                        time: 2500
@@ -6727,7 +6741,25 @@ define(function(require, exports){
 	        $obj.autocomplete('search', '');
 	    });
 	};
+	/**
+	 * 判断已选择导游
+	 * @param  {object} $obj 焦点元素
+	 * @param  {object} guideId 导游id
+	 * @return {object} true:已选择，false：未选择  
+	 */
+	Count.isChooseGuide = function($obj,guideId){
+		var $td = $obj.closest('td'),guideArrObj = $td.find('input[name=guideArrangeId]'),
+			choose = false;
 
+		for(var i = 0;i<guideArrObj.length;i++){
+			var $that = guideArrObj.eq(i);
+			if(!$obj.val() && !!$that.val() && guideId == $that.val()){
+				choose = true;
+				break;
+			}
+		}
+		return choose;
+	};
 	/**
 	 * 判断日期是否在安排时间内
 	 * @param  {string}  date     安排日期

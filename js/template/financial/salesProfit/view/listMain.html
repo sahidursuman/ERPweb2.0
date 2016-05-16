@@ -21,7 +21,6 @@
             <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="{{searchParam.groupName}}" />
             <label>类别 </label>
             <select name="type" class="mar-r-10">
-                <option {{if !searchParam.type}}selected{{/if}} value="">全部</option>
                 <option {{if searchParam.type == 'tourist'}}selected{{/if}} value="tourist">收客利润</option>
                 <option {{if searchParam.type == 'booking'}}selected{{/if}} value="booking">代订利润</option>
             </select>

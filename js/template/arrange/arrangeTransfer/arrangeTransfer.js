@@ -803,7 +803,7 @@ define(function(require, exports) {
 		transfer.getPartnerAgencyList=function(obj){
 			var $obj = $(obj);
 			$.ajax({
-				url: KingServices.build_url('partnerAgency', 'findPartnerAnencyList'),
+				url: KingServices.build_url('partnerAgency', 'findPartnerAgencyByOtherTravelAgency'),
                 success:function(data){
 					var result = showDialog(data);
 					if(result){
