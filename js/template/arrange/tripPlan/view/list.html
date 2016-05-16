@@ -52,7 +52,7 @@
                 <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
                <td style="vertical-align:middle">
                 {{if !!rs.tripPlanDetails && !!rs.tripPlanDetails[0]}}
-                {{rs.tripPlanDetails[0].partnerAgencyName}}
+                {{rs.tripPlanDetails[0].travelAgencyName}}
                 {{/if}}
                 </td>
                 <td>{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</td>

@@ -401,11 +401,13 @@ define(function(require, exports) {
                     var receiveTrip = data.receiveTrip;
                     for(var i=0; i<receiveTrip.length; i++){
                         if(receiveTrip[i].receiveBus){
+                            receiveTrip[i].receiveBusClearFlag = receiveTrip[i].receiveBus.clearFlag;
                             receiveTrip[i].busNeedPayAllMoney = receiveTrip[i].receiveBus.needPayAllMoney;
                             receiveTrip[i].receiveBusId = receiveTrip[i].receiveBus.id;
                             receiveTrip[i].receiveBus = JSON.stringify(receiveTrip[i].receiveBus || {});
                         }
                         if(receiveTrip[i].receiveHotel){
+                            receiveTrip[i].receiveHotelClearFlag = receiveTrip[i].receiveHotel.clearFlag;
                             receiveTrip[i].hotelNeedPayAllMoney = receiveTrip[i].receiveHotel.needPayAllMoney;
                             receiveTrip[i].receiveHotelId = receiveTrip[i].receiveHotel.id;
                             receiveTrip[i].receiveHotel.hotel = [];
@@ -424,6 +426,7 @@ define(function(require, exports) {
                             receiveTrip[i].receiveHotel = JSON.stringify(receiveTrip[i].receiveHotel || {});
                         }
                         if(receiveTrip[i].receiveOther){
+                            receiveTrip[i].receiveOtherClearFlag = receiveTrip[i].receiveOther.clearFlag;
                             receiveTrip[i].otherNeedPayAllMoney = receiveTrip[i].receiveOther.needPayAllMoney;
                             receiveTrip[i].receiveOtherId = receiveTrip[i].receiveOther.id;
                             receiveTrip[i].receiveOther = JSON.stringify(receiveTrip[i].receiveOther || {});
@@ -476,11 +479,13 @@ define(function(require, exports) {
                     var sendTrip = data.sendTrip;
                     for(var i=0; i<sendTrip.length; i++){
                         if(sendTrip[i].sendBus){
+                            sendTrip[i].sendBusClearFlag = sendTrip[i].sendBus.clearFlag;
                             sendTrip[i].busNeedPayAllMoney = sendTrip[i].sendBus.needPayAllMoney;
                             sendTrip[i].sendBusId = sendTrip[i].sendBus.id;
                             sendTrip[i].sendBus = JSON.stringify(sendTrip[i].sendBus || {});
                         }
                         if(sendTrip[i].sendHotel){
+                            sendTrip[i].sendHotelClearFlag = sendTrip[i].sendHotel.clearFlag;
                             sendTrip[i].hotelNeedPayAllMoney = sendTrip[i].sendHotel.needPayAllMoney;
                             sendTrip[i].sendHotelId = sendTrip[i].sendHotel.id;
                             sendTrip[i].sendHotel.hotel = [];
@@ -499,6 +504,7 @@ define(function(require, exports) {
                             sendTrip[i].sendHotel = JSON.stringify(sendTrip[i].sendHotel || {});
                         }
                         if(sendTrip[i].sendOther){
+                            sendTrip[i].sendOtherClearFlag = sendTrip[i].sendOther.clearFlag;
                             sendTrip[i].otherNeedPayAllMoney = sendTrip[i].sendOther.needPayAllMoney;
                             sendTrip[i].sendOtherId = sendTrip[i].sendOther.id;
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
@@ -670,6 +676,8 @@ define(function(require, exports) {
             }else if($that.hasClass('datepicker')){
                 var start = $tab.find('.T-team-info [name="startTime"]').val();
                 $(this).datepicker('setStartDate', start);
+            }else if($that.hasClass('T-add-client')){
+                KingServices.addPartnerAgency(function(formData){});
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
@@ -1004,8 +1012,8 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
-                        '<td><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
+                        '<td><input type="text" class="min-w-200 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
@@ -1253,7 +1261,7 @@ define(function(require, exports) {
                         if($tr.find('[name="subNeedPayMoney"]').val() === ""){
                             $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
                         }
-                        var str = moneyData.needPayAllMoney;
+                        var str = Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         if(moneyData.isTransfer === 1){
                             str = "他部　" + moneyData.dutyDepartmentName + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }else if(moneyData.isTransfer === 2){
@@ -1429,8 +1437,9 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require.requireContent;
+                        var str = baseInfo.hotelName || baseInfo.require;
                         str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                        console.log(Tools.thousandPoint(moneyData.needPayAllMoney, 2));
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
