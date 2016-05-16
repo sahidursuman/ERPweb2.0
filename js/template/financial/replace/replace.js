@@ -227,10 +227,9 @@ define(function(require, exports) {
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
 					for(var i=0; i<detailList.length; i++){
-						var formula = detailList[i].count + "×" + detailList[i].price;
-						data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + formula + "=" + (detailList[i].count * detailList[i].price) + '，';
+                        data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money + "<br>";
 					}
-					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+					//data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
 				if(Replace.checkTemp && Replace.checkTemp.length > 0){
                     data.bookinAccountList = FinancialService.getCheckTempData(data.bookinAccountList,Replace.checkTemp);
@@ -559,9 +558,9 @@ define(function(require, exports) {
 						var detailList = data.bookinAccountList[j].detailList;
 						data.bookinAccountList[j].newDetail = '';
 						for(var i=0; i<detailList.length; i++){
-							data.bookinAccountList[j].newDetail += detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' + detailList[i].level + '，' + detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price) + '，';
-						}
-						data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+                            data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money + "<br>";
+                        }
+						//data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 					}
 					var html;
 					data.bookinAccountList = FinancialService.getTempDate(data.bookinAccountList, Replace.payingJson);
@@ -760,16 +759,9 @@ define(function(require, exports) {
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
 					for(var i=0; i<detailList.length; i++){
-                        var gs = '';
-                        if (!!detailList[i].days) {
-                            gs = detailList[i].count + "×" + detailList[i].days + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price * detailList[i].days)
-                        }else{
-                            gs = detailList[i].count + "×" + detailList[i].price + "=" + (detailList[i].count * detailList[i].price)
-                        }
-						data.bookinAccountList[j].newDetail +=  detailList[i].name + '，' + detailList[i].type + '，' + detailList[i].shift + '，' +
-                                                                detailList[i].level + '，' + gs + '，';
+                        data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money + "<br>";
 					}
-					data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
+					//data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
 				if(Tools.addTab(blanceMenuKey, "代订收款", replaceClearing(data))){
 					Replace.$balanceTab = $('#tab-' + blanceMenuKey + '-content');

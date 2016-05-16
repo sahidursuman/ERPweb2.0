@@ -35,21 +35,14 @@
 						<input name="transNeedPayMoney" value="{{innerTransfer.transNeedPayMoney}}" maxlength="9" type="text" readonly="readonly" class="date-picker col-xs-12 F-float F-money" />
 					</div>
 
-					<label class="col-xs-1 control-label no-padding-right">计划现收：</label>
-					<div class="col-xs-1">
-					    {{if cashFlag==1}}
-							<input name="currentNeedPayMoney" value="{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}" readonly="readonly" maxlength="9" type="text" class=" col-xs-12 F-float F-money" />
-							{{else}}
-							<input name="currentNeedPayMoney" value="0" readonly="readonly" maxlength="9" type="text" class=" col-xs-12 F-float F-money" />
-					    {{/if}}
+                    <label class=" pull-left">
+						<input  type="checkbox" class="ace" {{if cashFlag==1}}checked="checked"{{/if}} name="cashFlag" />
+						<span class="lbl"> 对方现收</span>
+					</label>					
+					<div class="T-cashFlag mar-l-15 pull-left {{if cashFlag==0}}hidden{{/if}}">
+						<label class="control-label pad-l-5">对方现收金额：</label>
+						<input name="currentNeedPayMoney" value="{{if !!innerTransfer.touristGroup}}{{innerTransfer.touristGroup.currentNeedPayMoney}}{{/if}}" maxlength="9" type="text" class="F-float F-money" />
 					</div>
-
-                    <label>
-						<input  type="checkbox" class="ace" {{if cashFlag==1}}checked="checked"{{/if}} disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
-						<span class="lbl">
-						</span>
-					</label>
-					<label class="control-label no-padding-right">对方现收</label>
 
 					<div class="col-xs-1">
 						<input name="transPayedMoney" value="{{innerTransfer.transPayedMoney}}" readonly="readonly" maxlength="9" type="hidden" class="col-xs-12 F-float F-money" />
@@ -157,17 +150,6 @@
 						<div class="col-sm-2">
 							<input value="{{if innerTransfer.touristGroup.partnerAgency != null}}{{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
 						</div>
-
-						<label class="col-sm-1 control-label no-padding-right">获得方式:</label>
-						<div class="col-sm-2">
-							<select name="getType" class="col-sm-12" disabled="disabled">
-								<option{{if innerTransfer.touristGroup.getType==1 }} selected="selected" {{/if}} value="1">旅行社系统</option>
-								<option{{if innerTransfer.touristGroup.getType==2 }} selected="selected" {{/if}} value="2">传真</option>
-								<option{{if innerTransfer.touristGroup.getType==3 }} selected="selected" {{/if}} value="3">短信</option>
-								<option{{if innerTransfer.touristGroup.getType==4 }} selected="selected" {{/if}} value="4">电话</option>
-								<option{{if innerTransfer.touristGroup.getType==5 }} selected="selected" {{/if}} value="5">QQ</option>
-							</select>
-						</div>
 					</div>
 				</div>
 
@@ -195,29 +177,15 @@
 
 				 
 		    	<div class="search-area col-sm-12">
-				    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">应收：</label>
+				    <label class="col-sm-1 control-label no-padding-right" style="width:84px;">本段团款：</label>
 					<div class="col-sm-1">
 						<input name="needPayAllMoney" value="{{parentTouristGroup.needPayAllMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
 					</div>
-
-					<label class="col-sm-1 control-label no-padding-right">已收：</label>
-					<div class="col-sm-1">
-						<input name="payedMoney" value="{{parentTouristGroup.payedMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money"/>
-	  				</div>
-
-					<label class="col-sm-1 control-label no-padding-right">现收：</label>
-					<div class="col-sm-1">
-						{{if cashFlag==1}}
-							<input name="currentNeedPayMoney" value="{{innerTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
-							{{else}}
-							<input name="currentNeedPayMoney" value="0" readonly="readonly" type="text" class="col-xs-12 F-float F-money" />
-						{{/if}}
-	  				</div>
 	  			</div>
 
 				
 				
-				<div class="widget-body TransferTable">
+				<!-- <div class="widget-body TransferTable">
 					<div class="widget-main no-padding">
 						<table class="table table-striped table-bordered table-hover hotelRoomStandardList">
 							<thead>
@@ -234,7 +202,7 @@
 								<tr>
 									<td>  
 									  <input value="{{rs.name}}" readonly="readonly" type="text" name="type" class="col-sm-12">
-			                        </td>
+							                        </td>
 									<td><span class=" F-float F-count">{{rs.count}}</span></td>
 									<td><span class=" F-float F-money">{{rs.price}}</span></td>
 									<td><span class=" F-float F-money">{{rs.count*rs.price}}</span></td>
@@ -242,11 +210,11 @@
 								
 								</tr>
 								{{/each}}
-
+				
 							</tbody>
 						</table>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
