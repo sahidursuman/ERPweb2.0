@@ -63,9 +63,10 @@
                 <a class="cursor T-view T-action">
                     <label class="padding-right20">|</label>查看
                 </a>
-                <a class="cursor T-action T-hotel-cancel">
-                    <label class="padding-right20">|</label>取消
-                </a>
+                 {{ if hotel.isConfirmAccount == 1 }}
+                    <a class="cursor" style="color:#bbb;" data-catename="hotel" title="取消"><label class="padding-right20">|</label>取消</a> {{else}}
+                    <a class="cursor T-action T-hotel-cancel" data-catename="hotel" title="取消"><label class="padding-right20">|</label>取消</a>
+                {{/if}}
             </td>
             {{/if}}
         </tr>
