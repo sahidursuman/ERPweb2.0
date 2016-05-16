@@ -676,6 +676,8 @@ define(function(require, exports) {
             }else if($that.hasClass('datepicker')){
                 var start = $tab.find('.T-team-info [name="startTime"]').val();
                 $(this).datepicker('setStartDate', start);
+            }else if($that.hasClass('T-add-client')){
+                KingServices.addPartnerAgency(function(formData){});
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
