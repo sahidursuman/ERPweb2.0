@@ -1993,7 +1993,7 @@ define(function(require, exports){
 			'<input name = "currGuideMoney" class="w-70 F-float F-money" type = "text" />'+
 			'</div>';
 		var currRemarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name = "currGuideRemark" type = "text" />'+
+			'<input name = "currGuideRemark" class="w-100" type = "text" />'+
 			'</div>';
 
 		if($tr.hasClass('noSumRate')){
@@ -6591,8 +6591,9 @@ define(function(require, exports){
 			'<span style="color:#bbb;">查看</span>'+
 			'</div>';
 
-		var billRemarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name="billRemark"  class="w-80" type="text">'+
+		var billRemarkHtml = '';
+		'<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
+			'<input name="billRemark" type="text">'+
 			'</div>';
 		$thisTd.append(guideHtml);
 		$countTd.append(countHtml);

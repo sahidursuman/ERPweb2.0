@@ -226,7 +226,8 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this), 
                 $tr = $that.closest('tr'),
-                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                sumCostMoney = ($tr.find('[name="days"]').val() || 0) *
+                                ($tr.find('[name="costPrice"]').val() || 0) * 
                                 ($tr.find('[name="roomCount"]').val() || 0) - 
                                 ($tr.find('[name="reduceMoney"]').val() || 0);
             $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
@@ -244,6 +245,16 @@ define(function(require, exports) {
                 });
             }
         });
+        $tab.find('.T-hotelList').on("changeDate", '.datepicker', function(){
+            var $that = $(this),
+                $tr = $that.closest('tr'),
+                $days = $tr.find('[name="days"]'),
+                enterTime = $tr.find('[name="enterTime"]').val(),
+                leaveTime = $tr.find('[name="leaveTime"]').val();
+
+            $days.val(Tools.getDateDiff(enterTime, leaveTime));
+        });
+
         $tab.find('.T-hotel-add').on('click', function(){
             addHotel();
         });
@@ -267,6 +278,7 @@ define(function(require, exports) {
                         '    </select></td>'+
                         '<td><div class="col-sm-12"><input name="hotelName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-hotelName" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="hotelRoomType" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><input name="days" type="text" class="col-sm-12 T-action-blur" readonly /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
                         '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
@@ -482,6 +494,7 @@ define(function(require, exports) {
                     hotelLevel : $that.find('[name="hotelLevel"]').val(),
                     hotelId : $that.find('[name="hotelName"]').data('id'),
                     hotelRoomId : $that.find('[name="hotelRoomType"]').data('id'),
+                    days : $that.find('[name="days"]').val(),
                     costPrice : $that.find('[name="costPrice"]').val(),
                     roomCount : $that.find('[name="roomCount"]').val(),
                     reduceMoney : $that.find('[name="reduceMoney"]').val(),
