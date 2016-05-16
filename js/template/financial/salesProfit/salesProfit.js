@@ -22,6 +22,7 @@ define(function(require, exports) {
     salesProfit._getListMain=function(page){
         var args= FinancialService.getInitDate() || {};
         args.pageNo=page;
+        args.type='tourist';
         if (!!salesProfit.$tab) { //封装查询参数
             args = {
                 pageNo: (page || 0),
