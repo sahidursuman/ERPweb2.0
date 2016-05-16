@@ -89,21 +89,21 @@
 	                    <td><input type="text" class="col-xs-12" name="arriveShift" value="{{rs.arriveShift}}"></td>
 	                    <td>
 	                    	<input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.receiveBus}}" data-id="{{rs.receiveBusId}}" placeholder="点击填写车">
-	                    	<a class="cursor {{if rs.receiveBus && rs.receiveBus.clearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinBus">清空</a>
+	                    	<a class="cursor {{if rs.receiveBusClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinBus" {{if rs.receiveBusClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td>
 	                    	<input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.receiveHotel}}" data-id="{{rs.receiveHotelId}}" placeholder="点击填写房">
-	                    	<a class="cursor {{if rs.receiveHotel && rs.receiveHotel.clearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinHotel">清空</a>
+	                    	<a class="cursor {{if rs.receiveHotelClearFlag}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinHotel" {{if rs.receiveHotelClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td>
 	                    	<input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.receiveOther}}" data-id="{{rs.receiveOtherId}}" placeholder="点击填写它">
-	                    	<a class="cursor {{if rs.receiveOther && rs.receiveOther.clearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinOther">清空</a>
+	                    	<a class="cursor {{if rs.receiveOtherClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinOther" {{if rs.receiveOtherClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
 	                    <td><a class="cursor 
-	                    {{if (rs.receiveBus && rs.receiveBus.clearFlag == 1) ||
-	                    	(rs.receiveHotel && rs.receiveHotel.clearFlag == 1) ||
-	                    	(rs.receiveOther && rs.receiveOther.clearFlag == 1)
+	                    {{if (rs.receiveBusClearFlag == 1) ||
+	                    	(rs.receiveHotelClearFlag == 1) ||
+	                    	(rs.receiveOtherClearFlag == 1)
 	                    }}hct-color-BBB
 	                    {{else}}T-action T-delete{{/if}}">删除</a></td>
                     </tr>
@@ -188,21 +188,21 @@
 	                    <td><input type="text" class="col-xs-12" name="leaveShift" value="{{rs.leaveShift}}"></td>
 	                    <td>
 	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.sendBus}}" data-id="{{rs.sendBusId}}" placeholder="点击填写车">
-	                    	<a class="cursor {{if rs.sendBus && rs.sendBus.clearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendBus">清空</a>
+	                    	<a class="cursor {{if rs.sendBusClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendBus" {{if rs.sendBusClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td>
 	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-hotel" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.sendHotel}}" data-id="{{rs.sendHotelId}}" placeholder="点击填写房">
-	                    	<a class="cursor {{if rs.sendHotel && rs.sendHotel.clearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendHotel">清空</a>
+	                    	<a class="cursor {{if rs.sendHotelClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendHotel" {{if rs.sendHotelClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td>
 	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-other" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.sendOther}}" data-id="{{rs.sendOtherId}}" placeholder="点击填写它">
-	                    	<a class="cursor {{if rs.sendOther && rs.sendOther.clearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendOther">清空</a>
+	                    	<a class="cursor {{if rs.sendOtherClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendOther" {{if rs.sendOtherClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
 	                    <td><a class="cursor 
-	                    {{if (rs.sendBus && rs.sendBus.clearFlag == 1) ||
-	                    	(rs.sendHotel && rs.sendHotel.clearFlag == 1) ||
-	                    	(rs.sendOther && rs.sendOther.clearFlag == 1)
+	                    {{if (rs.sendBusClearFlag == 1) ||
+	                    	(rs.sendHotelClearFlag == 1) ||
+	                    	(rs.sendOtherClearFlag == 1)
 	                    }}hct-color-BBB
 	                    {{else}}T-action T-delete{{/if}}">删除</a></td>
                     </tr>

@@ -401,11 +401,13 @@ define(function(require, exports) {
                     var receiveTrip = data.receiveTrip;
                     for(var i=0; i<receiveTrip.length; i++){
                         if(receiveTrip[i].receiveBus){
+                            receiveTrip[i].receiveBusClearFlag = receiveTrip[i].receiveBus.clearFlag;
                             receiveTrip[i].busNeedPayAllMoney = receiveTrip[i].receiveBus.needPayAllMoney;
                             receiveTrip[i].receiveBusId = receiveTrip[i].receiveBus.id;
                             receiveTrip[i].receiveBus = JSON.stringify(receiveTrip[i].receiveBus || {});
                         }
                         if(receiveTrip[i].receiveHotel){
+                            receiveTrip[i].receiveHotelClearFlag = receiveTrip[i].receiveHotel.clearFlag;
                             receiveTrip[i].hotelNeedPayAllMoney = receiveTrip[i].receiveHotel.needPayAllMoney;
                             receiveTrip[i].receiveHotelId = receiveTrip[i].receiveHotel.id;
                             receiveTrip[i].receiveHotel.hotel = [];
@@ -424,6 +426,7 @@ define(function(require, exports) {
                             receiveTrip[i].receiveHotel = JSON.stringify(receiveTrip[i].receiveHotel || {});
                         }
                         if(receiveTrip[i].receiveOther){
+                            receiveTrip[i].receiveOtherClearFlag = receiveTrip[i].receiveOther.clearFlag;
                             receiveTrip[i].otherNeedPayAllMoney = receiveTrip[i].receiveOther.needPayAllMoney;
                             receiveTrip[i].receiveOtherId = receiveTrip[i].receiveOther.id;
                             receiveTrip[i].receiveOther = JSON.stringify(receiveTrip[i].receiveOther || {});
@@ -476,11 +479,13 @@ define(function(require, exports) {
                     var sendTrip = data.sendTrip;
                     for(var i=0; i<sendTrip.length; i++){
                         if(sendTrip[i].sendBus){
+                            sendTrip[i].sendBusClearFlag = sendTrip[i].sendBus.clearFlag;
                             sendTrip[i].busNeedPayAllMoney = sendTrip[i].sendBus.needPayAllMoney;
                             sendTrip[i].sendBusId = sendTrip[i].sendBus.id;
                             sendTrip[i].sendBus = JSON.stringify(sendTrip[i].sendBus || {});
                         }
                         if(sendTrip[i].sendHotel){
+                            sendTrip[i].sendHotelClearFlag = sendTrip[i].sendHotel.clearFlag;
                             sendTrip[i].hotelNeedPayAllMoney = sendTrip[i].sendHotel.needPayAllMoney;
                             sendTrip[i].sendHotelId = sendTrip[i].sendHotel.id;
                             sendTrip[i].sendHotel.hotel = [];
@@ -499,6 +504,7 @@ define(function(require, exports) {
                             sendTrip[i].sendHotel = JSON.stringify(sendTrip[i].sendHotel || {});
                         }
                         if(sendTrip[i].sendOther){
+                            sendTrip[i].sendOtherClearFlag = sendTrip[i].sendOther.clearFlag;
                             sendTrip[i].otherNeedPayAllMoney = sendTrip[i].sendOther.needPayAllMoney;
                             sendTrip[i].sendOtherId = sendTrip[i].sendOther.id;
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
