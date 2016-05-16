@@ -12,7 +12,7 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody class="T-busArrange">
+        <tbody class="T-arrange">
             {{each outRemarkList as Busplan}}
             <tr class="T-task-list">
                 <td class="h-touristGroupInfo">
@@ -143,7 +143,7 @@
                 <td>
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" {{ if outBus.isConfirmAccount==1 }}disabled="disabled" {{else}} type="text" {{/if}} value="{{outBus.prePayMoney}}" />
                 </td>
-                <td><input type="text" name="collection" class="T-collection" readonly value="{{outBus.collection}}"></td>
+                <td><input type="text" name="collection" class="T-collection" data-type = "bus" readonly value="{{outBus.collection}}"></td>
                 <td>
                     <input class="col-sm-12" name="remark" {{ if outBus.isConfirmAccount==1 }}disabled="disabled" {{else}} type="text" {{/if}} value="{{outBus.remark}}" maxlength="1000" />
                 </td>

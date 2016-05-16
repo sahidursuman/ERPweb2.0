@@ -544,7 +544,8 @@ define(function(require, exports) {
             });
             //计划代收
             $busplanId.find('.T-collection').on('click', function() {
-                Transfer.planCollection($busplanId, $(this));
+                var $that=$(this);
+                Transfer.planCollection($busplanId, $that);
             });
 
             //添加中转数据
@@ -798,8 +799,8 @@ define(function(require, exports) {
             }
         })
         outRemarkList = JSON.stringify(outRemarkList);
-        outBusList.push(Transfer.collectionList);
         outBusList = JSON.stringify(outBusList);
+
         $.ajax({
             url: KingServices.build_url(service_name, "saveOutBusUnifyArrange"),
             type: "POST",
@@ -811,6 +812,7 @@ define(function(require, exports) {
                 shuttleType: shuttleType,
                 deleteOutRemarkList: JSON.stringify(Transfer.delBusTransferId),
                 deleteOutBusIds: Transfer.deleteOutBusIds.join(','),
+
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1276,6 +1278,11 @@ define(function(require, exports) {
             //删除房
             $hotelplanId.find('.T-arrange-delete').on('click', function() {
                 Transfer.deleteHotelArrange($(this));
+            });
+            //计划代收
+            $hotelplanId.find('.T-collection').on('click', function() {
+                 var $that=$(this);
+                Transfer.planCollection($hotelplanId, $that);
             });
             // 新增游客
             $hotelplanId.find('.T-add-HotelTransfersId').on('click', function() {
@@ -2043,10 +2050,11 @@ define(function(require, exports) {
      */
     Transfer.planCollection = function($tab, $that) {
             var idList = [], //中转列表 Id
-                outRemarkId = $tab.find('.T-busArrange').find('input[name=outRemarkId]'),
+                outRemarkId = $tab.find('.T-arrange').find('input[name=outRemarkId]'),
                 $tr = $that.closest('tr'),
                 arrangeId = $tr.attr('data-entity-id'),
-                subject = 0;
+                subject = $that.attr("data-type")=="bus" ? 0 : 1;
+               
             outRemarkId.each(function() {
                 if ($(this).val().trim()) {
                     idList.push($(this).val());
@@ -2085,9 +2093,19 @@ define(function(require, exports) {
                                     }
                                     layer.close(viewAccountsLayer);
                                     $that.val(count);
+
+                                    $LayerId.find('tr').each(function(index) {
+                                        var $that = $(this);
+                                        var planCollection = {
+                                            id : $that.attr("id"),
+                                            touristGroupId : $that.attr("touristGroupId"),
+                                            collection : $that.find("[name=collection]").val(),
+                                            collectionType : $that.find('[name=collectionType]').is('checked') ? 0 : 1
+                                        };
+                                        $tr.find('[name=collection]').data('json',planCollection);
+                                    });
+                                   
                                 })
-                                Transfer.collectionList = Tools.getTableVal($('#T-transfer-bus')),
-                                Transfer.collectionList = JSON.stringify(Transfer.collectionList);
                             }
                         });
 
