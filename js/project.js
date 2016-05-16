@@ -1367,11 +1367,9 @@ Tools.getTableVal = function($tbody, idName) {
 		idName = idName || 'id';
 
 		$tbody.children('tr').each(function() {
-			var $tr = $(this), val = {id: $tr.data(idName)};
-
+			var $tr = $(this), val = {id: $tr.data(idName),collectionList:[]};
 			$tr.find('input,select').each(function() {
 				var $that = $(this);
-
 				name = $that.prop('name');
 				if (!!name) {
 					if ($that.is('[type=checkbox],[type=radio]')) {
@@ -1379,13 +1377,11 @@ Tools.getTableVal = function($tbody, idName) {
 					} else {
 						value = $that.val();
 					}
-
 					val[name] = value;
 				}
-
-
+				
 			});
-
+			val.collectionList.push($tr.find('[name=collection]').data('json'));
 			res.push(val);
 		});
 	}
@@ -1867,29 +1863,6 @@ Tools.filterUnPoint = function(obj){
 	return $obj;
 };
 
-/**
- * 需要排序的数组
- * @param  {arr} arr 排序对象
- * @param  {string} key 排序字段的key。若无，则排序数组本身
- * @return {Array}     返回排序后的数组
- */
-Tools.sortByPinYin = function(arr, key) {
-    if (!!arr && arr.length) {
-        if (!!key) {
-            arr.sort(function(a, b) {
-                return a[key].localeCompare(b[key]);
-            });
-        } else {
-            arr.sort(function(a, b) {
-                return a.localeCompare(b);
-            });
-        }
-    }
-
-    return arr;
-};
-
-//千分位
 $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
 	$(this).data('old-value-format-float.api', this.value);
 })

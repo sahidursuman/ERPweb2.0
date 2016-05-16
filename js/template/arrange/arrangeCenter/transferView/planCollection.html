@@ -13,11 +13,8 @@
         </thead>
         <tbody id="T-transfer-bus">
         {{each collectionList as item}}
-            <tr data-entity-id="" >
+            <tr  id="{{item.id}}" touristGroupId="{{item.touristGroupId}}" >
                 <td>
-                <input type="hidden" name="id" value="{{item.id}}">
-                    <input type="hidden" name="touristGroupId" value="{{item.touristGroupId}}">
-                    <input type="hidden" name="collection" value="{{item.collection}}">
                     <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
                     <p><span><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></span></p>
                     <p><span name="startTime">{{item.startTime}}</span>
