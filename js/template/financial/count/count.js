@@ -488,6 +488,9 @@ define(function(require, exports){
 	                    id: $id,
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
+	                // 按拼音排序
+					Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
+
 	                Count.reimbursementGuide = data.guideArranges;
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
 	                tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
@@ -915,6 +918,8 @@ define(function(require, exports){
                         tmp.isFinance = true;
                     };
                     tmp.remarkArrangeList = Count.handleRemark(tmp.remarkArrangeList);
+                    // 按拼音排序
+    				Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
                     Count.updateGuide = data.guideArranges;
                     tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
                     tmp.selfpayArrange.listMap = Count.formatSelfRate(tmp.selfpayArrange.listMap);
@@ -5236,43 +5241,47 @@ define(function(require, exports){
 		});
 	};
 	//获取搜索区域数据--导游
-	Count.getGuideData = function($obj){
-        	$obj.autocomplete({
-				minLength:0,
-				change:function(event,ui){
-					if(ui.item == null){
-						$(this).closest('div').find('input[name="guideId"]').val('');
-					}
-				},
-				select:function(event,ui){
-					$(this).blur();
-					$(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
-				}
-			}).off("click").on("click", function(){
-				var obj = this;
-				$.ajax({
-					url:KingServices.build_url("guide","findAll"),
-					type:'POST',
-					data:{
-						menuKey:"resource_guide"
-					},
-                    showLoading:false,
-                    success: function(data) {
-						var result = showDialog(data);
-						if(result){
-							var guideList = JSON.parse(data.guideList);
-							if(guideList != null && guideList.length > 0){
-								for(var i=0;i<guideList.length;i++){
-									guideList[i].value = guideList[i].realname;
-								}
-							}
-							$(obj).autocomplete('option','source', guideList);
-							$(obj).autocomplete('search', '');
-						}
-                    }
-                });
-			});
+	Count.getGuideData = function($obj) {
+	    $obj.autocomplete({
+	        minLength: 0,
+	        change: function(event, ui) {
+	            if (ui.item == null) {
+	                $(this).closest('div').find('input[name="guideId"]').val('');
+	            }
+	        },
+	        select: function(event, ui) {
+	            $(this).blur();
+	            $(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
+	        }
+	    }).off("click").on("click", function() {
+	        var obj = this;
+	        $.ajax({
+	            url: KingServices.build_url("guide", "findAll"),
+	            type: 'POST',
+	            data: {
+	                menuKey: "resource_guide"
+	            },
+	            showLoading: false,
+	            success: function(data) {
+	                var result = showDialog(data);
+	                if (result) {
+	                    var guideList = JSON.parse(data.guideList);
+	                    if (guideList != null && guideList.length > 0) {
+	                        // 按拼音排序
+	                        Tools.sortByPinYin(guideList, 'realname');
+
+	                        for (var i = 0; i < guideList.length; i++) {
+	                            guideList[i].value = guideList[i].realname;
+	                        }
+	                    }
+	                    $(obj).autocomplete('option', 'source', guideList);
+	                    $(obj).autocomplete('search', '');
+	                }
+	            }
+	        });
+	    });
 	};
+
 	//格式化日期控件
 	Count.formatDate = function($obj){
 		$obj.find('.datepicker').datepicker({
