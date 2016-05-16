@@ -73,6 +73,7 @@
                 <th class="th-border">优惠</th>
                 <th class="th-border">应付款</th>
                 <th class="th-border">预付款</th>
+                <th class="th-border">计划代收</th>
                 <th class="th-border">备注</th>
                 <th class="th-border">对账状态</th>
                 <th class="th-border" style="width: 50px">操作</th>
@@ -142,6 +143,7 @@
                 <td>
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" {{ if outBus.isConfirmAccount==1 }}disabled="disabled" {{else}} type="text" {{/if}} value="{{outBus.prePayMoney}}" />
                 </td>
+                <td><input type="text" name="collection" class="T-collection" readonly value="{{outBus.collection}}"></td>
                 <td>
                     <input class="col-sm-12" name="remark" {{ if outBus.isConfirmAccount==1 }}disabled="disabled" {{else}} type="text" {{/if}} value="{{outBus.remark}}" maxlength="1000" />
                 </td>
