@@ -879,15 +879,20 @@ define(function(require, exports) {
         return this;
         function deleteList($tr, id) {
             if(!!id){
-                var delJson = $tr.closest('tbody').data('del-json');
-                if(typeof delJson !== "object"){
-                    delJson = JSON.parse(delJson || "[]");
-                };
-                delJson.push({
-                    id : id
+                if($tr.closest('tbody').hasClass('T-part-group-list')){
+                    id = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
+                }
+                validateDelete(id, function(data){
+                    var delJson = $tr.closest('tbody').data('del-json');
+                    if(typeof delJson !== "object"){
+                        delJson = JSON.parse(delJson || "[]");
+                    };
+                    delJson.push({
+                        id : id
+                    });
+                    $tr.closest('tbody').data('del-json', delJson);
+                    $tr.remove();
                 });
-                $tr.closest('tbody').data('del-json', delJson);
-                $tr.remove();
             }else{
                 $tr.remove();
             }
@@ -928,6 +933,18 @@ define(function(require, exports) {
             }else{
                 showMessageDialog("数据已经清空！");
             }
+        }
+        function validateDelete(id, fn){
+            $.ajax({
+                url : KingServices.build_url('customerOrder', 'validateDelete'),
+                data : {id :  id}
+            }).done(function(data){
+                if(showDialog(data)){
+                    if($.type(fn) === "function"){
+                        fn(data);
+                    }
+                }
+            });
         }
     };
 
@@ -1316,18 +1333,19 @@ define(function(require, exports) {
                             str = "外转　" + moneyData.transferPartnerAgency + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }
                         $that.val(str).data('json', JSON.stringify(moneyData)).trigger('blur');
+                        layer.close(index);
+                        F.subtotal($that.closest('tr'), 1);
                     }else{
                         if(parseFloat(moneyData.needPayAllMoney) < 
                             parseFloat(moneyData.preIncomeMoney) + 
                             parseFloat(moneyData.currentNeedPayMoney)){
-                            showMessageDialog('预收款+计划现收不能大于应收！');
-                            return false;
+                            showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
+                                layer.close(index);
+                                $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                            });
+                        }else{
+                            $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                         }
-                        $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
-                    }
-                    layer.close(index);
-                    if(!!type){
-                        F.subtotal($that.closest('tr'), 1);
                     }
                 });
 		    }

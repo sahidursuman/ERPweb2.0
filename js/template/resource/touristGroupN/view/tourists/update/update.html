@@ -37,12 +37,12 @@
 						</td>
 						<td>
 							<div class="hct-input-group col-xs-12">
-								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}" data-id="{{baseInfo.lineProductId}}">
-								<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>
+								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}" data-id="{{baseInfo.lineProductId}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}>
+								{{if baseInfo.disableFlag== 1}}<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>{{/if}}
 							</div>
 						</td>
-						<td><input type="text" class="col-xs-12 datepicker" name="startTime" value="{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}"></td>
-						<td><input type="text" class="col-xs-12 datepicker T-action" name="endTime" value="{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}"></td>
+						<td><input type="text" class="col-xs-12 datepicker" name="startTime" value="{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 datepicker T-action" name="endTime" value="{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
 						<td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float" readonly name="needPayAllMoney" value="{{baseInfo.needPayAllMoney}}" data-json="{{baseInfo.touristGroupFee}}" placeholder="点击填写应收团款"></td>
 						<td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" value="{{baseInfo.name}}" data-json="{{baseInfo.touristGroupMemberInfo}}" placeholder="点击填写客人信息"></td>
 						<td><input type="text" class="col-xs-12" name="mobileNumber" readonly value="{{baseInfo.mobileNumber}}"></td>
