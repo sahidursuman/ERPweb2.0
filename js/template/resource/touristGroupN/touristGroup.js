@@ -1333,18 +1333,19 @@ define(function(require, exports) {
                             str = "外转　" + moneyData.transferPartnerAgency + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }
                         $that.val(str).data('json', JSON.stringify(moneyData)).trigger('blur');
+                        layer.close(index);
+                        F.subtotal($that.closest('tr'), 1);
                     }else{
                         if(parseFloat(moneyData.needPayAllMoney) < 
                             parseFloat(moneyData.preIncomeMoney) + 
                             parseFloat(moneyData.currentNeedPayMoney)){
-                            showMessageDialog('预收款+计划现收不能大于应收！');
-                            return false;
+                            showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
+                                layer.close(index);
+                                $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                            });
+                        }else{
+                            $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                         }
-                        $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
-                    }
-                    layer.close(index);
-                    if(!!type){
-                        F.subtotal($that.closest('tr'), 1);
                     }
                 });
 		    }
