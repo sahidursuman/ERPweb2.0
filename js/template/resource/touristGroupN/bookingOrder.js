@@ -361,6 +361,7 @@ define(function(require, exports, module) {
             },
             success:function(data){
                 if(showDialog(data)){
+                    data.imgUrl = imgUrl;
                     html = T.viewSettlementTemplate(data);
                     var viewSettlementLayer = layer.open({
                         type: 1,
