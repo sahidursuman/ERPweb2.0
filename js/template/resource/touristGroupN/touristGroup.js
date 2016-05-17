@@ -451,6 +451,7 @@ define(function(require, exports) {
                             joinTrip[i].hotelInfoId = joinTrip[i].hotelInfo.id;
                             joinTrip[i].hotelOutRemarkId = joinTrip[i].hotelInfo.outRemarkId;
                             joinTrip[i].hotelInfo.hotel = [];
+                            joinTrip[i].hotelInfoClearFlag = joinTrip[i].hotelInfo.clearFlag;
                             var hotelIds = joinTrip[i].hotelInfo.hotelIds,
                                 hotelNames = joinTrip[i].hotelInfo.hotelName;
                             if(!!hotelIds){
@@ -464,9 +465,9 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
                             str = str && str +" ";
-                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
+                            str = str && str.length > 6 ? str.substr(0, 6)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -594,7 +595,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
                             str = str && str +" ";
                             str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
@@ -1012,8 +1013,8 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
-                        '<td><input type="text" class="min-w-200 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
+                        '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
@@ -1438,8 +1439,8 @@ define(function(require, exports) {
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
                         var str = baseInfo.hotelName || baseInfo.require;
-                        str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
-                        console.log(Tools.thousandPoint(moneyData.needPayAllMoney, 2));
+                        str = str.length > 6 ? str.substr(0, 6)  + "..." : str;
+
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
