@@ -1845,7 +1845,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number discount F-float F-count" name="reduceMoney"  maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney"  maxlength="9" type="text" value="" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" type="text" value="" /></td>' +
-            '<td><input type="text"></td>' +
+            '<td><input class="col-sm-12 T-collection F-float F-money" type="text" data-type="bus" name="collection" readonly></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
             '<td>--</td>' +
             '<td><a class="cursor T-arrange-delete" data-catename="bus" title="删除">删除</a></td>' +
@@ -1858,6 +1858,10 @@ define(function(require, exports) {
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
             Transfer.deleteBusArrange($(this));
+        });
+        $obj.find('.T-collection').on('click', function() {
+            var $that=$(this);
+            Transfer.planCollection($obj, $that);
         });
         //校验
         rule.transferBusUpdate(validate);
@@ -1883,6 +1887,7 @@ define(function(require, exports) {
             '<td><input class="col-sm-12 T-number discount F-float F-money" name="reduceMoney"  maxlength="9" value="" type="text" /></td>' +
             '<td><input class="col-sm-12 needPay F-float F-money" readonly="readonly" name="needPayMoney" value="" type="text" /></td>' +
             '<td><input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" value="" type="text" maxlength="9" /></td>' +
+            '<td><input class="col-sm-12 T-collection F-float F-money" type="text" name="collection" readonly ></td>' +
             '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000" /></td>' +
             '<td>--</td>' +
             '<td><a class="cursor T-arrange-delete" data-catename="hotel" title="删除">删除</a></td>' +
@@ -1895,6 +1900,10 @@ define(function(require, exports) {
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
             Transfer.deleteHotelArrange($(this));
+        });
+        $obj.find('.T-collection').on('click', function() {
+            var $that=$(this);
+            Transfer.planCollection($obj, $that);
         });
         //校验
         rule.transferHotelUpdate(validate);
