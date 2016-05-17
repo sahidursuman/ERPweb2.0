@@ -2495,11 +2495,6 @@ define(function(require, exports) {
             }
             var status = $that.find('.T-status').data('status');
             status = status == undefined ? 1 : status;
-            /*if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
-                joinTripData.innerTransferInfo = JSON.parse($innerTurn.data('json'));
-            }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json')) && status == "1"){
-                joinTripData.outTransferInfo = JSON.parse($outerTurn.data('json'));
-            }*/
 
             if(!!$that.data('id')){
                 joinTripData.id = $that.data('id');
@@ -2512,11 +2507,6 @@ define(function(require, exports) {
         if(typeof data.joinTripDel === "object" && !!data.joinTripDel){
             data.joinTripDel = JSON.stringify(data.joinTripDel);
         }
-        /*if(data.joinTrip.length === 0){
-            var tripMsg = data.baseInfo.customerType === 0 ? '至少填写一条参团信息！' : '至少填写一条转团信息！';
-            showMessageDialog($("#confirm-dialog-message"), tripMsg);
-            return false;
-        }*/
 
         if(data.baseInfo.customerType === 0){
             //送团
@@ -2634,7 +2624,7 @@ define(function(require, exports) {
             data.id = id;
             method = "updateCustomerOrder";
         }
-        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
             var msg = data.baseInfo.customerType === 0 ? '请选择行程或添加参团信息！' : '请选择行程或添加转团信息！';
             showMessageDialog(msg);
             return false;
