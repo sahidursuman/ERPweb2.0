@@ -5,7 +5,8 @@
  */
 
 define(function(require, exports) {
-    var BusListTemplate = require('./transferView/busList'),
+    var tabKey = "transfer",
+        BusListTemplate = require('./transferView/busList'),
         BusArrangedListTemplate = require('./transferView/busArrangedList'),
         BusArrangeTemplate = require('./transferView/busArrange'),
         ViewBusTemplate = require('./transferView/viewBus'),
@@ -826,7 +827,6 @@ define(function(require, exports) {
                 shuttleType: shuttleType,
                 deleteOutRemarkList: JSON.stringify(Transfer.delBusTransferId),
                 deleteOutBusIds: Transfer.deleteOutBusIds.join(','),
-
             },
             success: function(data) {
                 if (showDialog(data)) {
@@ -1689,8 +1689,7 @@ define(function(require, exports) {
                     if (showDialog(data)) {
                         var tab_key = tabKey + '_other';
                         if (Tools.addTab(tab_key, '其他安排', OtherArrangeTemplate(data))) {
-                            Transfer._initOtherArrange($('#tab-' + tab_key + '-content'));
-                            //var $otherArrangeTab = 
+                            Transfer._initOtherArrange($('#tab-' + tab_key + '-content')); 
                         }
                     }
                 }
@@ -2084,12 +2083,12 @@ define(function(require, exports) {
                 arrangeId = $tr.attr('data-entity-id'),
                 subject = $that.attr("data-type")=="bus" ? 0 : 1,
                 isConfirmAccount = $that.attr('data-isConfirmAccount');
-               
             outRemarkId.each(function() {
                 if ($(this).val().trim()) {
                     idList.push($(this).val());
                 }
             });
+
             $.ajax({
                 url: KingServices.build_url(service_name, "getCollectionList"),
                 type: "POST",
@@ -2102,8 +2101,15 @@ define(function(require, exports) {
                     if (showDialog(data)) {
                         data.isConfirmAccount = isConfirmAccount;
                         data.isView = isView;
+                        if (!!$that.data('collectGroItemList') && $that.data('collectGroItemList').length > 0 ) {
+                            var colGroItemList = $that.data('collectGroItemList') || "[]";
+                            for (var i = 0; i < colGroItemList.length; i++) {
+                                data.collectionList[i].collectionGroup = colGroItemList[i].collectionGroup;
+                                 data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
+                            };
+                        }
                         var html = planCollectionTemplate(data);
-                        var viewAccountsLayer = layer.open({
+                        layer.open({
                             type: 1,
                             title: "编辑计划代收",
                             skin: 'layui-layer-rim',
@@ -2111,35 +2117,44 @@ define(function(require, exports) {
                             zIndex: 1028,
                             content: html,
                             scrollbar: false,
-                            success: function() {
-                                var $LayerId = $('.T-transfer-bus-planCollectionLayer');
-                                //关闭弹窗
-                                $LayerId.on('click','.T-btn-close',function(){
-                                    layer.close(viewAccountsLayer);
-                                });
+                            success: function(obj, index) {
+                                var $LayerId = $(obj);
+                                //save
                                 $LayerId.on('click','.T-btn-save',function(){
-                                    var collection  = $LayerId.find('input[name=collection]'),collectionList=[]
-                                    var count = 0;
-                                    for(var i = 0; i < collection.length; i++){
-                                     count += +collection.eq(i).val();
-                                    }
-                                    layer.close(viewAccountsLayer);
-                                    $that.val(count);
-
-                                    $LayerId.find('#T-transfer-bus').children('tr').each(function(index) {
-                                        var $that = $(this);
-                                        var planCollection = {
-                                            id : $that.attr("id"),
-                                            touristGroupId : $that.attr("touristGroupId"),
-                                            collection : $that.find("[name=collection]").val(),
-                                            collectionType : $that.find('.T-assign-check').is(':checked') ? 0 : 1
-                                        };
+                                    var collection  = $LayerId.find('input[name=collection]'),
+                                        collectionList = [],
+                                        collectGroItemList = [],
+                                        count = 0,
+                                        $layerTr = $LayerId.find('#T-transfer-bus').children('tr');
+                                    $layerTr.each(function(index) {
+                                        var $that = $(this),
+                                            collectionGroup=$that.find('[name=collectionGroup]').val()*1 || 0,
+                                            collectionItem=$that.find('[name=collectionItem]').val()*1 || 0,
+                                            planCollection = {
+                                                id : $that.attr("id"),
+                                                touristGroupId : $that.attr("touristGroupId"),
+                                                collectionGroup : collectionGroup,
+                                                collectionItem : collectionItem
+                                            },
+                                            collectGroItemJson = {
+                                                collectionGroup : collectionGroup,
+                                                collectionItem : collectionItem
+                                            };
+                                        count=collectionGroup+collectionItem;
                                         collectionList.push(planCollection);
+                                        collectGroItemList.push(collectGroItemJson);
                                     });
-
-                                    $tr.find('[name=collectionList]').val(JSON.stringify(collectionList));
+                                    $tr.find('[name=collectionList]').val(JSON.stringify(collectionList));//代收信息
+                                    $that.val(count); //代收金额合计
+                                    $that.data('collectGroItemList', collectGroItemList);//存储代收费用信息
+                                    layer.close(index);
                                    
                                 })
+
+                                //layer-close
+                                $LayerId.on('click','.T-btn-close',function(){
+                                    layer.close(index);
+                                });
                             }
                         });
 
