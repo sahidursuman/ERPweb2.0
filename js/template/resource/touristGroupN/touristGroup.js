@@ -832,15 +832,20 @@ define(function(require, exports) {
         return this;
         function deleteList($tr, id) {
             if(!!id){
-                var delJson = $tr.closest('tbody').data('del-json');
-                if(typeof delJson !== "object"){
-                    delJson = JSON.parse(delJson || "[]");
-                };
-                delJson.push({
-                    id : id
+                if($tr.closest('tbody').hasClass('T-part-group-list')){
+                    id = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
+                }
+                validateDelete(id, function(data){
+                    var delJson = $tr.closest('tbody').data('del-json');
+                    if(typeof delJson !== "object"){
+                        delJson = JSON.parse(delJson || "[]");
+                    };
+                    delJson.push({
+                        id : id
+                    });
+                    $tr.closest('tbody').data('del-json', delJson);
+                    $tr.remove();
                 });
-                $tr.closest('tbody').data('del-json', delJson);
-                $tr.remove();
             }else{
                 $tr.remove();
             }
@@ -881,6 +886,18 @@ define(function(require, exports) {
             }else{
                 showMessageDialog("数据已经清空！");
             }
+        }
+        function validateDelete(id, fn){
+            $.ajax({
+                url : KingServices.build_url('customerOrder', 'validateDelete'),
+                data : {id :  id}
+            }).done(function(data){
+                if(showDialog(data)){
+                    if($.type(fn) === "function"){
+                        fn(data);
+                    }
+                }
+            });
         }
     };
 
