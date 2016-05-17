@@ -489,7 +489,7 @@ define(function(require, exports){
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                // 按拼音排序
-					//Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
+					Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
 
 	                Count.reimbursementGuide = data.guideArranges;
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
