@@ -6,10 +6,13 @@
 				<label class="pull-left control-label text-right mar-r-10">收客单号</label>
 				<input type="text" class="pull-left w-150" disabled value="{{baseInfo.orderNumber}}">
 			</div>
-			<div class="pull-right mar-r-10" style="margin-top: -6px;">
+			<div class="pull-right mar-r-10 mar-t-F6">
 				<label class="pull-left control-label text-right mar-r-10">是否买保险</label>
 				<input type="checkbox" class="ace pull-left" disabled {{if !!baseInfo.buyInsurance}}checked{{/if}}>
 				<span class="lbl"></span>
+			</div>
+			<div class="pull-right mar-r-15 mar-t-F6">
+				<button class="btn btn-sm btn-success export-Btn T-statementsBtn" style="height: 20px;line-height: 1px;">结算单</button>
 			</div>
 		</div>
 		<div class="col-xs-12">
@@ -29,7 +32,7 @@
 				</thead>
 				<tbody class="T-team-info">
 					<tr>
-						<td>{{baseInfo.fromPartnerAgency}}（{{baseInfo.fromPartnerAgencyContactName}}）</td>
+						<td>{{baseInfo.fromPartnerAgency}}{{if baseInfo.fromPartnerAgencyContactName != ""}}（{{baseInfo.fromPartnerAgencyContactName}}）{{/if}}</td>
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>

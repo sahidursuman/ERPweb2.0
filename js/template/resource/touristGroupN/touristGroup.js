@@ -21,6 +21,7 @@ define(function(require, exports) {
             add : require('./view/tourists/add'),//新增页面
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
+            viewAccountsTemplate : require('./view/tourists/view/viewAccounts'),//查看结算单
             chooseClient : require('./view/tourists/choose/chooseClient'),//选择客户
             chooseClientList : require('./view/tourists/choose/chooseClientList'),//选择客户列表
             chooseLineProduct : require('./view/tourists/choose/chooseLineProduct'),//选择线路产品
@@ -451,6 +452,7 @@ define(function(require, exports) {
                             joinTrip[i].hotelInfoId = joinTrip[i].hotelInfo.id;
                             joinTrip[i].hotelOutRemarkId = joinTrip[i].hotelInfo.outRemarkId;
                             joinTrip[i].hotelInfo.hotel = [];
+                            joinTrip[i].hotelInfoClearFlag = joinTrip[i].hotelInfo.clearFlag;
                             var hotelIds = joinTrip[i].hotelInfo.hotelIds,
                                 hotelNames = joinTrip[i].hotelInfo.hotelName;
                             if(!!hotelIds){
@@ -464,9 +466,9 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
                             str = str && str +" ";
-                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
+                            str = str && str.length > 6 ? str.substr(0, 6)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -594,7 +596,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
+                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
                             str = str && str +" ";
                             str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
@@ -625,10 +627,56 @@ define(function(require, exports) {
                         touristGroup.commonEvents($("#tab-" + K.view + "-content"), 1);
                     }
                 }
+                var $viewAccount = $("#tab-resource_touristGroup_view-content");
+                    $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
+                    var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        touristGroup.viewAccountList(id);
+                });
+
             }
         });
     };
 
+     /**
+     * [viewAccountList 结算单打印]
+     * @return {[type]} [description]
+     */
+    touristGroup.viewAccountList = function(id){ 
+        $.ajax({
+                url: KingServices.build_url("touristGroup", "viewPartnerSettlement"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                        if(result){
+                            html = T.viewAccountsTemplate(data);
+                            var viewAccountsLayer = layer.open({
+                                type: 1,
+                                title:"打印结算单",
+                                skin: 'layui-layer-rim',
+                                area: '750px', 
+                                zIndex:1028,
+                                content: html,
+                                scrollbar: false
+                            });
+                        //打印结算单页面
+                        var $outAccountsTab = $("#T-touristGroupViewAccount");
+                            $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                            touristGroup.exportsOutAccounts($outAccountsTab);
+                        });
+                    }   
+                }
+        });       
+    };
+
+    //打印页面
+    touristGroup.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
+    };
     /**
      * 删除游客小组
      * @param  {number} id 游客ID
@@ -1012,8 +1060,8 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
-                        '<td><input type="text" class="min-w-200 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
+                        '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
@@ -1438,8 +1486,8 @@ define(function(require, exports) {
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
                         var str = baseInfo.hotelName || baseInfo.require;
-                        str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
-                        console.log(Tools.thousandPoint(moneyData.needPayAllMoney, 2));
+                        str = str.length > 6 ? str.substr(0, 6)  + "..." : str;
+
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
@@ -2494,11 +2542,6 @@ define(function(require, exports) {
             }
             var status = $that.find('.T-status').data('status');
             status = status == undefined ? 1 : status;
-            /*if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
-                joinTripData.innerTransferInfo = JSON.parse($innerTurn.data('json'));
-            }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json')) && status == "1"){
-                joinTripData.outTransferInfo = JSON.parse($outerTurn.data('json'));
-            }*/
 
             if(!!$that.data('id')){
                 joinTripData.id = $that.data('id');
@@ -2511,11 +2554,6 @@ define(function(require, exports) {
         if(typeof data.joinTripDel === "object" && !!data.joinTripDel){
             data.joinTripDel = JSON.stringify(data.joinTripDel);
         }
-        /*if(data.joinTrip.length === 0){
-            var tripMsg = data.baseInfo.customerType === 0 ? '至少填写一条参团信息！' : '至少填写一条转团信息！';
-            showMessageDialog($("#confirm-dialog-message"), tripMsg);
-            return false;
-        }*/
 
         if(data.baseInfo.customerType === 0){
             //送团
@@ -2633,7 +2671,7 @@ define(function(require, exports) {
             data.id = id;
             method = "updateCustomerOrder";
         }
-        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
             var msg = data.baseInfo.customerType === 0 ? '请选择行程或添加参团信息！' : '请选择行程或添加转团信息！';
             showMessageDialog(msg);
             return false;

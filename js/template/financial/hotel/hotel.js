@@ -9,7 +9,9 @@ define(function(require, exports) {
         hotelChecking = require("./view/hotelChecking"),
         hotelClearing = require("./view/hotelClearing"),
         payedDetailTempLate = require("./view/viewPayedDetail"),
-        needPayDetailTempLate = require("./view/viewNeedPayDetail");
+        needPayDetailTempLate = require("./view/viewNeedPayDetail"),
+        planCollectionTemplate = require('./view/planCollection'),
+        service_name = 'v2/singleItemArrange/touristGroupTransferArrange'
 
     var hotel = {
   		searchData : false,
@@ -649,9 +651,70 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-needPayDetail')) {
                 // 应收明细
                 hotel.needPayDetail(id);
+            }else if ($that.hasClass('T-collection')) {
+                // 代收金额
+                var $that=$(this);
+                hotel.planCollection($tab, $that);
             }
         });
     };
+    //计划代收
+    hotel.planCollection = function($tab, $that) {
+            var $tr = $that.closest('tr'),
+                arrangeId = $tr.attr('arrangeId'),
+                subject = $that.attr("data-type")=="bus" ? 0 : 1;
+            $.ajax({
+                url: KingServices.build_url(service_name, "getCollectionList"),
+                type: "POST",
+                data: {
+                    arrangeId: arrangeId,
+                    subject: subject
+                },
+                success: function(data) {
+                    if (showDialog(data)) {
+                        var html = planCollectionTemplate(data);
+                        var viewAccountsLayer = layer.open({
+                            type: 1,
+                            title: "编辑计划代收",
+                            skin: 'layui-layer-rim',
+                            area: '1200px',
+                            zIndex: 1028,
+                            content: html,
+                            scrollbar: false,
+                            success: function() {
+                                var $LayerId = $('.T-transfer-bus-planCollectionLayer');
+                                //关闭弹窗
+                                $LayerId.on('click','.T-btn-close',function(){
+                                    layer.close(viewAccountsLayer);
+                                });
+                                $LayerId.on('click','.T-btn-save',function(){
+                                    var collection  = $LayerId.find('input[name=collection]');
+                                    var count = 0;
+                                    for(var i = 0; i < collection.length; i++){
+                                     count += +collection.eq(i).val();
+                                    }
+                                    layer.close(viewAccountsLayer);
+                                    $that.val(count);
+
+                                    $LayerId.find('tr').each(function(index) {
+                                        var $that = $(this);
+                                        var planCollection = {
+                                            id : $that.attr("id"),
+                                            touristGroupId : $that.attr("touristGroupId"),
+                                            collection : $that.find("[name=collection]").val(),
+                                            collectionType : $that.find('[name=collectionType]').is('checked') ? 0 : 1
+                                        };
+                                        $tr.find('[name=collection]').data('json',planCollection);
+                                    });
+                                   
+                                })
+                            }
+                        });
+
+                    }
+                }
+            })
+        }
 
     hotel.getHotelList = function($tab,type){
         var $obj = $tab.find('input[name=hotelName]'),
