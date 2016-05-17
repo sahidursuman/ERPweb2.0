@@ -2082,7 +2082,7 @@ define(function(require, exports) {
                 outRemarkId = $tab.find('.T-arrange').find('input[name=outRemarkId]'),
                 $tr = $that.closest('tr'),
                 arrangeId = $tr.attr('data-entity-id'),
-                subject = $that.attr("data-type")=="bus" ? 0 : 1;
+                subject = $that.attr("data-type")=="bus" ? 0 : 1,
                 isConfirmAccount = $that.attr('data-isConfirmAccount');
                
             outRemarkId.each(function() {
