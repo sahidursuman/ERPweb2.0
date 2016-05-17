@@ -543,11 +543,11 @@ define(function(require, exports) {
                 Transfer.deleteBusArrange($(this));
             });
             //计划代收
-            $busplanId.find('.T-collection').on('click', function() {
-                var $that=$(this);
-                Transfer.planCollection($busplanId, $that);
+            $busplanId.find('.T-bus-plan').on('click', '.T-collection', function(event) {
+                event.preventDefault();
+                /* Act on the event */
+                Transfer.planCollection($busplanId, $(this));
             });
-
             //添加中转数据
             $busplanId.find('.T-add-BusTransfersId').on('click', function() {
                 var shuttleType = $busplanId.find('input[name=shuttleType]').val();
@@ -1279,11 +1279,13 @@ define(function(require, exports) {
             $hotelplanId.find('.T-arrange-delete').on('click', function() {
                 Transfer.deleteHotelArrange($(this));
             });
+
             //计划代收
-            $hotelplanId.find('.T-collection').on('click', function() {
-                 var $that=$(this);
-                Transfer.planCollection($hotelplanId, $that);
+            $hotelplanId.find('.T-hotel-plan').on('click', '.T-collection', function(event) {
+                event.preventDefault();
+                Transfer.planCollection($hotelplanId, $(this));
             });
+
             // 新增游客
             $hotelplanId.find('.T-add-HotelTransfersId').on('click', function() {
                 var shuttleType = $hotelplanId.find('input[name=shuttleType]').val();
@@ -1859,10 +1861,6 @@ define(function(require, exports) {
         $obj.find('.T-arrange-delete').on('click', function() {
             Transfer.deleteBusArrange($(this));
         });
-        $obj.find('.T-collection').on('click', function() {
-            var $that=$(this);
-            Transfer.planCollection($obj, $that);
-        });
         //校验
         rule.transferBusUpdate(validate);
     };
@@ -1900,10 +1898,6 @@ define(function(require, exports) {
         //删除房
         $obj.find('.T-arrange-delete').on('click', function() {
             Transfer.deleteHotelArrange($(this));
-        });
-        $obj.find('.T-collection').on('click', function() {
-            var $that=$(this);
-            Transfer.planCollection($obj, $that);
         });
         //校验
         rule.transferHotelUpdate(validate);
