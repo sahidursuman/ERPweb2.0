@@ -1367,7 +1367,7 @@ Tools.getTableVal = function($tbody, idName) {
 		idName = idName || 'id';
 
 		$tbody.children('tr').each(function() {
-			var $tr = $(this), val = {id: $tr.data(idName),collectionList:[]};
+			var $tr = $(this), val = {id: $tr.data(idName)};
 			$tr.find('input,select').each(function() {
 				var $that = $(this);
 				name = $that.prop('name');
@@ -1379,9 +1379,7 @@ Tools.getTableVal = function($tbody, idName) {
 					}
 					val[name] = value;
 				}
-				
 			});
-			val.collectionList.push($tr.find('[name=collection]').data('json'));
 			res.push(val);
 		});
 	}
