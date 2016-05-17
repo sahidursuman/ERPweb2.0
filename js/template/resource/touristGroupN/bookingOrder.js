@@ -24,6 +24,7 @@ define(function(require, exports, module) {
             updateMoney : require('./view/booking/update/updateMoney'),//编辑应收
             updaeGuestInfo : require('./view/booking/update/updaeGuestInfo'),//编辑客人信息
             view : require('./view/booking/view/view'),//查看页面
+            viewSettlementTemplate : require("./view/booking/view/viewSettlement"),//查看结算单
             viewHotel : require('./view/booking/view/viewHotel'),//查看酒店
             viewTicketl : require('./view/booking/view/viewTicket'),//查看票务
             viewScenic : require('./view/booking/view/viewScenic'),//查看酒店
@@ -252,6 +253,12 @@ define(function(require, exports, module) {
      * @return {[type]}      [description]
      */
     bookingOrder.commonEvents = function($tab, type, bookingId){
+        //导出查看项目代订按钮事件
+        $tab.find('.T-viewSettle').off('click').on('click',function(){
+            var pluginKey = 'plugin_print';
+                Tools.loadPluginScript(pluginKey);
+                bookingOrder.viewSettlement(bookingId);
+        });
         $tab.find('.T-booking-info').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this);
@@ -273,6 +280,7 @@ define(function(require, exports, module) {
                 clearItem($that);
             }
         });
+
         bookingOrder.getOPUserList($tab.find('.T-chooseUser'), true).trigger('click');
         $tab.on('change', '.T-container', function(event){
             if(type === 0){
@@ -337,6 +345,49 @@ define(function(require, exports, module) {
                 showMessageDialog("数据已经清空！");
             }
         }
+        
+    };
+
+    /**
+     * 代订结算单
+     * 
+     */
+    bookingOrder.viewSettlement = function(id){
+        $.ajax({
+            url : KingServices.build_url('bookingOrder','viewBookingSettlement'),
+            type:'POST',
+            data:{
+                id:id
+            },
+            success:function(data){
+                if(showDialog(data)){
+                    html = T.viewSettlementTemplate(data);
+                    var viewSettlementLayer = layer.open({
+                        type: 1,
+                        title:"代订结算单",
+                        skin: 'layui-layer-rim',
+                        area: '750px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false,
+                        success:function(){
+                            //打印结算单页面
+                            var $outAccountsTab = $("#T-viewSettlement");
+                            $outAccountsTab.off('click').on('click','.T-printBooking',function(){
+                                bookingOrder.exportsOutAccounts($outAccountsTab);
+                            });
+                        }
+                    });
+                       
+                }
+            }
+        });
+    };
+    //打印页面
+    bookingOrder.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
     };
 
     /**
