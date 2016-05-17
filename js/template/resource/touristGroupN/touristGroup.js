@@ -651,7 +651,6 @@ define(function(require, exports) {
                 success:function(data){
                     var result = showDialog(data);
                         if(result){
-                            data.imgUrl = imgUrl;
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,
