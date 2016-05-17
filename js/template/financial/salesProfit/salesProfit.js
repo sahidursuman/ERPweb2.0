@@ -22,7 +22,6 @@ define(function(require, exports) {
     salesProfit._getListMain=function(page){
         var args= FinancialService.getInitDate() || {};
         args.pageNo=page;
-        args.type='tourist';
         if (!!salesProfit.$tab) { //封装查询参数
             args = {
                 pageNo: (page || 0),
@@ -33,7 +32,6 @@ define(function(require, exports) {
                 businessName: salesProfit.$tab.find('[name=businessName]').val(),
                 groupName: salesProfit.$tab.find('[name=groupName]').val(),
                 outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
-                type: salesProfit.$tab.find('[name=type]').val(),
                 startDate: salesProfit.$tab.find('[name=startTime]').val(),
                 endDate: salesProfit.$tab.find('[name=endTime]').val()
             }
