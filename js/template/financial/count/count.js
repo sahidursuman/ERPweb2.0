@@ -489,7 +489,7 @@ define(function(require, exports){
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                // 按拼音排序
-					Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
+					//Tools.sortByPinYin(data.guideArranges.listMap, 'guideName');
 
 	                Count.reimbursementGuide = data.guideArranges;
 	                tmp.shopArrange.listMap = Count.formatShopRate(tmp.shopArrange.listMap);
@@ -3122,7 +3122,7 @@ define(function(require, exports){
 	};
 	//新增自费安排
 	Count.addSelf = function($obj,$parentObj){
-		
+		var divHtml = Count.returnDivHtml($parentObj);
 		var td = '<td name="selfGuideName" >'+
 				'<div class="div-h-30">'+
 					'<button class="btn btn-success  btn-sm btn-white T-addSelfGuide pull-right">'+
@@ -3139,68 +3139,68 @@ define(function(require, exports){
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,"selfGuideName",$parentObj);
 		var html = '<tr arrangeType="selfArrange" class="oldData">'+
-			'<td class="countWhichDaysContainer" rowspan="1"><div class="div-h-30"></div></td>'+
-			'<td><div class="div-h-30"></div><input type="text" name="selfPayName" class="w-70"><input type="hidden" name="selfPayId"></td>'+
-			'<td><div class="div-h-30"></div><input name="selfPayItem" class="w-70" type="text"><input type="hidden" name="selfPayItemId"></td>'+
-			'<td><div class="div-h-30"></div><input name="marketPrice" class="w-50" type="text"></td>'+
+			'<td class="countWhichDaysContainer" rowspan="1">'+divHtml+'</td>'+
+			'<td>'+divHtml+'<input type="text" name="selfPayName" class="w-70"><input type="hidden" name="selfPayId"></td>'+
+			'<td>'+divHtml+'<input name="selfPayItem" class="w-70" type="text"><input type="hidden" name="selfPayItemId"></td>'+
+			'<td>'+divHtml+'<input name="marketPrice" class="w-50" type="text"></td>'+
 			guideHtml+
 			'<td name="incomeCount">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="incomeCount" class="w-50" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="needInReduceMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<span class="F-float F-money needInReduceMoney">0</span>'+
 					'<input name="needInReduceMoney" type="hidden"/>'+
 				'</div>'+
 			'</td>'+
 			'<td name="needIncome">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<span class="F-float F-money needIncome">0</span>'+
 					'<input name="needIncome" type="hidden"/>'+
 				'</div>'+
 			'</td>'+
 			'<td name="cashMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="cashMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td>'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<input name="price" class="w-50" type="text">'+
 			'</td>'+
 			'<td name="realCount">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="realCount" class="w-50" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="realReduceMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="realReduceMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="realNeedPayMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<span class="F-float F-money realNeedPayMoney">0</span>'+
 					'<input name="realNeedPayMoney" type="hidden">'+
 				'</div>'+
 			'</td>'+
 			'<td name="payedMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<span class="F-float F-money payedMoney">0</span>'+
 				'</div>'+
 			'</td>'+
 			'<td name="guidePayedMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<p class="inline-flex">'+
 						'<select name="payType">'+
@@ -3214,55 +3214,55 @@ define(function(require, exports){
 			'</td>'+
 			
 			'<td name="billImage">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<span style="color:#bbb;">查看</span>'+
 				'</div>'+
 			'</td>'+
-			'<td><div class="div-h-30"></div><input name="customerRebateMoney" type="text" class="w-70 F-float F-money"></td>'+
+			'<td>'+divHtml+'<input name="customerRebateMoney" type="text" class="w-70 F-float F-money"></td>'+
 			'<td name="travelAgencyRate">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="travelAgencyRate" class="w-50" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="travelAgencyRebateMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="travelAgencyRebateMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="guideRate">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="guideRate" class="w-50" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="guideRebateMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="guideRebateMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="quanpeiRebate">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="quanpeiRebate" class="w-50" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="quanpeiRebateMoney">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="quanpeiRebateMoney" class="w-70 F-float F-money" type="text">'+
 				'</div>'+
 			'</td>'+
 			'<td name="billRemark">'+
-				'<div class="div-h-30"></div>'+
+				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
 					'<input name="billRemark" class="w-70" type="text">'+
 				'</div>'+
 			'</td>'+
-			'<td><div class="div-h-30"></div>未对账<a class="T-selfArrDel" href="javascript:void(0)" style="margin-left:14px;">删除</a></td>'+
+			'<td>'+divHtml+'未对账<a class="T-selfArrDel" href="javascript:void(0)" style="margin-left:14px;">删除</a></td>'+
 			
 			'</tr>';
 		$obj.append(html);
@@ -3765,7 +3765,7 @@ define(function(require, exports){
 		'<td>'+divHtml+'<span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>'+divHtml+'0</td>'+
 		guideTdHtml+
-		'<td><'+divHtml+'未对账<a href="javascript:void(0)" class="T-restArrDel" style="margin-left:12px;">删除</a></td>'+
+		'<td>'+divHtml+'未对账<a href="javascript:void(0)" class="T-restArrDel" style="margin-left:12px;">删除</a></td>'+
 		'</tr>';
 		$obj.append(html);
 		//获取餐厅数据
@@ -6591,8 +6591,7 @@ define(function(require, exports){
 			'<span style="color:#bbb;">查看</span>'+
 			'</div>';
 
-		var billRemarkHtml = '';
-		'<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
+		var billRemarkHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
 			'<input name="billRemark" type="text">'+
 			'</div>';
 		$thisTd.append(guideHtml);
