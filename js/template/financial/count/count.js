@@ -4,12 +4,9 @@ define(function(require, exports){
 		listTableTemplate = require('./view/listTable'),
 		updateTemplate = require("./view/update"),
 		Reimbursement = require("./view/Reimbursement"),
-		arrangeDetailTempLate = require("./view/arrangeDetail"),
-		
 		qualityTempLate = require("./view/quality"),
 		outDetailTempLate = require("./view/outDetail"),
 		tripDetailTempLate = require("./view/tripDetail"),
-		
 		viewLogTemplate = require("./view/viewLog"),
 		shopArrangeTemplate = require('./view/shopArrange'),
 		selfArrangeTemplate = require('./view/selfPayArrange'),
@@ -26,7 +23,7 @@ define(function(require, exports){
 		addFeeTemplate = require('./view/addFee'),
 		viewCostRemarkTemplate = require('./view/viewCostRemark'),
 		formulaTemplate = require('./view/formulaList'),
-		//transitDetailsTamplate = require('./view/viewTransitDetails'),
+		tripGroupTemplate = require('./view/tripGroup'),
 		updateTabId = menuKey+"-update",
 		ReimbursementId = menuKey+"-Reimbursement",
 		detailId= menuKey + "-detail",
@@ -309,7 +306,7 @@ define(function(require, exports){
 		});
 	};
 	//单团明细页面事件
-	Count.detailEvents = function($obj){
+	Count.detailEvents = function($obj,data){
 
 		//显示隐藏
 		Count.showOrhideList($obj);
@@ -318,7 +315,10 @@ define(function(require, exports){
 			Count.showFormula($obj);
 		});
 		var $listObj = $obj.find('.T-list');
-		
+		var $tripCostObj = $listObj.find('.T-tripDetail');
+		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+			Count.viewCostDetail($(this),data.touristGroup);
+		});
 		//按钮事件--单团核算表
 		$obj.find('.T-tripAccount').off('click').on('click',function(){
 			var id = $obj.find('[name=financialTripPlanId]').val();
@@ -500,9 +500,7 @@ define(function(require, exports){
 	                var $ReimbursementId = $("#tab-"+ReimbursementId+"-content");
 					Count.$ReimbursementTab = $ReimbursementId;
 					//查看团款明细说明
-					$ReimbursementId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail($(this),tmp.touristGroup);
-					});
+					
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
 				}
@@ -510,7 +508,7 @@ define(function(require, exports){
 		});
 	};
 	//单团报账页面事件
-	Count.reimbursementEvents = function($obj){
+	Count.reimbursementEvents = function($obj,data){
 		
 		//显示隐藏
 		Count.showOrhideList($obj);
@@ -525,6 +523,9 @@ define(function(require, exports){
 
 		//团款tripDetail checkTripCostStatus
 		var $tripCostObj = $listObj.find('.T-tripDetail');
+		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+			Count.viewCostDetail($(this),data.touristGroup);
+		});
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
@@ -927,10 +928,7 @@ define(function(require, exports){
 					Tools.addTab(updateTabId,'单团审核',html);
 					var $updateTabId = $("#tab-"+updateTabId+"-content");
 					Count.$updateTab = $updateTabId;
-					//查看团款明细说明
-					$updateTabId.find('.T-viewCostDetail').on('click',function(){
-						Count.viewCostDetail($(this),tmp.touristGroup);
-					});
+					
 					//加载列表
 					Count.installList($updateTabId,tmp);
 				}
@@ -961,7 +959,7 @@ define(function(require, exports){
 		});
 	};
 	//单团审核页面事件
-	Count.updateEvent = function($obj){//页面tabid--$obj
+	Count.updateEvent = function($obj,data){//页面tabid--$obj
 		//显示隐藏
 		Count.showOrhideList($obj);
 		//显示计算公式
@@ -973,6 +971,10 @@ define(function(require, exports){
 		var $listObj = $obj.find('.T-list');
 		//团款tripDetail
 		var $tripCostObj = $listObj.find('.T-tripDetail');
+		//查看团款明细说明
+		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+			Count.viewCostDetail($(this),data.touristGroup);
+		});
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
 			Count.getAccoutnGuide($(this),$obj);
@@ -1352,6 +1354,8 @@ define(function(require, exports){
 	};
 	//加载list
 	Count.installList = function($obj,data){
+		var tripGroupHtml = tripGroupTemplate(data);
+		$obj.find('.T-tripCost').html(tripGroupHtml)
 		if(data.editStatus !=2){
 			//加载购物安排列表
 			var shopHtml = shopArrangeTemplate(data);
@@ -1400,11 +1404,11 @@ define(function(require, exports){
 		//页面事件 
 		if(data.editStatus == 0){
 			//页面事件
-			Count.reimbursementEvents($obj);
+			Count.reimbursementEvents($obj,data);
 		}else if(data.editStatus == 1){
-			Count.updateEvent($obj);
+			Count.updateEvent($obj,data);
 		}else if(data.editStatus == 2){
-			Count.detailEvents($obj);
+			Count.detailEvents($obj,data);
 		};
 		Count.addFee($obj, data.id);
 		//
@@ -1499,68 +1503,7 @@ define(function(require, exports){
             }
     	});
 	};
-	//安排预算--明细
-	Count.arrangeDetail = function(id){
-		$.ajax({
-			url:KingServices.build_url('tripPlan','findTripArrangeById'),
-			type:"POST",
-			data:{
-				tripPlanId:id,
-				operation:"self"
-			},
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-					var tripPlanInfo = JSON.parse(data.tripPlan),
-					 insuranceList = JSON.parse(data.insuranceList),
-					 hotelList = JSON.parse(data.hotelList),
-					 busCompanyList = JSON.parse(data.busCompanyList),
-					 guideList = JSON.parse(data.guideList),
-					 otherList = JSON.parse(data.otherList),
-					 restaurantList = JSON.parse(data.restaurantList),
-					 scenicList = JSON.parse(data.scenicList),
-					 selfPayList = JSON.parse(data.selfPayList),
-					 shopList = JSON.parse(data.shopList),
-					 ticketList = JSON.parse(data.ticketList);
-					
-					data = {
-						tripPlan : tripPlanInfo,
-						insuranceList : insuranceList,
-						hotelList : hotelList,
-						busCompanyList : busCompanyList,
-						guideList : guideList,
-						otherList : otherList,
-						restaurantList : restaurantList,
-						scenicList : scenicList,
-						selfPayList : selfPayList,
-						shopList : shopList,
-						ticketList : ticketList,
-						calculation : data.calculation
-					};
-	    			var html = arrangeDetailTempLate(data);
-	    			var financialArrangeDetail = Tools.addTab(detailId,"安排预算", html);
-                    var tabid = $("#tab-"+detailId+"-content");
-                    var tripCost = tabid.find('.tripCost');
-                    var guideArrangePrice = tabid.find('.tripCost-guideArrangePrice').text()==""?0:parseFloat(tabid.find('.tripCost-guideArrangePrice').text());
-                    var insuranceArrangeNeedPayMoney = tabid.find('.tripCost-insuranceArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-insuranceArrangeNeedPayMoney').text());
-                    var busCompanyNeedPayMoney = tabid.find('.tripCost-busCompanyNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-busCompanyNeedPayMoney').text());
-                    var restaurantArrangeNeedPayMoney = tabid.find('.tripCost-restaurantArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-restaurantArrangeNeedPayMoney').text());
-                    var hotelArrangeNeedPayMoney = tabid.find('.tripCost-hotelArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-hotelArrangeNeedPayMoney').text());
-                    var scenicArrangeNeedPayMoney = tabid.find('.tripCost-scenicArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-scenicArrangeNeedPayMoney').text());
-                    var ticketArrangeNeedPayMoney = tabid.find('.tripCost-ticketArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-ticketArrangeNeedPayMoney').text());
-                    var otherArrangeNeedPayMoney = tabid.find('.tripCost-otherArrangeNeedPayMoney').text()==""?0:parseFloat(tabid.find('.tripCost-otherArrangeNeedPayMoney').text());
-                    var sum = guideArrangePrice+insuranceArrangeNeedPayMoney+busCompanyNeedPayMoney+restaurantArrangeNeedPayMoney+hotelArrangeNeedPayMoney+scenicArrangeNeedPayMoney+ticketArrangeNeedPayMoney+otherArrangeNeedPayMoney
-                    tripCost.text(sum);
-                    //其他
-                    var other = tabid.find(".tripOther");
-                    var guideArrangeManageFee = tabid.find(".tripOther-guideArrangeManageFee")==""?0:parseFloat(tabid.find(".tripOther-guideArrangeManageFee").text());
-                    var guideAllPreMoney = tabid.find(".tripOther-guideAllPreMoney")==""?0:parseFloat(tabid.find(".tripOther-guideAllPreMoney").text());
-                    var otherSum = guideArrangeManageFee+guideAllPreMoney;
-                    other.text(otherSum);
-				}   
-			}
-    	});
-	};
+	
 	//单团核算表
 	Count.viewTripAccount = function(id){
 		$.ajax({
