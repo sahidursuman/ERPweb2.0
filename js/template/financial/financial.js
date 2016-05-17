@@ -149,13 +149,13 @@ FinancialService.updateUnpayMoney = function($tab,rule){
         if(!validator.form()){ return false;}
         var settlementMoney = ($tr.find("input[name=settlementMoney]").val() || 0) * 1,
             payedMoney = ($tr.find(".T-payedDetail").data("money") || 0) * 1,
-            planPayMoney = ($tr.find('input[name=collection]').val() || 0)*1;
+            planPayMoney = ($tr.find('.T-collection').text() || 0)*1;
 
         // 设置未付金额
-        $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney));
+        $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney ));
 
         //若存在代收
-        if (!!$tr.find('input[name=planPay]')) {
+        if (!!$tr.find('.T-collection')) {
              $tr.find("td[name=unPayedMoney]").text(Tools.toFixed(settlementMoney - payedMoney - planPayMoney));
         }
         //计算结算金额修改前后差值
