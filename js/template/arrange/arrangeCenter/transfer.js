@@ -660,7 +660,7 @@ define(function(require, exports) {
                             '<a class="cursor T-del-bus" title="删除">删除</a>' +
                             '</td>' +
                             '</tr>'
-                        $busplanId.find('.T-busArrange').append(htmlData);
+                        $busplanId.find('.T-arrange').append(htmlData);
                     };
 
                     // 关闭对话框
