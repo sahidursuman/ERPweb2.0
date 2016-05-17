@@ -50,6 +50,7 @@ define(function(require, exports) {
         var args = $form.serializeJson();
         args.item = $form.parent().data('target');
         args.pageNo = page || 0;
+        args.assign = $form.find('.T-assign-check').is(":checked") ? 1 : 0;
         var temp = args.item + "List";
         if(!!item && args.item != item){
             $form = $("#booking-"+item+"-arrange").find('.T-search-area');
