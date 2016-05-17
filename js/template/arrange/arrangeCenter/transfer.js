@@ -1711,11 +1711,25 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     var html = ViewBusTemplate(data);
-                    addTab(viewBusId, '车查看', html);
+                    var viewBusTabId = "tab-viewBus-content";
+                    addTab(viewBusTabId, '车查看', html);
+                    Transfer._viewPlanCollection($('#tab-'+viewBusTabId+'-content'));
                 }
             }
         });
     };
+
+    //车查看代收
+     Transfer._viewPlanCollection = function ($tab) {
+        $tab.find('.T-bus-plan').on('click', '.T-collection', function(event) {
+            event.preventDefault();
+            Transfer.planCollection($tab, $(this), 'view');
+        });
+        $tab.find('.T-hotel-plan').on('click', '.T-collection', function(event) {
+            event.preventDefault();
+            Transfer.planCollection($tab, $(this), 'view');
+        }) 
+     } 
 
     /**
      * 房查看
@@ -1730,7 +1744,9 @@ define(function(require, exports) {
             success: function(data) {
                 if (showDialog(data)) {
                     var html = ViewHotelTemplate(data);
-                    addTab(viewhotelId, '房查看', html);
+                    var viewHotelTabId = "tab-viewBus-content";
+                    addTab(viewHotelTabId, '房查看', html);
+                    Transfer._viewPlanCollection($('#tab-'+viewHotelTabId+'-content'));
                 }
             }
         });
@@ -2061,12 +2077,13 @@ define(function(require, exports) {
      * @param  {object} $obj 删除按钮
      * @return {[type]}      [description]
      */
-    Transfer.planCollection = function($tab, $that) {
+    Transfer.planCollection = function($tab, $that, isView) {
             var idList = [], //中转列表 Id
                 outRemarkId = $tab.find('.T-arrange').find('input[name=outRemarkId]'),
                 $tr = $that.closest('tr'),
                 arrangeId = $tr.attr('data-entity-id'),
-                subject = $that.attr("data-type")=="bus" ? 0 : 1;
+                subject = $that.attr("data-type")=="bus" ? 0 : 1,
+                isConfirmAccount = $that.attr('data-isConfirmAccount');
                
             outRemarkId.each(function() {
                 if ($(this).val().trim()) {
@@ -2083,6 +2100,8 @@ define(function(require, exports) {
                 },
                 success: function(data) {
                     if (showDialog(data)) {
+                        data.isConfirmAccount = isConfirmAccount;
+                        data.isView = isView;
                         var html = planCollectionTemplate(data);
                         var viewAccountsLayer = layer.open({
                             type: 1,
@@ -2113,7 +2132,7 @@ define(function(require, exports) {
                                             id : $that.attr("id"),
                                             touristGroupId : $that.attr("touristGroupId"),
                                             collection : $that.find("[name=collection]").val(),
-                                            collectionType : $that.find('[name=collectionType]').is('checked') ? 0 : 1
+                                            collectionType : $that.find('.T-assign-check').is(':checked') ? 0 : 1
                                         };
                                         collectionList.push(planCollection);
                                     });

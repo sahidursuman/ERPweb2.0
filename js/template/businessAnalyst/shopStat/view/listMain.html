@@ -1,49 +1,26 @@
 <div class="T-search-shopStatArea col-xs-12">
     <div class="form-group clearfix T-search-area mar-b-10 T-noprint">
         <form class="form-inline" role="form" onsubmit="return false">
-        <div class="form-group mar-r-9">
+        <div class="form-group mar-r-10">
             <label>客户 </label>
             <input type="text" name="fromPartnerAgency" class="form-control T-Choose-partnerAgency" placeholder="客户" value="" />
             <input type="hidden" name="fromPartnerAgencyId" value="" />
         </div>
-        <div class="form-group mar-r-9">
+        <div class="form-group mar-r-10">
             <label>团号 </label>
             <input type="text" name="tripNumber" class="form-control T-Choose-tripNumber" placeholder="团号" value="" />
         </div>
-        <div class="form-group mar-r-9">
+        <div class="form-group mar-r-10">
             <label>购物店 </label>
             <input type="text" name="shop" class="form-control T-Choose-shop" placeholder="购物店" value="" />
             <input type="hidden" name="shopId" value="" />
         </div>
-        <div class="form-group mar-r-9">
-            <label>针对客源 </label>
-            <select name="customerType">
-                <option value="">全部</option>
-                <option value="0">散客</option>
-                <option value="1">团体</option>
-            </select>
+        <div class="form-group mar-r-10">
+            <label>商品 </label>
+            <input type="text" name="shopItem" class="form-control T-Choose-goods" placeholder="商品搜索" value="" />
+            <input type="hidden" name="shopItemId" value="" />
         </div>
-        </form>
-        <form class="form-inline" role="form" onsubmit="return false">
-        <div class="form-group mar-r-9 T-tripTime">
-            <label>出团日期 </label>
-            <input type="text" name="startTime" class="form-control datepicker" placeholder="开始日期" value="{{startDate}}" />
-            <input type="text" name="endTime" class="form-control datepicker" placeholder="结束日期" value="{{endDate}}" />
-        </div>
-        <div class="form-group mar-r-9 T-shopTime">
-            <label>进店日期 </label>
-            <input type="text" name="startShopTime" class="form-control datepicker" placeholder="开始日期" value="" />
-            <input type="text" name="endShopTime" class="form-control datepicker" placeholder="结束日期" value="" />
-        </div>
-        <div class="form-group mar-r-9">
-            <label>是否进店 </label>
-            <select name="isShopping">
-                <option value="">全部</option>
-                <option value="1">已进店</option>
-                <option value="0">未进店</option>
-            </select>
-        </div>
-        <div class="form-group mar-r-9">
+        <div class="form-group mar-r-10">
             <button class=" btn-sm  T-shopStat-search search-btn">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
@@ -54,6 +31,36 @@
                导出
            </button> -->
         </div>
+        </form>
+        <form class="form-inline" role="form" onsubmit="return false">
+        <div class="form-group mar-r-15 T-tripTime">
+            <label>出团日期 </label>
+            <input type="text" name="startTime" class="form-control datepicker" placeholder="开始日期" value="{{startDate}}" />
+            <input type="text" name="endTime" class="form-control datepicker" placeholder="结束日期" value="{{endDate}}" />
+        </div>
+        <div class="form-group mar-r-15 T-shopTime">
+            <label>进店日期 </label>
+            <input type="text" name="startShopTime" class="form-control datepicker" placeholder="开始日期" value="" />
+            <input type="text" name="endShopTime" class="form-control datepicker" placeholder="结束日期" value="" />
+        </div>
+        <div class="form-group mar-l-23">
+            <label>是否进店 </label>
+            <select name="isShopping">
+                <option value="">全部</option>
+                <option value="1">已进店</option>
+                <option value="0">未进店</option>
+            </select>
+        </div>
+
+        <div class="form-group mar-l-20">
+            <label>针对客源 </label>
+            <select name="customerType">
+                <option value="">全部</option>
+                <option value="0">散客</option>
+                <option value="1">团体</option>
+            </select>
+        </div>
+        
         </form>
     </div>
     <div class="T-shopStatPager-list T-print">

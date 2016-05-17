@@ -21,6 +21,7 @@ define(function(require, exports) {
             add : require('./view/tourists/add'),//新增页面
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
+            viewAccountsTemplate : require('./view/tourists/view/viewAccounts'),//查看结算单
             chooseClient : require('./view/tourists/choose/chooseClient'),//选择客户
             chooseClientList : require('./view/tourists/choose/chooseClientList'),//选择客户列表
             chooseLineProduct : require('./view/tourists/choose/chooseLineProduct'),//选择线路产品
@@ -626,10 +627,56 @@ define(function(require, exports) {
                         touristGroup.commonEvents($("#tab-" + K.view + "-content"), 1);
                     }
                 }
+                var $viewAccount = $("#tab-resource_touristGroup_view-content");
+                    $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
+                    var pluginKey = 'plugin_print';
+                        Tools.loadPluginScript(pluginKey);
+                        touristGroup.viewAccountList(id);
+                });
+
             }
         });
     };
 
+     /**
+     * [viewAccountList 结算单打印]
+     * @return {[type]} [description]
+     */
+    touristGroup.viewAccountList = function(id){ 
+        $.ajax({
+                url: KingServices.build_url("touristGroup", "viewPartnerSettlement"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                        if(result){
+                            html = T.viewAccountsTemplate(data);
+                            var viewAccountsLayer = layer.open({
+                                type: 1,
+                                title:"打印结算单",
+                                skin: 'layui-layer-rim',
+                                area: '750px', 
+                                zIndex:1028,
+                                content: html,
+                                scrollbar: false
+                            });
+                        //打印结算单页面
+                        var $outAccountsTab = $("#T-touristGroupViewAccount");
+                            $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                            touristGroup.exportsOutAccounts($outAccountsTab);
+                        });
+                    }   
+                }
+        });       
+    };
+
+    //打印页面
+    touristGroup.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
+    };
     /**
      * 删除游客小组
      * @param  {number} id 游客ID

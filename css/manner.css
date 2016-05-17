@@ -452,7 +452,9 @@ table tr td {
 .mar-t-5 {
     margin-top: 5px;
 }
-
+.mar-t-F6 {
+    margin-top: -6px;
+}
 .mar-t-20 {
     margin-top: 20px;
 }
@@ -493,11 +495,17 @@ table tr td {
 .mar-l-15 {
     margin-left: 15px;
 }
+.mar-l-20 {
+    margin-left: 20px;
+}
 .mar-1-135{
     margin-left: 135px;
 }
 .mar-r-10 {
     margin-right: 10px;
+}
+.mar-r-15 {
+    margin-right: 15px;
 }
 .mar-r-20 {
     margin-right: 20px!important;
@@ -688,7 +696,7 @@ table tr td {
 }
 
 .whereQ td {
-    border: 1px solid #ececec;
+    border: 1px solid #DDDDDD;
     padding: 7px 5px;
 }
 
