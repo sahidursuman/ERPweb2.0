@@ -120,7 +120,7 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this);
             $that.closest('form').find('.T-arrange-feild')
-            .toggleClass('hidden', $that.val() === '0').find('input').val('');
+            .toggleClass('hidden', $that.val() === '0').find('input').val('').prop('checked', false);
         });
     };
 

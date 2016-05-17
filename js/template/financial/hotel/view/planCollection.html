@@ -7,8 +7,8 @@
                 <th>游客信息</th>
                 <th>客户</th>
                 <th>外联销售</th>
-                <th>代收金额</th>
-                <th>代收类型</th>
+                <th>代收团款</th>
+                <th>代收新增项</th>
             </tr>
         </thead>
         <tbody id="T-transfer-bus">
@@ -17,7 +17,7 @@
                 <td>
                     <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
                     <p><span><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></span></p>
-                    <p><span name="startTime">{{item.startTime}}</span>
+                    <p><span name="startTime">{{item.startTime | dateFormat: 'yyyy-MM-dd'}}</span></p>
                 </td>
                 <td>
                     <p><span name="tgMemberName">{{item.tgMemberName}}</span></p>
@@ -29,15 +29,11 @@
                 </td>
                 <td>{{item.partnerAgencyName}}</td>
                 <td>{{item.outOPUser}}</td>
-                <td><input type="text" name="collection" readonly='readonly' value="{{item.collection}}"></td>
                 <td>
-                    <label class="pos-rel mar-r-10">
-                        <input type="radio" {{if item.collectionType == 0}} checked="checked"  value="0" {{/if}} name="collectionType" class="ace ridioCheck T-assign-check" class="T-assign-check"> <span class="lbl"></span> 
-                        代收团款
-                    </label>
-                    <label class="pos-rel">
-                        <input type="radio" {{if item.collectionType == 1}} checked="checked" value="1" {{/if}} name="collectionType"  class="ace ridioCheck T-assign-check" class="T-assign-check"> <span class="lbl"></span> 代收增项
-                    </label>
+                   <input type="text" readonly="readonly" value="{{item.collectionGroup}}"> 
+                </td>
+                <td>
+                   <input type="text" readonly="readonly" value="{{item.collectionItem}}"> 
                 </td>
             </tr>
         {{/each}}
