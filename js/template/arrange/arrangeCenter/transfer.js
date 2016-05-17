@@ -540,15 +540,14 @@ define(function(require, exports) {
             $busplanId.find('.T-add-bus').on('click', function() {
                 Transfer.addbus($busplanId, validate);
             });
-            //删除车
-            $busplanId.find('.T-arrange-delete').on('click', function() {
-                Transfer.deleteBusArrange($(this));
-            });
+            
             //计划代收
             $busplanId.find('.T-bus-plan').on('click', '.T-collection', function(event) {
                 event.preventDefault();
                 /* Act on the event */
                 Transfer.planCollection($busplanId, $(this));
+            }).on('click', '.T-arrange-delete', function() {
+                Transfer.deleteBusArrange($(this));
             });
             //添加中转数据
             $busplanId.find('.T-add-BusTransfersId').on('click', function() {
@@ -1291,15 +1290,13 @@ define(function(require, exports) {
             $hotelplanId.find('.T-add-hotel').on('click', function() {
                 Transfer.addhotel($hotelplanId, validate);
             });
-            //删除房
-            $hotelplanId.find('.T-arrange-delete').on('click', function() {
-                Transfer.deleteHotelArrange($(this));
-            });
 
             //计划代收
             $hotelplanId.find('.T-hotel-plan').on('click', '.T-collection', function(event) {
                 event.preventDefault();
                 Transfer.planCollection($hotelplanId, $(this));
+            }).on('click', '.T-arrange-delete', function() {
+                Transfer.deleteHotelArrange($(this));
             });
 
             // 新增游客
@@ -1878,10 +1875,6 @@ define(function(require, exports) {
         Transfer.addResource($obj); //车安排弹窗
         Transfer.bindBusCompanyChoose($obj); //车安排autocomplete列表
         Transfer.setDate($obj); //时间控件
-        //删除房
-        $obj.find('.T-arrange-delete').on('click', function() {
-            Transfer.deleteBusArrange($(this));
-        });
         //校验
         rule.transferBusUpdate(validate);
     };
@@ -1916,10 +1909,6 @@ define(function(require, exports) {
         Transfer.addResource($obj); //房安排弹窗
         Transfer.bindHotelChoose($obj); //房安排autocomplete列表
         Transfer.setDate($obj); //时间控件
-        //删除房
-        $obj.find('.T-arrange-delete').on('click', function() {
-            Transfer.deleteHotelArrange($(this));
-        });
         //校验
         rule.transferHotelUpdate(validate);
     };
