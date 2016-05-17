@@ -31,7 +31,7 @@
 					<tr>
 						<td>
 							<div class="col-xs-12">
-								<input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}（{{baseInfo.fromPartnerAgencyContactName}}）" data-id="{{baseInfo.fromPartnerAgencyId}}" data-contact-id="{{baseInfo.fromPartnerAgencyContactId}}" placeholder="点击选择客户">
+								<input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}{{if baseInfo.fromPartnerAgencyContactName != ""}}（{{baseInfo.fromPartnerAgencyContactName}}）{{/if}}" data-id="{{baseInfo.fromPartnerAgencyId}}" data-contact-id="{{baseInfo.fromPartnerAgencyContactId}}" placeholder="点击选择客户">
 								<span class="addResourceBtn T-action T-add-client" title="添加客户"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
 							</div>
 						</td>
