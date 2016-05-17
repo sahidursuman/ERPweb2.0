@@ -253,11 +253,7 @@ define(function(require, exports, module) {
      * @return {[type]}      [description]
      */
     bookingOrder.commonEvents = function($tab, type, bookingId){
-        // $tab.find('.T-viewSettle').on('click',function(){
-        //     console.log(13)
-        // });
         //导出查看项目代订按钮事件
-        // var $viewBookAccount = $("#tab-resource_bookingOrder_view-content");
         $tab.find('.T-viewSettle').off('click').on('click',function(){
             var pluginKey = 'plugin_print';
                 Tools.loadPluginScript(pluginKey);
