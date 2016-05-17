@@ -29,7 +29,7 @@
 				</thead>
 				<tbody class="T-team-info">
 					<tr>
-						<td>{{baseInfo.fromPartnerAgency}}（{{baseInfo.fromPartnerAgencyContactName}}）</td>
+						<td>{{baseInfo.fromPartnerAgency}}{{if baseInfo.fromPartnerAgencyContactName != ""}}（{{baseInfo.fromPartnerAgencyContactName}}）{{/if}}</td>
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>

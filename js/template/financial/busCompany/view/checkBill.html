@@ -86,7 +86,7 @@
         </thead>
         <tbody class="T-checkList" data-right="230005">
             {{each financialBusCompanyListData as rs index}}
-		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
+		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" arrangeId='{{rs.arrangeId}}' data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
             {{if rs.change}}data-change="true"{{/if}}>
 				<td>{{#rs.title}}</td>
 				<td>{{if rs.startTime == null || rs.startTime == ""}}
@@ -121,7 +121,7 @@
                 </td>   
 				<td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-busCompanyImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
 				<td><input type="text" name="settlementMoney" value="{{rs.settlementMoney}}" class="money F-float F-money" /></td>
-                <td>{{if rs.serviceType==1}}<input type="text" name="collection" value="{{rs.collection}}" class="money F-float F-money" />{{else}}-{{/if}}</td>
+                <td><input type="text" name="collection" value="{{rs.collection}}" data-type='bus' readonly='readonly' class="money F-float F-money {{if rs.serviceType == 1}} T-option T-collection{{/if}}" /></td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
                 <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td> 
