@@ -12,12 +12,12 @@
             </tr>
         </thead>
         <tbody id="T-transfer-bus">
-        {{each collectionList as item}}
+        {{each collectionList as item index}}
             <tr  id="{{item.id}}" touristGroupId="{{item.touristGroupId}}" >
                 <td>
                     <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
-                    <p><span><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></span></p>
-                    <p><span name="startTime">{{item.startTime}}</span>
+                    <p><span><span class="lineProductName">{{item.lineProductName}}</span></span></p>
+                    <p><span name="startTime">{{item.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
                 </td>
                 <td>
                     <p><span name="tgMemberName">{{item.tgMemberName}}</span></p>
@@ -29,14 +29,14 @@
                 </td>
                 <td>{{item.partnerAgencyName}}</td>
                 <td>{{item.outOPUser}}</td>
-                <td><input type="text" name="collection" value="{{item.collection}}"></td>
+                <td><input type="text" name="collection" value="{{item.collection}}" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
                 <td>
                     <label class="pos-rel mar-r-10">
-                        <input type="radio" {{if item.collectionType == 0}}checked{{/if}}   value="0"  name="collectionType" class="ace ridioCheck T-assign-check"> <span class="lbl"></span>
+                        <input type="radio" {{if item.collectionType == 0}}checked{{/if}} {{if isConfirmAccount=="1" || isView}}disabled{{/if}}  value="0"  name="collectionType-{{index}}" class="ace ridioCheck T-assign-check"> <span class="lbl"></span>
                         代收团款
                     </label>
                     <label class="pos-rel">
-                        <input type="radio" {{if item.collectionType == 1}}checked{{/if}}   value="1"  name="collectionType"  class="ace ridioCheck"> <span class="lbl"></span> 代收增项
+                        <input type="radio" {{if item.collectionType == 1}}checked{{/if}} {{if isConfirmAccount=="1" || isView}}disabled{{/if}}   value="1"  name="collectionType-{{index}}"  class="ace ridioCheck"> <span class="lbl"></span> 代收增项
                     </label>
                 </td>
             </tr>
@@ -45,6 +45,6 @@
     </table>
     <div class="col-xs-12 mar-t-20 mar-b-10 text-center">
         <button class="btn btn-sm btn-default otherButton T-btn-close" style="height: auto;"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
-        <button class="btn btn-sm btn-primary otherButton T-btn-save mar-l-15" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
+        <button class="btn btn-sm btn-primary otherButton T-btn-save mar-l-15 {{if isConfirmAccount=="1" || isView}}hidden{{/if}}" style="height: auto;" > <i class="ace-icon fa fa-check"></i> 保存 </button>
     </div>
 </div>
