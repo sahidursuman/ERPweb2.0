@@ -2124,7 +2124,7 @@ define(function(require, exports) {
                                             id : $that.attr("id"),
                                             touristGroupId : $that.attr("touristGroupId"),
                                             collection : $that.find("[name=collection]").val(),
-                                            collectionType : $that.find('[name=collectionType]').is('checked') ? 0 : 1
+                                            collectionType : $that.find('.T-assign-check').is(':checked') ? 0 : 1
                                         };
                                         collectionList.push(planCollection);
                                     });

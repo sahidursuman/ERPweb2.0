@@ -32,11 +32,11 @@
                 <td><input type="text" name="collection" value="{{item.collection}}"></td>
                 <td>
                     <label class="pos-rel mar-r-10">
-                        <input type="radio" {{if item.collectionType == 0}} checked="checked"  value="0" {{/if}} name="collectionType" class="ace ridioCheck T-assign-check" class="T-assign-check"> <span class="lbl"></span> 
+                        <input type="radio" {{if item.collectionType == 0}}checked{{/if}}   value="0"  name="collectionType" class="ace ridioCheck T-assign-check"> <span class="lbl"></span>
                         代收团款
                     </label>
                     <label class="pos-rel">
-                        <input type="radio" {{if item.collectionType == 1}} checked="checked" value="1" {{/if}} name="collectionType"  class="ace ridioCheck T-assign-check" class="T-assign-check"> <span class="lbl"></span> 代收增项
+                        <input type="radio" {{if item.collectionType == 1}}checked{{/if}}   value="1"  name="collectionType"  class="ace ridioCheck"> <span class="lbl"></span> 代收增项
                     </label>
                 </td>
             </tr>
