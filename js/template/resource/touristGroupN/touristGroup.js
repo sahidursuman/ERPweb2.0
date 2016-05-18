@@ -524,13 +524,14 @@ define(function(require, exports) {
      * @param  {number} id 游客ID
      * @return {[type]}    [description]
      */
-    touristGroup.touristGroupView = function(id){
+    touristGroup.touristGroupView = function(id, type){
         $.ajax({
             url : KingServices.build_url('customerOrder', 'viewCustomerOrder'),
             data : {id : id},
             type: 'POST',
             success : function(data){
                 if(showDialog(data)){
+                    data.type = type;
                     data.id = id;
                     if(!!data.baseInfo && !!data.baseInfo.touristGroupMemberInfo){
                         var memberInfo = data.baseInfo.touristGroupMemberInfo;
