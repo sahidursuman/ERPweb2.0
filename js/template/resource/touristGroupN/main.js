@@ -58,4 +58,5 @@ define(function(require, exports) {
 
     
     exports.init = customerOrder.initModule;
+    exports.viewBooking = bookingOrder.getUpdateBooking;
 });
