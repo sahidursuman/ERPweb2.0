@@ -895,6 +895,7 @@ define(function(require, exports) {
                         Transfer._refreshList('bus');
                         Tools.closeTab(busplanId);
                         Transfer.deleteOutBusIds = [];
+                        Transfer.deleteOutRemarkList = [];
                     });
                 }
 
@@ -1584,6 +1585,7 @@ define(function(require, exports) {
                         Transfer._refreshList('hotel');
                         Tools.closeTab(hotelplanId);
                         Transfer.deleteOutHotelIds = [];
+                        Transfer.delHotelTransferId = [];
                     });
                 }
 

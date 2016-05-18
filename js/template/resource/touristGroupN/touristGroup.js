@@ -1049,7 +1049,7 @@ define(function(require, exports) {
         var str = Tools.thousandPoint(needPayAllMoney);
         if(!!jsonData.isTransfer && jsonData.isTransfer == 1){
             str = "他部　" + jsonData.dutyDepartmentName + "　" + Tools.thousandPoint(needPayAllMoney, 2);
-        }else if(!!jsonData.isTransfer && jsonData.isTransfer == 1){
+        }else if(!!jsonData.isTransfer && jsonData.isTransfer == 2){
             str = "外转　" + jsonData.transferPartnerAgency + "　" + Tools.thousandPoint(needPayAllMoney, 2);
         }
         $fee.text(str);
@@ -2797,9 +2797,15 @@ define(function(require, exports) {
             data.id = id;
             method = "updateCustomerOrder";
         }
+        
         if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
             var msg = data.baseInfo.customerType === 0 ? '请选择行程或添加参团信息！' : '请选择行程或添加转团信息！';
             showMessageDialog(msg);
+            return false;
+        }
+
+        if((data.receiveTrip.length > 0 || data.sendTrip.length > 0) && data.joinTrip.length === 0){
+            showMessageDialog('请添加一条参团信息！');
             return false;
         }
 

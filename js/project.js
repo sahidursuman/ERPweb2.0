@@ -2398,8 +2398,8 @@ KingServices.tripDetail = function(id){
 }
 //代订明细
 KingServices.replaceDetail = function(id){
-	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_booking,function(module){
-		module.replaceDetail(id);
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_order_center,function(module){
+		module.viewBooking(id, 2);
 	});
 }
 //查看线路产品
