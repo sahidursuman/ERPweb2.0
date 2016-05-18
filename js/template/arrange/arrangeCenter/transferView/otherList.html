@@ -36,17 +36,28 @@
                 {{item.consumeTime}}
             </td>
 
-            {{if item.arrangeItems.length > 0}}
+            
             <td>
+            {{if item.arrangeItems.length > 0}}
                 {{if item.arrangeItems[0].arrangeType == 'ticket' }} 票
                      {{else if item.arrangeItems[0].arrangeType == 'restaurant' }}餐
                      {{else if item.arrangeItems[0].arrangeType == 'other' }}它
                 {{/if}}
+            {{else}}
+            -
+            {{/if}}
             </td>
-            <td>{{item.arrangeItems[0].require}}</td>
+            <td>
+            {{if item.arrangeItems.length > 0}}
+            {{item.arrangeItems[0].require}}
+             {{else}}
+            -
+            {{/if}}
+            </td>
 
             <!-- 具体安排 -->
             <td class="h-touristGroupInfo">
+            {{if item.arrangeItems.length > 0}}
             {{if item.arrangeItems[0].arrangeResultList.length}}
                 {{each item.arrangeItems[0].arrangeResultList as list}}
                 <p class="inline-block">
@@ -57,22 +68,29 @@
                 </p>
                 {{/each}}
             {{/if}}
+             {{else}}
+            -
+            {{/if}}
             </td>
-            <td rowspan="{{item.size}}">{{item.arrangeUserName}}</td>
+            <td rowspan="{{item.size}}">
+            {{if item.arrangeItems.length > 0}}
+            {{item.arrangeUserName}}
+            {{else}}
+            -
+            {{/if}}
+            </td>
             <td>
+            {{if item.arrangeItems.length > 0}}
                 {{if item.arrangeItems[0].status == 1}}
                     <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
                 {{else if item.arrangeItems[0].status == 0}}
                     <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
                 {{/if}}
+            
             </td>
             {{else}}
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            -
             {{/if}}
-
             <td rowspan="{{item.size}}">
                 {{if item.status == 1}}
                 <a class="cursor T-arrage T-inform T-action"> 
