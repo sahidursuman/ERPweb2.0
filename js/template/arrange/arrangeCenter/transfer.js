@@ -39,7 +39,8 @@ define(function(require, exports) {
             deleteOutTicketIds: [], //删除票务
             busArrangeIdArray: [],
             hotelArrangeIdArray: [],
-            collectionList : []
+            collectionList : [] ,
+            colGroItemList : []
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange',
@@ -571,8 +572,26 @@ define(function(require, exports) {
                     Transfer.delBusTransferId.push(delBusTransferData);
                 }
 
+                Transfer.spliceColGroIteArr(outRemarkId);
+
             });
         }
+
+        /**
+         * [spliceColGroIteArr 移除代收安排记录]
+         * @param  {[type]} outRemarkId 计划ID
+         * @return {[type]}             [description]
+         */
+        Transfer.spliceColGroIteArr = function(outRemarkId){
+            if (!!Transfer.colGroItemList && Transfer.colGroItemList.length > 0) {
+               for (var i = 0; i < Transfer.colGroItemList.length; i++) {
+                    if (Transfer.colGroItemList[i].outRemarkId = outRemarkId) {
+                        Transfer.colGroItemList.splice(i, 1);
+                    }
+                };
+            }  
+        }
+
         /**
          * 
          * 增加车安排弹窗任务
@@ -1320,6 +1339,9 @@ define(function(require, exports) {
                     }
                     Transfer.delHotelTransferId.push(delHotelTransferData);
                 }
+
+               //移除代收安排记录
+               Transfer.spliceColGroIteArr(outRemarkId);
             });
 
         }
@@ -2102,10 +2124,10 @@ define(function(require, exports) {
                         data.isConfirmAccount = isConfirmAccount;
                         data.isView = isView;
                         if (!!$that.data('collectGroItemList') && $that.data('collectGroItemList').length > 0 ) {
-                            var colGroItemList = $that.data('collectGroItemList') || "[]";
-                            for (var i = 0; i < colGroItemList.length; i++) {
-                                data.collectionList[i].collectionGroup = colGroItemList[i].collectionGroup;
-                                 data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
+                            Transfer.colGroItemList = $that.data('collectGroItemList');
+                            for (var i = 0; i <  Transfer.colGroItemList.length; i++) {
+                                data.collectionList[i].collectionGroup =  Transfer.colGroItemList[i].collectionGroup;
+                                 data.collectionList[i].collectionItem =  Transfer.colGroItemList[i].collectionItem;
                             };
                         }
                         var html = planCollectionTemplate(data);
@@ -2128,8 +2150,8 @@ define(function(require, exports) {
                                         $layerTr = $LayerId.find('#T-transfer-bus').children('tr');
                                     $layerTr.each(function(index) {
                                         var $that = $(this),
-                                            collectionGroup=$that.find('[name=collectionGroup]').val()*1 || 0,
-                                            collectionItem=$that.find('[name=collectionItem]').val()*1 || 0,
+                                            collectionGroup=$layerTr.eq(index).find('[name=collectionGroup]').val()*1 || 0,
+                                            collectionItem=$layerTr.eq(index).find('[name=collectionItem]').val()*1 || 0,
                                             planCollection = {
                                                 id : $that.attr("id"),
                                                 touristGroupId : $that.attr("touristGroupId"),
@@ -2138,11 +2160,22 @@ define(function(require, exports) {
                                             },
                                             collectGroItemJson = {
                                                 collectionGroup : collectionGroup,
-                                                collectionItem : collectionItem
+                                                collectionItem : collectionItem ,
+                                                outRemarkId : ''
                                             };
-                                        count=collectionGroup+collectionItem;
+                                         count+=collectionGroup;
+                                        count+=collectionItem;
                                         collectionList.push(planCollection);
+
                                         collectGroItemList.push(collectGroItemJson);
+
+                                        //设置安排Id
+                                        if (!!collectGroItemList && collectGroItemList.length > 0 && !!idList && idList.length>0) {
+                                            for (var i = 0; i < collectGroItemList.length; i++) {
+                                                collectGroItemList[i].outRemarkId = idList[i];
+                                            };
+                                        }
+
                                     });
                                     $tr.find('[name=collectionList]').val(JSON.stringify(collectionList));//代收信息
                                     $that.val(count); //代收金额合计
