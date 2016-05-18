@@ -524,13 +524,14 @@ define(function(require, exports) {
      * @param  {number} id 游客ID
      * @return {[type]}    [description]
      */
-    touristGroup.touristGroupView = function(id){
+    touristGroup.touristGroupView = function(id, type){
         $.ajax({
             url : KingServices.build_url('customerOrder', 'viewCustomerOrder'),
             data : {id : id},
             type: 'POST',
             success : function(data){
                 if(showDialog(data)){
+                    data.type = type;
                     data.id = id;
                     if(!!data.baseInfo && !!data.baseInfo.touristGroupMemberInfo){
                         var memberInfo = data.baseInfo.touristGroupMemberInfo;
@@ -881,11 +882,12 @@ define(function(require, exports) {
         return this;
         function deleteList($tr, id) {
             if(!!id){
+                var outId = 0;
                 if($tr.closest('tbody').hasClass('T-part-group-list')){
-                    id = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
+                    outId = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
                 }
-                if(!!id){
-                    validateDelete(id, function(data){
+                if(!!outId){
+                    validateDelete(outId, function(data){
                         var delJson = $tr.closest('tbody').data('del-json');
                         if(typeof delJson !== "object"){
                             delJson = JSON.parse(delJson || "[]");
@@ -1444,8 +1446,8 @@ define(function(require, exports) {
                         F.subtotal($that.closest('tr'), 1);
                     }else{
                         if(parseFloat(moneyData.needPayAllMoney) < 
-                            parseFloat(moneyData.preIncomeMoney) + 
-                            parseFloat(moneyData.currentNeedPayMoney)){
+                            parseFloat(moneyData.preIncomeMoney || 0) + 
+                            parseFloat(moneyData.currentNeedPayMoney || 0)){
                             showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
                                 $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                                 layer.close(index);
@@ -2804,7 +2806,7 @@ define(function(require, exports) {
             return false;
         }
 
-        if((data.receiveTrip.length > 0 || data.sendTrip.length > 0) && data.joinTrip.length === 0){
+        if(($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
             showMessageDialog('请添加一条参团信息！');
             return false;
         }
