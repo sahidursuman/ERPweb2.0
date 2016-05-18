@@ -38,7 +38,7 @@
 						<td>
 							<div class="hct-input-group col-xs-12">
 								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}" data-id="{{baseInfo.lineProductId}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}>
-								{{if baseInfo.disableFlag== 1}}<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>{{/if}}
+								{{if baseInfo.disableFlag!= 1}}<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>{{/if}}
 							</div>
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker" name="startTime" value="{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
