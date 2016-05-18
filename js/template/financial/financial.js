@@ -248,8 +248,8 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
                         saveJson[i].settlementMoney = $this.find("input[name=settlementMoney]").val();
 
                     }
-                    if (!!$this.find("input[name=collection]")) { //代收
-                       saveJson[i].collection = $this.find("input[name=collection]").val();
+                    if (!!$this.find(".T-collection")) { //代收
+                       saveJson[i].collection = $this.find(".T-collection]").text() || 0;
                     }
                     saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
                     saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
@@ -267,14 +267,14 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
                     confirm : $this.data("confirm"),//数据的原始对账状态，保存时用于过滤不需提交的数据
                     isChecked : isChecked
                 };
-                if (!!$this.find("input[name=collection]")) { //代收
-                    checkRecord.collection = $this.find("input[name=collection]").val();
+                if (!!$this.find(".T-collection")) { //代收
+                    checkRecord.collection = $this.find(".T-collection").text() || 0;
                 }
                 if(inner){
                     checkRecord.backMoney = $this.find("input[name=settlementMoney]").val();
                     checkRecord.settlementMoney = $this.find(".T-settlementMoney").text();
                 }
-                saveJson.push(checkRecord);  
+                saveJson.push(checkRecord);
             }
         }
     });
