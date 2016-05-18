@@ -35,7 +35,7 @@
         <tr data-entity-id="{{quote.id}}">
             <td>{{quote.quoteNumber}}</td>
             <td class="h-touristGroupInfo">
-                <p class="h-lineName">&lt;{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}&gt;</p>
+                <p class="h-lineName">{{if quote.lineProduct != null}}{{quote.lineProduct.name}}{{/if}}</p>
                 <p>
                     <span class="h-agencyName">{{if quote.lineProduct != null}}{{if quote.lineProduct.customerType == 0}}散客{{else}}团体{{/if}}{{/if}} 
                     </span>
