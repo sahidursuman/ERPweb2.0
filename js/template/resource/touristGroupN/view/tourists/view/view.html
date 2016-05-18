@@ -1,4 +1,4 @@
-<div class="container-fluid T-container">
+<div class="container-fluid T-container" data-id="{{id}}">
 	<div class="row">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title pull-left">小组信息</h3>
@@ -36,7 +36,7 @@
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a></td>
+						<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust">[费用调整]</a></td>
 						<td><a class="hct-cursor T-action T-guest-info" data-json="{{baseInfo.touristGroupMemberInfo}}">{{baseInfo.name}}</a></td>
 						<td>{{baseInfo.mobileNumber}}</td>
 						<td>{{baseInfo.outOPUserName}}</td>
@@ -109,7 +109,10 @@
 						<td name="tripStartTime">{{rs.tripStartTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{rs.subNeedPayMoney}}</td>
-						<td><a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a></td>
+						<td>
+							<a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust">[费用调整]</a>
+						</td>
 						{{if baseInfo.customerType == 0}}
 						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelInputValue}}</a></td>
 						<td><span class="F-float F-money">{{rs.operateCurrentNeedPayMoney}}</span></td>
