@@ -675,7 +675,7 @@ define(function(require, exports) {
                         var html = planCollectionTemplate(data);
                         var viewAccountsLayer = layer.open({
                             type: 1,
-                            title: "编辑计划代收",
+                            title: "查看计划代收",
                             skin: 'layui-layer-rim',
                             area: '1200px',
                             zIndex: 1028,
