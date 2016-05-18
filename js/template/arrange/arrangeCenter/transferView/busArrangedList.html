@@ -46,13 +46,15 @@
             {{if index == 0}}
             <td rowspan="{{bus.outRemarkList.length}}">{{bus.arrangeUserName}}</td>
             {{/if}}
+
             {{if index == 0}}
-            <td rowspan="{{bus.outRemarkList.length}}">{{if buslist.status == 3}}
+            <td rowspan="{{bus.outRemarkList.length}}">{{if buslist.status == 1}}
             <i class="ace-icon fa fa-check green bigger-130"></i>
             已完成{{else}}
             <i class="ace-icon fa fa-times red bigger-125"></i>未完成{{/if}}
             </td>
             {{/if}}
+
             {{if index == 0}}
             <td rowspan="{{bus.outRemarkList.length}}">
                 <!-- <a class="cursor T-action T-inform">通知</a> -->

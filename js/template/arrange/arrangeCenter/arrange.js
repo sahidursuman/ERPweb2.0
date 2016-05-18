@@ -121,6 +121,8 @@ define(function(require, exports) {
             var $that = $(this);
             $that.closest('form').find('.T-arrange-feild')
             .toggleClass('hidden', $that.val() === '0').find('input').val('').prop('checked', false);
+            //已安排列表
+            $that.closest('form').find('.T-arrangeStatus').toggleClass('hidden', $that.val() === '0').children('[name=arrangeStatus]').val('');
         });
     };
 

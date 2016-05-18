@@ -39,8 +39,7 @@ define(function(require, exports) {
             deleteOutTicketIds: [], //删除票务
             busArrangeIdArray: [],
             hotelArrangeIdArray: [],
-            collectionList : [] ,
-            colGroItemList : []
+            collectionList : []
         },
         tabKey = 'transfer_arrange_part',
         service_name = 'v2/singleItemArrange/touristGroupTransferArrange',
@@ -861,7 +860,7 @@ define(function(require, exports) {
             outRemarkList = [], //中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
             outRemarkId = $tab.find('input[name=outRemarkId]'),
-            status = $tab.find('.T-finishedArrange').is(':checked') ? 3 : 1;
+            status = $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0;
         outRemarkId.each(function() {
             if ($(this).val().trim()) {
                 var outRemarkJson = {
@@ -1383,7 +1382,7 @@ define(function(require, exports) {
                 }
 
                //更新缓存数据
-               Transfer.spliceColGroIteArr(outRemarkId);
+               Transfer.spliceColGroIteArr($hotelplanId, outRemarkId);
             });
 
         }
@@ -1546,7 +1545,7 @@ define(function(require, exports) {
         var unifyId = $hotelplanId.find('[name=unifyId]').val();
         var shuttleType = $hotelplanId.find('[name=shuttleType]').val();
         var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'), //车安排列表
-            status = $hotelplanId.find('.T-finishedArrange').is(':checked') ? 3 : 1;
+            status = $hotelplanId.find('.T-finishedArrange').is(':checked') ? 1 : 0;
 
         outHotelList.forEach(function(item) {
             item.collectionList = JSON.parse(item.collectionList || '[]');
@@ -2172,15 +2171,15 @@ define(function(require, exports) {
                                 data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
                             };
                         }
-                        var html = planCollectionTemplate(data),_title='';
+                        var html = planCollectionTemplate(data);
+                        var _Title = '编辑计划代收';
                         if (!!isView) {
-                            _title = '查看计划代收';
+                            _Title = '查看计划代收';
                         };
-                        _title = '编辑计划代收';
-
+                       
                         layer.open({
                             type: 1,
-                            title: _title,
+                            title: _Title,
                             skin: 'layui-layer-rim',
                             area: '1200px',
                             zIndex: 1028,
