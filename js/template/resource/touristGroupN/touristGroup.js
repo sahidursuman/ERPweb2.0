@@ -1049,7 +1049,7 @@ define(function(require, exports) {
         var str = Tools.thousandPoint(needPayAllMoney);
         if(!!jsonData.isTransfer && jsonData.isTransfer == 1){
             str = "他部　" + jsonData.dutyDepartmentName + "　" + Tools.thousandPoint(needPayAllMoney, 2);
-        }else if(!!jsonData.isTransfer && jsonData.isTransfer == 1){
+        }else if(!!jsonData.isTransfer && jsonData.isTransfer == 2){
             str = "外转　" + jsonData.transferPartnerAgency + "　" + Tools.thousandPoint(needPayAllMoney, 2);
         }
         $fee.text(str);
