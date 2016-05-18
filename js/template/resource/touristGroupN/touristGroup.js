@@ -1444,8 +1444,8 @@ define(function(require, exports) {
                         F.subtotal($that.closest('tr'), 1);
                     }else{
                         if(parseFloat(moneyData.needPayAllMoney) < 
-                            parseFloat(moneyData.preIncomeMoney) + 
-                            parseFloat(moneyData.currentNeedPayMoney)){
+                            parseFloat(moneyData.preIncomeMoney || 0) + 
+                            parseFloat(moneyData.currentNeedPayMoney || 0)){
                             showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
                                 $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                                 layer.close(index);
