@@ -589,7 +589,7 @@ define(function(require, exports) {
 
             //房安排
             $hotelTr.each(function(index) {
-                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList');
+                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0;
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         if (collectGroItemList[i].outRemarkId = outRemarkId) {
