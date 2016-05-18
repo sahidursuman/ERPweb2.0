@@ -3639,7 +3639,7 @@ define(function(require, exports){
 			'<td name="billRemark">'+
 				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<input name="billRemark"  class="w-80" type="text"/>'+
+					'<input name="billRemark" type="text"/>'+
 				'</div>'+
 			'</td>'+
 			'<td>未对账<a href="javascript:void(0)" class="T-busArrDel" style="margin-left:13px;">删除</a></td>'+
@@ -4746,7 +4746,7 @@ define(function(require, exports){
 						}
 					}
 					var newItem = {
-						id:-1,
+						id:"",
 						value:"导游自选"
 					};
 					restaurantList.unshift(newItem)
@@ -4766,6 +4766,16 @@ define(function(require, exports){
 								var $tr = $(this).closest('tr');
 								$tr.find('input[name=restaurantId]').val(ui.item.id);
 								$tr.find('input[name=standardId]').val(ui.item.id);
+								if(ui.item.id == ""){
+									var optionHtml = '<option value="0">现金</option>'+
+										'<option value="1">刷卡</option>';
+									$tr.find('select[name=payType]').html(optionHtml)
+								}else{
+									var optionHtml = '<option value="0">现金</option>'+
+										'<option value="1">刷卡</option>'+
+										'<option value="2">签单</option>';
+									$tr.find('select[name=payType]').html(optionHtml)
+								};
 								Count.autoRestaurantSum($(this),$parentObj);
 								//获取餐标
 								Count.getRestPrice($tr,$parentObj);
@@ -4783,51 +4793,56 @@ define(function(require, exports){
 	};
 	//获取餐标
 	Count.getRestPrice = function($obj,$parentObj){
-		var id = $obj.find('input[name=restaurantId]').val() || $obj.find('select[name=chooseRest]').val(),
+		var id = $obj.find('input[name=restaurantId]').val(),
 			standardObj = $obj.find('input[name=price]'),
 			type = $obj.find('select[name=type]').val() || $obj.find('input[name=type]').val();
-		$.ajax({
-			url:KingServices.build_url('restaurant','getRestaurantStandardByType'),
-			data:{
-				restaurantId:id,
-				type:type
-			},
-			showLoading:false,
-			type:'POST',
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-					var restaurantStandardList = data.restaurantStandardList || [];
+		if(!!$obj.find('select[name=chooseRest]').val()){
+			id = $obj.find('select[name=chooseRest]').val();
+		};
+		if(!!id){
+			$.ajax({
+				url:KingServices.build_url('restaurant','getRestaurantStandardByType'),
+				data:{
+					restaurantId:id,
+					type:type
+				},
+				showLoading:false,
+				type:'POST',
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						var restaurantStandardList = data.restaurantStandardList || [];
 
-					for(var i=0; i < restaurantStandardList.length; i++){
-						restaurantStandardList[i].value = restaurantStandardList[i].price;
-					}
-					standardObj.autocomplete({
-						minLength:0,
-						change:function(event,ui){
-							 if(ui.item == null){
-							 	var $tr = $(this).closest('tr');
-							 	// 允许输入餐标，不清空
-							 	// $(this).val('');
-							 	$tr.find('input[name=standardId]').val('');
-							 }
-							 Count.autoRestaurantSum($(this),$parentObj);
-						},
-						select:function(event,ui){
-							if(ui.item !=null){
-								var $tr = $(this).closest('tr');
-							 	$tr.find('input[name=standardId]').val(ui.item.id);
-							}
+						for(var i=0; i < restaurantStandardList.length; i++){
+							restaurantStandardList[i].value = restaurantStandardList[i].price;
 						}
-					}).off('click').on('click',function(){
-						var obj = $(this);
-						obj.autocomplete('option','source', restaurantStandardList);
-						obj.autocomplete('search', '');
-					});
-					
+						standardObj.autocomplete({
+							minLength:0,
+							change:function(event,ui){
+								 if(ui.item == null){
+								 	var $tr = $(this).closest('tr');
+								 	// 允许输入餐标，不清空
+								 	// $(this).val('');
+								 	$tr.find('input[name=standardId]').val('');
+								 }
+								 Count.autoRestaurantSum($(this),$parentObj);
+							},
+							select:function(event,ui){
+								if(ui.item !=null){
+									var $tr = $(this).closest('tr');
+								 	$tr.find('input[name=standardId]').val(ui.item.id);
+								}
+							}
+						}).off('click').on('click',function(){
+							var obj = $(this);
+							obj.autocomplete('option','source', restaurantStandardList);
+							obj.autocomplete('search', '');
+						});
+						
+					}
 				}
-			}
-		});
+			});
+		}
 	};
 	//获取酒店数据
 	Count.getHotelData = function($obj,$parentObj){
@@ -5463,17 +5478,7 @@ define(function(require, exports){
 		}
 
 		var addRestList = saveJsonStr.addRestArrangeList;
-		for(var i = 0;i<addRestList.length;i++){
-			// 不校验餐标
-			if(addRestList[i].restaurantId == ""){
-				var message="";
-				if(addRestList[i].restaurantId == ""){
-					message = "请选择餐厅"
-				};
-				showMessageDialog(message);
-				return;
-			}
-		}
+		
 		///导游自选餐厅
 		if(typeFlag == 3){
 			var restaurantList= saveJsonStr.addRestArrangeList;

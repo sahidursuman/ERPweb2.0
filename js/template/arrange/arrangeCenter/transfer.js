@@ -571,8 +571,68 @@ define(function(require, exports) {
                     Transfer.delBusTransferId.push(delBusTransferData);
                 }
 
+                //更新缓冲数据
+                Transfer.spliceColGroIteArr($busplanId, outRemarkId);
+
             });
         }
+
+        /**
+         * [spliceColGroIteArr 移除代收安排记录]
+         * @param  {[type]} outRemarkId 计划ID
+         * @return {[type]}             [description]
+         */
+        Transfer.spliceColGroIteArr = function($tab, outRemarkId){
+
+            var $hotelTr = $tab.find('tbody.T-hotel-plan').children('tr'),
+                $busTr = $tab.find('tbody.T-bus-plan').children('tr');
+
+            //房安排
+            $hotelTr.each(function(index) {
+                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList');
+                if (!!collectGroItemList && collectGroItemList.length > 0 ) {
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        if (collectGroItemList[i].outRemarkId = outRemarkId) {
+                            collectGroItemList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    //修改缓存data数据
+                    $hotelTr.eq(index).find('.T-collection').data('collectGroItemList', collectGroItemList)
+
+                    //重置计算
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        count+=collectGroItemList[i].collectionGroup;
+                        count+=collectGroItemList[i].collectionItem;
+                    }
+                    $hotelTr.eq(index).find('.T-collection').val(count);
+                }
+                
+            }); 
+
+            //车安排
+            $busTr.each(function(index) {
+                var collectGroItemList=$busTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0; 
+                if (!!collectGroItemList && collectGroItemList.length > 0 ) {
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        if (collectGroItemList[i].outRemarkId = outRemarkId) {
+                            collectGroItemList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    //修改data缓存数据
+                    $busTr.eq(index).find('.T-collection').data('collectGroItemList', collectGroItemList);
+
+                    //重置计算
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        count+=collectGroItemList[i].collectionGroup;
+                        count+=collectGroItemList[i].collectionItem;
+                    }
+                    $busTr.eq(index).find('.T-collection').val(count);
+                }
+            }); 
+        }
+
         /**
          * 
          * 增加车安排弹窗任务
@@ -800,7 +860,7 @@ define(function(require, exports) {
             outRemarkList = [], //中转列表 Id
             $tr = $tab.find('.T-bus-plan tr'),
             outRemarkId = $tab.find('input[name=outRemarkId]'),
-            status = $tab.find('.T-finishedArrange').is(':checked') ? 3 : 1;
+            status = $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0;
         outRemarkId.each(function() {
             if ($(this).val().trim()) {
                 var outRemarkJson = {
@@ -1320,6 +1380,9 @@ define(function(require, exports) {
                     }
                     Transfer.delHotelTransferId.push(delHotelTransferData);
                 }
+
+               //更新缓存数据
+               Transfer.spliceColGroIteArr($hotelplanId, outRemarkId);
             });
 
         }
@@ -1482,7 +1545,7 @@ define(function(require, exports) {
         var unifyId = $hotelplanId.find('[name=unifyId]').val();
         var shuttleType = $hotelplanId.find('[name=shuttleType]').val();
         var outHotelList = Tools.getTableVal($('#hotelplan_body'), 'id'), //车安排列表
-            status = $hotelplanId.find('.T-finishedArrange').is(':checked') ? 3 : 1;
+            status = $hotelplanId.find('.T-finishedArrange').is(':checked') ? 1 : 0;
 
         outHotelList.forEach(function(item) {
             item.collectionList = JSON.parse(item.collectionList || '[]');
@@ -2101,17 +2164,22 @@ define(function(require, exports) {
                     if (showDialog(data)) {
                         data.isConfirmAccount = isConfirmAccount;
                         data.isView = isView;
-                        if (!!$that.data('collectGroItemList') && $that.data('collectGroItemList').length > 0 ) {
-                            var colGroItemList = $that.data('collectGroItemList') || "[]";
-                            for (var i = 0; i < colGroItemList.length; i++) {
+                        var colGroItemList = $that.data('collectGroItemList');
+                        if (!!colGroItemList && colGroItemList.length > 0 ) {
+                            for (var i = 0; i <  colGroItemList.length; i++) {
                                 data.collectionList[i].collectionGroup = colGroItemList[i].collectionGroup;
-                                 data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
+                                data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
                             };
                         }
                         var html = planCollectionTemplate(data);
+                        var _Title = '编辑计划代收';
+                        if (!!isView) {
+                            _Title = '查看计划代收';
+                        };
+                       
                         layer.open({
                             type: 1,
-                            title: "编辑计划代收",
+                            title: _Title,
                             skin: 'layui-layer-rim',
                             area: '1200px',
                             zIndex: 1028,
@@ -2128,8 +2196,8 @@ define(function(require, exports) {
                                         $layerTr = $LayerId.find('#T-transfer-bus').children('tr');
                                     $layerTr.each(function(index) {
                                         var $that = $(this),
-                                            collectionGroup=$that.find('[name=collectionGroup]').val()*1 || 0,
-                                            collectionItem=$that.find('[name=collectionItem]').val()*1 || 0,
+                                            collectionGroup=$layerTr.eq(index).find('[name=collectionGroup]').val()*1 || 0,
+                                            collectionItem=$layerTr.eq(index).find('[name=collectionItem]').val()*1 || 0,
                                             planCollection = {
                                                 id : $that.attr("id"),
                                                 touristGroupId : $that.attr("touristGroupId"),
@@ -2138,11 +2206,22 @@ define(function(require, exports) {
                                             },
                                             collectGroItemJson = {
                                                 collectionGroup : collectionGroup,
-                                                collectionItem : collectionItem
+                                                collectionItem : collectionItem ,
+                                                outRemarkId : ''
                                             };
-                                        count=collectionGroup+collectionItem;
+                                         count+=collectionGroup;
+                                        count+=collectionItem;
                                         collectionList.push(planCollection);
+
                                         collectGroItemList.push(collectGroItemJson);
+
+                                        //设置安排Id
+                                        if (!!collectGroItemList && collectGroItemList.length > 0 && !!idList && idList.length>0) {
+                                            for (var i = 0; i < collectGroItemList.length; i++) {
+                                                collectGroItemList[i].outRemarkId = idList[i];
+                                            };
+                                        }
+
                                     });
                                     $tr.find('[name=collectionList]').val(JSON.stringify(collectionList));//代收信息
                                     $that.val(count); //代收金额合计
