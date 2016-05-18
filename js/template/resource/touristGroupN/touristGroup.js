@@ -795,6 +795,7 @@ define(function(require, exports) {
                     $("body").find('[href="#tab-' + K.menu + '-content"]').trigger('click');                    
                 }
             });
+
         }
     	//接团表内操作
     	$tab.find('.T-join-group-list').on('click', '.T-action', function(event){
@@ -882,7 +883,19 @@ define(function(require, exports) {
                 if($tr.closest('tbody').hasClass('T-part-group-list')){
                     id = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
                 }
-                validateDelete(id, function(data){
+                if(!!id){
+                    validateDelete(id, function(data){
+                        var delJson = $tr.closest('tbody').data('del-json');
+                        if(typeof delJson !== "object"){
+                            delJson = JSON.parse(delJson || "[]");
+                        };
+                        delJson.push({
+                            id : id
+                        });
+                        $tr.closest('tbody').data('del-json', delJson);
+                        $tr.remove();
+                    });
+                }else{
                     var delJson = $tr.closest('tbody').data('del-json');
                     if(typeof delJson !== "object"){
                         delJson = JSON.parse(delJson || "[]");
@@ -892,7 +905,7 @@ define(function(require, exports) {
                     });
                     $tr.closest('tbody').data('del-json', delJson);
                     $tr.remove();
-                });
+                }
             }else{
                 $tr.remove();
             }
@@ -1340,11 +1353,12 @@ define(function(require, exports) {
                             parseFloat(moneyData.preIncomeMoney) + 
                             parseFloat(moneyData.currentNeedPayMoney)){
                             showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
-                                layer.close(index);
                                 $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                                layer.close(index);
                             });
                         }else{
                             $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                            layer.close(index);
                         }
                     }
                 });
