@@ -23,7 +23,7 @@
 						<th>行程</th>
 						<th width="100">接团日期</th>
 						<th width="100">送团日期</th>
-						<th>应收</th>
+						{{if type != "inner"}}<th>应收</th>{{/if}}
 						<th>客人信息</th>
 						<th>联系电话</th>
 						<th>外联销售</th>
@@ -36,7 +36,7 @@
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust">[费用调整]</a></td>
+						{{if type != "inner"}}<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust">[费用调整]</a></td>{{/if}}
 						<td><a class="hct-cursor T-action T-guest-info" data-json="{{baseInfo.touristGroupMemberInfo}}">{{baseInfo.name}}</a></td>
 						<td>{{baseInfo.mobileNumber}}</td>
 						<td>{{baseInfo.outOPUserName}}</td>
@@ -46,7 +46,7 @@
 			</table>
 		</div>
 	</div>
-	{{if baseInfo.customerType == 0 && receiveTrip.length > 0}}
+	{{if baseInfo.customerType == 0 && receiveTrip.length > 0 && type != "inner"}}
 	<div class="row T-join-group">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">接团</h3>
@@ -125,7 +125,7 @@
 		</div>
 	</div>
 	{{/if}}
-	{{if baseInfo.customerType == 0 && sendTrip.length > 0}}
+	{{if baseInfo.customerType == 0 && sendTrip.length > 0 && type != "inner"}}
 	<div class="row T-send-group">
 		<div class="col-xs-12">
 			<h3 class="hct-update-list-title hct-title-point">送团</h3>
