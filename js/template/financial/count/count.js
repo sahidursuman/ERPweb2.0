@@ -5478,17 +5478,7 @@ define(function(require, exports){
 		}
 
 		var addRestList = saveJsonStr.addRestArrangeList;
-		for(var i = 0;i<addRestList.length;i++){
-			// 不校验餐标
-			if(addRestList[i].restaurantId == ""){
-				var message="";
-				if(addRestList[i].restaurantId == ""){
-					message = "请选择餐厅"
-				};
-				showMessageDialog(message);
-				return;
-			}
-		}
+		
 		///导游自选餐厅
 		if(typeFlag == 3){
 			var restaurantList= saveJsonStr.addRestArrangeList;
