@@ -51,12 +51,14 @@
             {{if index == 0}}
             <td rowspan="{{hotel.outRemarkList.length}}">
             {{/if}}
-            {{if hotel.status == 3}}
+
+            {{if hotel.status == 1}}
             <i class="ace-icon fa fa-check green bigger-130"></i>已完成
             {{else}}<i class="ace-icon fa fa-times red bigger-125"></i>未完成
             {{/if}}
             </td>
             {{/if}}
+
             {{if index == 0}}
             <td rowspan="{{hotel.outRemarkList.length}}">
                 <a class="cursor T-arrange-item T-action">安排</a>
