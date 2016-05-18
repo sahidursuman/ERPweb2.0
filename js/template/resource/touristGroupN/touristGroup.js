@@ -625,14 +625,14 @@ define(function(require, exports) {
                     }
                     if (Tools.addTab(K.view , '查看小组', T.view(data))) {
                         touristGroup.commonEvents($("#tab-" + K.view + "-content"), 1);
+                        var $viewAccount = $("#tab-resource_touristGroup_view-content");
+                            $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
+                            var pluginKey = 'plugin_print';
+                                Tools.loadPluginScript(pluginKey);
+                                touristGroup.viewAccountList(id);
+                            });
                     }
                 }
-                var $viewAccount = $("#tab-resource_touristGroup_view-content");
-                    $viewAccount.find('.T-statementsBtn').off('click').on('click',function(){
-                    var pluginKey = 'plugin_print';
-                        Tools.loadPluginScript(pluginKey);
-                        touristGroup.viewAccountList(id);
-                });
 
             }
         });
