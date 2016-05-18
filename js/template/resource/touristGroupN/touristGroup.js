@@ -881,11 +881,12 @@ define(function(require, exports) {
         return this;
         function deleteList($tr, id) {
             if(!!id){
+                var outId = 0;
                 if($tr.closest('tbody').hasClass('T-part-group-list')){
-                    id = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
+                    outId = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
                 }
-                if(!!id){
-                    validateDelete(id, function(data){
+                if(!!outId){
+                    validateDelete(outId, function(data){
                         var delJson = $tr.closest('tbody').data('del-json');
                         if(typeof delJson !== "object"){
                             delJson = JSON.parse(delJson || "[]");
@@ -2804,7 +2805,7 @@ define(function(require, exports) {
             return false;
         }
 
-        if((data.receiveTrip.length > 0 || data.sendTrip.length > 0) && data.joinTrip.length === 0){
+        if(($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
             showMessageDialog('请添加一条参团信息！');
             return false;
         }
