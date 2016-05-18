@@ -572,7 +572,8 @@ define(function(require, exports) {
                     Transfer.delBusTransferId.push(delBusTransferData);
                 }
 
-                Transfer.spliceColGroIteArr(outRemarkId);
+                //更新缓冲数据
+                Transfer.spliceColGroIteArr($busplanId, outRemarkId);
 
             });
         }
@@ -582,14 +583,55 @@ define(function(require, exports) {
          * @param  {[type]} outRemarkId 计划ID
          * @return {[type]}             [description]
          */
-        Transfer.spliceColGroIteArr = function(outRemarkId){
-            if (!!Transfer.colGroItemList && Transfer.colGroItemList.length > 0) {
-               for (var i = 0; i < Transfer.colGroItemList.length; i++) {
-                    if (Transfer.colGroItemList[i].outRemarkId = outRemarkId) {
-                        Transfer.colGroItemList.splice(i, 1);
+        Transfer.spliceColGroIteArr = function($tab, outRemarkId){
+
+            var $hotelTr = $tab.find('tbody.T-hotel-plan').children('tr'),
+                $busTr = $tab.find('tbody.T-bus-plan').children('tr');
+
+            //房安排
+            $hotelTr.each(function(index) {
+                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList');
+                if (!!collectGroItemList && collectGroItemList.length > 0 ) {
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        if (collectGroItemList[i].outRemarkId = outRemarkId) {
+                            collectGroItemList.splice(i, 1);
+                            break;
+                        }
                     }
-                };
-            }  
+                    //修改缓存data数据
+                    $hotelTr.eq(index).find('.T-collection').data('collectGroItemList', collectGroItemList)
+
+                    //重置计算
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        count+=collectGroItemList[i].collectionGroup;
+                        count+=collectGroItemList[i].collectionItem;
+                    }
+                    $hotelTr.eq(index).find('.T-collection').val(count);
+                }
+                
+            }); 
+
+            //车安排
+            $busTr.each(function(index) {
+                var collectGroItemList=$busTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0; 
+                if (!!collectGroItemList && collectGroItemList.length > 0 ) {
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        if (collectGroItemList[i].outRemarkId = outRemarkId) {
+                            collectGroItemList.splice(i, 1);
+                            break;
+                        }
+                    }
+                    //修改data缓存数据
+                    $busTr.eq(index).find('.T-collection').data('collectGroItemList', collectGroItemList);
+
+                    //重置计算
+                    for(var i = 0, len = collectGroItemList.length; i < len; i++){
+                        count+=collectGroItemList[i].collectionGroup;
+                        count+=collectGroItemList[i].collectionItem;
+                    }
+                    $busTr.eq(index).find('.T-collection').val(count);
+                }
+            }); 
         }
 
         /**
@@ -1340,7 +1382,7 @@ define(function(require, exports) {
                     Transfer.delHotelTransferId.push(delHotelTransferData);
                 }
 
-               //移除代收安排记录
+               //更新缓存数据
                Transfer.spliceColGroIteArr(outRemarkId);
             });
 
@@ -2123,17 +2165,22 @@ define(function(require, exports) {
                     if (showDialog(data)) {
                         data.isConfirmAccount = isConfirmAccount;
                         data.isView = isView;
-                        if (!!$that.data('collectGroItemList') && $that.data('collectGroItemList').length > 0 ) {
-                            Transfer.colGroItemList = $that.data('collectGroItemList');
-                            for (var i = 0; i <  Transfer.colGroItemList.length; i++) {
-                                data.collectionList[i].collectionGroup =  Transfer.colGroItemList[i].collectionGroup;
-                                 data.collectionList[i].collectionItem =  Transfer.colGroItemList[i].collectionItem;
+                        var colGroItemList = $that.data('collectGroItemList');
+                        if (!!colGroItemList && colGroItemList.length > 0 ) {
+                            for (var i = 0; i <  colGroItemList.length; i++) {
+                                data.collectionList[i].collectionGroup = colGroItemList[i].collectionGroup;
+                                data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
                             };
                         }
-                        var html = planCollectionTemplate(data);
+                        var html = planCollectionTemplate(data),_title='';
+                        if (!!isView) {
+                            _title = '查看计划代收';
+                        };
+                        _title = '编辑计划代收';
+
                         layer.open({
                             type: 1,
-                            title: "编辑计划代收",
+                            title: _title,
                             skin: 'layui-layer-rim',
                             area: '1200px',
                             zIndex: 1028,
