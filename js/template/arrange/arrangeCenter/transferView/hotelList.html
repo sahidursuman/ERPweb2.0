@@ -39,7 +39,10 @@
                     <span class="adultCount">{{hotel.adultCount}}</span>大
                     <span class="childCount">{{hotel.childCount}}</span>小
                 </p>
-                <p><span class="contactMemberName">{{hotel.contactMemberName}}</span> <span class="contactMemberPhoneNumber">({{hotel.contactMemberPhoneNumber}})</span></p>
+                {{each hotel.contactMemberList as itme}}
+                <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td><span class="checkInTime">{{hotel.checkInTime}}</span></td>
             <td>

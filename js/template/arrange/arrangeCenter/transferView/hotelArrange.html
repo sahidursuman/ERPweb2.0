@@ -34,8 +34,10 @@
                         <span class="adultCount">{{item.adultCount}}</span>大
                         <span class="childCount">{{item.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberName">{{item.contactMemberName}}</span> 
-                    <span class="contactMemberPhoneNumber">({{item.contactMemberPhoneNumber}})</span></p>
+                   {{each item.contactMemberList as itmes}}
+                    <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>
                     <p><span class="checkInTime">{{item.checkInTime}}</span></p>

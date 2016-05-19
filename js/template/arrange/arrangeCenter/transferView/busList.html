@@ -42,8 +42,10 @@
                     <span class="adultCount">{{bus.adultCount}}</span>大
                     <span class="childCount">{{bus.childCount}}</span>小
                 </p>
-                <p><span class="contactMemberName">{{bus.contactMemberName}}</span>
-                <span class="contactMemberPhoneNumber">({{bus.contactMemberPhoneNumber}})</span></p>
+                {{each bus.contactMemberList as itme}}
+                <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td><span class="arriveTime">{{bus.arriveTime}}</span></td>
             <td><span class="shift">{{bus.shift}}</span></td>
