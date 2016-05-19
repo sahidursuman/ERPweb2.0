@@ -729,12 +729,11 @@ define(function(require, exports) {
                             input +
                             '</td>' +
                             '<td>' +
-                            '<p><span cals="contactMemberName">' + (busPlan.contactMemberName || "") + '</span></p>' +
                             '<p>' +
                             '<span class="adultCount">' + (busPlan.adultCount || "") + '</span>大' +
                             '<span class="childCount">' + (busPlan.childCount || "") + '</span>小' +
                             '</p>' +
-                            '<p><span class="contactMemberPhoneNumber">' + (busPlan.contactMemberPhoneNumber || "") + '</span></p>' +
+                            '<p><span class="contactMemberName">' + (busPlan.contactMemberName || "") + '</span><span class="contactMemberPhoneNumber">' + (busPlan.contactMemberPhoneNumber || "") + '</span></p>' +
                             '</td>' +
                             '<td><span class="arriveTime">' + (busPlan.arriveTime || "") + '</span></td>' +
                             '<td><span class="shift">' + (busPlan.shift || "") + '</span></td>' +
@@ -1500,12 +1499,11 @@ define(function(require, exports) {
                             input +
                             '</td>' +
                             '<td>' +
-                            '<p><span cals="contactMemberName">' + (hotelPlan.contactMemberName || "") + '</span></p>' +
                             '<p>' +
                             '<span class="adultCount">' + (hotelPlan.adultCount || "") + '</span>大' +
                             '<span class="childCount">' + (hotelPlan.childCount || "") + '</span>小' +
                             '</p>' +
-                            '<p><span class="contactMemberPhoneNumber">' + (hotelPlan.contactMemberPhoneNumber || "") + '</span></p>' +
+                            '<p><span cals="contactMemberName">' + (hotelPlan.contactMemberName || "") + '</span> <span class="contactMemberPhoneNumber">' + (hotelPlan.contactMemberPhoneNumber || "") + '</span></p>' +
                             '</td>' +
                             '<td><sapn class="checkInTime">' + (hotelPlan.checkInTime || "") + '</span></td>' +
                             '<td><sapn class="hotelLevel">' + (hotelPlan.hotelLevel || "") + '</span></td>' +
