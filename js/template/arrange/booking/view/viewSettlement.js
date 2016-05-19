@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":308,"md5":"fabc31a4a069b52eac9c811861f6ed4c"}*/
+/*TMODJS:{"debug":true,"version":306,"md5":"fabc31a4a069b52eac9c811861f6ed4c"}*/
 define(function(require) {
     return require("../../../template")("arrange/booking/view/viewSettlement", function($data, $filename) {
         try {
