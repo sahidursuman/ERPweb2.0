@@ -184,7 +184,55 @@ define(function(require, exports) {
 				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId,-1);
 			};
 		});
-	};
+
+		//商品事件
+		var $showLIt = shopStat.$tab.find(".T-Choose-goods");
+			$showLIt.off('click').on('click',function(){
+				shopStat.showItem($(this));
+			})
+		};
+
+		shopStat.showItem = function($obj){
+			var shopId = shopStat.$searchArea.find('input[name=shopId]').val();
+			if (!!shopId) {
+				$.ajax({
+					url: KingServices.build_url('shop','findPolicyByShopId'),
+					type: 'POST',
+					data:{id:shopId},
+					showLoading:false,
+					success:function(data){
+						 //商品列表
+						var shopItemList = JSON.parse(data.shopPolicyList);
+						for(var i = 0;i<shopItemList.length;i++){
+							shopItemList[i].value = shopItemList[i].name;
+						};
+						$obj.autocomplete({
+							minLength:0,
+							select:function(event,ui){
+								if(ui.item != null){
+									var divObj = $(this).closest('div');
+									divObj.find('[name='+name+'Id]').val(ui.item.id);
+								}
+							},
+							change:function(event,ui){
+								if(ui.item == null){
+									var divObj = $(this).closest('div');
+									$(this).val('');
+									divObj.find('[name='+name+'Id]').val('');
+								};
+							}
+						})
+						$obj.autocomplete('option','source', shopItemList);
+						$obj.autocomplete('search', '');
+					}
+				});
+			}else{
+ 				layer.tips('请选择购物店', $obj, {
+ 				    tips: [1, '#3595CC'],
+ 				    time: 2000
+ 				});
+			}
+		};
 
 	/**
 	 *展示点击总打单
@@ -222,6 +270,9 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+
+
 	/**
 	 * [autocompleteDate 获取客户、团号和购物店列表]
 	 * @return {[type]} [description]
@@ -235,7 +286,7 @@ define(function(require, exports) {
 			if (showDialog(data)){
 				var partnerAgency = tab.find('[name=fromPartnerAgency]'),
 					shop = tab.find('[name=shop]');
-					shopItem = tab.find('[name=shopItem]');
+					// shopItem = tab.find('[name=shopItem]');
 
 				//购物店列表
 				var shopList = data.shopList;
@@ -243,11 +294,11 @@ define(function(require, exports) {
 					shopList[i].value = shopList[i].shopName;
 				};
 				 //商品列表
-				var shopItemList = data.shopItemList;
-				for(var i = 0;i<shopItemList.length;i++){
-					shopItemList[i].value = shopItemList[i].shopItem;
-					shopItemList[i].id = shopItemList[i].shopItemId;
-				};
+				// var shopItemList = data.shopItemList;
+				// for(var i = 0;i<shopItemList.length;i++){
+				// 	shopItemList[i].value = shopItemList[i].shopItem;
+				// 	shopItemList[i].id = shopItemList[i].shopItemId;
+				// };
 				//客户列表
 				var customerList = data.fromPartnerAgencyList;
 				for(var i = 0;i<customerList.length;i++){
@@ -256,7 +307,7 @@ define(function(require, exports) {
 				};
 
 				shopStat.showList(shop,shopList);
-				shopStat.showList(shopItem,shopItemList);
+				// shopStat.showList(shopId,shopItemList);
 				shopStat.showList(partnerAgency,customerList);
 			}
 		});
