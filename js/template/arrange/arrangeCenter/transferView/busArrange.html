@@ -36,8 +36,10 @@
                         <span class="adultCount">{{Busplan.adultCount}}</span>大
                         <span class="childCount">{{Busplan.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberName">{{Busplan.contactMemberName}}</span>
-                    <span class="contactMemberPhoneNumber">({{Busplan.contactMemberPhoneNumber}})</span></p>
+                    {{each Busplan.contactMemberList as itme}}
+                    <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>{{Busplan.arriveTime}}</td>
                 <td>{{Busplan.shift}}</td>

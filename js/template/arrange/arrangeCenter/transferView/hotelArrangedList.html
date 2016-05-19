@@ -38,8 +38,11 @@
                 <p>收客单号：{{seat.tgOrderNumber}}</p>
             </td>
             <td>
-            <p><span>{{seat.contactMemberName}}</span></p>
                 <p> {{seat.adultCount}} 大 {{seat.childCount}} 小</p>
+                {{each seat.contactMemberList as itme}}
+                <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td>{{seat.checkInTime}}</td>
             <td>
