@@ -122,7 +122,7 @@ define(function(require, exports) {
             $that.closest('form').find('.T-arrange-feild')
             .toggleClass('hidden', $that.val() === '0').find('input').val('').prop('checked', false);
             $that.closest('form').find('.T-giveMe').toggleClass('hidden');
-            $that.val() === '0'? $that.closest('form').find('.T-arrange-feild').next().prop('selected',true):$that.closest('form').find('.T-arrange-feild').prop('selected',true);
+            $that.val() === '0'? $that.closest('form').find('.T-arrange-feild').next().prop('selected',true):$that.closest('form').find('.T-arrange-feild').next().prop('selected',true);
             //已安排列表
             $that.closest('form').find('.T-arrangeStatus').toggleClass('hidden', $that.val() === '0').children('[name=arrangeStatus]').val('0');
         });
