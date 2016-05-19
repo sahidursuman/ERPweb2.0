@@ -408,5 +408,9 @@
           default:
             return console.info("Other Type:type"), "其他类型";
         }
+    }), template.helper("canEditCheckedFinancial", function(status) {
+        var res = !0;
+        return 2 != status && 1 != status || isAuth("1190003") || 32 != IndexData.userInfo.travelAgencyId || (res = !1), 
+        res;
     });
 }();
