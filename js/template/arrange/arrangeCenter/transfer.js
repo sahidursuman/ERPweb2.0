@@ -474,7 +474,9 @@ define(function(require, exports) {
                         Transfer.$checkJson = Transfer.$busviewId;
                         Transfer.busplanclick($busplanId, '', shuttleType); //车安排事件
                         Transfer.deleteOutBusIds = [];
-                        Transfer.busCollList($busplanId,data.outBusList);
+
+                        //设置计划代收初始化缓存数据
+                        Transfer.planCollList($busplanId,data.outBusList);
                     }
                 }
             });
@@ -563,17 +565,18 @@ define(function(require, exports) {
                     touristGroupId = $tr.attr('data-touristgroupId');
                 var $taskListLen = $busplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
-                    $that.attr('disabled', 'disabled');
+                    $that.prop('disabled', true);
                 } else {
                     $tr.remove();
                     var delBusTransferData = {
                         outRemarkId: outRemarkId
                     }
                     Transfer.delBusTransferId.push(delBusTransferData);
+                    //更新缓冲数据
+                    Transfer.spliceColGroIteArr($busplanId, touristGroupId);
                 }
 
-                //更新缓冲数据
-                Transfer.spliceColGroIteArr($busplanId, outRemarkId, touristGroupId);
+                
 
             });
         }
@@ -583,86 +586,71 @@ define(function(require, exports) {
          * @param  {[type]} outRemarkId 计划ID
          * @return {[type]}             [description]
          */
-        Transfer.spliceColGroIteArr = function($tab, outRemarkId){
+        Transfer.spliceColGroIteArr = function($tab, touristGroupId){
 
             var $hotelTr = $tab.find('tbody.T-hotel-plan').children('tr'),
                 $busTr = $tab.find('tbody.T-bus-plan').children('tr');
             //房安排
             $hotelTr.each(function(index) {
-                //缓存数据
-                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0;
-                //初始化显示数据data
-                var collectionList = $hotelTr.eq(index).find('[name=collectionList]').val();
+                 
+                //读取缓存数据
+                var collectionList = $hotelTr.eq(index).find('[name=collectionList]').val(),
+                    count = 0,
+                    collectGroItemList=[];
                 //实例化对象
-                collectionList = JSON.parse(collectionList);
+                collectGroItemList = JSON.parse(collectionList);
 
-                //数据未缓存时
-                if (!collectGroItemList) {
-                    collectGroItemList = collectionList;
-                }
-
+                //分割缓存数据
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
-                        if (collectGroItemList[i].outRemarkId = outRemarkId) {
-                            collectGroItemList.splice(i, 1);
-                            break;
-                        }
-
                         //小组ID
                         if (collectGroItemList[i].touristGroupId = touristGroupId) {
                             collectGroItemList.splice(i, 1);
                             break;
                         }
                     }
-                    //修改缓存data数据
-                    $hotelTr.eq(index).find('.T-collection').data('collectGroItemList', collectGroItemList)
-
+        
                     //重置计算
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         count+=collectGroItemList[i].collectionGroup;
                         count+=collectGroItemList[i].collectionItem;
                     }
                     $hotelTr.eq(index).find('.T-collection').val(count);
+
+                    //更新缓存数据
+                    $hotelTr.eq(index).find('[name=collectionList]').val(JSON.stringify(collectGroItemList));
                 }
                 
             }); 
 
             //车安排
             $busTr.each(function(index) {
-                //缓存数据
-                var collectGroItemList=$busTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0; 
-
-                //初始化显示数据data
-                var collectionList = $busTr.eq(index).find('[name=collectionList]').val();
+                //读取缓存数据
+                var collectionList = $busTr.eq(index).find('[name=collectionList]').val(),
+                    count = 0,
+                    collectGroItemList = []; 
                 //实例化对象
-                collectionList = JSON.parse(collectionList);
-                //无数据缓存
-                if (!collectGroItemList) {
-                    collectGroItemList = collectionList;
-                }
-
+                collectGroItemList = JSON.parse(collectionList);
+                
+                //分割缓存数据
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
-                        if (collectGroItemList[i].outRemarkId = outRemarkId) {
-                            collectGroItemList.splice(i, 1);
-                            break;
-                        }
-
                         //小组ID
                         if (collectGroItemList[i].touristGroupId = touristGroupId) {
                             collectGroItemList.splice(i, 1);
                             break;
                         }
                     }
-                    //修改data缓存数据
-                    $busTr.eq(index).find('.T-collection').data('collectGroItemList', collectGroItemList);
-
+        
                     //重置计算
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         count+=collectGroItemList[i].collectionGroup;
                         count+=collectGroItemList[i].collectionItem;
                     }
                     $busTr.eq(index).find('.T-collection').val(count);
+
+                    //更新缓存数据
+                    $busTr.eq(index).find('[name=collectionList]').val(JSON.stringify(collectGroItemList));
                 }
             }); 
         }
@@ -817,7 +805,13 @@ define(function(require, exports) {
         return Transfer.installCheckData;
     };
 
-    Transfer.busCollList = function($tab, outBusList){
+    /**
+     * [planCollList 设置计划代收初始化缓存数据包]
+     * @param  {[type]} $tab       
+     * @param  {[type]} outBusList 
+     * @return {[type]}   
+     */
+    Transfer.planCollList = function($tab, outBusList){
         var collectionList=[];
         if (!!outBusList && outBusList.length> 0 ) {
            for (var i = 0; i < outBusList.length; i++) {
@@ -1350,7 +1344,9 @@ define(function(require, exports) {
                         $hotelplanId = Transfer.$hotelplanId;
                         Transfer.hotelplanclick($hotelplanId);
                         Transfer.deleteOutHotelIds = [];
-                        Transfer.busCollList($hotelplanId,data.outHotelList);
+
+                        //设置计划代收初始化数据
+                        Transfer.planCollList($hotelplanId,data.outHotelList);
                     }
                 }
             });
@@ -1417,10 +1413,11 @@ define(function(require, exports) {
                         outRemarkId: outRemarkId
                     }
                     Transfer.delHotelTransferId.push(delHotelTransferData);
+                    //更新缓存数据
+                    Transfer.spliceColGroIteArr($hotelplanId, touristGroupId);
                 }
 
-               //更新缓存数据
-               Transfer.spliceColGroIteArr($hotelplanId, outRemarkId, touristGroupId);
+               
             });
 
         }
@@ -2204,13 +2201,18 @@ define(function(require, exports) {
                     if (showDialog(data)) {
                         data.isConfirmAccount = isConfirmAccount;
                         data.isView = isView;
-                        var colGroItemList = $that.data('collectGroItemList');
+
+                        //读取缓存数据
+                        var colGroItemList = $that.closest('tr').find('[name=collectionList]').val() || "[]";
+                        colGroItemList = JSON.parse(colGroItemList);
+                        
                         if (!!colGroItemList && colGroItemList.length > 0 ) {
                             for (var i = 0; i <  colGroItemList.length; i++) {
                                 data.collectionList[i].collectionGroup = colGroItemList[i].collectionGroup;
                                 data.collectionList[i].collectionItem = colGroItemList[i].collectionItem;
                             };
                         }
+
                         var html = planCollectionTemplate(data);
                         var _Title = '编辑计划代收';
                         if (!!isView) {
@@ -2243,29 +2245,13 @@ define(function(require, exports) {
                                                 touristGroupId : $that.attr("touristGroupId"),
                                                 collectionGroup : collectionGroup,
                                                 collectionItem : collectionItem
-                                            },
-                                            collectGroItemJson = {
-                                                collectionGroup : collectionGroup,
-                                                collectionItem : collectionItem ,
-                                                outRemarkId : ''
                                             };
-                                         count+=collectionGroup;
+                                        count+=collectionGroup;
                                         count+=collectionItem;
                                         collectionList.push(planCollection);
-
-                                        collectGroItemList.push(collectGroItemJson);
-
-                                        //设置安排Id
-                                        if (!!collectGroItemList && collectGroItemList.length > 0 && !!idList && idList.length>0) {
-                                            for (var i = 0; i < collectGroItemList.length; i++) {
-                                                collectGroItemList[i].outRemarkId = idList[i];
-                                            };
-                                        }
-
                                     });
                                     $tr.find('[name=collectionList]').val(JSON.stringify(collectionList));//代收信息
                                     $that.val(count); //代收金额合计
-                                    $that.data('collectGroItemList', collectGroItemList);//存储代收费用信息
                                     layer.close(index);
                                    
                                 })

@@ -14,7 +14,7 @@
         </thead>
         <tbody class="T-arrange">
             {{each outRemarkList as Busplan}}
-            <tr class="T-task-list">
+            <tr class="T-task-list" data-touristgroupId="{{Busplan.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{Busplan.id}}">
                     <p>中转单号：<span class="orderNumber">{{Busplan.orderNumber}}</span></p>

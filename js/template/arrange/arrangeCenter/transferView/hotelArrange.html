@@ -15,7 +15,7 @@
         </thead>
         <tbody class="T-hotelArrange T-arrange">
             {{each outRemarkList as item}}
-            <tr class="T-task-list">
+            <tr class="T-task-list"  data-touristgroupId="{{item.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{item.id}}">
                     <p>中转单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
