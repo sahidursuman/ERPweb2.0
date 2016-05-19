@@ -90,27 +90,29 @@
                 {{if financialTripPlan.tripPlan.oPCheckUser != null}}{{financialTripPlan.tripPlan.oPCheckUser.realName}}{{/if}}
             {{/if}}
         </td>
-           <td style="vertical-align:middle">
-            
-            <a data-entity-id="{{financialTripPlan.id}}" class="T-action T-detail cursor">
-                明细
+        <td style="vertical-align:middle">
+            {{if canEditCheckedFinancial(financialTripPlan.tripPlan.billStatus)}}
+                
+                <a data-entity-id="{{financialTripPlan.id}}" class="T-action T-detail cursor">
+                    明细
 
-            </a>
-            <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor T-action T-update T-audit">
-            <label class="padding-right20">|</label>
-            审核
-            </a>
-            {{if financialTripPlan.tripPlan.billStatus == -1}}
-            <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor T-action T-account R-right" data-right="1190004">
+                </a>
+                <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor T-action T-update T-audit">
                 <label class="padding-right20">|</label>
-                报账
-            </a>
-            {{/if}}
-            {{if financialTripPlan.tripPlan}}
-               <a  class="cursor R-right T-action T-quality" data-id="{{financialTripPlan.tripPlan.id}}" data-right="1190004">
-                   <label class="padding-right20">|</label>
-                   质量
-               </a>
+                审核
+                </a>
+                {{if financialTripPlan.tripPlan.billStatus == -1}}
+                <a data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}" data-entity-id="{{financialTripPlan.id}}" class="cursor T-action T-account R-right" data-right="1190004">
+                    <label class="padding-right20">|</label>
+                    报账
+                </a>
+                {{/if}}
+                {{if financialTripPlan.tripPlan}}
+                   <a  class="cursor R-right T-action T-quality" data-id="{{financialTripPlan.tripPlan.id}}" data-right="1190004">
+                       <label class="padding-right20">|</label>
+                       质量
+                   </a>
+                {{/if}}
             {{/if}}
         </td>
         </tr> 
