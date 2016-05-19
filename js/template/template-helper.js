@@ -459,3 +459,20 @@ template.helper('getLogTypeText', function(type) {
             return '其他类型';
     }
 })
+
+/**
+ * 财务模块
+ */
+/**
+ * 针对美华用户，当财务审核之后，没有审核权限的用户，无法查看单团审核的数据
+ * @param  {int} status)    单团状态
+ * @return {[type]}         [description]
+ */
+template.helper('canEditCheckedFinancial', function(status) {
+    var res = true;
+    if ((status == 2) && !isAuth('1190003') && (IndexData.userInfo.travelAgencyId == 32)) {
+        res = false;
+    }
+
+    return res;
+});
