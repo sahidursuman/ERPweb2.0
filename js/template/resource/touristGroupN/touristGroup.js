@@ -644,6 +644,10 @@ define(function(require, exports) {
                 success:function(data){
                     var result = showDialog(data);
                         if(result){
+                           var num = data.touristGroup.companyLogo.indexOf('null');
+                            if(num>0){
+                                data.touristGroup.companyLogo =''
+                            }
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,

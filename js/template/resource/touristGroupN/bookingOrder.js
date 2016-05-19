@@ -364,6 +364,10 @@ define(function(require, exports, module) {
             },
             success:function(data){
                 if(showDialog(data)){
+                     var num = data.operateUser.companyLogo.indexOf('null');
+                        if(num>0){
+                            data.operateUser.companyLogo =''
+                        }
                     html = T.viewSettlementTemplate(data);
                     var viewSettlementLayer = layer.open({
                         type: 1,
