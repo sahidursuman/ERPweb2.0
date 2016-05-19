@@ -9,10 +9,14 @@
                 <label class="control-label mar-r-20">中转单号：{{viewmian.orderNumber}}</label>
                 <label class="control-label mar-r-20">人数：{{viewmian.adultCount}} 大 {{viewmian.childCount}}小</label>
                 <!-- <label class="control-label mar-r-20">抵达时间：{{viewmian.arriveTime}}</label>  -->
-                <label class="control-label mar-r-20">游客小组联系人：
-                    {{each viewmian.contactMemberList as itme}}
-                    <span>{{itme.contactMemberName}}</span>
-                    <span class="mar-r-10">({{itme.contactMemberPhoneNumber}})</span>
+                <label class="control-label mar-r-20" data-contact="{{viewmian.contactMemberList | stringify}}">游客小组联系人：
+                    {{each viewmian.contactMemberList as itme index}}
+                        {{if index == 0}}
+                            <span>{{itme.contactMemberName}}</span>
+                            <span class="mar-r-10">({{itme.contactMemberPhoneNumber}})</span>
+                        {{else if index>0}}
+                        <a class="T-view-contact">查看更多</a>
+                    {{/if}}
                     {{/each}}
                 </label>
                 <label class="control-label mar-r-20">线路名称：{{viewmian.lineProductName}}</label>
