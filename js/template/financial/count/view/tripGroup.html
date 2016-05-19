@@ -20,7 +20,7 @@
             <tr id="{{touristGroup.id}}">
                 <td>{{index+1}}</td>
                 <td>{{touristGroup.partnerAgencyName}}</td>
-                <td>{{touristGroup.orderNumber}}</td>
+                <td><a href="#" class="T-viewTouristGroup">{{touristGroup.orderNumber}}</a></td>
                 <td>
                     <span>{{touristGroup.adultCount}}</span>大<span class="F-float F-count">{{touristGroup.childCount}}</span>小</span>
                     <br/>
@@ -96,9 +96,9 @@
                         {{/if}}
                     {{/if}}
                 </a>
-                {{if touristGroup.isConfirmAccount == 0 && editStatus != 2}}
+                <!-- {{if touristGroup.isConfirmAccount == 0 && editStatus != 2}}
                     <a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
-                {{/if}}
+                {{/if}} -->
             </td>
             <td>
                 {{if touristGroup.isConfirmAccount == 0}}
