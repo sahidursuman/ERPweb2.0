@@ -29,8 +29,8 @@
                 </td>
                 <td>{{item.partnerAgencyName}}</td>
                 <td>{{item.outOPUser}}</td>
-                <td><input type="text" name="collectionGroup" value="{{item.collectionGroup}}" maxlength="11" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
-                <td><input type="text" name="collectionItem" value="{{item.collectionItem}}" maxlength="11" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
+                <td><input type="text" class="F-float F-money" name="collectionGroup" value="{{item.collectionGroup}}" maxlength="11" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
+                <td><input type="text" class="F-float F-money" name="collectionItem" value="{{item.collectionItem}}" maxlength="11" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
             </tr>
         {{/each}}
         </tbody>
