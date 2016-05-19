@@ -8,9 +8,13 @@
                     <input type="hidden" name="outRemarkId" value="{{viewlist.outRemarkId}}">
                     <label class="control-label mar-r-20">中转单号：{{viewlist.orderNumber}}</label>
                     <label class="control-label mar-r-20">人数：{{viewlist.adultCount}} 大 {{viewlist.childCount}}小</label>
-                    <label class="control-label mar-r-20">联系人电话：{{viewlist.contactMemberPhoneNumber}}</label>
+                    <label class="control-label mar-r-20">游客小组联系人：
+                    {{each viewlist.contactMemberList as itme}}
+                    <span>{{itme.contactMemberName}}</span>
+                    <span class="mar-r-10">({{itme.contactMemberPhoneNumber}})</span>
+                    {{/each}}
+                    </label>
                     <label class="control-label mar-r-20">抵达时间：{{viewlist.arriveTime}}</label>
-                    <label class="control-label mar-r-20">游客联系人：{{viewlist.contactMemberName}}</label>
                     <label class="control-label mar-r-20">线路名称：{{viewlist.lineProductName}}</label>
                     <label class="control-label">外联销售：{{viewlist.outOPUserName}}</label>
                 </td>
