@@ -29,12 +29,13 @@
                     <input type="hidden" name="shuttleType" value="{{if item.shuttleType == 1}} 1 {{else if item.shuttleType == 2}} 2 {{else if item.shuttleType == 3}}3{{/if}}">
                 </td>
                 <td>
-                    <p><span class="contactMemberName">{{item.contactMemberName}}</span></p>
+                    <p></p>
                     <p>
                         <span class="adultCount">{{item.adultCount}}</span>大
                         <span class="childCount">{{item.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberPhoneNumber">{{item.contactMemberPhoneNumber}}</span></p>
+                    <p><span class="contactMemberName">{{item.contactMemberName}}</span> 
+                    <span class="contactMemberPhoneNumber">({{item.contactMemberPhoneNumber}})</span></p>
                 </td>
                 <td>
                     <p><span class="checkInTime">{{item.checkInTime}}</span></p>
@@ -164,7 +165,7 @@
         <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
-                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
+                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 1}}checked{{/if}}>
                 <span class="lbl font-w"> 安排完成</span>
         </label>
         </span>

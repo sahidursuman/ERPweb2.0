@@ -1,7 +1,7 @@
 {{each result as rs}}
     <tr data-id="{{rs.id}}"  lineId="{{rs.lineProductId}}">
         <td>{{if rs.orderNumber  == null || rs.orderNumber  == ""}}-{{else}}{{rs.orderNumber }}{{/if}}</td>
-        <td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-{{else}}<a class="T-option T-line" data-id="{{rs.lineProductId}}">{{rs.lineProductName}}</a>{{/if}}</td>
+        <td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-{{else}}{{rs.lineProductName}}{{/if}}</td>
         <td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
         <td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>
         <td>{{if (rs.adultCount == null || rs.adultCount == "") && (rs.childCount == null || rs.childCount == "")}}

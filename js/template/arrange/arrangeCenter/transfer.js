@@ -559,7 +559,8 @@ define(function(require, exports) {
             $busplanId.off('click').on('click', '.T-del-bus', function() {
                 var $that = $(this),
                     $tr = $that.closest('tr'),
-                    outRemarkId = $tr.find('[name=outRemarkId]').val();
+                    outRemarkId = $tr.find('[name=outRemarkId]').val(),
+                    touristGroupId = $tr.attr('data-touristgroupId');
                 var $taskListLen = $busplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
                     $that.attr('disabled', 'disabled');
@@ -572,7 +573,7 @@ define(function(require, exports) {
                 }
 
                 //更新缓冲数据
-                Transfer.spliceColGroIteArr($busplanId, outRemarkId);
+                Transfer.spliceColGroIteArr($busplanId, outRemarkId, touristGroupId);
 
             });
         }
@@ -586,13 +587,29 @@ define(function(require, exports) {
 
             var $hotelTr = $tab.find('tbody.T-hotel-plan').children('tr'),
                 $busTr = $tab.find('tbody.T-bus-plan').children('tr');
-
             //房安排
             $hotelTr.each(function(index) {
-                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList');
+                //缓存数据
+                var collectGroItemList=$hotelTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0;
+                //初始化显示数据data
+                var collectionList = $hotelTr.eq(index).find('[name=collectionList]').val();
+                //实例化对象
+                collectionList = JSON.parse(collectionList);
+
+                //数据未缓存时
+                if (!collectGroItemList) {
+                    collectGroItemList = collectionList;
+                }
+
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         if (collectGroItemList[i].outRemarkId = outRemarkId) {
+                            collectGroItemList.splice(i, 1);
+                            break;
+                        }
+
+                        //小组ID
+                        if (collectGroItemList[i].touristGroupId = touristGroupId) {
                             collectGroItemList.splice(i, 1);
                             break;
                         }
@@ -612,10 +629,27 @@ define(function(require, exports) {
 
             //车安排
             $busTr.each(function(index) {
+                //缓存数据
                 var collectGroItemList=$busTr.eq(index).find('.T-collection').data('collectGroItemList'), count = 0; 
+
+                //初始化显示数据data
+                var collectionList = $busTr.eq(index).find('[name=collectionList]').val();
+                //实例化对象
+                collectionList = JSON.parse(collectionList);
+                //无数据缓存
+                if (!collectGroItemList) {
+                    collectGroItemList = collectionList;
+                }
+
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         if (collectGroItemList[i].outRemarkId = outRemarkId) {
+                            collectGroItemList.splice(i, 1);
+                            break;
+                        }
+
+                        //小组ID
+                        if (collectGroItemList[i].touristGroupId = touristGroupId) {
                             collectGroItemList.splice(i, 1);
                             break;
                         }
@@ -693,7 +727,7 @@ define(function(require, exports) {
                             span = '<span>送团</span>';
                             input = '<input name="shuttleType" value="2" type="hidden"/>';
                         }
-                        var htmlData = '<tr class="T-task-list">' +
+                        var htmlData = '<tr class="T-task-list" data-touristGroupId="'+ busPlan.touristGroupId +'">' +
                             '<td class="h-touristGroupInfo">' +
                             '<input type="hidden" name="outRemarkId" value="' + (busPlan.id || "") + '">' +
                             '<p>中转单号：<span class="orderNumber">' + (busPlan.orderNumber || "") + '</span></p>' +
@@ -707,12 +741,11 @@ define(function(require, exports) {
                             input +
                             '</td>' +
                             '<td>' +
-                            '<p><span cals="contactMemberName">' + (busPlan.contactMemberName || "") + '</span></p>' +
                             '<p>' +
                             '<span class="adultCount">' + (busPlan.adultCount || "") + '</span>大' +
                             '<span class="childCount">' + (busPlan.childCount || "") + '</span>小' +
                             '</p>' +
-                            '<p><span class="contactMemberPhoneNumber">' + (busPlan.contactMemberPhoneNumber || "") + '</span></p>' +
+                            '<p><span class="contactMemberName">' + (busPlan.contactMemberName || "") + '</span><span class="contactMemberPhoneNumber">' + (busPlan.contactMemberPhoneNumber || "") + '</span></p>' +
                             '</td>' +
                             '<td><span class="arriveTime">' + (busPlan.arriveTime || "") + '</span></td>' +
                             '<td><span class="shift">' + (busPlan.shift || "") + '</span></td>' +
@@ -753,12 +786,13 @@ define(function(require, exports) {
         var $tr = $frame.find('.T-bus-list').find('tr'); //找到所有的tr
         $tr.each(function(i) {
             var $that = $(this),
-                id = $that.attr('data-id');
+                id = $that.attr('data-id'); 
             var selectFlag = $that.find('.T-cheked').is(':checked'); //判断是否勾选
             if (selectFlag) {
                 var checkData = {
                     shuttleType: $that.find("input[name=shuttleType]").val(),
                     id: id,
+                    touristGroupId : $that.attr("data-touristGroupId"),
                     orderNumber: $that.find('.orderNumber').text(),
                     lineProductName: $that.find('.lineProductName').text(),
                     startTime: $that.find('.startTime').text(),
@@ -895,6 +929,7 @@ define(function(require, exports) {
                         Transfer._refreshList('bus');
                         Tools.closeTab(busplanId);
                         Transfer.deleteOutBusIds = [];
+                        Transfer.deleteOutRemarkList = [];
                     });
                 }
 
@@ -1369,7 +1404,9 @@ define(function(require, exports) {
             $hotelplanId.off('click').on('click', '.T-del-hotel', function() {
                 var $that = $(this),
                     $tr = $that.closest('tr'),
-                    outRemarkId = $tr.find('[name=outRemarkId]').val();
+                    outRemarkId = $tr.find('[name=outRemarkId]').val(),
+                    touristGroupId = $tr.attr('data-touristgroupId');
+
                 var $taskListLen = $hotelplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
                     $that.attr('disabled', 'disabled');
@@ -1382,7 +1419,7 @@ define(function(require, exports) {
                 }
 
                //更新缓存数据
-               Transfer.spliceColGroIteArr($hotelplanId, outRemarkId);
+               Transfer.spliceColGroIteArr($hotelplanId, outRemarkId, touristGroupId);
             });
 
         }
@@ -1450,7 +1487,7 @@ define(function(require, exports) {
                             span = '<span>返程住宿</span>';
                             input = '<input name="shuttleType" value="3" type="hidden"/>';
                         };
-                        var htmlData = ' <tr class="T-task-list">' +
+                        var htmlData = ' <tr class="T-task-list" data-touristGroupId="'+hotelPlan.touristGroupId+'">' +
                             '<td class="h-touristGroupInfo">' +
                             '<input type="hidden" name="outRemarkId" value="' + (hotelPlan.id || "") + '">' +
                             '<p>中转单号：<span class="orderNumber">' + (hotelPlan.orderNumber || "") + '</span></p>' +
@@ -1465,12 +1502,11 @@ define(function(require, exports) {
                             input +
                             '</td>' +
                             '<td>' +
-                            '<p><span cals="contactMemberName">' + (hotelPlan.contactMemberName || "") + '</span></p>' +
                             '<p>' +
                             '<span class="adultCount">' + (hotelPlan.adultCount || "") + '</span>大' +
                             '<span class="childCount">' + (hotelPlan.childCount || "") + '</span>小' +
                             '</p>' +
-                            '<p><span class="contactMemberPhoneNumber">' + (hotelPlan.contactMemberPhoneNumber || "") + '</span></p>' +
+                            '<p><span cals="contactMemberName">' + (hotelPlan.contactMemberName || "") + '</span> <span class="contactMemberPhoneNumber">' + (hotelPlan.contactMemberPhoneNumber || "") + '</span></p>' +
                             '</td>' +
                             '<td><sapn class="checkInTime">' + (hotelPlan.checkInTime || "") + '</span></td>' +
                             '<td><sapn class="hotelLevel">' + (hotelPlan.hotelLevel || "") + '</span></td>' +
@@ -1518,6 +1554,7 @@ define(function(require, exports) {
             if (selectFlag) {
                 var checkData = {
                     id: id,
+                    touristGroupId : $that.attr('data-touristGroupId'),
                     shuttleType: $that.find('input[name=shuttleType]').val(),
                     orderNumber: $that.find('.orderNumber').text(),
                     lineProductName: $that.find('.lineProductName').text(),
@@ -1584,6 +1621,7 @@ define(function(require, exports) {
                         Transfer._refreshList('hotel');
                         Tools.closeTab(hotelplanId);
                         Transfer.deleteOutHotelIds = [];
+                        Transfer.delHotelTransferId = [];
                     });
                 }
 

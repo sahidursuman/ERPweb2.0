@@ -315,9 +315,13 @@ define(function(require, exports){
 			Count.showFormula($obj);
 		});
 		var $listObj = $obj.find('.T-list');
+		//团款
 		var $tripCostObj = $listObj.find('.T-tripDetail');
-		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
+		}).on('click','.T-viewTouristGroup',function(){
+			var id = $(this).closest('tr').attr('id');
+			KingServices.viewTouristGroup(id);
 		});
 		//按钮事件--单团核算表
 		$obj.find('.T-tripAccount').off('click').on('click',function(){
@@ -521,10 +525,13 @@ define(function(require, exports){
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
 
-		//团款tripDetail checkTripCostStatus
+		//团款
 		var $tripCostObj = $listObj.find('.T-tripDetail');
-		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
+		}).on('click','.T-viewTouristGroup',function(){
+			var id = $(this).closest('tr').attr('id');
+			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
@@ -969,11 +976,13 @@ define(function(require, exports){
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
-		//团款tripDetail
+		//团款
 		var $tripCostObj = $listObj.find('.T-tripDetail');
-		//查看团款明细说明
-		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
+		}).on('click','.T-viewTouristGroup',function(){
+			var id = $(this).closest('tr').attr('id');
+			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
@@ -2686,7 +2695,7 @@ define(function(require, exports){
 		if(!!$tr.find('.realPrice').text()){
 			price = Count.changeTwoDecimal($tr.find('.realPrice').text());
 		};
-		var cashMoney = 0,inCount = 0,tRate = 0,gRate = 0,tMoney = 0,gMoney = 0,sum = 0,qMoney = 0;
+		var cashMoney = 0,inCount = 0,tRate = 0,gRate = 0,qRate = 0,tMoney = 0,gMoney = 0,sum = 0,qMoney = 0;
 
 		$cashMoney.find('div').each(function(){
 			var index = $(this).attr('index');
@@ -2938,6 +2947,7 @@ define(function(require, exports){
 				var $that = $nextTr.eq(i);
 				
 				if($that.children('td').eq(0).hasClass('breakFlag')){
+					selfMoney += sumMoney($that);
 					selfMoney += sumMoney($trObj);
 					break;
 				}else{
@@ -6894,14 +6904,14 @@ define(function(require, exports){
 						realNeedPayMoney:realNeedPayMoney.eq(i).find('[name=realNeedPayMoney]').val(),
 						realGuidePayMoney:guidePayedMoney.eq(i).find('[name=guidePayedMoney]').val(),
 						realPayType:guidePayedMoney.eq(i).find('[name=payType]').val(),
-						travelAgencyRate:parseFloat(travelAgencyRate.eq(i).find('[name=travelAgencyRate]').val()/100),
-						travelAgencyRebateMoney:travelAgencyRebateMoney.eq(i).find('[name=travelAgencyRebateMoney]').val(),
-						twoRebate:parseFloat(twoRebate.eq(i).find('[name=twoRebate]').val()/100),
-						twoRebateMoney:twoRebateMoney.eq(i).find('[name=twoRebateMoney]').val(),
-						guideRate:parseFloat(guideRate.eq(i).find('[name=guideRate]').val()/100),
-						guideRebateMoney:guideRebateMoney.eq(i).find('[name=guideRebateMoney]').val(),
-						quanpeiRebate:parseFloat(quanpeiRebate.eq(i).find('[name=quanpeiRebate]').val()/100),
-						quanpeiRebateMoney:quanpeiRebateMoney.eq(i).find('[name=quanpeiRebateMoney]').val(),
+						travelAgencyRate:Count.changeTwoDecimal(travelAgencyRate.eq(i).find('[name=travelAgencyRate]').val()/100),
+						travelAgencyRebateMoney:Count.changeTwoDecimal(travelAgencyRebateMoney.eq(i).find('[name=travelAgencyRebateMoney]').val()),
+						twoRebate:Count.changeTwoDecimal(twoRebate.eq(i).find('[name=twoRebate]').val()/100),
+						twoRebateMoney:Count.changeTwoDecimal(twoRebateMoney.eq(i).find('[name=twoRebateMoney]').val()),
+						guideRate:Count.changeTwoDecimal(guideRate.eq(i).find('[name=guideRate]').val()/100),
+						guideRebateMoney:Count.changeTwoDecimal(guideRebateMoney.eq(i).find('[name=guideRebateMoney]').val()),
+						quanpeiRebate:Count.changeTwoDecimal(quanpeiRebate.eq(i).find('[name=quanpeiRebate]').val()/100),
+						quanpeiRebateMoney:Count.changeTwoDecimal(quanpeiRebateMoney.eq(i).find('[name=quanpeiRebateMoney]').val()),
 						billRemark:billRemark.eq(i).find('[name=billRemark]').val(),
 					}
 					guideDetails.push(guide);

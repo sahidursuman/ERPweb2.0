@@ -5,7 +5,7 @@
     <tbody class="T-transfersId-hotel T-arrange">
         <tr>
             <td style="text-align: left;">
-                <input type="hidden" name="id" value="{{viewmian.id}}">
+                <input type="hidden" name="outRemarkId" value="{{viewmian.id}}">
                 <label class="control-label mar-r-20">中转单号：{{viewmian.orderNumber}}</label>
                 <label class="control-label mar-r-20">人数：{{viewmian.adultCount}} 大 {{viewmian.childCount}}小</label>
                 <label class="control-label mar-r-20">联系人电话：{{viewmian.contactMemberPhoneNumber}}</label>
@@ -50,7 +50,7 @@
         </thead>
         <tbody class="T-hotel-plan">
             {{each outHotelList as view}}
-            <tr data-entity-id="{{view.id}}">
+            <tr data-entity-id="{{view.outHotelId}}">
                 <td>
                     {{view.checkInTime}}
                 </td>
@@ -88,7 +88,7 @@
                     {{view.prePayMoney}}
                 </td>
                 <td>
-                    <a class="cursor T-collection T-collection" data-type="bus">{{view.collection}}</a>
+                    <a class="cursor T-collection" data-type="hotel">{{view.collection}}</a>
                 </td>
                 <td>{{view.remark}}</td>
             </tr>{{/each}}
