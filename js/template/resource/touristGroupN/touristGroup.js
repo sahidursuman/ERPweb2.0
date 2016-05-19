@@ -39,8 +39,6 @@ define(function(require, exports) {
             viewBus : require('./view/tourists/view/viewBus'),//查看车
             viewHotel : require('./view/tourists/view/viewHotel'),//查看房
             viewOther : require('./view/tourists/view/viewOther'),//查看其它
-            viewInnerTurn : require('./view/tourists/view/viewInnerTurn'),//查看内转
-            viewOuterTurn : require('./view/tourists/view/viewOuterTurn'),//查看外转
         },
         rule = require('./rule'),
         touristGroup = {
