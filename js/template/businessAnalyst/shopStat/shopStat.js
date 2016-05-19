@@ -286,19 +286,12 @@ define(function(require, exports) {
 			if (showDialog(data)){
 				var partnerAgency = tab.find('[name=fromPartnerAgency]'),
 					shop = tab.find('[name=shop]');
-					// shopItem = tab.find('[name=shopItem]');
 
 				//购物店列表
 				var shopList = data.shopList;
 				for(var i = 0;i<shopList.length;i++){
 					shopList[i].value = shopList[i].shopName;
 				};
-				 //商品列表
-				// var shopItemList = data.shopItemList;
-				// for(var i = 0;i<shopItemList.length;i++){
-				// 	shopItemList[i].value = shopItemList[i].shopItem;
-				// 	shopItemList[i].id = shopItemList[i].shopItemId;
-				// };
 				//客户列表
 				var customerList = data.fromPartnerAgencyList;
 				for(var i = 0;i<customerList.length;i++){
@@ -307,7 +300,6 @@ define(function(require, exports) {
 				};
 
 				shopStat.showList(shop,shopList);
-				// shopStat.showList(shopId,shopItemList);
 				shopStat.showList(partnerAgency,customerList);
 			}
 		});
