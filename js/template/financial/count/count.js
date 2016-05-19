@@ -315,9 +315,13 @@ define(function(require, exports){
 			Count.showFormula($obj);
 		});
 		var $listObj = $obj.find('.T-list');
+		//团款
 		var $tripCostObj = $listObj.find('.T-tripDetail');
-		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
+		}).on('click','.T-viewTouristGroup',function(){
+			var id = $(this).closest('tr').attr('id');
+			KingServices.viewTouristGroup(id);
 		});
 		//按钮事件--单团核算表
 		$obj.find('.T-tripAccount').off('click').on('click',function(){
@@ -521,10 +525,13 @@ define(function(require, exports){
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
 
-		//团款tripDetail checkTripCostStatus
+		//团款
 		var $tripCostObj = $listObj.find('.T-tripDetail');
-		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
+		}).on('click','.T-viewTouristGroup',function(){
+			var id = $(this).closest('tr').attr('id');
+			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
@@ -969,11 +976,13 @@ define(function(require, exports){
 		// 禁用自动计算的判断条件
 		Count.loading = true;
 		var $listObj = $obj.find('.T-list');
-		//团款tripDetail
+		//团款
 		var $tripCostObj = $listObj.find('.T-tripDetail');
-		//查看团款明细说明
-		$tripCostObj.find('.T-viewCostDetail').on('click',function(){
+		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
+		}).on('click','.T-viewTouristGroup',function(){
+			var id = $(this).closest('tr').attr('id');
+			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
 		$tripCostObj.find('input[name=guideName]').each(function(){
