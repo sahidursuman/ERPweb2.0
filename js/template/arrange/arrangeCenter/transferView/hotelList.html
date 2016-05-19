@@ -16,7 +16,8 @@
     </thead>
     <tbody class="T-hotel-list">
         {{each outHotelRemarkList as hotel}}
-        <tr data-id="{{hotel.outRemarkId}}" shuttleType = "{{hotel.shuttleType}}" {{if hotel.checked}} class="success" {{/if}}>
+        <tr data-id="{{hotel.outRemarkId}}" shuttleType = "{{hotel.shuttleType}}" data-touristGroupId="{{hotel.touristGroupId}}" 
+        {{if hotel.checked}} class="success" {{/if}}>
             <td>
                 <label class="pos-rel">
                     <input type="checkbox" class="ace T-cheked" {{if hotel.checked}} checked="checked" {{/if}}> <span class="lbl"></span>

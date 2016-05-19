@@ -15,7 +15,7 @@
     </thead>
     <tbody class="T-bus-list">
         {{each outRemarkArrangeList as bus}}
-        <tr data-id="{{bus.id}}" shuttleType = "{{bus.shuttleType}}" {{if bus.checked}} class="success" {{/if}}>
+        <tr data-id="{{bus.id}}" shuttleType = "{{bus.shuttleType}}" data-touristGroupId="{{bus.touristGroupId}}" {{if bus.checked}} class="success" {{/if}}>
             <td>
                 <label class="pos-rel">
                     <input type="hidden" name="outRemarkId" value="{{bus.id}}">
