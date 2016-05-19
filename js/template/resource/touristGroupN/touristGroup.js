@@ -39,8 +39,6 @@ define(function(require, exports) {
             viewBus : require('./view/tourists/view/viewBus'),//查看车
             viewHotel : require('./view/tourists/view/viewHotel'),//查看房
             viewOther : require('./view/tourists/view/viewOther'),//查看其它
-            viewInnerTurn : require('./view/tourists/view/viewInnerTurn'),//查看内转
-            viewOuterTurn : require('./view/tourists/view/viewOuterTurn'),//查看外转
         },
         rule = require('./rule'),
         touristGroup = {
@@ -644,6 +642,10 @@ define(function(require, exports) {
                 success:function(data){
                     var result = showDialog(data);
                         if(result){
+                           var num = data.touristGroup.companyLogo.indexOf('null');
+                            if(num>0){
+                                data.touristGroup.companyLogo =''
+                            }
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,
@@ -2805,9 +2807,10 @@ define(function(require, exports) {
             showMessageDialog(msg);
             return false;
         }
+        var _type = $tab.find('.T-container').data('type') || "single";
 
-        if(($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
-            showMessageDialog('请添加一条参团信息！');
+        if(_type == "single" && ($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
+            showMessageDialog('有接送团，请添加一条参团信息！');
             return false;
         }
 
