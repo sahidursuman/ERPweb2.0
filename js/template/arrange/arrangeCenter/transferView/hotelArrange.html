@@ -15,7 +15,7 @@
         </thead>
         <tbody class="T-hotelArrange T-arrange">
             {{each outRemarkList as item}}
-            <tr class="T-task-list">
+            <tr class="T-task-list"  data-touristgroupId="{{item.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{item.id}}">
                     <p>中转单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
@@ -29,12 +29,15 @@
                     <input type="hidden" name="shuttleType" value="{{if item.shuttleType == 1}} 1 {{else if item.shuttleType == 2}} 2 {{else if item.shuttleType == 3}}3{{/if}}">
                 </td>
                 <td>
-                    <p><span class="contactMemberName">{{item.contactMemberName}}</span></p>
+                    <p></p>
                     <p>
                         <span class="adultCount">{{item.adultCount}}</span>大
                         <span class="childCount">{{item.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberPhoneNumber">{{item.contactMemberPhoneNumber}}</span></p>
+                   {{each item.contactMemberList as itmes}}
+                    <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>
                     <p><span class="checkInTime">{{item.checkInTime}}</span></p>

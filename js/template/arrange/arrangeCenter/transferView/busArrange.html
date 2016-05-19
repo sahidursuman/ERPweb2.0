@@ -14,7 +14,7 @@
         </thead>
         <tbody class="T-arrange">
             {{each outRemarkList as Busplan}}
-            <tr class="T-task-list">
+            <tr class="T-task-list" data-touristgroupId="{{Busplan.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{Busplan.id}}">
                     <p>中转单号：<span class="orderNumber">{{Busplan.orderNumber}}</span></p>
@@ -32,12 +32,14 @@
                     <input type="hidden" name="shuttleType" value="{{if Busplan.shuttleType == 1}} 1 {{else if Busplan.shuttleType == 2}} 2{{/if}}">
                 </td>
                 <td>
-                    <p><span cals="contactMemberName">{{Busplan.contactMemberName}}</span></p>
                     <p>
                         <span class="adultCount">{{Busplan.adultCount}}</span>大
                         <span class="childCount">{{Busplan.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberPhoneNumber">{{Busplan.contactMemberPhoneNumber}}</span></p>
+                    {{each Busplan.contactMemberList as itme}}
+                    <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>{{Busplan.arriveTime}}</td>
                 <td>{{Busplan.shift}}</td>

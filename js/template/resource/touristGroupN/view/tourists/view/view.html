@@ -36,7 +36,7 @@
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
-						{{if type != "inner"}}<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust">[费用调整]</a></td>{{/if}}
+						{{if type != "inner"}}<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust R-right" data-right="1470007">[费用调整]</a></td>{{/if}}
 						<td><a class="hct-cursor T-action T-guest-info" data-json="{{baseInfo.touristGroupMemberInfo}}">{{baseInfo.name}}</a></td>
 						<td>{{baseInfo.mobileNumber}}</td>
 						<td>{{baseInfo.outOPUserName}}</td>
@@ -111,7 +111,7 @@
 						<td>{{rs.subNeedPayMoney}}</td>
 						<td>
 							<a class="T-action T-line-cope hct-cursor F-float F-money" data-json="{{rs.lineInfo}}">{{rs.lineNeedPayAllMoney}}</a>
-							&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust">[费用调整]</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust R-right" data-right="1470007">[费用调整]</a>
 						</td>
 						{{if baseInfo.customerType == 0}}
 						<td><a class="T-action T-hotel hct-cursor F-float F-money" data-json="{{rs.hotelInfo}}">{{rs.hotelInputValue}}</a></td>

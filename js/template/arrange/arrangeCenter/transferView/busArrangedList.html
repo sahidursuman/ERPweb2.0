@@ -37,8 +37,11 @@
                 <p>收客单号：{{buslist.tgOrderNumber}}</p>
             </td>
             <td>
-                <p>{{buslist.contactMemberName}}</p>
-                <p>{{buslist.adultCount}}大{{buslist.childCount}}小</p>
+                <p> {{buslist.adultCount}}大{{buslist.childCount}}小</p>
+                {{each buslist.contactMemberList as itme}}
+                <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td>{{buslist.arriveTime}}</td>
             <td>{{buslist.shift}}</td>

@@ -238,7 +238,7 @@ define(function(require, exports, module) {
         }).done(function(data){
             if(showDialog(data)){
                 var partnerAgencyName = data.bookingOrder.partnerAgencyName;
-                if(data.bookingOrder.contactRealname != ""){
+                if(data.bookingOrder.contactRealname != null &&  data.bookingOrder.contactRealname != ""){
                     partnerAgencyName = data.bookingOrder.partnerAgencyName + "（"+ data.bookingOrder.contactRealname +"）";
                 }
                 data.bookingOrder.partnerAgencyName = partnerAgencyName;
