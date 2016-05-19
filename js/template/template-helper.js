@@ -470,7 +470,7 @@ template.helper('getLogTypeText', function(type) {
  */
 template.helper('canEditCheckedFinancial', function(status) {
     var res = true;
-    if ((status == 2) && !isAuth('1190003') && (IndexData.userInfo.travelAgencyId == 32)) {
+    if ((status == 2 || status == 1) && !isAuth('1190003') && (IndexData.userInfo.travelAgencyId == 32)) {
         res = false;
     }
 
