@@ -13,6 +13,17 @@
             <input type="text" name="guideName" class="col-xs-10 T-Choose-tourgSet" placeholder="导游" value="{{searchParam.guideName}}" />
             <input type="hidden" name="guidChooseId" value="" />
         </div>
+    
+        <label class="pull-left text-right control-label no-padding-right">购物店 </label>
+        <div class="col-xs-1">
+            <input type="text" name="shop" class="form-control T-Choose-shop" placeholder="购物店" value="{{searchParam.shop}}" />
+            <input type="hidden" name="shopId" value="{{searchParam.shopId}}" />
+        </div>
+
+        <label class="pull-left text-right control-label no-padding-right">商品</label>
+        <div class="col-xs-1">
+           <input type="text" name="shopItem" class="form-control T-Choose-goods" placeholder="商品" value="{{searchParam.shopItem}}" />
+        </div>
 
         <div class="col-xs-2 pull-left">
             <label class="pull-left text-right control-label no-padding-right mar-r-10">排序</label>
