@@ -472,7 +472,10 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 						if(result){
-							var imgUrl = data.ERP_IMG_URL;
+							var num = data.transfer.companyLogo.indexOf('null');
+							if (num > 0) {
+								data.transfer.companyLogo = '';
+							}
 							var html = viewTransferOutAccTemplate(data);
 							var viewAccountsLayer = layer.open({
 								type: 1,
