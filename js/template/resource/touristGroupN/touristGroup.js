@@ -2805,9 +2805,10 @@ define(function(require, exports) {
             showMessageDialog(msg);
             return false;
         }
+        var _type = $tab.find('.T-container').data('type') || "single";
 
-        if(($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
-            showMessageDialog('请添加一条参团信息！');
+        if(_type == "single" && ($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
+            showMessageDialog('有接送团，请添加一条参团信息！');
             return false;
         }
 
