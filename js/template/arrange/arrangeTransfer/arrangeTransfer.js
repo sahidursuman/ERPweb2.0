@@ -476,7 +476,6 @@ define(function(require, exports) {
 							if (num > 0) {
 								data.transfer.companyLogo = '';
 							}
-							var imgUrl = data.ERP_IMG_URL;
 							var html = viewTransferOutAccTemplate(data);
 							var viewAccountsLayer = layer.open({
 								type: 1,
