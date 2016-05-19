@@ -38,8 +38,11 @@
                 <p>收客单号：{{seat.tgOrderNumber}}</p>
             </td>
             <td>
-                <p>{{seat.contactMemberName}}</p>
-                <p>{{seat.adultCount}} 大 {{seat.childCount}} 小</p>
+                <p> {{seat.adultCount}} 大 {{seat.childCount}} 小</p>
+                {{each seat.contactMemberList as itme}}
+                <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td>{{seat.checkInTime}}</td>
             <td>
@@ -66,7 +69,7 @@
                     <label class="padding-right20">|</label>查看
                 </a>
                  {{ if hotel.isConfirmAccount == 1 }}
-                    <a class="cursor" style="color:#bbb;" data-catename="hotel" title="取消"><label class="padding-right20">|</label>取消</a> {{else}}
+                    <a class="cursor" style="color:#bbb;" data-catename="hotel" title="已对账，无法删除"><label class="padding-right20">|</label>取消</a> {{else}}
                     <a class="cursor T-action T-hotel-cancel" data-catename="hotel" title="取消"><label class="padding-right20">|</label>取消</a>
                 {{/if}}
             </td>

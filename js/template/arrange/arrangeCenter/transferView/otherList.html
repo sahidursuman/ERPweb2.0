@@ -28,9 +28,11 @@
                 {{else if item.shuttleType == 2}}送团{{/if}}            
             </td>
             <td  rowspan="{{item.size}}">
-                <p>{{item.contactMemberName}}</p>
                 <p>{{item.adultCount}}大{{item.childCount}}小</p>
-                <p>{{item.contactMemberPhoneNumber}}</p>
+                {{each item.contactMemberList as itmes}}
+                <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td rowspan="{{item.size}}">
                 {{item.consumeTime}}
