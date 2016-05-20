@@ -428,11 +428,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateHotel = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewHotel(data);
             html = Tools.filterMoney(html);
@@ -491,11 +497,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateTicket = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewTicketl(data);
             html = Tools.filterMoney(html);
@@ -546,11 +558,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateScenic = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewScenic(data);
             html = Tools.filterMoney(html);
@@ -603,11 +621,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateBus = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewBus(data);
             html = Tools.filterMoney(html);
