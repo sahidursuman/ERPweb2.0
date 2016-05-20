@@ -1643,7 +1643,7 @@ define(function(require, exports) {
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><div class="inline-flex">'+preTypeHtml+'<input name="prePayMoney" type="text" class="price F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
 		'<td><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
-		'<td><input name="remark min-w150" type="text" class="col-sm-12"/></td>' +
+		'<td><input name="remark" type="text" class="col-sm-12 min-w150"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
