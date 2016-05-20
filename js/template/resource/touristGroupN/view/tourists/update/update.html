@@ -148,7 +148,7 @@
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker" name="tripStartTime" value="{{rs.tripStartTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status != 1}} disabled{{/if}}></td>
 						<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime" value="{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status != 1}} disabled{{/if}}></td>
-						<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney" value="{{rs.subNeedPayMoney}}"{{if rs.status != 1}} disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney" value="{{rs.subNeedPayMoney}}"{{if rs.status != 1}} disabled{{/if}} data-change="1"></td>
 						<td>
 							<input type="text" class="w-150 F-float F-money{{if rs.status == 1}} T-action T-line-cope hct-cursor{{/if}}" readonly name="lineNeedPayMoney" value="{{rs.lineNeedPayAllMoney}}" data-json="{{rs.lineInfo}}" data-id="{{rs.lineInfoId}}" placeholder="点击填写线路应付">
 							<a class="cursor{{if rs.status != 1}} hct-color-BBB{{else}} T-action T-clear{{/if}}" data-status="partLine">清空</a>
