@@ -15,7 +15,7 @@
                     <label class="control-label mar-r-20">线路名称：{{viewlist.lineProductName}}</label>
                     <label class="control-label mar-r-20">出游日期：{{viewlist.startTime}}</label>
                     <label class="control-label mar-r-20">人数：{{viewlist.adultCount}} 大 {{viewlist.childCount}}小</label>
-                    <label class="control-label mar-r-20" data-contact="{{viewlist.contactMemberList | stringify}}">游客小组联系人： 
+                    <label class="control-label mar-r-20" data-contact="{{viewlist.contactMemberList | stringify}}">游客联系人： 
                     {{if !!viewlist.contactMemberList && viewlist.contactMemberList.length}}
                         <span>{{viewlist.contactMemberList[0].contactMemberName}}</span>
                         <span class="mar-r-10">({{viewlist.contactMemberList[0].contactMemberPhoneNumber}})</span> 

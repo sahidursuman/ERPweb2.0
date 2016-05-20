@@ -15,7 +15,7 @@
                     <label class="control-label mar-r-20">线路名称：{{viewmian.lineProductName}}</label>
                     <label class="control-label mar-r-20">出游日期：{{viewmian.startTime}}</label>
                     <label class="control-label mar-r-20">人数：{{viewmian.adultCount}} 大 {{viewmian.childCount}}小</label>
-                    <label class="control-label mar-r-20" data-contact="{{viewmian.contactMemberList | stringify}}">游客小组联系人： 
+                    <label class="control-label mar-r-20" data-contact="{{viewmian.contactMemberList | stringify}}">游客联系人： 
                     {{if !!viewmian.contactMemberList && viewmian.contactMemberList.length}}
                         <span>{{viewmian.contactMemberList[0].contactMemberName}}</span>
                         <span class="mar-r-10">({{viewmian.contactMemberList[0].contactMemberPhoneNumber}})</span> 
