@@ -29,13 +29,11 @@
                                 </div>
                                 <label class="col-sm-1 control-label no-padding-right pull-left"><span class="necessary">*</span>计划现收</label>
                                 <div class="col-sm-2 trans-PayedMoney">
-                                    {{if cashFlag==1}}
-                                    <input name="currentNeedPayMoney F-float F-money" value="{{touristGroupTransfer.touristGroup.currentNeedPayMoney}}" readonly="readonly" type="text" class="col-xs-12" /> {{else}}
-                                    <input name="currentNeedPayMoney F-float F-money" value="0" readonly="readonly" type="text" class="col-xs-12" /> {{/if}}
+                                    <input name="currentNeedPayMoney F-float F-money" value="0" type="text" class="col-xs-12" />
                                 </div>
                                 <div class="col-sm-2">
                                 	<label>
-                                	    <input type="checkbox" class="ace" {{if cashFlag==1}}checked="checked" {{/if}} disabled="disabled" value="{{cashFlag}}" name="cashFlag" />
+                                	    <input type="checkbox" class="ace" {{if cashFlag==1}}checked="checked" {{/if}}  value="{{cashFlag}}" name="cashFlag" />
                                 	    <span class="lbl"></span>
                                 	</label>
                                 	<label class="control-label no-padding-right">对方现收</label>
@@ -137,16 +135,6 @@
                             <div class="col-sm-2">
                                 <input name="contactMemberName" value="{{if touristGroupTransfer.touristGroup.partnerAgencyContact != null}}{{touristGroupTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{touristGroupTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
                             </div>
-                            <label class="col-sm-1 control-label no-padding-right">获得方式</label>
-                            <div class="col-sm-2">
-                                <select name="getType" class="col-sm-12" disabled="disabled">
-                                    <option{{if touristGroupTransfer.touristGroup.getType==1 }} selected="selected" {{/if}} value="1">旅行社系统</option>
-                                    <option{{if touristGroupTransfer.touristGroup.getType==2 }} selected="selected" {{/if}} value="2">传真</option>
-                                    <option{{if touristGroupTransfer.touristGroup.getType==3 }} selected="selected" {{/if}} value="3">短信</option>
-                                    <option{{if touristGroupTransfer.touristGroup.getType==4 }} selected="selected" {{/if}} value="4">电话</option>
-                                    <option{{if touristGroupTransfer.touristGroup.getType==5 }} selected="selected" {{/if}} value="5">QQ</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
                     <div class="search-area col-sm-12">
@@ -171,24 +159,14 @@
             <table class="whereQ whereTwo" style="width: 100%">
                 <tr>
                     <td class="style-myself CheckPlan">本段团款：</td>
-                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{parentTouristGroup.subsectionNeedPayAllMoney}}</span></td>
-                    <td class="style-myself CheckPlan">对方现收：</td>
-                    <td style="text-align: left;padding: 0px 0px 0px 10px">
-                        {{if cashFlag==1}}
-                        <span class="F-float F-money">{{parentTouristGroup.currentNeedPayMoney}}</span> {{else}}0 {{/if}}
-                    </td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money" colspan="3">{{parentTouristGroup.subsectionNeedPayAllMoney}}</span></td>
                 </tr>
             </table>
             {{else}}
             <table class="whereQ whereTwo" style="width: 100%">
                 <tr>
                     <td class="style-myself CheckPlan">本段团款：</td>
-                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
-                    <td class="style-myself CheckPlan">对方现收：</td>
-                    <td style="text-align: left;padding: 0px 0px 0px 10px">
-                        {{if cashFlag==1}}
-                        <span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span> {{else}}0 {{/if}}
-                    </td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money" colspan="3">{{touristGroup.needPayAllMoney}}</span></td>
                 </tr>
             </table>
             {{/if}}
