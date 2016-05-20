@@ -120,7 +120,6 @@ define(function(require, exports) {
         }).done(function(data){
             if (showDialog(data)) {
                 var tab_key = tabKey + '_' + target + '_edit';
-
                 if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
                     BookingArrange.init_arrange_event($('#tab-' + tab_key + '-content'), target);
                 }
