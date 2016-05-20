@@ -884,7 +884,13 @@ define(function(require, exports) {
 			// 表单校验
 			if (!validator.form()) { return; }
 			getValue = function(name){
-				var value = $tab.find("[name="+name+"]").val()
+				var type = $tab.find("[name="+name+"]").attr('type'),value;
+					if (!!type && type === 'text' || type === 'hidden') {
+						value = $tab.find("[name="+name+"]").val()
+					}
+					if (!!type && type === 'checkbox') {
+						value = $tab.find("[name="+name+"]").is(':checked') ? 1 : 0; 
+					}
 				return value;
 			}
 			var id=getValue("touristGroupTransferId"),

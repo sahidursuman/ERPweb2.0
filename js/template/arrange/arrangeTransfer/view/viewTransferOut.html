@@ -12,22 +12,9 @@
             <tr>
                 <td class="style-myself">应付：</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.transNeedPayAllMoney}}</span></td>
-                <td colspan="3"> 
-                    {{if touristGroup.operateCurrentNeedPayMoney==1}}
-                    <label>
-                        <input type="checkbox" class="ace buyInsurance-status" checked="checked" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
-                        <span class="lbl">
-								</span>
-                    </label>
-                    {{else}}
-                    <label style="padding-left:0px;">
-                        <input type="checkbox" class="ace buyInsurance-status" checked="" value="{{touristGroup.operateCurrentNeedPayMoney}}" name="operateCurrentNeedPayMoney" disabled="disabled">
-                        <span class="lbl">
-								</span>
-                    </label>
-                    {{/if}}
-                    <label class="control-label no-padding-right">对方现收</label>
-                </td>
+
+                <td class="style-myself">对方现收: </td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="2"><span class="F-float F-money">{{ if !!touristGroup.operateCurrentNeedPayMoney}}{{touristGroup.operateCurrentNeedPayMoney}}{{else}}0{{/if}}</span></td>
             </tr>
             <tr>
                 <td class="style-myself">转客备注：</td>
@@ -91,12 +78,8 @@
                 <td class="style-myself CheckPlan">客户</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroup.partnerAgency.travelAgencyName}}</td>
                 <td class="style-myself CheckPlan">客户联系人</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px">
+                <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">
                     {{if touristGroup.partnerAgencyContact != null}}{{touristGroup.partnerAgencyContact.contactRealname}}|{{touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}
-                </td>
-                <td class="style-myself CheckPlan">获得方式</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px">
-                    {{if touristGroup.getType==1 }}旅行社系统 {{else if touristGroup.getType==2}}传真 {{else if touristGroup.getType==3}}短信 {{else if touristGroup.getType==4}}电话 {{else if touristGroup.getType==5}}QQ {{else}}旅行社系统{{/if}}
                 </td>
             </tr>
             <tr>
@@ -116,24 +99,14 @@
         <table class="whereQ whereTwo" style="width: 100%">
             <tr>
                 <td class="style-myself CheckPlan">本段团款：</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{parentTouristGroup.subsectionNeedPayAllMoney}}</span></td>
-                <td class="style-myself CheckPlan">对方现收：</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px">
-                    {{if cashFlag==1}}
-                    <span class="F-float F-money">{{parentTouristGroup.currentNeedPayMoney}}</span> {{else}}0 {{/if}}
-                </td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5"><span class="F-float F-money">{{parentTouristGroup.subsectionNeedPayAllMoney}}</span></td>
             </tr>
         </table>
         {{else}}
         <table class="whereQ whereTwo" style="width: 100%">
             <tr>
                 <td class="style-myself CheckPlan">本段团款：</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
-                <td class="style-myself CheckPlan">对方现收：</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px">
-                    {{if cashFlag==1}}
-                    <span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span> {{else}}0 {{/if}}
-                </td>
+                <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="5"><span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span></td>
             </tr>
         </table>
         {{/if}}
