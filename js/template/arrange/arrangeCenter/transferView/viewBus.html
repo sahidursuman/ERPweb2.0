@@ -1,43 +1,43 @@
 <div class="T-planbus globalAdd ">
-<h5 class="base-title">基本信息</h5>
-{{each outRemarkList as viewlist}}
+    <h5 class="base-title">基本信息</h5> 
+    {{each outRemarkList as viewlist}}
     <table class="table table-striped table-bordered mar-b-20">
         <tbody class="T-task-list T-arrange">
             <tr>
+                <td style="text-align: center;" rowspan="2">
+                    中转单号：{{viewlist.orderNumber}} <br>
+                    ( 收客单号：{{viewlist.tgOrderNumber}} )
+                </td>
                 <td style="text-align: left;">
                     <input type="hidden" name="outRemarkId" value="{{viewlist.outRemarkId}}">
-                    <label class="control-label mar-r-20">中转单号：{{viewlist.orderNumber}}</label>
-                    <label class="control-label mar-r-20">人数：{{viewlist.adultCount}} 大 {{viewlist.childCount}}小</label>
-                    <label class="control-label mar-r-20" data-contact="{{viewlist.contactMemberList | stringify}}">游客小组联系人：
-                    {{each viewlist.contactMemberList as itme index}}
-                        {{if index == 0}}
-                            <span>{{itme.contactMemberName}}</span>
-                            <span class="mar-r-10">({{itme.contactMemberPhoneNumber}})</span>
-                        {{else if index>0}}
-                        <a class="T-view-contact">查看更多</a>
-                    {{/if}}
-                    {{/each}}
-                    
-                    </label>
-                    <label class="control-label mar-r-20">抵达时间：{{viewlist.arriveTime}}</label>
-                    <label class="control-label mar-r-20">线路名称：{{viewlist.lineProductName}}</label>
+                    <label class="control-label mar-r-20">客户：{{viewlist.partnerAgencyName}} </label>
                     <label class="control-label">外联销售：{{viewlist.outOPUserName}}</label>
+                    <label class="control-label mar-r-20">线路名称：{{viewlist.lineProductName}}</label>
+                    <label class="control-label mar-r-20">出游日期：{{viewlist.startTime}}</label>
+                    <label class="control-label mar-r-20">人数：{{viewlist.adultCount}} 大 {{viewlist.childCount}}小</label>
+                    <label class="control-label mar-r-20" data-contact="{{viewlist.contactMemberList | stringify}}">游客小组联系人： 
+                    {{if !!viewlist.contactMemberList && viewlist.contactMemberList.length}}
+                        <span>{{viewlist.contactMemberList[0].contactMemberName}}</span>
+                        <span class="mar-r-10">({{viewlist.contactMemberList[0].contactMemberPhoneNumber}})</span> 
+                        {{ if viewlist.contactMemberList.length > 1}}
+                            <a class="T-view-contact">查看更多</a> 
+                        {{/if}}
+                    {{/if}}
+                    </label>
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td style="text-align: left;">
-                    <label class="control-label mar-r-20">客户名：{{viewlist.partnerAgencyName}} </label>
-                    <label class="control-label mar-r-20">要求：{{viewlist.require}}</label>
-                    <label class="control-label mar-r-20">班次：{{viewlist.shift}}</label>
                     <label class="control-label mar-r-20">类型：{{if viewlist.shuttleType == 1}}接团{{else if viewlist.shuttleType == 2}}送团 {{/if}}</label>
-                    <label class="control-label mar-r-20">出游日期：{{viewlist.startTime}}</label>
-                    <label class="control-label">收客单号：{{viewlist.tgOrderNumber}}</label>
+                    <label class="control-label mar-r-20">班次：{{viewlist.shift}}</label>
+                    <label class="control-label mar-r-20">抵达时间：{{viewlist.arriveTime}}</label>
+                    <label class="control-label mar-r-20"> <b> 要求：{{viewlist.require}} </b></label>
                 </td>
             </tr>
         </tbody>
     </table>
-{{/each}}
-<h5 class="base-title"><i class="fa fa-bus" aria-hidden="true"></i> 车辆安排</h5>
+    {{/each}}
+    <h5 class="base-title"><i class="fa fa-bus" aria-hidden="true"></i> 车辆安排</h5>
     <table class="table table-striped table-bordered table-hover ">
         <thead>
             <tr>
@@ -60,7 +60,7 @@
         </thead>
         <tbody class="T-bus-plan">
             {{each outBusList as view}}
-            <tr data-entity-id="{{view.outBusId}}" >
+            <tr data-entity-id="{{view.outBusId}}">
                 <td>
                     {{view.busCompanyName}}
                 </td>
