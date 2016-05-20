@@ -924,7 +924,7 @@ define(function(require, exports) {
                         Transfer._refreshList('bus');
                         Tools.closeTab(busplanId);
                         Transfer.deleteOutBusIds = [];
-                        Transfer.deleteOutRemarkList = [];
+                        Transfer.delBusTransferId = [];
                     });
                 }
 
