@@ -17,7 +17,12 @@
     </thead>
     <tbody class="T-ticket-list">
     {{each bookingOrderList as rs}}
-        <tr data-id="{{rs.id}}">
+        <tr data-id="{{rs.id}}" 
+            data-start-time="{{rs.startTime}}" 
+            data-starting-city="{{rs.startingCity}}"
+            data-arrive-city="{{rs.arriveCity}}" 
+            data-seat-level="{{rs.seatLevel}}"
+            data-member-count="{{rs.memberCount}}">
             <td>{{rs.orderNumber}}</td>
             <td>{{rs.type | getTicketText}}</td>
             <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}</td>
