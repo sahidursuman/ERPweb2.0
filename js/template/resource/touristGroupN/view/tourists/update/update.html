@@ -160,7 +160,7 @@
 						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" value="{{rs.operateCurrentNeedPayMoney}}" readonly></td>
 						<td class="T-status" data-status="{{rs.status}}">{{rs.status | getPartGroupStatusText}}</td>
 						<td>
-							<a class="cursor {{if rs.status != 1 || rs.hotelInfoClearFlag == 1}}hct-color-BBB{{else}}T-action T-delete{{/if}}">删除</a>
+							<a class="cursor {{if rs.status != 1 || rs.hotelInfoClearFlag == 1}}hct-color-BBB{{else}}T-action T-delete{{/if}}" {{if rs.hotelInfoClearFlag == 1}}title="已有中转安排，无法删除"{{/if}}>删除</a>
 						</td>
 					</tr>
 				{{/each}}
