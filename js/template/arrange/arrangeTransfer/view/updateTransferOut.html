@@ -106,46 +106,36 @@
             </div>
         </div>
     </form>
-    <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+
+    <form class="form-horizontal hotelMainForm" role="form" style="margin-top:10px" onsubmit="return false">
         <div class=" ui-sortable-handle">
             <h5 class="">
-				<span class="badge badge-primary">2</span>
-				<label class="middle title-size">线路产品信息</label>
-			</h5>
-            <div class="widget-body clearfix">
-                <div class="widget-main">
-                    <div class="form-group col-sm-12">
-                        <label class="col-sm-1 control-label no-padding-right">线路产品</label>
-                        <div class="col-sm-2">
-                            <input name="lineProductName" value="{{if !!touristGroupTransfer.lineProduct}}{{touristGroupTransfer.lineProduct.name}}{{/if}}" type="text" readonly="readonly" class="date-picker col-xs-12" />
-                        </div>
-                        <label class="col-sm-1 control-label no-padding-right">出游日期</label>
-                        <div class="col-sm-2">
-                            <input name="createTime" value="{{touristGroupTransfer.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}" disabled="disabled" type="text" class="date-picker col-xs-12" />
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-12">
-                        <div class="search-area">
-                            <label class="col-sm-1 control-label no-padding-right">客户</label>
-                            <div class="col-sm-2">
-                                <input value="{{touristGroupTransfer.touristGroup.partnerAgency.travelAgencyName}}" readonly="readonly" type="text" class="col-xs-12" />
-                            </div>
-                            <label class="col-sm-1 control-label no-padding-right">客户联系人</label>
-                            <div class="col-sm-2">
-                                <input name="contactMemberName" value="{{if touristGroupTransfer.touristGroup.partnerAgencyContact != null}}{{touristGroupTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{touristGroupTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}" readonly="readonly" type="text" class="col-xs-12" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="search-area col-sm-12">
-                        <label class="pull-left col-sm-1 control-label no-padding-right">收客备注</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control col-sm-12" name="remark" value="{{touristGroupTransfer.touristGroup.remark}}" readonly="readonly" maxlength="1000">{{touristGroupTransfer.touristGroup.remark}}</textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <span class="badge badge-primary">2</span>
+                <label class="middle title-size">线路产品信息</label>
+            </h5>
+            <table class="whereQ whereTwo" style="width: 100%">
+                <tr>
+                    <td class="style-myself CheckPlan">线路产品</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px">{{if !!touristGroupTransfer.lineProduct}}{{touristGroupTransfer.lineProduct.name}}{{/if}}</td>
+                    <td class="style-myself CheckPlan">出游日期</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">{{touristGroupTransfer.touristGroup.startTime | dateFormat:'yyyy-MM-dd'}}</td>
+                </tr>
+                <tr>
+                    <td class="style-myself CheckPlan">客户</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px">{{touristGroupTransfer.touristGroup.partnerAgency.travelAgencyName}}</td>
+                    <td class="style-myself CheckPlan">客户联系人</td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3">
+                       {{if touristGroupTransfer.touristGroup.partnerAgencyContact != null}}{{touristGroupTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{touristGroupTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}}{{/if}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style-myself CheckPlan">收客备注</td>
+                    <td colspan="5">{{touristGroupTransfer.touristGroup.remark}}</td>
+                </tr>
+            </table>
         </div>
     </form>
+
     <!-- 收客信息start-->
     <form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
         <div class=" ui-sortable-handle">
