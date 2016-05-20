@@ -106,7 +106,9 @@ define(function(require, exports) {
         var target = $arrange.closest('.tab-pane').data('target'),
             title = $arrange.closest('.tabable').find('.nav').find('.active').text(),
             html = editTemplate[target + 'Edit'],
-            id = $arrange.closest('tr').data('id');
+            id = $arrange.closest('tr').data('id'),
+            startUseTime = $arrange.closest('tr').attr('data-startUseTime'),
+            endUseTime = $arrange.closest('tr').attr('data-endUseTime');
         
         if(!id || !target){
             console.info('信息有误，请检查传递的参数!');
@@ -120,7 +122,17 @@ define(function(require, exports) {
         }).done(function(data){
             if (showDialog(data)) {
                 var tab_key = tabKey + '_' + target + '_edit';
-
+                //代订车-安排需带入车时间
+                if (!!target && target === 'bus' && data.arrangeList.length > 0 ) {
+                    for(var i = 0, len = data.arrangeList.length; i < len; i++){
+                        data.arrangeList[i].startTime = startUseTime;
+                        data.arrangeList[i].endUseTime = startUseTime;
+                    }
+                }
+                //返回数据data.arrangeList数组对象为空
+                if (!!target && target === 'bus' && data.arrangeList.length == 0 ) {
+                    data.arrangeList.push({startTime :startUseTime ,  endTime : endUseTime});
+                }
                 if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
                     BookingArrange.init_arrange_event($('#tab-' + tab_key + '-content'), target);
                 }
