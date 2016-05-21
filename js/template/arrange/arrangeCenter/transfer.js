@@ -26,6 +26,7 @@ define(function(require, exports) {
         OtherArrangeTemplate = require('./transferView/otherArrange'),
         ViewOtherTemplate = require('./transferView/viewOther'),
         planCollectionTemplate = require('./transferView/planCollection'),
+        viewTouristTemplate = require('./transferView/viewTourist'),
 
         Transfer = {
             transitIds: [],
@@ -923,7 +924,7 @@ define(function(require, exports) {
                         Transfer._refreshList('bus');
                         Tools.closeTab(busplanId);
                         Transfer.deleteOutBusIds = [];
-                        Transfer.deleteOutRemarkList = [];
+                        Transfer.delBusTransferId = [];
                     });
                 }
 
@@ -1787,7 +1788,15 @@ define(function(require, exports) {
                     if (showDialog(data)) {
                         var tab_key = tabKey + '_other';
                         if (Tools.addTab(tab_key, '其他安排', OtherArrangeTemplate(data))) {
-                            Transfer._initOtherArrange($('#tab-' + tab_key + '-content')); 
+                            var $viewOtherId = $('#tab-' + tab_key + '-content')
+                            Transfer._initOtherArrange($viewOtherId); 
+                            $viewOtherId.off('click').on('click','.T-view-contact',function(event) {
+                                var contactList = $(this).closest('label').data('contact');
+                                var contactList = {
+                                    contactList : contactList
+                                }
+                                Transfer.viewTourist(contactList);
+                            });
                         }
                     }
                 }
@@ -1810,11 +1819,33 @@ define(function(require, exports) {
                     var html = ViewBusTemplate(data);
                     var viewBusTabId = "tab-viewBus-content";
                     addTab(viewBusTabId, '车查看', html);
-                    Transfer._viewPlanCollection($('#tab-'+viewBusTabId+'-content'));
+                    var $tabId = $('#tab-'+viewBusTabId+'-content');
+                    $tabId.off('click').on('click','.T-view-contact',function(event) {
+                        var contactList = $(this).closest('label').data('contact');
+                        var contactList = {
+                            contactList : contactList
+                        }
+                        Transfer.viewTourist(contactList);
+                    });
                 }
             }
         });
     };
+    Transfer.viewTourist = function(data){
+        var html = viewTouristTemplate(data);
+            var viewContactLeyer = layer.open({
+                    type: 1,
+                    title:"查看游客",
+                    skin: 'layui-layer-rim', //加上边框
+                    area: '600px', //宽高
+                    zIndex:1028,
+                    content: html,
+                    scrollbar: false,
+                    success : function(){
+
+            }
+        })
+    }
 
     //车查看代收
      Transfer._viewPlanCollection = function ($tab) {
@@ -1843,7 +1874,15 @@ define(function(require, exports) {
                     var html = ViewHotelTemplate(data);
                     var viewHotelTabId = "tab-viewBus-content";
                     addTab(viewHotelTabId, '房查看', html);
-                    Transfer._viewPlanCollection($('#tab-'+viewHotelTabId+'-content'));
+                    var $viewId = $('#tab-'+viewHotelTabId+'-content')
+                    Transfer._viewPlanCollection($viewId);
+                    $viewId.off('click').on('click','.T-view-contact',function(event) {
+                        var contactList = $(this).closest('label').data('contact');
+                        var contactList = {
+                            contactList : contactList
+                        }
+                        Transfer.viewTourist(contactList)
+                    });
                 }
             }
         });
@@ -1873,6 +1912,14 @@ define(function(require, exports) {
                             event.preventDefault();
 
                             Tools.closeTab(tab_key);
+
+                        });
+                        $('#tab-' + tab_key + '-content').off('click').on('click','.T-view-contact',function(event) {
+                            var contactList = $(this).closest('label').data('contact');
+                            var contactList = {
+                                contactList : contactList
+                            }
+                            Transfer.viewTourist(contactList)
                         });
                     }
                 }

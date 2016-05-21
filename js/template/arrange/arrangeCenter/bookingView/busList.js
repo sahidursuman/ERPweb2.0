@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":14,"md5":"3161ad30fa17d1c2a38e58ef57a42582"}*/
+/*TMODJS:{"debug":true,"version":35,"md5":"3161ad30fa17d1c2a38e58ef57a42582"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeCenter/bookingView/busList", function($data, $filename) {
         try {

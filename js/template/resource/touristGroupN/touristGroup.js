@@ -109,7 +109,10 @@ define(function(require, exports) {
             type: 'POST',
             success: function(data) {
             	if(showDialog(data)){
-            		var touristGroupList = JSON.parse(data.touristGroupList);
+                    var totalAdultCount = 0, 
+                        totalChildCount = 0,
+                        touristGroupList = JSON.parse(data.touristGroupList);
+
             		for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
                         tmp = touristGroupList[i];
                         tmp.editTitle = '';
@@ -165,12 +168,18 @@ define(function(require, exports) {
                                 } 
                             }
                         }
+
+                        totalAdultCount += tmp.adultCount;
+                        totalChildCount += tmp.childCount;
                     }
                     data.touristGroupList = touristGroupList;
             		var html = T.listTable(data);
             		html = filterUnAuth(html);
             		$tab.find('.T-touristGroup').html(html);
             		$tab.find('.T-record-size').html(data.recordSize);
+
+                    //$tab.find('.T-total-number').text((totalAdultCount||0) + "大" + (totalChildCount||0) + "小")
+
             		//绑定分页插件
                     laypage({
                         cont: $tab.find('.T-pagenation'),
@@ -816,7 +825,8 @@ define(function(require, exports) {
             }
     	});
     	//参团表内操作
-    	$tab.find('.T-part-group-list').on('click', '.T-action', function(event){
+        var $partGroup = $tab.find('.T-part-group-list');
+    	$partGroup.on('click', '.T-action', function(event){
     		event.preventDefault();
     		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
             if($that.hasClass('T-search-line')){
@@ -843,7 +853,7 @@ define(function(require, exports) {
                 touristGroup.feeAdjust(id, $that);
             }
     	});
-        $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
+        $partGroup.on('changeDate', '[name="tripStartTime"]', function(){
             var $that = $(this), $tr = $that.closest('tr'),
                 $endTime = $tr.find('[name="tripEndTime"]'),
                 lineData = $tr.find('[name="lineProductName"]').data('json');
@@ -853,6 +863,10 @@ define(function(require, exports) {
             if($that.val() != "" && !!lineData.days){
                 $endTime.val(Tools.addDay($that.val(), lineData.days-1)).trigger('blur');
             }
+        });
+        //本段团款change事件
+        $partGroup.on('change', '[name="subNeedPayMoney"]', function(event){
+            $(this).data('change', "1");
         });
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
@@ -1434,7 +1448,7 @@ define(function(require, exports) {
                         delete moneyData.touristGroupFeeJsonDel;
                         var $tr = $that.closest('tr');
                         $tr.find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
-                        if($tr.find('[name="subNeedPayMoney"]').val() === ""){
+                        if($tr.find('[name="subNeedPayMoney"]').data('change') != "1"){
                             $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
                         }
                         var str = Tools.thousandPoint(moneyData.needPayAllMoney, 2);
