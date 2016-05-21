@@ -731,7 +731,6 @@ define(function(require, exports) {
             }else if($that.hasClass('T-add-client')){
                 KingServices.addPartnerAgency(function(formData){});
             }else if($that.hasClass('T-fee-adjust')){
-                // touristGroup.feeAdjust(false, $that);
                 touristGroup.updateJionGroupMoney($that, 0, 2);
             }
         });
@@ -852,7 +851,6 @@ define(function(require, exports) {
                 clearItem($that);
             }else if($that.hasClass('T-fee-adjust')){
                 touristGroup.updateJionGroupMoney($that, 1, 2);
-                // touristGroup.feeAdjust(id, $that);
             }
     	});
         $partGroup.on('changeDate', '[name="tripStartTime"]', function(){
@@ -981,56 +979,7 @@ define(function(require, exports) {
             });
         }
     };
-
-    /**
-     * 调整费用项
-     * @param  {Number} id    小组ID或参团ID
-     * @param  {[type]} $that [description]
-     * @return {[type]}       [description]
-     */
-    touristGroup.feeAdjust = function(id, $that){
-        layer.open({
-            type: 1,
-            title: '调整费用项',
-            skin: 'layui-layer-rim', //加上边框
-            area: '1000px', //宽高
-            zIndex:1028,
-            content: T.addFee(),
-            scrollbar: false,
-            success:function(obj, index){
-                var $layer = $(obj),
-                    validate = rule.checkNeed($layer),
-                    $tbody = $layer.find('.T-feeAdjustBody');
-
-                $layer.find('.T-btn-save').on('click', function(){
-                    if(!validate.form()) return;
-                    var feeData = {
-                        feeList : [{
-                            count : $layer.find('[name="count"]').val(),
-                            price : $layer.find('[name="price"]').val(),
-                            remark : $layer.find('[name="remark"]').val(),
-                            type : $layer.find('[name="type"]').val()
-                        }]
-                    }
-                    feeData.id = id || $that.closest('.T-container').data('id');
-                    $.ajax({
-                        url : KingServices.build_url('customerOrder', 'reEditFee'),
-                        data : {saveJson : JSON.stringify(feeData)}
-                    }).done(function(data){
-                        if(showDialog(data)){
-                            touristGroup.overlayFee($that, feeData.feeList)
-                            layer.close(index);
-                        }
-                    });
-                });
-                $tbody.on('change', '.T-option', function(event){
-                    event.preventDefault();
-                    F.calcMoney($(this), $layer);
-                });
-            }
-        });
-    };
-
+    
     /**
      * 叠加费用项
      * @param  {[type]} $that [description]
@@ -1459,7 +1408,7 @@ define(function(require, exports) {
                         return this;
                     };
 
-                    var moneyData = F.assemblyMoneyData($layer, isAdjustFee);
+                    var moneyData = F.assemblyMoneyData($layer);
                     if(moneyData.touristGroupFeeJsonAdd.length === 0){
                         showMessageDialog('至少填写一条费用项！');
                         return false;
@@ -2971,22 +2920,20 @@ define(function(require, exports) {
         /**
          * 组装应收数据
          * @param  {object}  $tab        表单容器
-         * @param  {Boolean} isAdjustFee 是否是调整费用项
          * @return {[type]}              [description]
          */
-        assemblyMoneyData : function($tab, isAdjustFee){
+        assemblyMoneyData : function($tab){
             var moneyData = {
                 needPayAllMoney : $tab.find('[name="needPayAllMoney"]').val(),
                 touristGroupFeeJsonAdd : []
-            }, $list = $tab.find('.T-fee-list'),
-            $tr = isAdjustFee?$list.find('select').parent('tr'): $list.children('tr');
+            };
             if($tab.find('[name="preIncomeMoney"]').length > 0){
                 moneyData.preIncomeMoney = $tab.find('[name="preIncomeMoney"]').val();
             }
             if($tab.find('[name="currentNeedPayMoney"]').length > 0){
                 moneyData.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
             }
-            $tr.each(function(index){
+            $tab.find('.T-fee-list').children('tr').each(function(index){
                 var $that = $(this),
                     id = $that.data('id'),
                     type = $that.find('[name="type"]').val(),
