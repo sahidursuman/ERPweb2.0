@@ -33,7 +33,7 @@
         {{each shopListdata as rs index}}
         <tr>
             <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}" style="text-align:left">
-                <span>线路产品：{{rs.lineName}}</span><br/>
+                <span>线路：{{rs.lineName}}</span><br/>
                 <span>客户：{{rs.partnerAgencyName}}</span><br/>
                 <span>团号：{{rs.tripNumber}}</span><br/>
                 <span>人数：{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</span><br/>
