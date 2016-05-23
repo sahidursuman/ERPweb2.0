@@ -60,7 +60,7 @@
                     <th>游客</th>
                     <th>人数</th>
                     <th>客户</th>
-                    <th>团款应收</th>
+                    <th>本段团款</th>
                     <th>同行地接</th>
                     <th>外转成本</th>
                     <th>毛利</th>
@@ -82,7 +82,7 @@
                         </a>
                     </td>
                     <td>{{turnProfit.partnerAgencyName}}</td>
-                    <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail F-float F-money">{{turnProfit.settlementMoney}}</a></td>
+                    <td><span class="F-float F-money">{{turnProfit.settlementMoney}}</span></td>
                     <td>{{turnProfit.transferPartnerAgencyName}}</td>
                     <td>
                         <a href="javascript:void(0)" class="T-option T-showTransPay F-float F-money" data-id="{{turnProfit.tgTransferId}}">{{turnProfit.transNeedPayAllMoney}}</a>
