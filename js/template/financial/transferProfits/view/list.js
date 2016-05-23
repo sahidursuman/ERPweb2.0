@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":118,"md5":"0c5d600f6c107757bafa18ce7900da29"}*/
+/*TMODJS:{"debug":true,"version":120,"md5":"f55ceadb97af7f49508f423cfe71b275"}*/
 define(function(require) {
     return require("../../../template")("financial/transferProfits/view/list", function($data, $filename) {
         try {
@@ -7,7 +7,7 @@ define(function(require) {
             return $line = 1, $each(result, function(rs) {
                 $out += ' <tr data-id="', $line = 2, $out += $escape(rs.id), $out += '" data-lid="', 
                 $line = 2, $out += $escape(rs.lineProductId), $out += '"> <td>', $line = 3, null == rs.orderNumber || "" == rs.orderNumber ? ($out += "-", 
-                $line = 3) : ($line = 3, $out += $escape(rs.orderNumber), $line = 3), $out += "</td> <td>>", 
+                $line = 3) : ($line = 3, $out += $escape(rs.orderNumber), $line = 3), $out += "</td> <td>", 
                 $line = 4, $out += $escape(rs.lineProductName), $out += "</td> <td>", $line = 5, 
                 $out += $escape(rs.customerType), $out += "</td> <td>", $line = 6, $out += $escape($helpers.dateFormat(rs.startTime, "yyyy-MM-dd")), 
                 $out += "</td> <td>", $line = 7, null == rs.memberName || "" == rs.memberName ? ($out += "-", 
@@ -28,7 +28,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each result as rs}}\r\n<tr data-id="{{rs.id}}" data-lid="{{rs.lineProductId}}">\r\n	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>\r\n	<td>>{{rs.lineProductName}}</td>\r\n	<td>{{rs.customerType}}</td>\r\n	<td>{{rs.startTime | dateFormat:\'yyyy-MM-dd\'}}</td>\r\n	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>\r\n	<td><a class="cursor T-option T-viewGroup" title="查看小组">\r\n			<span class="F-float F-count">{{rs.adultCount}}</span> 大\r\n			<span class="F-float F-count">{{rs.childCount}}</span> 小\r\n		</a>\r\n	</td> \r\n	<td>{{rs.fromPartnerAgencyName}}</td>\r\n	<td><span class="F-float F-money">{{rs.needIncomeMoney}}</span></td>\r\n	<td>{{rs.service}}</td>\r\n	<td><a class="cursor T-option T-costDetail" title="查看明细">\r\n			<span class="F-float F-money">{{rs.needPayedMoney}}</span>\r\n		</a>\r\n	</td>\r\n	<td><span class="F-float F-money">{{rs.grossProfitMoney}}</span></td>\r\n	<td><span class="F-float F-money">{{rs.perGrossProfitMoney}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each result as rs}}\r\n<tr data-id="{{rs.id}}" data-lid="{{rs.lineProductId}}">\r\n	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>\r\n	<td>{{rs.lineProductName}}</td>\r\n	<td>{{rs.customerType}}</td>\r\n	<td>{{rs.startTime | dateFormat:\'yyyy-MM-dd\'}}</td>\r\n	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>\r\n	<td><a class="cursor T-option T-viewGroup" title="查看小组">\r\n			<span class="F-float F-count">{{rs.adultCount}}</span> 大\r\n			<span class="F-float F-count">{{rs.childCount}}</span> 小\r\n		</a>\r\n	</td> \r\n	<td>{{rs.fromPartnerAgencyName}}</td>\r\n	<td><span class="F-float F-money">{{rs.needIncomeMoney}}</span></td>\r\n	<td>{{rs.service}}</td>\r\n	<td><a class="cursor T-option T-costDetail" title="查看明细">\r\n			<span class="F-float F-money">{{rs.needPayedMoney}}</span>\r\n		</a>\r\n	</td>\r\n	<td><span class="F-float F-money">{{rs.grossProfitMoney}}</span></td>\r\n	<td><span class="F-float F-money">{{rs.perGrossProfitMoney}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
