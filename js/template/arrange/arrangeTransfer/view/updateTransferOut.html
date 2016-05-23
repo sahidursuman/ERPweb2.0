@@ -14,7 +14,7 @@
                             <div class="search-area">
                                 <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行地接</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="col-sm-12" {{if touristGroupTransfer.status==0}}readonly="readonly" {{/if}} placeholder="客户" name="" value="{{touristGroupTransfer.partnerAgency.travelAgencyName}}" />
+                                    <input type="text" class="col-sm-12 T-choosePartnerAgency" {{if touristGroupTransfer.status==0}}readonly="readonly" {{/if}} placeholder="客户" name="" value="{{touristGroupTransfer.partnerAgency.travelAgencyName}}" />
                                     <input type="hidden" name="transferPartnerAgencyId" value="{{touristGroupTransfer.partnerAgency.id}}" />
                                 </div>
                             </div>
