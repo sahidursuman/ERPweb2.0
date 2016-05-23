@@ -444,7 +444,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            //joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            joinTrip[i].currentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -576,7 +576,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            //joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            joinTrip[i].currentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -1159,7 +1159,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
                         '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
-                        '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney"></td>'+
+                        '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
@@ -1430,19 +1430,14 @@ define(function(require, exports) {
                             moneyData.isTransfer = 0;
                         }
                         moneyData.remark = $layer.find('[name="remark"]').val();
-                        moneyData.isCurrent = $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0;
-                        if(moneyData.isCurrent === 1){
-                            moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
-                        }else{
-                            moneyData.currentNeedPayMoney = 0;
-                        }
+                        moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
                         
                         moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
                         moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
                         delete moneyData.touristGroupFeeJsonAdd;
                         delete moneyData.touristGroupFeeJsonDel;
                         var $tr = $that.closest('tr');
-                        //$tr.find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
+                        $tr.find('[name="currentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
                         if($tr.find('[name="subNeedPayMoney"]').data('change') != "1"){
                             $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
                         }
