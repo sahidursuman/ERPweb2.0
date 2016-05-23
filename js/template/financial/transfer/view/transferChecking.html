@@ -100,7 +100,7 @@
                     </td>
                     <td rowspan="{{rs.rowLen}}">{{rs.contactName}}</td>
                     <td rowspan="{{rs.rowLen}}">{{rs.operateName}}</td>
-                    <td rowspan="{{rs.rowLen}}">{{rs.operateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                    <td rowspan="{{rs.rowLen}}">{{rs.operateTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
                     <td rowspan="{{rs.rowLen}}"><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
                     <td>{{if rs.outFeeList.length > 0}}
                         <!-- 若有中转结算价 -->
