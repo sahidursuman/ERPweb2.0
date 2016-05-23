@@ -64,9 +64,9 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12 mar-b-20">
-			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-join-group{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 接团 </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-join-group{{/if}}{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 接团 </button>
 			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-part-group{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> {{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}} </button>
-			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-send-group{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-send-group{{/if}}{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
 		</div>
 	</div>
 	
