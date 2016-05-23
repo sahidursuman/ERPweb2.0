@@ -83,8 +83,7 @@ define(function(require, exports) {
 	};
     //获取合计金额
     Transfer.getSumMoney = function(data,tabId){
-        var totalPerson = data.totalPeople || 0;
-        tabId.find('.T-sumCount').text(totalPerson);
+        tabId.find('.T-sumCount').text((data.transAdultCount || 0) + " 大 " + (data.transChildCount || 0) + " 小");
         tabId.find('.T-sumTransMoney').text(data.totalNeedPayMoney);
         tabId.find('.T-sumStMoney').text(data.totalSettlementMoney);
         tabId.find('.T-sumPaiedMoney').text(data.totalPayedMoney);

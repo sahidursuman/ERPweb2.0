@@ -642,6 +642,30 @@ function logout(){
 
 }
 
+//浏览器更新提示
+function browserUpdate(){
+	var updatePasswordLayer=layer.open({
+		type: 1,
+		title: "升级浏览器",
+		skin: 'layui-layer-lan', //加上边框
+		area: ['300px', '200px'], //宽高
+		content: "<div class='T-browserUpdate clearfix'><div class='col-sm-12' style='margin-top:25px;color:red;'>您当前浏览器版本过低，请选择升级！</div>" +
+		"<div style='margin:25px 25px 25px 15px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://windows.microsoft.com/zh-cn/internet-explorer/download-ie'>IE</button></div>"+
+		"<div style='margin:25px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://se.360.cn/'>360</button></div>"+
+		"<div style='margin:25px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://www.firefox.com.cn/'>火狐</button></div></div>",
+		success : function(){
+			$(".T-browserUpdate").on('click', '.T-update', function(event) {
+				event.preventDefault();
+
+				var href = $(this).data("href"),o = window.open();
+	            setTimeout(function(){
+	                o.location.href = href;
+	            }, 0);
+			});
+		}	
+	});
+}
+
 function viewAllMsg(){
 	seajs.use("" + ASSETS_ROOT +modalScripts['public_message'],function(message){
 		message.init();
