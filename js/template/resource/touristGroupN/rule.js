@@ -121,6 +121,14 @@ define(function(require, exports) {
                     errMsg: '班次不能为空'
                 }]
 			},*/
+            {
+                //班次
+                $ele: $obj.find('[name="lineNeedPayMoney"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '线路应付不能为空'
+                }]
+            },
 			{
 				//全陪电话
 				$ele: $obj.find('[name="accompanyGuideMobile"]'),
@@ -138,8 +146,8 @@ define(function(require, exports) {
                 }]
             },
 			{
-				//本段现收团款
-				$ele: $obj.find('[name="operateCurrentNeedPayMoney"]'),
+				//本段代收团款
+				$ele: $obj.find('[name="currentNeedPayMoney"]'),
 				rules : [{
                     type: 'float',
                     errMsg: '本段现收团款必须为数字'

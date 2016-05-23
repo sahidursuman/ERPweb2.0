@@ -1,6 +1,30 @@
-<div class="base-info" data-id="{{bookingOrder.id}}">
-    代订单号：<span class="mar-r-20">{{bookingOrder.orderNumber}}</span> 客人信息：
-    <span class="mar-r-20">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</span> 外联销售：{{bookingOrder.outOPUserName}}
+<div class="base-info container-fluid" data-id="{{bookingOrder.id}}">
+    <div class="hct-view-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">代订单号</div>
+                        <div class="hct-view-content">{{bookingOrder.orderNumber}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">客人信息</div>
+                        <div class="hct-view-content">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">外联销售</div>
+                        <div class="hct-view-content">{{bookingOrder.outOPUserName}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-12" colspan="3">
+                        <div class="hct-view-title">用车时间</div>
+                        <div class="hct-view-content">{{bookingOrder.startUseTime | dateFormat: 'yyyy-MM-dd'}} - {{bookingOrder.endUseTime | dateFormat: 'yyyy-MM-dd'}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <div class=" ui-sortable-handle">
     <h5 class="">

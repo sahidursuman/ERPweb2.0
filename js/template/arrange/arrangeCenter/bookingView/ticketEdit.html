@@ -17,6 +17,32 @@
                         <div class="hct-view-content">{{bookingOrder.outOPUserName}}</div>
                     </td>
                 </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">出发时间</div>
+                        <div class="hct-view-content">{{bookingOrder.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">出发城市</div>
+                        <div class="hct-view-content">{{bookingOrder.startingCity}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">到达城市</div>
+                        <div class="hct-view-content">{{bookingOrder.arriveCity}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">座位席别</div>
+                        <div class="hct-view-content">{{bookingOrder.seatLevel}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">数量</div>
+                        <div class="hct-view-content">{{bookingOrder.memberCount}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
