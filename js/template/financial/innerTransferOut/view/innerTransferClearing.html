@@ -55,7 +55,7 @@
         </button> -->
     </div>
     <div class="T-count">
-        <label class=" control-label mar-r-10">总人数：<span class="F-float F-count">{{sumData.sumTransCount}}</span></label>
+        <label class=" control-label mar-r-10">总人数：<span class="F-float F-count">{{sumData.sumAdultCount || 0}}大{{sumData.sumChildCount || 0}}小</span></label>
         <label class=" control-label mar-r-10">内转转出金额合计：<span class="F-float F-money">{{sumData.sumTransNeedPayMoney}}</span></label>
         <label class=" control-label mar-r-10">已付金额合计：<span class="F-float F-money">{{sumData.sumPayedMoney}}</span></label>
         <label class=" control-label mar-r-10">扣款金额合计：<span class="F-float F-money">{{sumData.sumPunishMoney}}</span></label>
