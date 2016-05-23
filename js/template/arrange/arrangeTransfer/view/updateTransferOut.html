@@ -14,43 +14,40 @@
                             <div class="search-area">
                                 <label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>同行地接</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="col-sm-12 {{if touristGroupTransfer.status!=0}}T-choosePartnerAgency{{/if}} " style="{{if touristGroupTransfer.status==0}}color:#bbb; {{/if}} " {{if touristGroupTransfer.status==0}}readonly="readonly" {{/if}} placeholder="客户" name="" value="{{touristGroupTransfer.partnerAgency.travelAgencyName}}" />
+                                    <input type="text" class="col-sm-12" {{if touristGroupTransfer.status==0}}readonly="readonly" {{/if}} placeholder="客户" name="" value="{{touristGroupTransfer.partnerAgency.travelAgencyName}}" />
                                     <input type="hidden" name="transferPartnerAgencyId" value="{{touristGroupTransfer.partnerAgency.id}}" />
                                 </div>
                             </div>
                         </div>
-                        <!-- 付款金额start -->
-                        <div class="form-group col-sm-12 formOneList">
-                            <div class="search-area">
-                                <label class="col-sm-1 control-label no-padding-right pull-left">应付</label>
-                                <div class="col-sm-2 trans-NeedPayAllMoney">
-                                    <input name="transNeedPayAllMoney" value="{{touristGroupTransfer.touristGroup.transNeedPayAllMoney}}" type="text" readonly="readonly" class="col-xs-12 F-float F-money" />
-                                </div>
-                                <label class="col-sm-1 control-label no-padding-right pull-left"><span class="necessary">*</span>计划现收</label>
-                                <div class="col-sm-2 trans-PayedMoney">
-                                    <input name="currentNeedPayMoney F-float F-money" value="0" type="text" class="col-xs-12" />
-                                </div>
-                                <div class="col-sm-2">
-                                	<label>
-                                	    <input type="checkbox" class="ace" {{if cashFlag==1}}checked="checked" {{/if}}  value="{{cashFlag}}" name="cashFlag" />
-                                	    <span class="lbl"></span>
-                                	</label>
-                                	<label class="control-label no-padding-right">对方现收</label>
-                                </div>
-                                <div class="col-sm-2 trans-PayedMoney">
-                                    <input name="transPayedMoney" value="{{touristGroupTransfer.touristGroup.transPayedMoney}}" readonly="readonly" type="hidden" class="col-xs-12 F-float F-money" />
-                                </div>
+
+    
+                        <div class="form-group col-sm-12">
+                            <label class="col-sm-1 control-label no-padding-right">外转备注</label>
+                            <div class="col-sm-5">
+                                <input value="{{touristGroupTransfer.touristGroup.transRemark}}" type="text" name="transRemark" class="col-xs-12" maxlength="500" />
                             </div>
+                        </div>
+
+                        <!-- 付款金额start -->
+                        <div class="form-group col-sm-12"> 
+                               <label class="col-xs-1 control-label no-padding-right">应付：</label> 
+                               <div class="col-xs-1"> 
+                                    <input name="transNeedPayAllMoney" value="{{touristGroupTransfer.touristGroup.transNeedPayAllMoney}}" maxlength="9" type="text" readonly="readonly" class="col-xs-12 F-float F-money" /> 
+                               </div> 
+                               <label class="pull-left">
+                                    <input type="checkbox" class="ace" {{if cashFlag==1}}checked{{/if}} name="cashFlag" /> <span class="lbl"> 对方现收</span> 
+                               </label>
+                               <div class="T-cashFlag mar-l-15 pull-left  {{if cashFlag==0}}hidden{{/if}}">
+                                   <label class="control-label pad-l-5">对方现收金额：</label> 
+                                   <input name="currentNeedPayMoney" value="{{if !!touristGroupTransfer.touristGroup}}{{touristGroupTransfer.touristGroup.currentNeedPayMoney}}{{/if}}" maxlength="9" type="text" class="F-float F-money">
+                               </div>
+                                <div class="col-xs-1">
+                                    <input name="transPayedMoney" value="{{touristGroupTransfer.transPayedMoney}}" maxlength="9" type="hidden" class="col-xs-12 F-float F-money" />
+                                </div>
                         </div>
                         <!-- 付款金额end -->
-                        <div class="form-group col-sm-12">
-                            <div class="search-area">
-                                <label class="col-sm-1 control-label no-padding-right">外转备注</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control col-sm-12" name="transRemark" value="" maxlength="1000">{{touristGroupTransfer.touristGroup.transRemark}}</textarea>
-                                </div>
-                            </div>
-                        </div>
+        
+
                         <div class="form-group col-sm-12">
                             <div class="search-area clearfix">
                                 <!-- 新增费用项目 -->
