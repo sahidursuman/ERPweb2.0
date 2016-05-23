@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":109,"md5":"ac6e07419d175bc912c9530aa06916d9"}*/
+/*TMODJS:{"debug":true,"version":111,"md5":"ac6e07419d175bc912c9530aa06916d9"}*/
 define(function(require) {
     return require("../../../../../template")("resource/touristGroupN/view/tourists/update/updateMoney", function($data, $filename) {
         try {

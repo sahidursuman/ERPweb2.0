@@ -137,7 +137,9 @@
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs listIndex}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" data-status="{{rs.status}}">
-                <td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
+                <td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}
+                    <a class="cursor T-action T-open-tourist" title="查看小组信息">{{rs.orderNumber}}</a>
+                {{/if}}</td>
                 <td>{{if rs.otaOrderNumber == null || rs.otaOrderNumber == ""}}-{{else}}{{rs.otaOrderNumber}}{{/if}}</td>
                 <td>{{rs.lineProductName}}</td>
                 <td>{{rs.startTime}}</td>

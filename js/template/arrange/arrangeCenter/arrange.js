@@ -77,8 +77,8 @@ define(function(require, exports) {
     FrameFun.initTransferEvent = function($tab) {
         $tab.on('click', '.T-search', function(event) {
                 event.preventDefault();
-                // TransferFun.busArrangeIdArray = [];
-                // TransferFun.hotelArrangeIdArray = [];
+                TransferFun.busArrangeIdArray = [];
+                TransferFun.hotelArrangeIdArray = [];
                 TransferFun.getList($(this).closest('form'));
             })
             // table内操作
