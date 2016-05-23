@@ -2,17 +2,16 @@
     <div class="form-group">
         <input type="hidden" name="outRemarkId" value="{{outRemark.outRemarkId}}">
         <label class="control-label mar-r-20">中转单号：{{outRemark.orderNumber}}</label>
-        <label class="control-label mar-r-20">线路产品：{{outRemark.lineProductName}}</label>
+        <label class="control-label mar-r-20">线路产品333：{{outRemark.lineProductName}}</label>
         <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{outRemark.adultCount}}</span>大<span class="F-float F-count">{{outRemark.childCount}}</span>小</label>
-        <label class="control-label mar-r-20" data-contact="{{outRemark.contactMemberList | stringify}}">游客小组联系人：
-            {{each outRemark.contactMemberList as itme index}}
-                {{if index == 0}}
-                    <span>{{itme.contactMemberName}}</span>
-                    <span class="mar-r-10">({{itme.contactMemberPhoneNumber}})</span>
-                {{else if index>0}}
+        <label class="control-label mar-r-20" data-contact="{{outRemark.contactMemberList | stringify}}">游客联系人： 
+        {{if !!outRemark.contactMemberList && outRemark.contactMemberList.length}}
+            <span>{{outRemark.contactMemberList[0].contactMemberName}}</span>
+            <span class="mar-r-10">({{outRemark.contactMemberList[0].contactMemberPhoneNumber}})</span> 
+            {{ if outRemark.contactMemberList.length > 1}}
                 <a class="T-view-contact">查看更多</a>
             {{/if}}
-            {{/each}}
+        {{/if}}
         </label>
         <label class="control-label ">外联销售：<span class="F-float F-money">{{outRemark.outOPUserName}}</span></label>
     </div>
