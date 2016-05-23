@@ -24,7 +24,7 @@
                         <div class="form-group col-sm-12">
                             <label class="col-sm-1 control-label no-padding-right">外转备注</label>
                             <div class="col-sm-5">
-                                <input value="{{touristGroupTransfer.touristGroup.transRemark}}" type="text" name="transRemark" class="col-xs-12" maxlength="500" />
+                                <input value="{{touristGroupTransfer.transRemark}}" type="text" name="transRemark" class="col-xs-12" maxlength="500" />
                             </div>
                         </div>
 
@@ -145,14 +145,15 @@
             <table class="whereQ whereTwo" style="width: 100%">
                 <tr>
                     <td class="style-myself CheckPlan">本段团款：</td>
-                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money" colspan="3">{{parentTouristGroup.subsectionNeedPayAllMoney}}</span></td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money" colspan="3">{{parentTouristGroup.needPayAllMoney}}</span></td>
                 </tr>
             </table>
             {{else}}
             <table class="whereQ whereTwo" style="width: 100%">
                 <tr>
                     <td class="style-myself CheckPlan">本段团款：</td>
-                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money" colspan="3">{{touristGroup.needPayAllMoney}}</span></td>
+                    <td style="text-align: left;padding: 0px 0px 0px 10px"><span class="F-float F-money" colspan="3"> 
+                    {{touristGroupTransfer.touristGroup.needPayAllMoney}}</span></td>
                 </tr>
             </table>
             {{/if}}
