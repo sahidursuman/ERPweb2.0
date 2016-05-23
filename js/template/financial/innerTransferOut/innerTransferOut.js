@@ -90,8 +90,7 @@ define(function(require,exports) {
 	};
 	//获取合计金额
 	InnerTransferOut.getSumMoney = function(data,tabId){
-		var totalPeople = data.sumAllTransAdultCount+data.sumAllTransChildCount;
-		tabId.find('.T-sumCount').text(totalPeople);
+		tabId.find('.T-sumCount').text((data.sumAllTransAdultCount || 0) + " 大 " + (data.sumAllTransChildCount || 0) + " 小");
         tabId.find('.T-sumInnerOutMoney').text(data.sumAllTransNeedPayMoney);
         tabId.find('.T-sumStMoney').text(data.sumAllSettlementMoney);
         tabId.find('.T-sumPaiedMoney').text(data.sumAllPayedMoney);
