@@ -17,6 +17,12 @@
                         <div class="hct-view-content">{{bookingOrder.outOPUserName}}</div>
                     </td>
                 </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-12" colspan="3">
+                        <div class="hct-view-title">用车时间</div>
+                        <div class="hct-view-content">{{bookingOrder.startUseTime | dateFormat: 'yyyy-MM-dd'}} - {{bookingOrder.endUseTime | dateFormat: 'yyyy-MM-dd'}}</div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
