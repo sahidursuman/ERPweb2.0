@@ -511,7 +511,7 @@ define(function(require, exports) {
                         data.settlementMoney = FinTransIn.checkTemp.settlementMoney;
                         data.unIncomeMoney = FinTransIn.checkTemp.unIncomeMoney;
                     }
-					$tab.find('.T-sumTransCount').text(data.totalCount);
+					$tab.find('.T-sumTransCount').text((data.sumAdultCount || 0) + '大' + (data.sumChildCount || 0) + '小');
 					$tab.find('.T-sumTransNeedPayMoney').text(data.transInMoney);
 					$tab.find('.T-sumPayedMoney').text(data.getedMoney);
 					$tab.find('.T-sumBackMoney').text(data.backMoney);
