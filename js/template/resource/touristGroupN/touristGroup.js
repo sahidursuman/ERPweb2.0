@@ -68,6 +68,7 @@ define(function(require, exports) {
     	args.pageNo = page || 0;
         args.type = args.type || 0;
         args.statusSearch = args.statusSearch || 1;
+        args.order = 0;
         if(!!$tab){
             $tab.html(filterUnAuth(T.list()));
             touristGroup.init_events($tab);
@@ -207,8 +208,9 @@ define(function(require, exports) {
                     customerType : $searchArea.find('[name="customerType"]').val(),
                     dateType : $searchArea.find('[name="dateType"]').val(),
                     tripTime : $searchArea.find('[name="tripTime"]').val(),
-                    realName: $searchArea.find('[name=realName]').val(),
-                    statusSearch : $searchArea.find('.T-select-status').val()
+                    realName: $searchArea.find('[name="realName"]').val(),
+                    statusSearch : $searchArea.find('.T-select-status').val(),
+                    order : $searchArea.find('[name="order"]').val()
                 };
             if(type == "1"){
                 args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
@@ -442,7 +444,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            //joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -574,7 +576,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            //joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -1157,7 +1159,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
                         '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
-                        '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
+                        '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney"></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
@@ -1440,7 +1442,7 @@ define(function(require, exports) {
                         delete moneyData.touristGroupFeeJsonAdd;
                         delete moneyData.touristGroupFeeJsonDel;
                         var $tr = $that.closest('tr');
-                        $tr.find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
+                        //$tr.find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
                         if($tr.find('[name="subNeedPayMoney"]').data('change') != "1"){
                             $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
                         }
@@ -2669,7 +2671,8 @@ define(function(require, exports) {
             };
 
             joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
-                joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
+            joinTripData.currentNeedPayMoney = $that.find('[name="currentNeedPayMoney"]').val();
+            
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
                 joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : null;
