@@ -1996,7 +1996,7 @@ define(function(require, exports) {
                     Transfer.calculation($(this).closest('tr'));
                 });
 
-            $tab.on('click', '.T-submit', function(event) {
+            $tab.find('.T-handle').on('click', '.T-submit', function(event) {
                 event.preventDefault();
                 if (!validate.form()) return;
                 Transfer.otherSubmit($tab);
