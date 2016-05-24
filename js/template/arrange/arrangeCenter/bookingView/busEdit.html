@@ -98,7 +98,7 @@
                         </td>
                     </tr>
                     {{/each}}
-                    {{else}}
+                    {{else if status != 1}}
                     <tr>
                         <td>
                             <input name="startTime" type="text" class="datepicker" value="{{startUseTime | dateFormat: 'yyyy-MM-dd'}}" />
