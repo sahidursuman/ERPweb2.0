@@ -396,6 +396,9 @@ define(function(require, exports) {
                             }
                         }
                     });
+
+                    //对话框居中
+                    $(window).trigger('resize');
                 }
             });
     };
@@ -1466,6 +1469,7 @@ define(function(require, exports) {
                     Transfer._getAddHotelList($(this).closest('form'), 0, selectedOutRemarkList, shuttleType);
                 }).trigger('click');
 
+
                 // 添加
                 $frame.find('.T-confirm').off('click').on('click', function(event) {
                     event.preventDefault();
@@ -1539,8 +1543,6 @@ define(function(require, exports) {
                         }
                     }
                 });
-                //layer居中
-                $(document).trigger('resize');
             }
         });
     };
