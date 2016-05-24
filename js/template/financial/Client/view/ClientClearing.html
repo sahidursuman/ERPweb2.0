@@ -230,7 +230,9 @@
                 <td rowspan="{{rs.rowLen}}" class="align-left">
                     <a class="T-action T-receive">
                         <span class="in-block">社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span></span>
+                        {{if !!rs.guideReciveMoney}}
                         <span class="in-block">导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span></span>
+                        {{/if}}
                     </a>
                 </td>
                 <td><span class="F-float F-money">{{rs.backMoney}}</span></td>

@@ -173,8 +173,10 @@
                 </td>
                 <td>
                     <a class="cursor T-action T-receive">
-                        社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>，
+                        社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>
+                        {{if !!rs.guideReciveMoney}}，
                         导游现收<span class="F-float F-money">{{rs.guideReciveMoney}}</span>
+                        {{/if}}
                     </a>
                 </td>
                 <td>{{if view == 1}}<span class="F-float F-money">{{rs.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled"{{/if}}>{{/if}}</td>

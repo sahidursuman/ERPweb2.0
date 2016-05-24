@@ -1139,6 +1139,8 @@ define(function(require, exports) {
                 } else {
                     Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));
                 }
+
+                Client.getCheckSumData(args, $tab);
             }
         }).on("click",function(){
             $obj.autocomplete('search','');

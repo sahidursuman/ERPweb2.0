@@ -64,9 +64,9 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12 mar-b-20">
-			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-join-group{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 接团 </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-join-group{{/if}}{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 接团 </button>
 			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-part-group{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> {{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}} </button>
-			<button class="btn btn-app btn-xs hct-bg-1FADE0 T-add-send-group{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-send-group{{/if}}{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
 		</div>
 	</div>
 	
@@ -105,12 +105,12 @@
 	                    	<a class="cursor {{if rs.receiveOtherClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinOther" {{if rs.receiveOtherClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
-	                    <td><a class="cursor 
+	                    <td><a 
 	                    {{if (rs.receiveBusClearFlag == 1) ||
 	                    	(rs.receiveHotelClearFlag == 1) ||
 	                    	(rs.receiveOtherClearFlag == 1)
-	                    }}hct-color-BBB
-	                    {{else}}T-action T-delete{{/if}}">删除</a></td>
+	                    }}class="cursor hct-color-BBB" title="已有中转安排，无法删除" 
+	                    {{else}}class="cursor T-action T-delete"{{/if}}>删除</a></td>
                     </tr>
 				{{/each}}
 				</tbody>
@@ -157,7 +157,7 @@
 							<input type="text" class="w-150 F-float F-money{{if rs.status == 1}} T-action T-hotel hct-cursor{{/if}}" readonly name="hotelNeedPayMoney" value="{{rs.hotelInputValue}}" data-json="{{rs.hotelInfo}}" data-id="{{rs.hotelInfoId}}" data-out-id="{{rs.hotelOutRemarkId}}" placeholder="点击填写返程住宿">
 							<a class="cursor{{if rs.status != 1 || rs.hotelInfoClearFlag == 1}} hct-color-BBB{{else}} T-action T-clear{{/if}}" data-status="partHotel" {{if rs.hotelInfoClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 						</td>
-						<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" value="{{rs.operateCurrentNeedPayMoney}}" readonly></td>
+						<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" value="{{rs.currentNeedPayMoney}}" readonly></td>
 						<td class="T-status" data-status="{{rs.status}}">{{rs.status | getPartGroupStatusText}}</td>
 						<td>
 							<a class="cursor {{if rs.status != 1 || rs.hotelInfoClearFlag == 1}}hct-color-BBB{{else}}T-action T-delete{{/if}}" {{if rs.hotelInfoClearFlag == 1}}title="已有中转安排，无法删除"{{/if}}>删除</a>
@@ -204,12 +204,12 @@
 	                    	<a class="cursor {{if rs.sendOtherClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendOther" {{if rs.sendOtherClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
 	                    </td>
 	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
-	                    <td><a class="cursor 
+	                    <td><a 
 	                    {{if (rs.sendBusClearFlag == 1) ||
 	                    	(rs.sendHotelClearFlag == 1) ||
 	                    	(rs.sendOtherClearFlag == 1)
-	                    }}hct-color-BBB
-	                    {{else}}T-action T-delete{{/if}}">删除</a></td>
+	                    }}class="cursor hct-color-BBB" title="已有中转安排，无法删除" 
+	                    {{else}}class="cursor T-action T-delete"{{/if}}>删除</a></td>
                     </tr>
 				{{/each}}
 				</tbody>

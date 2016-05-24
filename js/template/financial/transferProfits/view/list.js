@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":126,"md5":"f55ceadb97af7f49508f423cfe71b275"}*/
+/*TMODJS:{"debug":true,"version":122,"md5":"f55ceadb97af7f49508f423cfe71b275"}*/
 define(function(require) {
     return require("../../../template")("financial/transferProfits/view/list", function($data, $filename) {
         try {
