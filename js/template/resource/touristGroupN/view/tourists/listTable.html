@@ -34,20 +34,20 @@
 					查看
 				</a>
                 {{if touristGroup.innerFlag == 1}}
-                <a class="T-action T-outer-turn cursor">
+                <!-- <a class="T-action T-outer-turn cursor">
                     <label class="padding-right20">|</label>
                     <span>外转</span>
-                </a>
+                </a> -->
                 {{else}}
                 <a data-entity-id="{{touristGroup.id}}" class="T-action  R-right {{if touristGroup.canEdit}}T-edit{{/if}} cursor" {{if !touristGroup.canEdit}}style="color:#bbb;"  title="{{touristGroup.editTitle}}"{{/if}} data-right="1470002">
                     <label class="padding-right20">|</label>
                     <span>编辑</span>
                 </a>
-                {{/if}}
                 <a data-entity-id="{{touristGroup.id}}" class="T-action R-right {{if touristGroup.canDelete}}T-del{{/if}} cursor" {{if !touristGroup.canDelete}}style="color:#bbb;"   title="{{touristGroup.deleteTitle}}"{{/if}} data-right="1470003">
                     <label class="padding-right20">|</label>
                     删除
                 </a>
+                {{/if}}
             </div>
         </td>
     </tr>
