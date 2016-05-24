@@ -31,6 +31,7 @@ define(function(require, exports) {
 			updateBus : require('./view/tourists/update/updateBus'),//编辑车
 			updateHotel : require('./view/tourists/update/updateHotel'),//编辑房
 			updateOther : require('./view/tourists/update/updateOther'),//编辑其它
+            updateOuterTurn : require('./view/tourists/update/updateOuterTurn'),//编辑外转
             addFee : require('./view/tourists/addFee'),//调整费用项
             chooseHotel : require('./view/tourists/choose/chooseHotel'),//自选酒店
             chooseHotelList : require('./view/tourists/choose/chooseHotelList'),//自选酒店列表
@@ -120,7 +121,11 @@ define(function(require, exports) {
                         tmp.deleteTitle = '';
 
                         // can edit
-                        if (((tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                        if ((
+                            (tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || tmp.isBackStatus == 1) && 
+                            (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0) &&
+                            tmp.isEdit == 0)  
+                        {
                             tmp.canEdit = true;
                         } else {
                             tmp.canEdit = false;
@@ -141,7 +146,11 @@ define(function(require, exports) {
                         }
 
                         // can delete
-                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                        if ((tmp.status == 1 && 
+                            (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || 
+                            tmp.isBackStatus == 1 &&
+                            tmp.isEdit == 0) 
+                        {
                             tmp.canDelete = true;
                         } else {
                             tmp.canDelete = false;
@@ -292,6 +301,8 @@ define(function(require, exports) {
                 });
             }else if($that.hasClass('T-show-part-group')){
                 touristGroup.getListPartGroup(id, $tr, $that);
+            }else if($that.hasClass('T-outer-turn')){
+                touristGroup.updateOuterTurn(id);
             }
     	});
 
@@ -837,11 +848,7 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupHotel(1, $that, type);
             }else if($that.hasClass('T-line-cope')){
     			touristGroup.updateJionGroupMoney($that, 1, type);
-    		}else if($that.hasClass('T-inner-turn')){
-                touristGroup.updateInnerTurn($that, type);
-            }else if($that.hasClass('T-outer-turn')){
-                touristGroup.updateOuterTurn($that, type);
-            }else if($that.hasClass('T-delete')){
+    		}else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
                 if($tab.find('.T-part-group-list tr').length === 0){
                     $tab.find('.T-team-info').find('[name="lineProductName"]').attr('readonly', 'readonly');
@@ -1731,6 +1738,90 @@ define(function(require, exports) {
                 });
 		    }
 		});
+    };
+
+    //参团外转操作
+    touristGroup.updateOuterTurn = function(id){
+        $.ajax({
+            url: KingServices.build_url('customerOrder', 'getTransferInfo'),
+            data: {id: id},
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                layerOuterTurn(data);
+            }
+        });
+        return this;
+        function layerOuterTurn(data){
+            layer.open({
+                type: 1,
+                title: "编辑外转信息",
+                skin: 'layui-layer-rim', //加上边框
+                area: '870px', //宽高
+                zIndex:1028,
+                content: T.updateOuterTurn(data),
+                scrollbar: false,
+                success:function(obj, index){
+                    var $layer = $(obj);
+                    var validate = touristGroup.bindLayerCommonFeeEvents($layer, index);
+                    $layer.find('.T-btn-save').on('click', function(){
+                        if(!validate.form())return;
+                        var baseInfo = {
+                                transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
+                                transferPartnerAgencyId : $layer.find('[name="transferPartnerAgency"]').data('id'),
+                                remark : $layer.find('[name="remark"]').val(),
+                                isCurrent : $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0,
+                            },
+                            moneyData = F.assemblyMoneyData($layer);
+
+                        moneyData.outTransferFee = moneyData.touristGroupFeeJsonAdd;
+                        moneyData.outTransferFeeDel = moneyData.touristGroupFeeJsonDel;
+                        delete moneyData.touristGroupFeeJsonAdd;
+                        delete moneyData.touristGroupFeeJsonDel;
+                        $.extend(baseInfo, moneyData);
+                        $that.val(moneyData.needPayAllMoney);
+                        $that.data('json', JSON.stringify(baseInfo));
+                        layer.close(index);
+                        $that.closest('td').find('.T-inner-turn').addClass('hct-color-BBB').removeClass('T-action');
+                    });
+                }
+            });
+        }
+        /*
+        var data = {},
+            outerJson = $that.data('json'),
+            $tr = $that.closest('tr'),
+            $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
+            receivable = $tab.find('.T-team-info .T-receivable').data('json'),
+            html = "";
+        if(typeof outerJson !== "object"){
+            outerJson = JSON.parse(outerJson || "{}");
+        }
+        if(typeof receivable !== "object"){
+            receivable = JSON.parse(receivable || "{}");
+        }
+        var lineData = $tr.find('[name="lineProductName"]').data('json');
+        if(!lineData && optionType !== 1){
+            layer.tips('请先选择线路产品！', $that.closest('tr').find('[name="lineProductName"]'), {
+                tips: [1, '#3595CC'],
+                time: 2000
+            });
+            return false;
+        }
+        if(typeof lineData !== "object"){
+            lineData = JSON.parse(lineData || "{}");
+        }
+        data.lineData = lineData;
+        data.lineData.startTime = $tr.find('[name="startTime"]').val();
+        data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
+        $.extend(data, outerJson);
+
+        if(optionType === 1){
+            html = T.viewOuterTurn(data);
+        }else{
+            html = T.updateOuterTurn(data);
+        }
+        */
     };
 
     /**
