@@ -129,7 +129,7 @@ define(function(require, exports) {
         }).end().on('change', '.T-chekedAll', function(event) {  //全选
             event.preventDefault();
             /* Act on the event */
-            var $that = $(this),$busTr = $tab.find('.T-bus-list').children('tr');
+            var $that = $(this),$busTr = $tab.find('tbody').children('tr');
             if ($that.is(':checked')) {
                 $busTr.each(function(index, el) {
                     var $checked = $busTr.eq(index).find('.T-cheked');
