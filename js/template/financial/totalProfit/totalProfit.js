@@ -140,6 +140,7 @@ define(function(require, exports) {
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
+                    TotalProfit.$tab.find('.T-totalCount').text(data.total.sumAdultCount+'大'+data.total.sumChildCount+'小');
                     TotalProfit.$tab.find('.income').text(data.total.income);
                     TotalProfit.$tab.find('.cost').text(data.total.cost);
                     TotalProfit.$tab.find('.profit').text(data.total.profit);
