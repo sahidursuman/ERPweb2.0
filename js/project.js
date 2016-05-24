@@ -2819,7 +2819,7 @@ Tools.directionKeyControlFocus = function() {
 			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') == 'text';
 		})
 	}
-	$(document).on('keydown.tableFocus','table', function() {
+	$(document).on('keydown.tableFocus','table', function(event) {
 		var $this = $(this),
 			keyCode = event.which,
 			$focusInput = $this.find('input:focus'),
