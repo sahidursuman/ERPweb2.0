@@ -249,7 +249,7 @@ FinancialService.checkSaveJson = function($tab,tempJson,rule,isSave,inner){
 
                     }
                     if (!!$this.find(".T-collection")) { //代收
-                       saveJson[i].collection = $this.find(".T-collection]").text() || 0;
+                       saveJson[i].collection = $this.find(".T-collection").text() || 0;
                     }
                     saveJson[i].unPayedMoney = $this.find("td[name=unPayedMoney]").text();
                     saveJson[i].checkRemark = $this.find("[name=checkRemark]").val();
