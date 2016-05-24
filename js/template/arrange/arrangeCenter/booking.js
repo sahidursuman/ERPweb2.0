@@ -119,8 +119,23 @@ define(function(require, exports) {
             type: 'post',
         }).done(function(data){
             if (showDialog(data)) {
-                var tab_key = tabKey + '_' + target + '_edit';
 
+                var $tr = $arrange.closest('tr');
+                if(target === "ticket"){
+                    data.startTime     =   $tr.data('start-time');
+                    data.startingCity  =   $tr.data('starting-city');
+                    data.arriveCity    =   $tr.data('arrive-city');
+                    data.seatLevel     =   $tr.data('seat-level');
+                    data.memberCount   =   $tr.data('member-count');
+
+                }
+
+                if(target === "bus"){
+                    data.startUseTime  =   $tr.data('start-use-time');
+                    data.endUseTime    =   $tr.data('end-use-time');
+                }
+
+                var tab_key = tabKey + '_' + target + '_edit';
                 if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
                     BookingArrange.init_arrange_event($('#tab-' + tab_key + '-content'), target);
                 }

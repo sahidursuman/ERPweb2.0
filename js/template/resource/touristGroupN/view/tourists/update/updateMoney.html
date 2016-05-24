@@ -47,22 +47,17 @@
 			<input type="text" readonly class="pull-left F-float F-money" name="needPayAllMoney" value="{{needPayAllMoney}}">
 			<label class="control-label pull-left" style="width: 70px; padding-left: 24px;">预收款</label>
 			<input type="text" class="pull-left F-float F-money" name="preIncomeMoney" value="{{preIncomeMoney}}">
-			<label class="control-label pull-left" style="width: 70px; padding-left: 12px;">计划现收</label>
+			<label class="control-label pull-left" style="width: 70px; padding-left: 12px;">现收团款</label>
 			<input type="text" class="pull-left F-float F-money" name="currentNeedPayMoney" value="{{currentNeedPayMoney}}">
 			{{else}}
 			<div class="col-xs-1 text-right no-padding-right control-label">应付</div>
 			<div class="col-xs-3">
 				<input type="text" readonly class="pull-left F-float F-money" name="needPayAllMoney" value="{{needPayAllMoney}}">
 			</div>
-			<div class="col-xs-1 text-right no-padding-right control-label">计划现收</div>
+			<div class="col-xs-1 text-right no-padding-right control-label">现收团款</div>
 			<div class="col-xs-1 control-label F-float">{{needPayMoney || 0}}</div>
-			<div class="col-xs-1 text-right no-padding-right control-label">对方现收</div>
-			<div class="col-xs-1">
-				<input type="checkbox" name="isNowIncome" class="ace"{{if isCurrent == 1}} checked{{/if}}>
-				<label class="lbl"></label>
-			</div>
-			<div class="col-xs-1 text-right no-padding-right control-label T-now-money{{if isCurrent != 1}} hidden{{/if}}">现收金额</div>
-			<div class="col-xs-2 control-label T-now-money{{if isCurrent != 1}} hidden{{/if}}">
+			<div class="col-xs-1 text-right no-padding-right control-label T-now-money">本段代收</div>
+			<div class="col-xs-2 control-label T-now-money">
 				<input type="text" class="col-xs-12 F-float F-money" name="preIncomeMoney" value="{{currentNeedPayMoney}}">
 			</div>
 			{{/if}}
@@ -98,7 +93,7 @@
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 					{{/each}}
@@ -117,7 +112,7 @@
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 					{{/each}}
@@ -135,7 +130,7 @@
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>
-						<td><input type="text" class="col-xs-12" name="remark"></td>
+						<td><input type="text" class="col-xs-12" name="remark" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 				{{/if}}

@@ -4,7 +4,15 @@
         <label class="control-label mar-r-20">中转单号：{{outRemark.orderNumber}}</label>
         <label class="control-label mar-r-20">线路产品：{{outRemark.lineProductName}}</label>
         <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{outRemark.adultCount}}</span>大<span class="F-float F-count">{{outRemark.childCount}}</span>小</label>
-        <label class="control-label mar-r-20">联系人电话：{{outRemark.contactMemberPhoneNumber}}</label>
+        <label class="control-label mar-r-20" data-contact="{{outRemark.contactMemberList | stringify}}">游客联系人： 
+        {{if !!outRemark.contactMemberList && outRemark.contactMemberList.length}}
+            <span>{{outRemark.contactMemberList[0].contactMemberName}}</span>
+            <span class="mar-r-10">({{outRemark.contactMemberList[0].contactMemberPhoneNumber}})</span> 
+            {{ if outRemark.contactMemberList.length > 1}}
+                <a class="T-view-contact">查看更多</a>
+            {{/if}}
+        {{/if}}
+        </label>
         <label class="control-label ">外联销售：<span class="F-float F-money">{{outRemark.outOPUserName}}</span></label>
     </div>
     <div class="tabbable">
@@ -322,7 +330,7 @@
             {{/if}}
         </div>
     </div>
-    <div class="col-md-12 text-center mar-t-20">
+    <div class="col-md-12 text-center mar-t-20 T-handle">
         <button class="btn btn-sm btn-primary T-cancel">
             <i class="ace-icon fa fa-times-circle"></i> 取消
         </button>

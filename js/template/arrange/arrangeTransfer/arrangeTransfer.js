@@ -472,7 +472,10 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 						if(result){
-							var imgUrl = data.ERP_IMG_URL;
+							var num = data.transfer.companyLogo.indexOf('null');
+							if (num > 0) {
+								data.transfer.companyLogo = '';
+							}
 							var html = viewTransferOutAccTemplate(data);
 							var viewAccountsLayer = layer.open({
 								type: 1,
@@ -674,6 +677,15 @@ define(function(require, exports) {
 					/* Act on the event */
 					transfer.PayMoneyF($tab);
 				});
+
+				//对方现收
+				$tab.find('[name="cashFlag"]').on('change', function(){
+	                if($(this).is(':checked')){
+	                    $tab.find('.T-cashFlag').removeClass("hidden")
+	                }else{
+	                    $tab.find('.T-cashFlag').addClass("hidden")
+	                }
+	            });
 
 				//计算金额
 				transfer.calcPayMoney($tab);
@@ -881,11 +893,17 @@ define(function(require, exports) {
 			// 表单校验
 			if (!validator.form()) { return; }
 			getValue = function(name){
-				var value = $tab.find("[name="+name+"]").val()
+				var type = $tab.find("[name="+name+"]").attr('type'),value;
+					if (!!type && type === 'checkbox') {
+						value = $tab.find("[name="+name+"]").is(':checked') ? 1 : 0; 
+					}else{
+						value = $tab.find("[name="+name+"]").val();
+					}
 				return value;
 			}
 			var id=getValue("touristGroupTransferId"),
 			    remark=getValue("remark"),
+			    currentNeedPayMoney = 0,
 
 			    partnerAgencyId=getValue("transferPartnerAgencyId"),
 			    transPayedMoney=getValue("transPayedMoney"),
@@ -897,8 +915,10 @@ define(function(require, exports) {
 			    status=getValue("status"),
 			    cashFlag = getValue("cashFlag");
 
-	
-	
+			if (!!cashFlag && cashFlag==1) {  //对方现收勾选
+				currentNeedPayMoney=getValue("currentNeedPayMoney");
+			}
+
 			/**
 			 * [otherFeeJsonAdd 获取新增费用项目组装成JSON数据
 			 * @type {Array}
@@ -939,15 +959,14 @@ define(function(require, exports) {
 				},
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
-					"transPayedMoney":transPayedMoney,//已付
-					"transRemark":transRemark//转客费用备注
-				},			
+					"transPayedMoney":transPayedMoney//已付
+				},		
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
 				type: 'post',
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
+				data:"id="+id+"&cashFlag="+cashFlag+"&currentNeedPayMoney="+currentNeedPayMoney+"&transRemark="+transRemark+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
 			})
 			.done(function(data) {
 				if (showDialog(data)) {

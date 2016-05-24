@@ -15,7 +15,7 @@
         </thead>
         <tbody class="T-hotelArrange T-arrange">
             {{each outRemarkList as item}}
-            <tr class="T-task-list">
+            <tr class="T-task-list"  data-touristgroupId="{{item.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{item.id}}">
                     <p>中转单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
@@ -34,8 +34,10 @@
                         <span class="adultCount">{{item.adultCount}}</span>大
                         <span class="childCount">{{item.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberName">{{item.contactMemberName}}</span> 
-                    <span class="contactMemberPhoneNumber">({{item.contactMemberPhoneNumber}})</span></p>
+                   {{each item.contactMemberList as itmes}}
+                    <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>
                     <p><span class="checkInTime">{{item.checkInTime}}</span></p>
@@ -96,13 +98,8 @@
                 </td>
                 <td>
                     <select class="tripPlanHotelStar" name="hotelLevel" {{ if outHotel.isConfirmAccount==1 }}disabled="disabled" {{else}} {{/if}}>
-                        <option value="1" {{if outHotel.hotelLevel==1 }}selected="selected" {{/if}}>三星以下</option>
-                        <option value="2" {{if outHotel.hotelLevel==2 }}selected="selected" {{/if}}>三星</option>
-                        <option value="3" {{if outHotel.hotelLevel==3 }}selected="selected" {{/if}}>准四星</option>
-                        <option value="4" {{if outHotel.hotelLevel==4 }}selected="selected" {{/if}}>四星</option>
-                        <option value="5" {{if outHotel.hotelLevel==5 }}selected="selected" {{/if}}>准五星</option>
-                        <option value="6" {{if outHotel.hotelLevel==6 }}selected="selected" {{/if}}>五星</option>
-                        <option value="7" {{if outHotel.hotelLevel==7 }}selected="selected" {{/if}}>五星以上</option>
+                        <option value="">--全部--</option>
+                        {{#outHotel.hotelLevel | getHotelLevelOptions}}
                     </select>
                 </td>
                 <td>

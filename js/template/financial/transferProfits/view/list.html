@@ -1,7 +1,7 @@
 {{each result as rs}}
 <tr data-id="{{rs.id}}" data-lid="{{rs.lineProductId}}">
 	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
-	<td><a class="cursor T-option T-viewLineproduct" title="查看线路产品">{{rs.lineProductName}}</a></td>
+	<td>{{rs.lineProductName}}</td>
 	<td>{{rs.customerType}}</td>
 	<td>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}</td>
 	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>

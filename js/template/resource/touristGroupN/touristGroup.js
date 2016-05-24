@@ -39,8 +39,6 @@ define(function(require, exports) {
             viewBus : require('./view/tourists/view/viewBus'),//查看车
             viewHotel : require('./view/tourists/view/viewHotel'),//查看房
             viewOther : require('./view/tourists/view/viewOther'),//查看其它
-            viewInnerTurn : require('./view/tourists/view/viewInnerTurn'),//查看内转
-            viewOuterTurn : require('./view/tourists/view/viewOuterTurn'),//查看外转
         },
         rule = require('./rule'),
         touristGroup = {
@@ -70,6 +68,7 @@ define(function(require, exports) {
     	args.pageNo = page || 0;
         args.type = args.type || 0;
         args.statusSearch = args.statusSearch || 1;
+        args.order = 0;
         if(!!$tab){
             $tab.html(filterUnAuth(T.list()));
             touristGroup.init_events($tab);
@@ -111,7 +110,10 @@ define(function(require, exports) {
             type: 'POST',
             success: function(data) {
             	if(showDialog(data)){
-            		var touristGroupList = JSON.parse(data.touristGroupList);
+                    var totalAdultCount = 0, 
+                        totalChildCount = 0,
+                        touristGroupList = JSON.parse(data.touristGroupList);
+
             		for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
                         tmp = touristGroupList[i];
                         tmp.editTitle = '';
@@ -167,12 +169,18 @@ define(function(require, exports) {
                                 } 
                             }
                         }
+
+                        totalAdultCount += tmp.adultCount;
+                        totalChildCount += tmp.childCount;
                     }
                     data.touristGroupList = touristGroupList;
             		var html = T.listTable(data);
             		html = filterUnAuth(html);
             		$tab.find('.T-touristGroup').html(html);
             		$tab.find('.T-record-size').html(data.recordSize);
+
+                    //$tab.find('.T-total-number').text((totalAdultCount||0) + "大" + (totalChildCount||0) + "小")
+
             		//绑定分页插件
                     laypage({
                         cont: $tab.find('.T-pagenation'),
@@ -200,8 +208,9 @@ define(function(require, exports) {
                     customerType : $searchArea.find('[name="customerType"]').val(),
                     dateType : $searchArea.find('[name="dateType"]').val(),
                     tripTime : $searchArea.find('[name="tripTime"]').val(),
-                    realName: $searchArea.find('[name=realName]').val(),
-                    statusSearch : $searchArea.find('.T-select-status').val()
+                    realName: $searchArea.find('[name="realName"]').val(),
+                    statusSearch : $searchArea.find('.T-select-status').val(),
+                    order : $searchArea.find('[name="order"]').val()
                 };
             if(type == "1"){
                 args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
@@ -435,7 +444,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            joinTrip[i].currentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -567,7 +576,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            joinTrip[i].currentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -644,6 +653,10 @@ define(function(require, exports) {
                 success:function(data){
                     var result = showDialog(data);
                         if(result){
+                           var num = data.touristGroup.companyLogo.indexOf('null');
+                            if(num>0){
+                                data.touristGroup.companyLogo =''
+                            }
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,
@@ -720,7 +733,7 @@ define(function(require, exports) {
             }else if($that.hasClass('T-add-client')){
                 KingServices.addPartnerAgency(function(formData){});
             }else if($that.hasClass('T-fee-adjust')){
-                touristGroup.feeAdjust(false, $that);
+                touristGroup.updateJionGroupMoney($that, 0, 2);
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
@@ -814,7 +827,8 @@ define(function(require, exports) {
             }
     	});
     	//参团表内操作
-    	$tab.find('.T-part-group-list').on('click', '.T-action', function(event){
+        var $partGroup = $tab.find('.T-part-group-list');
+    	$partGroup.on('click', '.T-action', function(event){
     		event.preventDefault();
     		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
             if($that.hasClass('T-search-line')){
@@ -838,10 +852,10 @@ define(function(require, exports) {
             }else if($that.hasClass('T-clear')){
                 clearItem($that);
             }else if($that.hasClass('T-fee-adjust')){
-                touristGroup.feeAdjust(id, $that);
+                touristGroup.updateJionGroupMoney($that, 1, 2);
             }
     	});
-        $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
+        $partGroup.on('changeDate', '[name="tripStartTime"]', function(){
             var $that = $(this), $tr = $that.closest('tr'),
                 $endTime = $tr.find('[name="tripEndTime"]'),
                 lineData = $tr.find('[name="lineProductName"]').data('json');
@@ -851,6 +865,10 @@ define(function(require, exports) {
             if($that.val() != "" && !!lineData.days){
                 $endTime.val(Tools.addDay($that.val(), lineData.days-1)).trigger('blur');
             }
+        });
+        //本段团款change事件
+        $partGroup.on('change', '[name="subNeedPayMoney"]', function(event){
+            $(this).data('change', "1");
         });
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
@@ -963,56 +981,7 @@ define(function(require, exports) {
             });
         }
     };
-
-    /**
-     * 调整费用项
-     * @param  {Number} id    小组ID或参团ID
-     * @param  {[type]} $that [description]
-     * @return {[type]}       [description]
-     */
-    touristGroup.feeAdjust = function(id, $that){
-        layer.open({
-            type: 1,
-            title: '调整费用项',
-            skin: 'layui-layer-rim', //加上边框
-            area: '1000px', //宽高
-            zIndex:1028,
-            content: T.addFee(),
-            scrollbar: false,
-            success:function(obj, index){
-                var $layer = $(obj),
-                    validate = rule.checkNeed($layer),
-                    $tbody = $layer.find('.T-feeAdjustBody');
-
-                $layer.find('.T-btn-save').on('click', function(){
-                    if(!validate.form()) return;
-                    var feeData = {
-                        feeList : [{
-                            count : $layer.find('[name="count"]').val(),
-                            price : $layer.find('[name="price"]').val(),
-                            remark : $layer.find('[name="remark"]').val(),
-                            type : $layer.find('[name="type"]').val()
-                        }]
-                    }
-                    feeData.id = id || $that.closest('.T-container').data('id');
-                    $.ajax({
-                        url : KingServices.build_url('customerOrder', 'reEditFee'),
-                        data : {saveJson : JSON.stringify(feeData)}
-                    }).done(function(data){
-                        if(showDialog(data)){
-                            touristGroup.overlayFee($that, feeData.feeList)
-                            layer.close(index);
-                        }
-                    });
-                });
-                $tbody.on('change', '.T-option', function(event){
-                    event.preventDefault();
-                    F.calcMoney($(this), $layer);
-                });
-            }
-        });
-    };
-
+    
     /**
      * 叠加费用项
      * @param  {[type]} $that [description]
@@ -1034,9 +1003,9 @@ define(function(require, exports) {
 
         //合并新旧应收&应付费用项
         if(!!jsonData.touristGroupFeeJsonAdd){
-            $.merge(jsonData.touristGroupFeeJsonAdd, data);
+            $.merge(jsonData.touristGroupFeeJsonAdd, data.feeList);
         }else if(!!jsonData.lineFee){
-            $.merge(jsonData.lineFee, data);
+            $.merge(jsonData.lineFee, data.feeList);
         }
 
         //重新计算应付&应收
@@ -1054,7 +1023,9 @@ define(function(require, exports) {
         }else if(!!jsonData.isTransfer && jsonData.isTransfer == 2){
             str = "外转　" + jsonData.transferPartnerAgency + "　" + Tools.thousandPoint(needPayAllMoney, 2);
         }
-        $fee.text(str);
+        jsonData.currentNeedPayMoney = data.currentNeedPayMoney;
+        $fee.text(str).closest('tr').find('.currentNeedPayMoney').text(data.currentNeedPayMoney);
+        $fee.data('json', jsonData);
     };
 
     //选择客户
@@ -1188,7 +1159,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
                         '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
-                        '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
+                        '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
@@ -1334,6 +1305,9 @@ define(function(require, exports) {
 
     //更新/查看 应收团款
     touristGroup.updateJionGroupMoney = function($that, type, optionType){
+        if (optionType === 2) {
+            $that = $that.prev();
+        }
         var title = "应收团款", data = {}, moneyData = $that.data('json'), html = "", groupType = $that.closest('.T-container').data('type');
         if(typeof moneyData !== "object"){
             moneyData = JSON.parse(moneyData || "{}");
@@ -1368,14 +1342,22 @@ define(function(require, exports) {
         }
         data.groupType = groupType;
         $.extend(data, moneyData);
-        if(optionType===1){
+        if(optionType===1 || optionType===2){
+            if (optionType === 2) {
+                title = '调整费用项';
+                data.isFeeAdjust = true;
+            }
+
             html = T.viewMoney(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
+
+            
         }else{
             html = T.updateMoney(data);
         }
+
     	layer.open({
 			type: 1,
 		    title: title,
@@ -1399,6 +1381,35 @@ define(function(require, exports) {
                 //保存
                 $layer.find('.T-btn-save').on('click', function(){
                     if(!validate.form())return;
+
+                    if (optionType === 2) {
+                        var feeData = {}, feeList = [];
+                        $layer.find('.T-fee-list').find('select').closest('tr').each(function(index, el) {
+                            feeList.push(
+                                {
+                                    count : $layer.find('[name="count"]').val(),
+                                    price : $layer.find('[name="price"]').val(),
+                                    remark : $layer.find('[name="remark"]').val(),
+                                    type : $layer.find('[name="type"]').val()
+                                });
+                        });
+                        feeData.feeList = feeList;
+                        feeData.id = $that.closest('tr').data('id') || $that.closest('.T-container').data('id');
+                        feeData.currentNeedPayMoney = $layer.find('.currentNeedPayMoney').val() || 0;
+
+                        $.ajax({
+                            url : KingServices.build_url('customerOrder', 'reEditFee'),
+                            data : {saveJson : JSON.stringify(feeData)}
+                        }).done(function(data){
+                            if(showDialog(data)){
+                                touristGroup.overlayFee($that, feeData)
+                                layer.close(index);
+                            }
+                        });
+
+                        return this;
+                    };
+
                     var moneyData = F.assemblyMoneyData($layer);
                     if(moneyData.touristGroupFeeJsonAdd.length === 0){
                         showMessageDialog('至少填写一条费用项！');
@@ -1419,20 +1430,15 @@ define(function(require, exports) {
                             moneyData.isTransfer = 0;
                         }
                         moneyData.remark = $layer.find('[name="remark"]').val();
-                        moneyData.isCurrent = $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0;
-                        if(moneyData.isCurrent === 1){
-                            moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
-                        }else{
-                            moneyData.currentNeedPayMoney = 0;
-                        }
+                        moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
                         
                         moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
                         moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
                         delete moneyData.touristGroupFeeJsonAdd;
                         delete moneyData.touristGroupFeeJsonDel;
                         var $tr = $that.closest('tr');
-                        $tr.find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
-                        if($tr.find('[name="subNeedPayMoney"]').val() === ""){
+                        $tr.find('[name="currentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
+                        if($tr.find('[name="subNeedPayMoney"]').data('change') != "1"){
                             $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
                         }
                         var str = Tools.thousandPoint(moneyData.needPayAllMoney, 2);
@@ -1732,10 +1738,10 @@ define(function(require, exports) {
      * @param  {object} $layer layer的jQuery对象
      */
     touristGroup.bindLayerCommonFeeEvents = function($layer, layerIndex, type, groupType){
+        $layer.find('.T-btn-close').on('click', function(){
+            layer.close(layerIndex);
+        });
         if(type === 1){
-            $layer.find('.T-btn-close').on('click', function(){
-                layer.close(layerIndex);
-            });
             return false;
         }
         var validate = rule.checkNeed($layer);
@@ -2660,7 +2666,8 @@ define(function(require, exports) {
             };
 
             joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
-                joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
+            joinTripData.currentNeedPayMoney = $that.find('[name="currentNeedPayMoney"]').val();
+            
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
                 joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : null;
@@ -2805,9 +2812,10 @@ define(function(require, exports) {
             showMessageDialog(msg);
             return false;
         }
+        var _type = $tab.find('.T-container').data('type') || "single";
 
-        if(($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
-            showMessageDialog('请添加一条参团信息！');
+        if(_type == "single" && ($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
+            showMessageDialog('有接送团，请添加一条参团信息！');
             return false;
         }
 
@@ -2907,7 +2915,11 @@ define(function(require, exports) {
                 $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
             }
         },
-        //组装应收数据
+        /**
+         * 组装应收数据
+         * @param  {object}  $tab        表单容器
+         * @return {[type]}              [description]
+         */
         assemblyMoneyData : function($tab){
             var moneyData = {
                 needPayAllMoney : $tab.find('[name="needPayAllMoney"]').val(),
@@ -2919,7 +2931,7 @@ define(function(require, exports) {
             if($tab.find('[name="currentNeedPayMoney"]').length > 0){
                 moneyData.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
             }
-            $tab.find('.T-fee-list tr').each(function(index){
+            $tab.find('.T-fee-list').children('tr').each(function(index){
                 var $that = $(this),
                     id = $that.data('id'),
                     type = $that.find('[name="type"]').val(),

@@ -10,7 +10,8 @@ define(function(require, exports) {
         BookingFun = require('./booking'),
 
         // 模板
-        MainFrameTemplate = require('./mainFrame');
+        MainFrameTemplate = require('./mainFrame'),
+         service_name = 'v2/singleItemArrange/touristGroupTransferArrange';
 
     var FrameFun = {},
         tabKey = 'arrange_center';
@@ -76,8 +77,8 @@ define(function(require, exports) {
     FrameFun.initTransferEvent = function($tab) {
         $tab.on('click', '.T-search', function(event) {
                 event.preventDefault();
-                // TransferFun.busArrangeIdArray = [];
-                // TransferFun.hotelArrangeIdArray = [];
+                TransferFun.busArrangeIdArray = [];
+                TransferFun.hotelArrangeIdArray = [];
                 TransferFun.getList($(this).closest('form'));
             })
             // table内操作
@@ -96,11 +97,11 @@ define(function(require, exports) {
                     TransferFun.view($that);
                 } else if ($that.hasClass('T-bus-cancel')){
                     //取消
-                    TransferFun.cancelBus($that);
+                    TransferFun.cancelPlan($that,"deleteOutBusArrange",'bus');
 
                 } else if ($that.hasClass('T-hotel-cancel')){
                     //取消
-                    TransferFun.cancelHotel($that);
+                    TransferFun.cancelPlan($that,"deleteOutHotelArrange",'hotel');
 
                 }
             })
@@ -121,8 +122,27 @@ define(function(require, exports) {
             var $that = $(this);
             $that.closest('form').find('.T-arrange-feild')
             .toggleClass('hidden', $that.val() === '0').find('input').val('').prop('checked', false);
+            $that.closest('form').find('.T-giveMe').toggleClass('hidden');
+            $that.val() === '0'? $that.closest('form').find('.T-arrange-feild').next().prop('selected',true):$that.closest('form').find('.T-arrange-feild').prop('selected',true);
             //已安排列表
             $that.closest('form').find('.T-arrangeStatus').toggleClass('hidden', $that.val() === '0').children('[name=arrangeStatus]').val('0');
+        }).end().on('change', '.T-chekedAll', function(event) {  //全选
+            event.preventDefault();
+            /* Act on the event */
+            var $that = $(this),$busTr = $tab.find('.T-bus-list').children('tr');
+            if ($that.is(':checked')) {
+                $busTr.each(function(index, el) {
+                    var $checked = $busTr.eq(index).find('.T-cheked');
+                    $checked.prop('checked', true);
+                    TransferFun.setArrangeId($checked);
+                });
+            }else{
+                $busTr.each(function(index, el) {
+                    var $checked = $busTr.eq(index).find('.T-cheked');
+                    $checked.prop('checked', false);
+                    TransferFun.setArrangeId($checked);
+                });
+            }
         });
     };
 
@@ -210,44 +230,44 @@ define(function(require, exports) {
         })
     };
     //取消车
-    TransferFun.cancelBus = function ($that) {
-        // data-catename
+    TransferFun.cancelPlan = function ($that,url,condition) {
+        console.log(url)
         var id = $that.closest('tr').data('id');
         id = JSON.stringify(id);   
         showConfirmMsg("你确定要取消该中转安排信息？",function(){         
         $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutBusArrange"),     
+            url: KingServices.build_url(service_name,url),     
             type: 'POST',
             data: 'id='+id,
             success: function(data) {
                 if (showDialog(data)) {
                     showMessageDialog(data.message, function() {
-                        TransferFun._refreshList('bus');
+                        TransferFun._refreshList(condition);
                     })
                 }
             }
         })
         },function(){},"取消","确定");
     }
-    //取消房
-    TransferFun.cancelHotel = function ($that) {
-        // data-catename
-        var id = $that.closest('tr').data('id');
-        id = JSON.stringify(id);   
-        showConfirmMsg("你确定要取消该中转安排信息？",function(){         
-        $.ajax({
-            url: KingServices.build_url("v2/singleItemArrange/touristGroupTransferArrange","deleteOutHotelArrange"),     
-            type: 'POST',
-            data: 'id='+id,
-            success: function(data) {
-                if (showDialog(data)) {
-                    showMessageDialog(data.message, function() {
-                       TransferFun._refreshList('hotel');
-                    })
-                }
-            }
-        })
-        },function(){},"取消","确定");
-    }
+    // //取消房
+    // TransferFun.cancelHotel = function ($that) {
+    //     // data-catename
+    //     var id = $that.closest('tr').data('id');
+    //     id = JSON.stringify(id);   
+    //     showConfirmMsg("你确定要取消该中转安排信息？",function(){         
+    //     $.ajax({
+    //         url: KingServices.build_url(service_name,"deleteOutHotelArrange"),     
+    //         type: 'POST',
+    //         data: 'id='+id,
+    //         success: function(data) {
+    //             if (showDialog(data)) {
+    //                 showMessageDialog(data.message, function() {
+    //                    TransferFun._refreshList('hotel');
+    //                 })
+    //             }
+    //         }
+    //     })
+    //     },function(){},"取消","确定");
+    // }
     exports.init = FrameFun.initMain;
 });
