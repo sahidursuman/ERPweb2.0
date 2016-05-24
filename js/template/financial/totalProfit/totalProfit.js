@@ -143,7 +143,8 @@ define(function(require, exports) {
                     TotalProfit.$tab.find('.income').text(data.total.income);
                     TotalProfit.$tab.find('.cost').text(data.total.cost);
                     TotalProfit.$tab.find('.profit').text(data.total.profit);
-                }
+                    TotalProfit.$tab.find('.T-avgProfit').text(data.total.preProfit);
+                } 
             }
         });
     };
