@@ -601,8 +601,8 @@ define(function(require, exports) {
             //当删除酒店中转记录有多个相同游客小组ID
             $hotelTaskTr.each(function(index) {
                 var outId = $hotelTaskTr.eq(index).find('[name=outRemarkId]').val(),
-                    touristgroupId =  $hotelTaskTr.eq(index).attr('data-touristgroupId');
-                if (tGroupId == touristgroupId && outId != outRemarkId) {
+                    touristGroupId =  $hotelTaskTr.eq(index).attr('data-touristgroupId');
+                if (tGroupId == touristGroupId && outId != outRemarkId) {
                     isTGroup = true;
                 }
             });
@@ -610,8 +610,8 @@ define(function(require, exports) {
             //当删除车安排中转记录有多个相同游客小组ID
             $busTaskTr.each(function(index) {
                 var outId = $busTaskTr.eq(index).find('[name=outRemarkId]').val(),
-                    touristgroupId =  $busTaskTr.eq(index).attr('data-touristgroupId');
-                if (tGroupId == touristgroupId && outId != outRemarkId) {
+                    touristGroupId =  $busTaskTr.eq(index).attr('data-touristgroupId');
+                if (tGroupId == touristGroupId && outId != outRemarkId) {
                     isTGroup = true;
                 }
             });
