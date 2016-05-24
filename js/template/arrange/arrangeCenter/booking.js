@@ -119,15 +119,20 @@ define(function(require, exports) {
             type: 'post',
         }).done(function(data){
             if (showDialog(data)) {
-                if(target === "ticket"){
-                    var $tr = $arrange.closest('tr');
 
+                var $tr = $arrange.closest('tr');
+                if(target === "ticket"){
                     data.startTime     =   $tr.data('start-time');
                     data.startingCity  =   $tr.data('starting-city');
                     data.arriveCity    =   $tr.data('arrive-city');
                     data.seatLevel     =   $tr.data('seat-level');
                     data.memberCount   =   $tr.data('member-count');
 
+                }
+
+                if(target === "bus"){
+                    data.startUseTime  =   $tr.data('start-use-time');
+                    data.endUseTime    =   $tr.data('end-use-time');
                 }
 
                 var tab_key = tabKey + '_' + target + '_edit';
