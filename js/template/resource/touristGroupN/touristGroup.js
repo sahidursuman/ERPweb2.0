@@ -1766,62 +1766,45 @@ define(function(require, exports) {
                     var validate = touristGroup.bindLayerCommonFeeEvents($layer, index);
                     $layer.find('.T-btn-save').on('click', function(){
                         if(!validate.form())return;
-                        var baseInfo = {
-                                transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
-                                transferPartnerAgencyId : $layer.find('[name="transferPartnerAgency"]').data('id'),
-                                remark : $layer.find('[name="remark"]').val(),
-                                isCurrent : $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0,
-                            },
-                            moneyData = F.assemblyMoneyData($layer);
-
-                        moneyData.outTransferFee = moneyData.touristGroupFeeJsonAdd;
-                        moneyData.outTransferFeeDel = moneyData.touristGroupFeeJsonDel;
-                        delete moneyData.touristGroupFeeJsonAdd;
-                        delete moneyData.touristGroupFeeJsonDel;
-                        $.extend(baseInfo, moneyData);
-                        $that.val(moneyData.needPayAllMoney);
-                        $that.data('json', JSON.stringify(baseInfo));
-                        layer.close(index);
-                        $that.closest('td').find('.T-inner-turn').addClass('hct-color-BBB').removeClass('T-action');
+                        saveOuterTurn($layer, index);
                     });
                 }
             });
         }
-        /*
-        var data = {},
-            outerJson = $that.data('json'),
-            $tr = $that.closest('tr'),
-            $tab = $tr.closest('[id^="tab-resource_touristGroup"]'),
-            receivable = $tab.find('.T-team-info .T-receivable').data('json'),
-            html = "";
-        if(typeof outerJson !== "object"){
-            outerJson = JSON.parse(outerJson || "{}");
-        }
-        if(typeof receivable !== "object"){
-            receivable = JSON.parse(receivable || "{}");
-        }
-        var lineData = $tr.find('[name="lineProductName"]').data('json');
-        if(!lineData && optionType !== 1){
-            layer.tips('请先选择线路产品！', $that.closest('tr').find('[name="lineProductName"]'), {
-                tips: [1, '#3595CC'],
-                time: 2000
+        function saveOuterTurn($layer, index) {
+            var id = $layer.find('.T-outer-turn').data('id'),
+                baseInfo = {
+                    transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
+                    transferPartnerAgencyId : $layer.find('[name="transferPartnerAgency"]').data('id'),
+                    remark : $layer.find('[name="remark"]').val(),
+                    needPayAllMoney : $layer.find('[name="needPayAllMoney"]').val(),
+                    id : id
+                },
+                moneyData = F.assemblyMoneyData($layer);
+                moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
+                moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
+                delete moneyData.touristGroupFeeJsonAdd;
+                delete moneyData.touristGroupFeeJsonDel;
+                $.extend(baseInfo, moneyData);
+            $.ajax({
+                url: KingServices.build_url('customerOrder', 'doTransfer'),
+                data: {lineInfo: JSON.stringify(baseInfo), id : id},
+            })
+            .done(function(data) {
+                if(showDialog(data)){
+                    showMessageDialog(data.message, function() {
+                        layer.close(index);
+                        var $listTab = $("#tab-customer_order-content");
+                        if($listTab.length > 0){
+                            $listTab.find('#customerOrderTouristsOrder').find('.T-touristGroupList-search').trigger('click');
+                        }else{
+                            touristGroup.listTouristGroup(0);
+                        }
+                    });
+                }
             });
-            return false;
+            
         }
-        if(typeof lineData !== "object"){
-            lineData = JSON.parse(lineData || "{}");
-        }
-        data.lineData = lineData;
-        data.lineData.startTime = $tr.find('[name="startTime"]').val();
-        data.currentNeedPayMoney = receivable.currentNeedPayMoney || 0;
-        $.extend(data, outerJson);
-
-        if(optionType === 1){
-            html = T.viewOuterTurn(data);
-        }else{
-            html = T.updateOuterTurn(data);
-        }
-        */
     };
 
     /**
