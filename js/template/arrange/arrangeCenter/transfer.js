@@ -746,6 +746,8 @@ define(function(require, exports) {
                         $busplanId.find('.T-arrange').append(htmlData);
                     };
 
+                    //对话框居中
+                    $(document).trigger('resize');
                     // 关闭对话框
                     layer.close(layerFrame);
                 });
@@ -1516,7 +1518,6 @@ define(function(require, exports) {
 
                         $hotelplanId.find('.T-hotelArrange').append(htmlData);
                     };
-
                     // 关闭对话框
                     layer.close(layerFrame);
                 });
@@ -1538,6 +1539,8 @@ define(function(require, exports) {
                         }
                     }
                 });
+                //layer居中
+                $(document).trigger('resize');
             }
         });
     };
