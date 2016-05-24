@@ -12,7 +12,10 @@
     </thead>
     <tbody class="T-bus-list">
     {{each bookingOrderList as rs}}
-        <tr data-id="{{rs.id}}">
+        <tr data-id="{{rs.id}}" 
+            data-start-use-time="{{rs.startUseTime | dateFormat: 'yyyy-MM-dd'}}" 
+            data-end-use-time="{{rs.endUseTime | dateFormat: 'yyyy-MM-dd'}}"
+            >
             <td>{{rs.orderNumber}}</td>
             <td>{{rs.startUseTime | dateFormat: 'yyyy-MM-dd'}} - {{rs.endUseTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{rs.required}}</td>
