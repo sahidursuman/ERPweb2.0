@@ -566,7 +566,8 @@ define(function(require, exports) {
                 var $that = $(this),
                     $tr = $that.closest('tr'),
                     outRemarkId = $tr.find('[name=outRemarkId]').val(),
-                    tGroupId = $tr.attr('data-touristgroupId');
+                    tGroupId = $tr.attr('data-touristgroupId'),
+                    $tbodyArr = $that.closest('.T-arrange');
                 var $taskListLen = $busplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
                     $that.prop('disabled', true);
@@ -577,7 +578,7 @@ define(function(require, exports) {
                     }
                     Transfer.delBusTransferId.push(delBusTransferData);
                     //更新缓冲数据
-                    Transfer.spliceColGroIteArr($busplanId, tGroupId);
+                    Transfer.spliceColGroIteArr($busplanId, tGroupId, outRemarkId, $tbodyArr);
                 }
 
                 
@@ -590,10 +591,36 @@ define(function(require, exports) {
          * @param  {[type]} outRemarkId 计划ID
          * @return {[type]}             [description]
          */
-        Transfer.spliceColGroIteArr = function($tab, tGroupId){
+        Transfer.spliceColGroIteArr = function($tab, tGroupId, outRemarkId, $tbodyArr){
 
             var $hotelTr = $tab.find('tbody.T-hotel-plan').children('tr'),
-                $busTr = $tab.find('tbody.T-bus-plan').children('tr');
+                $hotelTaskTr = $tbodyArr.children('tr'),  //酒店中转安排
+                $busTr = $tab.find('tbody.T-bus-plan').children('tr'),
+                $busTaskTr = $tbodyArr.children('tr');  //车中转安排
+            var isTGroup = false;
+            //当删除酒店中转记录有多个相同游客小组ID
+            $hotelTaskTr.each(function(index) {
+                var outId = $hotelTaskTr.eq(index).find('[name=outRemarkId]').val(),
+                    touristgroupId =  $hotelTaskTr.eq(index).attr('data-touristgroupId');
+                if (tGroupId == touristgroupId && outId != outRemarkId) {
+                    isTGroup = true;
+                }
+            });
+
+            //当删除车安排中转记录有多个相同游客小组ID
+            $busTaskTr.each(function(index) {
+                var outId = $busTaskTr.eq(index).find('[name=outRemarkId]').val(),
+                    touristgroupId =  $busTaskTr.eq(index).attr('data-touristgroupId');
+                if (tGroupId == touristgroupId && outId != outRemarkId) {
+                    isTGroup = true;
+                }
+            });
+
+            //当删除安排中转记录有多个相同游客小组ID时不刷新缓存数据
+            if (isTGroup) {
+                return;
+            }
+            
             //房安排
             $hotelTr.each(function(index) {
                  
@@ -1407,7 +1434,9 @@ define(function(require, exports) {
                 var $that = $(this),
                     $tr = $that.closest('tr'),
                     outRemarkId = $tr.find('[name=outRemarkId]').val(),
-                    tGroupId = $tr.attr('data-touristgroupId');
+                    tGroupId = $tr.attr('data-touristgroupId'),
+                    $tbodyArr = $that.closest('.T-arrange');
+
 
                 var $taskListLen = $hotelplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
@@ -1419,7 +1448,7 @@ define(function(require, exports) {
                     }
                     Transfer.delHotelTransferId.push(delHotelTransferData);
                     //更新缓存数据
-                    Transfer.spliceColGroIteArr($hotelplanId, tGroupId);
+                    Transfer.spliceColGroIteArr($hotelplanId, tGroupId, outRemarkId, $tbodyArr);
                 }
 
                
