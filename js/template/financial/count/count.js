@@ -5158,7 +5158,7 @@ define(function(require, exports){
             });
             //审核过滤
             $obj.find(".T-audit").each(function(i){
-                var right,status = status = $(this).closest('tr').attr('.billstatus') * 1;
+                var right,status = $(this).closest('tr').attr('billstatus') * 1;
                 if(status == 0){//计调可审
                     right = "1190002"; 
                 } else if(status == 1 || status == 2){//财务可审
