@@ -96,7 +96,7 @@ define(function(require, exports) {
         salesProfit.getOPUserList(salesProfit.$tab.find('[name=outOPUserName]'));
     };
 
-
+ 
     //获取统计数据
     salesProfit._getTotalData = function(args){
         $.ajax({
@@ -109,6 +109,7 @@ define(function(require, exports) {
                     salesProfit.$tab.find('.T-totalNeed').text(data.total.sumIncome);
                     salesProfit.$tab.find('.T-totalCost').text(data.total.sumCost);
                     salesProfit.$tab.find('.T-totalProfit').text(data.total.sumProfit);
+                    salesProfit.$tab.find('.T-avgProfit').text(data.total.avgProfit);
                 }
             }
         });

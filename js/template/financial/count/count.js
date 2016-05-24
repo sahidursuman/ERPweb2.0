@@ -165,7 +165,7 @@ define(function(require, exports){
 					var tripPlanList = JSON.parse(data.tripPlanList);
                     data.tripPlanList = tripPlanList;
 					var html = listTableTemplate(data);
-					html = Count.authFilter(html,data.tripPlanList);
+					html = Count.authFilter(html);
 					Count.$listTab.find(".T-counterList").html(html);
 					Count.listEvents();
 					laypage({
@@ -5146,7 +5146,7 @@ define(function(require, exports){
 		});
 	};
 	//权限过滤
-	Count.authFilter = function(obj,tripPlanList){
+	Count.authFilter = function(obj){
             var $obj = $(obj);
             //报账过滤
             $obj.find(".R-right").each(function(){
@@ -5158,7 +5158,7 @@ define(function(require, exports){
             });
             //审核过滤
             $obj.find(".T-audit").each(function(i){
-                var right,status = tripPlanList[i].tripPlan.billStatus;
+                var right,status = status = $(this).closest('tr').attr('.billstatus') * 1;
                 if(status == 0){//计调可审
                     right = "1190002"; 
                 } else if(status == 1 || status == 2){//财务可审

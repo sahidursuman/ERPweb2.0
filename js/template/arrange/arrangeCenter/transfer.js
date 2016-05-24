@@ -396,6 +396,9 @@ define(function(require, exports) {
                             }
                         }
                     });
+
+                    //对话框居中
+                    $(window).trigger('resize');
                 }
             });
     };
@@ -563,7 +566,8 @@ define(function(require, exports) {
                 var $that = $(this),
                     $tr = $that.closest('tr'),
                     outRemarkId = $tr.find('[name=outRemarkId]').val(),
-                    touristGroupId = $tr.attr('data-touristgroupId');
+                    tGroupId = $tr.attr('data-touristgroupId'),
+                    $tbodyArr = $that.closest('.T-arrange');
                 var $taskListLen = $busplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
                     $that.prop('disabled', true);
@@ -574,7 +578,7 @@ define(function(require, exports) {
                     }
                     Transfer.delBusTransferId.push(delBusTransferData);
                     //更新缓冲数据
-                    Transfer.spliceColGroIteArr($busplanId, touristGroupId);
+                    Transfer.spliceColGroIteArr($busplanId, tGroupId, outRemarkId, $tbodyArr);
                 }
 
                 
@@ -587,10 +591,36 @@ define(function(require, exports) {
          * @param  {[type]} outRemarkId 计划ID
          * @return {[type]}             [description]
          */
-        Transfer.spliceColGroIteArr = function($tab, touristGroupId){
+        Transfer.spliceColGroIteArr = function($tab, tGroupId, outRemarkId, $tbodyArr){
 
             var $hotelTr = $tab.find('tbody.T-hotel-plan').children('tr'),
-                $busTr = $tab.find('tbody.T-bus-plan').children('tr');
+                $hotelTaskTr = $tbodyArr.children('tr'),  //酒店中转安排
+                $busTr = $tab.find('tbody.T-bus-plan').children('tr'),
+                $busTaskTr = $tbodyArr.children('tr');  //车中转安排
+            var isTGroup = false;
+            //当删除酒店中转记录有多个相同游客小组ID
+            $hotelTaskTr.each(function(index) {
+                var outId = $hotelTaskTr.eq(index).find('[name=outRemarkId]').val(),
+                    touristGroupId =  $hotelTaskTr.eq(index).attr('data-touristgroupId');
+                if (tGroupId == touristGroupId && outId != outRemarkId) {
+                    isTGroup = true;
+                }
+            });
+
+            //当删除车安排中转记录有多个相同游客小组ID
+            $busTaskTr.each(function(index) {
+                var outId = $busTaskTr.eq(index).find('[name=outRemarkId]').val(),
+                    touristGroupId =  $busTaskTr.eq(index).attr('data-touristgroupId');
+                if (tGroupId == touristGroupId && outId != outRemarkId) {
+                    isTGroup = true;
+                }
+            });
+
+            //当删除安排中转记录有多个相同游客小组ID时不刷新缓存数据
+            if (isTGroup) {
+                return;
+            }
+            
             //房安排
             $hotelTr.each(function(index) {
                  
@@ -605,7 +635,7 @@ define(function(require, exports) {
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         //小组ID
-                        if (collectGroItemList[i].touristGroupId = touristGroupId) {
+                        if (collectGroItemList[i].touristGroupId == tGroupId) {
                             collectGroItemList.splice(i, 1);
                             break;
                         }
@@ -637,7 +667,7 @@ define(function(require, exports) {
                 if (!!collectGroItemList && collectGroItemList.length > 0 ) {
                     for(var i = 0, len = collectGroItemList.length; i < len; i++){
                         //小组ID
-                        if (collectGroItemList[i].touristGroupId = touristGroupId) {
+                        if (collectGroItemList[i].touristGroupId == tGroupId) {
                             collectGroItemList.splice(i, 1);
                             break;
                         }
@@ -746,6 +776,8 @@ define(function(require, exports) {
                         $busplanId.find('.T-arrange').append(htmlData);
                     };
 
+                    //对话框居中
+                    $(document).trigger('resize');
                     // 关闭对话框
                     layer.close(layerFrame);
                 });
@@ -1402,7 +1434,9 @@ define(function(require, exports) {
                 var $that = $(this),
                     $tr = $that.closest('tr'),
                     outRemarkId = $tr.find('[name=outRemarkId]').val(),
-                    touristGroupId = $tr.attr('data-touristgroupId');
+                    tGroupId = $tr.attr('data-touristgroupId'),
+                    $tbodyArr = $that.closest('.T-arrange');
+
 
                 var $taskListLen = $hotelplanId.find('.T-task-list').length;
                 if ($taskListLen <= 1) {
@@ -1414,7 +1448,7 @@ define(function(require, exports) {
                     }
                     Transfer.delHotelTransferId.push(delHotelTransferData);
                     //更新缓存数据
-                    Transfer.spliceColGroIteArr($hotelplanId, touristGroupId);
+                    Transfer.spliceColGroIteArr($hotelplanId, tGroupId, outRemarkId, $tbodyArr);
                 }
 
                
@@ -1463,6 +1497,7 @@ define(function(require, exports) {
                     event.preventDefault();
                     Transfer._getAddHotelList($(this).closest('form'), 0, selectedOutRemarkList, shuttleType);
                 }).trigger('click');
+
 
                 // 添加
                 $frame.find('.T-confirm').off('click').on('click', function(event) {
@@ -1516,7 +1551,6 @@ define(function(require, exports) {
 
                         $hotelplanId.find('.T-hotelArrange').append(htmlData);
                     };
-
                     // 关闭对话框
                     layer.close(layerFrame);
                 });
@@ -1820,6 +1854,8 @@ define(function(require, exports) {
                     var viewBusTabId = "tab-viewBus-content";
                     addTab(viewBusTabId, '车查看', html);
                     var $tabId = $('#tab-'+viewBusTabId+'-content');
+                    //代收信息查看
+                    Transfer._viewPlanCollection($tabId);
                     $tabId.off('click').on('click','.T-view-contact',function(event) {
                         var contactList = $(this).closest('label').data('contact');
                         var contactList = {
@@ -1874,7 +1910,7 @@ define(function(require, exports) {
                     var html = ViewHotelTemplate(data);
                     var viewHotelTabId = "tab-viewBus-content";
                     addTab(viewHotelTabId, '房查看', html);
-                    var $viewId = $('#tab-'+viewHotelTabId+'-content')
+                    var $viewId = $('#tab-'+viewHotelTabId+'-content');
                     Transfer._viewPlanCollection($viewId);
                     $viewId.off('click').on('click','.T-view-contact',function(event) {
                         var contactList = $(this).closest('label').data('contact');

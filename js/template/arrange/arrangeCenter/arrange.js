@@ -126,6 +126,23 @@ define(function(require, exports) {
             $that.val() === '0'? $that.closest('form').find('.T-arrange-feild').next().prop('selected',true):$that.closest('form').find('.T-arrange-feild').prop('selected',true);
             //已安排列表
             $that.closest('form').find('.T-arrangeStatus').toggleClass('hidden', $that.val() === '0').children('[name=arrangeStatus]').val('0');
+        }).end().on('change', '.T-chekedAll', function(event) {  //全选
+            event.preventDefault();
+            /* Act on the event */
+            var $that = $(this),$busTr = $tab.find('tbody').children('tr');
+            if ($that.is(':checked')) {
+                $busTr.each(function(index, el) {
+                    var $checked = $busTr.eq(index).find('.T-cheked');
+                    $checked.prop('checked', true);
+                    TransferFun.setArrangeId($checked);
+                });
+            }else{
+                $busTr.each(function(index, el) {
+                    var $checked = $busTr.eq(index).find('.T-cheked');
+                    $checked.prop('checked', false);
+                    TransferFun.setArrangeId($checked);
+                });
+            }
         });
     };
 
