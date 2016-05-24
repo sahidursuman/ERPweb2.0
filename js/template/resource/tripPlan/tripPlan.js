@@ -772,7 +772,7 @@ define(function(require, exports) {
 			}
 		});
 		//车费查询
-		$tab.find('#tripPlan_addPlan_bus').off('change').on('change','.T-busPriceC',function () {
+		$tab.find('#tripPlan_addPlan_bus').on('change','.T-busPriceC',function () {
 			var $this = $(this), $parent = $this.closest('tr');
 			var busStartTime = $parent.find('[name=startTime]').val(),
 				busEndTime = $parent.find('[name=endTime]').val(),
@@ -786,7 +786,9 @@ define(function(require, exports) {
 				data: {busId: busId, startTime: busStartTime},
 			})
 			.done(function(data) {
-				$parent.find('[name=price]').val(data.contractPrice * busDays);
+				if (!!data.contractPrice && data.contractPrice > 0) {
+					$parent.find('[name=price]').val(data.contractPrice * busDays);
+				}
 			});
 		})
 
