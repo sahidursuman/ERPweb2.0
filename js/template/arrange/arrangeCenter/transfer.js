@@ -385,6 +385,23 @@ define(function(require, exports) {
                     var html = args.status == '1' ? HotelArrangedListTemplate(data) : HotelListTemplate(data);
 
                     var $container = $searchFrom.next().html(filterUnAuth(html));
+                    var $frame= $searchFrom.closest('#transfer-hotel-arrange-frame');
+                    $frame.find('.T-chekedAll').off('change').on('change', function(event) {
+                        event.preventDefault();
+                        /* Act on the event */
+                         var $that = $(this), $tourTr = $frame.find('.T-hotel-list').children('tr');
+                         if ($that.is(':checked')) {
+                            $tourTr.each(function(index) {
+                                var $checked = $tourTr.eq(index).find('.T-cheked');
+                                $checked.prop('checked', true);
+                            });
+                         }else{
+                            $tourTr.each(function(index) {
+                                var $checked = $tourTr.eq(index).find('.T-cheked');
+                                $checked.prop('checked', false);
+                            });
+                         };
+                    });
 
                     laypage({
                         cont: $container.find('.T-pagenation'),
@@ -728,6 +745,8 @@ define(function(require, exports) {
                     Transfer._getAddBusList($(this).closest('form'), 0, selectedOutRemarkList);
                 }).trigger('click');
 
+           
+
                 // 添加
                 $frame.find('.T-confirm').off('click').on('click', function(event) {
                     event.preventDefault();
@@ -898,6 +917,25 @@ define(function(require, exports) {
                     var html = args.status == '1' ? BusArrangedListTemplate(data) : BusListTemplate(data);
 
                     var $container = $searchFrom.next().html(html);
+
+                    var $frame= $searchFrom.closest('#transfer-bus-arrange-frame');
+                    $frame.find('.T-chekedAll').off('change').on('change', function(event) {
+                        event.preventDefault();
+                        /* Act on the event */
+                         var $that = $(this), $tourTr = $frame.find('.T-bus-list').children('tr');
+                         if ($that.is(':checked')) {
+                            $tourTr.each(function(index) {
+                                var $checked = $tourTr.eq(index).find('.T-cheked');
+                                $checked.prop('checked', true);
+                            });
+                         }else{
+                            $tourTr.each(function(index) {
+                                var $checked = $tourTr.eq(index).find('.T-cheked');
+                                $checked.prop('checked', false);
+                            });
+                         };
+                    });
+
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
