@@ -89,7 +89,7 @@
                     <td rowspan="{{item.length=item.touristGroupMemberList.length}}">{{item.orderNumber}}</td>
                     <td rowspan="{{item.length}}">{{item.partnerAgency.travelAgencyName}}</td>
                     <td rowspan="{{item.length}}">{{item.adultCount}}大{{item.childCount}}小</td>
-                    {{if item.length > 0}}
+                    {{if item.length > 0 && item.touristGroupMemberList.length > 0}}
                     <td>{{item.touristGroupMemberList[0].name}}</td>
                     <td>{{item.touristGroupMemberList[0].mobileNumber}}</td>
                     <td>{{item.touristGroupMemberList[0].idCardType | getCardText}}</td>
@@ -97,6 +97,14 @@
                     <td>{{if item.touristGroupMemberList[0].gender == 1}} 男 {{else if item.touristGroupMemberList[0].gender == 2}} 女 {{/if}}</td>
                     <td>{{item.touristGroupMemberList[0].age}}</td>
                     <td>{{item.touristGroupMemberList[0].area}}</td>
+                    {{else}}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     {{/if}}
                 </tr>
                 {{each item.touristGroupMemberList as member index}}
