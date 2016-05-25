@@ -134,7 +134,7 @@ template.helper("getFeeItemType2", function(type) {
     res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
-template.helper("getFeeItemText", function(type) {
+template.helper("getFeeItemText", function(type, showType) {
     switch(type * 1){
         case 1: return "大人结算价";
         case 2: return "小孩结算价";
@@ -143,7 +143,9 @@ template.helper("getFeeItemText", function(type) {
         case 5: return "餐厅费用";
         case 6: return "保险费用";
         case 7: return "导服费";
-        case 8: return "酒店费用";
+        case 8: 
+            if(showType == 2) return "单房差";
+            else return "酒店费用";
         case 9: return "景区费用";
         case 10: return "自费费用";
         case 11: return "票务费用";

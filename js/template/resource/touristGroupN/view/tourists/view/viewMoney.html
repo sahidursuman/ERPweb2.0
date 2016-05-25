@@ -77,11 +77,13 @@
 						{{/if}}
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}">
+				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type}}data-type="4"{{/if}}>
 				{{if touristGroupFeeJsonAdd && touristGroupFeeJsonAdd.length > 0}}
 					{{each touristGroupFeeJsonAdd as rs}}
 					<tr data-id="{{rs.id}}">
-						<td>{{rs.type | getFeeItemText}}</td>
+						<td>
+							{{rs.type | getFeeItemText}}
+						</td>
 						<td class="F-float F-count">{{rs.count}}</td>
 						<td class="F-float F-money">{{rs.price}}</td>
 						<td class="F-float F-money">{{rs.price*rs.count}}</td>
@@ -94,7 +96,7 @@
 				{{else if lineFee && lineFee.length > 0}}
 					{{each lineFee as rs}}
 					<tr>
-						<td>{{rs.type | getFeeItemText}}</td>
+						<td>{{rs.type | getFeeItemText:2}}</td>
 						<td class="F-float F-count">{{rs.count}}</td>
 						<td class="F-float F-money">{{rs.price}}</td>
 						<td class="F-float F-money">{{rs.price*rs.count}}</td>
