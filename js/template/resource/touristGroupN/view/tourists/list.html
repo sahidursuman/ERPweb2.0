@@ -11,12 +11,14 @@
             </div>
 		</div>
 		<div class="form-inline">
-			<div class="form-group mar-r-10">
+            <div class="form-group mar-r-10">
                 <label class="control-label">收客单号</label>
                 <input type="text" class="form-control" placeholder="收客单号" name="orderNumber"/>
             </div>
-
-
+            <div class="form-group mar-r-10">
+                <label class="control-label">组团单号</label>
+                <input type="text" class="form-control" placeholder="组团单号" name="otaOrderNumber"/>
+            </div>
             <div class="form-group">
                 <select class="T-choosePorB" style="width: 63px;">
                     <option value='0'>全部</option>
@@ -30,11 +32,6 @@
                 <input type="text" class="T-chooseBussinessGroup T-PorB form-control hidden" name="fromBussinessGroupName" value="全部" />
                 <input type="hidden" name="fromPartnerAgencyId">
                 <input type="hidden" name="fromBussinessGroupId" />
-            </div>
-
-            <div class="form-group mar-r-10">
-                <label class="control-label">行程</label>
-                <input type="text" class="form-control" placeholder="线路产品" name="lineTripName" />
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label">接团日期</label>
@@ -81,12 +78,21 @@
                 <input type="text" class="form-control" placeholder="名字、电话" name="guestDetails" />
             </div>
             <div class="form-group mar-r-10">
+                <label class="control-label">行程</label>
+                <input type="text" class="form-control" placeholder="线路产品" name="lineTripName" />
+            </div>
+            <div class="form-group mar-r-10">
                 <label>团散界定</label>
                 <select name="customerType" style="width: 51px;">
                     <option value="">全部</option>
                     <option value="0">散客</option>
                     <option value="1">团体</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label>录入日期</label>
+                <input type="text" class="datetimepicker" name="createTimeStart" placeholder="开始时间" />-
+                <input type="text" class="datetimepicker" name="createTimeEnd" placeholder="结束时间" />
             </div>
 		</div>
 	</form>
