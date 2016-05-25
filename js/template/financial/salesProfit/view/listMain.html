@@ -2,23 +2,23 @@
     <div class="T-search-area">
         <div class="form-horizontal form-group ">
             <label>收客单号 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="" />
             <label>客户 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="客户" name="partnerAgencyName" value="{{searchParam.partnerAgencyName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="客户" name="partnerAgencyName" value="" />
             <input type="hidden" name="partnerAgencyId" value="" />
             <label>团散标识 </label>
             <select name="customerType" class="mar-r-10 w100">
-                <option {{if !searchParam.customerType}}selected{{/if}}  value="">全部</option>
-                <option {{if searchParam.customerType=="0"}}selected{{/if}} value="0">散客</option>
-                <option {{if searchParam.customerType=="1"}}selected{{/if}} value="1">团队</option>
+                <option value="">全部</option>
+                <option value="0">散客</option>
+                <option value="1">团队</option>
             </select>
             <label>外联销售 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="{{searchParam.outOPUserName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="" />
             <label>部门 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="{{searchParam.businessName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="" />
             <input type="hidden" name="businessNameId" value="" />
             <label>子部门 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="{{searchParam.groupName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="" />
         </div>
         <div class="form-group">
             <label>开始日期 </label>
@@ -50,7 +50,7 @@
                 <th>团款收入</th>
                 <th>代订收入</th>
                 <th>中转支出</th>
-                <th>发团支出</th>
+                <th>参团本部支出</th>
                 <th>外转支出</th>
                 <th>内转支出</th>
                 <th>代订支出</th>
