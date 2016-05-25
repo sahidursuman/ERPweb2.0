@@ -489,7 +489,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
+                            var str = joinTrip[i].hotelInfo.hotelName;
                             str = str && str +" ";
                             str = str && str.length > 6 ? str.substr(0, 6)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
@@ -620,7 +620,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
+                            var str = joinTrip[i].hotelInfo.hotelName;
                             str = str && str +" ";
                             str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
@@ -1630,10 +1630,10 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require;
+                        var str = baseInfo.hotelName;
                         str = str.length > 6 ? str.substr(0, 6)  + "..." : str;
-
-                        $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                        str = str && str + "　";
+                        $that.val(str + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                         F.subtotal($that.closest('tr'), 0);
