@@ -202,12 +202,15 @@ define(function(require, exports) {
                 args = {
                     pageNo : 0,
                     orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                    otaOrderNumber : $searchArea.find('[name="otaOrderNumber"]').val(),
                     type : type,
                     lineTripName : $searchArea.find('[name="lineTripName"]').val(),
                     guestDetails : $searchArea.find('[name="guestDetails"]').val(),
                     customerType : $searchArea.find('[name="customerType"]').val(),
                     dateType : $searchArea.find('[name="dateType"]').val(),
                     tripTime : $searchArea.find('[name="tripTime"]').val(),
+                    createTimeStart : $searchArea.find('[name="createTimeStart"]').val(),
+                    createTimeEnd : $searchArea.find('[name="createTimeEnd"]').val(),
                     realName: $searchArea.find('[name="realName"]').val(),
                     statusSearch : $searchArea.find('.T-select-status').val(),
                     order : $searchArea.find('[name="order"]').val()
@@ -270,6 +273,7 @@ define(function(require, exports) {
         });
         //绑定日期事件
         Tools.setDatePicker($searchArea.find('.datepicker'));
+        Tools.setDateHSPicker($searchArea.find('.datetimepicker'));
 
         touristGroup.getOPUserList($searchArea.find('[name=realName]'), true);
         touristGroup.getListPartnerAgencyList($searchArea.find('.T-choosePartnerAgency'));
