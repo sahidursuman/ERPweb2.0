@@ -15,28 +15,23 @@ define(function(require, exports) {
      * 初始化模块
      */
     salesProfit.initModule = function() {
-        salesProfit.$tab=null;
-        salesProfit._getListMain(0);
+         var args= FinancialService.getInitDate() || {};
+         Tools.addTab(menuKey,"销售利润",listMainTemp({searchParam : args}));
+         salesProfit.$tab=$("#tab-"+menuKey+"-content");
+         salesProfit._initMain_event(salesProfit.$tab);
+        //初始化模板
+        salesProfit._initMain(args);
     };
 
-    salesProfit._getListMain=function(page){
-        var args= FinancialService.getInitDate() || {};
-        args.pageNo=page;
-        if (!!salesProfit.$tab) { //封装查询参数
-            args = {
-                pageNo: (page || 0),
-                orderNumber: salesProfit.$tab.find('[name=orderNumber]').val(),
-                partnerAgencyName: salesProfit.$tab.find('[name=partnerAgencyName]').val(),
-                customerType: salesProfit.$tab.find('[name=customerType]').val(),
-                outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
-                businessName: salesProfit.$tab.find('[name=businessName]').val(),
-                groupName: salesProfit.$tab.find('[name=groupName]').val(),
-                outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
-                startDate: salesProfit.$tab.find('[name=startTime]').val(),
-                endDate: salesProfit.$tab.find('[name=endTime]').val()
-            }
-        }
-
+    salesProfit._initMain = function(args){
+        
+         //listMain
+         salesProfit._getListMain(0, args);
+         //获取统计数据
+         salesProfit._getTotalData();
+    }
+    salesProfit._getListMain=function(page, args){
+        var args = salesProfit._getArgs(args,page);
         $.ajax({
             url:KingServices.build_url("saleProfit","findPager"),
             data:args,
@@ -44,13 +39,6 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-
-                Tools.addTab(menuKey,"销售利润",listMainTemp(data));
-                salesProfit.$tab=$("#tab-"+menuKey+"-content");
-                salesProfit._initMain_event($("#tab-"+menuKey+"-content"));
-                //获取统计数据
-                salesProfit._getTotalData(args);
-
                 var html = Tools.filterUnPoint(Tools.filterMoney(Tools.filterCount(tableTemp(data))));
                 salesProfit.$tab.find('.T-salesProfit-list').html(html);
                 salesProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
@@ -70,13 +58,34 @@ define(function(require, exports) {
         })
     };
 
+
+    salesProfit._getArgs = function(args,page){
+        var args = args ||　{};
+        args.pageNo=page || 0;
+        if (!!salesProfit.$tab) { //封装查询参数
+            args = {
+                pageNo: (page || 0),
+                orderNumber: salesProfit.$tab.find('[name=orderNumber]').val(),
+                partnerAgencyName: salesProfit.$tab.find('[name=partnerAgencyName]').val(),
+                customerType: salesProfit.$tab.find('[name=customerType]').val(),
+                outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
+                businessName: salesProfit.$tab.find('[name=businessName]').val(),
+                groupName: salesProfit.$tab.find('[name=groupName]').val(),
+                outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
+                startDate: salesProfit.$tab.find('[name=startTime]').val(),
+                endDate: salesProfit.$tab.find('[name=endTime]').val()
+            }
+        }
+        return args;
+    }
+
     salesProfit._initMain_event=function($tab){
 
         //点击搜索
         $tab.find('.T-search-area').on('click', '.T-search', function(event) { 
             event.preventDefault();
             /* Act on the event */
-            salesProfit._getListMain(0);
+            salesProfit._initMain();
         });
 
         //点击线路产品事件
@@ -98,7 +107,8 @@ define(function(require, exports) {
 
  
     //获取统计数据
-    salesProfit._getTotalData = function(args){
+    salesProfit._getTotalData = function(){
+        var args = salesProfit._getArgs();
         $.ajax({
             url:KingServices.build_url("saleProfit","findTotal"),
             data:args,
