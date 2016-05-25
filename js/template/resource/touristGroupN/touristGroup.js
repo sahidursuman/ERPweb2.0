@@ -31,6 +31,7 @@ define(function(require, exports) {
 			updateBus : require('./view/tourists/update/updateBus'),//编辑车
 			updateHotel : require('./view/tourists/update/updateHotel'),//编辑房
 			updateOther : require('./view/tourists/update/updateOther'),//编辑其它
+            updateOuterTurn : require('./view/tourists/update/updateOuterTurn'),//编辑外转
             addFee : require('./view/tourists/addFee'),//调整费用项
             chooseHotel : require('./view/tourists/choose/chooseHotel'),//自选酒店
             chooseHotelList : require('./view/tourists/choose/chooseHotelList'),//自选酒店列表
@@ -120,7 +121,11 @@ define(function(require, exports) {
                         tmp.deleteTitle = '';
 
                         // can edit
-                        if (((tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                        if ((
+                            (tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || tmp.isBackStatus == 1) && 
+                            (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0) &&
+                            tmp.isEdit == 0)  
+                        {
                             tmp.canEdit = true;
                         } else {
                             tmp.canEdit = false;
@@ -141,7 +146,11 @@ define(function(require, exports) {
                         }
 
                         // can delete
-                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                        if ((tmp.status == 1 && 
+                            (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || 
+                            tmp.isBackStatus == 1 &&
+                            tmp.isEdit == 0) 
+                        {
                             tmp.canDelete = true;
                         } else {
                             tmp.canDelete = false;
@@ -296,6 +305,8 @@ define(function(require, exports) {
                 });
             }else if($that.hasClass('T-show-part-group')){
                 touristGroup.getListPartGroup(id, $tr, $that);
+            }else if($that.hasClass('T-outer-turn')){
+                touristGroup.updateOuterTurn(id);
             }
     	});
 
@@ -841,11 +852,7 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupHotel(1, $that, type);
             }else if($that.hasClass('T-line-cope')){
     			touristGroup.updateJionGroupMoney($that, 1, type);
-    		}else if($that.hasClass('T-inner-turn')){
-                touristGroup.updateInnerTurn($that, type);
-            }else if($that.hasClass('T-outer-turn')){
-                touristGroup.updateOuterTurn($that, type);
-            }else if($that.hasClass('T-delete')){
+    		}else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
                 if($tab.find('.T-part-group-list tr').length === 0){
                     $tab.find('.T-team-info').find('[name="lineProductName"]').attr('readonly', 'readonly');
@@ -1735,6 +1742,73 @@ define(function(require, exports) {
                 });
 		    }
 		});
+    };
+
+    //参团外转操作
+    touristGroup.updateOuterTurn = function(id){
+        $.ajax({
+            url: KingServices.build_url('customerOrder', 'getTransferInfo'),
+            data: {id: id},
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                layerOuterTurn(data);
+            }
+        });
+        return this;
+        function layerOuterTurn(data){
+            layer.open({
+                type: 1,
+                title: "编辑外转信息",
+                skin: 'layui-layer-rim', //加上边框
+                area: '870px', //宽高
+                zIndex:1028,
+                content: T.updateOuterTurn(data),
+                scrollbar: false,
+                success:function(obj, index){
+                    var $layer = $(obj);
+                    var validate = touristGroup.bindLayerCommonFeeEvents($layer, index);
+                    $layer.find('.T-btn-save').on('click', function(){
+                        if(!validate.form())return;
+                        saveOuterTurn($layer, index);
+                    });
+                }
+            });
+        }
+        function saveOuterTurn($layer, index) {
+            var id = $layer.find('.T-outer-turn').data('id'),
+                baseInfo = {
+                    transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
+                    transferPartnerAgencyId : $layer.find('[name="transferPartnerAgency"]').data('id'),
+                    remark : $layer.find('[name="remark"]').val(),
+                    needPayAllMoney : $layer.find('[name="needPayAllMoney"]').val(),
+                    id : id
+                },
+                moneyData = F.assemblyMoneyData($layer);
+                moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
+                moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
+                delete moneyData.touristGroupFeeJsonAdd;
+                delete moneyData.touristGroupFeeJsonDel;
+                $.extend(baseInfo, moneyData);
+            $.ajax({
+                url: KingServices.build_url('customerOrder', 'doTransfer'),
+                data: {lineInfo: JSON.stringify(baseInfo), id : id},
+            })
+            .done(function(data) {
+                if(showDialog(data)){
+                    showMessageDialog(data.message, function() {
+                        layer.close(index);
+                        var $listTab = $("#tab-customer_order-content");
+                        if($listTab.length > 0){
+                            $listTab.find('#customerOrderTouristsOrder').find('.T-touristGroupList-search').trigger('click');
+                        }else{
+                            touristGroup.listTouristGroup(0);
+                        }
+                    });
+                }
+            });
+            
+        }
     };
 
     /**

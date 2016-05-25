@@ -301,7 +301,7 @@ define(function(require, exports) {
 					var text = [], label = ['现金', '刷卡', '签单'];
 					for (var i = 0; i < 3;i ++) {
 						if (detail[i] != 0) {
-							text.push(label[i] + detail[i]);
+							text.push(label[i] + Tools.thousandPoint(detail[i],2 ));
 						}
 					}
 
@@ -3538,7 +3538,8 @@ define(function(require, exports) {
 		var text = [], label = ['现金', '刷卡', '签单'];
 		for (var i = 0; i < 3;i ++) {
 			if (detail[i] != 0) {
-				text.push(label[i] + detail[i]);
+				text.push(label[i] + Tools.thousandPoint(detail[i], 2));
+
 			}
 		}
 

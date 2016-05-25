@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":122,"md5":"f55ceadb97af7f49508f423cfe71b275"}*/
+/*TMODJS:{"debug":true,"version":124,"md5":"32e28612dd77b803443bca6ba4b771e2"}*/
 define(function(require) {
     return require("../../../template")("financial/transferProfits/view/list", function($data, $filename) {
         try {
@@ -15,12 +15,11 @@ define(function(require) {
                 $line = 9, $out += $escape(rs.adultCount), $out += '</span> 大 <span class="F-float F-count">', 
                 $line = 10, $out += $escape(rs.childCount), $out += "</span> 小 </a> </td> <td>", 
                 $line = 13, $out += $escape(rs.fromPartnerAgencyName), $out += '</td> <td><span class="F-float F-money">', 
-                $line = 14, $out += $escape(rs.needIncomeMoney), $out += "</span></td> <td>", $line = 15, 
-                $out += $escape(rs.service), $out += '</td> <td><a class="cursor T-option T-costDetail" title="查看明细"> <span class="F-float F-money">', 
-                $line = 17, $out += $escape(rs.needPayedMoney), $out += '</span> </a> </td> <td><span class="F-float F-money">', 
-                $line = 20, $out += $escape(rs.grossProfitMoney), $out += '</span></td> <td><span class="F-float F-money">', 
-                $line = 21, $out += $escape(rs.perGrossProfitMoney), $out += "</span></td> </tr> ", 
-                $line = 23;
+                $line = 14, $out += $escape(rs.needIncomeMoney), $out += '</span></td> <td><a class="cursor T-option T-costDetail" title="查看明细"> <span class="F-float F-money">', 
+                $line = 16, $out += $escape(rs.needPayedMoney), $out += '</span> </a> </td> <td><span class="F-float F-money">', 
+                $line = 19, $out += $escape(rs.grossProfitMoney), $out += '</span></td> <td><span class="F-float F-money">', 
+                $line = 20, $out += $escape(rs.perGrossProfitMoney), $out += "</span></td> </tr> ", 
+                $line = 22;
             }), new String($out);
         } catch (e) {
             throw {
@@ -28,7 +27,7 @@ define(function(require) {
                 name: "Render Error",
                 message: e.message,
                 line: $line,
-                source: '{{each result as rs}}\r\n<tr data-id="{{rs.id}}" data-lid="{{rs.lineProductId}}">\r\n	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>\r\n	<td>{{rs.lineProductName}}</td>\r\n	<td>{{rs.customerType}}</td>\r\n	<td>{{rs.startTime | dateFormat:\'yyyy-MM-dd\'}}</td>\r\n	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>\r\n	<td><a class="cursor T-option T-viewGroup" title="查看小组">\r\n			<span class="F-float F-count">{{rs.adultCount}}</span> 大\r\n			<span class="F-float F-count">{{rs.childCount}}</span> 小\r\n		</a>\r\n	</td> \r\n	<td>{{rs.fromPartnerAgencyName}}</td>\r\n	<td><span class="F-float F-money">{{rs.needIncomeMoney}}</span></td>\r\n	<td>{{rs.service}}</td>\r\n	<td><a class="cursor T-option T-costDetail" title="查看明细">\r\n			<span class="F-float F-money">{{rs.needPayedMoney}}</span>\r\n		</a>\r\n	</td>\r\n	<td><span class="F-float F-money">{{rs.grossProfitMoney}}</span></td>\r\n	<td><span class="F-float F-money">{{rs.perGrossProfitMoney}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
+                source: '{{each result as rs}}\r\n<tr data-id="{{rs.id}}" data-lid="{{rs.lineProductId}}">\r\n	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>\r\n	<td>{{rs.lineProductName}}</td>\r\n	<td>{{rs.customerType}}</td>\r\n	<td>{{rs.startTime | dateFormat:\'yyyy-MM-dd\'}}</td>\r\n	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>\r\n	<td><a class="cursor T-option T-viewGroup" title="查看小组">\r\n			<span class="F-float F-count">{{rs.adultCount}}</span> 大\r\n			<span class="F-float F-count">{{rs.childCount}}</span> 小\r\n		</a>\r\n	</td> \r\n	<td>{{rs.fromPartnerAgencyName}}</td>\r\n	<td><span class="F-float F-money">{{rs.needIncomeMoney}}</span></td>\r\n	<td><a class="cursor T-option T-costDetail" title="查看明细">\r\n			<span class="F-float F-money">{{rs.needPayedMoney}}</span>\r\n		</a>\r\n	</td>\r\n	<td><span class="F-float F-money">{{rs.grossProfitMoney}}</span></td>\r\n	<td><span class="F-float F-money">{{rs.perGrossProfitMoney}}</span></td>\r\n</tr>\r\n{{/each}}'.split(/\n/)[$line - 1].replace(/^\s+/, "")
             };
         }
     });
