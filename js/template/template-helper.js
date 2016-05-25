@@ -125,6 +125,15 @@ template.helper("getFeeItemType", function(type,isTransfer) {
     res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
+template.helper("getFeeItemType2", function(type) {
+    var res = '';
+    type = type || 1;
+    res += '<option value="1" '+(type == 1?'selected':'')+'>大人结算价</option>';
+    res += '<option value="2" '+(type == 2?'selected':'')+'>小孩结算价</option>';
+    res += '<option value="8" '+(type == 8?'selected':'')+'>单房差</option>';
+    res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
+    return res;
+});
 template.helper("getFeeItemText", function(type) {
     switch(type * 1){
         case 1: return "大人结算价";

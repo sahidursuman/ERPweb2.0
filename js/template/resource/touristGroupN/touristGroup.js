@@ -1839,13 +1839,15 @@ define(function(require, exports) {
                 option = '<option value="5">餐厅费用</option>'+
                          '<option value="11">票务费用</option>'+
                          '<option value="12">其他费用</option>';
+            }else if($tbody.data('type') == "4"){
+                option = '<option value="1">大人结算价</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="8">单房差</option>'+
+                         '<option value="12">其他费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
-                         '<option value="2">小孩结算价</option>';
-                if(groupType!="group"){
-                    option += '<option value="3">中转结算价</option>';
-                }
-                option +='<option value="4">车辆费用</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="4">车辆费用</option>'+
                          '<option value="5">餐厅费用</option>'+
                          '<option value="6">保险费用</option>'+
                          '<option value="7">导服费</option>'+

@@ -17,7 +17,7 @@
         if (isArray(data)) for (var i = 0, len = data.length; len > i; i++) callback.call(data, data[i], i, data); else for (i in data) callback.call(data, data[i], i);
     }
     function resolve(from, to) {
-        var DOUBLE_DOT_RE = /(\/)[^/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^/]+$/, ""), filename = dirname + to;
+        var DOUBLE_DOT_RE = /(\/)[^\/]+\1\.\.\1/, dirname = ("./" + from).replace(/[^\/]+$/, ""), filename = dirname + to;
         for (filename = filename.replace(/\/\.\//g, "/"); filename.match(DOUBLE_DOT_RE); ) filename = filename.replace(DOUBLE_DOT_RE, "/");
         return filename;
     }
@@ -152,6 +152,11 @@
         res += '<option value="10" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
         res += '<option value="11" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
         res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
+    }), template.helper("getFeeItemType2", function(type) {
+        var res = "";
+        return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
+        res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
+        res += '<option value="8" ' + (8 == type ? "selected" : "") + ">单房差</option>", res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
     }), template.helper("getFeeItemText", function(type) {
         switch (1 * type) {
           case 1:
