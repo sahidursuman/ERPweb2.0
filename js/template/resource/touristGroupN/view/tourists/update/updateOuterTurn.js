@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":30,"md5":"c0f1b44b33bc134f3057d543de5c282d"}*/
+/*TMODJS:{"debug":true,"version":29,"md5":"c0f1b44b33bc134f3057d543de5c282d"}*/
 define(function(require) {
     return require("../../../../../template")("resource/touristGroupN/view/tourists/update/updateOuterTurn", function($data, $filename) {
         try {
