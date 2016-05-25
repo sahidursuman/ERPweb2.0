@@ -127,8 +127,7 @@ define(function(require, exports, module) {
                 pageNo : page,
                 orderNumber : $searchArea.find('[name="orderNumber"]').val(),
                 partnerAgencyName : $searchArea.find('[name="partnerAgencyName"]').val(),
-                outOPUserName : $searchArea.find('[name="outOPUserName"]').val(),
-                status : $searchArea.find('.T-select-status').val()
+                outOPUserName : $searchArea.find('[name="outOPUserName"]').val()
             };
             return args;
         }
