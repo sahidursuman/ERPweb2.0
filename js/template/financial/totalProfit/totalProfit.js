@@ -102,6 +102,8 @@ define(function(require, exports) {
                 outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
                 businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
+                lineProduct: TotalProfit.$searchArea.find("input[name=lineProduct]").val(),
+                lineProductId: TotalProfit.$searchArea.find("input[name=lineProductId]").val(),
                 pageNo: page || 0
             }
         }
