@@ -556,3 +556,12 @@ template.helper('canEditCheckedFinancial', function(status) {
 
     return res;
 });
+
+/**
+ * 美华用户：如果是公司权限，就可以查看明细
+ * @param  {Boolean} ) true 可以查看
+ * @return {[type]}   [description]
+ */
+template.helper('isNeedShowDetail', function() {
+    return IndexData.userInfo.travelAgencyId == 32 && IndexData.userInfo.financialCountAuth == 4;
+});
