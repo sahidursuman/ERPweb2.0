@@ -282,6 +282,10 @@ define(function(require, exports) {
                 $ele: $obj.find('input[name="roomCount"]'),
                 rules : [
                     {
+                        type: 'null',
+                        errMsg: '房间数不能为空'
+                    },
+                    {
                         type: 'nonnegative-float',
                         errMsg: '房间数必须为正整数'
                     }

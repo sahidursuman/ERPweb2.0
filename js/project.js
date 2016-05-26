@@ -2277,6 +2277,18 @@ KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId,guideArrangeId
 }
 
 /**
+ * 购物统计检索线路
+ * @param  {[type]}  $target    线路对象
+ * @param  {Boolean} isShopLine 判定请求url
+ * @return {[type]}
+ */
+KingServices.showLineProduct = function($target)  {
+	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
+		module.showLineProduct($target);
+	});
+}
+
+/**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]

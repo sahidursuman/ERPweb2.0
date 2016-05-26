@@ -91,11 +91,9 @@
             {{/if}}
         </td>
         <td style="vertical-align:middle">
-            {{if canEditCheckedFinancial(financialTripPlan.tripPlan.billStatus)}}
-                
+            {{if canEditCheckedFinancial(financialTripPlan.tripPlan.billStatus)}}                
                 <a data-entity-id="{{financialTripPlan.id}}" class="T-action T-detail cursor">
                     明细
-
                 </a>
                 <a  data-entity-billStatus="{{financialTripPlan.tripPlan.billStatus}}"  data-entity-id="{{financialTripPlan.id}}" data-guideFinancialExamine="{{financialTripPlan.guideFinancialExamine}}" class="cursor T-action T-update T-audit">
                 <label class="padding-right20">|</label>
@@ -113,6 +111,10 @@
                        质量
                    </a>
                 {{/if}}
+            {{else if isNeedShowDetail()}}
+                 <a data-entity-id="{{financialTripPlan.id}}" class="T-action T-detail cursor">
+                    明细
+                </a>
             {{/if}}
         </td>
         </tr> 

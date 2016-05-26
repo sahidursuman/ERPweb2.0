@@ -73,46 +73,27 @@
 		</tr>
 	</thead>
   <tbody class="addTransferCost">
-		{{if isParent==1}}
-		    <!-- 其他费用中转分段显示值灰 -->
-			{{each innerTransfer.innerTransferFeeSet as rs}}
-				<tr data-entity-id={{rs.id}}>
-					<td>	
-					  <select name="type" class="col-sm-10 col-sm-offset-1" {{if rs.type==3}}disabled{{/if}}>
-					       {{#rs.type | getFeeItemType: true}}
-					  </select>
-					</td>
-					<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}" {{if rs.type==3}}disabled{{/if}} /></td>
-					<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" {{if rs.type==3}}disabled{{/if}} /></td>
-					<td>
-						<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
-					</td>
-					<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}" {{if rs.type==3}}disabled{{/if}} /></td>
-					<td><a class="cursor T-edittransfer-delete" {{if rs.type==3}}disabled{{/if}}>删除</a></td>
-				</tr>
-			{{/each}}
-			<!-- 其他费用中转分段显示值灰 -->
-			{{else}}
-			
-			{{each innerTransfer.innerTransferFeeSet as rs}}
-			{{if rs.type!=3}}
-				<tr data-entity-id={{rs.id}}>
-					<td>	
-					  <select name="type" class="col-sm-10 col-sm-offset-1">
-					       {{#rs.type | getFeeItemType: false}}
-					  </select>
-					</td>
-					<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}"/></td>
-					<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}" /></td>
-					<td>
-						<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
-					</td>
-					<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}"/></td>
-					<td><a class="cursor T-edittransfer-delete">删除</a></td>
-				</tr>
-			{{/if}}
-			{{/each}}
-		{{/if}}
+		<!-- 其他费用中转分段显示值灰 -->
+		{{each innerTransfer.innerTransferFeeSet as rs}}
+			<tr data-entity-id={{rs.id}}>
+				<td>	
+				  <select name="type" class="col-sm-10 col-sm-offset-1" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}>
+				        {{if rs.type == 1 || rs.type == 2 || rs.type == 8 || rs.type == 12}}
+						{{#rs.type | getFeeItemType2}}
+						{{else}}
+						{{#rs.type | getFeeItemType:true}}
+						{{/if}}
+				  </select>
+				</td>
+				<td><input  name="count" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right count  T-count T-calc F-float F-count" maxlength="6" value="{{rs.count}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} /></td>
+				<td><span class="necessary  pull-left col-sm-2"></span><input  name="price" type="text" maxlength="9" class="col-sm-10 col-sm-offset-1   no-padding-right  price T-price T-calc F-float F-money" value="{{rs.price}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} /></td>
+				<td>
+					<input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right T-payMoney F-float F-money" />
+				</td>
+				<td><input  name="remark" type="text" class="col-sm-10 col-sm-offset-1  no-padding-right" maxlength="100" value="{{rs.remark}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} /></td>
+				<td><a class="cursor T-edittransfer-delete" {{if rs.type==3}}disabled{{/if}}>删除</a></td>
+			</tr>
+		{{/each}}
 	</tbody>
  </table>
  <!-- 转客列表编辑end -->	
