@@ -51,7 +51,9 @@ define(function(require, exports) {
                 groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
                 outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
-                businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id")
+                businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
+                lineProduct: TotalProfit.$searchArea.find("input[name=lineProduct]").val(),
+                lineProductId: TotalProfit.$searchArea.find("input[name=lineProductId]").val()
             };
             //获取数据列表
             TotalProfit.getListData(0, args);
@@ -67,6 +69,20 @@ define(function(require, exports) {
         TotalProfit.getOPUserList(TotalProfit.$searchArea.find('[name="outOPUserName"]'));
         TotalProfit.getGroupMapList(TotalProfit.$searchArea.find('[name="groupName"]'));
         TotalProfit.getBusinessList(TotalProfit.$searchArea.find('[name="businessName"]'));
+        TotalProfit.$searchArea.on('click', '.T-Choose-product', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            KingServices.showLineProduct($(this));
+        }).on('click', '.T-clear-line', function(event) {
+            event.preventDefault();
+            var $div = $(this).closest('div');
+            if(!!$div.find('input[name=lineProduct]').val()){
+                showConfirmDialog('是否清除?', function() {
+                    $div.find('input[name=lineProduct]').val('');
+                    $div.find('input[name=lineProductId]').val('');
+                });
+            };
+        });
        
     };
     //获取列表数据
@@ -86,6 +102,8 @@ define(function(require, exports) {
                 outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
                 businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
+                lineProduct: TotalProfit.$searchArea.find("input[name=lineProduct]").val(),
+                lineProductId: TotalProfit.$searchArea.find("input[name=lineProductId]").val(),
                 pageNo: page || 0
             }
         }
