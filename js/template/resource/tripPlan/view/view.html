@@ -70,26 +70,49 @@
 <div id="arrange-view-touristgroup-list" class="collapse in">
     <table class="table table-bordered" >
         <thead>
-            <tr>
+            <tr>{{if basicInfo.tripPlanType == 1}}
                 <th class="th-border">收客单号</th>
                 <th class="th-border">客户</th>
-                <th class="th-border">人数</th>
+                {{else}}
+                <th class="th-border">收客单号</th>
+                <th class="th-border">外联销售</th>
+                <th class="th-border">现收团款</th>
+                <th class="th-border">全陪</th>
+                <th class="th-border">全陪电话</th>
+                <th class="th-border">接站牌/送客地点</th>
+                {{/if}}
                 <th class="th-border">姓名</th>
                 <th class="th-border">手机号码</th>
                 <th class="th-border">证件类型</th>
                 <th class="th-border">证件号码</th>
                 <th class="th-border">性别</th>
                 <th class="th-border">年龄</th>
-                <th class="th-border">省份</th>
+                <th class="th-border">客源地</th>
+                <th class="th-border">是否联系人</th>
+                <th class="th-border">备注</th>
             </tr>
         </thead>
         <tbody>
             {{each touristGroupList as item}}
                 <tr>
-                    <td rowspan="{{item.length=item.touristGroupMemberList.length}}">{{item.orderNumber}}</td>
-                    <td rowspan="{{item.length}}">{{item.partnerAgency.travelAgencyName}}</td>
-                    <td rowspan="{{item.length}}">{{item.adultCount}}大{{item.childCount}}小</td>
-                    {{if item.length > 0 && item.touristGroupMemberList.length > 0}}
+                    {{if basicInfo.tripPlanType == 1}}
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.orderNumber}}</td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.partnerAgency.travelAgencyName}}</td>
+                    {{else}}
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.orderNumber}}<br />
+                        {{item.lineProduct.name}}<br />
+                        {{if item.partnerAgency}}{{item.partnerAgency.travelAgencyName}}{{/if}}<br />
+                        {{item.adultCount}}大{{item.childCount}}小
+                    </td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{if !!item.outOPUser}}{{item.outOPUser.realName}}{{/if}}</td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.currentNeedPayMoney}}</td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.accompanyGuideName}}</td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.accompanyGuideMobile}}</td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{if !!item.welcomeBoard}}(接){{item.welcomeBoard}}{{/if}}
+                    {{if !!item.sendPosition && !!item.welcomeBoard}}<br />{{/if}}{{if !!item.sendPosition}}(送){{item.sendPosition}}{{/if}}
+                    </td>
+                    {{/if}}
+                    {{if item.touristGroupMemberList.length > 0}}
                     <td>{{item.touristGroupMemberList[0].name}}</td>
                     <td>{{item.touristGroupMemberList[0].mobileNumber}}</td>
                     <td>{{item.touristGroupMemberList[0].idCardType | getCardText}}</td>
@@ -97,6 +120,8 @@
                     <td>{{if item.touristGroupMemberList[0].gender == 1}} 男 {{else if item.touristGroupMemberList[0].gender == 2}} 女 {{/if}}</td>
                     <td>{{item.touristGroupMemberList[0].age}}</td>
                     <td>{{item.touristGroupMemberList[0].area}}</td>
+                    <td>{{if item.touristGroupMemberList[0].isContactUser == 1}}是{{else}}{{/if}}</td>
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.remark}}</td>
                     {{else}}
                     <td></td>
                     <td></td>
@@ -117,6 +142,7 @@
                     <td>{{if member.gender == 1}} 男 {{else if member.gender == 2}} 女 {{/if}}</td>
                     <td>{{member.age}}</td>
                     <td>{{member.area}}</td>
+                    <td>{{if member.isContactUser == 1}}是{{else}}{{/if}}</td>
                 </tr>
                 {{/if}}
                 {{/each}}
