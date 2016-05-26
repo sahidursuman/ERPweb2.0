@@ -445,5 +445,6 @@ define(function(require, exports) {
 	};
 
 	exports.init = shopStat.initModule;
-	exports.viewConsumeMoney=shopStat.viewConsumeMoney;
+	exports.viewConsumeMoney = shopStat.viewConsumeMoney;
+	exports.showLineProduct= shopStat.showLineProduct ;
 });
