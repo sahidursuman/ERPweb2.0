@@ -642,6 +642,30 @@ function logout(){
 
 }
 
+//浏览器更新提示
+function browserUpdate(){
+	var updatePasswordLayer=layer.open({
+		type: 1,
+		title: "升级浏览器",
+		skin: 'layui-layer-lan', //加上边框
+		area: ['300px', '200px'], //宽高
+		content: "<div class='T-browserUpdate clearfix'><div class='col-sm-12' style='margin-top:25px;color:red;'>您当前浏览器版本过低，请选择升级！</div>" +
+		"<div style='margin:25px 25px 25px 15px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://windows.microsoft.com/zh-cn/internet-explorer/download-ie'>IE</button></div>"+
+		"<div style='margin:25px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://se.360.cn/'>360</button></div>"+
+		"<div style='margin:25px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://www.firefox.com.cn/'>火狐</button></div></div>",
+		success : function(){
+			$(".T-browserUpdate").on('click', '.T-update', function(event) {
+				event.preventDefault();
+
+				var href = $(this).data("href"),o = window.open();
+	            setTimeout(function(){
+	                o.location.href = href;
+	            }, 0);
+			});
+		}	
+	});
+}
+
 function viewAllMsg(){
 	seajs.use("" + ASSETS_ROOT +modalScripts['public_message'],function(message){
 		message.init();
@@ -1368,10 +1392,8 @@ Tools.getTableVal = function($tbody, idName) {
 
 		$tbody.children('tr').each(function() {
 			var $tr = $(this), val = {id: $tr.data(idName)};
-
 			$tr.find('input,select').each(function() {
 				var $that = $(this);
-
 				name = $that.prop('name');
 				if (!!name) {
 					if ($that.is('[type=checkbox],[type=radio]')) {
@@ -1379,13 +1401,9 @@ Tools.getTableVal = function($tbody, idName) {
 					} else {
 						value = $that.val();
 					}
-
 					val[name] = value;
 				}
-
-
 			});
-
 			res.push(val);
 		});
 	}
@@ -1867,6 +1885,29 @@ Tools.filterUnPoint = function(obj){
 	return $obj;
 };
 
+/**
+ * 需要排序的数组
+ * @param  {arr} arr 排序对象
+ * @param  {string} key 排序字段的key。若无，则排序数组本身
+ * @return {Array}     返回排序后的数组
+ */
+Tools.sortByPinYin = function(arr, key) {
+    if (!!arr && arr.length) {
+        if (!!key) {
+            arr.sort(function(a, b) {
+                return a[key].localeCompare(b[key]);
+            });
+        } else {
+            arr.sort(function(a, b) {
+                return a.localeCompare(b);
+            });
+        }
+    }
+
+    return arr;
+};
+
+//千分位
 $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
 	$(this).data('old-value-format-float.api', this.value);
 })
@@ -1941,6 +1982,7 @@ $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
  * @return {[type]}      [description]
  */
 Tools.formatQuantile = function(data){
+	if(data === undefined) return "";
 	var str = data;
 	data = data.replace(/,/g, '');
 	return isNaN(data) ? str : data;
@@ -2380,8 +2422,8 @@ KingServices.tripDetail = function(id){
 }
 //代订明细
 KingServices.replaceDetail = function(id){
-	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_booking,function(module){
-		module.replaceDetail(id);
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_order_center,function(module){
+		module.viewBooking(id, 2);
 	});
 }
 //查看线路产品
@@ -2398,7 +2440,7 @@ KingServices.viewFeeDetail = function(id){
 }
 //查看游客小组
 KingServices.viewTouristGroup = function(id,isTransferIn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_order_center,function(module){
 		module.viewTouristGroup(id,isTransferIn);
 	});
 }
@@ -2777,7 +2819,7 @@ Tools.directionKeyControlFocus = function() {
 			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') == 'text';
 		})
 	}
-	$(document).on('keydown.tableFocus','table', function() {
+	$(document).on('keydown.tableFocus','table', function(event) {
 		var $this = $(this),
 			keyCode = event.which,
 			$focusInput = $this.find('input:focus'),

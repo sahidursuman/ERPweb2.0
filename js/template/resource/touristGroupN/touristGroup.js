@@ -21,6 +21,7 @@ define(function(require, exports) {
             add : require('./view/tourists/add'),//新增页面
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
+            viewAccountsTemplate : require('./view/tourists/view/viewAccounts'),//查看结算单
             chooseClient : require('./view/tourists/choose/chooseClient'),//选择客户
             chooseClientList : require('./view/tourists/choose/chooseClientList'),//选择客户列表
             chooseLineProduct : require('./view/tourists/choose/chooseLineProduct'),//选择线路产品
@@ -30,8 +31,8 @@ define(function(require, exports) {
 			updateBus : require('./view/tourists/update/updateBus'),//编辑车
 			updateHotel : require('./view/tourists/update/updateHotel'),//编辑房
 			updateOther : require('./view/tourists/update/updateOther'),//编辑其它
-            updateInnerTurn : require('./view/tourists/update/updateInnerTurn'),//编辑内转
             updateOuterTurn : require('./view/tourists/update/updateOuterTurn'),//编辑外转
+            addFee : require('./view/tourists/addFee'),//调整费用项
             chooseHotel : require('./view/tourists/choose/chooseHotel'),//自选酒店
             chooseHotelList : require('./view/tourists/choose/chooseHotelList'),//自选酒店列表
             viewGuestInfo : require('./view/tourists/view/viewGuestInfo'),//查看客人信息
@@ -39,8 +40,6 @@ define(function(require, exports) {
             viewBus : require('./view/tourists/view/viewBus'),//查看车
             viewHotel : require('./view/tourists/view/viewHotel'),//查看房
             viewOther : require('./view/tourists/view/viewOther'),//查看其它
-            viewInnerTurn : require('./view/tourists/view/viewInnerTurn'),//查看内转
-            viewOuterTurn : require('./view/tourists/view/viewOuterTurn'),//查看外转
         },
         rule = require('./rule'),
         touristGroup = {
@@ -70,6 +69,7 @@ define(function(require, exports) {
     	args.pageNo = page || 0;
         args.type = args.type || 0;
         args.statusSearch = args.statusSearch || 1;
+        args.order = 0;
         if(!!$tab){
             $tab.html(filterUnAuth(T.list()));
             touristGroup.init_events($tab);
@@ -111,14 +111,21 @@ define(function(require, exports) {
             type: 'POST',
             success: function(data) {
             	if(showDialog(data)){
-            		var touristGroupList = JSON.parse(data.touristGroupList);
+                    var totalAdultCount = 0, 
+                        totalChildCount = 0,
+                        touristGroupList = JSON.parse(data.touristGroupList);
+
             		for (var i = 0 , len = touristGroupList.length, tmp;i < len; i ++) {
                         tmp = touristGroupList[i];
                         tmp.editTitle = '';
                         tmp.deleteTitle = '';
 
                         // can edit
-                        if (((tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || touristGroup.isBackStatus == 1) && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0))  {
+                        if ((
+                            (tmp.status < 3 || tmp.status == 6 || tmp.status == 5) || tmp.isBackStatus == 1) && 
+                            (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0) &&
+                            tmp.isEdit == 0)  
+                        {
                             tmp.canEdit = true;
                         } else {
                             tmp.canEdit = false;
@@ -139,7 +146,11 @@ define(function(require, exports) {
                         }
 
                         // can delete
-                        if ((tmp.status == 1 && (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || tmp.isBackStatus == 1) {
+                        if ((tmp.status == 1 && 
+                            (tmp.isInnerTransferConfirm == 0 && tmp.isConfirmAccount == 0)) || 
+                            tmp.isBackStatus == 1 &&
+                            tmp.isEdit == 0) 
+                        {
                             tmp.canDelete = true;
                         } else {
                             tmp.canDelete = false;
@@ -167,12 +178,18 @@ define(function(require, exports) {
                                 } 
                             }
                         }
+
+                        totalAdultCount += tmp.adultCount;
+                        totalChildCount += tmp.childCount;
                     }
                     data.touristGroupList = touristGroupList;
             		var html = T.listTable(data);
             		html = filterUnAuth(html);
             		$tab.find('.T-touristGroup').html(html);
             		$tab.find('.T-record-size').html(data.recordSize);
+
+                    //$tab.find('.T-total-number').text((totalAdultCount||0) + "大" + (totalChildCount||0) + "小")
+
             		//绑定分页插件
                     laypage({
                         cont: $tab.find('.T-pagenation'),
@@ -194,14 +211,18 @@ define(function(require, exports) {
                 args = {
                     pageNo : 0,
                     orderNumber : $searchArea.find('[name="orderNumber"]').val(),
+                    otaOrderNumber : $searchArea.find('[name="otaOrderNumber"]').val(),
                     type : type,
                     lineTripName : $searchArea.find('[name="lineTripName"]').val(),
                     guestDetails : $searchArea.find('[name="guestDetails"]').val(),
                     customerType : $searchArea.find('[name="customerType"]').val(),
                     dateType : $searchArea.find('[name="dateType"]').val(),
                     tripTime : $searchArea.find('[name="tripTime"]').val(),
-                    realName: $searchArea.find('[name=realName]').val(),
-                    statusSearch : $searchArea.find('.T-select-status').val()
+                    createTimeStart : $searchArea.find('[name="createTimeStart"]').val(),
+                    createTimeEnd : $searchArea.find('[name="createTimeEnd"]').val(),
+                    realName: $searchArea.find('[name="realName"]').val(),
+                    statusSearch : $searchArea.find('.T-select-status').val(),
+                    order : $searchArea.find('[name="order"]').val()
                 };
             if(type == "1"){
                 args.fromPartnerAgencyName = $searchArea.find('[name="fromPartnerAgencyName"]').val();
@@ -261,6 +282,7 @@ define(function(require, exports) {
         });
         //绑定日期事件
         Tools.setDatePicker($searchArea.find('.datepicker'));
+        Tools.setDateHSPicker($searchArea.find('.datetimepicker'));
 
         touristGroup.getOPUserList($searchArea.find('[name=realName]'), true);
         touristGroup.getListPartnerAgencyList($searchArea.find('.T-choosePartnerAgency'));
@@ -283,6 +305,8 @@ define(function(require, exports) {
                 });
             }else if($that.hasClass('T-show-part-group')){
                 touristGroup.getListPartGroup(id, $tr, $that);
+            }else if($that.hasClass('T-outer-turn')){
+                touristGroup.updateOuterTurn(id);
             }
     	});
 
@@ -401,11 +425,13 @@ define(function(require, exports) {
                     var receiveTrip = data.receiveTrip;
                     for(var i=0; i<receiveTrip.length; i++){
                         if(receiveTrip[i].receiveBus){
+                            receiveTrip[i].receiveBusClearFlag = receiveTrip[i].receiveBus.clearFlag;
                             receiveTrip[i].busNeedPayAllMoney = receiveTrip[i].receiveBus.needPayAllMoney;
                             receiveTrip[i].receiveBusId = receiveTrip[i].receiveBus.id;
                             receiveTrip[i].receiveBus = JSON.stringify(receiveTrip[i].receiveBus || {});
                         }
                         if(receiveTrip[i].receiveHotel){
+                            receiveTrip[i].receiveHotelClearFlag = receiveTrip[i].receiveHotel.clearFlag;
                             receiveTrip[i].hotelNeedPayAllMoney = receiveTrip[i].receiveHotel.needPayAllMoney;
                             receiveTrip[i].receiveHotelId = receiveTrip[i].receiveHotel.id;
                             receiveTrip[i].receiveHotel.hotel = [];
@@ -424,6 +450,7 @@ define(function(require, exports) {
                             receiveTrip[i].receiveHotel = JSON.stringify(receiveTrip[i].receiveHotel || {});
                         }
                         if(receiveTrip[i].receiveOther){
+                            receiveTrip[i].receiveOtherClearFlag = receiveTrip[i].receiveOther.clearFlag;
                             receiveTrip[i].otherNeedPayAllMoney = receiveTrip[i].receiveOther.needPayAllMoney;
                             receiveTrip[i].receiveOtherId = receiveTrip[i].receiveOther.id;
                             receiveTrip[i].receiveOther = JSON.stringify(receiveTrip[i].receiveOther || {});
@@ -432,7 +459,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            joinTrip[i].currentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -448,6 +475,7 @@ define(function(require, exports) {
                             joinTrip[i].hotelInfoId = joinTrip[i].hotelInfo.id;
                             joinTrip[i].hotelOutRemarkId = joinTrip[i].hotelInfo.outRemarkId;
                             joinTrip[i].hotelInfo.hotel = [];
+                            joinTrip[i].hotelInfoClearFlag = joinTrip[i].hotelInfo.clearFlag;
                             var hotelIds = joinTrip[i].hotelInfo.hotelIds,
                                 hotelNames = joinTrip[i].hotelInfo.hotelName;
                             if(!!hotelIds){
@@ -461,9 +489,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
-                            str = str && str +" ";
-                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
+                            var str = joinTrip[i].hotelInfo.isTransfer === 0 ? "本部" : "他部";
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -476,11 +502,13 @@ define(function(require, exports) {
                     var sendTrip = data.sendTrip;
                     for(var i=0; i<sendTrip.length; i++){
                         if(sendTrip[i].sendBus){
+                            sendTrip[i].sendBusClearFlag = sendTrip[i].sendBus.clearFlag;
                             sendTrip[i].busNeedPayAllMoney = sendTrip[i].sendBus.needPayAllMoney;
                             sendTrip[i].sendBusId = sendTrip[i].sendBus.id;
                             sendTrip[i].sendBus = JSON.stringify(sendTrip[i].sendBus || {});
                         }
                         if(sendTrip[i].sendHotel){
+                            sendTrip[i].sendHotelClearFlag = sendTrip[i].sendHotel.clearFlag;
                             sendTrip[i].hotelNeedPayAllMoney = sendTrip[i].sendHotel.needPayAllMoney;
                             sendTrip[i].sendHotelId = sendTrip[i].sendHotel.id;
                             sendTrip[i].sendHotel.hotel = [];
@@ -499,6 +527,7 @@ define(function(require, exports) {
                             sendTrip[i].sendHotel = JSON.stringify(sendTrip[i].sendHotel || {});
                         }
                         if(sendTrip[i].sendOther){
+                            sendTrip[i].sendOtherClearFlag = sendTrip[i].sendOther.clearFlag;
                             sendTrip[i].otherNeedPayAllMoney = sendTrip[i].sendOther.needPayAllMoney;
                             sendTrip[i].sendOtherId = sendTrip[i].sendOther.id;
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
@@ -517,13 +546,14 @@ define(function(require, exports) {
      * @param  {number} id 游客ID
      * @return {[type]}    [description]
      */
-    touristGroup.touristGroupView = function(id){
+    touristGroup.touristGroupView = function(id, type){
         $.ajax({
             url : KingServices.build_url('customerOrder', 'viewCustomerOrder'),
             data : {id : id},
             type: 'POST',
             success : function(data){
                 if(showDialog(data)){
+                    data.type = type;
                     data.id = id;
                     if(!!data.baseInfo && !!data.baseInfo.touristGroupMemberInfo){
                         var memberInfo = data.baseInfo.touristGroupMemberInfo;
@@ -559,7 +589,7 @@ define(function(require, exports) {
                     var joinTrip = data.joinTrip;
                     for(var i=0; i<joinTrip.length; i++){
                         if(joinTrip[i].lineInfo){
-                            joinTrip[i].operateCurrentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
+                            joinTrip[i].currentNeedPayMoney = joinTrip[i].lineInfo.currentNeedPayMoney;
                             var str = "", isTransfer = joinTrip[i].lineInfo.isTransfer;
                             if(isTransfer == 1){
                                 str = "他部　" + joinTrip[i].lineInfo.dutyDepartmentName + "　";
@@ -588,9 +618,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require.requireContent;
-                            str = str && str +" ";
-                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
+                            var str = joinTrip[i].hotelInfo.isTransfer === 0 ? "本部" : "他部";
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -623,6 +651,49 @@ define(function(require, exports) {
         });
     };
 
+     /**
+     * [viewAccountList 结算单打印]
+     * @return {[type]} [description]
+     */
+    touristGroup.viewAccountList = function(id){ 
+        $.ajax({
+                url: KingServices.build_url("touristGroup", "viewPartnerSettlement"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                        if(result){
+                           var num = data.touristGroup.companyLogo.indexOf('null');
+                            if(num>0){
+                                data.touristGroup.companyLogo =''
+                            }
+                            html = T.viewAccountsTemplate(data);
+                            var viewAccountsLayer = layer.open({
+                                type: 1,
+                                title:"打印结算单",
+                                skin: 'layui-layer-rim',
+                                area: '750px', 
+                                zIndex:1028,
+                                content: html,
+                                scrollbar: false
+                            });
+                        //打印结算单页面
+                        var $outAccountsTab = $("#T-touristGroupViewAccount");
+                            $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                            touristGroup.exportsOutAccounts($outAccountsTab);
+                        });
+                    }   
+                }
+        });       
+    };
+
+    //打印页面
+    touristGroup.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
+    };
     /**
      * 删除游客小组
      * @param  {number} id 游客ID
@@ -670,6 +741,10 @@ define(function(require, exports) {
             }else if($that.hasClass('datepicker')){
                 var start = $tab.find('.T-team-info [name="startTime"]').val();
                 $(this).datepicker('setStartDate', start);
+            }else if($that.hasClass('T-add-client')){
+                KingServices.addPartnerAgency(function(formData){});
+            }else if($that.hasClass('T-fee-adjust')){
+                touristGroup.updateJionGroupMoney($that, 0, 2);
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
@@ -739,6 +814,12 @@ define(function(require, exports) {
                     $("body").find('[href="#tab-' + K.menu + '-content"]').trigger('click');                    
                 }
             });
+            //绑定答应结算单事件
+            $tab.find('.T-statementsBtn').off('click').on('click',function(){
+                var pluginKey = 'plugin_print';
+                    Tools.loadPluginScript(pluginKey);
+                    touristGroup.viewAccountList($tab.find('.T-container').data('id'));
+            });
         }
     	//接团表内操作
     	$tab.find('.T-join-group-list').on('click', '.T-action', function(event){
@@ -757,7 +838,8 @@ define(function(require, exports) {
             }
     	});
     	//参团表内操作
-    	$tab.find('.T-part-group-list').on('click', '.T-action', function(event){
+        var $partGroup = $tab.find('.T-part-group-list');
+    	$partGroup.on('click', '.T-action', function(event){
     		event.preventDefault();
     		var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
             if($that.hasClass('T-search-line')){
@@ -766,11 +848,7 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupHotel(1, $that, type);
             }else if($that.hasClass('T-line-cope')){
     			touristGroup.updateJionGroupMoney($that, 1, type);
-    		}else if($that.hasClass('T-inner-turn')){
-                touristGroup.updateInnerTurn($that, type);
-            }else if($that.hasClass('T-outer-turn')){
-                touristGroup.updateOuterTurn($that, type);
-            }else if($that.hasClass('T-delete')){
+    		}else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
                 if($tab.find('.T-part-group-list tr').length === 0){
                     $tab.find('.T-team-info').find('[name="lineProductName"]').attr('readonly', 'readonly');
@@ -780,9 +858,11 @@ define(function(require, exports) {
                 $(this).datepicker('setStartDate', start);
             }else if($that.hasClass('T-clear')){
                 clearItem($that);
+            }else if($that.hasClass('T-fee-adjust')){
+                touristGroup.updateJionGroupMoney($that, 1, 2);
             }
     	});
-        $tab.find('.T-part-group-list').on('changeDate', '[name="tripStartTime"]', function(){
+        $partGroup.on('changeDate', '[name="tripStartTime"]', function(){
             var $that = $(this), $tr = $that.closest('tr'),
                 $endTime = $tr.find('[name="tripEndTime"]'),
                 lineData = $tr.find('[name="lineProductName"]').data('json');
@@ -792,6 +872,10 @@ define(function(require, exports) {
             if($that.val() != "" && !!lineData.days){
                 $endTime.val(Tools.addDay($that.val(), lineData.days-1)).trigger('blur');
             }
+        });
+        //本段团款change事件
+        $partGroup.on('change', '[name="subNeedPayMoney"]', function(event){
+            $(this).data('change', "1");
         });
     	//送团表内操作
     	$tab.find('.T-send-group-list').on('click', '.T-action', function(event){
@@ -823,15 +907,33 @@ define(function(require, exports) {
         return this;
         function deleteList($tr, id) {
             if(!!id){
-                var delJson = $tr.closest('tbody').data('del-json');
-                if(typeof delJson !== "object"){
-                    delJson = JSON.parse(delJson || "[]");
-                };
-                delJson.push({
-                    id : id
-                });
-                $tr.closest('tbody').data('del-json', delJson);
-                $tr.remove();
+                var outId = 0;
+                if($tr.closest('tbody').hasClass('T-part-group-list')){
+                    outId = $tr.find('[name="hotelNeedPayMoney"]').data('out-id');
+                }
+                if(!!outId){
+                    validateDelete(outId, function(data){
+                        var delJson = $tr.closest('tbody').data('del-json');
+                        if(typeof delJson !== "object"){
+                            delJson = JSON.parse(delJson || "[]");
+                        };
+                        delJson.push({
+                            id : id
+                        });
+                        $tr.closest('tbody').data('del-json', delJson);
+                        $tr.remove();
+                    });
+                }else{
+                    var delJson = $tr.closest('tbody').data('del-json');
+                    if(typeof delJson !== "object"){
+                        delJson = JSON.parse(delJson || "[]");
+                    };
+                    delJson.push({
+                        id : id
+                    });
+                    $tr.closest('tbody').data('del-json', delJson);
+                    $tr.remove();
+                }
             }else{
                 $tr.remove();
             }
@@ -873,6 +975,64 @@ define(function(require, exports) {
                 showMessageDialog("数据已经清空！");
             }
         }
+        function validateDelete(id, fn){
+            $.ajax({
+                url : KingServices.build_url('customerOrder', 'validateDelete'),
+                data : {id :  id}
+            }).done(function(data){
+                if(showDialog(data)){
+                    if($.type(fn) === "function"){
+                        fn(data);
+                    }
+                }
+            });
+        }
+    };
+    
+    /**
+     * 叠加费用项
+     * @param  {[type]} $that [description]
+     * @param  {[type]} data  [description]
+     * @return {[type]}       [description]
+     */
+    touristGroup.overlayFee = function($that, data){
+
+        var $td = $that.closest('td'),
+            $fee = $td.find('.T-receivable');
+
+        $fee = $fee.length > 0 ? $fee : $td.find('.T-line-cope');
+
+        //获取原有的费用项数据
+        var jsonData = $fee.data('json') || {};
+        if(!!jsonData && typeof jsonData !== "object"){
+            jsonData = JSON.parse(jsonData);
+        }
+
+        //合并新旧应收&应付费用项
+        if(!!jsonData.touristGroupFeeJsonAdd){
+            $.merge(jsonData.touristGroupFeeJsonAdd, data.feeList);
+        }else if(!!jsonData.lineFee){
+            $.merge(jsonData.lineFee, data.feeList);
+        }
+
+        //重新计算应付&应收
+        var feeList = jsonData.touristGroupFeeJsonAdd || jsonData.lineFee,
+            needPayAllMoney = 0;
+        for(var i=0; i<feeList.length; i++){
+            needPayAllMoney += feeList[i].price * feeList[i].count;
+        }
+        jsonData.needPayAllMoney = needPayAllMoney;
+
+        //重新赋值查看界面显示的应付&应收金额
+        var str = Tools.thousandPoint(needPayAllMoney);
+        if(!!jsonData.isTransfer && jsonData.isTransfer == 1){
+            str = "他部　" + jsonData.dutyDepartmentName + "　" + Tools.thousandPoint(needPayAllMoney, 2);
+        }else if(!!jsonData.isTransfer && jsonData.isTransfer == 2){
+            str = "外转　" + jsonData.transferPartnerAgency + "　" + Tools.thousandPoint(needPayAllMoney, 2);
+        }
+        jsonData.currentNeedPayMoney = data.currentNeedPayMoney;
+        $fee.text(str).closest('tr').find('.currentNeedPayMoney').text(data.currentNeedPayMoney);
+        $fee.data('json', jsonData);
     };
 
     //选择客户
@@ -904,7 +1064,15 @@ define(function(require, exports) {
                         showMessageDialog('请选择一个客户！');
                         return false;
                     }
-                    $that.val($tr.find('[name="travelAgencyName"]').text()+"（"+$tr.find('[name="travelAgencyContactName"]').text()+"）").data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
+                    var travelAgencyName = $tr.data('agency-name'),
+                        travelAgencyContactName = $tr.find('[name="travelAgencyContactName"]').text(), 
+                        str = "";
+                    if(!!travelAgencyContactName){
+                        str = travelAgencyName + " （"+travelAgencyContactName+"）";
+                    }else{
+                        str = travelAgencyName;
+                    }
+                    $that.val(str).data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
                     layer.close(index);
                 });
                 //关闭
@@ -996,9 +1164,9 @@ define(function(require, exports) {
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
-                        '<td><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
-                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="min-w-200 F-float F-money hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
-                        '<td><input type="text" class="w-100 F-float F-money" name="operateCurrentNeedPayMoney" readonly></td>'+
+                        '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
+                        '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
+                        '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
     	$tab.find('.T-part-group-list').append(html);
@@ -1144,6 +1312,9 @@ define(function(require, exports) {
 
     //更新/查看 应收团款
     touristGroup.updateJionGroupMoney = function($that, type, optionType){
+        if (optionType === 2) {
+            $that = $that.prev();
+        }
         var title = "应收团款", data = {}, moneyData = $that.data('json'), html = "", groupType = $that.closest('.T-container').data('type');
         if(typeof moneyData !== "object"){
             moneyData = JSON.parse(moneyData || "{}");
@@ -1178,14 +1349,22 @@ define(function(require, exports) {
         }
         data.groupType = groupType;
         $.extend(data, moneyData);
-        if(optionType===1){
+        if(optionType===1 || optionType===2){
+            if (optionType === 2) {
+                title = '调整费用项';
+                data.isFeeAdjust = true;
+            }
+
             html = T.viewMoney(data);
             html = Tools.filterMoney(html);
             html = Tools.filterCount(html);
             html = Tools.filterUnPoint(html)[0].outerHTML;
+
+            
         }else{
             html = T.updateMoney(data);
         }
+
     	layer.open({
 			type: 1,
 		    title: title,
@@ -1209,6 +1388,35 @@ define(function(require, exports) {
                 //保存
                 $layer.find('.T-btn-save').on('click', function(){
                     if(!validate.form())return;
+
+                    if (optionType === 2) {
+                        var feeData = {}, feeList = [];
+                        $layer.find('.T-fee-list').find('select').closest('tr').each(function(index, el) {
+                            feeList.push(
+                                {
+                                    count : $layer.find('[name="count"]').val(),
+                                    price : $layer.find('[name="price"]').val(),
+                                    remark : $layer.find('[name="remark"]').val(),
+                                    type : $layer.find('[name="type"]').val()
+                                });
+                        });
+                        feeData.feeList = feeList;
+                        feeData.id = $that.closest('tr').data('id') || $that.closest('.T-container').data('id');
+                        feeData.currentNeedPayMoney = $layer.find('.currentNeedPayMoney').val() || 0;
+
+                        $.ajax({
+                            url : KingServices.build_url('customerOrder', 'reEditFee'),
+                            data : {saveJson : JSON.stringify(feeData)}
+                        }).done(function(data){
+                            if(showDialog(data)){
+                                touristGroup.overlayFee($that, feeData)
+                                layer.close(index);
+                            }
+                        });
+
+                        return this;
+                    };
+
                     var moneyData = F.assemblyMoneyData($layer);
                     if(moneyData.touristGroupFeeJsonAdd.length === 0){
                         showMessageDialog('至少填写一条费用项！');
@@ -1229,31 +1437,38 @@ define(function(require, exports) {
                             moneyData.isTransfer = 0;
                         }
                         moneyData.remark = $layer.find('[name="remark"]').val();
-                        moneyData.isCurrent = $layer.find('[name="isNowIncome"]').is(":checked") ? 1 : 0;
-                        if(moneyData.isCurrent === 1){
-                            moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
-                        }else{
-                            moneyData.currentNeedPayMoney = 0;
-                        }
+                        moneyData.currentNeedPayMoney = $layer.find('[name="preIncomeMoney"]').val();
                         
                         moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
                         moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
                         delete moneyData.touristGroupFeeJsonAdd;
                         delete moneyData.touristGroupFeeJsonDel;
-                        $that.closest('tr').find('[name="operateCurrentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
-                        var str = moneyData.needPayAllMoney;
+                        var $tr = $that.closest('tr');
+                        $tr.find('[name="currentNeedPayMoney"]').val(moneyData.currentNeedPayMoney);
+                        if($tr.find('[name="subNeedPayMoney"]').data('change') != "1"){
+                            $tr.find('[name="subNeedPayMoney"]').val(moneyData.needPayAllMoney);
+                        }
+                        var str = Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         if(moneyData.isTransfer === 1){
                             str = "他部　" + moneyData.dutyDepartmentName + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }else if(moneyData.isTransfer === 2){
                             str = "外转　" + moneyData.transferPartnerAgency + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2);
                         }
                         $that.val(str).data('json', JSON.stringify(moneyData)).trigger('blur');
-                    }else{
-                        $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
-                    }
-                    layer.close(index);
-                    if(!!type){
+                        layer.close(index);
                         F.subtotal($that.closest('tr'), 1);
+                    }else{
+                        if(parseFloat(moneyData.needPayAllMoney) < 
+                            parseFloat(moneyData.preIncomeMoney || 0) + 
+                            parseFloat(moneyData.currentNeedPayMoney || 0)){
+                            showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
+                                $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                                layer.close(index);
+                            });
+                        }else{
+                            $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                            layer.close(index);
+                        }
                     }
                 });
 		    }
@@ -1411,8 +1626,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require.requireContent;
-                        str = str.length > 10 ? str.substr(0, 10)  + "..." : str;
+                        var str = baseInfo.isTransfer === 0 ? "本部" : "他部";
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
@@ -1524,15 +1738,82 @@ define(function(require, exports) {
 		});
     };
 
+    //参团外转操作
+    touristGroup.updateOuterTurn = function(id){
+        $.ajax({
+            url: KingServices.build_url('customerOrder', 'getTransferInfo'),
+            data: {id: id},
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                layerOuterTurn(data);
+            }
+        });
+        return this;
+        function layerOuterTurn(data){
+            layer.open({
+                type: 1,
+                title: "编辑外转信息",
+                skin: 'layui-layer-rim', //加上边框
+                area: '870px', //宽高
+                zIndex:1028,
+                content: T.updateOuterTurn(data),
+                scrollbar: false,
+                success:function(obj, index){
+                    var $layer = $(obj);
+                    var validate = touristGroup.bindLayerCommonFeeEvents($layer, index);
+                    $layer.find('.T-btn-save').on('click', function(){
+                        if(!validate.form())return;
+                        saveOuterTurn($layer, index);
+                    });
+                }
+            });
+        }
+        function saveOuterTurn($layer, index) {
+            var id = $layer.find('.T-outer-turn').data('id'),
+                baseInfo = {
+                    transferPartnerAgency : $layer.find('[name="transferPartnerAgency"]').val(),
+                    transferPartnerAgencyId : $layer.find('[name="transferPartnerAgency"]').data('id'),
+                    remark : $layer.find('[name="remark"]').val(),
+                    needPayAllMoney : $layer.find('[name="needPayAllMoney"]').val(),
+                    id : id
+                },
+                moneyData = F.assemblyMoneyData($layer);
+                moneyData.lineFee = moneyData.touristGroupFeeJsonAdd;
+                moneyData.lineFeeDel = moneyData.touristGroupFeeJsonDel;
+                delete moneyData.touristGroupFeeJsonAdd;
+                delete moneyData.touristGroupFeeJsonDel;
+                $.extend(baseInfo, moneyData);
+            $.ajax({
+                url: KingServices.build_url('customerOrder', 'doTransfer'),
+                data: {lineInfo: JSON.stringify(baseInfo), id : id},
+            })
+            .done(function(data) {
+                if(showDialog(data)){
+                    showMessageDialog(data.message, function() {
+                        layer.close(index);
+                        var $listTab = $("#tab-customer_order-content");
+                        if($listTab.length > 0){
+                            $listTab.find('#customerOrderTouristsOrder').find('.T-touristGroupList-search').trigger('click');
+                        }else{
+                            touristGroup.listTouristGroup(0);
+                        }
+                    });
+                }
+            });
+            
+        }
+    };
+
     /**
      * 绑定弹层费用项公共事件
      * @param  {object} $layer layer的jQuery对象
      */
     touristGroup.bindLayerCommonFeeEvents = function($layer, layerIndex, type, groupType){
+        $layer.find('.T-btn-close').on('click', function(){
+            layer.close(layerIndex);
+        });
         if(type === 1){
-            $layer.find('.T-btn-close').on('click', function(){
-                layer.close(layerIndex);
-            });
             return false;
         }
         var validate = rule.checkNeed($layer);
@@ -1552,13 +1833,15 @@ define(function(require, exports) {
                 option = '<option value="5">餐厅费用</option>'+
                          '<option value="11">票务费用</option>'+
                          '<option value="12">其他费用</option>';
+            }else if($tbody.data('type') == "4"){
+                option = '<option value="1">大人结算价</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="8">单房差</option>'+
+                         '<option value="12">其他费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
-                         '<option value="2">小孩结算价</option>';
-                if(groupType!="group"){
-                    option += '<option value="3">中转结算价</option>';
-                }
-                option +='<option value="4">车辆费用</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="4">车辆费用</option>'+
                          '<option value="5">餐厅费用</option>'+
                          '<option value="6">保险费用</option>'+
                          '<option value="7">导服费</option>'+
@@ -2348,9 +2631,9 @@ define(function(require, exports) {
             orderNumber : $tab.find('[name="orderNumber"]').val()
         };
         if(typeof data.baseInfo.touristGroupFee.touristGroupFeeJsonDel !== "object"){
-            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || null);
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || "[]");
         }else if(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel && data.baseInfo.touristGroupFee.touristGroupFeeJsonDel.length === 0){
-            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = null;
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = [];
         }
         var receiveDateArr = [];
         if(data.baseInfo.customerType === 0){
@@ -2389,14 +2672,14 @@ define(function(require, exports) {
                         receiveTripData.receiveBus.id = $bus.data("id");
                     }
                     if(typeof receiveTripData.receiveBus.busFeeDel !== "object"){
-                        receiveTripData.receiveBus.busFeeDel = JSON.parse(receiveTripData.receiveBus.busFeeDel || null);
+                        receiveTripData.receiveBus.busFeeDel = JSON.parse(receiveTripData.receiveBus.busFeeDel || "[]");
                     }
                 }
                 if(!receiveTripData.receiveHotel || $.isEmptyObject(receiveTripData.receiveHotel)){
                     receiveTripData.receiveHotel = null;
                 }else{
                     if(typeof receiveTripData.receiveHotel.hotelFeeDel !== "object"){
-                        receiveTripData.receiveHotel.hotelFeeDel = JSON.parse(receiveTripData.receiveHotel.hotelFeeDel || null);
+                        receiveTripData.receiveHotel.hotelFeeDel = JSON.parse(receiveTripData.receiveHotel.hotelFeeDel || "[]");
                     }
                 }
                 if($.isEmptyObject(receiveTripData.receiveOther)){
@@ -2406,12 +2689,12 @@ define(function(require, exports) {
                         receiveTripData.receiveOther.id = $other.data("id");
                     }
                     if(typeof receiveTripData.receiveOther.otherFeeDel !== "object"){
-                        receiveTripData.receiveOther.otherFeeDel = JSON.parse(receiveTripData.receiveOther.otherFeeDel || null);
+                        receiveTripData.receiveOther.otherFeeDel = JSON.parse(receiveTripData.receiveOther.otherFeeDel || "[]");
                     }
                 }
-                receiveTripData.receiveBusDel = $bus.data('clear') == "1" && !!$bus.data('id') ? [{id:$bus.data('id')}] : null;
-                receiveTripData.receiveHotelDel = $hotel.data('clear') == "1" && !! $hotel.data('id') ? [{id:$hotel.data('id')}] : null;
-                receiveTripData.receiveOtherDel = $other.data('clear') == "1" && !!$other.data('id') ? [{id:$other.data('id')}] : null;
+                receiveTripData.receiveBusDel = $bus.data('clear') == "1" && !!$bus.data('id') ? [{id:$bus.data('id')}] : [];
+                receiveTripData.receiveHotelDel = $hotel.data('clear') == "1" && !! $hotel.data('id') ? [{id:$hotel.data('id')}] : [];
+                receiveTripData.receiveOtherDel = $other.data('clear') == "1" && !!$other.data('id') ? [{id:$other.data('id')}] : [];
 
                 if(!!$that.data('id')){
                     receiveTripData.id = $that.data('id');
@@ -2443,7 +2726,7 @@ define(function(require, exports) {
                 }
                 hotelNeedPayMoney.hotel = typeof hotelNeedPayMoney.hotel !== "object" ? JSON.parse(hotelNeedPayMoney.hotel || "[]") : hotelNeedPayMoney.hotel;
                 if(typeof hotelNeedPayMoney.hotelFeeDel !== "object"){
-                    hotelNeedPayMoney.hotelFeeDel = JSON.parse(hotelNeedPayMoney.hotelFeeDel || null);
+                    hotelNeedPayMoney.hotelFeeDel = JSON.parse(hotelNeedPayMoney.hotelFeeDel || "[]");
                 }
             }
             var $linePayMoeny = $that.find('[name="lineNeedPayMoney"]'),
@@ -2456,22 +2739,18 @@ define(function(require, exports) {
                 lineInfo : typeof lineInfo !== "object" ? JSON.parse(lineInfo || "{}") : lineInfo
             };
 
-            joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
-                joinTripData.currentNeedPayMoney = $that.find('[name="operateCurrentNeedPayMoney"]').val();
+            joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : [];
+            joinTripData.currentNeedPayMoney = $that.find('[name="currentNeedPayMoney"]').val();
+            
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
-                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : null;
+                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : [];
             }
             if($.isEmptyObject(joinTripData.lineInfo)){
                 joinTripData.lineInfo = null;
             }
             var status = $that.find('.T-status').data('status');
             status = status == undefined ? 1 : status;
-            /*if(!!$innerTurn.data('json') && !$.isEmptyObject($innerTurn.data('json')) && status == "1"){
-                joinTripData.innerTransferInfo = JSON.parse($innerTurn.data('json'));
-            }else if(!!$outerTurn.data('json') && !$.isEmptyObject($outerTurn.data('json')) && status == "1"){
-                joinTripData.outTransferInfo = JSON.parse($outerTurn.data('json'));
-            }*/
 
             if(!!$that.data('id')){
                 joinTripData.id = $that.data('id');
@@ -2484,11 +2763,6 @@ define(function(require, exports) {
         if(typeof data.joinTripDel === "object" && !!data.joinTripDel){
             data.joinTripDel = JSON.stringify(data.joinTripDel);
         }
-        /*if(data.joinTrip.length === 0){
-            var tripMsg = data.baseInfo.customerType === 0 ? '至少填写一条参团信息！' : '至少填写一条转团信息！';
-            showMessageDialog($("#confirm-dialog-message"), tripMsg);
-            return false;
-        }*/
 
         if(data.baseInfo.customerType === 0){
             //送团
@@ -2524,14 +2798,14 @@ define(function(require, exports) {
                         sendTripData.sendBus.id = $bus.data("id");
                     }
                     if(typeof sendTripData.sendBus.busFeeDel !== "object"){
-                        sendTripData.sendBus.busFeeDel = JSON.parse(sendTripData.sendBus.busFeeDel || null);
+                        sendTripData.sendBus.busFeeDel = JSON.parse(sendTripData.sendBus.busFeeDel || "[]");
                     }
                 }
                 if(!sendTripData.sendHotel || $.isEmptyObject(sendTripData.sendHotel)){
                     sendTripData.sendHotel = null;
                 }else{
                     if(typeof sendTripData.sendHotel.hotelFeeDel !== "object"){
-                        sendTripData.sendHotel.hotelFeeDel = JSON.parse(sendTripData.sendHotel.hotelFeeDel || null);
+                        sendTripData.sendHotel.hotelFeeDel = JSON.parse(sendTripData.sendHotel.hotelFeeDel || "[]");
                     }
                 }
                 if($.isEmptyObject(sendTripData.sendOther)){
@@ -2541,12 +2815,12 @@ define(function(require, exports) {
                         sendTripData.sendOther.id = $other.data("id");
                     }
                     if(typeof sendTripData.sendOther.otherFeeDel !== "object"){
-                        sendTripData.sendOther.otherFeeDel = JSON.parse(sendTripData.sendOther.otherFeeDel || null);
+                        sendTripData.sendOther.otherFeeDel = JSON.parse(sendTripData.sendOther.otherFeeDel || "[]");
                     }
                 }
-                sendTripData.sendBusDel = $bus.data('clear') == "1" && $bus.data('id') ? [{id:$bus.data('id')}] : null;
-                sendTripData.sendHotelDel = $hotel.data('clear') == "1" && $hotel.data('id') ? [{id:$hotel.data('id')}] : null;
-                sendTripData.sendOtherDel = $other.data('clear') == "1" && $other.data('id') ? [{id:$other.data('id')}] : null;
+                sendTripData.sendBusDel = $bus.data('clear') == "1" && $bus.data('id') ? [{id:$bus.data('id')}] : [];
+                sendTripData.sendHotelDel = $hotel.data('clear') == "1" && $hotel.data('id') ? [{id:$hotel.data('id')}] : [];
+                sendTripData.sendOtherDel = $other.data('clear') == "1" && $other.data('id') ? [{id:$other.data('id')}] : [];
                 if(!!$that.data('id')){
                     sendTripData.id = $that.data('id');
                 }
@@ -2606,9 +2880,16 @@ define(function(require, exports) {
             data.id = id;
             method = "updateCustomerOrder";
         }
-        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0 && !id){
-            var msg = data.baseInfo.customerType === 0 ? '未填写参团，请点击搜索行程选择一条行程！' : '未填写转团，请点击搜索行程选择一条行程！';
+        
+        if(data.joinTrip.length === 0 && !data.baseInfo.lineProductId && $partGroup.find('tr').length === 0){
+            var msg = data.baseInfo.customerType === 0 ? '请选择行程或添加参团信息！' : '请选择行程或添加转团信息！';
             showMessageDialog(msg);
+            return false;
+        }
+        var _type = $tab.find('.T-container').data('type') || "single";
+
+        if(_type == "single" && ($joinGroup.find('tr').length > 0 || $sendGroup.find('tr').length > 0) && $partGroup.find('tr').length === 0){
+            showMessageDialog('有接送团，请添加一条参团信息！');
             return false;
         }
 
@@ -2708,7 +2989,11 @@ define(function(require, exports) {
                 $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
             }
         },
-        //组装应收数据
+        /**
+         * 组装应收数据
+         * @param  {object}  $tab        表单容器
+         * @return {[type]}              [description]
+         */
         assemblyMoneyData : function($tab){
             var moneyData = {
                 needPayAllMoney : $tab.find('[name="needPayAllMoney"]').val(),
@@ -2720,7 +3005,7 @@ define(function(require, exports) {
             if($tab.find('[name="currentNeedPayMoney"]').length > 0){
                 moneyData.currentNeedPayMoney = $tab.find('[name="currentNeedPayMoney"]').val();
             }
-            $tab.find('.T-fee-list tr').each(function(index){
+            $tab.find('.T-fee-list').children('tr').each(function(index){
                 var $that = $(this),
                     id = $that.data('id'),
                     type = $that.find('[name="type"]').val(),

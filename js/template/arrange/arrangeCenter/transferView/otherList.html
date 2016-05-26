@@ -19,7 +19,7 @@
         <tr data-id="{{item.outRemarkId}}" data-shuttleType="{{item.shuttleType}}">
             <td class="h-touristGroupInfo" rowspan="{{item.size}}">
                 <p>中转单号：{{item.orderNumber}}</p>
-                <p><span>&lt;{{item.lineProductName}}&gt;</span></p>
+                <p><span>{{item.lineProductName}}</span></p>
                 <p><span>{{item.startTime}}</span><span>{{item.partnerAgencyName}}</span><span>外联销售：{{item.outOPUserName}}</span></p>
                 <p>收客单号：{{item.tgOrderNumber}}</p>
             </td>
@@ -28,25 +28,38 @@
                 {{else if item.shuttleType == 2}}送团{{/if}}            
             </td>
             <td  rowspan="{{item.size}}">
-                <p>{{item.contactMemberName}}</p>
                 <p>{{item.adultCount}}大{{item.childCount}}小</p>
-                <p>{{item.contactMemberPhoneNumber}}</p>
+                {{each item.contactMemberList as itmes}}
+                <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td rowspan="{{item.size}}">
                 {{item.consumeTime}}
             </td>
 
-            {{if item.arrangeItems.length > 0}}
+            
             <td>
+            {{if item.arrangeItems.length > 0}}
                 {{if item.arrangeItems[0].arrangeType == 'ticket' }} 票
                      {{else if item.arrangeItems[0].arrangeType == 'restaurant' }}餐
                      {{else if item.arrangeItems[0].arrangeType == 'other' }}它
                 {{/if}}
+            {{else}}
+            -
+            {{/if}}
             </td>
-            <td>{{item.arrangeItems[0].require}}</td>
+            <td>
+            {{if item.arrangeItems.length > 0}}
+            {{item.arrangeItems[0].require}}
+             {{else}}
+            -
+            {{/if}}
+            </td>
 
             <!-- 具体安排 -->
             <td class="h-touristGroupInfo">
+            {{if item.arrangeItems.length > 0}}
             {{if item.arrangeItems[0].arrangeResultList.length}}
                 {{each item.arrangeItems[0].arrangeResultList as list}}
                 <p class="inline-block">
@@ -57,22 +70,29 @@
                 </p>
                 {{/each}}
             {{/if}}
+             {{else}}
+            -
+            {{/if}}
             </td>
-            <td rowspan="{{item.size}}">{{item.arrangeUserName}}</td>
+            <td rowspan="{{item.size}}">
+            {{if item.arrangeItems.length > 0}}
+            {{item.arrangeUserName}}
+            {{else}}
+            -
+            {{/if}}
+            </td>
             <td>
+            {{if item.arrangeItems.length > 0}}
                 {{if item.arrangeItems[0].status == 1}}
                     <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
                 {{else if item.arrangeItems[0].status == 0}}
                     <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
                 {{/if}}
+            
             </td>
             {{else}}
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            -
             {{/if}}
-
             <td rowspan="{{item.size}}">
                 {{if item.status == 1}}
                 <a class="cursor T-arrage T-inform T-action"> 

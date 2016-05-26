@@ -12,13 +12,13 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody class="T-busArrange">
+        <tbody class="T-arrange">
             {{each outRemarkList as Busplan}}
-            <tr class="T-task-list">
+            <tr class="T-task-list" data-touristgroupId="{{Busplan.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{Busplan.id}}">
                     <p>中转单号：<span class="orderNumber">{{Busplan.orderNumber}}</span></p>
-                    <p><span><span class="lineProductName">&lt;{{Busplan.lineProductName}}&gt;</span></span>
+                    <p><span><span class="lineProductName">{{Busplan.lineProductName}}</span></span>
                     </p>
                     <p><span class="startTime">{{Busplan.startTime}}</span>
                         <span class="partnerAgencyName">{{Busplan.partnerAgencyName}}</span>外联销售：
@@ -32,12 +32,14 @@
                     <input type="hidden" name="shuttleType" value="{{if Busplan.shuttleType == 1}} 1 {{else if Busplan.shuttleType == 2}} 2{{/if}}">
                 </td>
                 <td>
-                    <p><span cals="contactMemberName">{{Busplan.contactMemberName}}</span></p>
                     <p>
                         <span class="adultCount">{{Busplan.adultCount}}</span>大
                         <span class="childCount">{{Busplan.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberPhoneNumber">{{Busplan.contactMemberPhoneNumber}}</span></p>
+                    {{each Busplan.contactMemberList as itme}}
+                    <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>{{Busplan.arriveTime}}</td>
                 <td>{{Busplan.shift}}</td>
@@ -73,6 +75,7 @@
                 <th class="th-border">优惠</th>
                 <th class="th-border">应付款</th>
                 <th class="th-border">预付款</th>
+                <th class="th-border">计划代收</th>
                 <th class="th-border">备注</th>
                 <th class="th-border">对账状态</th>
                 <th class="th-border" style="width: 50px">操作</th>
@@ -143,6 +146,10 @@
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" {{ if outBus.isConfirmAccount==1 }}disabled="disabled" {{else}} type="text" {{/if}} value="{{outBus.prePayMoney}}" />
                 </td>
                 <td>
+                    <input type="text" name="collection" class="T-collection" data-type = "bus" readonly value="{{outBus.collection}}" data-isConfirmAccount="{{outBus.isConfirmAccount}}">
+                    <input type="hidden" name="collectionList"  value="">
+                </td>
+                <td>
                     <input class="col-sm-12" name="remark" {{ if outBus.isConfirmAccount==1 }}disabled="disabled" {{else}} type="text" {{/if}} value="{{outBus.remark}}" maxlength="1000" />
                 </td>
                 <td>
@@ -162,7 +169,7 @@
         <button class="btn btn-sm btn-primary mar-r-20  T-bus-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
-                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
+                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 1}}checked{{/if}}>
                 <span class="lbl font-w">安排完成</span>
         </label>
         </span>

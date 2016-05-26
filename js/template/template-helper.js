@@ -125,7 +125,16 @@ template.helper("getFeeItemType", function(type,isTransfer) {
     res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
-template.helper("getFeeItemText", function(type) {
+template.helper("getFeeItemType2", function(type) {
+    var res = '';
+    type = type || 1;
+    res += '<option value="1" '+(type == 1?'selected':'')+'>大人结算价</option>';
+    res += '<option value="2" '+(type == 2?'selected':'')+'>小孩结算价</option>';
+    res += '<option value="8" '+(type == 8?'selected':'')+'>单房差</option>';
+    res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
+    return res;
+});
+template.helper("getFeeItemText", function(type, showType) {
     switch(type * 1){
         case 1: return "大人结算价";
         case 2: return "小孩结算价";
@@ -134,7 +143,9 @@ template.helper("getFeeItemText", function(type) {
         case 5: return "餐厅费用";
         case 6: return "保险费用";
         case 7: return "导服费";
-        case 8: return "酒店费用";
+        case 8: 
+            if(showType == 2) return "单房差";
+            else return "酒店费用";
         case 9: return "景区费用";
         case 10: return "自费费用";
         case 11: return "票务费用";
@@ -527,4 +538,21 @@ template.helper('getLogTypeText', function(type) {
             console.info('Other Type:' + 'type');
             return '其他类型';
     }
-})
+});
+
+/**
+ * 财务模块
+ */
+/**
+ * 针对美华用户，当财务审核之后，没有审核权限的用户，无法查看单团审核的数据
+ * @param  {int} status)    单团状态
+ * @return {[type]}         [description]
+ */
+template.helper('canEditCheckedFinancial', function(status) {
+    var res = true;
+    if ((status == 2 || status == 1) && !isAuth('1190003') && (IndexData.userInfo.travelAgencyId == 32)) {
+        res = false;
+    }
+
+    return res;
+});

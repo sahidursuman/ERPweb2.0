@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered table-hover T-showHighLight">
     <thead>
         <tr class="bg-blur">
-            <th>选择</th>
+            <th><label class="pos-rel"><input type="checkbox" class="ace T-chekedAll"><span class="lbl"></span> 选择</label></th>
             <th>中转信息</th>
             <th>类型</th>
             <th>客人信息</th>
@@ -16,7 +16,8 @@
     </thead>
     <tbody class="T-hotel-list">
         {{each outHotelRemarkList as hotel}}
-        <tr data-id="{{hotel.outRemarkId}}" shuttleType = "{{hotel.shuttleType}}" {{if hotel.checked}} class="success" {{/if}}>
+        <tr data-id="{{hotel.outRemarkId}}" shuttleType = "{{hotel.shuttleType}}" data-touristGroupId="{{hotel.touristGroupId}}" 
+        {{if hotel.checked}} class="success" {{/if}}>
             <td>
                 <label class="pos-rel">
                     <input type="checkbox" class="ace T-cheked" {{if hotel.checked}} checked="checked" {{/if}}> <span class="lbl"></span>
@@ -24,22 +25,24 @@
             </td>
             <td class="h-touristGroupInfo">
                 <p>中转单号：<span class="orderNumber">{{hotel.orderNumber}}</span></p>
-                <p><span class="lineProductName">&lt;{{hotel.lineProductName}}&gt;</span></p>
+                <p><span class="lineProductName">{{hotel.lineProductName}}</span></p>
                 <p><span class="startTime">{{hotel.startTime}}</span><span class="partnerAgencyName">{{hotel.partnerAgencyName}}</span><span>外联销售：<span class="outOPUserName">{{hotel.outOPUserName}}</span></span>
                 </p>
                 <p>收客单号：{{hotel.tgOrderNumber}}</p>
             </td>
             <td>
                 <span>{{if hotel.shuttleType == 1}} 接团 {{else if hotel.shuttleType == 2}} 送团{{else if hotel.shuttleType == 3}}返程住宿{{/if}}</span>
-                <input type="hidden" name="shuttleType" value="{{if hotel.shuttleType == 1}} 1 {{else if hotel.shuttleType == 2}} 2{{/if}}">
+                <input type="hidden" name="shuttleType" value="{{if hotel.shuttleType == 1}} 1 {{else if hotel.shuttleType == 2}} 2{{else if hotel.shuttleType == 3}} 3{{/if}}">
             </td>
             <td>
-                <p>{{hotel.contactMemberName}}</p>
                 <p>
                     <span class="adultCount">{{hotel.adultCount}}</span>大
                     <span class="childCount">{{hotel.childCount}}</span>小
                 </p>
-                <p><span class="contactMemberPhoneNumber">{{hotel.contactMemberPhoneNumber}}</span></p>
+                {{each hotel.contactMemberList as itme}}
+                <p><span class="contactMemberName">{{itme.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itme.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
             </td>
             <td><span class="checkInTime">{{hotel.checkInTime}}</span></td>
             <td>

@@ -64,6 +64,7 @@
                         <th class="th-border" width="90">星级</th>
                         <th class="th-border"><span class="necessary">*</span>酒店</th>
                         <th class="th-border"><span class="necessary">*</span>房型</th>
+                        <th class="th-border" width="90">天数</th>
                         <th class="th-border" width="90">单价</th>
                         <th class="th-border" width="90">数量</th>
                         <th class="th-border" width="90">优惠</th>
@@ -101,6 +102,9 @@
                             <input name="hotelRoomType" value="{{rs.hotelRoomType}}" data-id="{{rs.hotelRoomId}}" type="text" class="col-sm-12 bind-change"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
+                            <input name="days" value="{{rs.days}}" type="text" class="col-sm-12 T-action-blur" readonly />
+                        </td>
+                        <td>
                             <input name="costPrice" value="{{rs.costPrice}}" type="text" class="col-sm-12 T-action-blur F-float F-money"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
@@ -123,7 +127,7 @@
                         </td>
                     </tr>
                 {{/each}}
-                {{else}}
+                {{else if status != 1}}
                     <tr>
                         <td>
                             <input name="enterTime" type="text" class="datepicker" />
@@ -145,6 +149,9 @@
                         </td>
                         <td>
                             <input name="hotelRoomType" type="text" class="col-sm-12 bind-change" />
+                        </td>
+                        <td>
+                            <input name="days" type="text" class="col-sm-12 T-action-blur" readonly />
                         </td>
                         <td>
                             <input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" />

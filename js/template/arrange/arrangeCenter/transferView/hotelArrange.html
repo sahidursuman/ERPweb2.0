@@ -13,13 +13,13 @@
                 <th>操作</th>
             </tr>
         </thead>
-        <tbody class="T-hotelArrange">
+        <tbody class="T-hotelArrange T-arrange">
             {{each outRemarkList as item}}
-            <tr class="T-task-list">
+            <tr class="T-task-list"  data-touristgroupId="{{item.touristGroupId}}">
                 <td class="h-touristGroupInfo">
                     <input type="hidden" name="outRemarkId" value="{{item.id}}">
                     <p>中转单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
-                    <p><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></p>
+                    <p><span class="lineProductName">{{item.lineProductName}}</span></p>
                     <p><span class="startTime">{{item.startTime}}</span><span class="partnerAgencyName">{{item.partnerAgencyName}}</span><span>外联销售：<span class="outOPUserName">{{item.outOPUserName}}</span></span>
                     </p>
                     <p>收客单号：<span class="tgOrderNumber">{{item.tgOrderNumber}}</span></p>
@@ -29,12 +29,15 @@
                     <input type="hidden" name="shuttleType" value="{{if item.shuttleType == 1}} 1 {{else if item.shuttleType == 2}} 2 {{else if item.shuttleType == 3}}3{{/if}}">
                 </td>
                 <td>
-                    <p><span class="contactMemberName">{{item.contactMemberName}}</span></p>
+                    <p></p>
                     <p>
                         <span class="adultCount">{{item.adultCount}}</span>大
                         <span class="childCount">{{item.childCount}}</span>小
                     </p>
-                    <p><span class="contactMemberPhoneNumber">{{item.contactMemberPhoneNumber}}</span></p>
+                   {{each item.contactMemberList as itmes}}
+                    <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                    <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                    {{/each}}
                 </td>
                 <td>
                     <p><span class="checkInTime">{{item.checkInTime}}</span></p>
@@ -76,6 +79,7 @@
                 <th class="th-border">优惠</th>
                 <th class="th-border">应付款</th>
                 <th class="th-border">预付款</th>
+                <th class="th-border">计划代收</th>
                 <th class="th-border">备注</th>
                 <th class="th-border">对账状态</th>
                 <th class="th-border" style="width: 100px">操作</th>
@@ -94,13 +98,8 @@
                 </td>
                 <td>
                     <select class="tripPlanHotelStar" name="hotelLevel" {{ if outHotel.isConfirmAccount==1 }}disabled="disabled" {{else}} {{/if}}>
-                        <option value="1" {{if outHotel.hotelLevel==1 }}selected="selected" {{/if}}>三星以下</option>
-                        <option value="2" {{if outHotel.hotelLevel==2 }}selected="selected" {{/if}}>三星</option>
-                        <option value="3" {{if outHotel.hotelLevel==3 }}selected="selected" {{/if}}>准四星</option>
-                        <option value="4" {{if outHotel.hotelLevel==4 }}selected="selected" {{/if}}>四星</option>
-                        <option value="5" {{if outHotel.hotelLevel==5 }}selected="selected" {{/if}}>准五星</option>
-                        <option value="6" {{if outHotel.hotelLevel==6 }}selected="selected" {{/if}}>五星</option>
-                        <option value="7" {{if outHotel.hotelLevel==7 }}selected="selected" {{/if}}>五星以上</option>
+                        <option value="">--全部--</option>
+                        {{#outHotel.hotelLevel | getHotelLevelOptions}}
                     </select>
                 </td>
                 <td>
@@ -139,6 +138,10 @@
                     <input class="col-sm-12 T-number T-prePayMoney F-float F-money" name="prePayMoney" maxlength="9" value="{{outHotel.prePayMoney}}" {{ if outHotel.isConfirmAccount==1 }}disabled="disabled" {{else}}{{/if}} type="text" />
                 </td>
                 <td>
+                    <input type="text" name="collection" class="T-collection" readonly value="{{outHotel.collection}}" data-isConfirmAccount="{{outHotel.isConfirmAccount}}">
+                    <input type="hidden" name="collectionList"  value="">
+                </td>
+                <td>
                     <input class="col-sm-12" name="remark" {{ if outHotel.isConfirmAccount==1 }}disabled="disabled" {{else}}{{/if}} type="text" value="{{outHotel.remark}}" maxlength="1000" />
                 </td>
                 <td>
@@ -159,7 +162,7 @@
         <button class="btn btn-sm btn-primary mar-r-20  T-hotel-already T-hotel-save"> <i class="ace-icon fa fa-check-circle"></i> 提交信息 </button>
         <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
             <label>
-                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 3}}checked{{/if}}>
+                <input name="status" type="checkbox" class="ace T-finishedArrange" {{if status == 1}}checked{{/if}}>
                 <span class="lbl font-w"> 安排完成</span>
         </label>
         </span>

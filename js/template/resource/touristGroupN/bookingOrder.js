@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         T = {
             list : require('./view/booking/list'),//列表页
             listTable : require('./view/booking/listTable'),//列表页表格
+            listCount : require('./view/booking/listCount'),//列表页合计
             add : require('./view/booking/add'),//新增页面
             updateHotel : require('./view/booking/update/updateHotel'),//编辑酒店
             updateTicket : require('./view/booking/update/updateTicket'),//编辑票务
@@ -24,6 +25,7 @@ define(function(require, exports, module) {
             updateMoney : require('./view/booking/update/updateMoney'),//编辑应收
             updaeGuestInfo : require('./view/booking/update/updaeGuestInfo'),//编辑客人信息
             view : require('./view/booking/view/view'),//查看页面
+            viewSettlementTemplate : require("./view/booking/view/viewSettlement"),//查看结算单
             viewHotel : require('./view/booking/view/viewHotel'),//查看酒店
             viewTicketl : require('./view/booking/view/viewTicket'),//查看票务
             viewScenic : require('./view/booking/view/viewScenic'),//查看酒店
@@ -58,6 +60,25 @@ define(function(require, exports, module) {
     };
 
     /**
+     * 获取统计
+     * @param  {object} args 参数
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    bookingOrder.getTouristStatisticData = function(args, $tab){
+        $.ajax({
+            url : KingServices.build_url('bookingOrderV2','getStatistics'),
+            data : args,
+            type: "POST",
+            success: function(data) {
+                if(showDialog(data)){
+                    $tab.find('.T-countData').html(T.listCount(data));
+                }
+            }
+        });
+    };
+
+    /**
      * 获取列表数据
      * @param  {[type]} args [description]
      * @param  {[type]} $tab [description]
@@ -71,6 +92,10 @@ define(function(require, exports, module) {
         if(typeof args !== "object"){
             args = getArgs($tab.find(".T-search-area"));
         }
+
+        //获取统计 
+        bookingOrder.getTouristStatisticData(args, $tab);
+        
         $.ajax({
             url: KingServices.build_url('bookingOrderV2','getBookingOrderList'),
             data: args,
@@ -102,8 +127,7 @@ define(function(require, exports, module) {
                 pageNo : page,
                 orderNumber : $searchArea.find('[name="orderNumber"]').val(),
                 partnerAgencyName : $searchArea.find('[name="partnerAgencyName"]').val(),
-                outOPUserName : $searchArea.find('[name="outOPUserName"]').val(),
-                status : $searchArea.find('.T-select-status').val()
+                outOPUserName : $searchArea.find('[name="outOPUserName"]').val()
             };
             return args;
         }
@@ -212,7 +236,10 @@ define(function(require, exports, module) {
             data : {id : id}
         }).done(function(data){
             if(showDialog(data)){
-                var partnerAgencyName = data.bookingOrder.partnerAgencyName + "（"+ data.bookingOrder.contactRealname +"）";
+                var partnerAgencyName = data.bookingOrder.partnerAgencyName;
+                if(data.bookingOrder.contactRealname != null &&  data.bookingOrder.contactRealname != ""){
+                    partnerAgencyName = data.bookingOrder.partnerAgencyName + "（"+ data.bookingOrder.contactRealname +"）";
+                }
                 data.bookingOrder.partnerAgencyName = partnerAgencyName;
                 if(type === 1){
                     bookingOrder.operationBooking(data.bookingOrder, 1);
@@ -252,6 +279,12 @@ define(function(require, exports, module) {
      * @return {[type]}      [description]
      */
     bookingOrder.commonEvents = function($tab, type, bookingId){
+        //导出项目代订查看结算单按钮事件
+        $tab.find('.T-viewSettle').off('click').on('click',function(){
+            var pluginKey = 'plugin_print';
+                Tools.loadPluginScript(pluginKey);
+                bookingOrder.viewSettlement(bookingId);
+        });
         $tab.find('.T-booking-info').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this);
@@ -273,6 +306,7 @@ define(function(require, exports, module) {
                 clearItem($that);
             }
         });
+
         bookingOrder.getOPUserList($tab.find('.T-chooseUser'), true).trigger('click');
         $tab.on('change', '.T-container', function(event){
             if(type === 0){
@@ -337,6 +371,53 @@ define(function(require, exports, module) {
                 showMessageDialog("数据已经清空！");
             }
         }
+        
+    };
+
+    /**
+     * 代订结算单
+     * 
+     */
+    bookingOrder.viewSettlement = function(id){
+        $.ajax({
+            url : KingServices.build_url('bookingOrder','viewBookingSettlement'),
+            type:'POST',
+            data:{
+                id:id
+            },
+            success:function(data){
+                if(showDialog(data)){
+                     var num = data.operateUser.companyLogo.indexOf('null');
+                        if(num>0){
+                            data.operateUser.companyLogo =''
+                        }
+                    html = T.viewSettlementTemplate(data);
+                    var viewSettlementLayer = layer.open({
+                        type: 1,
+                        title:"代订结算单",
+                        skin: 'layui-layer-rim',
+                        area: '750px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false,
+                        success:function(){
+                            //打印结算单页面
+                            var $outAccountsTab = $("#T-viewSettlement");
+                            $outAccountsTab.off('click').on('click','.T-printBooking',function(){
+                                bookingOrder.exportsOutAccounts($outAccountsTab);
+                            });
+                        }
+                    });
+                       
+                }
+            }
+        });
+    };
+    //打印页面
+    bookingOrder.exportsOutAccounts = function($obj){
+        $obj.print({
+            globalStyles:true
+        });
     };
 
     /**
@@ -346,11 +427,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateHotel = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewHotel(data);
             html = Tools.filterMoney(html);
@@ -409,11 +496,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateTicket = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewTicketl(data);
             html = Tools.filterMoney(html);
@@ -464,11 +557,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateScenic = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewScenic(data);
             html = Tools.filterMoney(html);
@@ -521,11 +620,17 @@ define(function(require, exports, module) {
      * @return {[type]}            [description]
      */
     bookingOrder.updateBus = function($that, optionType){
-        var data = $that.data('json'), html = "";
+        var data = $that.data('json') || {}, 
+            html = "";
+
         if(typeof data !== "object"){
-            data = JSON.parse(data || "{}");
+            data = JSON.parse(data);
         }
-        data.feeDel = JSON.stringify(data.feeDel || null);
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
         if(optionType === 2){
             html = T.viewBus(data);
             html = Tools.filterMoney(html);

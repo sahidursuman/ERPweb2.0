@@ -384,6 +384,8 @@ define(function(require, exports) {
                 Client.viewReceive(id);
             }else if($that.hasClass('T-view')){
                 Client.viewDetails(id);
+            }else if($that.hasClass('T-open-tourist')){
+                KingServices.viewTouristGroup($that.closest('tr').data('gid'));
             }
         })
         .on('change', 'input', function(event) {
@@ -654,6 +656,8 @@ define(function(require, exports) {
                 Client.viewReceive(id)
             }else if($that.hasClass('T-view')){
                 Client.viewDetails(id)
+            }else if($that.hasClass('T-open-tourist')){
+                KingServices.viewTouristGroup($that.closest('tr').data('gid'));
             }
         })
         .on('change', 'input', function(event) {
@@ -1135,6 +1139,8 @@ define(function(require, exports) {
                 } else {
                     Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));
                 }
+
+                Client.getCheckSumData(args, $tab);
             }
         }).on("click",function(){
             $obj.autocomplete('search','');

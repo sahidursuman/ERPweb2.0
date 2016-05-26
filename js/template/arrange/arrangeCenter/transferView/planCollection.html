@@ -1,0 +1,42 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+    <div >提示：代收团款计入客户账务，代收增项不计入客户账务。</div>
+    <table class="table table-striped table-bordered table-hover mar-t-10">
+        <thead>
+            <tr>
+                <th>收客信息</th>
+                <th>游客信息</th>
+                <th>客户</th>
+                <th>外联销售</th>
+                <th>代收团款</th>
+                <th>代收增项</th>
+            </tr>
+        </thead>
+        <tbody id="T-transfer-bus">
+        {{each collectionList as item index}}
+            <tr  id="{{item.id}}" touristGroupId="{{item.touristGroupId}}" >
+                <td>
+                    <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
+                    <p><span class="lineProductName">{{item.lineProductName}}</span></p>
+                    <p><span name="startTime">{{item.startTime | dateFormat: 'yyyy-MM-dd'}}</span>
+                </td>
+                <td>
+                    <p><span name="tgMemberName">{{item.tgMemberName}}</span></p>
+                <p>
+                    <span name="adultCount">{{item.adultCount}}</span>大
+                    <span name="childCount">{{item.childCount}}</span>小
+                </p>
+                <p><span name="tgMemberMobileNumber ">{{item.tgMemberMobileNumber}}</span></p>
+                </td>
+                <td>{{item.partnerAgencyName}}</td>
+                <td>{{item.outOPUser}}</td>
+                <td><input type="text" class="F-float F-money" name="collectionGroup" value="{{item.collectionGroup}}" maxlength="11" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
+                <td><input type="text" class="F-float F-money" name="collectionItem" value="{{item.collectionItem}}" maxlength="11" {{if isConfirmAccount=="1" || isView}}disabled{{/if}}></td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="col-xs-12 mar-t-20 mar-b-10 text-center">
+        <button class="btn btn-sm btn-default otherButton T-btn-close" style="height: auto;"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+        <button class="btn btn-sm btn-primary otherButton T-btn-save mar-l-15 {{if isConfirmAccount=="1" || isView}}hidden{{/if}}" style="height: auto;" > <i class="ace-icon fa fa-check"></i> 保存 </button>
+    </div>
+</div>

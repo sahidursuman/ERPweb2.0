@@ -2,29 +2,23 @@
     <div class="T-search-area">
         <div class="form-horizontal form-group ">
             <label>收客单号 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="收客单号/代订单号" name="orderNumber" value="" />
             <label>客户 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="客户" name="partnerAgencyName" value="{{searchParam.partnerAgencyName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="客户" name="partnerAgencyName" value="" />
             <input type="hidden" name="partnerAgencyId" value="" />
             <label>团散标识 </label>
             <select name="customerType" class="mar-r-10 w100">
-                <option {{if !searchParam.customerType}}selected{{/if}}  value="">全部</option>
-                <option {{if searchParam.customerType=="0"}}selected{{/if}} value="0">散客</option>
-                <option {{if searchParam.customerType=="1"}}selected{{/if}} value="1">团队</option>
+                <option value="">全部</option>
+                <option value="0">散客</option>
+                <option value="1">团队</option>
             </select>
             <label>外联销售 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="{{searchParam.outOPUserName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="外联销售" name="outOPUserName" value="" />
             <label>部门 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="{{searchParam.businessName}}" />
+            <input class="mar-r-10 w100" type="text" placeholder="部门" name="businessName" value="" />
             <input type="hidden" name="businessNameId" value="" />
             <label>子部门 </label>
-            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="{{searchParam.groupName}}" />
-            <label>类别 </label>
-            <select name="type" class="mar-r-10">
-                <option {{if !searchParam.type}}selected{{/if}} value="">全部</option>
-                <option {{if searchParam.type == 'tourist'}}selected{{/if}} value="tourist">收客利润</option>
-                <option {{if searchParam.type == 'booking'}}selected{{/if}} value="booking">代订利润</option>
-            </select>
+            <input class="mar-r-10 w100" type="text" placeholder="子部门" name="groupName" value="" />
         </div>
         <div class="form-group">
             <label>开始日期 </label>
@@ -39,13 +33,14 @@
             <label class="mar-r-20">收入合计：<span class="F-float F-money T-totalNeed"></span></label>
             <label class="mar-r-20">支出合计：<span class="F-float F-money T-totalCost"></span></label>
             <label class="mar-r-20 T-turn">毛利合计：<span class="F-float F-money T-totalProfit"></span></label>
+            <label class="mar-r-20">人均毛利：<span class="F-float F-money T-avgProfit"></span></label>
         </div>
     </div>
     <table class="table-bordered table  table-striped table-hover overflow-table T-showHighLight">
         <thead>
             <tr class="bg-blur T-tr-fixed">
                 <th>收客单号/代订单号</th>
-                <th>线路产品</th>
+                <th>行程</th>
                 <th>出游日期/代订日期</th>
                 <th>游客</th>
                 <th>人数</th>
@@ -54,11 +49,11 @@
                 <th>部门</th>
                 <th>团款收入</th>
                 <th>代订收入</th>
-                <th>中转成本</th>
-                <th>发团成本</th>
-                <th>外转成本</th>
-                <th>内转成本</th>
-                <th>代订成本</th>
+                <th>中转支出</th>
+                <th>参团本部支出</th>
+                <th>外转支出</th>
+                <th>内转支出</th>
+                <th>代订支出</th>
                 <th>收入小计</th>
                 <th>支出小计</th>
                 <th>毛利</th>

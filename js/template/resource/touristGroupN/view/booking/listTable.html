@@ -8,17 +8,16 @@
     <td><i class="ace-icon fa{{if rs.busCompanyOrderStatus == 1}} fa-check green bigger-130{{else}} fa-times red bigger-125{{/if}}"></i></td>
     <td><span class="F-float">{{rs.sumNeedGetMoney}}</span></td>
     <td>{{rs.outOPUserName}}</td>
-    <td>{{rs.status == "1" ? "已完成" : "未完成"}} </td>
     <td>
         <div class="btn-group" style="width:120px;">
             <a class="T-action T-view cursor">
                 查看
             </a>
-            <a class="T-action T-update cursor R-right" data-right="1470006">
+            <a class="{{if rs.isConfirmAccount != 1}}T-action T-update cursor{{else}}hct-color-BBB{{/if}} R-right" data-right="1470006" {{if rs.isConfirmAccount == 1}}title="该代订订单已对账，不能编辑"{{/if}}>
                 <label class="padding-right20">|</label>
                 <span>编辑</span>
             </a>
-            <a class="T-action T-delete cursor R-right" data-right="1470005">
+            <a class="{{if rs.isConfirmAccount != 1 && rs.isArrange != 1}}T-action T-delete cursor{{else}}hct-color-BBB{{/if}} R-right" data-right="1470005" {{if rs.isConfirmAccount == 1}}title="该代订订单已对账，不能删除"{{else if rs.isArrange ==1}}title="该代订订单已有安排，不能删除"{{/if}}>
                 <label class="padding-right20">|</label>
                 删除
             </a>

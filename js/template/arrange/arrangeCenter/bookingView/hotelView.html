@@ -1,6 +1,48 @@
 <div class="base-info" data-id="{{bookingOrder.id}}">
-    代订单号：<span class="mar-r-20">{{bookingOrder.orderNumber}}</span> 客人信息：
-    <span class="mar-r-20">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</span> 外联销售：{{bookingOrder.outOPUserName}}
+    <div class="hct-view-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">代订单号</div>
+                        <div class="hct-view-content">{{bookingOrder.orderNumber}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">客人信息</div>
+                        <div class="hct-view-content">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</div>
+                    </td>
+                    <td colspan="2" class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">外联销售</div>
+                        <div class="hct-view-content">{{bookingOrder.outOPUserName}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">入住日期</div>
+                        <div class="hct-view-content">{{bookingOrder.checkInTime}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">离店日期</div>
+                        <div class="hct-view-content">{{bookingOrder.checkOutTime}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">星级</div>
+                        <div class="hct-view-content">{{bookingOrder.hotelLevel | getHotelLevelDesc}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-3">
+                        <div class="hct-view-title">间数</div>
+                        <div class="hct-view-content">{{bookingOrder.roomCount}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="hct-view-group col-xs-12">
+                        <div class="hct-view-title">指定酒店</div>
+                        <div class="hct-view-content">{{bookingOrder.arrangeHotel}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <div class=" ui-sortable-handle">
     <h5 class="">

@@ -234,7 +234,11 @@
 			});
 			
 			$("input[name=password]").keyup(function(e){
-				if(e.which == 13 && !window.forbiddenError){
+				var agent = navigator.userAgent.toLowerCase();
+				var regStr_ie = /msie [\d.]/gi;
+				if(agent.indexOf("msie") > 0 && (agent.match(regStr_ie)+"").replace("msie ","") < 9) { //!$.support.opacity
+					browserUpdate();
+				} else if(e.which == 13 && !window.forbiddenError){
 					login();
 				}
 			});

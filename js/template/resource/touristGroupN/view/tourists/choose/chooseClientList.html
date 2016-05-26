@@ -1,13 +1,36 @@
 {{each travelAgencyList as rs}}
-<tr class="cursor" data-id="{{rs.travelAgencyId}}" data-contact-id="{{rs.fromPartnerAgencyContactId}}">
-	<td name="travelAgencyName">{{rs.travelAgencyName}}</td>
-	<td>{{rs.type | getTravelAgencyType}}</td>
-	<td>{{rs.level | getTravelAgencyLevel}}</td>
-	<td name="travelAgencyContactName">{{rs.contactRealname}}</td>
-	<td>{{rs.contactMobileNumber}}</td>
+<tr class="cursor" data-id="{{rs.travelAgencyId}}" data-contact-id="{{if rs.contactList.length > 0}}{{rs.contactList[0].fromPartnerAgencyContactId}}{{/if}}" data-agency-name="{{rs.travelAgencyName}}">
+	<td name="travelAgencyName" rowspan="{{rs.contactList.length}}">{{rs.travelAgencyName}}</td>
+	<td rowspan="{{rs.contactList.length}}">{{rs.type | getTravelAgencyType}}</td>
+	<td rowspan="{{rs.contactList.length}}">{{rs.level | getTravelAgencyLevel}}</td>
+    {{if rs.contactList.length > 0}}
+	<td name="travelAgencyContactName">{{rs.contactList[0].contactRealname}}</td>
+	<td>{{rs.contactList[0].contactMobileNumber}}</td>
 	<td>
 		<input type="radio" name="chooseClient" class="ace">
 		<label class="lbl"></label>
 	</td>
+    {{else}}
+    <td name="travelAgencyContactName"></td>
+    <td></td>
+    <td>
+        <input type="radio" name="chooseClient" class="ace">
+        <label class="lbl"></label>
+    </td>
+    {{/if}}
 </tr>
+    {{if rs.contactList.length > 0}}
+        {{each rs.contactList as cl index}}
+        {{if index > 0}}
+        <tr class="cursor" data-id="{{rs.travelAgencyId}}" data-contact-id="{{cl.fromPartnerAgencyContactId}}" data-agency-name="{{rs.travelAgencyName}}">
+            <td name="travelAgencyContactName">{{cl.contactRealname}}</td>
+            <td>{{cl.contactMobileNumber}}</td>
+            <td>
+                <input type="radio" name="chooseClient" class="ace">
+                <label class="lbl"></label>
+            </td>
+        </tr>
+        {{/if}}
+        {{/each}}
+    {{/if}}
 {{/each}}

@@ -34,15 +34,12 @@
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">应付：</div>
 			<div class="col-xs-3 control-label F-float F-money">{{needPayAllMoney}}</div>
-			<div class="col-xs-1 text-right no-padding-right no-padding-left control-label">计划现收：</div>
+			<div class="col-xs-1 text-right no-padding-right no-padding-left control-label">现收团款：</div>
 			<div class="col-xs-2 control-label F-float F-money">{{needPayMoney}}</div>
-			<div class="col-xs-1 text-right no-padding-right no-padding-left control-label">对方现收：</div>
-			<div class="col-xs-1">
-				<input type="checkbox" disabled class="ace"{{if isCurrent == 1}} checked{{/if}}>
-				<label class="lbl"></label>
-			</div>
-			{{if isCurrent == 1}}
-			<div class="col-xs-1 text-right no-padding-right no-padding-left control-label">现收金额：</div>
+			<div class="col-xs-2 text-right no-padding-right no-padding-left control-label">对方现收金额：</div>
+			{{if isFeeAdjust}}
+			<input type="text" class="currentNeedPayMoney" value="{{currentNeedPayMoney}}">
+			{{else}}
 			<div class="col-xs-2 control-label F-float F-money">{{currentNeedPayMoney}}</div>
 			{{/if}}
 		</div>
@@ -52,8 +49,18 @@
 			<span class="control-label pull-left F-float F-money">{{needPayAllMoney}}</span>
 			<label class="control-label pull-left" style="width: 75px; padding-left: 24px;">预收款：</label>
 			<span class="control-label pull-left F-float F-money">{{preIncomeMoney}}</span>
-			<label class="control-label pull-left" style="width: 75px; padding-left: 12px;">计划现收：</label>
+			<label class="control-label pull-left" style="width: 75px; padding-left: 12px;">现收团款：</label>
+			{{if isFeeAdjust}}
+			<input type="text" class="currentNeedPayMoney" value="{{currentNeedPayMoney}}">
+			{{else}}
 			<span class="control-label pull-left F-float F-money">{{currentNeedPayMoney}}</span>
+			{{/if}}
+		</div>
+		{{/if}}
+
+		{{if isFeeAdjust}}
+		<div class="col-xs-12 mar-t-20">
+			<button class="btn btn-sm btn-success T-add-fee"> <i class="ace-icon fa fa-plus"></i> 新增费用项 </button>
 		</div>
 		{{/if}}
 		<div class="col-xs-12 mar-t-20">
@@ -65,27 +72,38 @@
 						<th>单价</th>
 						<th>金额</th>
 						<th>说明</th>
+						{{if isFeeAdjust}}
+						<th>操作</th>
+						{{/if}}
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}">
+				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type}}data-type="4"{{/if}}>
 				{{if touristGroupFeeJsonAdd && touristGroupFeeJsonAdd.length > 0}}
 					{{each touristGroupFeeJsonAdd as rs}}
 					<tr data-id="{{rs.id}}">
-						<td>{{rs.type | getFeeItemText}}</td>
+						<td>
+							{{rs.type | getFeeItemText}}
+						</td>
 						<td class="F-float F-count">{{rs.count}}</td>
 						<td class="F-float F-money">{{rs.price}}</td>
 						<td class="F-float F-money">{{rs.price*rs.count}}</td>
 						<td>{{rs.remark}}</td>
+						{{if isFeeAdjust}}
+						<td></td>
+						{{/if}}
 					</tr>
 					{{/each}}
 				{{else if lineFee && lineFee.length > 0}}
 					{{each lineFee as rs}}
 					<tr>
-						<td>{{rs.type | getFeeItemText}}</td>
+						<td>{{rs.type | getFeeItemText:2}}</td>
 						<td class="F-float F-count">{{rs.count}}</td>
 						<td class="F-float F-money">{{rs.price}}</td>
 						<td class="F-float F-money">{{rs.price*rs.count}}</td>
 						<td>{{rs.remark}}</td>
+						{{if isFeeAdjust}}
+						<td></td>
+						{{/if}}
 					</tr>
 					{{/each}}
 				{{/if}}
@@ -94,6 +112,9 @@
 		</div>
 		<div class="col-xs-12 mar-t-20 mar-b-10 text-center">
 			<button class="btn btn-xs btn-default T-btn-close btn-primary w100"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+			{{if isFeeAdjust}}
+			<button class="btn btn-xs btn-primary T-btn-save w100" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
+			{{/if}}
 		</div>
 	</div>
 </div>

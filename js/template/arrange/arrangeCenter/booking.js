@@ -50,6 +50,7 @@ define(function(require, exports) {
         var args = $form.serializeJson();
         args.item = $form.parent().data('target');
         args.pageNo = page || 0;
+        args.assign = $form.find('.T-assign-check').is(":checked") ? 1 : 0;
         var temp = args.item + "List";
         if(!!item && args.item != item){
             $form = $("#booking-"+item+"-arrange").find('.T-search-area');
@@ -118,8 +119,23 @@ define(function(require, exports) {
             type: 'post',
         }).done(function(data){
             if (showDialog(data)) {
-                var tab_key = tabKey + '_' + target + '_edit';
 
+                var $tr = $arrange.closest('tr');
+                if(target === "ticket"){
+                    data.startTime     =   $tr.data('start-time');
+                    data.startingCity  =   $tr.data('starting-city');
+                    data.arriveCity    =   $tr.data('arrive-city');
+                    data.seatLevel     =   $tr.data('seat-level');
+                    data.memberCount   =   $tr.data('member-count');
+
+                }
+
+                if(target === "bus"){
+                    data.startUseTime  =   $tr.data('start-use-time');
+                    data.endUseTime    =   $tr.data('end-use-time');
+                }
+
+                var tab_key = tabKey + '_' + target + '_edit';
                 if (Tools.addTab(tab_key, "代订" + title + '安排', html(data))) {
                     BookingArrange.init_arrange_event($('#tab-' + tab_key + '-content'), target);
                 }
@@ -226,7 +242,8 @@ define(function(require, exports) {
             event.preventDefault();
             var $that = $(this), 
                 $tr = $that.closest('tr'),
-                sumCostMoney = ($tr.find('[name="costPrice"]').val() || 0) * 
+                sumCostMoney = ($tr.find('[name="days"]').val() || 0) *
+                                ($tr.find('[name="costPrice"]').val() || 0) * 
                                 ($tr.find('[name="roomCount"]').val() || 0) - 
                                 ($tr.find('[name="reduceMoney"]').val() || 0);
             $tr.find('[name="sumCostMoney"]').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
@@ -244,6 +261,16 @@ define(function(require, exports) {
                 });
             }
         });
+        $tab.find('.T-hotelList').on("changeDate", '.datepicker', function(){
+            var $that = $(this),
+                $tr = $that.closest('tr'),
+                $days = $tr.find('[name="days"]'),
+                enterTime = $tr.find('[name="enterTime"]').val(),
+                leaveTime = $tr.find('[name="leaveTime"]').val();
+
+            $days.val(Tools.getDateDiff(enterTime, leaveTime));
+        });
+
         $tab.find('.T-hotel-add').on('click', function(){
             addHotel();
         });
@@ -267,6 +294,7 @@ define(function(require, exports) {
                         '    </select></td>'+
                         '<td><div class="col-sm-12"><input name="hotelName" type="text" class="col-sm-12 bind-change" /><span class="addResourceBtn T-action T-add-hotelName" title="添加酒店"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span></div></td>'+
                         '<td><input name="hotelRoomType" type="text" class="col-sm-12 bind-change" /></td>'+
+                        '<td><input name="days" type="text" class="col-sm-12 T-action-blur" readonly /></td>'+
                         '<td><input name="costPrice" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
                         '<td><input name="roomCount" type="text" class="col-sm-12 T-action-blur F-float F-count" /></td>'+
                         '<td><input name="reduceMoney" type="text" class="col-sm-12 T-action-blur F-float F-money" /></td>'+
@@ -482,6 +510,7 @@ define(function(require, exports) {
                     hotelLevel : $that.find('[name="hotelLevel"]').val(),
                     hotelId : $that.find('[name="hotelName"]').data('id'),
                     hotelRoomId : $that.find('[name="hotelRoomType"]').data('id'),
+                    days : $that.find('[name="days"]').val(),
                     costPrice : $that.find('[name="costPrice"]').val(),
                     roomCount : $that.find('[name="roomCount"]').val(),
                     reduceMoney : $that.find('[name="reduceMoney"]').val(),

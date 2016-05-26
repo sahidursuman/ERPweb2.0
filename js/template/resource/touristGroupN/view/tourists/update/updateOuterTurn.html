@@ -1,36 +1,35 @@
 <div class="container-fluid mar-t-20">
-	<div class="row T-outer-turn">
+	<div class="row T-outer-turn" data-id="{{id}}">
 		<div class="col-xs-12">
 			<div class="col-xs-1 text-right no-padding-right control-label">线路名称</div>
-			<div class="col-xs-3 control-label">{{if !!lineData}}{{lineData.lineProductName}}{{/if}}</div>
+			<div class="col-xs-3 control-label">{{receiveInfo.lineProductName}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label">天数</div>
-			<div class="col-xs-1 control-label">{{if !!lineData}}{{lineData.days}}{{/if}}</div>
+			<div class="col-xs-1 control-label">{{receiveInfo.days}}</div>
 			<div class="col-xs-1 text-right no-padding-right control-label">出团日期</div>
-			<div class="col-xs-3 control-label">{{if !!lineData}}{{lineData.startTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</div>
+			<div class="col-xs-3 control-label">{{receiveInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</div>
+		</div>
+		<div class="col-xs-12 mar-t-20">
+			<div class="col-xs-1 text-right no-padding-right control-label">现收团款</div>
+			<div class="col-xs-1 control-label F-float">{{receiveInfo.currentNeedPayMoney || 0}}</div>
+			<div class="col-xs-1 text-right no-padding-right control-label">收客金额</div>
+			<div class="col-xs-1 control-label F-float">{{receiveInfo.needPayAllMoney || 0}}</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
 			<div class="col-xs-1 text-right no-padding-right control-label">同行</div>
 			<div class="col-xs-3">
-				<input type="text" class="col-xs-12" name="transferPartnerAgency" value="{{transferPartnerAgency}}" data-id="{{transferPartnerAgencyId}}">
+				<input type="text" class="col-xs-12" name="transferPartnerAgency" value="{{lineInfo.transferPartnerAgency}}" data-id="{{lineInfo.transferPartnerAgencyId}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-20">
 			<div class="col-xs-1 text-right no-padding-right control-label">备注</div>
 			<div class="col-xs-10">
-				<input type="text" class="col-xs-12" name="remark" value="{{remark}}">
+				<input type="text" class="col-xs-12" name="remark" value="{{lineInfo.remark}}">
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">应付</div>
 			<div class="col-xs-3">
-				<input type="text" readonly class="pull-left" name="needPayAllMoney" value="{{needPayAllMoney}}">
-			</div>
-			<div class="col-xs-1 text-right no-padding-right control-label">计划现收</div>
-			<div class="col-xs-2 control-label">{{currentNeedPayMoney}}</div>
-			<div class="col-xs-1 text-right no-padding-right control-label">对方现收</div>
-			<div class="col-xs-1">
-				<input type="checkbox" name="isNowIncome" class="ace"{{if isCurrent == 1}} checked{{/if}}>
-				<label class="lbl"></label>
+				<input type="text" readonly class="pull-left" name="needPayAllMoney" value="{{lineInfo.needPayAllMoney}}" readonly>
 			</div>
 		</div>
 		<div class="col-xs-12 mar-t-10">
@@ -53,18 +52,18 @@
 					</tr>
 				</thead>
 				<tbody class="T-fee-list" data-del-json="{{outTransferFeeDel}}">
-				{{if outTransferFee && outTransferFee.length > 0}}
-					{{each outTransferFee as rs}}
+				{{if lineInfo.lineFee && lineInfo.lineFee.length > 0}}
+					{{each lineInfo.lineFee as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select class="col-xs-12" name="type">
-								{{#rs.type | getFeeItemType:true}}
+								{{#rs.type | getFeeItemType}}
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 					{{/each}}
