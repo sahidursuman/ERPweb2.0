@@ -77,17 +77,13 @@
 						<th width="50">操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}">
+				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type}}data-type="4"{{/if}}>
 				{{if touristGroupFeeJsonAdd && touristGroupFeeJsonAdd.length > 0}}
 					{{each touristGroupFeeJsonAdd as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
 							<select name="type" class="col-xs-12">
-							{{if groupType == "group"}}
-								{{#rs.type | getFeeItemType}}
-							{{else}}
-								{{#rs.type | getFeeItemType:true}}
-							{{/if}}
+							{{#rs.type | getFeeItemType}}
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
@@ -101,18 +97,19 @@
 					{{each lineFee as rs}}
 					<tr data-id="{{rs.id}}">
 						<td>
-							<select name="type" class="col-xs-12">
-							{{if groupType == "group"}}
-								{{#rs.type | getFeeItemType}}
+							<select name="type" class="col-xs-12" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}>
+
+							{{if rs.type == 1 || rs.type == 2 || rs.type == 8 || rs.type == 12}}
+							{{#rs.type | getFeeItemType2}}
 							{{else}}
-								{{#rs.type | getFeeItemType:true}}
+							{{#rs.type | getFeeItemType:true}}
 							{{/if}}
 							</select>
 						</td>
-						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
-						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
-						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
+						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
 					</tr>
 					{{/each}}
@@ -120,10 +117,10 @@
 					<tr>
 						<td>
 							<select name="type" class="col-xs-12">
-							{{if groupType == "group"}}
-								{{#0 | getFeeItemType}}
+							{{if !!type}}
+								{{#0 | getFeeItemType2}}
 							{{else}}
-								{{#0 | getFeeItemType:true}}
+								{{#0 | getFeeItemType}}
 							{{/if}}
 							</select>
 						</td>

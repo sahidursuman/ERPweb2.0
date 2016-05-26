@@ -152,7 +152,12 @@
         res += '<option value="10" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
         res += '<option value="11" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
         res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
-    }), template.helper("getFeeItemText", function(type) {
+    }), template.helper("getFeeItemType2", function(type) {
+        var res = "";
+        return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
+        res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
+        res += '<option value="8" ' + (8 == type ? "selected" : "") + ">单房差</option>", res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
+    }), template.helper("getFeeItemText", function(type, showType) {
         switch (1 * type) {
           case 1:
             return "大人结算价";
@@ -176,7 +181,7 @@
             return "导服费";
 
           case 8:
-            return "酒店费用";
+            return 2 == showType ? "单房差" : "酒店费用";
 
           case 9:
             return "景区费用";
@@ -519,5 +524,7 @@
         var res = !0;
         return 2 != status && 1 != status || isAuth("1190003") || 32 != IndexData.userInfo.travelAgencyId || (res = !1), 
         res;
+    }), template.helper("isNeedShowDetail", function() {
+        return 32 == IndexData.userInfo.travelAgencyId && 4 == IndexData.userInfo.financialCountAuth;
     });
 }();

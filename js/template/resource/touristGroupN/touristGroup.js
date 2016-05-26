@@ -489,9 +489,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
-                            str = str && str +" ";
-                            str = str && str.length > 6 ? str.substr(0, 6)  + "..." : (str||"");
+                            var str = joinTrip[i].hotelInfo.isTransfer === 0 ? "本部" : "他部";
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -620,9 +618,7 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var str = joinTrip[i].hotelInfo.hotelName || joinTrip[i].hotelInfo.require;
-                            str = str && str +" ";
-                            str = str && str.length > 10 ? str.substr(0, 10)  + "..." : (str||"");
+                            var str = joinTrip[i].hotelInfo.isTransfer === 0 ? "本部" : "他部";
                             joinTrip[i].hotelInputValue = str + "　" + Tools.thousandPoint(joinTrip[i].hotelNeedPayAllMoney, 2);
                             joinTrip[i].hotelInfo = JSON.stringify(joinTrip[i].hotelInfo || {});
                         }
@@ -1630,9 +1626,7 @@ define(function(require, exports) {
                     delete moneyData.touristGroupFeeJsonDel;
                     $.extend(baseInfo, moneyData);
                     if(type === 1){
-                        var str = baseInfo.hotelName || baseInfo.require;
-                        str = str.length > 6 ? str.substr(0, 6)  + "..." : str;
-
+                        var str = baseInfo.isTransfer === 0 ? "本部" : "他部";
                         $that.val(str + "　" + Tools.thousandPoint(moneyData.needPayAllMoney, 2)).data('json', JSON.stringify(baseInfo)).data('clear', '0');
                     }else{
                         $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
@@ -1839,13 +1833,15 @@ define(function(require, exports) {
                 option = '<option value="5">餐厅费用</option>'+
                          '<option value="11">票务费用</option>'+
                          '<option value="12">其他费用</option>';
+            }else if($tbody.data('type') == "4"){
+                option = '<option value="1">大人结算价</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="8">单房差</option>'+
+                         '<option value="12">其他费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
-                         '<option value="2">小孩结算价</option>';
-                if(groupType!="group"){
-                    option += '<option value="3">中转结算价</option>';
-                }
-                option +='<option value="4">车辆费用</option>'+
+                         '<option value="2">小孩结算价</option>'+
+                         '<option value="4">车辆费用</option>'+
                          '<option value="5">餐厅费用</option>'+
                          '<option value="6">保险费用</option>'+
                          '<option value="7">导服费</option>'+
@@ -2635,9 +2631,9 @@ define(function(require, exports) {
             orderNumber : $tab.find('[name="orderNumber"]').val()
         };
         if(typeof data.baseInfo.touristGroupFee.touristGroupFeeJsonDel !== "object"){
-            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || null);
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = JSON.parse(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel || "[]");
         }else if(data.baseInfo.touristGroupFee.touristGroupFeeJsonDel && data.baseInfo.touristGroupFee.touristGroupFeeJsonDel.length === 0){
-            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = null;
+            data.baseInfo.touristGroupFee.touristGroupFeeJsonDel = [];
         }
         var receiveDateArr = [];
         if(data.baseInfo.customerType === 0){
@@ -2676,14 +2672,14 @@ define(function(require, exports) {
                         receiveTripData.receiveBus.id = $bus.data("id");
                     }
                     if(typeof receiveTripData.receiveBus.busFeeDel !== "object"){
-                        receiveTripData.receiveBus.busFeeDel = JSON.parse(receiveTripData.receiveBus.busFeeDel || null);
+                        receiveTripData.receiveBus.busFeeDel = JSON.parse(receiveTripData.receiveBus.busFeeDel || "[]");
                     }
                 }
                 if(!receiveTripData.receiveHotel || $.isEmptyObject(receiveTripData.receiveHotel)){
                     receiveTripData.receiveHotel = null;
                 }else{
                     if(typeof receiveTripData.receiveHotel.hotelFeeDel !== "object"){
-                        receiveTripData.receiveHotel.hotelFeeDel = JSON.parse(receiveTripData.receiveHotel.hotelFeeDel || null);
+                        receiveTripData.receiveHotel.hotelFeeDel = JSON.parse(receiveTripData.receiveHotel.hotelFeeDel || "[]");
                     }
                 }
                 if($.isEmptyObject(receiveTripData.receiveOther)){
@@ -2693,12 +2689,12 @@ define(function(require, exports) {
                         receiveTripData.receiveOther.id = $other.data("id");
                     }
                     if(typeof receiveTripData.receiveOther.otherFeeDel !== "object"){
-                        receiveTripData.receiveOther.otherFeeDel = JSON.parse(receiveTripData.receiveOther.otherFeeDel || null);
+                        receiveTripData.receiveOther.otherFeeDel = JSON.parse(receiveTripData.receiveOther.otherFeeDel || "[]");
                     }
                 }
-                receiveTripData.receiveBusDel = $bus.data('clear') == "1" && !!$bus.data('id') ? [{id:$bus.data('id')}] : null;
-                receiveTripData.receiveHotelDel = $hotel.data('clear') == "1" && !! $hotel.data('id') ? [{id:$hotel.data('id')}] : null;
-                receiveTripData.receiveOtherDel = $other.data('clear') == "1" && !!$other.data('id') ? [{id:$other.data('id')}] : null;
+                receiveTripData.receiveBusDel = $bus.data('clear') == "1" && !!$bus.data('id') ? [{id:$bus.data('id')}] : [];
+                receiveTripData.receiveHotelDel = $hotel.data('clear') == "1" && !! $hotel.data('id') ? [{id:$hotel.data('id')}] : [];
+                receiveTripData.receiveOtherDel = $other.data('clear') == "1" && !!$other.data('id') ? [{id:$other.data('id')}] : [];
 
                 if(!!$that.data('id')){
                     receiveTripData.id = $that.data('id');
@@ -2730,7 +2726,7 @@ define(function(require, exports) {
                 }
                 hotelNeedPayMoney.hotel = typeof hotelNeedPayMoney.hotel !== "object" ? JSON.parse(hotelNeedPayMoney.hotel || "[]") : hotelNeedPayMoney.hotel;
                 if(typeof hotelNeedPayMoney.hotelFeeDel !== "object"){
-                    hotelNeedPayMoney.hotelFeeDel = JSON.parse(hotelNeedPayMoney.hotelFeeDel || null);
+                    hotelNeedPayMoney.hotelFeeDel = JSON.parse(hotelNeedPayMoney.hotelFeeDel || "[]");
                 }
             }
             var $linePayMoeny = $that.find('[name="lineNeedPayMoney"]'),
@@ -2743,12 +2739,12 @@ define(function(require, exports) {
                 lineInfo : typeof lineInfo !== "object" ? JSON.parse(lineInfo || "{}") : lineInfo
             };
 
-            joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : null;
+            joinTripData.lineInfoDel = $linePayMoeny.data('clear') == "1" && !!$linePayMoeny.data('id') ? [{id:$linePayMoeny.data('id')}] : [];
             joinTripData.currentNeedPayMoney = $that.find('[name="currentNeedPayMoney"]').val();
             
             if(data.baseInfo.customerType === 0){
                 joinTripData.hotelInfo = hotelNeedPayMoney;
-                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : null;
+                joinTripData.hotelInfoDel = $hotelPayMoney.data('clear') == "1" && $hotelPayMoney.data('id') ? [{id:$hotelPayMoney.data('id'), outRemarkId: $hotelPayMoney.data("out-id")}] : [];
             }
             if($.isEmptyObject(joinTripData.lineInfo)){
                 joinTripData.lineInfo = null;
@@ -2802,14 +2798,14 @@ define(function(require, exports) {
                         sendTripData.sendBus.id = $bus.data("id");
                     }
                     if(typeof sendTripData.sendBus.busFeeDel !== "object"){
-                        sendTripData.sendBus.busFeeDel = JSON.parse(sendTripData.sendBus.busFeeDel || null);
+                        sendTripData.sendBus.busFeeDel = JSON.parse(sendTripData.sendBus.busFeeDel || "[]");
                     }
                 }
                 if(!sendTripData.sendHotel || $.isEmptyObject(sendTripData.sendHotel)){
                     sendTripData.sendHotel = null;
                 }else{
                     if(typeof sendTripData.sendHotel.hotelFeeDel !== "object"){
-                        sendTripData.sendHotel.hotelFeeDel = JSON.parse(sendTripData.sendHotel.hotelFeeDel || null);
+                        sendTripData.sendHotel.hotelFeeDel = JSON.parse(sendTripData.sendHotel.hotelFeeDel || "[]");
                     }
                 }
                 if($.isEmptyObject(sendTripData.sendOther)){
@@ -2819,12 +2815,12 @@ define(function(require, exports) {
                         sendTripData.sendOther.id = $other.data("id");
                     }
                     if(typeof sendTripData.sendOther.otherFeeDel !== "object"){
-                        sendTripData.sendOther.otherFeeDel = JSON.parse(sendTripData.sendOther.otherFeeDel || null);
+                        sendTripData.sendOther.otherFeeDel = JSON.parse(sendTripData.sendOther.otherFeeDel || "[]");
                     }
                 }
-                sendTripData.sendBusDel = $bus.data('clear') == "1" && $bus.data('id') ? [{id:$bus.data('id')}] : null;
-                sendTripData.sendHotelDel = $hotel.data('clear') == "1" && $hotel.data('id') ? [{id:$hotel.data('id')}] : null;
-                sendTripData.sendOtherDel = $other.data('clear') == "1" && $other.data('id') ? [{id:$other.data('id')}] : null;
+                sendTripData.sendBusDel = $bus.data('clear') == "1" && $bus.data('id') ? [{id:$bus.data('id')}] : [];
+                sendTripData.sendHotelDel = $hotel.data('clear') == "1" && $hotel.data('id') ? [{id:$hotel.data('id')}] : [];
+                sendTripData.sendOtherDel = $other.data('clear') == "1" && $other.data('id') ? [{id:$other.data('id')}] : [];
                 if(!!$that.data('id')){
                     sendTripData.id = $that.data('id');
                 }
