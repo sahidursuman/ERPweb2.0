@@ -11,7 +11,7 @@
 				<input type="checkbox" class="ace pull-left" disabled {{if !!baseInfo.buyInsurance}}checked{{/if}}>
 				<span class="lbl"></span>
 			</div>
-			{{if type != "inner"}}
+			{{if type != "inner" && baseInfo.hideSettlement == 0}}
 			<div class="pull-right mar-r-15 mar-t-F6">
 				<button class="btn btn-sm btn-success export-Btn T-statementsBtn" style="height: 20px;line-height: 1px;">结算单</button>
 			</div>
