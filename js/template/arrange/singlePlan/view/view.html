@@ -664,10 +664,8 @@
 					<tr>
 						<th class="th-border">收客单号</th>
 						<th class="th-border">外联销售</th>
+						<th class="th-border">团款</th>
 						<th class="th-border">现收团款</th>
-						<th class="th-border">全陪</th>
-						<th class="th-border">全陪电话</th>
-						<th class="th-border">接站牌/送客地点</th>
 						
 						<th class="th-border">姓名</th>
 						<th class="th-border">手机号码</th>
@@ -677,22 +675,24 @@
 						<th class="th-border">年龄</th>
 						<th class="th-border">客源地</th>
 						<th class="th-border">是否联系人</th>
+						<th class="th-border">全陪</th>
+						<th class="th-border">全陪电话</th>
+						<th class="th-border">接站牌/送客地点</th>
 						<th class="th-border">备注</th>
 					</tr>
 				</thead>
 				<tbody>
 				{{each touristGroupList as group}}
 					<tr>
-						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.orderNumber}}<br />
+						<td rowspan="{{group.touristGroupMemberList.length}}">
+							<a class="T-orderNumber" data-id="{{group.id}}" data-dept="{{group.dept}}">{{group.orderNumber}}</a><br />
 							{{group.lineProduct.name}}<br />
 							{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}<br />
 							{{group.adultCount}}大{{group.childCount}}小
 						</td>
-						<td rowspan="{{group.touristGroupMemberList.length}}">{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{if group.dept}}{{group.dept}}<br />{{/if}}{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.needPayAllMoney}}</td>
 						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.currentNeedPayMoney}}</td>
-						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.accompanyGuideName}}</td>
-						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.accompanyGuideMobile}}</td>
-						<td rowspan="{{group.touristGroupMemberList.length}}">{{if !!group.welcomeBoard}}(接){{group.welcomeBoard}}{{/if}}
 						{{if !!group.sendPosition && !!group.welcomeBoard}}<br />{{/if}}{{if !!group.sendPosition}}(送){{group.sendPosition}}{{/if}}
 						</td>
 						{{if group.touristGroupMemberList.length > 0}}
@@ -706,6 +706,9 @@
 						<td>{{tourist.age}}</td>
 						<td>{{tourist.area}}</td>
 						<td>{{if tourist.isContactUser == 1}}是{{else}}-{{/if}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.accompanyGuideName}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.accompanyGuideMobile}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{if !!group.welcomeBoard}}(接){{group.welcomeBoard}}{{/if}}
 						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.remark}}</td>
 						{{/if}}
 						{{/each}}

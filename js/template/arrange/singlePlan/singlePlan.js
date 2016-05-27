@@ -864,6 +864,15 @@ define(function(require, exports) {
                 }
                 data.tripPlan = JSON.parse(data.tripPlan);
                 if(Tools.addTab(viewMenuKey, "查看散客计划", html(data))){
+                    $("#tab-"+viewMenuKey+"-content").find('.T-orderNumber').on('click', function() {
+                        var $this = $(this),
+                            dept = $this.data('dept'),
+                            id = $this.data('id');
+                        if (!!dept) {
+                            dept = 'inner';
+                        }
+                        KingServices.viewTouristGroup(id, dept);
+                    })
                     $("#tab-"+viewMenuKey+"-content").find('.T-btn-close').on('click', function(event){
                         event.preventDefault();
                         Tools.closeTab(viewMenuKey);
