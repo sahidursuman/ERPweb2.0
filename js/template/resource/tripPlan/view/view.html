@@ -121,7 +121,6 @@
                     <td>{{item.touristGroupMemberList[0].age}}</td>
                     <td>{{item.touristGroupMemberList[0].area}}</td>
                     <td>{{if item.touristGroupMemberList[0].isContactUser == 1}}是{{else}}{{/if}}</td>
-                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.remark}}</td>
                     {{else}}
                     <td></td>
                     <td></td>
@@ -130,7 +129,9 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     {{/if}}
+                    <td rowspan="{{item.touristGroupMemberList.length}}">{{item.remark}}</td>
                 </tr>
                 {{each item.touristGroupMemberList as member index}}
                 {{if index > 0}}
