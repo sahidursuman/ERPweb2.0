@@ -316,6 +316,16 @@ define(function(require, exports) {
 							$this.text('[展开]');
 						}
 					});
+
+					$tab.find('.T-orderNumber').on('click', function() {
+						var $this = $(this),
+							dept = $this.data('dept'),
+							id = $this.data('id');
+						if (!!dept) {
+							dept = 'inner';
+						}
+						KingServices.viewTouristGroup(id, dept);
+					})
 				}
 			}
 		});
