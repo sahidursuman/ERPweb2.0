@@ -1640,6 +1640,12 @@ define(function(require, exports) {
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindBusCompanyChoose($tr);
 		tripPlan.changePayType($tab);
+		
+		var $trs = $tbody.find('tr'), startTime = $tab.find('.T-startTime').text(), endTime = $tab.find('.T-endTime').text();
+		if ($trs.length == 1) {
+			$trs.eq(0).find('input[name=startTime]').val(startTime);
+			$trs.eq(0).find('input[name=endTime]').val(endTime);
+		}
 	}
 
 	//添加餐饮安排
