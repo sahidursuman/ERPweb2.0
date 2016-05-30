@@ -768,14 +768,10 @@ define(function(require, exports) {
             }
         });
         $tab.find('.T-team-info').on('change', '[name="lineProductName"]', function(){
-            $(this).data('id', '');
+            $(this).data('id', '').data('json', '');
         });
         $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
-            var $that = $(this),
-                $endTime = $tab.find('.T-team-info').find('[name="endTime"]');
-            if($endTime.val() != "" && $that.val() > $endTime.val()){
-                $endTime.val('');
-            }
+            F.autoCalcDate($(this));
         });
 
         if(!type){
@@ -863,15 +859,7 @@ define(function(require, exports) {
             }
     	});
         $partGroup.on('changeDate', '[name="tripStartTime"]', function(){
-            var $that = $(this), $tr = $that.closest('tr'),
-                $endTime = $tr.find('[name="tripEndTime"]'),
-                lineData = $tr.find('[name="lineProductName"]').data('json');
-            if(typeof lineData !== "object"){
-                lineData = JSON.parse(lineData || "{}");
-            }
-            if($that.val() != "" && !!lineData.days){
-                $endTime.val(Tools.addDay($that.val(), lineData.days-1)).trigger('blur');
-            }
+            F.autoCalcDate($(this));
         });
         //本段团款change事件
         $partGroup.on('change', '[name="subNeedPayMoney"]', function(event){
@@ -2123,6 +2111,7 @@ define(function(require, exports) {
                     }
                     $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');;
                     layer.close(index);
+                    F.autoCalcDate($that);
                 });
                 //关闭
                 $layer.find('.T-btn-close').on('click', function(){
@@ -3088,6 +3077,27 @@ define(function(require, exports) {
                 sumNum = receiveBus * 1 + receiveHotel * 1 + receiveOther * 1;
             }
             $tr.find('[name="totalMoney"]').val(sumNum);
+        },
+        /**
+         * 自动计算日期
+         * @param  {object} $that $(this)
+         */
+        autoCalcDate : function ($that) {
+            var $tr = $that.closest('tr'),
+                $startDate = $tr.find('[name="tripStartTime"]'),
+                $endData = $tr.find('[name="tripEndTime"]'),
+                lineData = $tr.find('[name="lineProductName"]').data('json');
+
+            $startDate =  $startDate.length > 0 ? $startDate : $tr.find('[name="startTime"]');
+            $endData   =  $endData.length   > 0 ? $endData   : $tr.find('[name="endTime"]');
+
+            if(typeof lineData !== "object"){
+                lineData = JSON.parse(lineData || "{}");
+            }
+
+            if($startDate.val() != "" && !!lineData.days){
+                $endData.val(Tools.addDay($startDate.val(), lineData.days-1)).trigger('blur');
+            }
         }
     };
     exports.init = touristGroup.initModule;
