@@ -69,6 +69,31 @@
 <h5 class="base-title">游客名单 <a role="button" href="#arrange-view-touristgroup-list" aria-expanded="false" aria-controls="arrange-view-touristgroup-list" class="pull-right T-collapse" data-toggle="collapse" style="padding-right: 15px;">[收起]</a></h5>
 <div id="arrange-view-touristgroup-list" class="collapse in">
     <table class="table table-bordered" >
+        <colgroup>
+            {{if basicInfo.tripPlanType == 1}}
+            <col />
+            <col />
+            {{else}}
+            <col />
+            <col />
+            <col />
+            <col />
+            {{/if}}
+            <col style="width: 55px;" />
+            <col />
+            <col />
+            <col style="width: 55px;" />
+            <col />
+            <col />
+            <col />
+            <col />
+            {{if basicInfo.tripPlanType == 0}}
+            <col />
+            <col />
+            <col />
+            {{/if}}
+            <col style="width: 15%;" />
+        </colgroup>
         <thead>
             <tr>{{if basicInfo.tripPlanType == 1}}
                 <th class="th-border">收客单号</th>
