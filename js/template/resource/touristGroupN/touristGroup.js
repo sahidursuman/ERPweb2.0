@@ -1220,7 +1220,7 @@ define(function(require, exports) {
             type: 1,
             title: "调整本段团款",
             skin: 'layui-layer-rim', //加上边框
-            area: '500px', //宽高
+            area: '300px', //宽高
             zIndex: 1028,
             content: T.moneyAdjust(data),
             scrollbar: false,
@@ -1238,7 +1238,7 @@ define(function(require, exports) {
                     })
                     .done(function(data) {
                         if(showDialog(data)){
-                            $payMoney.text(subNeedPayMoney);
+                            $payMoney.text(subNeedPayMoney || 0);
                             layer.close(index);
                         }
                     });
@@ -2932,19 +2932,20 @@ define(function(require, exports) {
             return false;
         }
 
-        //$partGroup.find('tr')
         var _teamNeedPayMoney = data.baseInfo.touristGroupFee.currentNeedPayMoney,
             _partNeedPayMoney = 0;
+        if($partGroup.find('tr').length > 0){
+            for(var i = 0; i < $partGroup.find('tr').length; i++){
+                _partNeedPayMoney += parseFloat($partGroup.find('tr').eq(i).find('[name="currentNeedPayMoney"]').val());
+            }
 
-        for(var i = 0; i < $partGroup.find('tr').length; i++){
-            _partNeedPayMoney += parseInt($partGroup.find('tr').eq(i).find('[name="currentNeedPayMoney"]').val());
-        }
-        if(_teamNeedPayMoney != _partNeedPayMoney){
-            var msg = '现收团款（'+ Tools.thousandPoint(_teamNeedPayMoney, 2) +'）不等于参团代收团款之和（' + Tools.thousandPoint(_partNeedPayMoney, 2) + '），是否继续？';
-            showConfirmMsg(msg, function(){
-                saveTouristData(data);
-            });
-            return false;
+            if(_teamNeedPayMoney != _partNeedPayMoney){
+                var msg = '现收团款（'+ Tools.thousandPoint(_teamNeedPayMoney, 2) +'）不等于参团代收团款之和（' + Tools.thousandPoint(_partNeedPayMoney, 2) + '），是否继续？';
+                showConfirmMsg(msg, function(){
+                    saveTouristData(data);
+                });
+                return false;
+            }
         }
         saveTouristData(data);
         return this;
