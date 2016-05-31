@@ -43,7 +43,7 @@
 						<td>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
 						{{if type != "inner"}}
 						<td><a class="hct-cursor T-action T-receivable F-float F-money" data-json="{{baseInfo.touristGroupFee}}">{{baseInfo.needPayAllMoney}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="hct-cursor T-action T-fee-adjust R-right" data-right="1470007">[费用调整]</a></td>
-						<td class="F-float F-money">{{baseInfo.currentNeedPayMoney}}</td>
+						<td><span class="F-float F-money currentNeedPayMoney">{{baseInfo.currentNeedPayMoney}}</span></td>
 						{{/if}}
 						<td><a class="hct-cursor T-action T-guest-info" data-json="{{baseInfo.touristGroupMemberInfo}}">{{baseInfo.name}}</a></td>
 						<td>{{baseInfo.mobileNumber}}</td>
@@ -103,8 +103,8 @@
 						<th>线路应付</th>
 						{{if baseInfo.customerType == 0}}
 						<th class="T-is-hidden">返程住宿</th>
-						<th class="T-is-hidden" width="95">本段代收团款</th>
 						{{/if}}
+						<th class="T-is-hidden" width="95">本段代收团款</th>
 						<th>状态</th>
 					</tr>
 				</thead>
