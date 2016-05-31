@@ -92,9 +92,9 @@ define(function(require, exports) {
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
 		       		//翻页不请求合计数据
 		       		if(searchData.pageNo > 0){
-		       			shopStat.loadSumHtml();
+		       			shopStat.loadSumHtml(shopStat.$tab);
 		       		} else{
-		       			shopStat.getSumData(searchData);
+		       			shopStat.getSumData(shopStat.$tab,searchData);
 		       		}
 		       		
 		       		//绑定页面事件
@@ -121,7 +121,7 @@ define(function(require, exports) {
 	/**
 	 * 获取合计数据
 	 */
-	shopStat.getSumData = function(args){
+	shopStat.getSumData = function($tab,args){
 		$.ajax({
 			url: KingServices.build_url("financial/shopAccount","shopStatisticsTotal"),
 			type: 'POST',
@@ -130,20 +130,23 @@ define(function(require, exports) {
 		.done(function(data) {
 			if(showDialog(data)){
 				shopStat.totalData = data.totalShop[0];
-				shopStat.loadSumHtml();
+				shopStat.loadSumHtml($tab);
 			}
 		});
 	};
 
-	shopStat.loadSumHtml = function(){
-		if(shopStat.totalData){
-			var total = shopStat.totalData;
-			var sumHtml = '<tr style="background: #e0effd;"><td colspan="2" class="T-fontSize" style="text-align:right">合计</td>' +
-				'<td class="P-tdFontSize" >' + total.touristAdultCount + '大' + total.touristChildCount + '小</td><td class="P-tdFontSize" >-</td><td class="P-tdFontSize" >-</td>' +
-	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.consumeMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.avgConsumeMoney + '</span></td>' +
-	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.guideRebateMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.travelAgencyRebateMoney + '</span></td>' +
-	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.sumRebateMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.avgRebateMoney + '</span></td></tr>';
-	    	shopStat.$tab.find('.T-tourguidPer-list').append(sumHtml);
+	shopStat.loadSumHtml = function($tab){
+		if(!!shopStat.totalData){
+			var total = shopStat.totalData,
+				$totalTab = $tab.find('.T-totalAccount');
+			$totalTab.find('.T-person').text(total.touristAdultCount+'大'+total.touristChildCount+'小');
+			$totalTab.find('.T-consumeMoney').text(total.consumeMoney);
+			$totalTab.find('.T-avgConsumeMoney').text(total.avgConsumeMoney);
+			$totalTab.find('.T-guideRebateMoney').text(total.guideRebateMoney);
+			$totalTab.find('.T-travelAgencyRebateMoney').text(total.travelAgencyRebateMoney);
+			$totalTab.find('.T-sumRebateMoney').text(total.sumRebateMoney);
+			$totalTab.find('.T-avgRebateMoney').text(total.avgRebateMoney);
+			$totalTab.find('.T-tripCount').text(shopStat.$tab.find('.recordSize').text().substring(2,5));
 		}
 		
 	};
