@@ -2936,11 +2936,11 @@ define(function(require, exports) {
             _partNeedPayMoney = 0;
         if($partGroup.find('tr').length > 0){
             for(var i = 0; i < $partGroup.find('tr').length; i++){
-                _partNeedPayMoney += parseFloat($partGroup.find('tr').eq(i).find('[name="currentNeedPayMoney"]').val());
+                _partNeedPayMoney += parseFloat($partGroup.find('tr').eq(i).find('[name="currentNeedPayMoney"]').val() || 0);
             }
 
             if(_teamNeedPayMoney != _partNeedPayMoney){
-                var msg = '现收团款（'+ Tools.thousandPoint(_teamNeedPayMoney, 2) +'）不等于参团代收团款之和（' + Tools.thousandPoint(_partNeedPayMoney, 2) + '），是否继续？';
+                var msg = '现收团款（'+ Tools.thousandPoint(_teamNeedPayMoney || 0, 2) +'）不等于参团代收团款之和（' + Tools.thousandPoint(_partNeedPayMoney || 0, 2) + '），是否继续？';
                 showConfirmMsg(msg, function(){
                     saveTouristData(data);
                 });

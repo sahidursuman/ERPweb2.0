@@ -146,7 +146,7 @@ define(function(require, exports) {
 			$totalTab.find('.T-travelAgencyRebateMoney').text(total.travelAgencyRebateMoney);
 			$totalTab.find('.T-sumRebateMoney').text(total.sumRebateMoney);
 			$totalTab.find('.T-avgRebateMoney').text(total.avgRebateMoney);
-			$totalTab.find('.T-tripCount').text(parseInt(shopStat.$tab.find('.recordSize').text().replace(/[^0-9]/ig,"") || 0));
+			//$totalTab.find('.T-tripCount').text(parseInt(shopStat.$tab.find('.recordSize').text().replace(/[^0-9]/ig,"") || 0));
 		}
 		
 	};
