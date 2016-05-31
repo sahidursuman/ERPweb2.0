@@ -509,6 +509,20 @@ define(function(require, exports) {
         bookingCheck : function($container){
             this.$bookingCheckContainer = $container;
             return $container.formValidate(this.bookingEditor($container));
+        },
+        payMoneyEditor : function ($obj) {
+            return [{
+                //本段团款
+                $ele: $obj.find('[name="subNeedPayMoney"]'),
+                rules : [
+                {
+                    type: 'float',
+                    errMsg: '本段团款必须为数字'
+                }]
+            }]
+        },
+        checkPayMoney : function ($container) {
+            return $container.formValidate(this.payMoneyEditor($container));
         }
 	};
 	return rule;
