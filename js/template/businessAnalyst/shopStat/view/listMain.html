@@ -1,74 +1,81 @@
 <div class="T-search-shopStatArea col-xs-12">
-    <div class="form-group clearfix T-search-area mar-b-10 T-noprint">
+    <div class="form-inline clearfix T-search-area T-noprint">
+            <div class="form-group mar-r-10">
+                <label>客户 </label>
+                <input type="text" name="fromPartnerAgency" class="form-control T-Choose-partnerAgency" placeholder="客户" value="" />
+                <input type="hidden" name="fromPartnerAgencyId" value="" />
+            </div>
+            <div class="form-group mar-r-10">
+                <label>团号 </label>
+                <input type="text" name="tripNumber" class="form-control T-Choose-tripNumber" placeholder="团号" value="" />
+            </div>
+            <div class="form-group mar-r-10">
+                <label>购物店 </label>
+                <input type="text" name="shop" class="form-control T-Choose-shop" placeholder="购物店" value="" />
+                <input type="hidden" name="shopId" value="" />
+            </div>
+            <div class="form-group mar-r-10">
+                <label>商品 </label>
+                <input type="text" name="shopItem" class="form-control T-Choose-goods" placeholder="商品搜索" value="" />
+            </div>
+            <div class="form-group mar-r-10">
+                <label>线路产品</label>
+                <input type="text" name="lineProduct" class="hct-cursor T-Choose-product" placeholder="线路产品" value="" readonly />
+                <i class="ace-icon fa fa-times hct-cursor T-clear-line" style="margin-left: -17px;color:#f00;"></i>
+                <input type="hidden" name="lineProductId"/>
+                
+            </div>
+            <div class="form-group mar-r-10">
+                
+                <button class=" btn-sm  T-shopStat-search search-btn">
+                    <i class="ace-icon fa fa-search"></i> 搜索
+                </button>
+               <!--  <button class=" btn-sm  T-shopStat-export search-btn">
+                   打印
+               </button>
+               <button class=" btn-sm  T-shopStat-outToexcel search-btn">
+                   导出
+               </button> -->
+            </div>
         <form class="form-inline" role="form" onsubmit="return false">
-        <div class="form-group mar-r-10">
-            <label>客户 </label>
-            <input type="text" name="fromPartnerAgency" class="form-control T-Choose-partnerAgency" placeholder="客户" value="" />
-            <input type="hidden" name="fromPartnerAgencyId" value="" />
-        </div>
-        <div class="form-group mar-r-10">
-            <label>团号 </label>
-            <input type="text" name="tripNumber" class="form-control T-Choose-tripNumber" placeholder="团号" value="" />
-        </div>
-        <div class="form-group mar-r-10">
-            <label>购物店 </label>
-            <input type="text" name="shop" class="form-control T-Choose-shop" placeholder="购物店" value="" />
-            <input type="hidden" name="shopId" value="" />
-        </div>
-        <div class="form-group mar-r-10">
-            <label>商品 </label>
-            <input type="text" name="shopItem" class="form-control T-Choose-goods" placeholder="商品搜索" value="" />
-        </div>
-        <div class="form-group mar-r-10">
-            <label>线路产品</label>
-            <input type="text" name="lineProduct" class="hct-cursor T-Choose-product" placeholder="线路产品" value="" readonly />
-            <i class="ace-icon fa fa-times hct-cursor T-clear-line" style="margin-left: -17px;color:#f00;"></i>
-            <input type="hidden" name="lineProductId"/>
-            
-        </div>
-        <div class="form-group mar-r-10">
-            
-            <button class=" btn-sm  T-shopStat-search search-btn">
-                <i class="ace-icon fa fa-search"></i> 搜索
-            </button>
-           <!--  <button class=" btn-sm  T-shopStat-export search-btn">
-               打印
-           </button>
-           <button class=" btn-sm  T-shopStat-outToexcel search-btn">
-               导出
-           </button> -->
-        </div>
-        </form>
-        <form class="form-inline" role="form" onsubmit="return false">
-        <div class="form-group mar-r-15 T-tripTime">
-            <label>出团日期 </label>
-            <input type="text" name="startTime" class="form-control datepicker" placeholder="开始日期" value="{{startDate}}" />
-            <input type="text" name="endTime" class="form-control datepicker" placeholder="结束日期" value="{{endDate}}" />
-        </div>
-        <div class="form-group mar-r-15 T-shopTime">
-            <label>进店日期 </label>
-            <input type="text" name="startShopTime" class="form-control datepicker" placeholder="开始日期" value="" />
-            <input type="text" name="endShopTime" class="form-control datepicker" placeholder="结束日期" value="" />
-        </div>
-        <div class="form-group mar-l-23">
-            <label>是否进店 </label>
-            <select name="isShopping">
-                <option value="">全部</option>
-                <option value="1">已进店</option>
-                <option value="0">未进店</option>
-            </select>
-        </div>
+            <div class="form-group mar-r-15 T-tripTime">
+                <label>出团日期 </label>
+                <input type="text" name="startTime" class="form-control datepicker" placeholder="开始日期" value="{{startDate}}" />
+                <input type="text" name="endTime" class="form-control datepicker" placeholder="结束日期" value="{{endDate}}" />
+            </div>
+            <div class="form-group mar-r-15 T-shopTime">
+                <label>进店日期 </label>
+                <input type="text" name="startShopTime" class="form-control datepicker" placeholder="开始日期" value="" />
+                <input type="text" name="endShopTime" class="form-control datepicker" placeholder="结束日期" value="" />
+            </div>
+            <div class="form-group mar-l-23">
+                <label>是否进店 </label>
+                <select name="isShopping">
+                    <option value="">全部</option>
+                    <option value="1">已进店</option>
+                    <option value="0">未进店</option>
+                </select>
+            </div>
 
-        <div class="form-group mar-l-20">
-            <label>针对客源 </label>
-            <select name="customerType">
-                <option value="">全部</option>
-                <option value="0">散客</option>
-                <option value="1">团体</option>
-            </select>
-        </div>
-        
+            <div class="form-group mar-l-20">
+                <label>针对客源 </label>
+                <select name="customerType">
+                    <option value="">全部</option>
+                    <option value="0">散客</option>
+                    <option value="1">团体</option>
+                </select>
+            </div>
         </form>
+    </div>
+    <div class="form-group T-totalAccount">
+        <label class="control-label mar-r-20">总人数：<span class="F-float F-money T-person">0</span></label>
+        <label class="control-label mar-r-20">总打单：<span class="F-float F-money T-consumeMoney">0</span></label>
+        <label class="control-label mar-r-20">人均打单：<span class="F-float F-money T-avgConsumeMoney">0</span></label>
+        <label class="control-label mar-r-20">导佣：<span class="F-float F-money T-guideRebateMoney">0</span></label>
+        <label class="control-label mar-r-20">社佣：<span class="F-float F-count T-travelAgencyRebateMoney">0</span></label>
+        <label class="control-label mar-r-20">总佣金：<span class="F-float F-count T-sumRebateMoney">0</span></label>
+        <label class="control-label mar-r-20">人均返佣：<span class="F-float F-count T-avgRebateMoney">0</span></label>
+        <label class="control-label">团数：<span class="F-float F-count T-tripCount">0</span></label>
     </div>
     <div class="T-shopStatPager-list T-print">
     </div>

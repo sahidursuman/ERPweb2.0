@@ -1,0 +1,22 @@
+<div class="row" style="margin: 0; padding: 10px 10px 0;">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>商品</th>
+                <th>打单金额</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{{if sumPlayList.length > 0}}
+        		{{each sumPlayList as rs}}
+        			<tr>
+                        <td>{{rs.name}}</td>
+		                <td><span class="F-float F-money">{{rs.consumeMoney}}</span></td>
+		            </tr>
+        		{{/each}}
+        	{{else}}
+        		<tr><td colspan="5">暂无记录！</td></tr>
+        	{{/if}}
+       	</tbody>
+    </table>
+</div>
