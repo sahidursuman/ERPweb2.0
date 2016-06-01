@@ -91,6 +91,7 @@ define(function(require, exports) {
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
 		       		//翻页不请求合计数据
+		       		shopStat.totalRecordSize = data.searchParam.totalCount;
 		       		if(searchData.pageNo > 0){
 		       			shopStat.loadSumHtml(shopStat.$tab);
 		       		} else{
@@ -102,6 +103,7 @@ define(function(require, exports) {
 		       		//设置记录条数
 					var recordSize = Tools.getRecordSizeDesc(data.searchParam.totalCount);
 					shopStat.$tab.find('.recordSize').text(recordSize);
+
 			       	// 绑定翻页组件
 					laypage({
 					    cont: shopStat.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -139,6 +141,7 @@ define(function(require, exports) {
 		if(!!shopStat.totalData){
 			var total = shopStat.totalData,
 				$totalTab = $tab.find('.T-totalAccount');
+			console.log(total);
 			$totalTab.find('.T-person').text(total.touristAdultCount+'大'+total.touristChildCount+'小');
 			$totalTab.find('.T-consumeMoney').text(total.consumeMoney);
 			$totalTab.find('.T-avgConsumeMoney').text(total.avgConsumeMoney);
@@ -146,7 +149,7 @@ define(function(require, exports) {
 			$totalTab.find('.T-travelAgencyRebateMoney').text(total.travelAgencyRebateMoney);
 			$totalTab.find('.T-sumRebateMoney').text(total.sumRebateMoney);
 			$totalTab.find('.T-avgRebateMoney').text(total.avgRebateMoney);
-			//$totalTab.find('.T-tripCount').text(parseInt(shopStat.$tab.find('.recordSize').text().replace(/[^0-9]/ig,"") || 0));
+			$totalTab.find('.T-tripCount').text(shopStat.totalRecordSize);
 		}
 		
 	};
