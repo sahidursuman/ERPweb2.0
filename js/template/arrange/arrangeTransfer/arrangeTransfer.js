@@ -32,7 +32,7 @@ define(function(require, exports) {
 				orderNumber : "",				
 				partnerAgencyId	: "",	//地接社	
 				partnerAgencyName :"",					
-				status	: "",		
+				status	: 3,		
 				type : "",	
 				userName : "",
 				pageNo : ""
@@ -40,7 +40,9 @@ define(function(require, exports) {
 	    	$tab:"",
 	    	$divIdOutObj:"",
 	    	$divIdInObj:"",
-	    	allData : {}
+	    	allData : {},
+	    	isFirst : true
+
 	    };
 		var getFeeItemPayTypeOptions =  {
 	         payType : 1
@@ -298,6 +300,11 @@ define(function(require, exports) {
 				createEndTime :  getValue("createEndTime"),
 				status : $("#"+divId).find(".btn-status button").attr('data-value')
 			}
+
+			if (!!divId && divId==='Transfer-Out' && transfer.isFirst==true) {
+				transfer.$searchParam.status = 3;
+				 transfer.isFirst=false;
+			}
 	    };
 	
       	/**
@@ -307,7 +314,8 @@ define(function(require, exports) {
       	 */
 	    transfer.getListPage=function(event){
 	    	var divId=event.data.divId,
-	    	    type=event.data.type;
+	    	    type=event.data.type,
+	    	    initStatus = event.data.type;
 	    	transfer.getSearchParam(divId,type);
 	    	transfer.findPager(divId,type,0);
 	    	transfer.findTotal(divId);
