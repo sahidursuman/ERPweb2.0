@@ -11,6 +11,7 @@
                 <thead>
                     <tr>
                         <th rowspan="2">客户</th>
+                        <th rowspan="2">代订日期</th>
                         <th colspan="4">代订项目</th>
                         <th rowspan="2">代订小计</th>
                         <th rowspan="2">应收</th>
@@ -28,6 +29,9 @@
                 <tbody class="T-booking-info">
                     <tr>
                         <td><input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" placeholder="点击选择客户" value="{{partnerAgencyName}}" data-id="{{partnerAgencyId}}" data-contact-id="{{contactId}}"></td>
+                        <td>
+                            <input class="datepicker w-100" name="bookDate" value="{{bookDate}}" type="text">
+                        </td>
                         <td>
                             <input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly placeholder="点击填写酒店" {{if !!hotel}}value="{{hotelNeedPayMoney}}" data-json="{{hotel}}"{{/if}} data-id="{{hotelId}}">
                             <a class="cursor T-action T-clear" data-status="hotel">清空</a>
