@@ -212,12 +212,15 @@ define(function(require, exports, module) {
         if(type === 1){
             title = "编辑项目代订";
             menuKey = K.update;
+            data.bookDate = data.date;
             html = T.add(data);
         }else if(type === 2){
             title = "查看项目代订";
             menuKey = K.view;
             html = T.view(data);
         }else{
+            var bookDate = new Date().Format("yyyy-MM-dd");
+            data.bookDate = bookDate;
             html = T.add(data);
         }
         if (Tools.addTab(menuKey , title, html)) {
@@ -279,6 +282,9 @@ define(function(require, exports, module) {
      * @return {[type]}      [description]
      */
     bookingOrder.commonEvents = function($tab, type, bookingId){
+        //设置日期格式
+        Tools.setDatePicker($tab.find('.datepicker'));
+
         //导出项目代订查看结算单按钮事件
         $tab.find('.T-viewSettle').off('click').on('click',function(){
             var pluginKey = 'plugin_print';
@@ -906,7 +912,7 @@ define(function(require, exports, module) {
         var data = {},
             bookingOrderJson = {},
             $baseInfo = $tab.find('.T-booking-info');
-
+        bookingOrderJson.date = $tab.find('[name="bookDate"]').val();
         bookingOrderJson.orderNumber = $tab.find('[name="orderNumber"]').val();
         bookingOrderJson.partnerAgencyName = $baseInfo.find('[name="fromPartnerAgency"]').val();
         bookingOrderJson.partnerAgencyId = $baseInfo.find('[name="fromPartnerAgency"]').data('id');

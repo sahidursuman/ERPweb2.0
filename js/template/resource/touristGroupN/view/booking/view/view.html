@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th rowspan="2">客户</th>
+                        <th rowspan="2">代订日期</th>
                         <th colspan="4">代订项目</th>
                         <th rowspan="2">代订小计</th>
                         <th rowspan="2">应收</th>
@@ -33,6 +34,13 @@
                 <tbody class="T-booking-info">
                     <tr>
                         <td>{{partnerAgencyName}}</td>
+                        <td>
+                            {{if date == "" || date == null}}
+                                -
+                            {{else}}
+                                {{date}}
+                            {{/if}}
+                        </td>
                         <td><a class="cursor T-action T-hotel F-float F-money" data-json="{{hotel}}">{{hotelNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-ticket F-float F-money" data-json="{{ticket}}">{{ticketNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-scenic F-float F-money" data-json="{{scenic}}">{{scenicNeedPayMoney}}</a></td>
