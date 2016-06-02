@@ -289,7 +289,7 @@ define(function(require, exports) {
 		var validator = new FinRule(isCheck ? 0 : (Replace.isBalanceSource ? 3 : 1)),
 		validatorCheck = validator.check($tab);
 		Replace.getCustomerList($tab,isCheck);
-		Replace.getPartnerAgencyList($tab,args);
+		Replace.getPartnerAgencyList($tab,args.partnerAgencyId);
 		Replace.getCreatorList($tab,args.partnerAgencyId);
 		// 处理关闭与切换tab
         $tab.find(".T-clearList, .T-checkList").off('change').on('change',"input",function(event) {
@@ -886,7 +886,7 @@ define(function(require, exports) {
 	};
 
 	//获取客户联系人列表
-	Replace.getPartnerAgencyList = function($tab,args){
+	Replace.getPartnerAgencyList = function($tab,id){
 		var $obj = $tab.find('.T-search-contact');
         $obj.autocomplete({
             minLength: 0,
@@ -904,7 +904,9 @@ define(function(require, exports) {
                 url : KingServices.build_url('financial/customerAccount', 'selectPartnerContact'),
                 type : 'POST',
                 showLoading:false,
-                data: args
+                data: {
+                	fromPartnerAgencyId : id
+                }
             }).done(function(data) {
                 var partnerContact = data.partnerContact;
                 for(var i=0; i<partnerContact.length; i++){
