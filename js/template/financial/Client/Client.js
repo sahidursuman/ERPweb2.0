@@ -210,6 +210,7 @@ define(function(require, exports) {
             data : args
         }).done(function(data){
             if(showDialog(data)){
+                data.userInfoTravelAgencyId = IndexData.userInfo.travelAgencyId;
                 data.partnerAgencyName = partnerAgencyName;
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
                 //data.searchParam.lineProductName = args.lineProductName || '全部';
@@ -536,6 +537,7 @@ define(function(require, exports) {
             data:args,
         }).done(function(data){
             if(showDialog(data)){
+                data.userInfoTravelAgencyId = IndexData.userInfo.travelAgencyId;
                 data.type = type;
                 data.partnerAgencyName = partnerAgencyName;
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;

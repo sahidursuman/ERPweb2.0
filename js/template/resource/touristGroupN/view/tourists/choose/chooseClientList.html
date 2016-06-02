@@ -1,8 +1,8 @@
 {{each travelAgencyList as rs}}
 <tr class="cursor" data-id="{{rs.travelAgencyId}}" data-contact-id="{{if rs.contactList.length > 0}}{{rs.contactList[0].fromPartnerAgencyContactId}}{{/if}}" data-agency-name="{{rs.travelAgencyName}}">
-	<td name="travelAgencyName" rowspan="{{rs.contactList.length}}">{{rs.travelAgencyName}}</td>
-	<td rowspan="{{rs.contactList.length}}">{{rs.type | getTravelAgencyType}}</td>
-	<td rowspan="{{rs.contactList.length}}">{{rs.level | getTravelAgencyLevel}}</td>
+	<td name="travelAgencyName" rowspan="{{rs.contactList.length || 1}}">{{rs.travelAgencyName}}</td>
+	<td rowspan="{{rs.contactList.length || 1}}">{{rs.type | getTravelAgencyType}}</td>
+	<td rowspan="{{rs.contactList.length || 1}}">{{rs.level | getTravelAgencyLevel}}</td>
     {{if rs.contactList.length > 0}}
 	<td name="travelAgencyContactName">{{rs.contactList[0].contactRealname}}</td>
 	<td>{{rs.contactList[0].contactMobileNumber}}</td>

@@ -32,6 +32,7 @@ define(function(require, exports) {
 			updateHotel : require('./view/tourists/update/updateHotel'),//编辑房
 			updateOther : require('./view/tourists/update/updateOther'),//编辑其它
             updateOuterTurn : require('./view/tourists/update/updateOuterTurn'),//编辑外转
+            moneyAdjust : require('./view/tourists/update/moneyAdjust'),//调整本段团款
             addFee : require('./view/tourists/addFee'),//调整费用项
             chooseHotel : require('./view/tourists/choose/chooseHotel'),//自选酒店
             chooseHotelList : require('./view/tourists/choose/chooseHotelList'),//自选酒店列表
@@ -565,6 +566,7 @@ define(function(require, exports) {
                                 break;
                             }
                         }
+                        data.baseInfo.currentNeedPayMoney = data.baseInfo.touristGroupFee.currentNeedPayMoney;
                         data.baseInfo.name = data.baseInfo.name + " " + (data.baseInfo.touristGroupMemberInfo.adultCount || 0) +"大" + (data.baseInfo.touristGroupMemberInfo.childCount || 0) + "小";
                         data.baseInfo.touristGroupMemberInfo = JSON.stringify(data.baseInfo.touristGroupMemberInfo || {});
                     }
@@ -768,14 +770,10 @@ define(function(require, exports) {
             }
         });
         $tab.find('.T-team-info').on('change', '[name="lineProductName"]', function(){
-            $(this).data('id', '');
+            $(this).data('id', '').data('json', '');
         });
         $tab.find('.T-team-info').on('changeDate', '[name="startTime"]', function(){
-            var $that = $(this),
-                $endTime = $tab.find('.T-team-info').find('[name="endTime"]');
-            if($endTime.val() != "" && $that.val() > $endTime.val()){
-                $endTime.val('');
-            }
+            F.autoCalcDate($(this));
         });
 
         if(!type){
@@ -820,6 +818,9 @@ define(function(require, exports) {
                     Tools.loadPluginScript(pluginKey);
                     touristGroup.viewAccountList($tab.find('.T-container').data('id'));
             });
+            $tab.find('.T-money-adjust').on('click', function () {
+                touristGroup.adjustPayMoney($(this));
+            });
         }
     	//接团表内操作
     	$tab.find('.T-join-group-list').on('click', '.T-action', function(event){
@@ -863,15 +864,7 @@ define(function(require, exports) {
             }
     	});
         $partGroup.on('changeDate', '[name="tripStartTime"]', function(){
-            var $that = $(this), $tr = $that.closest('tr'),
-                $endTime = $tr.find('[name="tripEndTime"]'),
-                lineData = $tr.find('[name="lineProductName"]').data('json');
-            if(typeof lineData !== "object"){
-                lineData = JSON.parse(lineData || "{}");
-            }
-            if($that.val() != "" && !!lineData.days){
-                $endTime.val(Tools.addDay($that.val(), lineData.days-1)).trigger('blur');
-            }
+            F.autoCalcDate($(this));
         });
         //本段团款change事件
         $partGroup.on('change', '[name="subNeedPayMoney"]', function(event){
@@ -987,6 +980,7 @@ define(function(require, exports) {
                 }
             });
         }
+
     };
     
     /**
@@ -1212,6 +1206,45 @@ define(function(require, exports) {
         $tbody.append(html);
         touristGroup.memberNumber($tbody);
         rule.guestUpdate(validate)
+    };
+
+    touristGroup.adjustPayMoney = function ($that) {
+        var $tr = $that.closest('tr'),
+            $payMoney = $tr.find('.T-pay-money'),
+            data = {
+                id : $tr.data('id'),
+                subNeedPayMoney : $payMoney.text()
+            };
+
+        layer.open({
+            type: 1,
+            title: "调整本段团款",
+            skin: 'layui-layer-rim', //加上边框
+            area: '300px', //宽高
+            zIndex: 1028,
+            content: T.moneyAdjust(data),
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+
+                var validate = rule.checkPayMoney($layer);
+                $layer.find('.T-btn-save').on('click', function(){
+                    if(!validate.form())return;
+                    var id               =   $layer.find('.container-fluid').data('id'),
+                        subNeedPayMoney  =   $layer.find('[name="subNeedPayMoney"]').val();
+                    $.ajax({
+                        url: KingServices.build_url('customerOrder', 'reEditTripMoney'),
+                        data: {id : id, needPayAllMoney : subNeedPayMoney},
+                    })
+                    .done(function(data) {
+                        if(showDialog(data)){
+                            $payMoney.text(subNeedPayMoney || 0);
+                            layer.close(index);
+                        }
+                    });
+                });
+            }
+        });
     };
 
     /**
@@ -1458,10 +1491,15 @@ define(function(require, exports) {
                         layer.close(index);
                         F.subtotal($that.closest('tr'), 1);
                     }else{
-                        if(parseFloat(moneyData.needPayAllMoney) < 
-                            parseFloat(moneyData.preIncomeMoney || 0) + 
-                            parseFloat(moneyData.currentNeedPayMoney || 0)){
-                            showConfirmMsg('预收款和计划现收之和大于应收金额，是否继续？', function(){
+                        if(!moneyData.currentNeedPayMoney || moneyData.currentNeedPayMoney == 0){
+                            /*showConfirmMsg('现收团款，是否继续？', function(){
+                                $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
+                                layer.close(index);
+                            });*/
+                            var msg = moneyData.currentNeedPayMoney == "" ? 
+                                      '未填写现收团款，是否继续？' : 
+                                      '现收团款为0，是否继续？'
+                            showConfirmMsg(msg, function(){
                                 $that.val(moneyData.needPayAllMoney).data('json', JSON.stringify(moneyData)).trigger('blur');
                                 layer.close(index);
                             });
@@ -2123,6 +2161,7 @@ define(function(require, exports) {
                     }
                     $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');;
                     layer.close(index);
+                    F.autoCalcDate($that);
                 });
                 //关闭
                 $layer.find('.T-btn-close').on('click', function(){
@@ -2893,36 +2932,56 @@ define(function(require, exports) {
             return false;
         }
 
-        data.baseInfo = JSON.stringify(data.baseInfo);
-        data.receiveTrip = JSON.stringify(data.receiveTrip);
-        data.joinTrip = JSON.stringify(data.joinTrip);
-        data.sendTrip = JSON.stringify(data.sendTrip);
-        data.otherInfo = JSON.stringify(data.otherInfo);
-
-        $.ajax({
-            url : KingServices.build_url('customerOrder', method),
-            data : data,
-            type: 'POST',
-            success : function(data){
-                if(showDialog(data)){
-                    showMessageDialog(data.message, function() {
-                        if(!!tabArgs){
-                            if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
-                                touristGroup.init_events($("#tab-"+tabArgs[0]+"-content"));
-                            };
-                        }else{
-                            Tools.closeTab(Tools.getTabKey($tab.prop('id')));
-                            var $listTab = $("#tab-customer_order-content");
-                            if($listTab.length > 0){
-                                $listTab.find('#customerOrderTouristsOrder').find('.T-touristGroupList-search').trigger('click');
-                            }else{
-                                touristGroup.listTouristGroup(0);
-                            }
-                        }
-                    });
-                }
+        var _teamNeedPayMoney = data.baseInfo.touristGroupFee.currentNeedPayMoney,
+            _partNeedPayMoney = 0;
+        if($partGroup.find('tr').length > 0){
+            for(var i = 0; i < $partGroup.find('tr').length; i++){
+                _partNeedPayMoney += parseFloat($partGroup.find('tr').eq(i).find('[name="currentNeedPayMoney"]').val() || 0);
             }
-        })
+
+            if(_teamNeedPayMoney != _partNeedPayMoney){
+                var msg = '现收团款（'+ Tools.thousandPoint(_teamNeedPayMoney || 0, 2) +'）不等于参团代收团款之和（' + Tools.thousandPoint(_partNeedPayMoney || 0, 2) + '），是否继续？';
+                showConfirmMsg(msg, function(){
+                    saveTouristData(data);
+                });
+                return false;
+            }
+        }
+        saveTouristData(data);
+        return this;
+        function saveTouristData (data) {
+            data.baseInfo = JSON.stringify(data.baseInfo);
+            data.receiveTrip = JSON.stringify(data.receiveTrip);
+            data.joinTrip = JSON.stringify(data.joinTrip);
+            data.sendTrip = JSON.stringify(data.sendTrip);
+            data.otherInfo = JSON.stringify(data.otherInfo);
+
+            $.ajax({
+                url : KingServices.build_url('customerOrder', method),
+                data : data,
+                type: 'POST',
+                success : function(data){
+                    if(showDialog(data)){
+                        showMessageDialog(data.message, function() {
+                            if(!!tabArgs){
+                                if(Tools.addTab(tabArgs[0], tabArgs[1], tabArgs[2])){
+                                    touristGroup.init_events($("#tab-"+tabArgs[0]+"-content"));
+                                };
+                            }else{
+                                Tools.closeTab(Tools.getTabKey($tab.prop('id')));
+                                var $listTab = $("#tab-customer_order-content");
+                                if($listTab.length > 0){
+                                    $listTab.find('#customerOrderTouristsOrder').find('.T-touristGroupList-search').trigger('click');
+                                }else{
+                                    touristGroup.listTouristGroup(0);
+                                }
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        
     };
 
     /**
@@ -3088,6 +3147,27 @@ define(function(require, exports) {
                 sumNum = receiveBus * 1 + receiveHotel * 1 + receiveOther * 1;
             }
             $tr.find('[name="totalMoney"]').val(sumNum);
+        },
+        /**
+         * 自动计算日期
+         * @param  {object} $that $(this)
+         */
+        autoCalcDate : function ($that) {
+            var $tr = $that.closest('tr'),
+                $startDate = $tr.find('[name="tripStartTime"]'),
+                $endData = $tr.find('[name="tripEndTime"]'),
+                lineData = $tr.find('[name="lineProductName"]').data('json');
+
+            $startDate =  $startDate.length > 0 ? $startDate : $tr.find('[name="startTime"]');
+            $endData   =  $endData.length   > 0 ? $endData   : $tr.find('[name="endTime"]');
+
+            if(typeof lineData !== "object"){
+                lineData = JSON.parse(lineData || "{}");
+            }
+
+            if($startDate.val() != "" && !!lineData.days){
+                $endData.val(Tools.addDay($startDate.val(), lineData.days-1)).trigger('blur');
+            }
         }
     };
     exports.init = touristGroup.initModule;

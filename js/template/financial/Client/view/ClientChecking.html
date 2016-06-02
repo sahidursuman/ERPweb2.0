@@ -122,6 +122,9 @@
                 <th>录入人</th>
                 <th>录入时间</th>
                 <th>合同金额</th>
+                {{if userInfoTravelAgencyId == 9}}
+                <th>明细</th>
+                {{/if}}
                 <th>已收金额</th>
                 <th>返款金额</th>
                 <th>结算金额</th>
@@ -153,8 +156,32 @@
                 <td rowspan="{{rs.rowLen}}">{{rs.creatorName}}</td>
                 <td rowspan="{{rs.rowLen}}">{{rs.createTime | dateTimeFormat}}</td>
                 <td rowspan="{{rs.rowLen}}">
+                    {{if userInfoTravelAgencyId != 9}}
                     <a class="cursor T-viewFeeDetails T-contractMoney F-float F-money" data-index="{{listIndex}}" title="查看明细">{{rs.contractMoney}}</a>
+                    {{else}}
+                    {{rs.contractMoney}}
+                    {{/if}}
                 </td>
+                {{if userInfoTravelAgencyId == 9}}
+                <td>
+                    {{if rs.detailList.otherFee.length > 0}}
+                    <!-- 中转，otherFee中多条数据 -->
+                        <a class="T-viewFeeDetails" data-index="{{listIndex}}">
+                        {{each rs.detailList.otherFee as temp index}}
+                            {{if index == 0}}
+                                {{each temp.otherFeeList as of}}
+                                    {{of.name}}：
+                                    <span class="F-float F-money T-touristGroupId" data-id="{{of.touristGroupId}}">{{of.price}}</span>x
+                                    <span class="F-float F-count">{{of.count}}</span>=
+                                    <span class="F-float F-money">{{of.price * of.count}}</span><br>
+                                {{/each}}
+                            {{/if}}
+                        {{/each}}
+                        </a>
+                    {{else}}<!-- 若无费用明细 -->-
+                    {{/if}}
+                </td>
+                {{/if}}
                 <td>
                     <a class="cursor T-action T-receive">
                         社收<span class="F-float F-money">{{rs.travleReciveMoney}}</span>
