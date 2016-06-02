@@ -1149,21 +1149,39 @@ define(function(require, exports) {
      * @param {object} $tab tab的jQuery对象
      */
     touristGroup.addPartGroup = function($tab, validate){
-        var isHidden = $tab.find('.T-container').data('type') || "single";
-    	var html =  '<tr><td>'+
+        var isHidden         = $tab.find('.T-container').data('type') || "single",
+            id               = $tab.find('.T-container').data("id"),
+            $team            = $tab.find('.T-team-info'),
+            lineData         = "",
+            lineProductName  = "",
+            lineProductId    = $team.find('[name="lineProductName"]').data('id'),
+            tripStartTime    = "",
+            tripEndTime      = "",
+            $partList        = $tab.find('.T-part-group-list');
+
+        if(!id && !!lineProductId && $partList.find("tr").length < 1){
+            lineData         = $team.find('[name="lineProductName"]').data('json');
+            lineProductName  = $team.find('[name="lineProductName"]').val();
+            tripStartTime    = $team.find('[name="startTime"]').val();
+            tripEndTime      = $team.find('[name="endTime"]').val();
+        }else{
+            lineProductId = "";
+        }
+    	
+        var html =  '<tr><td>'+
                         '<div class="hct-input-group col-xs-12 T-action T-search-line">'+
-                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品">'+
+                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品" value="'+lineProductName+'" data-id="'+lineProductId+'" data-json='+lineData+'>'+
                                 '<span class="hct-group-add cursor">[搜索]</span>'+
                             '</div></td>'+
-                        '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime"></td>'+
-                        '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime"></td>'+
+                        '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime" value="'+tripStartTime+'"></td>'+
+                        '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripEndTime" value="'+tripEndTime+'"></td>'+
                         '<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney"></td>'+
                         '<td><input type="text" class="w-150 hct-cursor T-action T-line-cope" readonly name="lineNeedPayMoney" placeholder="点击填写线路应付"><a class="cursor T-action T-clear" data-status="partLine">清空</a></td>'+
                         '<td class="T-is-hidden'+(isHidden==="single"?"":" hidden")+'"><input type="text" class="w-150 hct-cursor T-action T-hotel" readonly name="hotelNeedPayMoney" placeholder="点击填写返程住宿"><a class="cursor T-action T-clear" data-status="partHotel">清空</a></td>'+
                         '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
-    	$tab.find('.T-part-group-list').append(html);
+    	$partList.append(html);
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
         $tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');

@@ -1,23 +1,26 @@
 <div class="search-guideSingle">
     <div class="clearfix T-search-area mar-b-10">
+
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">开始日期 </label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">{{searchParam.startTime}} </label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">结束日期 </label>
+        <label class="pull-left text-right control-label no-padding-right  mar-l-10">{{searchParam.endTime}} </label>
         <label class="pull-left text-right control-label no-padding-right mar-l-10">导游：</label>
         <label class="pull-left text-right control-label no-padding-right mar-l-10">{{if !!guide}}{{guide.guideName}}{{/if}} </label>
         <input type="hidden" name="guideId" class="col-xs-12" value="{{guide.id}}" />
-        <label class="pull-left text-right control-label no-padding-right mar-l-10">联系电话：</label> 
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">购物店：</label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">{{if !!searchParam}}{{searchParam.shopName}}{{/if}} </label>
+         <label class="pull-left text-right control-label no-padding-right mar-l-10">商品：</label>
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">{{if !!searchParam}}{{searchParam.policyName}}{{/if}} </label>
+
+        <label class="pull-left text-right control-label no-padding-right mar-l-10">联系电话：</label>
         <label class="pull-left text-right control-label no-padding-right mar-l-10 T-mobileNumber">{{if !!guide}}{{guide.mobileNumber}}{{/if}}</label>
-        <label class="pull-left text-right control-label no-padding-right mar-l-10">开始日期 </label>
-        <div class="col-xs-1">
-            <input type="text" name="startTime" class="col-xs-12 datepicker" placeholder="开始日期" value="{{searchParam.startTime}}" />
-        </div>
-        <label class="pull-left text-right control-label no-padding-right">结束日期 </label>
-        <div class="col-xs-1">
-            <input type="text" name="endTime" class="col-xs-12 datepicker" placeholder="结束日期" value="{{searchParam.endTime}}" />
-        </div>
-        <div class="col-xs-2">
-            <button class=" btn-sm  T-guideSingle-search search-btn" data-shopname="{{searchParam.shopName}}" data-policyname="{{searchParam.policyName}}">
-                <i class="ace-icon fa fa-search"></i> 搜索
-            </button>
-        </div>
+
+    <!-- <div class="col-xs-2">
+        <button class=" btn-sm  T-guideSingle-search search-btn" data-shopname="{{searchParam.shopName}}" data-policyname="{{searchParam.policyName}}">
+            <i class="ace-icon fa fa-search"></i> 搜索
+        </button>
+    </div> -->
     </div>
     <div class="T-guideSinglePager-list overflow-x">
         <table class="table table-striped table-bordered table-hover w-1200 T-showHighLight">
