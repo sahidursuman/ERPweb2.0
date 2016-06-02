@@ -13,6 +13,7 @@ define(function(require, exports) {
                     errMsg: '客户不能为空'
                 }]
 			},
+            
 			{
 				//线路产品
 				$ele: $obj.find('[name="lineProductName"]'),
@@ -493,6 +494,14 @@ define(function(require, exports) {
                         errMsg: '客户不能为空'
                     }
                 ]
+            },
+            {
+                //代订日期
+                $ele: $obj.find('[name="bookDate"]'),
+                rules : [{
+                    type: 'null',
+                    errMsg: '代订日期不能为空'
+                }]
             },
             { 
                 //客人信息

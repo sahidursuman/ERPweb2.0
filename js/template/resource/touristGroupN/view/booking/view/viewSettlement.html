@@ -34,9 +34,13 @@
             <p>
                 <span>贵单位：</span> 
                 <span>(代订单号)</span>
-                <span>{{partnerAgency.orderNumber}}</span> 
+                <span>{{partnerAgency.orderNumber}}</span>
+                {{if partnerAgency.date != "" && partnerAgency.date != null}}
+                    <span>(代订日期)</span>
+                    <span>{{partnerAgency.date}}</span>
+                {{/if}}
                 <span class="mar-l-8">(代订项目)</span> <span>
-                {{if bookingTicketInfo.length}}
+                {{if bookingBusCompanyInfo.length}}
                     车辆
                     {{if bookingTicketInfo.length  || bookingHotelInfo.length || bookingScenicInfo.length}}
                         、
@@ -48,7 +52,8 @@
                         、
                     {{/if}}
                 {{/if}}
-                {{if bookingScenicInfo.length}}景区
+                {{if bookingScenicInfo.length}}
+                    景区
                     {{if bookingTicketInfo.length}}
                         、
                     {{/if}}
