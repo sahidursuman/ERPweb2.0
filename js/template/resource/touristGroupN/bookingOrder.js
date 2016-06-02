@@ -285,6 +285,9 @@ define(function(require, exports, module) {
         //设置日期格式
         Tools.setDatePicker($tab.find('.datepicker'));
 
+        //表单校验
+        var addBookingValidata = rule.bookingCheck($tab);
+
         //导出项目代订查看结算单按钮事件
         $tab.find('.T-viewSettle').off('click').on('click',function(){
             var pluginKey = 'plugin_print';
@@ -323,6 +326,7 @@ define(function(require, exports, module) {
             Tools.closeTab(Tools.getTabKey($tab.prop('id')));
         });
         $tab.find(".T-btn-save").on('click', function(){
+            if(!addBookingValidata.form()){return}
             bookingOrder.saveData($tab);
         }); 
         /*$tab.find('.T-restore').on('click', function(){
