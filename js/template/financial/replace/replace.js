@@ -402,7 +402,7 @@ define(function(require, exports) {
 	                    accountStatus : args.accountStatus,
 	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
 	                    contactId : $tab.find(".T-search-contact").data("id"),
-						creatorId :$tab.find(".T-search-creator").data("id")
+						creatorId : $tab.find(".T-search-creator").data("id")
 	                };
 	            argsData.orderNumber = argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
@@ -951,7 +951,7 @@ define(function(require, exports) {
                 }).done(function(data) {
                     for(var i=0; i< data.creatorList.length; i++){
                         data.creatorList[i].value = data.creatorList[i].creatorName;
-                        data.creatorList[i].id = data.creatorList[i].creatorId;
+                        data.creatorList[i].id = data.creatorList[i].creator;
                     }
 
                     data.creatorList.unshift({id:'', value: '全部'});

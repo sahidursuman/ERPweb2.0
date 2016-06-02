@@ -1025,7 +1025,7 @@ define(function(require, exports) {
                 }).done(function(data) {
                     for(var i=0; i< data.creatorList.length; i++){
                         data.creatorList[i].value = data.creatorList[i].creatorName;
-                        data.creatorList[i].id = data.creatorList[i].creatorId;
+                        data.creatorList[i].id = data.creatorList[i].creator;
                     }
 
                     data.creatorList.unshift({id:'', value: '全部'});
