@@ -64,11 +64,10 @@
                                             <thead>
                                                 <tr class="T-fontSize view-accountsPrint">
                                                     <th class="th-border">收客信息</th>
-                                                    <th class="th-border">客户</th>
-                                                    <th class="th-border">客户联系人</th>
-                                                    <th class="th-border">游客联系人</th>
-                                                    <th class="th-border">人数</th>
-                                                    <th class="th-border">明细</th>
+                                                    <th class="th-border">客户信息</th>
+                                                    <th class="th-border">游客信息</th>
+                                                    <th class="th-border">费用项</th>
+                                                    <th class="th-border">说明</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
@@ -77,33 +76,69 @@
                                                 {{if tripIncomeMap != null}}
                                                     {{if tripIncomeMap.groupIncomeMap != null}}
                                                         {{each tripIncomeMap.groupIncomeMap.groupIncomeMapList as groupIncome}}
-                                                            <tr class="view-accountsPrint">
-                                                                <td style="text-align: left;"> <p>收客单号：{{groupIncome.orderNumber}}</p> <p>{{tripBaseInfo.lineProductName}}</p></td>
-                                                                <td>{{groupIncome.partnerAgencyName}}</td>
-                                                                <td>
-                                                                    {{groupIncome.partnerAgencyContactName}}<br>
-                                                                    {{groupIncome.partnerAgencyContactMobile}}
-                                                                </td>
-                                                                <td>    
-                                                                    {{groupIncome.touristContactName}}<br>
-                                                                    {{groupIncome.touristContactMobile}}
-                                                                </td>
-                                                                <td>{{groupIncome.adultCount}}大{{groupIncome.childCount}}小</td>
-                                                                <td>
-                                                                    {{if groupIncome.touristGroupFeeList !=null}}
-                                                                        {{each groupIncome.touristGroupFeeList as groupFee}}
-                                                                            {{groupFee.name}}:{{groupFee.count}}x{{groupFee.price}}={{groupFee.count*groupFee.price}}<br/>
-                                                                        {{/each}}
+                                                            {{if groupIncome.touristGroupFeeList !=null}}
+                                                                {{each groupIncome.touristGroupFeeList as groupFee index}}
+                                                                    {{if index == 0}}
+                                                                        <tr class="view-accountsPrint">
+                                                                            <td style="text-align: left;" rowspan="{{groupIncome.touristGroupFeeList.length}}"> 
+                                                                                <p>收客单号：{{groupIncome.orderNumber}}</p> 
+                                                                                <p>{{tripBaseInfo.lineProductName}}</p>
+                                                                            </td>
+                                                                            <td rowspan="{{groupIncome.touristGroupFeeList.length}}">
+                                                                                {{groupIncome.partnerAgencyName}}<br>
+                                                                                {{groupIncome.partnerAgencyContactName}}<br>
+                                                                                {{groupIncome.partnerAgencyContactMobile}}
+                                                                            </td>
+                                                                            
+                                                                            <td rowspan="{{groupIncome.touristGroupFeeList.length}}">    
+                                                                                {{groupIncome.adultCount}}大{{groupIncome.childCount}}小<br>
+                                                                                {{groupIncome.touristContactName}}<br>
+                                                                                {{groupIncome.touristContactMobile}}
+                                                                            </td>
+                                                                            
+                                                                            <td>
+                                                                                {{groupFee.name}}:
+                                                                                {{groupFee.count}}x{{groupFee.price}}={{groupFee.count*groupFee.price}}
+                                                                            </td>
+
+                                                                            <td style="max-width:150px;">
+                                                                                <span style="max-width:150px;">
+                                                                                    {{groupFee.remark}}
+                                                                                </span>
+                                                                            </td>
+                                                                            
+                                                                            <td rowspan="{{groupIncome.touristGroupFeeList.length}}">
+                                                                                <span class="F-float F-money">
+                                                                                    {{groupIncome.needPayAllMoney}}
+                                                                                </span>
+                                                                            </td>
+                                                                            <td rowspan="{{groupIncome.touristGroupFeeList.length}}">
+                                                                                <span class="F-float F-money">
+                                                                                    {{groupIncome.settlementMoney}}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    {{else index>0}}
+                                                                        <tr class="view-accountsPrint">
+                                                                            <td style="max-width:150px;">
+                                                                                {{groupFee.name}}:
+                                                                                {{groupFee.count}}x{{groupFee.price}}={{groupFee.count*groupFee.price}}
+                                                                            </td>
+
+                                                                            <td style="max-width:150px;">
+                                                                                <span style="max-width:150px;">
+                                                                                    {{groupFee.remark}}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
                                                                     {{/if}}
-                                                                </td>
-                                                                <td><span class="F-float F-money">{{groupIncome.needPayAllMoney}}</span></td>
-                                                                <td><span class="F-float F-money">{{groupIncome.settlementMoney}}</span></td>
-                                                            </tr>
+                                                                {{/each}}
+                                                            {{/if}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr>
-                                                    <td colspan="6" style="text-align:left">合计</td>
+                                                    <td colspan="5" style="text-align:left">合计</td>
                                                     <td class="td-border">
                                                     <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumNeedPayAllMoney}}</span></td>
                                                     <td class="td-border">
