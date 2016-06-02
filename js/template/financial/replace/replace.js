@@ -400,7 +400,9 @@ define(function(require, exports) {
 	                    startDate: $tab.find('.T-search-start-date').val(),
 	                    endDate: $tab.find('.T-search-end-date').val(),
 	                    accountStatus : args.accountStatus,
-	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+	                    contactId : $tab.find(".T-search-contact").data("id"),
+						creatorId :$tab.find(".T-search-creator").data("id")
 	                };
 	            argsData.orderNumber = argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
