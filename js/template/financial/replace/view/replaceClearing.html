@@ -19,6 +19,14 @@
                 <label>项目：</label>
                 <input type="text" class="form-control T-search-project" value="{{searchParam.projects}}">
             </div>
+            <div class="form-group mar-r-10">
+            <label>客户联系人：</label>
+            <input type="text" class="form-control T-search-contact" value="{{searchParam.contactRealname}}" data-id="{{searchParam.contactId}}" style="width:100px;" placeholder="客户联系人" />
+        </div>
+         <div class="form-group mar-r-10">
+            <label>录入人：</label>
+            <input type="text" class="form-control T-search-creator" value="{{searchParam.creatorName}}" data-id="{{searchParam.creatorId}}" style="width:100px;" placeholder="录入人" />
+        </div>
             <label class="form-group">对账状态：</label>
             <div class="form-group btn-group T-check-status mar-r-10">
                 <button data-value="{{searchParam.isConfirmAccount}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
@@ -130,23 +138,27 @@
         <table class="table table-striped table-bordered table-hover table-fixed hct_align_middle w-1500">
             <colgroup> 
                 <col style="width:12%;"> 
+                <col style="width:6%;">
                 <col style="width:6%;"> 
+                <col style="width:6%;">  
                 <col style="width:10%;"> 
-                <col style="width:19%;"> 
+                <col style="width:14%;"> 
                 <col style="width:5%;"> 
                 <col style="width:5%;"> 
-                <col style="width:8%;"> 
                 <col style="width:5%;"> 
-                <col style="width:6%;"> 
-                <col style="width:6%;"> 
-                <col style="width:10%;"> 
+                <col style="width:5%;"> 
+                <col style="width:5%;"> 
                 <col style="width:7%;"> 
+                <col style="width:6%;"> 
+                <col style="width:5%;"> 
                 <col style="width:7%; min-width: 105px;"> 
             </colgroup>
             <thead>
                 <tr class="T-tr-fixed bg-blur">
                     <th>代订单号</th>
                     <th>代订日期（账期）</th>
+                    <th>客户联系人</th>
+                    <th>录入人</th>
                     <th>项目</th>
                     <th>明细</th>
                     <th>代订金额</th>
