@@ -336,6 +336,10 @@ define(function(require, exports) {
                             content: html,
                             scrollbar: false
                         });
+                        var detailList=data.detailList;
+                        for (var i = 0; i < detailList.length; i++) {
+                            $('#T-tripNumber-layer').find('.T-number').eq(i).html(detailList[i].number+"");
+                        };
                     }
                 }
             });

@@ -1,0 +1,139 @@
+<div class="form-group">
+    <input type="hidden" name="outRemarkId" value="{{outRemark.outRemarkId}}">
+    <label class="control-label mar-r-20">中转单号：{{outRemark.orderNumber}}</label>
+    <label class="control-label mar-r-20">线路产品：{{outRemark.lineProductName}}</label>
+    <label class="control-label mar-r-20">用车时间：{{outRemark.arriveTime}}</label>
+    <label class="control-label mar-r-20">客人信息：<span class="F-float F-count">{{outRemark.adultCount}}</span>大<span class="F-float F-count">{{outRemark.childCount}}</span></label>
+    <label class="control-label ">外联销售：<span class="F-float F-money">{{outRemark.outOPUserName}}</span></label>
+</div>
+{{if !!restaurantStatus}}
+<p class="requirementsPlan">现餐厅要求：{{outRemark.restaurantRequire}}</p>
+{{/if}} 
+{{if !!ticketStatus}}
+<p class="requirementsPlan">现票务要求：{{outRemark.ticketRequire}}</p>
+{{/if}} 
+{{if !!otherStatus}}
+<p class="requirementsPlan">现其它要求：{{outRemark.otherStatus}}</p>
+{{/if}} 
+
+{{if !!restaurantStatus}}
+<div class="form-group restaurantList">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-cutlery"></i>
+        <label class="middle title-size ">安排餐饮</label>
+    </h5>
+	<table class="table table-striped table-bordered table-hover restaurantListTable margin-top">
+	    <thead>
+	        <tr>
+	            <th class="th-border">日期</th>
+	            <th class="th-border">餐厅</th>
+	            <th class="th-border">联系人</th>
+	            <th class="th-border">联系电话</th>
+	            <th class="th-border">类型</th>
+	            <th class="th-border">餐标<span style="font-size:12px;">(元/人)</span></th>
+	            <th class="th-border">人数</th>
+	            <th class="th-border">优惠</th>
+	            <th class="th-border">应付款</th>
+	            <th class="th-border">预付款</th>
+	            <th class="th-border">备注</th>
+	        </tr>
+	    </thead>
+	    <tbody>{{each outRestaurantList as outRestaurant}} {{if outRestaurant.id != null}}
+	        <tr data-entity-id="{{outRestaurant.id}}">
+	            <td>{{outRestaurant.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+	            <td>{{outRestaurant.restaurantName}}</td>
+	            <td>{{outRestaurant.restaurantManagerName}}</td>
+	            <td>{{outRestaurant.restaurantMobileNumber}}</td>
+	            <td>{{if outRestaurant.standardType == "早餐"}}早餐{{else if outRestaurant.standardType == "午餐"}}午餐{{else}}晚餐{{/if}}</td>
+	            <td><span class=" F-float F-money">{{outRestaurant.price}}</span></td>
+	            <td><span class=" F-float F-count">{{outRestaurant.memberCount}}</span></td>
+	            <td><span class=" F-float F-money">{{outRestaurant.reduceMoney}}</span></td>
+	            <td><span class=" F-float F-money">{{outRestaurant.needPayMoney}}</span></td>
+	            <td><span class=" F-float F-money">{{outRestaurant.prePayMoney}}</span></td>
+	            <td>{{outRestaurant.remark}}</td>
+	        </tr>{{/if}}{{/each}}
+	    </tbody>
+	</table>
+</div>
+{{/if}} {{if !!ticketStatus}}
+<div class="form-group ticketList">
+    <h5 class="title-size">
+	    <i class="ace-icon fa fa-car"></i>
+	    <label class="middle title-size">安排票务</label>
+	</h5>
+    <table class="table table-striped table-bordered table-hover ticketListTable margin-top">
+        <thead>
+            <tr>
+                <th class="th-border">票务公司</th>
+                <th class="th-border">类型</th>
+                <th class="th-border">出发城市</th>
+                <th class="th-border">到达城市</th>
+                <th class="th-border">日期</th>
+                <th class="th-border">班次</th>
+                <th class="th-border">座位级别</th>
+                <th class="th-border">单价</th>
+                <th class="th-border">数量</th>
+                <th class="th-border">优惠</th>
+                <th class="th-border">应付款</th>
+                <th class="th-border">预付款</th>
+                <th class="th-border" width="100px">备注</th>
+            </tr>
+        </thead>
+        <tbody>{{each outTicketList as outTicket}} {{if outTicket.id != null}}
+            <tr>
+                <td>{{outTicket.ticketName}}</td>
+                <td>{{if outTicket.type == 1}} 机票 {{else if outTicket.type == 2}} 汽车票 {{else if outTicket.type == 3}} 火车票 {{/if}}
+                </td>
+                <td>{{outTicket.startingCity}}</td>
+                <td>{{outTicket.arriveCity}}</td>
+                <td>{{if outTicket.startTime != null}}{{outTicket.startTime}}{{/if}}</td>
+                <td>{{outTicket.shift}}</td>
+                <td>{{outTicket.seatLevel}}</td>
+                <td><span class=" F-float F-money">{{outTicket.price}}</span></td>
+                <td><span class=" F-float F-count">{{outTicket.memberCount}}</span></td>
+                <td><span class=" F-float F-money">{{outTicket.reduceMoney}}</span></td>
+                <td><span class=" F-float F-money">{{outTicket.needPayMoney}}</span></td>
+                <td><span class=" F-float F-money">{{outTicket.prePayMoney}}</span></td>
+                <td>{{outTicket.remark}}</td>
+            </tr>{{/if}}{{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}} {{if !!otherStatus}}
+<div class="form-group otherList">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa fa-smile-o"></i>
+        <label class="middle title-size">安排其它</label>
+    </h5>
+    <table class="table table-striped table-bordered table-hover otherListTable margin-top">
+        <thead>
+            <tr>
+                <th class="th-border">日期</th>
+                <th class="th-border">项目</th>
+                <th class="th-border">联系人</th>
+                <th class="th-border">联系电话</th>
+                <th class="th-border">单价</th>
+                <th class="th-border">数量</th>
+                <th class="th-border">优惠</th>
+                <th class="th-border">应付款</th>
+                <th class="th-border">预付款</th>
+                <th class="th-border" style="width: 100px">备注</th>
+            </tr>
+        </thead>
+        <tbody>{{each outOtherList as outOther}} {{if outOther != null && outOther.name != null}}
+            <tr data-entity-id="{{outOther.id}}">
+                <td>{{outOther.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                <td>{{outOther.name}}</td>
+                <td>{{outOther.managerName}}</td>
+                <td>{{outOther.mobileNumber}}</td>
+                <td><span class=" F-float F-money">{{outOther.price}}</span></td>
+                <td><span class=" F-float F-count">{{outOther.memberCount}}</span></td>
+                <td><span class=" F-float F-money">{{outOther.reduceMoney}}</span></td>
+                <td><span class=" F-float F-money">{{outOther.needPayMoney}}</span></td>
+                <td><span class=" F-float F-money">{{outOther.prePayMoney}}</span></td>
+                <td>{{outOther.remark}}</td>
+            </tr>{{/if}}{{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}

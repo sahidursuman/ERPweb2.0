@@ -864,6 +864,15 @@ define(function(require, exports) {
                 }
                 data.tripPlan = JSON.parse(data.tripPlan);
                 if(Tools.addTab(viewMenuKey, "查看散客计划", html(data))){
+                    $("#tab-"+viewMenuKey+"-content").find('.T-orderNumber').on('click', function() {
+                        var $this = $(this),
+                            dept = $this.data('dept'),
+                            id = $this.data('id');
+                        if (!!dept) {
+                            dept = 'inner';
+                        }
+                        KingServices.viewTouristGroup(id, dept);
+                    })
                     $("#tab-"+viewMenuKey+"-content").find('.T-btn-close').on('click', function(event){
                         event.preventDefault();
                         Tools.closeTab(viewMenuKey);
@@ -1068,13 +1077,11 @@ define(function(require, exports) {
                     group[i].lineProduct.name+'</td><td>'+
                     group[i].partnerAgency.travelAgencyName+'</td><td>'+
                     group[i].contactMember.name+'</td><td>'+
-                    group[i].contactMember.mobileNumber+'</td><td>'+
+                    group[i].contactMember.mobileNumber+'</td><td>'+  
                     group[i].areaData+'</td><td>'+
                     group[i].ageData+'</td><td>'+
                     group[i].adultCount+'大'+group[i].childCount+'小</td><td>'+
                     group[i].currentNeedPayMoney+'</td><td>'+
-                    hotelLevel[(group[i].hotelLevel > 1 && group[i].hotelLevel < 8 ? group[i].hotelLevel - 1 : 0)]+'</td><td>'+
-                    (!!group[i].includeSelfPay?group[i].includeSelfPay:"")+'</td><td>'+
                     (!!group[i].accompanyGuideName?group[i].accompanyGuideName:"")+'</td><td>'+
                     (!!group[i].accompanyGuideMobile?group[i].accompanyGuideMobile:"")+'</td><td>'+
                     (!!group[i].welcomeBoard?group[i].welcomeBoard:"")+'</td><td>'+
@@ -1104,7 +1111,6 @@ define(function(require, exports) {
                             showMessageDialog(data.message,function(){
                                 obj.closest('tr').remove();
                                 singlePlan.MenberNumber($tab);
-                                singlePlan.tripPlanAllMemberCount($tab);
                             });
                         }
                     }
@@ -1112,7 +1118,6 @@ define(function(require, exports) {
             } else{
                 obj.closest('tr').remove();
                 singlePlan.MenberNumber($tab);
-                singlePlan.tripPlanAllMemberCount($tab);
             }
         },function(){},"取消","确定");
     };
@@ -1422,16 +1427,6 @@ define(function(require, exports) {
                 }
             });
         },function(){},"取消","确定");
-    };
-
-    singlePlan.tripPlanAllMemberCount = function($tab){
-        var tr = $tab.find(".T-tourist-list tr"),
-            trMemberCount = 0;
-        tr.each(function(){
-            trMemberCount += parseInt($(this).find(".T-memberCount").text());
-        })
-        $tab.find(".T-groupMemberCount").text(trMemberCount);
-        trMemberCount = 0;
     };
 
     //游客名单成员添加自动序号函数  singlePlan.MenberNumber(oClass);-

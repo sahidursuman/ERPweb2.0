@@ -203,7 +203,8 @@
 														</tr>
 													</thead>  
 													<tbody>
-														{{if guideQuote != null}}
+														{{if guideQuote.length}}
+														{{each guideQuote as guideQuote}}
 														<tr data-entity-id="{{guideQuote.id}}">
 															<td>
 																<input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="{{guideQuote.price}}" />
@@ -214,6 +215,7 @@
 															</td>
 															<td><input class="col-xs-12" name="remark" type="text" maxlength="1000" value="{{guideQuote.remark}}" /></td>
 														</tr>
+														{{/each}}
 														{{else}}
 														<tr data-entity-id="">
 															<td><input class="col-xs-12 T-changeQuote F-float F-money" name="guideFee" type="text" maxlength="9" value="" /></td>

@@ -1,0 +1,4 @@
+/*TMODJS:{"debug":true,"version":4,"md5":"90559009e50ccef1742c5e73e56ab456"}*/
+define(function(require) {
+    return require("../../../template")("resource/touristGroupN/view/mainFrame", '<div class="tabable hct-max-model" role="tablist"> <ul class="nav nav-tabs"> <li class="hct-box text-center"> <a data-toggle="tab" href="#customerOrderTouristsOrder" aria-expanded="true">游客订单</a> </li> <li class="hct-box text-center"> <a data-toggle="tab" href="#customerOrderBookingOrder" aria-expanded="true">代订订单</a> </li> </ul> <div class="tab-content"> <div class="tab-pane fade" id="customerOrderTouristsOrder"></div> <div class="tab-pane fade" id="customerOrderBookingOrder"></div> </div> </div>');
+});

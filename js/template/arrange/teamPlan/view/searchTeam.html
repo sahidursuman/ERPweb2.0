@@ -1,0 +1,55 @@
+<table class="table table-striped table-bordered table-hover search-travelLineList-table">
+	<thead>
+		<tr>
+			<th class="th-border">收客单号</th>
+			<th class="th-border">客户</th>
+			<th class="th-border">线路产品</th> 
+			<th class="th-border">针对客源</th> 
+			<th class="th-border">出游日期</th> 
+			<th class="th-border">报价单号</th> 
+			<th class="th-border">联系人</th> 
+			<th class="th-border">人数</th> 
+			<th class="th-border">买保险</th> 
+			<th class="th-border">组团单号</th> 
+			<th class="th-border">客源类型</th> 
+			<th class="th-border">接站牌</th>
+			<th class="th-border">外联销售</th>
+			<th class="th-border">录入时间</th> 
+			<th class="th-border" width="70">选择</th> 
+		</tr> 
+	</thead> 
+	<tbody class="T-quote-list">
+		{{each tourisGroupList as rs}}
+		<tr data-id="{{rs.id}}" data-orderNumber="{{rs.orderNumber}}"> 
+			<td>{{rs.orderNumber}}</td> 
+			<td name="partnerAgencyName">{{rs.fromPartnerAgencyName}}</td> 
+			<td>{{rs.lineProductName}}</td> 
+			<td>{{if rs.customerType == 1}}团体{{else}}散客{{/if}}</td> 
+			<td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td> 
+			<td>{{rs.quoteNumber}}</td> 
+			<td>{{rs.contactMemberName}}</td> 
+			<td><span class="F-float F-count">{{if rs.adultCount != 0}}{{rs.adultCount}}{{else}}0{{/if}}</span>大 <span>{{if rs.childCount != 0}}{{rs.childCount}}{{else}}0{{/if}}</span>小</td> 
+			<td>{{if rs.buyInsurance == 1}}是{{else}}否{{/if}}</td> 
+			<td>{{rs.otaOrderNumber}}</td> 
+			<td>{{if rs.memberType == 1}}外宾{{else}}内宾{{/if}}</td> 
+			<td>{{rs.welcomeBoard}}</td> 
+			<td>{{rs.outOPUserName}}</td> 
+			<td>{{rs.createTime}}</td> 
+			<td> 
+				<label class="T-team-radio"> 
+					<input type="radio" class="ace" name="team-radio"> 
+					<span class="lbl"> </span> 
+				</label> 
+			</td> 
+		</tr>
+		{{/each}}
+	</tbody> 
+</table>
+<div class="row pageMode">
+	<div class="col-xs-5">
+		<small>共计 {{recordSize}} 条记录</small>
+	</div>
+	<div class="col-xs-7">
+		<div class="dataTables_paginate paging_simple_numbers T-pagenation"></div>
+	</div>
+</div>

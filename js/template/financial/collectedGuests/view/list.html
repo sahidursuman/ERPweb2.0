@@ -1,11 +1,7 @@
 {{each result as rs}}
 <tr>
 	<td>{{if rs.orderNumber == null || rs.orderNumber == ""}}-{{else}}{{rs.orderNumber}}{{/if}}</td>
-	<td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-
-		{{else}}
-			<a class="cursor T-viewLine" data-lid="{{rs.lineProductId}}">{{rs.lineProductName}}</a>
-		{{/if}} 
-	</td>
+	<td>{{if rs.lineProductName == null || rs.lineProductName == ""}}-{{else}}{{rs.lineProductName}}{{/if}}</td>
 	<td>{{rs.customerType}}</td>
 	<td>{{if rs.startTime == null || rs.startTime == ""}}-{{else}}{{rs.startTime | dateFormat:'yyyy-MM-dd'}}{{/if}}</td>
 	<td>{{if rs.memberName == null || rs.memberName == ""}}-{{else}}{{rs.memberName}}{{/if}}</td>

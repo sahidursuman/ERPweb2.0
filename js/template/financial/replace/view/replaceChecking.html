@@ -13,11 +13,19 @@
         </div>
         <div class="form-group mar-r-10">
             <label>代订单号：</label>
-            <input type="text" class="form-control T-search-order" value="{{searchParam.orderNumber || '全部'}}" style="width: 190px;">
+            <input type="text" class="form-control T-search-order" value="{{searchParam.orderNumber}}" style="width: 190px;">
         </div>
         <div class="form-group mar-r-10">
             <label>项目：</label>
             <input type="text" class="form-control T-search-project" value="{{searchParam.projects}}">
+        </div>
+        <div class="form-group mar-r-10">
+            <label>客户联系人：</label>
+            <input type="text" class="form-control T-search-contact" value="{{searchParam.contactRealname}}" data-id="{{searchParam.contactId}}" style="width:100px;" placeholder="客户联系人" />
+        </div>
+         <div class="form-group mar-r-10">
+            <label>录入人：</label>
+            <input type="text" class="form-control T-search-creator" value="{{searchParam.creatorName}}" data-id="{{searchParam.creatorId}}" style="width:100px;" placeholder="录入人" />
         </div>
         <label class="form-group">对账状态：</label>
         <div class="form-group btn-group T-check-status mar-r-10">
@@ -78,23 +86,27 @@
         <colgroup> 
             <col style="width:12%;"> 
             <col style="width:6%;"> 
+            <col style="width:6%;">
             <col style="width:10%;"> 
-            <col style="width:20%;"> 
+            <col style="width:14%;"> 
+            <col style="width:6%;">
             <col style="width:5%;"> 
             <col style="width:5%;"> 
-            <col style="width:8%;"> 
+            <col style="width:6%;"> 
             <col style="width:5%;"> 
-            <col style="width:8%;"> 
-            <col style="width:9%;"> 
+            <col style="width:7%;"> 
+            <col style="width:6%;"> 
             <col style="width:5%;"> 
-            <col style="width:7%; min-width: 110px;"> 
+            <col style="min-width: 110px;"> 
         </colgroup>
         <thead>
             <tr class="T-tr-fixed bg-blur">
                 <th>代订单号</th>
                 <th>代订日期（账期）</th>
+                <th>客户联系人</th>
                 <th>项目</th>
                 <th>明细</th>
+                <th>录入人</th>
                 <th>代订金额</th>
                 <th>已收金额</th>
                 <th>结算金额</th>
@@ -110,8 +122,10 @@
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.orderNumber}}</td>
                 <td>{{rs.startTime}}</td>
+                <td>{{rs.partnerAgencyName}}</td>
                 <td>{{rs.projectName}}</td>
-                <td class="T-ctrl-tip" title="{{rs.newDetail}}"><span>{{rs.newDetail}}</span></td>
+                <td class="T-ctrl-tip" title="{{#rs.newDetail}}"><span>{{#rs.newDetail}}</span></td>
+                <td>{{rs.creatorName}}<br/>{{rs.creatorTime  | dateFormat:"yyyy-MM-dd"}}<br/>{{rs.creatorTime  | dateFormat:"hh:mm:ss"}}</td>
                 <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
                 <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
                 <td>{{if !!rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>{{else}}<input type="text" class="col-xs-12 F-float F-money" name="settlementMoney" value="{{rs.settlementMoney}}">{{/if}}</td>
@@ -120,7 +134,7 @@
                     <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
                     {{/if}}
                 </td>
-                <td>{{rs.checkTime}}</td>
+                <td>{{rs.checkTime | dateFormat:"yyyy-MM-dd"}}<br />{{rs.checkTime | dateFormat:"hh:mm:ss"}}</td>
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     <label class="pos-rel">

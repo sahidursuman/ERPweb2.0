@@ -1,0 +1,82 @@
+<div class="base-info container-fluid" data-id="{{bookingOrder.id}}">
+    <div class="hct-view-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">代订单号</div>
+                        <div class="hct-view-content">{{bookingOrder.orderNumber}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">客人信息</div>
+                        <div class="hct-view-content">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">外联销售</div>
+                        <div class="hct-view-content">{{bookingOrder.outOPUserName}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-12" colspan="3">
+                        <div class="hct-view-title">用车时间</div>
+                        <div class="hct-view-content">{{bookingOrder.startUseTime | dateFormat: 'yyyy-MM-dd'}} - {{bookingOrder.endUseTime | dateFormat: 'yyyy-MM-dd'}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class=" ui-sortable-handle">
+    <h5 class="">
+        <label class="middle title-size">车</label>
+    </h5>
+    <p class="panel hct-mh-required">现车辆计划要求：{{required}}</p>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            <table class="table table-striped table-bordered table-hover margin-top" style="border: 1px solid #ccc">
+                <thead>
+                    <tr>
+                        <th class="th-border" width="110"><span class="necessary">*</span>开始日期</th>
+                        <th class="th-border" width="110"><span class="necessary">*</span>结束日期</th>
+                        <th class="th-border" width="110"><span class="necessary">*</span>车座数</th>
+                        <th class="th-border">车辆品牌</th>
+                        <th class="th-border"><span class="necessary">*</span>所属车队</th>
+                        <th class="th-border" width="100">车费</th>
+                        <th class="th-border" width="100">优惠</th>
+                        <th class="th-border" width="100">应付</th>
+                        <th class="th-border" width="100">预付款</th>
+                        <th class="th-border">备注</th>
+                    </tr>
+                </thead>
+                <tbody class="T-busList">
+                {{if !!arrangeList && arrangeList.length > 0}}
+                {{each arrangeList as rs}}
+                    <tr data-id="{{rs.id}}">
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.needSeatCount}}</td>
+                        <td>{{rs.needBusBrand}}</td>
+                        <td>{{rs.busCompanyName}}</td>
+                        <td class="F-float F-money">{{rs.fee}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.sumCostMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                    {{/each}}
+                    {{/if}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mar-t-20">
+    <span class="checkbox checkbox-inline mar-0" data-target="#transit_receive_bus">
+        <button class="btn btn-xs btn-default T-btn-close btn-primary w100 mar-r-20"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+        <label>
+            <input name="status" type="checkbox" class="ace T-finishedArrange" disabled {{if status == 1}}checked{{/if}}>
+            <span class="lbl font-w"> 车辆安排完成</span>
+        </label>
+    </span>
+</div>

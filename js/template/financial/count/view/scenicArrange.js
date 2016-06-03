@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":421,"md5":"07f04cb7c0cfce6e66a98e3cf737b8f6"}*/
+/*TMODJS:{"debug":true,"version":307,"md5":"07f04cb7c0cfce6e66a98e3cf737b8f6"}*/
 define(function(require) {
     return require("../../../template")("financial/count/view/scenicArrange", function($data, $filename) {
         try {

@@ -1,0 +1,45 @@
+ <div class=" globalAdd   hct-max-model">
+        <ul class="nav nav-tabs ">
+            <li class="active hct-box text-center">
+                <a data-toggle="tab" href="#arrangeTransitSingle" aria-expanded="true">中转</a>
+            </li>
+            <li class="hct-box text-center">
+                <a data-toggle="tab" href="#arrangeTransitPlan" aria-expanded="true">团体</a>
+            </li>
+        </ul>
+        <div class="tab-content" style="margin-top: -2px">
+            <div class="form-group hct-tab">
+            <div id="arrangeTransitSingle" class="tab-pane fade active in">
+            <div class="tabbable box">
+                    <ul class="nav nav-tabs hct-new-tab T-listTabs">
+                        <li class="active ">
+                            <a data-toggle="tab" href="#arrangeTransitSingleBus" class="text-center T-tab T-busTab" aria-expanded="true">车</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#arrangeTransitPlanHotel" class="text-center T-tab T-hotelTab" aria-expanded="true">房</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#arrangeTransitPlanOther" class="text-center T-tab T-itsTab" aria-expanded="true">它</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- 搜索 -->
+                        <div class="T-search">
+                        </div>
+                        <!-- 车 -->
+                        <div id="arrangeTransitSingleBus" class="tab-pane fade  in active T-busLists">
+                        </div>
+                        <!-- 房 -->
+                        <div id="arrangeTransitPlanHotel" class="tab-pane fade T-HotelList">
+
+                        </div>
+                        <!-- 它 -->
+                        <div id="arrangeTransitPlanOther" class="tab-pane fade T-itsList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="arrangeTransitPlan" class="tab-pane fade"></div>
+        </div>
+    </div>
+</div>

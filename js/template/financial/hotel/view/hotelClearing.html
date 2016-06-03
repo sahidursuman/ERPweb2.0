@@ -149,15 +149,8 @@
         </thead>
         <tbody class="T-clearList">
             {{each financialHotelListData as rs}}
-            <tr data-id="{{rs.id}}">
-                <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
-                        {{if rs.lineProductName || rs.guideName}}，{{/if}}
-                    {{/if}}
-                    {{if rs.lineProductName != null && rs.lineProductName != ""}}{{rs.lineProductName}}
-                        {{if rs.guideName}}，{{/if}}
-                    {{/if}}
-                    {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
-                </td>
+            <tr data-id="{{rs.id}}" arrangeId='{{rs.arrangeId}}'>
+                <td>{{#rs.title}}</td>
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{if rs.type == null || rs.type == ""}}-{{else}}{{rs.type}}{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.price}}</span></td>
@@ -172,9 +165,14 @@
                 </td> 
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-hotelImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td> 
-                <td><span class="F-float F-money">{{if rs.serviceType==1}}{{rs.collection}}{{else}}-{{/if}}</span></td>
+                <td> 
+                    {{if rs.serviceType == 1}}
+                    <a class="money F-float F-money T-option T-collection" name="collection" data-type='hotel'>{{rs.collection}}</a>
+                    {{else}} - 
+                    {{/if}}
+                </td>
                 <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
-                <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money F-float F-money" maxlength="9" /></td>
+                <td><input name="payMoney" type="text" value="{{rs.payMoney}}" class="money F-float F-money " maxlength="9" /></td>
                 <td><textarea class="col-sm-12 hct-textarea" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>

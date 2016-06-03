@@ -1,0 +1,13 @@
+{{each lineProductList as rs}}
+<tr data-id="{{rs.id}}">
+	<td name="lineProductName">{{rs.name}}</td>
+	<td>{{rs.type}}</td>
+	<td>{{rs.customerType | getCustomerType:true}}</td>
+    <td name="days">{{rs.days}}</td>
+    <td>{{if !!rs.businessGroup}}{{rs.businessGroup.name}} {{/if}}</td>
+	<td>
+		<input type="radio" name="chooseLineProduct" class="ace">
+		<label class="lbl"></label>
+	</td>
+</tr>
+{{/each}}
