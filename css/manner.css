@@ -915,12 +915,15 @@ select {
     -moz-line-height: normal;
     padding-top: 2px;
 }
-
+.line-h-submit .guideSubmit {
+    line-height:16px !important;
+}
 .guideSubmit {
     height: 36px !important;
     font-size: 14px;
     line-height: 23px !important;
 }
+
 
 
 /*.datepicker{*/
