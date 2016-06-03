@@ -147,9 +147,8 @@
         </thead>
         <tbody class="T-clearList">
             {{each financialBusCompanyListData as rs index}}
-            <tr data-id="{{rs.id}}">
-                <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}} {{if rs.lineProductName || rs.guideName}}，{{/if}} {{/if}} {{if rs.lineProductName != null && rs.lineProductName != ""}}{{rs.lineProductName}} {{if rs.guideName}}，{{/if}} {{/if}} {{if rs.guideName != null && rs.guideName != ""}}{{rs.guideName}}{{/if}}
-                </td>
+            <tr data-id="{{rs.id}}" arrangeId='{{rs.arrangeId}}'>
+                <td>{{#rs.title}}</td>
                 <td>{{if rs.startTime == null || rs.startTime == ""}} - {{else}} {{rs.startTime | dateFormat: 'yyyy-MM-dd'}} ~ {{rs.endTime | dateFormat: 'yyyy-MM-dd'}} {{/if}}
                 </td>
                 <td>{{if rs.isMemberCount == 1}} - {{else}} {{if rs.touristAdultCount == null || rs.touristAdultCount == ""}}0{{else}}<span class="F-float F-count">{{rs.touristAdultCount}}</span>{{/if}} 大 {{if rs.touristChildCount == null || rs.touristChildCount == ""}}0{{else}}<span class="F-float F-count">{{rs.touristChildCount}}</span>{{/if}} 小 {{/if}}
@@ -170,7 +169,12 @@
                 </td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-busCompanyImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
                 <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
-                <td><span class="F-float F-money">{{if rs.serviceType==1}}{{rs.collection}}{{else}}-{{/if}}</span></td>
+                <td> 
+                    {{if rs.serviceType == 1}}
+                    <a class="money F-float F-money T-option T-collection" name="collection" data-type='bus'>{{rs.collection}}</a>
+                    {{else}} - 
+                    {{/if}}
+                </td>
                 <td><span class="F-float F-money">{{rs.unPayedMoney}}</span></td>
                 <td>
                     <input name="payMoney" type="text" value="{{rs.payMoney}}" class="money F-float F-money" maxlength="9" />

@@ -1,0 +1,71 @@
+<div class="container-fluid mar-t-20">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-xs-1 text-right no-padding-right control-label">出游日期</div>
+            <div class="col-xs-3 control-label">{{startDate | dateFormat: 'yyyy-MM-dd'}}</div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-1 text-right no-padding-right control-label">景区</div>
+            <div class="col-xs-3 control-label">{{scenicName}}</div>
+            <div class="col-xs-1 text-right no-padding-right control-label">门票数量</div>
+            <div class="col-xs-3 control-label">{{memberCount}}</div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-1 text-right no-padding-right control-label">景区要求</div>
+            <div class="col-xs-11 control-label">{{required}}</div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-2">
+                <select class="col-xs-12" disabled>
+                    <option value="0">本部操作</option>
+                    <option value="1" {{if opSide == 1}}selected{{/if}}>他部操作</option>
+                </select> 
+            </div>
+        {{if opSide == 1}}
+            <div class="col-xs-9">
+                <div class="col-xs-1 text-right no-padding-right control-label no-padding-left">部门</div>
+                <div class="col-xs-2 control-label">{{dutyDepartmentName}}</div>
+                <div class="col-xs-1 text-right no-padding-right control-label no-padding-left">子部门</div>
+                <div class="col-xs-2 control-label">{{dutySubDepartmentName}}</div>
+                <div class="col-xs-2 text-right no-padding-right control-label">责任计调</div>
+                <div class="col-xs-4 control-label">{{dutyUserName}}</div>
+            </div>
+        {{/if}}
+        </div>
+        <div class="col-xs-12 mar-t-20">
+            <div class="col-xs-8" style="padding-top: 4px;">
+                <label class="control-label pull-left" style="width: 35px;">应付</label>
+                <span class="pull-left F-float F-money">{{needPayMoney}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-20">
+            <table class="table table-striped table-new table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>费用项</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>金额</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody class="T-fee-list" data-type="3" data-del-json="{{feeDel}}">
+                {{if feeList && feeList.length > 0}}
+                    {{each feeList as rs}}
+                    <tr>
+                        <td>景区费用</td>
+                        <td><span class="F-float F-count">{{rs.count}}</span></td>
+                        <td><span class="F-float F-money">{{rs.price}}</span></td>
+                        <td><span class="F-float F-money">{{rs.price*rs.count}}</span></td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                    {{/each}}
+                {{/if}}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-12 mar-t-20 mar-b-10 text-center">
+            <button class="btn btn-xs btn-default T-btn-close btn-primary w100"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+        </div>
+    </div>
+</div>

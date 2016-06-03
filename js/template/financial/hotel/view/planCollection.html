@@ -1,0 +1,42 @@
+<div class="row T-transfer-bus-planCollectionLayer" style="margin: 0; padding: 10px 10px 0;">
+    <div >提示：代收团款计入客户账务，代收增项不计入客户账务。</div>
+    <table class="table table-striped table-bordered table-hover mar-t-10">
+        <thead>
+            <tr>
+                <th>收客信息</th>
+                <th>游客信息</th>
+                <th>客户</th>
+                <th>外联销售</th>
+                <th>代收团款</th>
+                <th>代收增项</th>
+            </tr>
+        </thead>
+        <tbody id="T-transfer-bus">
+        {{each collectionList as item}}
+            <tr  id="{{item.id}}" touristGroupId="{{item.touristGroupId}}" >
+                <td>
+                    <p>收客单号：<span class="orderNumber">{{item.orderNumber}}</span></p>
+                    <p><span><span class="lineProductName">&lt;{{item.lineProductName}}&gt;</span></span></p>
+                    <p><span name="startTime">{{item.startTime | dateFormat: 'yyyy-MM-dd'}}</span></p>
+                </td>
+                <td>
+                    <p><span name="tgMemberName">{{item.tgMemberName}}</span></p>
+                <p>
+                    <span name="adultCount">{{item.adultCount}}</span>大
+                    <span name="childCount">{{item.childCount}}</span>小
+                </p>
+                <p><span name="tgMemberMobileNumber ">{{item.tgMemberMobileNumber}}</span></p>
+                </td>
+                <td>{{item.partnerAgencyName}}</td>
+                <td>{{item.outOPUser}}</td>
+                <td>
+                   <input type="text" readonly="readonly" value="{{item.collectionGroup}}"> 
+                </td>
+                <td>
+                   <input type="text" readonly="readonly" value="{{item.collectionItem}}"> 
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

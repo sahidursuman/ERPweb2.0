@@ -1,0 +1,111 @@
+<div class="container-fluid mar-t-20" data-id="{{id}}">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-xs-1 text-right no-padding-right control-label"><span class="necessary">*</span>类型</div>
+            <div class="col-xs-3">
+                <select class="col-xs-12" name="ticketType">
+                    <option value="1">机票</option>
+                    <option value="2"{{if type == 2}} selected{{/if}}>汽车票</option>
+                    <option value="3"{{if type == 3}} selected{{/if}}>火车票</option>
+                    <option value="4"{{if type == 4}} selected{{/if}}>轮船票</option>
+                </select>
+            </div>
+            <div class="col-xs-1 text-right no-padding-right control-label">出发时间</div>
+            <div class="col-xs-3">
+                <input type="text" class="col-xs-12 datetimepicker" name="startTime" value="{{startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}">
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-1 text-right no-padding-right control-label"><span class="necessary pull-left">*</span>出发城市</div>
+            <div class="col-xs-3">
+                <input type="text" class="col-xs-12" name="startingCity" value="{{startingCity}}">
+            </div>
+            <div class="col-xs-1 text-right no-padding-right control-label">到达城市</div>
+            <div class="col-xs-3">
+                <input type="text" class="col-xs-12" name="arriveCity" value="{{arriveCity}}">
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-1 text-right no-padding-right control-label">座位席别</div>
+            <div class="col-xs-3">
+                <input type="text" class="col-xs-12" name="seatLevel" value="{{seatLevel}}">
+            </div>
+            <div class="col-xs-1 text-right no-padding-right control-label">数量</div>
+            <div class="col-xs-3">
+                <input type="text" class="col-xs-12" name="memberCount" value="{{memberCount}}">
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-1 text-right no-padding-right control-label">票务要求</div>
+            <div class="col-xs-11">
+                <input type="text" class="col-xs-12" name="required" value="{{required}}">
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-10">
+            <div class="col-xs-2 col-xs-offset-1">
+                <select class="col-xs-12 T-abversion">
+                    <option value="0">本部操作</option>
+                    <option value="1" {{if opSide == 1}}selected{{/if}}>他部操作</option>
+                </select> 
+            </div>
+            <div class="col-xs-9{{if opSide != 1}} hidden{{/if}} T-internal">
+                <div class="col-xs-1 text-right no-padding-right control-label no-padding-left">部门</div>
+                <div class="col-xs-2">
+                    <input type="text" class="col-xs-12" name="businessName" value="{{dutyDepartmentName}}" data-id="{{dutyDepartmentId}}">
+                </div>
+                <div class="col-xs-1 text-right no-padding-right control-label no-padding-left">子部门</div>
+                <div class="col-xs-2">
+                    <input type="text" class="col-xs-12" name="groupName" value="{{dutySubDepartmentName}}" data-id="{{dutySubDepartmentId}}" data-type="1">
+                </div>
+                <div class="col-xs-2 text-right no-padding-right control-label">责任计调</div>
+                <div class="col-xs-4">
+                    <input type="text" class="col-xs-12" name="dutyUserName" value="{{dutyUserName}}" data-id="{{dutyUserId}}">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-20">
+            <div class="col-xs-2" style="padding-left: 20px;">
+                <button class="btn btn-sm btn-success T-add-fee"> <i class="ace-icon fa fa-plus"></i> 新增费用项 </button>               
+            </div>
+            <div class="col-xs-8" style="padding-top: 4px;">
+                <label class="control-label pull-left" style="width: 35px;">应付</label>
+                <input type="text" readonly class="pull-left F-float F-money" name="needPayAllMoney" value="{{needPayMoney}}">
+            </div>
+        </div>
+        <div class="col-xs-12 mar-t-20">
+            <table class="table table-striped table-new table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>费用项</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>金额</th>
+                        <th>说明</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody class="T-fee-list" data-type="2" data-del-json="{{feeDel}}">
+                {{if feeList && feeList.length > 0}}
+                    {{each feeList as rs}}
+                    <tr data-id="{{rs.id}}">
+                        <td>
+                            <select class="col-xs-12" name="type">
+                                <option value="11">票务费用</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
+                        <td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
+                        <td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
+                        <td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
+                        <td><a class="cursor T-action T-delete">删除</a></td>
+                    </tr>
+                    {{/each}}
+                {{/if}}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-12 mar-t-20 mar-b-10 text-center">
+            <button class="btn btn-sm btn-primary otherButton T-btn-save" style="height: auto;"> <i class="ace-icon fa fa-check"></i> 保存 </button>
+        </div>
+    </div>
+</div>

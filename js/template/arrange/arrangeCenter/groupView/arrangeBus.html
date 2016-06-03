@@ -1,0 +1,169 @@
+<div class=" ui-sortable-handle">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-bus"></i> 车辆安排
+        <button class="btn btn-sm btn-success T-addResource T-addBus" style="margin-left: 20px">
+            <i class="ace-icon fa fa-plus"></i>
+            新增
+        </button>
+    </h5> {{if basicInfo.oldBusRequire}}
+    <p class="requirementsPlan">原车辆计划要求：{{basicInfo.oldBusRequire}}</p>{{/if}} {{if basicInfo.nowBusRequire}}
+    <p class="requirementsPlan">现车辆计划要求：{{basicInfo.nowBusRequire}}</p>{{/if}}
+    <div style="overflow-x:auto;">
+        <div style="min-width:2500px;">
+            <table class="table table-striped table-bordered table-hover table-tripPlan-container">
+                <colgroup>
+                    <col style="width:100px">
+                    <col style="width:100px">
+                    <col style="width:60px;">
+                    <col style="width:60px;">
+                    <col style="width:110px;">
+                    <col style="width:110px;">
+                    <col style="width:110px;">
+                    <col style="width:110px;">
+                    <col style="width:150px;">
+                    <col style="width:150px;">
+                    <col style="width:80px;">
+                    <col style="width:100px;">
+                    <col style="width:110px;">
+                    <col style="width:120px;">
+                    <col style="width:80px;">
+                    <col style="width:80px;">
+                    <col style="width:80px;">
+                    <col style="width:80px;">
+                    <col style="width:150px;">
+                    <col>
+                    <col style="width:100px;">
+                    <col style="width:140px;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="th-border"><span class="necessary">*</span>开始日期</th>
+                        <th class="th-border"><span class="necessary">*</span>结束日期</th>
+                        <th class="th-border">任务</th>
+                        <th class="th-border">车座数</th>
+                        <th class="th-border">车辆品牌</th>
+                        <th class="th-border">车牌号</th>
+                        <th class="th-border"><span class="necessary">*</span>所属车队</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">集合时间</th>
+                        <th class="th-border">集合地点</th>
+                        <th class="th-border" width="70">通知游客</th>
+                        <th class="th-border">司机</th>
+                        <th class="th-border">司机电话</th>
+                        <th class="th-border">合同号</th>
+                        <th class="th-border">车费</th>
+                        <th class="th-border">优惠</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">预付款</th>
+                        <th class="th-border">计划导付</th>
+                        <th class="th-border">备注</th>
+                        <th class="th-border">状态</th>
+                        <th class="th-border" width="160px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each busCompanyList as busCompany}} {{if busCompany != "[]" || busCompany != null}}
+                    <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}" data-entity-busCompanyId="{{if !!busCompany.busCompany}}{{busCompany.busCompany.id}}{{/if}}" data-entity-busId="{{if !!busCompany.bus}}{{busCompany.bus.id}}{{/if}}" data-entity-offerId="{{busCompany.offerId}}">
+                        <td>
+                            <input type="text" name="startTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.startTime | dateFormat:'yyyy-MM-dd'}}">
+                        </td>
+                        <td>
+                            <input type="text" name="endTime" class="datepicker T-busPriceC" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.endTime | dateFormat:'yyyy-MM-dd'}}">
+                        </td>
+                        <td>{{#busCompany.taskType | getTaskSelect:true}}</td>
+                        <td>
+                            <input type="text" name="needSeatCount" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.needSeatCount}}" class="col-sm-12" style="width: 60px;" />
+                        </td>
+                        <td>
+                            <input type="text" name="brand" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{busCompany.brand}}" class="col-sm-12" />
+                        </td>
+                        <td>
+                            <div class="col-xs-12 feild-relative">
+                                <input type="text" name="licenseNumber" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.bus != null}}{{busCompany.bus.licenseNumber}}{{/if}}" class="col-xs-12 T-busPriceC" />
+                                <input type="hidden" value="{{if busCompany.bus != null}}{{busCompany.bus.id}}{{/if}}" name="busId" />
+                                <span class="addResourceBtn T-addBusResource R-right" data-right="1020003" title="添加车辆">
+                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                    </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-xs-12 feild-relative">
+                                <input type="text" name="companyName" {{if !!busCompany.offerId}}disabled="disabled" {{/if}} value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.companyName}}{{/if}}" class="chooseBusCompany col-xs-12" />
+                                <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{busCompany.id}}{{/if}}">
+                                <input type="hidden" name="busCompanyId" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.id}}{{/if}}" />
+                                <span class="addResourceBtn T-addBusCompanyResource R-right" data-right="1020002" title="添加车队">
+                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                    </span>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" name="mobileNumber" readonly="readonly" value="{{if busCompany.busCompany != null}}{{busCompany.busCompany.mobileNumber}}{{/if}}" class="col-sm-12" />
+                        </td>
+                        <td>
+                            <input type="text" name="setPlaceTime" class="col-xs-12 T-dateTimePicker" value="{{if busCompany.taskType != 6}}{{busCompany.setPlaceTime}}{{/if}}" {{if busCompany.taskType==6 }}disabled{{/if}}>
+                        </td>
+                        <td>
+                            <input type="text" name="setPlacePosition" class="col-xs-12" value="{{if busCompany.taskType != 6}}{{busCompany.setPlacePosition}}{{/if}}" {{if busCompany.taskType==6 }}disabled{{/if}}>
+                        </td>
+                        <td><a class="T-noticeTourists" data-entity-touristgroup="{{busCompany.annouceTouristGroupIds}}">点击设置</a></td>
+                        <td>
+                            <div class="col-xs-12 feild-relative">
+                                <input type="text" name="driverName" value="{{if busCompany.driver != null}}{{busCompany.driver.name}}{{/if}}" class="col-xs-12" />
+                                <input type="hidden" name="driverId" value="{{if busCompany.driver != null}}{{busCompany.driver.id}}{{/if}}">
+                                <span class="addResourceBtn T-addDriverResource R-right" data-right="1020003" title="添加司机">
+                                        <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                    </span>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" name="driverMobileNumber" readonly="readonly" value="{{if busCompany.driver != null}}{{busCompany.driver.mobileNumber}}{{/if}}" class="col-sm-12" />
+                        </td>
+                        <td>
+                            <input type="text" name="contractNumber" value="{{busCompany.contractNumber}}" maxlength="20" class="col-sm-12" />
+                        </td>
+                        <td>
+                            <input type="text" name="price" value="{{busCompany.price}}" class="col-sm-12 price F-float F-money" maxlength="9" style="width: 60px;" />
+                            <input type="hidden" name="memberCount" value="1" />
+                        </td>
+                        <td>
+                            <input type="text" name="reduceMoney" value="{{busCompany.reduceMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" />
+                        </td>
+                        <td>
+                            <input type="text" name="needPayMoney" readonly="readonly" value="{{busCompany.needPayMoney}}" maxlength="9" class="col-sm-12 F-float F-money" />
+                        </td>
+                        <td>
+                            <input type="text" name="prePayMoney" value="{{busCompany.prePayMoney}}" class="col-sm-12 price F-float F-money" maxlength="9" />
+                        </td>
+                        <td class="inline-flex">{{#busCompany.payType | getPlanPayTypeOption}}
+                            <input name="guidePayMoney" type="text" value="{{if basicInfo.isArranged == 1}}{{if busCompany.payType == 2}}{{busCompany.signMoney}}{{else}}{{busCompany.guidePayMoney}}{{/if}}{{else}}{{busCompany.price}}{{/if}}" maxlength="9" class="F-float F-money" />
+                        </td>
+                        <td>
+                            <input name="remark" type="text" value="{{busCompany.remark}}" class="col-sm-12" maxlength="500" />
+                        </td>
+                        <td>
+                            <select name="orderStatus">
+                                <option value="1" {{if busCompany.orderStatus==1 }}selected="selected" {{/if}}>未预定</option>
+                                <option value="2" {{if busCompany.orderStatus==2 }}selected="selected" {{/if}}>预定中</option>
+                                <option value="3" {{if busCompany.orderStatus==3 }}selected="selected" {{/if}}>已预订</option>
+                                <option value="0" {{if busCompany.orderStatus==0 }}selected="selected" {{/if}}>无需预定</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a class="cursor T-bus-action T-bus-askPrice">询价</a><a class="cursor T-bus-action T-bus-offerStatus"><i class="ace-icon fa fa-search"></i></a>
+                            <a class="cursor T-bus-action T-bus-bookingStatus {{if busCompany.inquiryStatus == 1}}T-bus-booking{{/if}}" {{if busCompany.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-bus-action T-bus-bookingView"><i class="ace-icon fa fa-search"></i></a>
+                            <a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{busCompany.financialMoney}}" title="删除" data-entity-name="busCompany">删除</a>
+                        </td>
+                        {{if busCompany.offerId!=null}}
+                        <!-- <td>
+                                <a class="cursor T-bus-SendOrder T-sendOrder-Area R-right T-action" data-value='{{busCompany.qouteId}}' data-right="1450001" data-entity-offerId={{busCompany.offerId}}>
+                                发送订单
+                               </a>
+                            </td> -->
+                        {{/if}}
+                    </tr>
+                    {{/if}} {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -43,14 +43,14 @@
             <tr data-id="{{rs.id}}" data-bill-status="{{rs.billStatus}}">
                 <td class="h-touristGroupInfo" style="vertical-align:middle">
                     <p class="h-orderNumber">团号：{{rs.tripNumber}}</p>
-                    <p class="h-lineName">&lt;{{rs.lineProduct.name}}&gt;</p>
+                    <p class="h-lineName">{{rs.lineProduct.name}}</p>
                     <p>
                         {{if !!rs.guideNames}}<span class="h-memberName">导游：{{rs.guideNames}}</span>{{/if}}&nbsp;&nbsp;
                         {{if !!rs.dutyOPUserName}}<span class="h-memberName">责任计调：{{rs.dutyOPUserName}}</span>{{/if}}
                     </p>
                 </td>
                 <td>{{rs.startTime | dateFormat: 'yyyy.MM.dd'}} <br>-<br> {{rs.endTime | dateFormat: 'yyyy.MM.dd'}}</td>
-                <td style="vertical-align:middle">
+               <td style="vertical-align:middle">
                 {{if !!rs.tripPlanDetails && !!rs.tripPlanDetails[0]}}
                 {{rs.tripPlanDetails[0].travelAgencyName}}
                 {{/if}}

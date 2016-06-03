@@ -32,7 +32,7 @@ define(function(require, exports) {
 				orderNumber : "",				
 				partnerAgencyId	: "",	//地接社	
 				partnerAgencyName :"",					
-				status	: "",		
+				status	: 3,		
 				type : "",	
 				userName : "",
 				pageNo : ""
@@ -40,7 +40,9 @@ define(function(require, exports) {
 	    	$tab:"",
 	    	$divIdOutObj:"",
 	    	$divIdInObj:"",
-	    	allData : {}
+	    	allData : {},
+	    	isFirst : true
+
 	    };
 		var getFeeItemPayTypeOptions =  {
 	         payType : 1
@@ -298,6 +300,11 @@ define(function(require, exports) {
 				createEndTime :  getValue("createEndTime"),
 				status : $("#"+divId).find(".btn-status button").attr('data-value')
 			}
+
+			if (!!divId && divId==='Transfer-Out' && transfer.isFirst==true) {
+				transfer.$searchParam.status = 3;
+				 transfer.isFirst=false;
+			}
 	    };
 	
       	/**
@@ -307,7 +314,8 @@ define(function(require, exports) {
       	 */
 	    transfer.getListPage=function(event){
 	    	var divId=event.data.divId,
-	    	    type=event.data.type;
+	    	    type=event.data.type,
+	    	    initStatus = event.data.type;
 	    	transfer.getSearchParam(divId,type);
 	    	transfer.findPager(divId,type,0);
 	    	transfer.findTotal(divId);
@@ -472,7 +480,10 @@ define(function(require, exports) {
 				success:function(data){
 					var result = showDialog(data);
 						if(result){
-							var imgUrl = data.ERP_IMG_URL;
+							var num = data.transfer.companyLogo.indexOf('null');
+							if (num > 0) {
+								data.transfer.companyLogo = '';
+							}
 							var html = viewTransferOutAccTemplate(data);
 							var viewAccountsLayer = layer.open({
 								type: 1,
@@ -675,6 +686,15 @@ define(function(require, exports) {
 					transfer.PayMoneyF($tab);
 				});
 
+				//对方现收
+				$tab.find('[name="cashFlag"]').on('change', function(){
+	                if($(this).is(':checked')){
+	                    $tab.find('.T-cashFlag').removeClass("hidden")
+	                }else{
+	                    $tab.find('.T-cashFlag').addClass("hidden")
+	                }
+	            });
+
 				//计算金额
 				transfer.calcPayMoney($tab);
 				$tab.find('.T-calc').trigger('change');
@@ -729,7 +749,7 @@ define(function(require, exports) {
             "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其它费用</option></select></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
 			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
-            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\"readonly=\"readonly\" /></td>"+
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" readonly=\"readonly\" /></td>"+
             "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right\" maxlength=\"100\" /></td>"+
 			"<td><a class=\"cursor T-updateTransfer-delete\">删除</a></td>"+
 			"</tr>";
@@ -803,7 +823,7 @@ define(function(require, exports) {
 		transfer.getPartnerAgencyList=function(obj){
 			var $obj = $(obj);
 			$.ajax({
-				url: KingServices.build_url('partnerAgency', 'findPartnerAnencyList'),
+				url: KingServices.build_url('partnerAgency', 'findPartnerAgencyByOtherTravelAgency'),
                 success:function(data){
 					var result = showDialog(data);
 					if(result){
@@ -881,11 +901,17 @@ define(function(require, exports) {
 			// 表单校验
 			if (!validator.form()) { return; }
 			getValue = function(name){
-				var value = $tab.find("[name="+name+"]").val()
+				var type = $tab.find("[name="+name+"]").attr('type'),value;
+					if (!!type && type === 'checkbox') {
+						value = $tab.find("[name="+name+"]").is(':checked') ? 1 : 0; 
+					}else{
+						value = $tab.find("[name="+name+"]").val();
+					}
 				return value;
 			}
 			var id=getValue("touristGroupTransferId"),
 			    remark=getValue("remark"),
+			    currentNeedPayMoney = 0,
 
 			    partnerAgencyId=getValue("transferPartnerAgencyId"),
 			    transPayedMoney=getValue("transPayedMoney"),
@@ -897,8 +923,10 @@ define(function(require, exports) {
 			    status=getValue("status"),
 			    cashFlag = getValue("cashFlag");
 
-	
-	
+			if (!!cashFlag && cashFlag==1) {  //对方现收勾选
+				currentNeedPayMoney=getValue("currentNeedPayMoney");
+			}
+
 			/**
 			 * [otherFeeJsonAdd 获取新增费用项目组装成JSON数据
 			 * @type {Array}
@@ -939,15 +967,14 @@ define(function(require, exports) {
 				},
 			    transferFee : {
 					"transNeedPayAllMoney":transNeedPayAllMoney,//应付
-					"transPayedMoney":transPayedMoney,//已付
-					"transRemark":transRemark//转客费用备注
-				},			
+					"transPayedMoney":transPayedMoney//已付
+				},		
 			}
 			var otherFee=JSON.stringify(otherFeeJsonAdd);
 			$.ajax({
 				url:KingServices.build_url("transfer","update"),
 				type: 'post',
-				data:"id="+id+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee)+"&cashFlag="+cashFlag,
+				data:"id="+id+"&cashFlag="+cashFlag+"&currentNeedPayMoney="+currentNeedPayMoney+"&transRemark="+transRemark+"&touristGroupTransfer="+JSON.stringify(saveDate.touristGroupTransfer)+"&transferFee="+JSON.stringify(saveDate.transferFee)+"&otherFee="+encodeURIComponent(otherFee),
 			})
 			.done(function(data) {
 				if (showDialog(data)) {
@@ -1057,7 +1084,7 @@ define(function(require, exports) {
 		.done(function(data) {
 			var touristGroupId = data.touristGroupId;
 		    //跳转游客小组新增页面
-			KingServices.updateTransfer(touristGroupId,id);
+			//KingServices.updateTransfer(touristGroupId,id);
 		})
 	};
 

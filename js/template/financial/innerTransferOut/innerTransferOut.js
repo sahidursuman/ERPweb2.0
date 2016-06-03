@@ -32,10 +32,9 @@ define(function(require,exports) {
 	 */
 	InnerTransferOut.listInnerTransfer = function(pageNo,toBusinessGroupId,toBusinessGroupName,startDate,endDate,accountStatus){
 		if(InnerTransferOut.$tab && arguments.length === 1){
-			var $toBusinessGroupId = InnerTransferOut.$tab.find('input[name=toBusinessGroupId]').val();
-			var $toBusinessGroupName = InnerTransferOut.$tab.find('input[name=toBusinessGroupName]').val(),
-			toBusinessGroupId = $toBusinessGroupId;
-			toBusinessGroupName = $toBusinessGroupId==""?"":$toBusinessGroupName;
+			toBusinessGroupId = InnerTransferOut.$tab.find('input[name=toBusinessGroupId]').val();
+			toBusinessGroupName = InnerTransferOut.$tab.find('input[name=toBusinessGroupName]').val();
+			
 			startDate = InnerTransferOut.$tab.find('input[name=startDate]').val();
 			endDate = InnerTransferOut.$tab.find('input[name=endDate]').val();
 			accountStatus = InnerTransferOut.$tab.find(".T-finance-status").find("button").data("value");
@@ -91,8 +90,7 @@ define(function(require,exports) {
 	};
 	//获取合计金额
 	InnerTransferOut.getSumMoney = function(data,tabId){
-		var totalPeople = data.sumAllTransAdultCount+data.sumAllTransChildCount;
-		tabId.find('.T-sumCount').text(totalPeople);
+		tabId.find('.T-sumCount').text((data.sumAllTransAdultCount || 0) + " 大 " + (data.sumAllTransChildCount || 0) + " 小");
         tabId.find('.T-sumInnerOutMoney').text(data.sumAllTransNeedPayMoney);
         tabId.find('.T-sumStMoney').text(data.sumAllSettlementMoney);
         tabId.find('.T-sumPaiedMoney').text(data.sumAllPayedMoney);

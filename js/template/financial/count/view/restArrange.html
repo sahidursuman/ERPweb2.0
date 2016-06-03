@@ -82,7 +82,7 @@
                                     {{else}}
                                         导游自选
                                     {{/if}}
-                                    {{else}}
+                                {{else}}
                                     <span class="nameType">{{arrange.restaurantName}}</span>
                                 {{/if}}
                             {{/if}}
@@ -293,7 +293,9 @@
                                                             <select name="payType" {{if result.isConfirmAccount == 1 || result.badStatus == 1}}disabled="disabled"{{/if}}>
                                                                 <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
                                                                 <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
-                                                                <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                                {{if arrange.isChoose != 1}}
+                                                                    <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                                {{/if}}
                                                             </select>
                                                             <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
                                                             class="F-float F-money w-70" 
@@ -312,7 +314,9 @@
                                                         <select name="payType" {{if result.isConfirmAccount == 1 || result.badStatus == 1}}disabled="disabled"{{/if}}>
                                                             <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
                                                             <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
-                                                            <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                            {{if arrange.isChoose != 1}}
+                                                                <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                            {{/if}}
                                                         </select>
                                                         <input name="guidePayedMoney" type="text" class="w-70" {{if result.isConfirmAccount == 1 || result.badStatus == 1}}readOnly="readOnly" {{/if}}/>
                                                     {{/if}}
@@ -607,7 +611,9 @@
                                                             <select name="payType" {{if result.isConfirmAccount == 1 || result.badStatus == 1}}disabled="disabled"{{/if}}>
                                                                 <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
                                                                 <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
-                                                                <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                                {{if arrange.isChoose != 1}}
+                                                                    <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                                {{/if}}
                                                             </select>
                                                             <input type="text" name="guidePayedMoney" value="{{rs.guidePayedMoney}}" 
                                                             class="F-float F-money w-70" 
@@ -626,7 +632,9 @@
                                                         <select name="payType" {{if result.isConfirmAccount == 1 || result.badStatus == 1}}disabled="disabled"{{/if}}>
                                                             <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
                                                             <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
-                                                            <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                            {{if arrange.isChoose != 1}}
+                                                                <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
+                                                            {{/if}}
                                                         </select>
                                                         <input name="guidePayedMoney" type="text" class="w-70" {{if result.isConfirmAccount == 1 || result.badStatus == 1}}readOnly="readOnly" {{/if}}/>
                                                     {{/if}}
@@ -720,7 +728,6 @@
         <div arrangeType="rest"> 
             <label style="margin:5px 0px 0px 0px;">财务审核批注：</label>
             <input name="accountFinancialCheckComment" {{if (!(tripPlan.billStatus == 1 && isFinance)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.restRemark.length>0}}{{remarkArrangeList.restRemark[0].opCheckRemark}}{{/if}}" />
-        
             <label style="margin:5px 0px 0px 10px;">计调审核批注：</label>
             <input name="accountOPCheckComment" {{if (!(tripPlan.billStatus == 0 && isOp)) }}readonly="readonly"{{/if}} type="text" style="width:30%;" value="{{if remarkArrangeList.restRemark.length>0}}{{remarkArrangeList.restRemark[0].financeCheckRemark}}{{/if}}" />
         </div>

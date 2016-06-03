@@ -273,11 +273,15 @@ define(function(require, exports) {
                         checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
                         FinShop.sumShopMoney(FinShop.$checkingTab);
                     }
-                    if($theTab.data("total")){
+                    /**
+                     * 修复当在购物对账页面中改变结算金额，收款页面的数据统计没有同步
+                     */
+                    FinShop.getCheckSumData(args,$theTab);
+                    /*if($theTab.data("total")){
                         FinShop.loadSumData($theTab);
                     } else {
                         FinShop.getCheckSumData(args,$theTab);
-                    }
+                    }*/
                     FinShop.initOperationEvent($theTab,args,type);
                     $theTab.data('id', args.shopId);
                 } else {

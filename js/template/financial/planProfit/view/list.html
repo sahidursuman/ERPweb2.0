@@ -5,15 +5,9 @@
 		<th rowspan="2" style="width:60px;">收/付</th>
 		<th colspan="5">发团收入</th>
 		<th colspan="14">发团成本</th>
-		{{if isTurn == 1}}
-		<th colspan="5">中转成本</th>
-		{{/if}}
 		<th rowspan="2">导游退补小计</th>
 		<th rowspan="2">收入小计</th>
 		<th rowspan="2">发团成本小计</th>
-		{{if isTurn == 1}}
-		<th rowspan="2">中转成本小计</th>
-		{{/if}}
 		<th rowspan="2">毛利</th>
 		<th width="80" rowspan="2">人均毛利</th>
 	</tr>
@@ -37,13 +31,6 @@
 		<th>自费导佣</th>
 		<th>自费全陪</th>
 		<th style="min-width:50px;">导游结算扣款</th>
-		{{if isTurn}}
-		<th>车费</th>
-		<th>餐费</th>
-		<th>房费</th>
-		<th>票务</th>
-		<th>其他</th>
-		{{/if}}
 	</tr>
 </thead>
 <tbody>
@@ -95,19 +82,9 @@
 		<td><span class="F-float F-money">{{list.selfMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.selfPayQuanpeiRebateMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.guideDeductions}}</span></td>
-		{{if isTurn == 1}}
-		<td><span class="F-float F-money">{{list.outBusMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outRestaurantMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outHotelMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
-		{{/if}}
 		<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.totalIncome}}</span></td>
 		<td><span class="F-float F-money">{{list.totalTrip}}</span></td>
-		{{if isTurn == 1}}
-		<td><span class="F-float F-money">{{list.totalOut}}</span></td>
-		{{/if}}
 		{{/if}}
 		{{/each}}
 		<td rowspan="3"><span class="F-float F-money">{{rs.profit}}</span></td>
@@ -116,7 +93,7 @@
 	{{each rs.list as list index}}
 		{{if index > 0}}
 		<tr><td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
-			<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
+			<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 			<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.selfIncome}}{{/if}}</span></td>
 			<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.incomeMoney}}{{/if}}</span></td>
@@ -135,19 +112,9 @@
 			<td><span class="F-float F-money">{{if !!list.selfMoney}}{{list.selfMoney}}{{else}}-{{/if}}</span></td>
 			<td><span class="F-float F-money">{{if !!list.selfPayQuanpeiRebateMoney}}{{list.selfPayQuanpeiRebateMoney}}{{else}}-{{/if}}</span></td>
 			<td><span class="F-float F-money">{{if !!list.guideDeductions}}{{list.guideDeductions}}{{else}}-{{/if}}</span></td>
-			{{if isTurn == 1}}
-			<td><span class="F-float F-money">{{list.outBusMoney}}</span></td>
-			<td><span class="F-float F-money">{{list.outRestaurantMoney}}</span></td>
-			<td><span class="F-float F-money">{{list.outHotelMoney}}</span></td>
-			<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
-			<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
-			{{/if}}
 			<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 			<td><span class="F-float F-money">{{list.totalIncome}}</span></td>
 			<td><span class="F-float F-money">{{list.totalTrip}}</span></td>
-			{{if isTurn == 1}}
-			<td><span class="F-float F-money">{{list.totalOut}}</span></td>
-			{{/if}}
 		</tr>
 		{{/if}}
 	{{/each}}
@@ -178,19 +145,9 @@
 		<td><span class="F-float F-money">{{list.selfMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.selfPayQuanpeiRebateMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.guideDeductions}}</span></td>
-		{{if isTurn == 1}}
-		<td><span class="F-float F-money">{{list.outBusMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outRestaurantMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outHotelMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
-		<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
-		{{/if}}
 		<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 		<td><span class="F-float F-money">{{list.totalIncome}}</span></td>
 		<td><span class="F-float F-money">{{list.totalTrip}}</span></td>
-		{{if isTurn == 1}}
-		<td><span class="F-float F-money">{{list.totalOut}}</span></td>
-		{{/if}}
 		{{/if}}
 		{{/each}}
 		<td rowspan="3"><span class="F-float F-money">{{subtotal.profit}}</span></td>
@@ -200,7 +157,7 @@
 		{{if index > 0}}
 			<tr style="background: #fcf8e4;">
 				<td>{{if index == 1}}已{{else if index == 2}}未{{/if}}收/付</td>
-				<td>{{if isTurn != 1}}-{{else}}<span class="F-float F-money">{{list.needPayAllMoney}}</span>{{/if}}</td>
+				<td><span class="F-float F-money">{{list.needPayAllMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.shopMoney}}</span></td>
 				<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.selfIncome}}{{/if}}</span></td>
 				<td><span class="F-float F-money">{{if index == 2}}-{{else}}{{list.incomeMoney}}{{/if}}</span></td>
@@ -219,19 +176,9 @@
 				<td><span class="F-float F-money">{{if !!list.selfMoney}}{{list.selfMoney}}{{else}}-{{/if}}</span></td>
 				<td><span class="F-float F-money">{{if !!list.selfPayQuanpeiRebateMoney}}{{list.selfPayQuanpeiRebateMoney}}{{else}}-{{/if}}</span></td>
 				<td><span class="F-float F-money">{{if !!list.guideDeductions}}{{list.guideDeductions}}{{else}}-{{/if}}</span></td>
-				{{if isTurn == 1}}
-				<td><span class="F-float F-money">{{list.outBusMoney}}</span></td>
-				<td><span class="F-float F-money">{{list.outRestaurantMoney}}</span></td>
-				<td><span class="F-float F-money">{{list.outHotelMoney}}</span></td>
-				<td><span class="F-float F-money">{{list.outTicketMoney}}</span></td>
-				<td><span class="F-float F-money">{{list.outOtherMoney}}</span></td>
-				{{/if}}
 				<td><span class="F-float F-money">{{list.guideBackPaySMoney}}</span></td>
 				<td><span class="F-float F-money">{{list.totalIncome}}</span></td>
 				<td><span class="F-float F-money">{{list.totalTrip}}</span></td>
-				{{if isTurn == 1}}
-				<td><span class="F-float F-money">{{list.totalOut}}</span></td>
-				{{/if}}
 			</tr>
 		{{/if}}
 	{{/each}}

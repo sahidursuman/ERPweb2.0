@@ -67,6 +67,11 @@
 				width: 285px;
 				height: 40px;
 				border: 0;
+				-webkit-box-shadow: 0 0 0px 40px #fff inset !important;
+				-o-box-shadow: 0 0 0px 40px #fff inset !important;
+				-ms-box-shadow: 0 0 0px 40px #fff inset !important;
+				-moz-box-shadow:0 0 0px 40px #fff inset !important;
+					 box-shadow: 0 0 0px 40px #fff inset !important;
 
 			}
 			.inp-user{
@@ -229,7 +234,11 @@
 			});
 			
 			$("input[name=password]").keyup(function(e){
-				if(e.which == 13 && !window.forbiddenError){
+				var agent = navigator.userAgent.toLowerCase();
+				var regStr_ie = /msie [\d.]/gi;
+				if(agent.indexOf("msie") > 0 && (agent.match(regStr_ie)+"").replace("msie ","") < 9) { //!$.support.opacity
+					browserUpdate();
+				} else if(e.which == 13 && !window.forbiddenError){
 					login();
 				}
 			});

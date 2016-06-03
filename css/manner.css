@@ -10,6 +10,7 @@
 
 .table-special tr:first-child {
     border: none;
+   
 }
 
 .table-special tr {
@@ -63,9 +64,12 @@
 }
 
 .search-btn:hover {
-    background: #359fb2;
+    background: #359fb2!important;
 }
 
+.htc-btn {
+    line-height: 10px;
+}
 
 /*下拉列表横向滚动调样式调整*/
 
@@ -163,11 +167,13 @@ label {
 
 .cursor {
     text-decoration: none!important;
-    cursor: pointer;
+    cursor: pointer!important;
     font-size: 12px!important;
     margin-left: 5px;
 }
-
+.hct-cursor{
+    cursor: pointer!important;
+}
 .bg-blur {
     background: #51b0c2!important;
     color: white!important;
@@ -446,9 +452,14 @@ table tr td {
 .mar-t-5 {
     margin-top: 5px;
 }
-
+.mar-t-F6 {
+    margin-top: -6px;
+}
 .mar-t-20 {
     margin-top: 20px;
+}
+.mar-t-50{
+    margin-top: 50px;
 }
 .mar-t-30 {
     margin-top: 30px;
@@ -456,9 +467,7 @@ table tr td {
 .mar-t-10 {
     margin-top: 10px;
 }
-.mar-t-15 {
-    margin-top: 15px;
-}
+
 .mar-l-5 {
     margin-left: 5px;
 }
@@ -482,25 +491,21 @@ table tr td {
 .mar-l-23{
     margin-left: 23px;
 }
-.mar-l-f5{
-    margin-left: -5px;
-}
+
 .mar-l-15 {
     margin-left: 15px;
 }
-.mar-l-90 {
-    margin-left: 90px;
+.mar-l-20 {
+    margin-left: 20px;
 }
 .mar-1-135{
     margin-left: 135px;
 }
-
-.mar-r-9 {
-    margin-right: 9px;
-}
-
 .mar-r-10 {
     margin-right: 10px;
+}
+.mar-r-15 {
+    margin-right: 15px;
 }
 .mar-r-20 {
     margin-right: 20px!important;
@@ -532,12 +537,7 @@ table tr td {
 .pad-l-5 {
     padding-left: 5px;
 }
-.pad-b-30{
-    padding-bottom: 30px;
-}
-.pad-b-20{
-    padding-bottom: 20px;
-}
+
 .line-h-2 {
     line-height: 1.9em;    
 }
@@ -696,13 +696,10 @@ table tr td {
 }
 
 .whereQ td {
-    border: 1px solid #ececec;
+    border: 1px solid #DDDDDD;
     padding: 7px 5px;
 }
-#T-touristGroupViewAccount .whereQ td {
-    border: 1px solid #E2E2E2;
-    padding: 7px 0px 7px 0px;
-}
+
 .whereQ .style-myself {
     width: 90px !important;
     /*border: 2px solid #5d5d5d;*/
@@ -1170,7 +1167,7 @@ select {
 
 /*项目代订导出按钮*/
 
-.export-Btn {
+.bookingBtn {
     height: 24px;
     line-height: 9px;
     right: 14px;
@@ -1183,6 +1180,7 @@ select {
    top: 0px;
    
 }
+
 .addManagerRight {
     cursor: pointer;
     left: -22px;
@@ -1845,6 +1843,7 @@ p#back-top a span {
     cursor: pointer;
 }
 
+
 .h-touristGroupInfo p{
     text-align: left;
     margin: 0px;
@@ -2046,14 +2045,6 @@ p#back-top a span {
         border-bottom: 1px solid #ddd;
         border-left: 2px solid #ddd;
         border-right: 2px solid #ddd;
-    }
-    /*账户设置样式*/
-    .apply-details{
-        margin-left: -4px;height: 30px !important;
-    }
-    .apply-baseInfo{
-        margin-left: 8px;
-        height: 30px !important;
     }
 }
 
@@ -2345,7 +2336,7 @@ p#back-top a span {
         margin-left: 60px;
         margin-top: -20px;
     }
-    
+
 }
 
 @media screen and (max-width:1440px) {
@@ -2480,7 +2471,7 @@ p#back-top a span {
     }
     .mar-ort-10{
         margin-top: 10px;
-    } 
+    }
 }
 /*//分享报价手机自适应*/
 @media screen and (max-width:1080px) {
@@ -2741,6 +2732,51 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 .table-inner-list li:first-child{
     border:none;
 }
+
+}
+.w-150{
+    width: 150px
+}
+/*中转安排*/
+.hct-tab .hct-new-tab{
+    height: 40px;
+    background: #e9fbfe;
+    border-bottom: none;
+}    
+.hct-tab .hct-new-tab li{
+    width: 65px;
+    height: 40px;
+    margin-top: 0px;
+    
+}
+.hct-tab .hct-new-tab li a{
+    margin-top: 0px;
+    height: inherit!important;
+    background: none;
+    border:none;
+    box-shadow: none!important;
+    line-height: 25px;
+}
+
+.hct-tab .nav-tabs>li.active>a,.hct-tab .nav-tabs>li.active>a:hover, .hct-tab .nav-tabs>li.active>a:focus{
+    color:#fff;
+    border: none;
+    background: #51b0c2;
+    line-height: 25px;
+
+}
+.hct-max-model .tab-content{
+    border: none;
+    padding:14px 0px;
+}
+.T-hide{
+    display: none;
+}
+.hct-max-model .nav-tabs .hct-box{
+    width: 150px;
+    /*height: 30px;*/
+}
+
 /*打印时的样式*/
 @media print{
     h5{
@@ -2850,6 +2886,47 @@ a.gray span, .gray, .gray:hover, .gray:focus{
 
 /* 财务已收样式 */
 .in-block{display: inline-block;white-space:nowrap;}
+
+/*中转安排*/
+.hct-tab .hct-new-tab{
+    height: 40px;
+    background: #e9fbfe;
+    border-bottom: none;
+}    
+.hct-tab .hct-new-tab li{
+    width: 65px;
+    height: 40px;
+    margin-top: 0px;
+    
+}
+.hct-tab .hct-new-tab li a{
+    margin-top: 0px;
+    height: inherit!important;
+    background: none;
+    border:none;
+    box-shadow: none!important;
+    line-height: 25px;
+}
+
+.hct-tab .nav-tabs>li.active>a,.hct-tab .nav-tabs>li.active>a:hover, .hct-tab .nav-tabs>li.active>a:focus{
+    color:#fff;
+    border: none;
+    background: #51b0c2;
+    line-height: 25px;
+
+}
+.hct-max-model .box .tab-content{
+    border: none;
+    padding:14px 0px;
+}
+.hct-max-model .nav-tabs .hct-box{
+    width: 150px;
+    /*height: 30px;*/
+}
+.hct-view table{
+    width: 90%;
+    margin-left: 5%;
+}
 
 /*billImage style*/
 ul.billImageDowebok{list-style-type: none;}

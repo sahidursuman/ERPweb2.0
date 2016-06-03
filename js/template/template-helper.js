@@ -125,6 +125,34 @@ template.helper("getFeeItemType", function(type,isTransfer) {
     res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
+template.helper("getFeeItemType2", function(type) {
+    var res = '';
+    type = type || 1;
+    res += '<option value="1" '+(type == 1?'selected':'')+'>大人结算价</option>';
+    res += '<option value="2" '+(type == 2?'selected':'')+'>小孩结算价</option>';
+    res += '<option value="8" '+(type == 8?'selected':'')+'>单房差</option>';
+    res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
+    return res;
+});
+template.helper("getFeeItemText", function(type, showType) {
+    switch(type * 1){
+        case 1: return "大人结算价";
+        case 2: return "小孩结算价";
+        case 3: return "中转结算价";
+        case 4: return "车辆费用";
+        case 5: return "餐厅费用";
+        case 6: return "保险费用";
+        case 7: return "导服费";
+        case 8: 
+            if(showType == 2) return "单房差";
+            else return "酒店费用";
+        case 9: return "景区费用";
+        case 10: return "自费费用";
+        case 11: return "票务费用";
+        case 12: return "其他费用";
+        default: return "大人结算价";
+    }
+});
 template.helper("getWayTypeText", function(status) {
     var res = ['', '旅行社系统', '传真', '短信', '电话', 'QQ', '微信', '线上渠道'];
     status = status || 1; 
@@ -167,7 +195,32 @@ template.helper("getPlanPayTypeText", function(payType) {
         default:
             return '其他';
     }
-}); 
+});
+template.helper("getTravelAgencyType", function(payType) {
+    switch (payType * 1) {
+        case 0:
+            return '地接社';
+        case 1:
+            return '组团社';
+        case 2:
+            return '地接社和组团社';
+        default:
+            return '组团社';
+    }
+});
+template.helper("getTravelAgencyLevel", function(payType) {
+    switch (payType * 1) {
+        case 1:
+            return '金牌';
+        case 2:
+            return '银牌';
+        case 3:
+            return '铜牌';
+        default:
+            return '金牌';
+    }
+});
+
 template.helper("getPlanPayTypeOption", function(status, isDisabled) {
     var res = '',
         dis = '';
@@ -328,6 +381,18 @@ template.helper("getHotelLevelDesc", function(level) {
         default:     return '';
     }
 });
+template.helper("getHotelLevelOptions", function(level) {
+    var res = '';
+    level = level || 1;
+    res += '<option value="1" '+(level == 1?'selected':'')+'>三星以下</option>';
+    res += '<option value="2" '+(level == 2?'selected':'')+'>三星</option>';
+    res += '<option value="3" '+(level == 3?'selected':'')+'>准四星</option>';
+    res += '<option value="4" '+(level == 4?'selected':'')+'>四星</option>';
+    res += '<option value="5" '+(level == 5?'selected':'')+'>准五星</option>';
+    res += '<option value="6" '+(level == 6?'selected':'')+'>五星</option>';
+    res += '<option value="7" '+(level == 7?'selected':'')+'>五星以上</option>';
+    return res;
+});
 
 template.helper("getOrderStatusDesc", function(status) {
     switch (status * 1) {
@@ -423,6 +488,21 @@ template.helper("getNoteItemText", function(status){
     return res;
 });
 
+template.helper("getPartGroupStatusText", function(status){
+    switch (status * 1){
+        case 0:     return '已发团';
+        case 1:     return '未分团';
+        case 2:     return '已分团';
+        case 3:     return '已外转';
+        case 4:     return '已取消';
+        case 5:     return '已分段';
+        case 6:     return '已内转';
+        case -1:     return '内转成功';
+        case -2:     return '外转成功';
+        default:     return '-';
+    }
+});
+
 template.helper("getBusinessTypeText", function(businessType) {
     switch (businessType) {
         case "guide":
@@ -458,7 +538,7 @@ template.helper('getLogTypeText', function(type) {
             console.info('Other Type:' + 'type');
             return '其他类型';
     }
-})
+});
 
 /**
  * 财务模块
@@ -475,4 +555,13 @@ template.helper('canEditCheckedFinancial', function(status) {
     }
 
     return res;
+});
+
+/**
+ * 美华用户：如果是公司权限，就可以查看明细
+ * @param  {Boolean} ) true 可以查看
+ * @return {[type]}   [description]
+ */
+template.helper('isNeedShowDetail', function() {
+    return IndexData.userInfo.travelAgencyId == 32 && IndexData.userInfo.financialCountAuth == 4;
 });

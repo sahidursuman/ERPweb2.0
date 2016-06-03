@@ -1,0 +1,289 @@
+<div class="container-fluid T-container" data-id="{{id}}" data-type="{{if baseInfo.customerType == 1}}group{{else}}single{{/if}}">
+	<div class="row">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title pull-left">小组信息</h3>
+			<div class="pull-right" style="margin-top: -6px;">
+				<label class="pull-left control-label text-right mar-r-10">收客单号</label>
+				<input type="text" class="pull-left w-150" name="orderNumber" value="{{baseInfo.orderNumber}}">
+			</div>
+			<div class="pull-right mar-r-10" style="margin-top: -6px;">
+				<label class="pull-left control-label text-right mar-r-10">是否买保险</label>
+				<input type="checkbox" class="ace pull-left" name="buyInsurance" {{if !!baseInfo.buyInsurance}}checked{{/if}}>
+				<span class="lbl"></span>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th>客户</th>
+						<th>行程</th>
+						<th width="100">接团日期</th>
+						<th width="100">送团日期</th>
+						<th>应收</th>
+						<th>客人信息</th>
+						<th>联系电话</th>
+						<th>外联销售</th>
+						<th style="width: 170px;">团散界定</th>
+					</tr>
+				</thead>
+				<tbody class="T-team-info">
+					<tr>
+						<td>
+							<div class="col-xs-12">
+								<input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}{{if baseInfo.fromPartnerAgencyContactName != ""}}（{{baseInfo.fromPartnerAgencyContactName}}）{{/if}}" data-id="{{baseInfo.fromPartnerAgencyId}}" data-contact-id="{{baseInfo.fromPartnerAgencyContactId}}" placeholder="点击选择客户">
+								<span class="addResourceBtn T-action T-add-client" title="添加客户"><i class="ace-icon fa fa-plus bigger-110 icon-only"></i></span>
+							</div>
+						</td>
+						<td>
+							<div class="hct-input-group col-xs-12">
+								<input type="text" class="col-xs-12" name="lineProductName" value="{{baseInfo.lineProductName}}" data-id="{{baseInfo.lineProductId}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}>
+								{{if baseInfo.disableFlag!= 1}}<span class="hct-group-add hct-cursor T-action T-search-trip">[搜索]</span>{{/if}}
+							</div>
+						</td>
+						<td><input type="text" class="col-xs-12 datepicker" name="startTime" value="{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 datepicker T-action" name="endTime" value="{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float" readonly name="needPayAllMoney" value="{{baseInfo.needPayAllMoney}}" data-json="{{baseInfo.touristGroupFee}}" placeholder="点击填写应收团款"></td>
+						<td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" value="{{baseInfo.name}}" data-json="{{baseInfo.touristGroupMemberInfo}}" placeholder="点击填写客人信息"></td>
+						<td><input type="text" class="col-xs-12" name="mobileNumber" readonly value="{{baseInfo.mobileNumber}}"></td>
+						<td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName" value="{{baseInfo.outOPUserName}}" data-id="{{baseInfo.outOPUserId}}"></td>
+						<td>
+							<label class="radio-inline">
+								<input type="radio" class="ace T-single-group" name="singlePlanDefine" {{if baseInfo.customerType == 0}}checked{{/if}} {{if baseInfo.customerTypeFlag == "1"}}disabled{{/if}}>
+								<span class="lbl">散客拼团</span>
+							</label>
+							<label class="radio-inline">
+								<input type="radio" class="ace T-indep-group" name="singlePlanDefine" {{if baseInfo.customerType == 1}}checked{{/if}} {{if baseInfo.customerTypeFlag == "1"}}disabled{{/if}}>
+								<span class="lbl">独立成团</span>
+							</label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 mar-b-20">
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-join-group{{/if}}{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 接团 </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-part-group{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> {{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}} </button>
+			<button class="btn btn-app btn-xs{{if baseInfo.joinFlag == "1"}} hct-bg-BBB{{else}} hct-bg-1FADE0 T-add-send-group{{/if}}{{if baseInfo.customerType != 0}} hidden{{/if}}"> <i class="ace-icon fa fa-plus bigger-160"></i> 送团 </button>
+		</div>
+	</div>
+	
+	<div class="row T-join-group{{if baseInfo.customerType != 0 || receiveTrip.length == 0}} hidden{{/if}}">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-title-point">接团</h3>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th width="135">抵达时间</th>
+						<th>班次</th>
+						<th width="160">车</th>
+						<th width="160">房</th>
+						<th width="160">它</th>
+						<th>接团小计</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-join-group-list">
+				{{each receiveTrip as rs}}
+					<tr data-id="{{rs.id}}">
+						<td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime" value="{{rs.arriveTime | dateFormat: 'yyyy-MM-dd h:m'}}"></td>
+	                    <td><input type="text" class="col-xs-12" name="arriveShift" value="{{rs.arriveShift}}"></td>
+	                    <td>
+	                    	<input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.receiveBus}}" data-id="{{rs.receiveBusId}}" placeholder="点击填写车">
+	                    	<a class="cursor {{if rs.receiveBusClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinBus" {{if rs.receiveBusClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+	                    </td>
+	                    <td>
+	                    	<input type="text" class="w-100 hct-cursor T-action T-hotel F-float F-money" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.receiveHotel}}" data-id="{{rs.receiveHotelId}}" placeholder="点击填写房">
+	                    	<a class="cursor {{if rs.receiveHotelClearFlag}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinHotel" {{if rs.receiveHotelClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+	                    </td>
+	                    <td>
+	                    	<input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.receiveOther}}" data-id="{{rs.receiveOtherId}}" placeholder="点击填写它">
+	                    	<a class="cursor {{if rs.receiveOtherClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="joinOther" {{if rs.receiveOtherClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+	                    </td>
+	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
+	                    <td><a 
+	                    {{if (rs.receiveBusClearFlag == 1) ||
+	                    	(rs.receiveHotelClearFlag == 1) ||
+	                    	(rs.receiveOtherClearFlag == 1)
+	                    }}class="cursor hct-color-BBB" title="已有中转安排，无法删除" 
+	                    {{else}}class="cursor T-action T-delete"{{/if}}>删除</a></td>
+                    </tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div class="row T-offered {{if !joinTrip || joinTrip.length ==0}}hidden{{/if}}">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-title-point T-part-group-text">{{if baseInfo.customerType == 1}}转团{{else}}参团{{/if}}</h3>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th>线路产品</th>
+						<th width="100">出团日期</th>
+						<th width="100">完团日期</th>
+						<th width="95">本段团款</th>
+						<th width="200">线路应付</th>
+						<th class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}" width="200">返程住宿</th>
+						<th width="95">本段代收团款</th>
+						<th width="80">状态</th>
+						<th width="80">操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-part-group-list">
+				{{each joinTrip as rs}}
+					<tr data-id="{{rs.id}}">
+						<td>
+							<div class="hct-input-group col-xs-12{{if rs.status == 1}} T-action T-search-line{{/if}}">
+								<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" value="{{rs.lineProductName}}" data-id="{{rs.lineProductId}}" data-json="{{rs.lineJson}}" placeholder="点击选择线路产品">
+								{{if rs.status == 0 || rs.status == 1}}<span class="hct-group-add cursor">[搜索]</span>{{/if}}
+							</div>
+						</td>
+						<td><input type="text" class="col-xs-12 datepicker" name="tripStartTime" value="{{rs.tripStartTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status != 1}} disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 datepicker" name="tripEndTime" value="{{rs.tripEndTime | dateFormat: 'yyyy-MM-dd'}}"{{if rs.status != 1}} disabled{{/if}}></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="subNeedPayMoney" value="{{rs.subNeedPayMoney}}"{{if rs.status != 1}} disabled{{/if}} data-change="1"></td>
+						<td>
+							<input type="text" class="w-150 F-float F-money{{if rs.status == 1}} T-action T-line-cope hct-cursor{{/if}}" readonly name="lineNeedPayMoney" value="{{rs.lineNeedPayAllMoney}}" data-json="{{rs.lineInfo}}" data-id="{{rs.lineInfoId}}" placeholder="点击填写线路应付">
+							<a class="cursor{{if rs.status != 1}} hct-color-BBB{{else}} T-action T-clear{{/if}}" data-status="partLine">清空</a>
+						</td>
+						<td class="T-is-hidden {{if baseInfo.customerType != 0}}hidden{{/if}}">
+							<input type="text" class="w-150 F-float F-money{{if rs.status == 1}} T-action T-hotel hct-cursor{{/if}}" readonly name="hotelNeedPayMoney" value="{{rs.hotelInputValue}}" data-json="{{rs.hotelInfo}}" data-id="{{rs.hotelInfoId}}" data-out-id="{{rs.hotelOutRemarkId}}" placeholder="点击填写返程住宿">
+							<a class="cursor{{if rs.status != 1 || rs.hotelInfoClearFlag == 1}} hct-color-BBB{{else}} T-action T-clear{{/if}}" data-status="partHotel" {{if rs.hotelInfoClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+						</td>
+						<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" value="{{rs.currentNeedPayMoney}}" readonly></td>
+						<td class="T-status" data-status="{{rs.status}}">{{rs.status | getPartGroupStatusText}}</td>
+						<td>
+							<a class="cursor {{if rs.status != 1 || rs.hotelInfoClearFlag == 1}}hct-color-BBB{{else}}T-action T-delete{{/if}}" {{if rs.hotelInfoClearFlag == 1}}title="已有中转安排，无法删除"{{/if}}>删除</a>
+						</td>
+					</tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div class="row T-send-group{{if baseInfo.customerType != 0 || sendTrip.length == 0}} hidden{{/if}}">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-title-point">送团</h3>
+		</div>
+		<div class="col-xs-12">
+			<table class="table table-striped table-bordered table-hover hct-table-update">
+				<thead>
+					<tr>
+						<th width="135">送离时间</th>
+						<th>班次</th>
+						<th width="160">车</th>
+						<th width="160">房</th>
+						<th width="160">它</th>
+						<th>送团小计</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="T-send-group-list">
+				{{each sendTrip as rs}}
+					<tr data-id="{{rs.id}}">
+						<td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd h:m'}}"></td>
+	                    <td><input type="text" class="col-xs-12" name="leaveShift" value="{{rs.leaveShift}}"></td>
+	                    <td>
+	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.sendBus}}" data-id="{{rs.sendBusId}}" placeholder="点击填写车">
+	                    	<a class="cursor {{if rs.sendBusClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendBus" {{if rs.sendBusClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+	                    </td>
+	                    <td>
+	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-hotel" readonly name="receiveHotel" value="{{rs.hotelNeedPayAllMoney}}" data-json="{{rs.sendHotel}}" data-id="{{rs.sendHotelId}}" placeholder="点击填写房">
+	                    	<a class="cursor {{if rs.sendHotelClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendHotel" {{if rs.sendHotelClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+	                    </td>
+	                    <td>
+	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-other" readonly name="receiveOther" value="{{rs.otherNeedPayAllMoney}}" data-json="{{rs.sendOther}}" data-id="{{rs.sendOtherId}}" placeholder="点击填写它">
+	                    	<a class="cursor {{if rs.sendOtherClearFlag == 1}}hct-color-BBB{{else}}T-action T-clear{{/if}}" data-status="sendOther" {{if rs.sendOtherClearFlag == 1}}title="已有安排，不能清空"{{/if}}>清空</a>
+	                    </td>
+	                    <td><input type="text" class="w-100 F-float F-money" readonly name="totalMoney" value="{{(rs.busNeedPayAllMoney || 0)*1 + (rs.hotelNeedPayAllMoney || 0)*1 + (rs.otherNeedPayAllMoney || 0)*1}}"></td>
+	                    <td><a 
+	                    {{if (rs.sendBusClearFlag == 1) ||
+	                    	(rs.sendHotelClearFlag == 1) ||
+	                    	(rs.sendOtherClearFlag == 1)
+	                    }}class="cursor hct-color-BBB" title="已有中转安排，无法删除" 
+	                    {{else}}class="cursor T-action T-delete"{{/if}}>删除</a></td>
+                    </tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<h3 class="hct-update-list-title hct-shrink-box">其它信息
+				<a class="hct-shrink-btn T-other-info-btn">
+					<i class="ace-icon fa fa-angle-double-up bigger-160"></i>
+				</a>
+			</h3>
+		</div>
+	</div>
+	<div class="row T-other-info-cont">
+		<div class="col-xs-12 mar-t-10">
+			<div class="col-xs-3 hct-group-input ">
+				<label>全陪</label>
+				<div class="col-xs-12">
+					<input type="text" class="col-xs-12" name="accompanyGuideName" value="{{otherInfo.accompanyGuideName}}">
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>全陪电话</label>
+				<div class="col-xs-12">
+					<input type="text" class="col-xs-12" name="accompanyGuideMobile" value="{{otherInfo.accompanyGuideMobile}}">
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>组团单号</label>
+				<div class="col-xs-12">
+					<input type="text" class="col-xs-12" name="otaOrderNumber" value="{{otherInfo.otaOrderNumber}}">
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 mar-t-10">
+			<div class="col-xs-3 hct-group-input">
+				<label>客源类型</label>
+				<div class="col-xs-12">
+					<select name="memberType" class="col-xs-12"> 
+						<option {{if otherInfo.memberType != 1}}selected{{/if}} value="0">内宾</option> 
+						<option value="1" {{if otherInfo.memberType == 1}}selected{{/if}}>外宾</option> 
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>接站牌</label>
+				<div class="col-xs-12">
+					<input type="text" class="col-xs-12" name="welcomeBoard" value="{{otherInfo.welcomeBoard}}">
+				</div>
+			</div>
+			<div class="col-xs-3 hct-group-input">
+				<label>送客地点</label>
+				<div class="col-xs-12">
+					<input type="text" class="col-xs-12" name="sendPosition" value="{{otherInfo.sendPosition}}">
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 mar-t-10 hct-group-input">
+			<label>备注</label>
+			<div class="col-xs-12">
+				<textarea class="col-xs-12" name="remark">{{otherInfo.remark}}</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 mar-t-20 mar-b-10">
+			<button class="btn btn-block btn-primary T-btn-save"> <i class="ace-icon fa fa-check"></i> 提交信息 </button>
+		</div>
+	</div>
+</div>
+<!-- <div style="position: fixed; right: 20px; bottom: 10px;min-width: 50px;">
+	<a class="btn btn-warning T-refresh" title="重新加载数据" style="border-radius: 5px;">
+		<i class="ace-icon fa fa-refresh bigger-160" style="margin-right: 0;"></i>
+	</a>
+</div> -->
