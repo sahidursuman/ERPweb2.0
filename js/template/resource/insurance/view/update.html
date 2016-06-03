@@ -8,13 +8,13 @@
 			<div class="widget-body">
 				<div class="widget-main">
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>公司名称:</label>
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>公司名称</label>
 						<div class="col-sm-3">
 							<input type="text" name="name" class="col-sm-12" value="{{insurance.name}}" maxlength="50">
 							<input type="text" name="id" hidden="hidden" value="{{insurance.id}}">
 						</div>
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用:</label>
-						<div class="col-sm-3 checkbox resource_checkbox">
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>是否启用</label>
+						<div class="col-sm-3">
 							<label>
 								<input {{if insurance.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace T-insurance-status" value="1" />
 								<span class="lbl">
@@ -24,11 +24,11 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-					    <label class="col-sm-2 control-label no-padding-right">联系人:</label>
+					    <label class="col-sm-2 control-label no-padding-right">联系人</label>
 						<div class="col-sm-3">
 							<input type="text" name="managerName" class="col-sm-12" value="{{insurance.managerName}}" maxlength="32">
 						</div>
-						<label class="col-sm-2 control-label no-padding-right">联系电话:</label>
+						<label class="col-sm-2 control-label no-padding-right">联系电话</label>
 						<div class="col-sm-3">
 							<input type="text" name="mobileNumber" class="col-sm-12" value="{{insurance.mobileNumber}}" maxlength="11">
 							<label class="feild-label feild-error-tip" style="top:4px;right:2px;">
@@ -37,17 +37,17 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
+						<label class="col-sm-2 control-label no-padding-right">座机号码</label>
 						<div class="col-sm-3">
 							<input type="text" name="telNumber" class="col-sm-12" value="{{insurance.telNumber}}" maxlength="20" />
 						</div>
-						<label class="col-sm-2 control-label no-padding-right">传真号码:</label>
+						<label class="col-sm-2 control-label no-padding-right">传真号码</label>
 						<div class="col-sm-3">
 							<input type="text" name="faxNumber" class="col-sm-12" value="{{insurance.faxNumber}}"  maxlength="20" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区</label>
 						<div class="col-sm-8">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -61,13 +61,13 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>  
+						<label class="col-sm-2 control-label no-padding-right">详细地址</label>  
 						<div class="col-sm-6">
 							<input type="text" name="street" class="col-sm-12" placeholder="请输入街道地址" value="{{insurance.street}}"  maxlength="100" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">公司简介:</label>
+						<label class="col-sm-2 control-label no-padding-right">公司简介</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000">{{insurance.remark}}</textarea>
 						</div>

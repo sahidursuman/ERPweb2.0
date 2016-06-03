@@ -182,11 +182,13 @@ define(function(require, exports) {
 			//获取线路列表
 			shopStat.showLineProduct($(this));
 		}).on('click','.T-clear-line',function(){
-			var $div = $(this).closest('div');
+			var $that = $(this),
+				$div = $that.closest('div');
 			if(!!$div.find('input[name=lineProduct]').val()){
 				showConfirmDialog('是否清除?', function() {
 	                $div.find('input[name=lineProduct]').val('');
 	                $div.find('input[name=lineProductId]').val('');
+	                $that.addClass('hidden');
 	            });
 			};
 			
@@ -246,6 +248,7 @@ define(function(require, exports) {
 	                    };
 	                    $obj.closest('div').find('input[name=lineProductId]').val(lineData.id);
 	                    $obj.closest('div').find('input[name=lineProduct]').val(lineData.lineProductName);
+	                    $obj.closest('div').find('.T-clear-line').removeClass('hidden');
 	                    layer.close(index);
 	                });
 	                //关闭

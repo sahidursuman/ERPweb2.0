@@ -24,7 +24,8 @@ define(function(require, exports) {
             touristGroupMergeList: []
         },
         touristGroupId: [],
-        transferId: []
+        transferId: [],
+        MAX_CHEKED_LENGTH : 14
     };
 
     /**
@@ -485,9 +486,18 @@ define(function(require, exports) {
             $merge = $visitorObj.find('.T-arrangeTouristMergeList .list'),
             //$that = $(this),
             $parents = $that.closest('tr'),
+            $tbody = $that.closest('.T-arrageVisitor-list'),
+            checkedLen = $tbody.find('[type=checkbox]:checked').length,
             memberCount = $parents.attr("data-memberCount");
         //计算已选人数
         arrangeIndividual.choosenAdultAndChildCount(arrangeIndividual.$tab);
+
+        //全选是否选中
+        if (checkedLen >= arrangeIndividual.MAX_CHEKED_LENGTH) {
+            $visitorObj.find('.T-checkedAll').prop("checked", true);
+        }else{
+            $visitorObj.find('.T-checkedAll').prop("checked", false);
+        };
 
         if (memberCount == 0) {
             $(this).prop("checked", false);

@@ -58,7 +58,7 @@ define(function(require, exports) {
 			var itemValidator = $obj.formValidate([
 				//对项目列表进行验证
 				{	// 险种 
-	    	    	$ele: $obj.find('input[name="insurance"]'),
+	    	    	$ele: $obj.find('input[name="insuranceItem"]'),
 	    	    	rules: [
 							
 	    	    	        {
