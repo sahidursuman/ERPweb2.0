@@ -1017,6 +1017,9 @@ select {
     padding: 0px 0px 0px 6px;
 }
 
+.border-botm .table-bordered{
+    border: 1px solid #e5e5e5;
+}
 
 /*财务管理*/
 
