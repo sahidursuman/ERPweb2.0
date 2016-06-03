@@ -3148,6 +3148,7 @@ define(function(require, exports) {
 								}else{
 									$parents.remove();
 								}
+								quote.costCalculation($container);
 							}
 						}
 					});
@@ -3165,6 +3166,7 @@ define(function(require, exports) {
 				}else{
 					$parents.remove();
 				}
+				quote.costCalculation($container);
 			}
 		} else {
 			if (!!$obj.data("entity-id")) {
@@ -3186,6 +3188,7 @@ define(function(require, exports) {
 							if(result){	
 								var index = objParents.index();									
 								$(".T-timeline-item").eq(index).remove();
+								quote.costCalculation($container);
 							}
 						}
 					});
@@ -3193,9 +3196,9 @@ define(function(require, exports) {
 			} else {
 				$obj.closest('.T-timeline-item').remove();
 				quote.updateRouteIndex('',$obj.closest('.T-quoteContainer'));
+				quote.costCalculation($container);
 			}
 		}
-		quote.costCalculation($container);
 	};
 	/**
 	 * 更新安排的序号

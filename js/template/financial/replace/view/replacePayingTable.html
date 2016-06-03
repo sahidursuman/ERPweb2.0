@@ -2,20 +2,20 @@
     <tr data-id="{{rs.id}}">
         <td>{{rs.orderNumber}}</td>
         <td>{{rs.startTime}}</td>
+        <td>{{rs.partnerAgencyName}}</td>
         <td>{{rs.projectName}}</td>
-        <td class="T-ctrl-tip" title="{{rs.newDetail}}" ><span style="height:35px;">{{rs.newDetail}}</span></td>
+        <td class="T-ctrl-tip" title="{{#rs.newDetail}}" ><span style="height:35px;">{{#rs.newDetail}}</span></td>
+        <td>{{rs.creatorName}}<br/>{{rs.creatorTime  | dateFormat:"yyyy-MM-dd"}}<br/>{{rs.creatorTime  | dateFormat:"hh:mm:ss"}}</td>
         <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
         <td><a class="cursor T-action T-receive-money F-float F-money">{{rs.receiveMoney}}</a></td>
         <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
         <td><span class="F-float F-money">{{rs.unReceiveMoney}}</span></td>
         <td><input type="text" class="col-xs-12 T-reciveMoney F-float F-money" name="payMoney" value="{{rs.payMoney}}"></td>
         <td><textarea class="col-sm-12 hct-textarea T-remark" name="payRemark" maxlength="1000">{{rs.payRemark}}</textarea></td>
-        <td>{{rs.checkTime}}</td>
+        <td>{{rs.checkTime | dateFormat:"yyyy-MM-dd"}}<br />{{rs.checkTime | dateFormat:"hh:mm:ss"}}</td>
         <td>{{rs.checkUserName}}</td>
         <td>
-            <label class="pos-rel">
-                <span class="lbl">{{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账</span>
-            </label>
+            {{if !!rs.isConfirmAccount}}已{{else}}未{{/if}}对账
             <label class="cursor" data-right="1290004"> <a> |</a></label>
             <a class="cursor T-action T-view-Received" data-right="1290004">查看</a>
         </td>

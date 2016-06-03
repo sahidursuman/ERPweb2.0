@@ -218,10 +218,11 @@ define(function(require, exports) {
 
 	/**
 	 * 查看发团安排
-	 * @param  {[type]} id [安排ID]
+	 * @param  {int} id [安排ID]
+	 * @param  {string} type 安排项  （来自团队安排）
 	 * @return {[type]}     [description]
 	 */
-	tripPlan.viewTripPlan = function(id) {
+	tripPlan.viewTripPlan = function(id, type) {
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getTripPlanArrange'),
 			type: "GET",
@@ -234,16 +235,25 @@ define(function(require, exports) {
 					data.basicInfo = JSON.parse(data.basicInfo);
 					data.arrangeItemsStauts = JSON.parse(data.arrangeItemsStauts);
 					data.tripPlanDayList = JSON.parse(data.tripPlanDayList);
-					data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
-					data.hotelList = JSON.parse(data.arrangeItems.hotelList);
-					data.busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
-					data.guideList = JSON.parse(data.arrangeItems.guideList);
-					data.otherList = JSON.parse(data.arrangeItems.otherList);
-					data.restaurantList = JSON.parse(data.arrangeItems.restaurantList);
-					data.scenicList = JSON.parse(data.arrangeItems.scenicList);
-					data.selfPayList = JSON.parse(data.arrangeItems.selfPayList);
-					data.shopList = JSON.parse(data.arrangeItems.shopList);
-					data.ticketList = JSON.parse(data.arrangeItems.ticketList);
+
+					if (!!type)  {
+						var _type = type.split('_')[2];
+						for (var key in data.arrangeItems) {
+							data[key] = [];
+						}
+						data[_type + 'List'] = JSON.parse(data.arrangeItems[_type + 'List']);
+					} else {
+						data.insuranceList = JSON.parse(data.arrangeItems.insuranceList);
+						data.hotelList = JSON.parse(data.arrangeItems.hotelList);
+						data.busCompanyList = JSON.parse(data.arrangeItems.busCompanyList);
+						data.guideList = JSON.parse(data.arrangeItems.guideList);
+						data.otherList = JSON.parse(data.arrangeItems.otherList);
+						data.restaurantList = JSON.parse(data.arrangeItems.restaurantList);
+						data.scenicList = JSON.parse(data.arrangeItems.scenicList);
+						data.selfPayList = JSON.parse(data.arrangeItems.selfPayList);
+						data.shopList = JSON.parse(data.arrangeItems.shopList);
+						data.ticketList = JSON.parse(data.arrangeItems.ticketList);
+					}
 					data.basicInfo.touristCount = (data.basicInfo.touristAdultCount || 0) + (data.basicInfo.touristChildCount || 0);
 					data.days = Tools.getDateDiff(data.basicInfo.endTime, data.basicInfo.startTime) + 1;
 					data.touristGroupList = JSON.parse(data.touristGroupList);
@@ -291,11 +301,31 @@ define(function(require, exports) {
 					var text = [], label = ['现金', '刷卡', '签单'];
 					for (var i = 0; i < 3;i ++) {
 						if (detail[i] != 0) {
-							text.push(label[i] + detail[i]);
+							text.push(label[i] + Tools.thousandPoint(detail[i],2 ));
 						}
 					}
 
 					$tab.find('.T-guidePayMoneyLabel').text(text.length?text.join(','): 0);
+
+					$tab.on('click', '.T-collapse', function(event) {
+						event.preventDefault();
+						var $this = $(this);
+						if($this.hasClass('collapsed')){
+							$this.text('[收起]');
+						} else {
+							$this.text('[展开]');
+						}
+					});
+
+					$tab.find('.T-orderNumber').on('click', function() {
+						var $this = $(this),
+							dept = $this.data('dept'),
+							id = $this.data('id');
+						if (!!dept) {
+							dept = 'inner';
+						}
+						KingServices.viewTouristGroup(id, dept);
+					})
 				}
 			}
 		});
@@ -413,7 +443,7 @@ define(function(require, exports) {
 	/**
 	 * 编辑发团安排
 	 * @param  {[type]} id         [description]
-	 * @param  {[type]} $billStatus [description]
+	 * @param  {string} bs  账务状态  1/2已审核，0已报账 其他是安排，-2是安排具体的内容
 	 * @return {[type]}             [description]
 	 */
 	tripPlan.updateTripPlanArrange = function(id, $billStatus, target, tabId) {
@@ -447,6 +477,22 @@ define(function(require, exports) {
 						data.tarId = tabId;
 						tripPlan.dayWhich = data.dayWhich;
 
+						if ($billStatus === '-2' && !!target) {
+							// 来自安排中心的安排
+							var _type = target.split('_')[2];
+
+							if (!!data.arrangeItemsStauts[_type + 'Status'])  {
+								// 允许安排
+								for (var key in data.arrangeItemsStauts) {
+									data.arrangeItemsStauts[key] = 0;
+								};
+
+								data.arrangeItemsStauts[_type + 'Status'] = 1;
+							} else {
+								showMessageDialog('数据异常，请联系火柴头');
+								return;
+							}
+						}
 						for (var i = data.guideList.length - 1; i >= 0; i--) {
 							if (data.guideList[i].taskJson) {
 								data.guideList[i].taskJson = JSON.parse(data.guideList[i].taskJson)
@@ -565,6 +611,22 @@ define(function(require, exports) {
 			event.preventDefault();
 			$tab.find('[data-target="'+ $(this).attr('href') + '"]').removeClass('hidden').siblings('.checkbox').addClass('hidden');
 		});
+
+		//当导游任务选择全程时，自动填写相应的日期
+		$tab.find('#tripPlan_addPlan_guide').on('change', '[name=taskType]', function() {
+			var $this = $(this),
+				$tr = $this.closest('tr'),
+				$starts = $tr.find('[name=startTime]'),
+				$ends = $tr.find('[name=endTime]'),
+				index = $this.closest('.T-guideAddTask').data('index'),
+				startTime = $tab.find('.T-startTime').text(),
+				endTime = $tab.find('.T-endTime').text();
+
+			if ($this.val() == 0) {
+				$starts.eq(index).val(startTime);
+				$ends.eq(index).val(endTime);
+			}
+		})
 
 		//车辆安排通知游客
 		$tab.find('#tripPlan_addPlan_bus').off('click.noticeTourists').on('click.noticeTourists', '.T-noticeTourists', function() {
@@ -720,7 +782,7 @@ define(function(require, exports) {
 			}
 		});
 		//车费查询
-		$tab.find('#tripPlan_addPlan_bus').off('change').on('change','.T-busPriceC',function () {
+		$tab.find('#tripPlan_addPlan_bus').on('change','.T-busPriceC',function () {
 			var $this = $(this), $parent = $this.closest('tr');
 			var busStartTime = $parent.find('[name=startTime]').val(),
 				busEndTime = $parent.find('[name=endTime]').val(),
@@ -734,7 +796,9 @@ define(function(require, exports) {
 				data: {busId: busId, startTime: busStartTime},
 			})
 			.done(function(data) {
-				$parent.find('[name=price]').val(data.contractPrice * busDays);
+				if (!!data.contractPrice && data.contractPrice > 0) {
+					$parent.find('[name=price]').val(data.contractPrice * busDays);
+				}
 			});
 		})
 
@@ -1576,6 +1640,12 @@ define(function(require, exports) {
 		tripPlan.bindInsuranceChoose($tab);
 		tripPlan.bindBusCompanyChoose($tr);
 		tripPlan.changePayType($tab);
+		
+		var $trs = $tbody.find('tr'), startTime = $tab.find('.T-startTime').text(), endTime = $tab.find('.T-endTime').text();
+		if ($trs.length == 1) {
+			$trs.eq(0).find('input[name=startTime]').val(startTime);
+			$trs.eq(0).find('input[name=endTime]').val(endTime);
+		}
 	}
 
 	//添加餐饮安排
@@ -1591,7 +1661,7 @@ define(function(require, exports) {
 		'<td><input name="needPayMoney" readonly="readonly" type="text" class="col-sm-12 F-float F-money" style="width: 60px;"/></td>' +
 		'<td><div class="inline-flex">'+preTypeHtml+'<input name="prePayMoney" type="text" class="price F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
 		'<td><div class="inline-flex">'+ payTypeHtml +'<input name="guidePayMoney" type="text" class="F-float F-money" style="width: 60px;" maxlength="9"/></div></td>' +
-		'<td><input name="remark min-w150" type="text" class="col-sm-12"/></td>' +
+		'<td><input name="remark" type="text" class="col-sm-12 min-w150"/></td>' +
 		'<td><a class="cursor T-btn-deleteTripPlanList" data-entity-name="restaurant" title="删除">删除</a></td>';
 		tableContainer.append(filterUnAuth(html));
 		//精度控件
@@ -3390,7 +3460,9 @@ define(function(require, exports) {
 	            isGuidePayMoney = (name == 'guidePayMoney'),
 	            hasSignBillMoney = $that.closest('tr').find('[name=signBillMoney]').length;
 	        //如果改的是计划导付，但是没有签单金额，则不计算
+	        
 	        if (isGuidePayMoney && hasSignBillMoney == 0) {
+	        	tripPlan.calcSummary($tab);
 	        	return;
 	        }
 
@@ -3482,7 +3554,8 @@ define(function(require, exports) {
 		var text = [], label = ['现金', '刷卡', '签单'];
 		for (var i = 0; i < 3;i ++) {
 			if (detail[i] != 0) {
-				text.push(label[i] + detail[i]);
+				text.push(label[i] + Tools.thousandPoint(detail[i], 2));
+
 			}
 		}
 

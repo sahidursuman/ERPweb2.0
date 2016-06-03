@@ -414,7 +414,13 @@ define(function(require, exports) {
             Tools.inputCtrolFloat($childPrice);
             Tools.inputCtrolFloat($count);
 
-
+            $tab.find('[name="cashFlag"]').on('change', function(){
+                if($(this).is(':checked')){
+                    $tab.find('.T-cashFlag').removeClass("hidden")
+                }else{
+                    $tab.find('.T-cashFlag').addClass("hidden")
+                }
+            });
             //绑定分团转客信息
             $tab.find('.T-saveTransoutInfo').on('click', function(event) {
                 event.preventDefault();
@@ -448,12 +454,11 @@ define(function(require, exports) {
     innerTransfer.innitAddFee = function($tab, validator) {
         var html = "<tr class=\"transferFee1SelectId\">" +
             "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>" +
-            "<option value=\"4\">车辆费用</option><option value=\"5\">餐厅费用</option><option value=\"6\">保险费用</option>" +
-            "<option value=\"7\">导服费</option><option value=\"8\">酒店费用</option><option value=\"9\">景区费用</option>" +
-            "<option value=\"10\">自费费用</option><option value=\"11\">票务费用</option><option value=\"12\">其他费用</option></select></td>" +
+            "<option value=\"8\">单房差</option>" +
+            "<option value=\"12\">其他费用</option></select></td>" +
             "<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>" +
             "<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>" +
-            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" /></td>" +
+            "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" readonly /></td>" +
             "<td><input  name=\"remark\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right\"  maxlength=\"100\" /></td>" +
             "<td><a class=\"cursor T-edittransfer-delete\">删除</a></td>" +
             "</tr>";
@@ -587,7 +592,7 @@ define(function(require, exports) {
             showMessageDialog("计算应付值过大，请确认数据是否有误");
             return false;
         }
-        var cashFlag = getValParam("cashFlag");
+        var cashFlag = $tab.find('input[name="cashFlag"]').is(":checked");
         var innerTransferJson = {
             id: getValParam("id"), //	内转ID		
             innerTransferFeeSet: [], //内转的其他费用	array<object>	
@@ -598,6 +603,9 @@ define(function(require, exports) {
             transPayedMoney: getValParam("transPayedMoney"), //已付		填写
             transRemark: getValParam("transRemark"),
             isCurrent: getValParam("isCurrent")
+        }
+        if(cashFlag){
+            innerTransferJson.currentNeedPayMoney = getValParam("currentNeedPayMoney");
         }
 
         //获取新增费用项目

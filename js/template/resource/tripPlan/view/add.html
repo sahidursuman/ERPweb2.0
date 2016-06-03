@@ -64,7 +64,7 @@
                         <span class="fix-w-4">计划现收:</span><span class="F-float F-money">{{basicInfo.guideAllNowMoney}}</span>
                     </td>
                     <td>
-                        <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
+                        <span class="fix-w-4">计划导付:</span><span class="T-guidePayedMoneyLabel F-float F-money">&nbsp;</span><span class="T-guidePayedMoney hidden">{{basicInfo.guideAllPayMoney}}</span>
                     </td>
                     <td><span class="fix-w-5">计划预支款:</span>
                         <span class="T-guidePlanAllPreMoney F-float F-money">{{basicInfo.guidePlanAllPreMoney}}</span>
@@ -114,8 +114,6 @@
                     <th class="th-border">小组联系人</th>
                     <th class="th-border">人数</th>
                     <th class="th-border">现收团款</th>
-                    <th class="th-border">住宿标准</th>
-                    <th class="th-border">包含自费</th>
                     <th class="th-border">接站牌</th>
                     <th class="th-border">送客地点</th>
                     <th class="th-border">备注</th>
@@ -131,9 +129,6 @@
                     <td name="contactMemberName">{{if group.contactMember}}{{group.contactMember.name}}({{group.contactMember.mobileNumber}}){{/if}}</td>
                     <td name="peopleCount" class="F-float F-count" data-adultCount="{{group.adultCount}}" data-childCount="{{group.childCount}}">{{group.adultCount}}大{{group.childCount}}小</td>
                     <td name="currentNeedPayMoney" class="F-float F-money">{{group.currentNeedPayMoney}}</td>
-                    <td name="hotelLevel">{{group.hotelLevel | getHotelLevelDesc}}
-                    </td>
-                    <td name="includeSelfPay">{{group.includeSelfPay}}</td>
                     <td>{{group.welcomeBoard}}</td>
                     <td>{{group.sendPosition}}</td>
                     <td name="remark" title={{group.mark}}>{{group.remark}}</td>
@@ -1155,7 +1150,7 @@
                                     <col style="width:120px;">
                                     <col style="width:100px;">
                                     <col style="width:130px">
-                                    <col style="width:50px">
+                                    <col style="width:70px">
                                     <col style="width:70px">
                                     <col style="width:60px">
                                     <col style="width:70px">

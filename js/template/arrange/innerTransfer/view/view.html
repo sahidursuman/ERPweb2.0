@@ -12,10 +12,6 @@
                 <td class="style-myself CheckPlan">内转备注</td>
                 <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="4">{{innerTransfer.transRemark}}</td>
             </tr>
-            <tr>
-                <td class="style-myself CheckPlan">应付</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="3"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
-            </tr>
         </table>
     </div>
 </form>
@@ -39,14 +35,10 @@
                 <td style="text-align: left;padding: 0px 0px 0px 10px">
                     {{if innerTransfer.touristGroup.partnerAgencyContact != null}} {{innerTransfer.touristGroup.partnerAgencyContact.contactRealname}}|{{innerTransfer.touristGroup.partnerAgencyContact.contactMobileNumber}} {{/if}}
                 </td>
-                <td class="style-myself CheckPlan">获得方式</td>
-                <td style="text-align: left;padding: 0px 0px 0px 10px">
-                    {{if innerTransfer.touristGroup.getType==1 }}旅行社系统 {{else if innerTransfer.touristGroup.getType==2}}传真 {{else if innerTransfer.touristGroup.getType==3}}短信 {{else if innerTransfer.touristGroup.getType==4}}电话 {{else if innerTransfer.touristGroup.getType==5}}QQ {{/if}}
-                </td>
             </tr>
             <tr>
                 <td class="style-myself CheckPlan">收客备注</td>
-                <td colspan="5" style="text-align: left;padding: 0px 0px 0px 10px">{{innerTransfer.touristGroup.remark}}</td>
+                <td colspan="5" style="text-align: left;padding: 0px 0px 0px 10px">{{parentTouristGroup.remark}}</td>
             </tr>
         </table>
     </div>
@@ -63,7 +55,7 @@
                     <tr>
                         <td class="style-myself CheckPlan">应付：</td>
                         <td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{innerTransfer.transNeedPayMoney}}</span></td>
-                        <td class="style-myself CheckPlan">计划现收：</td>
+                        <td class="style-myself CheckPlan">对方现收金额：</td>
                         <td style="text-align: left;padding: 0px 0px 0px 10px" colspan="2">
                             {{if cashFlag==1}} {{if !!innerTransfer.touristGroup}}<span class=" F-float F-money">{{innerTransfer.touristGroup.currentNeedPayMoney}}</span>{{/if}} {{else}}0 {{/if}}
                         </td>
@@ -111,44 +103,10 @@
 				</h5>
                 <table class="whereQ whereTwo" style="width: 100%">
                     <tr>
-                        <td class="style-myself CheckPlan">应收：</td>
+                        <td class="style-myself CheckPlan">本段团款：</td>
                         <td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{parentTouristGroup.needPayAllMoney}}</span></td>
-                        <td class="style-myself CheckPlan">已收：</td>
-                        <td style="text-align: left;padding: 0px 0px 0px 10px"><span class=" F-float F-money">{{parentTouristGroup.payedMoney}}</span></td>
-                        <td class="style-myself CheckPlan">计划现收：</td>
-                        <td style="text-align: left;padding: 0px 0px 0px 10px">
-                            {{if cashFlag==1}}
-                            <span class=" F-float F-money">{{parentTouristGroup.currentNeedPayMoney}}</span> {{else}}
-                            <span class=" F-float F-money">0</span> {{/if}}
-                        </td>
                     </tr>
                 </table>
-                <div class="widget-body TransferTable">
-                    <div class="widget-main no-padding">
-                        <table class="table table-striped table-bordered table-hover hotelRoomStandardList">
-                            <thead>
-                                <tr>
-                                    <th class="th-border">费用项</th>
-                                    <th class="th-border">数量</th>
-                                    <th class="th-border">单价</th>
-                                    <th class="th-border">金额</th>
-                                    <th class="th-border">说明</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{each innerTransfer.touristGroup.touristGroupFeeList as rs}}
-                                <tr>
-                                    <td>{{rs.name}}</td>
-                                    <td><span class=" F-float F-count">{{rs.count}}</span></td>
-                                    <td><span class=" F-float F-money">{{rs.price}}</span></td>
-                                    <td><span class=" F-float F-money">{{rs.price*rs.count}}</span></td>
-                                    <td>{{rs.remark}}</td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

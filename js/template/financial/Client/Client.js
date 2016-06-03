@@ -210,21 +210,14 @@ define(function(require, exports) {
             data : args
         }).done(function(data){
             if(showDialog(data)){
+                data.userInfoTravelAgencyId = IndexData.userInfo.travelAgencyId;
                 data.partnerAgencyName = partnerAgencyName;
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
-                data.searchParam.lineProductName = args.lineProductName || '全部';
+                //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+                var resultList = data.customerAccountList;
 
                 //费用明细处理
-                var resultList = data.customerAccountList;
-                for(var i = 0; i < resultList.length; i++){
-                    var detailList = resultList[i].detailList,
-                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
-                    resultList[i].detailList = detailList;
-                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
-                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
-                }
-                data.customerAccountList = resultList; 
                 var title = '客户对账', tab_id;
                 if (isView) {
                     data.view = 1;
@@ -329,7 +322,7 @@ define(function(require, exports) {
         Client.$checksumUnReceivedMoney = Client.$checkSumArea.find('.T-sumUnReceivedMoney');
 
         // 初始化下拉选项
-        Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'), id);
+        //Client.getLineProductList(Client.$checkSearchArea.find('.T-search-line'), id);
         Client.getRecorderList(Client.$checkSearchArea.find('.T-search-enter'), id);
         Client.getPartnerContactList(Client.$checkSearchArea.find('.T-search-contact'),args);
 
@@ -392,6 +385,8 @@ define(function(require, exports) {
                 Client.viewReceive(id);
             }else if($that.hasClass('T-view')){
                 Client.viewDetails(id);
+            }else if($that.hasClass('T-open-tourist')){
+                KingServices.viewTouristGroup($that.closest('tr').data('gid'));
             }
         })
         .on('change', 'input', function(event) {
@@ -542,22 +537,15 @@ define(function(require, exports) {
             data:args,
         }).done(function(data){
             if(showDialog(data)){
+                data.userInfoTravelAgencyId = IndexData.userInfo.travelAgencyId;
                 data.type = type;
                 data.partnerAgencyName = partnerAgencyName;
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
 
-                data.searchParam.lineProductName = args.lineProductName || '全部';
+                //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
                 //费用明细处理
                 var resultList = data.customerAccountList;
-                for(var i = 0; i < resultList.length; i++){
-                    var detailList = resultList[i].detailList,
-                        transitLen = (detailList.transitFee.transitFeeList.length > 0) ? 1 : 0;
-                    resultList[i].detailList = detailList;
-                    resultList[i].rowLen = transitLen + ((detailList.otherFee.length > 0) ? detailList.otherFee.length : 0);
-                    resultList[i].rowLen = (resultList[i].rowLen > 0) ? resultList[i].rowLen : 1;
-                }
-                data.customerAccountList = resultList; 
                 if(Client.clearDataArray){
                     data = Client.pushClearData(data);
                 }
@@ -642,7 +630,7 @@ define(function(require, exports) {
         FinancialService.initPayEvent(Client.$clearSearchArea);
         //Client.init_clear_event(id, $cleartab);
         // 初始化下拉选项
-        Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
+        //Client.getLineProductList(Client.$clearSearchArea.find('.T-search-line'),  id);
         Client.getRecorderList(Client.$clearSearchArea.find('.T-search-enter'),  id);
         Client.getPartnerContactList(Client.$clearSearchArea.find('.T-search-contact'),args);
         //搜索事件
@@ -670,6 +658,8 @@ define(function(require, exports) {
                 Client.viewReceive(id)
             }else if($that.hasClass('T-view')){
                 Client.viewDetails(id)
+            }else if($that.hasClass('T-open-tourist')){
+                KingServices.viewTouristGroup($that.closest('tr').data('gid'));
             }
         })
         .on('change', 'input', function(event) {
@@ -1035,7 +1025,7 @@ define(function(require, exports) {
                 }).done(function(data) {
                     for(var i=0; i< data.creatorList.length; i++){
                         data.creatorList[i].value = data.creatorList[i].creatorName;
-                        data.creatorList[i].id = data.creatorList[i].creatorId;
+                        data.creatorList[i].id = data.creatorList[i].creator;
                     }
 
                     data.creatorList.unshift({id:'', value: '全部'});
@@ -1151,6 +1141,8 @@ define(function(require, exports) {
                 } else {
                     Client.ClientCheck(0,args, false, $(this).closest('.T-search-area').data('isview'));
                 }
+
+                Client.getCheckSumData(args, $tab);
             }
         }).on("click",function(){
             $obj.autocomplete('search','');
@@ -1162,7 +1154,6 @@ define(function(require, exports) {
         $tab.find('.T-viewFeeDetails').off().on("click",function(){
             var index = $(this).data("index"),
                 viewData = {
-                    transitFeeList : resultList[index].detailList.transitFee.transitFeeList,
                     otherFee : resultList[index].detailList.otherFee
                 };
             layer.open({
