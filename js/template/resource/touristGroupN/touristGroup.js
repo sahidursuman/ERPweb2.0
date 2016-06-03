@@ -3066,7 +3066,8 @@ define(function(require, exports) {
         calcRece : function($tab){
             var countMoney = 0;
             $tab.find('.T-fee-list tr').each(function(index){
-                var money = $(this).find('[name="money"]').val() * 1;
+                var $that = $(this),
+                    money = $that.find('.T-money').length > 0 ? $that.find('.T-money').text() * 1 : $that.find('[name="money"]').val() * 1;
                 countMoney += money;
             });
             countMoney = Tools.toFixed(countMoney)
@@ -3079,6 +3080,8 @@ define(function(require, exports) {
             $tr.find('[name="money"]').val(isNaN(price) ? 0 : price);
             if($tab.find('[name="sumNeedGetMoney"]').length > 0){
                 $tab.find('[name="sumNeedGetMoney"]').val(F.calcRece($tab));
+            }else if($tab.find('.T-needPayAllMoney').length > 0){
+                $tab.find('.T-needPayAllMoney').text(F.calcRece($tab));
             }else{
                 $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
             }
