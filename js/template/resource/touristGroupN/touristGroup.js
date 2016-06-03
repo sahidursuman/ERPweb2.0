@@ -1034,8 +1034,8 @@ define(function(require, exports) {
         layer.open({
             type: 1,
             title:"选择客户",
-            skin: 'hct-layui-layer-style layui-layer-rim', //加上边框
-            area: ['950px', '90%'], //宽高
+            skin: 'layui-layer-rim', //加上边框
+            area: '1024px;', //宽高
             zIndex:1028,
             content: T.chooseClient(),
             success:function(obj, index){
@@ -2148,7 +2148,7 @@ define(function(require, exports) {
             type: 1,
             title: "选择线路产品",
             skin: 'hct-layui-layer-style layui-layer-rim', //加上边框
-            area: ['80%', '90%'], //宽高
+            area: '1024px', //宽高
             zIndex: 1028,
             content: T.chooseLineProduct(),
             scrollbar: false,
