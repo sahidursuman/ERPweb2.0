@@ -907,19 +907,16 @@ select {
     margin-left: -4px;
 }
 
-/* .globalAdd button {
+ .globalAdd button {
     height: 24px;
     font-size: 12px;
     line-height: 12px;
     -moz-line-height: normal;
     padding-top: 2px;
-<<<<<<< HEAD
 }
 .line-h-submit .guideSubmit {
     line-height:16px !important;
 }
-=======
-} */
 
 .guideSubmit {
     height: 36px;
