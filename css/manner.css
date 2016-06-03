@@ -1107,6 +1107,9 @@ select {
 .layui-layer-content {
     padding-bottom: 10px;
 }
+.hct-layui-layer-style .layui-layer-content{
+    padding-bottom: 0px;
+}
 
 .marginLeft-30 {
     margin-left: 30px !important;
