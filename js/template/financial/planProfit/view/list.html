@@ -36,15 +36,19 @@
 <tbody>
 	{{each result as rs}}
 	<tr data-id="{{rs.financialId}}">
-		<td rowspan="3">
+		<td rowspan="3" class="h-touristGroupInfo">
 			{{if rs.billStatus != -1}}
 				<a href="javascript:void(0)" class="T-toTripAccount h-touristGroupInfo">
 			{{/if}}
 
-				<p>{{rs.tripNumber}}<span style="padding-left:10px;">{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span></p>
+				<p>{{rs.tripNumber}}&nbsp;&nbsp;<span>{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span></p>
 				<p>{{rs.lineProductName}}</p>
-				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}} <span class="F-float F-count" style="padding-left: 10px;">{{rs.adultCount}}</span>大<span class="F-float F-count">{{rs.childCount}}</span>小</p>
-				<p>导游：{{rs.guideName}}<span style="padding-left:10px;">责任计调：{{rs.creatorName}}</span></p>
+				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}} 
+				&nbsp;&nbsp;
+				<span class="F-float F-count">{{rs.adultCount}}大
+				<span class="F-float F-count">{{rs.childCount}}小</span></span>
+				</p>
+				<p>导游：{{rs.guideName}}&nbsp;&nbsp;<span>责任计调：{{rs.creatorName}}</span></p>
 			{{if rs.billStatus != -1}}
 				</a>
 			{{/if}}
