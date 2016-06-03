@@ -256,7 +256,7 @@ define(function(require, exports) {
                 }
 
                 if (k === end) {
-                    // 找完了，也没有合适的,新增一组
+                    // 找完了，也没有合适的,新增一组.
                     res[end] = [tmp];
                     j = end;
                 }

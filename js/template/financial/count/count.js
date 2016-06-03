@@ -166,7 +166,9 @@ define(function(require, exports){
                     data.tripPlanList = tripPlanList;
 					var html = listTableTemplate(data);
 					html = Count.authFilter(html);
-					Count.$listTab.find(".T-counterList").html(html);
+					html = Tools.filterMoney(html);
+					html = Tools.filterUnPoint(html);      
+					Count.$listTab.find(".T-counterList").html(html); 
 					Count.listEvents();
 					laypage({
 	                    cont: Count.$listTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -611,7 +613,7 @@ define(function(require, exports){
 		$selfObj.off('change').on('change','input',function(){
 			var nameFlag = $(this).attr('name');
 			if(selfNoneAutoFields.indexOf(nameFlag)<0){
-				//校验输入的数据是否合法
+				//校验输入的数据是否合法收入
 				Count.calculateCost($(this));
 				//计算金额
 				if (Count.loading) {
