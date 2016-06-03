@@ -33,7 +33,7 @@
 		</div>
 		<div class="col-xs-12 mar-t-10">
 			<div class="col-xs-1 text-right no-padding-right control-label">应付：</div>
-			<div class="col-xs-3 control-label F-float F-money">{{needPayAllMoney}}</div>
+			<div class="col-xs-3 control-label F-float F-money T-needPayAllMoney">{{needPayAllMoney}}</div>
 			<div class="col-xs-1 text-right no-padding-right no-padding-left control-label">现收团款：</div>
 			<div class="col-xs-2 control-label F-float F-money">{{needPayMoney}}</div>
 			<div class="col-xs-2 text-right no-padding-right no-padding-left control-label">对方现收金额：</div>
@@ -46,7 +46,7 @@
 		{{else}}
 		<div class="col-xs-12 mar-t-20">
 			<label class="control-label pull-left" style="width: 40px;">应收：</label>
-			<span class="control-label pull-left F-float F-money">{{needPayAllMoney}}</span>
+			<span class="control-label pull-left F-float F-money T-needPayAllMoney">{{needPayAllMoney}}</span>
 			<label class="control-label pull-left" style="width: 75px; padding-left: 24px;">预收款：</label>
 			<span class="control-label pull-left F-float F-money">{{preIncomeMoney}}</span>
 			<label class="control-label pull-left" style="width: 75px; padding-left: 12px;">现收团款：</label>
@@ -86,7 +86,7 @@
 						</td>
 						<td class="F-float F-count">{{rs.count}}</td>
 						<td class="F-float F-money">{{rs.price}}</td>
-						<td class="F-float F-money">{{rs.price*rs.count}}</td>
+						<td class="F-float F-money T-money">{{rs.price*rs.count}}</td>
 						<td>{{rs.remark}}</td>
 						{{if isFeeAdjust}}
 						<td></td>
@@ -99,7 +99,7 @@
 						<td>{{rs.type | getFeeItemText:2}}</td>
 						<td class="F-float F-count">{{rs.count}}</td>
 						<td class="F-float F-money">{{rs.price}}</td>
-						<td class="F-float F-money">{{rs.price*rs.count}}</td>
+						<td class="F-float F-money T-money">{{rs.price*rs.count}}</td>
 						<td>{{rs.remark}}</td>
 						{{if isFeeAdjust}}
 						<td></td>
