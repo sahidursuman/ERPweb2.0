@@ -219,9 +219,11 @@
                         <span class="F-float F-money">{{partnerAgency.unIncomeMoney}}</span>
                     </td>
                 </tr>
+                {{if !!partnerAgency.remark}}
                 <tr>
                     <td colspan="2"  class="text-a-l">备注：{{partnerAgency.remark}}</td>
                 </tr>
+                {{/if}}
                 <tr>
                     <td colspan="2" class="text-a-l">请仔细阅读并盖章确认之后回传！谢谢！</td>
                 </tr>
