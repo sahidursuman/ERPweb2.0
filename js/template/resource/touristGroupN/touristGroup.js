@@ -1055,22 +1055,9 @@ define(function(require, exports) {
                     getClientData($(this));
                 });
 
-                //保存
-                $layer.find('.T-btn-save').on('click', function(){
-                    var $clientRadio = $layer.find('.T-client-list').find('[name="chooseClient"]:checked');
-                    if($clientRadio.length === 0){
-                        showMessageDialog('请选择一个客户！');
-                        return false;
-                    }
-                    getClientData($clientRadio);
-                });
                 //关闭
                 $layer.find('.T-btn-close').on('click', function(){
                     layer.close(index);
-                });
-
-                $layer.find('.T-client-list').on('click', 'tr', function(event){
-                    $(this).find('[type="radio"]')[0].checked = true;
                 });
 
                 function getClientData($this) {
@@ -2177,14 +2164,6 @@ define(function(require, exports) {
 
                 $layer.find('.T-line-product-list').on('click', '[name="chooseLineProduct"]', function () {
                      getLineData($(this));
-                });
-                $layer.find('.T-btn-save').on('click', function(){
-                    var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked');
-                    if($lineRadio.length === 0){
-                        showMessageDialog('请选择一条线路产品！');
-                        return false;
-                    }
-                    getLineData($lineRadio);
                 });
                 //关闭
                 $layer.find('.T-btn-close').on('click', function(){
