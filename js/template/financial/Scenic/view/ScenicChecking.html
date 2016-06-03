@@ -87,7 +87,14 @@
             {{each financialScenicListData as rs index}}
 		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
             {{if rs.change}}data-change="true"{{/if}}>
-				<td>{{rs.tripNumber}}{{"，"}}{{rs.lineProductName}}{{"，"}}{{rs.guideName}}</td>
+				<td>{{if rs.tripNumber}}{{rs.tripNumber}}
+                        {{if rs.lineProductName || rs.guideName}}，{{/if}}
+                    {{/if}}
+                    {{if rs.lineProductName}}{{rs.lineProductName}}
+                        {{if rs.guideName}}，{{/if}}
+                    {{/if}}
+                    {{if rs.guideName}}{{rs.guideName}}{{/if}}
+                </td>
 				<td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
 				<td>{{rs.name}}</td>
                 <td>{{rs.orderNumber}}</td>

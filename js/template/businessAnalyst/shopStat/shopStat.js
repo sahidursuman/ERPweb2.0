@@ -8,6 +8,8 @@ define(function(require, exports) {
         listMainTemplate = require("./view/listMain"),
         listTemplate = require("./view/list"),
         viewConsumeMoneyTemplate = require("./view/viewConsumeMoney"),
+        viewLineProductTemplate = require('./view/viewLineProduct'),
+        viewLineProductListTemplate = require('./view/viewLineProductList'),
         tabId="tab-"+menuKey+"-content";
     /**
 	 * 定义购物统计对象
@@ -65,9 +67,11 @@ define(function(require, exports) {
 	   			shopName: shopStat.getValue(shopStat.$searchArea,'shop'),
 	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
 	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber'),
+	   			shopItem: shopStat.getValue(shopStat.$searchArea,'shopItem'),
 	   			startShopTime: shopStat.getValue(shopStat.$searchArea,'startShopTime'),
 	   			endShopTime: shopStat.getValue(shopStat.$searchArea,'endShopTime'),
-	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping')
+	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping'),
+	   			lineProductId: shopStat.getValue(shopStat.$searchArea,'lineProductId'),
 	   		}
 		};
 	   	// 修正页码
@@ -87,10 +91,11 @@ define(function(require, exports) {
 		       		var html = listTemplate(data);
 		       		shopStat.$tab.find('.T-shopStatPager-list').html(Tools.filterMoney(html));
 		       		//翻页不请求合计数据
+		       		shopStat.totalRecordSize = data.searchParam.totalCount;
 		       		if(searchData.pageNo > 0){
-		       			shopStat.loadSumHtml();
+		       			shopStat.loadSumHtml(shopStat.$tab);
 		       		} else{
-		       			shopStat.getSumData(searchData);
+		       			shopStat.getSumData(shopStat.$tab,searchData);
 		       		}
 		       		
 		       		//绑定页面事件
@@ -98,6 +103,7 @@ define(function(require, exports) {
 		       		//设置记录条数
 					var recordSize = Tools.getRecordSizeDesc(data.searchParam.totalCount);
 					shopStat.$tab.find('.recordSize').text(recordSize);
+
 			       	// 绑定翻页组件
 					laypage({
 					    cont: shopStat.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
@@ -117,7 +123,7 @@ define(function(require, exports) {
 	/**
 	 * 获取合计数据
 	 */
-	shopStat.getSumData = function(args){
+	shopStat.getSumData = function($tab,args){
 		$.ajax({
 			url: KingServices.build_url("financial/shopAccount","shopStatisticsTotal"),
 			type: 'POST',
@@ -126,20 +132,24 @@ define(function(require, exports) {
 		.done(function(data) {
 			if(showDialog(data)){
 				shopStat.totalData = data.totalShop[0];
-				shopStat.loadSumHtml();
+				shopStat.loadSumHtml($tab);
 			}
 		});
 	};
 
-	shopStat.loadSumHtml = function(){
-		if(shopStat.totalData){
-			var total = shopStat.totalData;
-			var sumHtml = '<tr style="background: #e0effd;"><td colspan="2" class="T-fontSize" style="text-align:right">合计</td>' +
-				'<td class="P-tdFontSize" >' + total.touristAdultCount + '大' + total.touristChildCount + '小</td><td class="P-tdFontSize" >-</td><td class="P-tdFontSize" >-</td>' +
-	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.consumeMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.avgConsumeMoney + '</span></td>' +
-	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.guideRebateMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.travelAgencyRebateMoney + '</span></td>' +
-	    		'<td class="P-tdFontSize" ><span class="F-float F-money">' + total.sumRebateMoney + '</span></td><td class="P-tdFontSize" ><span class="F-float F-money">' + total.avgRebateMoney + '</span></td></tr>';
-	    	shopStat.$tab.find('.T-tourguidPer-list').append(sumHtml);
+	shopStat.loadSumHtml = function($tab){
+		if(!!shopStat.totalData){
+			var total = shopStat.totalData,
+				$totalTab = $tab.find('.T-totalAccount');
+			console.log(total);
+			$totalTab.find('.T-person').text(total.touristAdultCount+'大'+total.touristChildCount+'小');
+			$totalTab.find('.T-consumeMoney').text(total.consumeMoney);
+			$totalTab.find('.T-avgConsumeMoney').text(total.avgConsumeMoney);
+			$totalTab.find('.T-guideRebateMoney').text(total.guideRebateMoney);
+			$totalTab.find('.T-travelAgencyRebateMoney').text(total.travelAgencyRebateMoney);
+			$totalTab.find('.T-sumRebateMoney').text(total.sumRebateMoney);
+			$totalTab.find('.T-avgRebateMoney').text(total.avgRebateMoney);
+			$totalTab.find('.T-tripCount').text(shopStat.totalRecordSize);
 		}
 		
 	};
@@ -168,6 +178,18 @@ define(function(require, exports) {
 				filename:'购物统计',
 				exclude_links:false
 			});
+		}).on('click','.T-Choose-product',function(){
+			//获取线路列表
+			shopStat.showLineProduct($(this));
+		}).on('click','.T-clear-line',function(){
+			var $div = $(this).closest('div');
+			if(!!$div.find('input[name=lineProduct]').val()){
+				showConfirmDialog('是否清除?', function() {
+	                $div.find('input[name=lineProduct]').val('');
+	                $div.find('input[name=lineProductId]').val('');
+	            });
+			};
+			
 		});
 		//列表事件
 		var $listObj = shopStat.$tab.find('.T-shopStatPager-list');
@@ -183,7 +205,136 @@ define(function(require, exports) {
 				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId,-1);
 			};
 		});
-	};
+
+		//商品事件
+		var $showLIt = shopStat.$tab.find(".T-Choose-goods");
+			$showLIt.off('click').on('click',function(){
+				shopStat.showItem($(this));
+			})
+		};
+		/**
+		 * 选择线路
+		 */
+		shopStat.showLineProduct = function($obj){
+			layer.open({
+	            type: 1,
+	            title: "选择线路产品",
+	            skin: 'layui-layer-rim', //加上边框
+	            area: '80%', //宽高
+	            zIndex: 1028,
+	            content: viewLineProductTemplate(),
+	            scrollbar: false,
+	            success:function(obj, index){
+	                var $layer = $(obj);
+	                shopStat.getLineProduct(0,$layer);
+	                $layer.find('.T-btn-search').on('click', function(){
+	                    shopStat.getLineProduct({
+	                        pageNo : 0,
+	                        name : $layer.find('[name="lineProductName"]').val()
+	                    }, $layer);
+	                });
+	                $layer.find('.T-btn-save').on('click', function(){
+	                    var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked'),
+	                        $tr = $lineRadio.closest('tr');
+	                    if($lineRadio.length === 0){
+	                        showMessageDialog('请选择一条线路产品！');
+	                        return false;
+	                    }
+	                    var lineData = {
+	                        id : $tr.data('id'),
+	                        lineProductName : $tr.find('[name="lineProductName"]').text(),
+	                    };
+	                    $obj.closest('div').find('input[name=lineProductId]').val(lineData.id);
+	                    $obj.closest('div').find('input[name=lineProduct]').val(lineData.lineProductName);
+	                    layer.close(index);
+	                });
+	                //关闭
+	                $layer.find('.T-btn-close').on('click', function(){
+	                    layer.close(index);
+	                });
+	                
+	            }
+	        });
+		}
+		/**
+		 * 获取线路列表
+		 * @param  {[type]} $obj [当前搜索框]
+		 * @return {[type]}      [description]
+		 */
+		shopStat.getLineProduct = function(args,$obj){
+			if(typeof args === "number"){
+	            var page = args;
+	            args = {};
+	            args.pageNo = page;
+	        }
+			$.ajax({
+				url:KingServices.build_url('lineProduct','findAll'),
+				type:'POST',
+				data:args
+			}).done(function(data){
+				if(showDialog(data)){
+					data.lineProductList = JSON.parse(data.lineProductList);
+					$obj.find('.T-line-product-list').html(viewLineProductListTemplate(data));
+
+					$obj.find('.T-record-size').text(data.recordSize);
+
+					// 绑定翻页组件
+	                laypage({
+	                    cont: $obj.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+	                    pages: data.totalPage, //总页数
+	                    curr: (data.pageNo + 1),
+	                    jump: function(obj, first) {
+	                        if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+	                            args.pageNo = (obj.curr - 1);
+	                            shopStat.getLineProduct(args,$obj);
+	                        }
+	                    }
+	                });
+                 	$(document).trigger('resize');
+				}
+			});
+		};
+		shopStat.showItem = function($obj){
+			var shopId = shopStat.$searchArea.find('input[name=shopId]').val();
+			if (!!shopId) {
+				$.ajax({
+					url: KingServices.build_url('shop','findPolicyByShopId'),
+					type: 'POST',
+					data:{id:shopId},
+					showLoading:false,
+					success:function(data){
+						 //商品列表
+						var shopItemList = JSON.parse(data.shopPolicyList);
+						for(var i = 0;i<shopItemList.length;i++){
+							shopItemList[i].value = shopItemList[i].name;
+						};
+						$obj.autocomplete({
+							minLength:0,
+							select:function(event,ui){
+								if(ui.item != null){
+									var divObj = $(this).closest('div');
+									divObj.find('[name='+name+'Id]').val(ui.item.id);
+								}
+							},
+							change:function(event,ui){
+								if(ui.item == null){
+									var divObj = $(this).closest('div');
+									$(this).val('');
+									divObj.find('[name='+name+'Id]').val('');
+								};
+							}
+						})
+						$obj.autocomplete('option','source', shopItemList);
+						$obj.autocomplete('search', '');
+					}
+				});
+			}else{
+ 				layer.tips('请选择购物店', $obj, {
+ 				    tips: [1, '#3595CC'],
+ 				    time: 2000
+ 				});
+			}
+		};
 
 	/**
 	 *展示点击总打单
@@ -221,6 +372,9 @@ define(function(require, exports) {
 			}
 		});
 	};
+
+
+
 	/**
 	 * [autocompleteDate 获取客户、团号和购物店列表]
 	 * @return {[type]} [description]
@@ -297,5 +451,6 @@ define(function(require, exports) {
 	};
 
 	exports.init = shopStat.initModule;
-	exports.viewConsumeMoney=shopStat.viewConsumeMoney;
+	exports.viewConsumeMoney = shopStat.viewConsumeMoney;
+	exports.showLineProduct= shopStat.showLineProduct ;
 });

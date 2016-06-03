@@ -715,22 +715,26 @@
 			<table class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
-						<th class="th-border">序号</th>
 						<th class="th-border">姓名</th>
 						<th class="th-border">手机号码</th>
 						<th class="th-border">证件类型</th>
-						<th class="th-border">证件号</th>
+						<th class="th-border">证件号码</th>
+		                <th class="th-border">性别</th>
+		                <th class="th-border">年龄</th>
+		                <th class="th-border">客源地</th>
 						<th class="th-border">是否联系人</th>
 					</tr>
 				</thead>
 				<tbody>
 				{{each touristGroupMembers as rs index}}
 					<tr>
-						<td>{{index + 1}}</td>
 						<td>{{rs.name}}</td>
 						<td>{{rs.mobileNumber}}</td>
 						<td>{{rs.idCardType | getCardText}}</td>
 						<td>{{rs.idCardNumber}}</td>
+						<td>{{if rs.gender == 1}}男{{else if rs.gender == 0}}女{{else}}{{/if}}</td>
+						<td>{{rs.age}}</td>
+						<td>{{rs.area}}</td>
 						<td>{{if rs.isContactUser}}是{{else}}-{{/if}}</td>
 					</tr>
 				{{/each}}

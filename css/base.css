@@ -99,6 +99,10 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=d
 	width: 60px;
 }
 
+.tab-content {
+	top: -2px;
+}
+
 /***发团计划样式**/
 
 input.datepicker:not([class^="col-"]) {
@@ -129,6 +133,11 @@ input.datepicker:not([class^="col-"]) {
 .hct-search-area{
 	width: 100%;
 	max-width: 1280px;
+	margin-bottom: 0;
+	overflow: hidden;
+}
+.hct-search-box{
+	width: 1080px;
 	margin-bottom: 0;
 	overflow: hidden;
 }
@@ -914,6 +923,10 @@ input.datepicker:not([class^="col-"]) {
 .w-80 {
 	width: 80px;
 }
+/*金额input的宽度*/
+.w-110 {	
+	width: 110px;
+}
 
 /*导游名字输入框*/
 .w-70 {
@@ -924,7 +937,6 @@ input.datepicker:not([class^="col-"]) {
 .w-100 {
 	width: 100px;
 }
-
 /*线路产品*/
 .w-150 {	
 	width: 150px;
@@ -1011,7 +1023,20 @@ input.datepicker:not([class^="col-"]) {
 	position: relative;
 	border-left: 1px solid #ddd!important;
 }
-.table>thead>tr.T-tr-fixed>th:last-child{
+.widget-main.no-padding .table-bordered th:first-child{
+	border-left: 1px solid #ddd;
+}
+.widget-main.no-padding .table-bordered>tbody>tr:last-child>td{
+    border-bottom-width: 1px!important;
+}
+.widget-main.no-padding .table-bordered td:first-child{
+    border-left-width: 1px;
+}
+.widget-main.no-padding .table-bordered>tbody>tr>td:last-child{
+    border-right-width: 1px!important;
+}
+.table>thead>tr.T-tr-fixed>th:last-child,
+.widget-main.no-padding .table-bordered>thead>tr>th:last-child{
 	border-right: 1px solid #ddd!important;
 }
 .table>thead>tr.bg-blur.T-tr-fixed>th{
@@ -1060,6 +1085,201 @@ input.datepicker:not([class^="col-"]) {
 .sidebar.menu-min+.main-content{
 	margin-left: 0;
 	padding-left: 43px;
+}
+/**新版本**/
+.table-new > thead > tr > th,
+.table-new > tbody > tr > td{
+	border: 1px solid #ccc;
+}
+.table-new > thead > tr > th{
+	background: #f9f9f9;
+	color: #444;
+}
+.table-new>thead:first-child>tr:first-child>th{
+	border-top: 1px solid #ccc;
+}
+.table-new>thead>tr>th:first-child{
+	border-left-color: #ccc;
+}
+.table-new>thead>tr>th:last-child{
+	border-right-color: #ccc;
+}
+.table-new>tbody>tr:nth-child(odd){
+	background-color: #fff;
+}
+.table-new>tbody>tr:nth-child(even){
+	background-color: #f9f9f9;
+}
+.hct-table-update thead tr th{
+	height: 34px;
+	background-color: #51B0C2;
+	border-left: none;
+    border-bottom: none;
+    border-right-color: #fff;
+    color: #fff;
+}
+.hct-table-update thead tr th:last-child{
+	border-right-color: #51B0C2;
+}
+.hct-table-update tbody tr td{
+	border-color: #ECECEC;
+}
+.hct-update-list-title{
+	font-size: 16px;
+    color: #428BCA;
+    font-weight: bold;
+	margin-top: 0;
+}
+.hct-title-point{
+	padding-left: 18px;
+	position: relative;
+}
+.hct-title-point:after{
+	content: '';
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -4px;
+	background-color: #428BCA;
+}
+.hct-shrink-box{
+	position: relative;
+    overflow: hidden;
+}
+.hct-shrink-box:before{
+	content: '';
+    position: absolute;
+    top: 50%;
+    left: 75px;
+	height: 1px;
+	width: 100%;
+	background-color: #DFDFDF;
+}
+.hct-shrink-box .hct-shrink-btn{
+	position: absolute;
+	right: 0;
+	top: -5px;
+	color: #CDCDDC;
+    background-color: #fff;
+    padding-left: 10px;
+}
+.hct-bg-1FADE0{
+	background: #1FADE0!important;
+}
+.hct-bg-1FADE0.btn:hover{
+	background: #2e6da4!important;
+}
+.hct-bg-BBB{
+	background: #BBB!important;
+}
+.hct-bg-BBB:hover{
+	background: #BBB!important;
+}
+.hct-color-BBB{
+	color: #bbb!important;
+}
+.hct-group-input{
+	position: relative;
+}
+.col-xs-12.hct-group-input{
+	padding-right: 0;
+}
+.hct-group-input > label{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 55px;
+	line-height: 24px;
+	text-align: right;
+}
+.hct-group-input > .col-xs-12{
+	padding-left: 48px;
+}
+.hct-group-input > .control-label{
+	min-height: 22px;
+}
+.col-xs-12.hct-group-input > label{
+	left: 12px;
+}
+.col-xs-12.hct-group-input> .col-xs-12{
+	padding-left: 60px;
+}
+.radio-inline{
+	padding-left: 0;
+}
+
+.inline-block {
+	display: block;
+}
+
+.item-line {
+	border-top: 1px solid #ddd;
+}
+.hct-mh-required{
+    padding: 10px 5px;
+    background-color: #EFEFEF;
+    border-radius: 0;
+}
+/*重写查看中转明细样式*/
+.hct-view-container{
+	width: 100%;
+}
+.hct-view-container .hct-view-group{
+	position: relative;
+    border: none;
+}
+.hct-view-container .hct-view-group:after{
+	z-index: 2;
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #ddd;
+}
+.hct-view-container .hct-view-group:after{
+	border-right: none;
+	border-bottom: none;
+}
+.hct-view-container .hct-view-group:last-child:after{
+	border-right: 1px solid #ddd;
+}
+.hct-view-container tr:last-child .hct-view-group:after{
+	border-bottom: 1px solid #ddd;
+}
+.hct-view-container .hct-view-group:before{
+	z-index: 3;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 96px;
+	width: 1px;
+	height: 100%;
+	background-color: #ddd;
+}
+.hct-view-container .hct-view-group .hct-view-title{
+	z-index: 2;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -8px;
+	width: 90px;
+	text-align: right;
+}
+.hct-view-container .hct-view-group .hct-view-content{
+	z-index: 1;
+	position: relative;
+	padding-left: 96px;
+    min-height: 16px;
+	text-align: left;
+	word-wrap:break-word;
+}
+.hct-pos-inherit{
+	position: inherit;
 }
 @media (max-width: 1485px){
 	.financial-search-planProfit{

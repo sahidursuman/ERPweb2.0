@@ -152,6 +152,52 @@
         res += '<option value="10" ' + (10 == type ? "selected" : "") + ">自费费用</option>", 
         res += '<option value="11" ' + (11 == type ? "selected" : "") + ">票务费用</option>", 
         res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
+    }), template.helper("getFeeItemType2", function(type) {
+        var res = "";
+        return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
+        res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
+        res += '<option value="8" ' + (8 == type ? "selected" : "") + ">单房差</option>", res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
+    }), template.helper("getFeeItemText", function(type, showType) {
+        switch (1 * type) {
+          case 1:
+            return "大人结算价";
+
+          case 2:
+            return "小孩结算价";
+
+          case 3:
+            return "中转结算价";
+
+          case 4:
+            return "车辆费用";
+
+          case 5:
+            return "餐厅费用";
+
+          case 6:
+            return "保险费用";
+
+          case 7:
+            return "导服费";
+
+          case 8:
+            return 2 == showType ? "单房差" : "酒店费用";
+
+          case 9:
+            return "景区费用";
+
+          case 10:
+            return "自费费用";
+
+          case 11:
+            return "票务费用";
+
+          case 12:
+            return "其他费用";
+
+          default:
+            return "大人结算价";
+        }
     }), template.helper("getWayTypeText", function(status) {
         var res = [ "", "旅行社系统", "传真", "短信", "电话", "QQ", "微信", "线上渠道" ];
         return status = status || 1, res[status];
@@ -192,6 +238,34 @@
 
           default:
             return "其他";
+        }
+    }), template.helper("getTravelAgencyType", function(payType) {
+        switch (1 * payType) {
+          case 0:
+            return "地接社";
+
+          case 1:
+            return "组团社";
+
+          case 2:
+            return "地接社和组团社";
+
+          default:
+            return "组团社";
+        }
+    }), template.helper("getTravelAgencyLevel", function(payType) {
+        switch (1 * payType) {
+          case 1:
+            return "金牌";
+
+          case 2:
+            return "银牌";
+
+          case 3:
+            return "铜牌";
+
+          default:
+            return "金牌";
         }
     }), template.helper("getPlanPayTypeOption", function(status, isDisabled) {
         var res = "", dis = "";
@@ -330,6 +404,12 @@
           default:
             return "";
         }
+    }), template.helper("getHotelLevelOptions", function(level) {
+        var res = "";
+        return level = level || 1, res += '<option value="1" ' + (1 == level ? "selected" : "") + ">三星以下</option>", 
+        res += '<option value="2" ' + (2 == level ? "selected" : "") + ">三星</option>", res += '<option value="3" ' + (3 == level ? "selected" : "") + ">准四星</option>", 
+        res += '<option value="4" ' + (4 == level ? "selected" : "") + ">四星</option>", res += '<option value="5" ' + (5 == level ? "selected" : "") + ">准五星</option>", 
+        res += '<option value="6" ' + (6 == level ? "selected" : "") + ">五星</option>", res += '<option value="7" ' + (7 == level ? "selected" : "") + ">五星以上</option>";
     }), template.helper("getOrderStatusDesc", function(status) {
         switch (1 * status) {
           case 1:
@@ -365,6 +445,38 @@
         var res = "交通";
         return "trafic" == status ? res = "交通" : "hotel" == status ? res = "住宿" : "play" == status ? res = "游玩" : "note" == status ? res = "笔记" : "line" == status && (res = "线路简介"), 
         res;
+    }), template.helper("getPartGroupStatusText", function(status) {
+        switch (1 * status) {
+          case 0:
+            return "已发团";
+
+          case 1:
+            return "未分团";
+
+          case 2:
+            return "已分团";
+
+          case 3:
+            return "已外转";
+
+          case 4:
+            return "已取消";
+
+          case 5:
+            return "已分段";
+
+          case 6:
+            return "已内转";
+
+          case -1:
+            return "内转成功";
+
+          case -2:
+            return "外转成功";
+
+          default:
+            return "-";
+        }
     }), template.helper("getBusinessTypeText", function(businessType) {
         switch (businessType) {
           case "guide":
@@ -408,5 +520,11 @@
           default:
             return console.info("Other Type:type"), "其他类型";
         }
+    }), template.helper("canEditCheckedFinancial", function(status) {
+        var res = !0;
+        return 2 != status && 1 != status || isAuth("1190003") || 32 != IndexData.userInfo.travelAgencyId || (res = !1), 
+        res;
+    }), template.helper("isNeedShowDetail", function() {
+        return 32 == IndexData.userInfo.travelAgencyId && 4 == IndexData.userInfo.financialCountAuth;
     });
 }();

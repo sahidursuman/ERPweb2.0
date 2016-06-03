@@ -1,0 +1,195 @@
+<table class="table table-striped table-bordered table-hover  T-showHighLight">
+    <thead>
+        <tr class="bg-blur">
+            <th>中转信息</th>
+            <th>类型</th>
+            <th>客人信息</th>
+            <th>消费时间</th>
+            <th>分类</th>
+            <th>要求</th>
+            <th>安排结果</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="T-its-list">
+    <!-- 它 -->
+    {{each outOtherList as item}}
+        <tr data-id="{{item.outRemarkId}}" data-shuttleType="{{item.shuttleType}}">
+            <td class="h-touristGroupInfo" rowspan="{{item.size}}">
+                <p>中转单号：{{item.orderNumber}}</p>
+                <p><span>&lt;{{item.lineProductName}}&gt;</span></p>
+                <p><span>{{item.startTime}}</span><span>{{item.partnerAgencyName}}</span><span>外链销售：{{item.outOPUserName}}</span></p>
+                <p>收客单号：{{item.tgOrderNumber}}</p>
+            </td>
+            <td  rowspan="{{item.size}}">
+                {{if item.shuttleType == 1 }}接
+                {{else if shuttleType == 2}}送{{/if}}            
+            </td>
+            <td  rowspan="{{item.size}}">
+                <p>{{item.contactMemberName}}</p>
+                <p>{{item.adultCount}}大{{item.childCount}}小</p>
+            </td>
+            <td rowspan="{{item.size}}">
+                {{item.startTime}}
+            </td>
+
+            {{if item.arrangeItems.length > 0}}
+            <td>
+                {{if item.arrangeItems[0].arrangeType == 'ticket' }} 票
+                     {{else if item.arrangeItems[0].arrangeType == 'restaurant' }}餐
+                     {{else if item.arrangeItems[0].arrangeType == 'other' }}它
+                {{/if}}
+            </td>
+            <td>{{item.arrangeItems[0].require}}</td>
+
+            <!-- 具体安排 -->
+            <td>
+            {{if item.arrangeItems[0].arrangeResultList.length}}
+                {{each item.arrangeItems[0].arrangeResultList as list}}
+                <label class="inline-block">
+                <!-- 项目名称 -->
+                {{list.name}}
+                <!-- 如果是票，显示班次 -->
+                {{list.shift}}
+                </label>
+                {{/each}}
+            {{/if}}
+            </td>
+            <td>
+                {{if item.arrangeItems[0].status == 1}}
+                    <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
+                {{else if item.arrangeItems[0].status == 0}}
+                    <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
+                {{/if}}
+            </td>
+            {{else}}
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            {{/if}}
+
+            <td rowspan="{{item.size}}">
+                {{if item.status == 1}}
+                <a class="cursor T-arrage T-inform T-action"> 
+                通知</a>
+                <label class="padding-right20">|</label>
+                {{/if}}
+                <a class="cursor T-arrage T-plan-its T-action">
+                     安排</a>
+                <a class="cursor T-arrage T-view-plan T-action">
+                    <label class="padding-right20">|</label> 查看 </a>
+            </td>
+        </tr>
+
+            {{each item.arrangeItems as arrange level2}}
+            {{if level2 > 0}}
+            <tr>
+                <td>
+                    {{if arrange.arrangeType == 'ticket' }} 票
+                         {{else if arrange.arrangeType == 'restaurant' }}餐
+                         {{else if arrange.arrangeType == 'other' }}它
+                    {{/if}}
+                </td>
+                <td>{{item.require}}</td>
+
+                <!-- 具体安排 -->
+                <td>
+                {{each arrange.arrangeResultList as list level3}}
+                    <label  class="inline-block {{if level3 > 0}} item-line {{/if}}">
+                    <!-- 项目名称 -->
+                    {{list.name}}
+                    <!-- 如果是票，显示班次 -->
+                    {{list.shift}}
+                    </label>
+                {{/each}}
+                </td>
+                <td>
+                    {{if arrange.status == 1}}
+                        <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
+                    {{else if arrange.status == 0}}
+                        <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
+                    {{/if}}
+                </td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        {{/each}}
+        <!-- 餐 -->
+        <!--  <tr>
+            <td class="h-touristGroupInfo">
+                <p>中转单号：HLJQ16390994858943ZZ</p>
+                <p><span>&lt;贵阳-西江-黄果树双飞五日游&gt;</span><span>跟团游</span></p>
+                <p><span>2016-3-15</span><span>百事通</span><span>外链销售：张晓雅</span></p>
+                <p>收客单号：HLJQ16390994858943ZZ</p>
+            </td>
+            <td>餐</td>
+            <td>
+                <p>王倩倩</p>
+                <p>20大2小</p>
+            </td>
+            <td>
+                2016-3-21
+            </td>
+            <td>川剧变脸</td>
+            <td>
+                <p>
+                    <span>四川大剧院</span>
+                    <span>16:30场</span>
+                </p>
+            </td>
+            <td><i class="ace-icon fa fa-check green bigger-130"></i>已安排</td>
+            <td>
+                <a class="cursor T-inform T-action"> 
+                通知</a>
+                <a class="cursor T-plan-meal T-action">
+                    <label class="padding-right20">|</label> 安排</a>
+                <a class="cursor T-view T-action">
+                    <label class="padding-right20">|</label> 查看
+            </td>
+        </tr>
+        票
+         <tr>
+            <td class="h-touristGroupInfo">
+                <p>中转单号：HLJQ16390994858943ZZ</p>
+                <p><span>&lt;贵阳-西江-黄果树双飞五日游&gt;</span><span>跟团游</span></p>
+                <p><span>2016-3-15</span><span>百事通</span><span>外链销售：张晓雅</span></p>
+                <p>收客单号：HLJQ16390994858943ZZ</p>
+            </td>
+            <td>票</td>
+            <td>
+                <p>王倩倩</p>
+                <p>20大2小</p>
+            </td>
+            <td>
+                2016-3-21
+            </td>
+            <td>川剧变脸</td>
+            <td>
+                <p>
+                    <span>四川大剧院</span>
+                    <span>16:30场</span>
+                </p>
+            </td>
+            <td><i class="ace-icon fa fa-check green bigger-130"></i>已安排</td>
+            <td>
+                <a class="cursor T-inform T-action"> 
+                通知</a>
+                <a class="cursor T-plan-ticket T-action">
+                    <label class="padding-right20">|</label> 安排</a>
+                <a class="cursor T-view-plan T-action">
+                    <label class="padding-right20">|</label> 查看
+            </td> -->
+        <!-- </tr> -->
+    </tbody>
+</table>
+<div class="row pageMode">
+    <div class="col-xs-6">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>

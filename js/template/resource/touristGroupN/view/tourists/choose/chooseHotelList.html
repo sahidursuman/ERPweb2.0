@@ -1,0 +1,9 @@
+{{each hotelList as rs}}
+<tr data-id="{{rs.id}}"{{if !!rs.ischeck}} class="success"{{/if}}>
+	<td name="hotelName">{{rs.name}}</td>
+	<td>
+		<input type="checkbox"{{if !!rs.ischeck}} checked{{/if}} name="isSelectHotel" class="ace T-select T-cheked">
+		<label class="lbl"></label>
+	</td>
+</tr>
+{{/each}}

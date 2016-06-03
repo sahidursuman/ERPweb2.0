@@ -1,0 +1,132 @@
+<div class=" ui-sortable-handle">
+    <h5 class="title-size">
+        <i class="ace-icon fa fa-hotel"></i>
+        酒店安排
+        <button class="btn btn-sm btn-success T-addResource T-addHotel" style="margin-left: 20px">
+        <i class="ace-icon fa fa-plus"></i>
+        新增
+        </button>
+        <button class="btn btn-sm btn-success pull-right mar-l-15 T-oneClick T-booking"> 
+            一键预订
+        </button> 
+        <button class="btn btn-sm btn-success pull-right mar-l-15 T-oneClick T-asking"> 
+            一键询价
+        </button> 
+    </h5> {{if basicInfo.oldHotelRequire}}
+    <p class="requirementsPlan">原酒店计划要求：{{basicInfo.oldHotelRequire}}</p>{{/if}} {{if basicInfo.nowHotelRequire}}
+    <p class="requirementsPlan">现酒店计划要求：{{basicInfo.nowHotelRequire}}</p>{{/if}}
+    <div class="overflow-x min-w-1050">
+        <table class="table table-striped table-bordered table-hover table-tripPlan-container w-1400">
+            <colgroup>
+                <col style="width:110px">
+                <col style="width:90px;">
+                <col style="width:150px;">
+                <col style="width:160px;">
+                <col style="width:60px;">
+                <col style="width:60px;">
+                <col style="width:60px;">
+                <col style="width:60px;">
+                <col style="width:60px;">
+                <col style="width:60px;">
+                <col style="width:150px;">
+                <col>
+                <col style="width:80px;">
+                <col style="width:110px;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="th-border" style="width:100px;"><span class="necessary">*</span>日期</th>
+                    <th class="th-border">星级</th>
+                    <th class="th-border"><span class="necessary">*</span>酒店</th>
+                    <th class="th-border">联系方式</th>
+                    <th class="th-border"><span class="necessary">*</span>房型</th>
+                    <th class="th-border">单价</th>
+                    <th class="th-border">数量</th>
+                    <th class="th-border">优惠</th>
+                    <th class="th-border">应付</th>
+                    <th class="th-border">预付款</th>
+                    <th class="th-border">计划导付</th>
+                    <th class="th-border">备注</th>
+                    <th class="th-border">状态</th>
+                    <th class="th-border" style="width: 170px;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each hotelList as hotel}} {{if hotel != "[]" || hotel != null}}
+                <tr data-entity-arrangeid="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" data-entity-hotelId="{{hotel.hotel.id}}" data-entity-roomId="{{if !!hotel.hotelRoom}}{{hotel.hotelRoom.id}} {{/if}}" data-entity-offerId="{{hotel.offerId}}" data-qouteId="{{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}">
+                    <td class="T-whichDaysContainer T-whichDays" value="{{hotel.whichDay}}" data-qouteId={{if hotel.qouteId!=null}}{{hotel.qouteId}}{{/if}}></td>
+                    <td>
+                        <select class="col-sm-12 no-padding tripPlanHotelStar T-tripPlanHotelStar" {{if hotel.qouteId!=null}}disabled="disabled" {{/if}} style="width: 80px; {{if hotel.qouteId!=null}}background:#EFEBEB{{/if}}">
+                            {{if hotel.hotel !=null}}
+                            <option {{if hotel.hotel.level==0 }}selected="selected" {{/if}} value="">--全部--</option>
+                            <option {{if hotel.hotel.level==1 }}selected="selected" {{/if}} value="1">三星以下</option>
+                            <option {{if hotel.hotel.level==2 }}selected="selected" {{/if}} value="2">三星</option>
+                            <option {{if hotel.hotel.level==3 }}selected="selected" {{/if}} value="3">准四星</option>
+                            <option {{if hotel.hotel.level==4 }}selected="selected" {{/if}} value="4">四星</option>
+                            <option {{if hotel.hotel.level==5 }}selected="selected" {{/if}} value="5">准五星</option>
+                            <option {{if hotel.hotel.level==6 }}selected="selected" {{/if}} value="6">五星</option>
+                            <option {{if hotel.hotel.level==7 }}selected="selected" {{/if}} value="7">五星以上</option>
+                            {{/if}}
+                        </select>
+                        <input type="hidden" name="id" value="{{if basicInfo.isArranged == 1}}{{hotel.id}}{{/if}}" />
+                    </td>
+                    <td>
+                        <div class="col-sm-12">
+                            <input type="text" class="col-sm-12 T-chooseHotel" name="name" value="{{if hotel.hotel !=null}}{{hotel.hotel.name}}{{/if}}" />
+                            <input type="hidden" name="hotelId" value="{{if hotel.hotel !=null}}{{hotel.hotel.id}}{{/if}}">
+                            <span class="addResourceBtn T-addHotelResource R-right" data-right="1040002" title="添加酒店">
+                                    <i class="ace-icon fa fa-plus bigger-110 icon-only"></i>
+                                </span>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12" name="managerName" readonly="readonly" value="{{if hotel.hotel !=null}}{{hotel.hotel.managerName}} {{hotel.hotel.mobileNumber}}{{/if}}" />
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12 T-chooseHotelRoom" name="hotelRoom" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.type}}{{/if}}" />
+                        <input type="hidden" name="hotelRoomId" value="{{if hotel.hotelRoom !=null}}{{hotel.hotelRoom.id}}{{/if}}">
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12 price F-float F-money" name="price" maxlength="8" value="{{hotel.price}}" style="width: 60px;" maxlength="9" />
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12 F-float F-count" name="memberCount" maxlength="8" value="{{hotel.memberCount}}" style="width: 60px;" />
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12 price F-float F-money" name="reduceMoney" maxlength="8" value="{{hotel.reduceMoney}}" style="width: 60px;" />
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12 F-float F-money" readonly="readonly" name="needPayMoney" value="{{hotel.needPayMoney}}" style="width: 60px;" />
+                    </td>
+                    <td>
+                        <input type="text" class="col-sm-12 price F-float F-money" name="prePayMoney" maxlength="9" value="{{hotel.prePayMoney}}" style="width: 60px;" />
+                    </td>
+                    <td class="inline-flex">{{#hotel.payType | getPlanPayTypeOption}}
+                        <input type="text" name="guidePayMoney" class="F-float F-money" value="{{if hotel.payType == 2}}{{hotel.signMoney}}{{else}}{{hotel.guidePayMoney}}{{/if}}" style="width: 60px;" maxlength="9" />
+                    </td>
+                    <td>
+                        <input type="text" name="remark" class="col-sm-12" value="{{hotel.remark}}" maxlength="500" />
+                    </td>
+                    <td>
+                        <select name="orderStatus">
+                            <option {{if hotel.orderStatus==1 }}selected="selected" {{/if}} value="1">未预定</option>
+                            <option {{if hotel.orderStatus==2 }}selected="selected" {{/if}} value="2">预定中</option>
+                            <option {{if hotel.orderStatus==3 }}selected="selected" {{/if}} value="3">已预订</option>
+                            <option {{if hotel.orderStatus==0 }}selected="selected" {{/if}} value="0">无需预订</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a class="cursor T-hotel-action T-hotel-askPrice">询价</a><a class="cursor T-hotel-action T-hotel-offerStatus"><i class="ace-icon fa fa-search"></i></a>
+                        <a class="cursor T-hotel-action T-hotel-bookingStatus {{if hotel.inquiryStatus == 1}}T-hotel-booking{{/if}}" {{if hotel.inquiryStatus !=1 }}style="color: #bbb" {{/if}}>预订</a><a class="cursor T-hotel-action T-hotel-bookingView"><i class="ace-icon fa fa-search"></i></a><a class="cursor T-hotel-action T-btn-deleteTripPlanList" data-entity-ispayed="{{hotel.financialMoney}}" data-entity-name="hotel">删除</a>
+                    </td>
+                    <!-- <td>
+                            {{if hotel.offerId!=null}}
+                            <a class="cursor T-Hotel-SendOrder T-sendOrder-Area R-right T-action" data-value="{{hotel.qouteId}}" data-right="1450001" data-entity-offerId={{hotel.offerId}}>发送订单</a>
+                            {{/if}}
+                        </td> -->
+                </tr>
+                {{/if}} {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

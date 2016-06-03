@@ -1,4 +1,4 @@
-<div class="row" style="margin: 0; padding: 10px 10px 0;">
+<div class="row" id="T-tripNumber-layer" style="margin: 0; padding: 10px 10px 0;">
 	<table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
@@ -10,7 +10,7 @@
         <tbody>
         {{each detailList as rs}}
             <tr>
-                <td>{{rs.number}}</td>
+                <td class="T-number">{{rs.number}}</td>
                 <td>{{rs.money}}</td>
                 <td>{{rs.remark}}</td>
             </tr>

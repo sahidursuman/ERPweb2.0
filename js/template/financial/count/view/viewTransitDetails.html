@@ -1,0 +1,268 @@
+<div class="container-fluid">
+    <div class="hct-view-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">线路产品</div>
+                        <div class="hct-view-content">{{touristGroup.lineProductName}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">出游日期</div>
+                        <div class="hct-view-content">{{touristGroup.startTime}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">人数合计</div>
+                        <div class="hct-view-content">{{touristGroup.adultCount}}大{{touristGroup.childCount}}小</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="hct-view-group col-xs-12">
+                        <div class="hct-view-title">小组联系人</div>
+                        <div class="hct-view-content">
+                            {{if touristGroup.contactUserList && touristGroup.contactUserList.length > 0}}
+                            {{each touristGroup.contactUserList as rs index}}
+                                {{rs.name}}（{{rs.mobileNumber}}）{{if index != touristGroup.contactUserList.length-1}}、{{/if}}
+                            {{/each}}
+                            {{/if}}
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {{if arrangeList.outBusList && arrangeList.outBusList.length > 0}}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="hct-update-list-title hct-title-point">车辆安排</h3>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover hct-table-update">
+                <thead>
+                    <tr>
+                        <th>车队</th>
+                        <th>车座数</th>
+                        <th>车辆品牌</th>
+                        <th>车牌</th>
+                        <th>司机</th>
+                        <th>司机电话</th>
+                        <th>用车时间</th>
+                        <th>上车地点</th>
+                        <th>目的地</th>
+                        <th>车费</th>
+                        <th>优惠</th>
+                        <th>应付款</th>
+                        <th>预付款</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{each arrangeList.outBusList as rs}}
+                    <tr>
+                        <td>{{rs.busCompanyName}}</td>
+                        <td>{{rs.seatCount}}</td>
+                        <td>{{rs.brand}}</td>
+                        <td>{{rs.licenseNumber}}</td>
+                        <td>{{rs.driverName}}</td>
+                        <td>{{rs.driverMobileNumber}}</td>
+                        <td>{{rs.useTime}}</td>
+                        <td>{{rs.boardLocation}}</td>
+                        <td>{{rs.destination}}</td>
+                        <td class="F-float F-money">{{rs.fee}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+    {{if arrangeList.outHotelList && arrangeList.outHotelList.length > 0}}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="hct-update-list-title hct-title-point">酒店安排</h3>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover hct-table-update">
+                <thead>
+                    <tr>
+                        <th>入住日期</th>
+                        <th>离店日期</th>
+                        <th>星级</th>
+                        <th>酒店</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>房型</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>优惠</th>
+                        <th>应付款</th>
+                        <th>预付款</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{each arrangeList.outHotelList as rs}}
+                    <tr>
+                        <td>{{rs.checkInTime}}</td>
+                        <td>{{rs.checkOutTime}}</td>
+                        <td>{{rs.hotelLevel | getHotelLevelDesc}}</td>
+                        <td>{{rs.hotelName}}</td>
+                        <td>{{rs.hotelManagerName}}</td>
+                        <td>{{rs.hotelMobileNumber}}</td>
+                        <td>{{rs.hotelRoomType}}</td>
+                        <td class="F-float F-money">{{rs.price}}</td>
+                        <td class="F-float F-count">{{rs.memberCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+    {{if arrangeList.outTicketList && arrangeList.outTicketList.length > 0}}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="hct-update-list-title hct-title-point">票务安排</h3>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover hct-table-update">
+                <thead>
+                    <tr>
+                        <th>票务公司</th>
+                        <th>类型</th>
+                        <th>出发城市</th>
+                        <th>到达城市</th>
+                        <th>日期</th>
+                        <th>班次</th>
+                        <th>座位级别</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>优惠</th>
+                        <th>应付款</th>
+                        <th>预付款</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{each arrangeList.outTicketList as rs}}
+                    <tr>
+                        <td>{{rs.ticketName}}</td>
+                        <td>{{rs.type | getTicketText}}</td>
+                        <td>{{rs.startingCity}}</td>
+                        <td>{{rs.arriveCity}}</td>
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}</td>
+                        <td>{{rs.shift}}</td>
+                        <td>{{rs.seatLevel}}</td>
+                        <td class="F-float F-money">{{rs.price}}</td>
+                        <td class="F-float F-count">{{rs.memberCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+    {{if arrangeList.outRestaurantList && arrangeList.outRestaurantList.length > 0}}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="hct-update-list-title hct-title-point">餐厅安排</h3>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover hct-table-update">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>餐厅</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>类型</th>
+                        <th>餐标(元/人)</th>
+                        <th>人数</th>
+                        <th>优惠</th>
+                        <th>应付款</th>
+                        <th>预付款</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{each arrangeList.outRestaurantList as rs}}
+                    <tr>
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.restaurantName}}</td>
+                        <td>{{rs.restaurantManagerName}}</td>
+                        <td>{{rs.restaurantMobileNumber}}</td>
+                        <td>{{rs.standardType}}</td>
+                        <td class="F-float F-money">{{rs.price}}</td>
+                        <td class="F-float F-count">{{rs.memberCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+    {{if arrangeList.outOtherList && arrangeList.outOtherList.length > 0}}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="hct-update-list-title hct-title-point">其它安排</h3>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered table-hover hct-table-update">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>项目</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>优惠</th>
+                        <th>应付款</th>
+                        <th>预付款</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{each arrangeList.outOtherList as rs}}
+                    <tr>
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.name}}</td>
+                        <td>{{rs.managerName}}</td>
+                        <td>{{rs.mobileNumber}}</td>
+                        <td class="F-float F-money">{{rs.price}}</td>
+                        <td class="F-float F-count">{{rs.memberCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                        <td class="F-float F-money">{{rs.prePayMoney}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+    <div class="row">
+        <div class="col-xs-12 mar-t-20 mar-b-10 text-center">
+            <button class="btn btn-xs btn-default T-btn-close btn-primary w100"> 
+                <i class="ace-icon fa fa-times"></i> 关闭 
+            </button> 
+        </div> 
+    </div>
+</div>

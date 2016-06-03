@@ -81,8 +81,7 @@ define(function(require, exports) {
 
     //获取合计金额
 	FinTransIn.getSumData = function(data,$tab){
-		var totalPeople = data.sumChildCount+data.sumAdultCount;
-		$tab.find('.T-sumCount').text(totalPeople);
+		$tab.find('.T-sumCount').text((data.sumAdultCount || 0) + " 大 " + (data.sumChildCount || 0) + " 小");
         $tab.find('.T-sumInnerInMoney').text(data.sumTransNeedPayMoney);
         $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
         $tab.find('.T-sumReceiveMoney').text(data.sumAlreadyIncomeMoney);
@@ -512,7 +511,7 @@ define(function(require, exports) {
                         data.settlementMoney = FinTransIn.checkTemp.settlementMoney;
                         data.unIncomeMoney = FinTransIn.checkTemp.unIncomeMoney;
                     }
-					$tab.find('.T-sumTransCount').text(data.totalCount);
+					$tab.find('.T-sumTransCount').text((data.sumAdultCount || 0) + '大' + (data.sumChildCount || 0) + '小');
 					$tab.find('.T-sumTransNeedPayMoney').text(data.transInMoney);
 					$tab.find('.T-sumPayedMoney').text(data.getedMoney);
 					$tab.find('.T-sumBackMoney').text(data.backMoney);

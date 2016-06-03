@@ -12,7 +12,7 @@ var $tabList = $('#tabList'), $tabContent = $("#tabContent"),
 var SWITCH_TAB_SAVE = 'switch.tab.save',
 	CLOSE_TAB_SAVE = 'close.tab.save',
 	SWITCH_TAB_BIND_EVENT = 'switch.tab.bind_event',
-	REFRESH_TAB_EVENT = 'refresh.tab.event',
+	REFRESH_TAB_EVENT = 'refresh.tab.event', DemoData = DemoData || false,
 	CLOSE_TAB_SAVE_NO = "close.tab.save.no";
 	//申明showMessgeageDialog的全局变量
 	var $conDiaMes = $("#confirm-dialog-message");
@@ -642,6 +642,30 @@ function logout(){
 
 }
 
+//浏览器更新提示
+function browserUpdate(){
+	var updatePasswordLayer=layer.open({
+		type: 1,
+		title: "升级浏览器",
+		skin: 'layui-layer-lan', //加上边框
+		area: ['300px', '200px'], //宽高
+		content: "<div class='T-browserUpdate clearfix'><div class='col-sm-12' style='margin-top:25px;color:red;'>您当前浏览器版本过低，请选择升级！</div>" +
+		"<div style='margin:25px 25px 25px 15px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://windows.microsoft.com/zh-cn/internet-explorer/download-ie'>IE</button></div>"+
+		"<div style='margin:25px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://se.360.cn/'>360</button></div>"+
+		"<div style='margin:25px;display:inline-block;'><button class='btn btn-sm btn-success T-update' data-href='http://www.firefox.com.cn/'>火狐</button></div></div>",
+		success : function(){
+			$(".T-browserUpdate").on('click', '.T-update', function(event) {
+				event.preventDefault();
+
+				var href = $(this).data("href"),o = window.open();
+	            setTimeout(function(){
+	                o.location.href = href;
+	            }, 0);
+			});
+		}	
+	});
+}
+
 function viewAllMsg(){
 	seajs.use("" + ASSETS_ROOT +modalScripts['public_message'],function(message){
 		message.init();
@@ -679,10 +703,15 @@ var modalScripts = {
     'resource_subsection': 'js/template/resource/subsection/subsection.js',
     'resource_partnerAgency': 'js/template/resource/partnerAgency/partnerAgency.js',
     'resource_touristGroup': 'js/template/resource/touristGroup/touristGroup.js', //游客管理
+    'resource_order_center' : 'js/template/resource/touristGroupN/main.js',//客户订单
     'arrange_plan': "js/template/arrange/tripPlan/tripPlan.js",
-    'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",
+    // 'arrange_plan': "js/template/arrange/teamPlan/tripPlan.js",//meihua 团队计划
+    'arrange_singlePlan': "js/template/arrange/singlePlan/singlePlan.js",//散客计划
+    // 'arrange_singlePlan': "js/template/arrange/customerPlan/singlePlan.js",//散客计划meihua
     'resource_travelLine': 'js/template/resource/travelLine/travelLine.js',
     'arrange_transit': 'js/template/arrange/transit/transit.js',
+    // 'arrange_transit': 'js/template/arrange/transitPlan/transitPlan.js',
+    'arrange_single_operate': 'js/template/arrange/arrangeCenter/arrange.js',//单向操作
     'arrange_all': 'js/template/resource/tripPlan/tripPlan.js',
     'arrange_travels': 'js/template/arrange/arrangeTravels/travels.js',//跟团游记
     'arrange_serviceStandards':'js/template/resource/serviceStandards/serviceStandards.js',//服务标准
@@ -724,6 +753,7 @@ var modalScripts = {
 	'financial_bank_account':"js/template/financial/bankAccount/bankAccount.js",//银行账号
 	'financial_collectedGuests':"js/template/financial/collectedGuests/collectedGuests.js",//收客利润
 	'financial_transferProfits':"js/template/financial/transferProfits/transferProfits.js",//中转利润
+	'financial_salesProfit':"js/template/financial/salesProfit/salesProfit.js", //销售利润
 	'financial_onlinePay':"js/template/financial/onlinePayment/onlinePayment.js",//在线支付
 	'financial_guide_borrow_money':"js/template/financial/guideBorrow/guideBorrow.js",//导游借款
 	'financial_offsetByDetail':"js/template/financial/offsetByDetail/offsetByDetail.js",//冲抵明细
@@ -1128,7 +1158,7 @@ var _statusText = {
 				if ( elem ) {
 					hooks = jQuery.valHooks[ elem.type ] || jQuery.valHooks[ elem.nodeName.toLowerCase() ];
 
-					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined && ret != null) {
+					if ( hooks && "get" in hooks && (ret = hooks.get( elem, "value" )) !== undefined && !!ret) {
 						return ret.replace(/(^\s*)|(\s*$)/g, "");
 					}
 
@@ -1362,10 +1392,8 @@ Tools.getTableVal = function($tbody, idName) {
 
 		$tbody.children('tr').each(function() {
 			var $tr = $(this), val = {id: $tr.data(idName)};
-
 			$tr.find('input,select').each(function() {
 				var $that = $(this);
-
 				name = $that.prop('name');
 				if (!!name) {
 					if ($that.is('[type=checkbox],[type=radio]')) {
@@ -1373,13 +1401,9 @@ Tools.getTableVal = function($tbody, idName) {
 					} else {
 						value = $that.val();
 					}
-
 					val[name] = value;
 				}
-
-
 			});
-
 			res.push(val);
 		});
 	}
@@ -1861,6 +1885,29 @@ Tools.filterUnPoint = function(obj){
 	return $obj;
 };
 
+/**
+ * 需要排序的数组
+ * @param  {arr} arr 排序对象
+ * @param  {string} key 排序字段的key。若无，则排序数组本身
+ * @return {Array}     返回排序后的数组
+ */
+Tools.sortByPinYin = function(arr, key) {
+    if (!!arr && arr.length) {
+        if (!!key) {
+            arr.sort(function(a, b) {
+                return a[key].localeCompare(b[key]);
+            });
+        } else {
+            arr.sort(function(a, b) {
+                return a.localeCompare(b);
+            });
+        }
+    }
+
+    return arr;
+};
+
+//千分位
 $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
 	$(this).data('old-value-format-float.api', this.value);
 })
@@ -1935,7 +1982,10 @@ $('body').on('focusin.format-float.api', 'input.F-float', function(event) {
  * @return {[type]}      [description]
  */
 Tools.formatQuantile = function(data){
-	return data.replace(/,/g, '');
+	if(data === undefined) return "";
+	var str = data;
+	data = data.replace(/,/g, '');
+	return isNaN(data) ? str : data;
 };
 
 /**
@@ -2227,6 +2277,18 @@ KingServices.viewConsumeMoney = function(tripPlanId,shopArrangeId,guideArrangeId
 }
 
 /**
+ * 购物统计检索线路
+ * @param  {[type]}  $target    线路对象
+ * @param  {Boolean} isShopLine 判定请求url
+ * @return {[type]}
+ */
+KingServices.showLineProduct = function($target)  {
+	seajs.use(ASSETS_ROOT + modalScripts.business_analyst_shopStat, function(module){
+		module.showLineProduct($target);
+	});
+}
+
+/**
  * 编辑中转安排——
  * @param  {string} id 游客小组的ID
  * @return {[type]}    [description]
@@ -2372,8 +2434,8 @@ KingServices.tripDetail = function(id){
 }
 //代订明细
 KingServices.replaceDetail = function(id){
-	seajs.use("" + ASSETS_ROOT + modalScripts.arrange_booking,function(module){
-		module.replaceDetail(id);
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_order_center,function(module){
+		module.viewBooking(id, 2);
 	});
 }
 //查看线路产品
@@ -2390,7 +2452,7 @@ KingServices.viewFeeDetail = function(id){
 }
 //查看游客小组
 KingServices.viewTouristGroup = function(id,isTransferIn){
-	seajs.use("" + ASSETS_ROOT + modalScripts.resource_touristGroup,function(module){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_order_center,function(module){
 		module.viewTouristGroup(id,isTransferIn);
 	});
 }
@@ -2727,7 +2789,6 @@ Tools.trFixed = function(obj){
 			$focus.blur();
 			$focus.datetimepicker('hide');
 		}else if($(".datepicker.datepicker-dropdown").length > 0){
-			console.log($(".datepicker.datepicker-dropdown").length);
 			$(".datepicker.datepicker-dropdown").remove();
 		}
 
@@ -2770,7 +2831,7 @@ Tools.directionKeyControlFocus = function() {
 			return $(this).attr('readonly') != 'readonly' && $(this).attr('type') == 'text';
 		})
 	}
-	$(document).on('keydown.tableFocus','table', function() {
+	$(document).on('keydown.tableFocus','table', function(event) {
 		var $this = $(this),
 			keyCode = event.which,
 			$focusInput = $this.find('input:focus'),

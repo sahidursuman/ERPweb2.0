@@ -660,61 +660,101 @@
 	<div class="row border">
 		<div class="col-xs-12">
 			<table class="table table-striped table-bordered table-hover">
+			    <colgroup>
+			        <col />
+			        <col />
+			        <col />
+			        <col />
+			        <col style="width: 55px;" />
+			        <col />
+			        <col style="width: 55px;" />
+			        <col />
+			        <col />
+			        <col />
+			        <col />
+			        <col />
+			        <col />
+			        <col />
+			        <col />
+			        <col style="width: 15%;" />
+			    </colgroup>
 				<thead>
 					<tr>
-						<th class="th-border">小组</th>
-						<!-- <th class="th-border">外联销售</th>
-						<th class="th-border">线路产品</th>
-						<th class="th-border">联系人</th>
-						<th class="th-border">联系电话</th>
-						<th class="th-border">客源地</th>
-						<th class="th-border">年龄</th>
-						<th class="th-border">人数</th>
-						<th class="th-border">现收团款</th>
-						<th class="th-border">住宿标准</th>
-						<th class="th-border">包含自费</th>
-						<th class="th-border">备注</th> -->
 						<th class="th-border">收客单号</th>
 						<th class="th-border">外联销售</th>
-						<th class="th-border">客户</th>
-						<th class="th-border">线路产品</th>
-						<th class="th-border">联系人</th>
-						<th class="th-border">联系电话</th>
-						<th class="th-border">客源地</th>
-						<th class="th-border">年龄</th>
-						<th class="th-border">人数</th>
+						<th class="th-border">团款</th>
 						<th class="th-border">现收团款</th>
-						<th class="th-border">住宿标准</th>
-						<th class="th-border">包含自费</th>
+						<th class="th-border">姓名</th>
+						<th class="th-border">手机号码</th>
+						<th class="th-border">证件类型</th>
+						<th class="th-border">证件号码</th>
+						<th class="th-border">性别</th>
+						<th class="th-border">年龄</th>
+						<th class="th-border">客源地</th>
+						<th class="th-border">是否联系人</th>
 						<th class="th-border">全陪</th>
 						<th class="th-border">全陪电话</th>
-						<th class="th-border">接站牌</th>
-						<th class="th-border">送客地点</th>
+						<th class="th-border">接站牌/送客地点</th>
 						<th class="th-border">备注</th>
 					</tr>
 				</thead>
 				<tbody>
-				{{each touristGroupList as group index}}
+				{{each touristGroupList as group}}
 					<tr>
-						<td>{{index + 1}}</td>
-						<td>{{group.orderNumber}}</td>
-						<td>{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
-						<td>{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}</td>
-						<td>{{group.lineProduct.name}}</td>
-						<td>{{if group.contactMember}}{{group.contactMember.name}}{{/if}}</td>
-						<td>{{if group.contactMember}}{{group.contactMember.mobileNumber}}{{/if}}</td>
-						<td>{{group.areaData}}</td>
-						<td>{{group.ageData}}</td>
-						<td>{{group.adultCount}}大{{group.childCount}}小</td>
-						<td>{{group.currentNeedPayMoney}}</td>
-						<td>{{group.hotelLevel | getHotelLevelDesc}}</td>
-						<td>{{group.includeSelfPay}}</td>
-						<td>{{group.accompanyGuideName}}</td>
-						<td>{{group.accompanyGuideMobile}}</td>
-						<td>{{group.welcomeBoard}}</td>
-						<td>{{group.sendPosition}}</td>
-						<td>{{group.remark}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">
+							<a class="T-orderNumber" data-id="{{group.id}}" data-dept="{{group.dept}}">{{group.orderNumber}}</a><br />
+							{{group.lineProduct.name}}<br />
+							{{if group.partnerAgency}}{{group.partnerAgency.travelAgencyName}}{{/if}}<br />
+							{{group.adultCount}}大{{group.childCount}}小
+						</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{if group.dept}}{{group.dept}}<br />{{/if}}{{if !!group.outOPUser}}{{group.outOPUser.realName}}{{/if}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.needPayAllMoney}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.currentNeedPayMoney}}</td>
+						{{if group.touristGroupMemberList.length > 0}}
+						{{each group.touristGroupMemberList as tourist index}}
+						{{if index == 0}}
+						<td>{{tourist.name}}</td>
+						<td>{{tourist.mobileNumber}}</td>
+						<td>{{tourist.idCardType | getCardText}}</td>
+						<td>{{tourist.idCardNumber}}</td>
+						<td>{{if tourist.gender == 0}}女{{else if tourist.gender == 1}}男{{else}}{{/if}}</td>
+						<td>{{tourist.age}}</td>
+						<td>{{tourist.area}}</td>
+						<td>{{if tourist.isContactUser == 1}}是{{else}}-{{/if}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.accompanyGuideName}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.accompanyGuideMobile}}</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{if !!group.welcomeBoard}}(接){{group.welcomeBoard}}{{/if}}
+						{{if !!group.sendPosition && !!group.welcomeBoard}}<br />{{/if}}{{if !!group.sendPosition}}(送){{group.sendPosition}}{{/if}}
+						</td>
+						<td rowspan="{{group.touristGroupMemberList.length}}">{{group.remark}}</td>
+						{{/if}}
+						{{/each}}
+						{{else}}
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						{{/if}}
 					</tr>
+					{{each group.touristGroupMemberList as tourist index}}
+					{{if index > 0}}
+					<tr>
+						<td>{{tourist.name}}</td>
+						<td>{{tourist.mobileNumber}}</td>
+						<td>{{tourist.idCardType | getCardText}}</td>
+						<td>{{tourist.idCardNumber}}</td>
+						<td>{{if tourist.gender == 0}}女{{else if tourist.gender == 1}}男{{else}}{{/if}}</td>
+						<td>{{tourist.age}}</td>
+						<td>{{tourist.area}}</td>
+						<td>{{if tourist.isContactUser == 1}}是{{else}}-{{/if}}</td>
+					</tr>
+					{{/if}}
+					{{/each}}
+
 				{{/each}}
 				</tbody>
 			</table>

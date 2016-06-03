@@ -48,10 +48,6 @@
             <label class="control-label mar-r-20">外转成本合计：<span class="F-float F-money">{{sumTransCost}}</span></label>
             <label class="control-label mar-r-20">毛利合计：<span class="F-float F-money">{{sumProfit}}</span></label>
             <label class="control-label ">人均毛利合计：<span class="F-float F-money">{{sumAverProfit}}</span></label>
-            <label class="pos-rel pull-right">
-                <input type="checkbox" class="ace T-checkTurn" {{if searchParam.type==1 }}checked="checked" {{/if}}/>
-                <span class="lbl"> 核算中转</span>
-            </label>
         </div>
     </div>
     <div class="row ticketList">
@@ -64,11 +60,7 @@
                     <th>游客</th>
                     <th>人数</th>
                     <th>客户</th>
-                    <th>团款应收</th>
-                    {{if searchParam.type == 1}}
-                    <th>中转</th>
-                    <th>中转成本</th>
-                    {{/if}}
+                    <th>本段团款</th>
                     <th>同行地接</th>
                     <th>外转成本</th>
                     <th>毛利</th>
@@ -90,11 +82,7 @@
                         </a>
                     </td>
                     <td>{{turnProfit.partnerAgencyName}}</td>
-                    <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail F-float F-money">{{turnProfit.settlementMoney}}</a></td>
-                    {{if searchParam.type == 1}}
-                    <td>{{if turnProfit.change == ""}}-{{else}}{{turnProfit.change}}{{/if}}</td>
-                    <td><a href="javascript:void(0)" class="T-option T-showChangePay F-float F-money">{{turnProfit.changeNeedPayMoney}}</a></td>
-                    {{/if}}
+                    <td><span class="F-float F-money">{{turnProfit.settlementMoney}}</span></td>
                     <td>{{turnProfit.transferPartnerAgencyName}}</td>
                     <td>
                         <a href="javascript:void(0)" class="T-option T-showTransPay F-float F-money" data-id="{{turnProfit.tgTransferId}}">{{turnProfit.transNeedPayAllMoney}}</a>

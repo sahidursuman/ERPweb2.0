@@ -1,0 +1,50 @@
+<div class="col-xs-12 viewGroupMain">
+	<form class="form-horizontal" role="form" style="margin-top:10px" onsubmit="return false">
+		<div class="form-group">
+			<div class="col-xs-12 col-sm-12 widget-container-col">
+				<div class=" ui-sortable-handle">
+					<div class="widget-body">
+						<div class="widget-main">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="th-border">姓名</th>
+										<th class="th-border">证件类型</th>
+										<th class="th-border">证件号</th>
+										<th class="th-border">手机号</th>
+										<th class="th-border">是否为联系人</th>
+										<th class="th-border">客源地</th>
+										<th class="th-border">年龄</th>
+									</tr>
+								</thead>
+
+								<tbody>{{each memberList as memberList}}
+								<tr  data-travelLine-Id="{{memberList.id}}">
+									<td>{{memberList.name}}</td>
+									<td>
+										{{if memberList.idCardType==0}}身份证
+										{{else if memberList.idCardType==1}}护照
+										{{else}}其他
+										{{/if}}
+									</td>
+									<td>{{memberList.idCardNumber}}</td>
+									<td>{{memberList.mobileNumber}}</td>
+									<td>
+										{{if memberList.isContactUser == 1}}
+											是
+										{{else if memberList.isContactUser == 0}}
+											 否
+										{{/if}}
+									</td>
+									<td>{{if memberList.idCardType==0}}{{memberList.area}}{{else}}-{{/if}}</td>
+									<td>{{if memberList.idCardType==0}}{{memberList.age}}{{else}}-{{/if}}</td>
+								</tr>{{/each}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

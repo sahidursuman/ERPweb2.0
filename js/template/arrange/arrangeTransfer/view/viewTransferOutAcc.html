@@ -2,7 +2,10 @@
     <div class="form-inline" style="text-align:center;margin: 15px 0px 25px 0px;">
         <div class="form-group">
             <h4 style="margin: auto;">
-            <img src="{{imgUrl}}{{transfer.companyLogo}}" class="imgViewAccount" alt=" " style="width: 35px;height: 35px"><span class="mar-l-5">{{transfer.travelName}}</span>
+            {{if transfer.companyLogo !=null && transfer.companyLogo !=""}} 
+            <img src="{{transfer.companyLogo}}"class="imgViewAccount" alt=" " style="width: 35px;height: 35px">
+            {{/if}}
+            <span class="mar-l-5">{{transfer.travelName}}</span>
         </h4>
         </div>
         <div class="form-group pull-right mar-r-20 globalAdd">

@@ -1,0 +1,152 @@
+<table class="table table-striped table-bordered table-hover  T-showHighLight">
+    <thead>
+        <tr class="bg-blur">
+            <th>中转信息</th>
+            <th>类型</th>
+            <th>客人信息</th>
+            <th>消费时间</th>
+            <th>分类</th>
+            <th>要求</th>
+            <th>安排结果</th>
+            <th>安排人</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody class="T-its-list">
+    <!-- 它 -->
+    {{each outOtherList as item}}
+        <tr data-id="{{item.outRemarkId}}" data-shuttleType="{{item.shuttleType}}">
+            <td class="h-touristGroupInfo" rowspan="{{item.size}}">
+                <p>中转单号：{{item.orderNumber}}</p>
+                <p><span>{{item.lineProductName}}</span></p>
+                <p><span>{{item.startTime}}</span><span>{{item.partnerAgencyName}}</span><span>外联销售：{{item.outOPUserName}}</span></p>
+                <p>收客单号：{{item.tgOrderNumber}}</p>
+            </td>
+            <td  rowspan="{{item.size}}">
+                {{if item.shuttleType == 1 }}接团
+                {{else if item.shuttleType == 2}}送团{{/if}}            
+            </td>
+            <td  rowspan="{{item.size}}">
+                <p>{{item.adultCount}}大{{item.childCount}}小</p>
+                {{each item.contactMemberList as itmes}}
+                <p><span class="contactMemberName">{{itmes.contactMemberName}}</span>
+                <span class="contactMemberPhoneNumber">({{itmes.contactMemberPhoneNumber}})</span></p>
+                {{/each}}
+            </td>
+            <td rowspan="{{item.size}}">
+                {{item.consumeTime}}
+            </td>
+
+            
+            <td>
+            {{if item.arrangeItems.length > 0}}
+                {{if item.arrangeItems[0].arrangeType == 'ticket' }} 票
+                     {{else if item.arrangeItems[0].arrangeType == 'restaurant' }}餐
+                     {{else if item.arrangeItems[0].arrangeType == 'other' }}它
+                {{/if}}
+            {{else}}
+            -
+            {{/if}}
+            </td>
+            <td>
+            {{if item.arrangeItems.length > 0}}
+            {{item.arrangeItems[0].require}}
+             {{else}}
+            -
+            {{/if}}
+            </td>
+
+            <!-- 具体安排 -->
+            <td class="h-touristGroupInfo">
+            {{if item.arrangeItems.length > 0}}
+            {{if item.arrangeItems[0].arrangeResultList.length}}
+                {{each item.arrangeItems[0].arrangeResultList as list}}
+                <p class="inline-block">
+                <!-- 项目名称 -->
+                {{list.name}}
+                <!-- 如果是票，显示班次 -->
+                {{list.shift}}
+                </p>
+                {{/each}}
+            {{/if}}
+             {{else}}
+            -
+            {{/if}}
+            </td>
+            <td rowspan="{{item.size}}">
+            {{if item.arrangeItems.length > 0}}
+            {{item.arrangeUserName}}
+            {{else}}
+            -
+            {{/if}}
+            </td>
+            <td>
+            {{if item.arrangeItems.length > 0}}
+                {{if item.arrangeItems[0].status == 1}}
+                    <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
+                {{else if item.arrangeItems[0].status == 0}}
+                    <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
+                {{/if}}
+            
+            </td>
+            {{else}}
+            -
+            {{/if}}
+            <td rowspan="{{item.size}}">
+                {{if item.status == 1}}
+                <a class="cursor T-arrage T-inform T-action"> 
+                通知 <label class="padding-right20">|</label> </a>
+                {{/if}}
+                <a class="cursor T-arrage T-arrange-item T-action R-right" data-right='1480005'>
+                     安排
+                </a>
+                <a class="cursor T-arrage T-view T-action">  <label class="padding-right20">|</label> 查看 </a>
+            </td>
+        </tr>
+
+            {{each item.arrangeItems as arrange level2}}
+            {{if level2 > 0}}
+            <tr>
+                <td>
+                    {{if arrange.arrangeType == 'ticket' }} 票
+                         {{else if arrange.arrangeType == 'restaurant' }}餐
+                         {{else if arrange.arrangeType == 'other' }}它
+                    {{/if}}
+                </td>
+                <td>{{arrange.require}}</td>
+
+                <!-- 具体安排 -->
+                <td class="h-touristGroupInfo">
+                {{each arrange.arrangeResultList as list}}
+                    <p  class="inline-block">
+                    <!-- 项目名称 -->
+                    {{list.name}}
+                    <!-- 如果是票，显示班次 -->
+                    {{list.shift}}
+                    </p>
+                {{/each}}
+                </td>
+
+                <td>
+                    {{if arrange.status == 1}}
+                        <i class="ace-icon fa fa-check green bigger-130"></i> 已完成
+                    {{else if arrange.status == 0}}
+                        <i class="ace-icon fa fa-times red bigger-125"></i> 未完成
+                    {{/if}}
+                </td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        {{/each}}
+    </tbody>
+</table>
+<div class="row pageMode">
+    <div class="col-xs-6">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-6">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>
