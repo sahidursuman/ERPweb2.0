@@ -70,27 +70,31 @@
                             </thead>
                             <tbody class="T-addTransferCost">
                                 <!-- 其他费用 -->
-                                {{each touristGroupTransfer.touristGroup.touristGroupTransferFeeList as transferFee1}} {{if transferFee1 != null}}
-                                <tr data-entity-id="{{transferFee1.id}}">
+                                {{each touristGroupTransfer.touristGroup.touristGroupTransferFeeList as rs}} {{if rs != null}}
+                                <tr data-entity-id="{{rs.id}}">
                                     <td>
-                                        <select name="type" class="col-sm-10 col-sm-offset-1">
-                                            {{#transferFee1.type | getFeeItemType: true}}
+                                        <select name="type" class="col-sm-10 col-sm-offset-1" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}>
+                                            {{if rs.type == 1 || rs.type == 2 || rs.type == 8 || rs.type == 12}}
+                                            {{#rs.type | getFeeItemType2}}
+                                            {{else}}
+                                            {{#rs.type | getFeeItemType:true}}
+                                            {{/if}}
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" name="count" value="{{transferFee1.count}}" class="col-sm-10 col-sm-offset-1 count T-count T-calc F-float F-count" />
+                                        <input type="text" name="count" value="{{rs.count}}" class="col-sm-10 col-sm-offset-1 count T-count T-calc F-float F-count" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} />
                                     </td>
                                     <td>
-                                        <input type="text" name="otherPrice" value="{{transferFee1.price}}" class="col-sm-10 col-sm-offset-1 price T-price T-calc F-float F-money" />
+                                        <input type="text" name="otherPrice" value="{{rs.price}}" class="col-sm-10 col-sm-offset-1 price T-price T-calc F-float F-money" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} />
                                     </td>
                                     <td>
-                                        <input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money" />
+                                        <input name="payMoney" value="" readonly="readonly" type="text" class="col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} />
                                     </td>
                                     <td>
-                                        <input name="remark" value="{{transferFee1.remark}}" type="text" class="col-sm-10 col-sm-offset-1   no-padding-right" />
+                                        <input name="remark" value="{{rs.remark}}" type="text" class="col-sm-10 col-sm-offset-1   no-padding-right" {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}} />
                                     </td>
                                     <td>
-                                        <a class="T-updateTransfer-delete cursor">删除</a>
+                                        <a class="{{if rs.type == 1 || rs.type == 2 || rs.type == 8 || rs.type == 12}}T-updateTransfer-delete{{else}}hct-color-BBB{{/if}} cursor">删除</a>
                                     </td>
                                 </tr>
                                 {{/if}} {{/each}}
