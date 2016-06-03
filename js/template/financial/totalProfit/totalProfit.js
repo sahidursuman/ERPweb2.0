@@ -75,11 +75,13 @@ define(function(require, exports) {
             KingServices.showLineProduct($(this));
         }).on('click', '.T-clear-line', function(event) {
             event.preventDefault();
-            var $div = $(this).closest('div');
+            var $that = $(this),
+                $div = $that.closest('div');
             if(!!$div.find('input[name=lineProduct]').val()){
                 showConfirmDialog('是否清除?', function() {
                     $div.find('input[name=lineProduct]').val('');
                     $div.find('input[name=lineProductId]').val('');
+                    $that.addClass('hidden');
                 });
             };
         });
