@@ -8,12 +8,12 @@
 			<input type="hidden" name="id" value="{{shop.id}}">
 			<div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>商家名称:</label>
+					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>商家名称</label>
 					<div class="col-sm-3">
 						<input type="text" name="name" value="{{shop.name}}" class="col-sm-12" maxlength="100">
 					</div>
-					<label class="col-sm-2 control-label no-padding-right"><span class="necessary"></span>启用标志:</label>
-					<div class="col-sm-2 checkbox resource_checkbox">
+					<label class="col-sm-2 control-label no-padding-right"><span class="necessary"></span>启用标志</label>
+					<div class="col-sm-2">
 						<label>
 							<input {{if shop.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace T-shop-status" value="1">
 							<span class="lbl">
@@ -23,11 +23,11 @@
 					</div>
 				</div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
+					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人</label>
 					<div class="col-sm-3"> 
 						<input type="text" name="managerName" value="{{shop.managerName}}" class="col-sm-12" maxlength="32">
 					</div>
-					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
+					<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系电话</label>
 					<div class="col-sm-3">
 						<input type="text" name="mobileNumber" value="{{shop.mobileNumber}}" class="col-sm-12" maxlength="11">
 						<label class="feild-label feild-error-tip" style="top:4px;right:2px;">
@@ -36,28 +36,28 @@
 					</div>
 				</div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
+					<label class="col-sm-2 control-label no-padding-right">座机号码</label>
 					<div class="col-sm-3">
 						<input type="text" name="telNumber" class="col-sm-12" value="{{shop.telNumber}}" maxlength="20"/>
 					</div>
 
-					<label class="col-sm-2 control-label no-padding-right">传真号码:</label>
+					<label class="col-sm-2 control-label no-padding-right">传真号码</label>
 					<div class="col-sm-3">
 						<input type="text" name="faxNumber" class="col-sm-12" value="{{shop.faxNumber}}" maxlength="20"/>
 					</div>
 				</div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人):</label>
+					<label class="col-sm-2 control-label no-padding-right">人数返佣(元/人)</label>
 					<div class="col-sm-3">
 						<input type="text" name="customerRebateMoney" class="col-sm-12 F-float F-money" value="{{shop.customerRebateMoney}}" maxlength="9">
 					</div>
-					<label class="col-sm-2 control-label no-padding-right" style="padding-left: 0px!important;">停车返佣(元/辆):</label>
+					<label class="col-sm-2 control-label no-padding-right" style="padding-left: 0px!important;">停车返佣(元/辆)</label>
 					<div class="col-sm-3">
 						<input type="text" name="parkingRebateMoney" class="col-sm-12 F-float F-money " value="{{shop.parkingRebateMoney}}" maxlength="9">
 					</div>
 				</div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
+					<label class="col-sm-2 control-label no-padding-right">所在地区</label>
 					<div class="col-sm-8 T-distict">
 						<select name="provinceId" style="margin-right:3px">
 							 <option selected="selected" value="">未选择</option>
@@ -71,13 +71,13 @@
 					</div>
 				</div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
+					<label class="col-sm-2 control-label no-padding-right">详细地址</label>
 					<div class="col-sm-6">
 						<input type="text" name="street" value="{{shop.street}}" class="col-sm-12 addressMinute" placeholder="请输入街道地址" maxlength="100"/>
 					</div>
 				</div>
 				<div class="form-group guideInterval">
-					<label class="col-sm-2 control-label no-padding-right">商家简介:</label>
+					<label class="col-sm-2 control-label no-padding-right">商家简介</label>
 					<div class="col-sm-8">
 						<textarea class="form-control" name="remark" class="col-sm-12"  maxlength="500">{{shop.remark}}</textarea>
 					</div>

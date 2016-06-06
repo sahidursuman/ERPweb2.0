@@ -907,23 +907,22 @@ select {
     margin-left: -4px;
 }
 
-.globalAdd button {
+/* .globalAdd button {
     height: 24px;
     font-size: 12px;
     line-height: 12px;
     -moz-line-height: normal;
     padding-top: 2px;
-}
+} */
 
 .guideSubmit {
-    height: 36px !important;
+    height: 36px;
     font-size: 14px;
-    line-height: 23px !important;
+    line-height: 14px;
 }
 
 
 /*.datepicker{*/
-
 
 /*width: 130px;*/
 
