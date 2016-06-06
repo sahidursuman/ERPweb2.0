@@ -9,11 +9,11 @@
 			<div class="widget-body">
 				<div class="widget-main widget-mainFrist">
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队名称:</label>
+						<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>车队名称</label>
 						<div class="col-sm-3">
 							<input type="text" name="companyName" class="col-sm-12" value="{{busCompany.companyName}}" maxlength="32">
 						</div>
-						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车队类型:</label>
+						<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>车队类型</label>
                        <div class="col-sm-3">
 						<select name="type">
 							<option {{if busCompany.type == 0}}selected="selected"{{/if}} value="0">个人</option>
@@ -25,11 +25,11 @@
 					   <!-- -->
 					<!--</div>-->
 					<div class="form-group guideInterval">
-					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人:</label>
+					    <label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系人</label>
 						<div class="col-sm-3">
 							<input type="text" name="managerName" class="col-sm-12" value="{{busCompany.managerName}}" maxlength="45"/>
 						</div>
-				    	<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
+				    	<label class="col-sm-1 control-label no-padding-right"><span class="necessary">*</span>联系电话</label>
 						<div class="col-sm-3">
 							<input type="text" name="mobileNumber" class="col-sm-12" value="{{busCompany.mobileNumber}}" maxlength="11" />
 							<label class="feild-label feild-error-tip" style="top:4px;right:80px;">
@@ -38,17 +38,17 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">座机号码:</label>
+						<label class="col-sm-2 control-label no-padding-right">座机号码</label>
 						<div class="col-sm-3">
 							<input type="text" name="telNumber" class="col-sm-12" value="{{busCompany.telNumber}}"  maxlength="20" />
 						</div>
-						<label class="col-sm-1 control-label no-padding-right">传真号码:</label>
+						<label class="col-sm-1 control-label no-padding-right">传真号码</label>
 						<div class="col-sm-3">
 							<input type="text" name="faxNumber" class="col-sm-12" value="{{busCompany.faxNumber}}" maxlength="20" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">所在地区:</label>
+						<label class="col-sm-2 control-label no-padding-right">所在地区</label>
 						<div class="col-sm-4">
 							<select name="provinceId" style="margin-right:3px">
 								<option selected="selected" value="">未选择</option>
@@ -61,8 +61,8 @@
 							</select>
 						</div>
 
-						<label class="col-sm-1 control-label no-padding-right" style="margin-left: -107px;">是否启用:</label>
-						<div class="col-sm-3 checkbox resource_checkbox">
+						<label class="col-sm-1 control-label no-padding-right" style="margin-left: -107px;">是否启用</label>
+						<div class="col-sm-3">
 							<label>
 								<input {{if busCompany.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace busCompany-status" value="1">
 								<span class="lbl">
@@ -72,13 +72,13 @@
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">详细地址:</label>
+						<label class="col-sm-2 control-label no-padding-right">详细地址</label>
 						<div class="col-sm-6">
 							<input type="text" name="street" class="col-sm-12 addressMinute" placeholder="请输入街道地址" value="{{busCompany.street}}" maxlength="100" />
 						</div>
 					</div>
 					<div class="form-group guideInterval">
-						<label class="col-sm-2 control-label no-padding-right">车队简介:</label>
+						<label class="col-sm-2 control-label no-padding-right">车队简介</label>
 						<div class="col-sm-8">
 							<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000" >{{busCompany.remark}}</textarea>
 						</div>

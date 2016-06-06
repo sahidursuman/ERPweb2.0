@@ -43,7 +43,11 @@
 
 				<p>{{rs.tripNumber}}&nbsp;&nbsp;<span>{{if rs.tripPlanType == 1}}团队{{else if rs.tripPlanType == 0}}散客{{/if}}</span></p>
 				<p>{{rs.lineProductName}}</p>
-				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}&nbsp;&nbsp;<span class="F-float F-count">{{rs.adultCount}}大<span class="F-float F-count">{{rs.childCount}}小</span></span></p>
+				<p>{{rs.startTime | dateFormat:'yyyy-MM-dd'}}
+				&nbsp;&nbsp;
+				<span class="F-float F-count">{{rs.adultCount}}大
+				<span class="F-float F-count">{{rs.childCount}}小</span></span>
+				</p>
 				<p>导游：{{rs.guideName}}&nbsp;&nbsp;<span>责任计调：{{rs.creatorName}}</span></p>
 			{{if rs.billStatus != -1}}
 				</a>
