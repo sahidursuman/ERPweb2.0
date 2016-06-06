@@ -1035,7 +1035,7 @@ define(function(require, exports) {
             type: 1,
             title:"选择客户",
             skin: 'layui-layer-rim', //加上边框
-            area: '950px', //宽高
+            area: '1024px;', //宽高
             zIndex:1028,
             content: T.chooseClient(),
             success:function(obj, index){
@@ -1050,15 +1050,19 @@ define(function(require, exports) {
                     };
                     touristGroup.getClientList(args, $layer);
                 });
-                //保存
-                $layer.find('.T-btn-save').on('click', function(){
-                    var $clientRadio = $layer.find('.T-client-list').find('[name="chooseClient"]:checked'),
-                        $tr = $clientRadio.closest('tr');
-                    if($clientRadio.length === 0){
-                        showMessageDialog('请选择一个客户！');
-                        return false;
-                    }
-                    var travelAgencyName = $tr.data('agency-name'),
+
+                $layer.find('.T-client-list').on('click', '[name="chooseClient"]', function(){
+                    getClientData($(this));
+                });
+
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
+                    layer.close(index);
+                });
+
+                function getClientData($this) {
+                    var $tr = $this.closest('tr'),
+                        travelAgencyName = $tr.data('agency-name'),
                         travelAgencyContactName = $tr.find('[name="travelAgencyContactName"]').text(), 
                         str = "";
                     if(!!travelAgencyContactName){
@@ -1068,15 +1072,7 @@ define(function(require, exports) {
                     }
                     $that.val(str).data('id', $tr.data('id')).data('contact-id', $tr.data('contact-id')).trigger('blur');
                     layer.close(index);
-                });
-                //关闭
-                $layer.find('.T-btn-close').on('click', function(){
-                    layer.close(index);
-                });
-
-                $layer.find('.T-client-list').on('click', 'tr', function(event){
-                    $(this).find('[type="radio"]')[0].checked = true;
-                });
+                }
             }
         });
     };
@@ -1170,7 +1166,7 @@ define(function(require, exports) {
     	
         var html =  '<tr><td>'+
                         '<div class="hct-input-group col-xs-12 T-action T-search-line">'+
-                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品" value="'+lineProductName+'" data-id="'+lineProductId+'" data-json='+lineData+'>'+
+                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品" value="'+lineProductName+'" data-id="'+lineProductId+'">'+
                                 '<span class="hct-group-add cursor">[搜索]</span>'+
                             '</div></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime" value="'+tripStartTime+'"></td>'+
@@ -1181,7 +1177,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
-    	$partList.append(html);
+    	$partList.append($(html).find('input[name="lineProductName"]').data('json', lineData).end());
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
         $tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');
@@ -2151,8 +2147,8 @@ define(function(require, exports) {
         layer.open({
             type: 1,
             title: "选择线路产品",
-            skin: 'layui-layer-rim', //加上边框
-            area: '80%', //宽高
+            skin: 'hct-layui-layer-style layui-layer-rim', //加上边框
+            area: '1024px', //宽高
             zIndex: 1028,
             content: T.chooseLineProduct(),
             scrollbar: false,
@@ -2165,14 +2161,18 @@ define(function(require, exports) {
                         name : $layer.find('[name="lineProductName"]').val()
                     }, $layer);
                 });
-                $layer.find('.T-btn-save').on('click', function(){
-                    var $lineRadio = $layer.find(".T-line-product-list").find('[name="chooseLineProduct"]:checked'),
-                        $tr = $lineRadio.closest('tr');
-                    if($lineRadio.length === 0){
-                        showMessageDialog('请选择一条线路产品！');
-                        return false;
-                    }
-                    var lineData = {
+
+                $layer.find('.T-line-product-list').on('click', '[name="chooseLineProduct"]', function () {
+                     getLineData($(this));
+                });
+                //关闭
+                $layer.find('.T-btn-close').on('click', function(){
+                    layer.close(index);
+                });
+
+                function getLineData($this) {
+                    var $tr = $this.closest('tr'),
+                        lineData = {
                         id : $tr.data('id'),
                         lineProductName : $tr.find('[name="lineProductName"]').text(),
                         days : $tr.find('[name="days"]').text()
@@ -2180,11 +2180,7 @@ define(function(require, exports) {
                     $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');;
                     layer.close(index);
                     F.autoCalcDate($that);
-                });
-                //关闭
-                $layer.find('.T-btn-close').on('click', function(){
-                    layer.close(index);
-                });
+                }
                 
             }
         });
@@ -3049,7 +3045,8 @@ define(function(require, exports) {
         calcRece : function($tab){
             var countMoney = 0;
             $tab.find('.T-fee-list tr').each(function(index){
-                var money = $(this).find('[name="money"]').val() * 1;
+                var $that = $(this),
+                    money = $that.find('.T-money').length > 0 ? $that.find('.T-money').text() * 1 : $that.find('[name="money"]').val() * 1;
                 countMoney += money;
             });
             countMoney = Tools.toFixed(countMoney)
@@ -3062,6 +3059,8 @@ define(function(require, exports) {
             $tr.find('[name="money"]').val(isNaN(price) ? 0 : price);
             if($tab.find('[name="sumNeedGetMoney"]').length > 0){
                 $tab.find('[name="sumNeedGetMoney"]').val(F.calcRece($tab));
+            }else if($tab.find('.T-needPayAllMoney').length > 0){
+                $tab.find('.T-needPayAllMoney').text(F.calcRece($tab));
             }else{
                 $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
             }
