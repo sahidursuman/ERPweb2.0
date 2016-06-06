@@ -38,7 +38,7 @@ define(function(require, exports) {
 	//导游业绩页面list
 	tourguidPerObj.listtourguidPer=function(page,sortType,order,startTime,endTime,guideId,guideName,shop,shopItem, shopId, shopItemId ){
 
-	   if (!!tourguidPerObj.$tab) {
+	   if (!!tourguidPerObj.$tab && arguments.length === 1) {
 	   		//初始化页面后可以获取页面参数
 	   		order=tourguidPerObj.$tab.find('[name=sortType]').val();
 	   		sortType=tourguidPerObj.$tab.find('[name=orderBy]').val();
@@ -97,7 +97,7 @@ define(function(require, exports) {
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		tourguidPerObj.listtourguidPer(obj.curr -1,sortType,order,startTime,endTime,guideId,guideName);
+						    		tourguidPerObj.listtourguidPer(obj.curr -1);
 						    	}
 						    }
 						});
