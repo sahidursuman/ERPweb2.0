@@ -333,8 +333,8 @@ define(function(require, exports) {
 				tripPlanId=$that.attr('data-tripPlanId'),
 				shopArrangeId=$that.attr('data-arrangeId'),
 				guideArrangeId = $that.attr('guideArrangeId');
-			var shopName = $tab.find('.T-guideSingle-search').data('shopname');
-				policyName = $tab.find('.T-guideSingle-search').data('policyname');
+			var shopName = $tab.find('.T-search-area').data('shopname') || "";
+				policyName = $tab.find('.T-search-area').data('policyname') || "";
 
 			$.ajax({
 				url:KingServices.build_url('financial/shopAccount','consumeMoney'),
