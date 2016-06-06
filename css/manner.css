@@ -907,19 +907,23 @@ select {
     margin-left: -4px;
 }
 
-/* .globalAdd button {
+ .globalAdd button {
     height: 24px;
     font-size: 12px;
     line-height: 12px;
     -moz-line-height: normal;
     padding-top: 2px;
-} */
+}
+.line-h-submit .guideSubmit {
+    line-height:16px !important;
+}
 
 .guideSubmit {
-    height: 36px;
+    height: 36px !important;
     font-size: 14px;
     line-height: 14px;
 }
+
 
 
 /*.datepicker{*/
@@ -1015,6 +1019,9 @@ select {
     padding: 0px 0px 0px 6px;
 }
 
+.border-botm .table-bordered{
+    border: 1px solid #e5e5e5;
+}
 
 /*财务管理*/
 
