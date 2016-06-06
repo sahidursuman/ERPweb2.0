@@ -1,11 +1,11 @@
 <div class="col-xs-12 T-guide-container guideAdd">
 	<form class="form-horizontal T-form" role="form" style="margin-top:10px" onsubmit="return false">
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>导游姓名:</label>
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>导游姓名</label>
 			<div class="col-sm-3">
 				<input type="text" name="realname" class="col-sm-12" value="{{guide.realname}}"  maxlength="32"/>
 			</div>
-			<label class="col-sm-2 control-label no-padding-right">性别:</label>
+			<label class="col-sm-2 control-label no-padding-right">性别</label>
 			<div class="col-sm-3">
 				<select name="gender" class="col-sm-12">
 					<option value="0" {{if guide.gender == 0}}selected="selected"{{/if}}>男</option>
@@ -14,30 +14,30 @@
 			</div>
 		</div>
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系电话:</label>
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>联系电话</label>
 			<div class="col-sm-3">
 				<input type="text" name="mobileNumber" class="col-sm-12" value="{{guide.mobileNumber}}"  maxlength="11" />
 				<label class="feild-label feild-error-tip" style="top:4px;right:2px;">
 					<i title="该手机号码将接收短信" class="fa fa-info blue"></i>
 				</label>
 			</div>
-			<label class="col-sm-2 control-label no-padding-right">所属公司:</label>
+			<label class="col-sm-2 control-label no-padding-right">所属公司</label>
 			<div class="col-sm-3">
 				<input type="text" name="company" class="col-sm-12" value="{{guide.company}}" maxlength="200" />
 			</div>
 		</div>
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>导游证编号:</label>
+			<label class="col-sm-2 control-label no-padding-right"><span class="necessary">*</span>导游证编号</label>
 			<div class="col-sm-3">
 				<input type="text" name="guideCardNumber" class="col-sm-12" value="{{guide.guideCardNumber}}" maxlength="32" />
 			</div>
-			<label class="col-sm-2 control-label no-padding-right">身份证号:</label>
+			<label class="col-sm-2 control-label no-padding-right">身份证号</label>
 			<div class="col-sm-3">
 				<input type="text" name="idCardNumber" class="col-sm-12" value="{{guide.idCardNumber}}" maxlength="18" />  
 			</div>
 		</div>
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right">导游等级:</label>
+			<label class="col-sm-2 control-label no-padding-right">导游等级</label>
 			<div class="col-sm-3">
 				<select name="guideLevel" class="col-sm-12">
 					<option value="1" {{if guide.guideLevel == 1}}selected="selected"{{/if}}>初级导游</option>
@@ -46,7 +46,7 @@
 					<option value="4" {{if guide.guideLevel == 4}}selected="selected"{{/if}}>特级导游</option>
 				</select>
 			</div>
-			<label class="col-sm-2 control-label no-padding-right">学历:</label>
+			<label class="col-sm-2 control-label no-padding-right">学历</label>
 			<div class="col-sm-3">
 				<select name="guideEducation" class="col-sm-12">
 					<option value="1" {{if guide.guideEducation == 1}}selected="selected"{{/if}}>小学</option>
@@ -62,7 +62,7 @@
 			</div>
 		</div>
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right">加入时间:</label>
+			<label class="col-sm-2 control-label no-padding-right">加入时间</label>
 			<div class="col-sm-3">
 				<div class="input-group">
 					<input type="text" name="joinTime" class="col-sm-12 date-picker" value="{{guide.joinTime | dateFormat:'yyyy-MM-dd'}}" />
@@ -71,8 +71,8 @@
 					</span>
 				</div>
 			</div>
-			<label class="col-sm-2 control-label no-padding-right">是否启用:</label>
-			<div class="col-sm-2 checkbox resource_checkbox">
+			<label class="col-sm-2 control-label no-padding-right">是否启用</label>
+			<div class="col-sm-2">
 				<label>
 					<input {{if guide.status == 1}}checked="checked"{{/if}} type="checkbox" class="ace T-guide-status" value="1" />
 					<span class="lbl">
@@ -82,7 +82,7 @@
 			</div>
 		</div>
 		<div class="form-group guideInterval">
-			<label class="col-sm-2 control-label no-padding-right">导游简介:</label>
+			<label class="col-sm-2 control-label no-padding-right">导游简介</label>
 			<div class="col-sm-8">
 				<textarea class="form-control" name="remark" class="col-sm-12" maxlength="1000">{{guide.remark}}</textarea>
 			</div>

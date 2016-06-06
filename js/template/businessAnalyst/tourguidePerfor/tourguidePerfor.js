@@ -101,18 +101,18 @@ define(function(require, exports) {
 						    	}
 						    }
 						});
-				}
-			}
-		});
 
-	//autocomplete
-	$.ajax({
-		    url : KingServices.build_url("Performance","getQueryTerms"),
-			type: "POST",
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-					tourguidPerObj.autocompleteDate.guideList=data.guideList;
+					//autocomplete
+					$.ajax({
+						    url : KingServices.build_url("Performance","getQueryTerms"),
+							type: "POST",
+							success:function(data){
+								var result = showDialog(data);
+								if(result){
+									tourguidPerObj.autocompleteDate.guideList=data.guideList;
+								}
+							}
+					});
 				}
 			}
 		});
@@ -236,7 +236,6 @@ define(function(require, exports) {
 				url: KingServices.build_url('shop','findPolicyByShopId'),
 				type: 'POST',
 				data:{id:shopId},
-				showLoading:false,
 				success:function(data){
 					 //商品列表
 					var shopItemList = JSON.parse(data.shopPolicyList);
@@ -347,7 +346,6 @@ define(function(require, exports) {
 					policyname: policyName
 				},
 				type:'POST',
-				showLoading:false,
 				success:function(data){
 					var sumPlayList = data.sumPlayList;
 					var newSumPlayList = [];
