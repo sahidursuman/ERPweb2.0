@@ -923,6 +923,7 @@ define(function(require, exports, module) {
         bookingOrderJson.contactId = $baseInfo.find('[name="fromPartnerAgency"]').data('contact-id');
         bookingOrderJson.outOPUserName = $baseInfo.find('[name="outOPUserName"]').val();
         bookingOrderJson.outOPUserId = $baseInfo.find('[name="outOPUserName"]').data('id');
+        bookingOrderJson.remark = $tab.find('[name="remark"]').val();
 
         var $hotel = $baseInfo.find('.T-hotel'),
             hotelJson = $hotel.data('json'),
