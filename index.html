@@ -90,31 +90,12 @@
 							<!--<img src="images/order.png">-->
 							<!--<p>订单</p>-->
 						<!--</li>-->
-						<li style="width: 85px;position: relative" class="news-ID hidden">
-							<label data-toggle="dropdown"  aria-expanded="false" style="width:85px;">
+						<li style="width: 85px;position: relative" class="news-ID hidden" onclick="viewAllMsg()">
+							<label class="hct-cursor" data-toggle="dropdown"  aria-expanded="false" style="width:85px;">
 								<img src="images/Message.png">
 								<p>消息</p>
 								<span class="badge badge-important news" id="msgCountSpan" >0</span>
 							</label>
-
-							<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-close news-style" style="text-align: left;margin-left: 18px;">
-
-								<!--<li class="dropdown-content ace-scroll" style="position: relative;" id="msgContainer">-->
-									<!--<ul class="dropdown-menu dropdown-navbar msgList"></ul>-->
-								<!--</li>-->
-								<li class="dropdown-header" id="unReadCountStr" style="color: red!important;background: white!important;">
-
-									<i class="ace-icon fa fa-envelope-o"></i>
-								</li>
-
-								<li class="dropdown-footer" style="color: white!important;text-align: right!important;height: 30px!important;line-height: 33px!important;background: #ed8b10">
-									<label href="javascript:void(0)" onclick="viewAllMsg()" style="cursor: pointer;text-align: right!important;">
-										更多
-										<i class="ace-icon fa fa-arrow-right"></i>
-									</label>
-								</li>
-							</ul>
-
 						</li>
 
 						<li  style="width: 85px;"  class="user-ID test" id="loginUserInfo" >

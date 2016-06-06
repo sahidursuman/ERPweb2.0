@@ -1034,8 +1034,8 @@ define(function(require, exports) {
         layer.open({
             type: 1,
             title:"选择客户",
-            skin: 'hct-layui-layer-style layui-layer-rim', //加上边框
-            area: ['950px', '90%'], //宽高
+            skin: 'layui-layer-rim', //加上边框
+            area: '1024px;', //宽高
             zIndex:1028,
             content: T.chooseClient(),
             success:function(obj, index){
@@ -1166,7 +1166,7 @@ define(function(require, exports) {
     	
         var html =  '<tr><td>'+
                         '<div class="hct-input-group col-xs-12 T-action T-search-line">'+
-                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品" value="'+lineProductName+'" data-id="'+lineProductId+'" data-json='+lineData+'>'+
+                                '<input type="text" class="col-xs-12 hct-cursor" readonly name="lineProductName" placeholder="点击选择线路产品" value="'+lineProductName+'" data-id="'+lineProductId+'">'+
                                 '<span class="hct-group-add cursor">[搜索]</span>'+
                             '</div></td>'+
                         '<td><input type="text" class="col-xs-12 datepicker T-action" name="tripStartTime" value="'+tripStartTime+'"></td>'+
@@ -1177,7 +1177,7 @@ define(function(require, exports) {
                         '<td><input type="text" class="w-100 F-float F-money" name="currentNeedPayMoney" readonly></td>'+
                         '<td>-</td>'+
                         '<td><a class="cursor T-action T-delete">删除</a></td></tr>';
-    	$partList.append(html);
+    	$partList.append($(html).find('input[name="lineProductName"]').data('json', lineData).end());
         Tools.setDatePicker($tab.find('.datepicker'));
         rule.update(validate);
         $tab.find('.T-team-info').find('[name="lineProductName"]').removeAttr('readonly');
@@ -2148,7 +2148,7 @@ define(function(require, exports) {
             type: 1,
             title: "选择线路产品",
             skin: 'hct-layui-layer-style layui-layer-rim', //加上边框
-            area: ['80%', '90%'], //宽高
+            area: '1024px', //宽高
             zIndex: 1028,
             content: T.chooseLineProduct(),
             scrollbar: false,

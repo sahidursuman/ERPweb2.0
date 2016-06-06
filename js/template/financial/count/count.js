@@ -274,6 +274,7 @@ define(function(require, exports){
 						insuranceArrange:data.insuranceArrange,
 						hotelArrange:data.hotelArrange,
 						guideArrange:data.guideArranges,
+						guideCount:data.guideArranges.listMap.length,
 						otherIncome:data.otherIncome,
 						remarkArrangeList:data.remarkArrangeList,
 						restaurantArrange:data.restaurantArrange,

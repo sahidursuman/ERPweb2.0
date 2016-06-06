@@ -11,7 +11,6 @@
             <!-- <th>社收</th> -->
             <th>现收</th>
             <th>明细</th>
-            <th>是否对账</th>
         </tr>
     </thead>
     <tbody class="T-tripDetail">
@@ -70,7 +69,9 @@
                             <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
                         {{/if}}
                         
-                        <input class="F-float F-money w-80 mar-l-5" name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}" maxlength="12" {{if touristGroup.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
+                        <input class="F-float F-money w-80 mar-l-5" 
+                        title="请在订单中心-查看页面-费用调整中修改团款现收！"
+                        name="currentNeedPayMoney" value="{{touristGroup.currentNeedPayMoney}}"readOnly/>
                         &nbsp;&nbsp;
                         <select name="receiveStatus" {{if touristGroup.isConfirmAccount == 1}}disabled="disabled"{{/if}}>
                             <option value="0" {{if touristGroup.isReceived == 0}}selected="selected"{{/if}}>未收到</option>
@@ -100,13 +101,7 @@
                     <a data-status="0" class="cursor T-addFee R-right" data-right="1190005">[费用调整]</a>
                 {{/if}} -->
             </td>
-            <td>
-                {{if touristGroup.isConfirmAccount == 0}}
-                    未对账
-                {{else}}
-                    已对账
-                {{/if}}
-            </td>
+            
         </tr>
         {{/each}}
     {{/if}}
