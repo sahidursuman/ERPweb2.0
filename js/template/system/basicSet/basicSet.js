@@ -125,7 +125,9 @@ define(function(require,exports){
 		});
 		//修改科目名称
 		$obj.find('.T-accObjList').on('click','.T-edit',function(){
+
 			var $tr = $(this).closest('tr');
+			$(this).html('保存')
 			Infrastructure.editAccountant($tr,args);
 		});
 	};
@@ -200,10 +202,7 @@ define(function(require,exports){
 		if(oldType == 2){ typeHtml += selected2; }
 		typeHtml += '>转账</option></select>';
 		$obj.find('.T-type').html(typeHtml);
-		$obj.find('input').off('change').on('change',function(){
-			Infrastructure.installAccData($obj,args);
-		});
-		$obj.find('select').off('blur').on('blur',function(){
+		$obj.find('.T-edit').off('click').on('click',function(){
 			Infrastructure.installAccData($obj,args);
 		});
 	};
@@ -224,6 +223,7 @@ define(function(require,exports){
 				if(result){
 					showMessageDialog(data.message,function(){
 						Infrastructure.listInfrastructure(args);
+						$obj.find('.T-edit').html('编辑');
 					});
 				}
 			}
