@@ -246,7 +246,7 @@ define(function(require, exports) {
                         Client.getCheckSumData(args,$tab);
                     }
                     
-                    Client.initCheck($tab,args);
+                    Client.initCheck($tab,args,isView);
                     Client.viewFeeDetails($tab,resultList);
                 } else {
                     Client.$checkTab.data("next",args);
@@ -279,7 +279,7 @@ define(function(require, exports) {
         });
     };
 
-    Client.initCheck = function($tab,args){
+    Client.initCheck = function($tab,args,isView){
         var id = $tab.find('.T-search-area').data('id');
         $tab.data('id', id);
         var validator = (new FinRule(6)).check($tab);
@@ -415,7 +415,7 @@ define(function(require, exports) {
          });
 
         //关闭页面事件
-        FinancialService.closeTab(ClientCheckTab);
+        FinancialService.closeTab(isView ? ClientCheckTab + '-view' : ClientCheckTab);
 
     };
 
