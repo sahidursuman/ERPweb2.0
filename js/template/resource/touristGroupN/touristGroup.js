@@ -1436,7 +1436,7 @@ define(function(require, exports) {
                     }
                 });
 
-                if ($layer.find('[name=remark]').val().length == 0 && remark.length > 0) {
+                if (!!remark && $layer.find('[name=remark]').val().length == 0 && remark.length > 0) {
                     $layer.find('[name=remark]').val(remark)
                 }
 
