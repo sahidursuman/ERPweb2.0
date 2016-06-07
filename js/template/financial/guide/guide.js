@@ -215,7 +215,7 @@ define(function(require, exports) {
     FinGuide.initOperationModule = function(args, type, $tab) {
         if (!!$tab) {
             var $line = $tab.find('.T-lineProductName');
-            args.guideId = $tab.find('.T-saveClear').data('id');
+            args.guideId = $tab.find('.T-search-area').data('id');
             args.startDate = $tab.find('.T-search-start-date').val();
             args.endDate = $tab.find('.T-search-end-date').val();
             args.tripPlanNumber = $tab.find('.T-tripPlanNumber').val();
@@ -651,7 +651,7 @@ define(function(require, exports) {
 
             var args = {
                 pageNo: pageNo || 0,
-                guideId: $tab.find('.T-saveClear').data('id'),
+                guideId: $tab.find('.T-search-area').data('id'),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 tripPlanNumber: $tab.find('.T-tripPlanNumber').val(),
