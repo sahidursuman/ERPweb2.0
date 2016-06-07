@@ -16,48 +16,17 @@ define(function(require, exports) {
     };
 
     TurnProfit.initModule = function() {
-        var dateJson = FinancialService.getInitDate();
-        TurnProfit.searchParam = {
-            pageNo: 0,
-            lineProductId : "",
-            lineProductName :"",
-            partnerAgencyId : "",
-            partnerAgencyName : "",
-            toBusinessGroupId : "",
-            toBusinessGroupName : "",
-            orderNumber : "",
-            startTime : dateJson.startDate,
-            endTime : dateJson.endDate,
-            type : 1,
-            sortType: 'auto' 
-        };
-        TurnProfit.listTurnProfit(0,"","","","","","",dateJson.startDate,dateJson.endDate,1);
+        var dateJson = FinancialService.getInitDate(),
+            args = {
+                startTime : dateJson.startDate,
+                endTime : dateJson.endDate
+            };
+        TurnProfit.listTurnProfit(0,args);
     };
 
-    TurnProfit.listTurnProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,orderNumber,startTime,endTime,type) {
-        if (TurnProfit.$searchArea && arguments.length === 1) {
-            type = 1;
-            if(!TurnProfit.$tab.find(".T-checkTurn").is(":checked")){
-                type = 0;
-            }
-        	TurnProfit.searchParam = {
-	        	pageNo: page,
-	        	lineProductId : TurnProfit.$searchArea.find("input[name=lineProductId]").val(),
-	        	lineProductName : TurnProfit.$searchArea.find("input[name=lineProductName]").val(),
-	        	partnerAgencyId : TurnProfit.$searchArea.find("input[name=partnerAgencyId]").val(),
-	        	partnerAgencyName : TurnProfit.$searchArea.find("input[name=partnerAgencyName]").val(),
-	        	toBusinessGroupId : TurnProfit.$searchArea.find("input[name=toBusinessGroupId]").val(),
-	        	toBusinessGroupName : TurnProfit.$searchArea.find("input[name=toBusinessGroupName]").val(),
-                orderNumber : TurnProfit.$searchArea.find("input[name=orderNumber]").val(),
-	        	startTime : TurnProfit.$searchArea.find("input[name=startTime]").val(),
-	        	endTime : TurnProfit.$searchArea.find("input[name=endTime]").val(),
-                type : type,
-	        	sortType: 'auto' 
-	        }
-        }
-        // 修正页码
-        page = page || 0;
-        if (page == -1) {
+    TurnProfit.listTurnProfit = function(page,args) {
+        args = TurnProfit.getArgs(page,args);
+        if (args.page == -1) {
             if (!TurnProfit.searchParam.startTime || !TurnProfit.searchParam.endTime) {
                 showMessageDialog("请选择时间区间"); 
                 return false;
@@ -68,21 +37,22 @@ define(function(require, exports) {
         $.ajax({
             url:KingServices.build_url("profitTransfer","listProfitTransfer"),
             type: "POST",
-            data: TurnProfit.searchParam,
+            data: args,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                	data.searchParam = TurnProfit.searchParam;
+                	data.searchParam = args;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"外转利润",html);
                     TurnProfit.searchParam.pageNo = page;
+                    TurnProfit.$tab = $('#' + tabId);
                     
                     TurnProfit.initList();
                     // 绑定翻页组件
                     laypage({
                         cont: TurnProfit.$tab.find('.T-pagenation'),
                         pages: data.totalPage, 
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 TurnProfit.listTurnProfit(obj.curr - 1);
@@ -94,9 +64,33 @@ define(function(require, exports) {
         });
     };
 
+    TurnProfit.getArgs = function(page,args){
+        var args = args || {};
+        if(TurnProfit.$tab){
+            args = {
+                pageNo: page || 0,
+                lineProductId : TurnProfit.$searchArea.find("input[name=lineProductId]").val(),
+                lineProductName : TurnProfit.$searchArea.find("input[name=lineProductName]").val(),
+                partnerAgencyId : TurnProfit.$searchArea.find("input[name=partnerAgencyId]").val(),
+                partnerAgencyName : TurnProfit.$searchArea.find("input[name=partnerAgencyName]").val(),
+                toBusinessGroupId : TurnProfit.$searchArea.find("input[name=toBusinessGroupId]").val(),
+                toBusinessGroupName : TurnProfit.$searchArea.find("input[name=toBusinessGroupName]").val(),
+                orderNumber : TurnProfit.$searchArea.find("input[name=orderNumber]").val(),
+                startTime : TurnProfit.$searchArea.find("input[name=startTime]").val(),
+                endTime : TurnProfit.$searchArea.find("input[name=endTime]").val()
+            }
+        }
+
+        args.sortType = 'auto';
+        if(TurnProfit.$tab && TurnProfit.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            TurnProfit.$tab.data("searchEdit",false);
+        }
+        return args;
+    };
+
     TurnProfit.initList = function(){
         // 初始化jQuery 对象
-        TurnProfit.$tab = $('#' + tabId);
         TurnProfit.$searchArea = TurnProfit.$tab.find('.T-search-area');
 
         if(TurnProfit.$tab.data('searchData')){
@@ -106,6 +100,12 @@ define(function(require, exports) {
         }
         
         Tools.setDatePicker(TurnProfit.$tab.find(".date-picker"), true);
+
+        //监听搜索区修改
+        TurnProfit.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
+            event.preventDefault();
+            TurnProfit.$tab.data('searchEdit', true);
+        });
         //搜索按钮事件
         TurnProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();

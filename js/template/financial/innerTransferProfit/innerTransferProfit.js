@@ -17,46 +17,21 @@ define(function(require, exports) {
     };
 
     innerProfit.initModule = function() {
-        var dateJson = FinancialService.getInitDate();
-        innerProfit.listInnerProfit(0,"","","","","","","",dateJson.startDate,dateJson.endDate,1);
+        var dateJson = FinancialService.getInitDate(),
+            args = {
+                startTime : dateJson.startDate,
+                endTime : dateJson.endDate
+            };
+
+        innerProfit.listInnerProfit(0,args);
     };
 
-    innerProfit.listInnerProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,indexOrderNumber,startTime,endTime,isSelectTransfer) {
-        if (innerProfit.$searchArea && arguments.length === 1) {
-            isSelectTransfer = 1;
-            if(!innerProfit.$tab.find(".T-checkTurn").is(":checked")){
-                isSelectTransfer = 0;
-            }
-            // 初始化页面后，可以获取页面的参数
-            lineProductId = innerProfit.$searchArea.find("input[name=lineProductId]").val(),
-            lineProductName = innerProfit.$searchArea.find("input[name=lineProductName]").val(),
-            partnerAgencyId = innerProfit.$searchArea.find("input[name=partnerAgencyId]").val(),
-            partnerAgencyName = innerProfit.$searchArea.find("input[name=partnerAgencyName]").val(),
-            toBusinessGroupId = innerProfit.$searchArea.find("input[name=toBusinessGroupId]").val(),
-            toBusinessGroupName = innerProfit.$searchArea.find("input[name=toBusinessGroupName]").val(),
-            indexOrderNumber = innerProfit.$searchArea.find("input[name=indexOrderNumber]").val(),
-            startTime = innerProfit.$searchArea.find("input[name=startTime]").val(),
-            endTime = innerProfit.$searchArea.find("input[name=endTime]").val()
-        }
-        // 修正页码
-        page = page || 0;
+    innerProfit.listInnerProfit = function(page,args) {
+        args = innerProfit.getArgs(page,args);
         $.ajax({
             url:innerProfit.url("profitInnerTransfer","listProfitInnerTransfer"),
             type: "POST",
-            data: {
-                pageNo: page,
-                lineProductId: lineProductId,
-                lineProductName : lineProductName,
-                fromPartnerAgencyId: partnerAgencyId,
-                partnerAgencyName : partnerAgencyName,
-                toBusinessGroupId : toBusinessGroupId,
-                toBusinessGroupName : toBusinessGroupName,
-                indexOrderNumber : indexOrderNumber,
-                startTime : startTime,
-                endTime : endTime,
-                isSelectTransfer : isSelectTransfer,
-                sortType: 'auto'
-            },
+            data: args,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
@@ -94,14 +69,14 @@ define(function(require, exports) {
             innerProfit.searchAreaList();
         }
         
+        //监听搜索区修改
+        innerProfit.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
+            event.preventDefault();
+            innerProfit.$tab.data('searchEdit', true);
+        });
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
-            innerProfit.listInnerProfit(0);
-        });
-
-        //核算中转
-        innerProfit.$tab.find(".T-checkTurn").on("click",function(){
             innerProfit.listInnerProfit(0);
         });
 
@@ -132,6 +107,32 @@ define(function(require, exports) {
             }
         });
     };
+
+    innerProfit.getArgs = function(page,args){
+        var args = args || {};
+        if(innerProfit.$tab){
+            args = {
+                pageNo : page || 0,
+                lineProductId : innerProfit.$searchArea.find("input[name=lineProductId]").val(),
+                lineProductName : innerProfit.$searchArea.find("input[name=lineProductName]").val(),
+                partnerAgencyId : innerProfit.$searchArea.find("input[name=partnerAgencyId]").val(),
+                partnerAgencyName : innerProfit.$searchArea.find("input[name=partnerAgencyName]").val(),
+                toBusinessGroupId : innerProfit.$searchArea.find("input[name=toBusinessGroupId]").val(),
+                toBusinessGroupName : innerProfit.$searchArea.find("input[name=toBusinessGroupName]").val(),
+                indexOrderNumber : innerProfit.$searchArea.find("input[name=indexOrderNumber]").val(),
+                startTime : innerProfit.$searchArea.find("input[name=startTime]").val(),
+                endTime : innerProfit.$searchArea.find("input[name=endTime]").val(),
+            }
+        }
+        args.sortType = 'auto';
+
+        if(innerProfit.$tab && innerProfit.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            innerProfit.$tab.data("searchEdit",false);
+        }
+        return args;
+    };
+
     //查看游客小组、收客团款明细
     innerProfit.viewTouristGroup = function(id){
         var $path = innerProfit.clickFlag == 2?'profitInnerTransfer':'touristGroup';

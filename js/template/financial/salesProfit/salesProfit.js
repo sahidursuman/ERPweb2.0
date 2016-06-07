@@ -85,6 +85,11 @@ define(function(require, exports) {
                 endDate: salesProfit.$tab.find('[name=endTime]').val()
             }
         }
+        if(salesProfit.$tab && salesProfit.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            salesProfit.$tab.data("searchEdit",false);
+            salesProfit.$tab.data("total",false);
+        }
         return args;
     }
 
@@ -93,8 +98,6 @@ define(function(require, exports) {
         //点击搜索
         $tab.find('.T-search-area').on('click', '.T-search', function(event) { 
             event.preventDefault();
-            salesProfit.$tab.data("searchEdit",false);
-            salesProfit.$tab.data("total",false);
             salesProfit._getListMain(0);
         });
 
