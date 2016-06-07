@@ -63,8 +63,15 @@ define(function(require, exports) {
                     transfer.listTransfer(0);
                     
                     Tools.setDatePicker($tab.find(".date-picker"),true);
+                    //监听搜索区修改
+                    $tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
+                        event.preventDefault();
+                        $tab.data('searchEdit', true);
+                    });
                     $tab.find(".T-search").off().on('click', function(event) {
                         event.preventDefault();
+                         $tab.data('searchEdit',false);
+                        $tab.data('total',false);
                         transfer.listTransfer(0);
                     });
                 }
@@ -123,7 +130,12 @@ define(function(require, exports) {
                     var $tab = $("#tab-" + menuKey + "-content");
                     $tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
-                    transfer.getSumData($tab,transfer.searchData);
+                    if(!$tab.data('searchEdit') && $tab.data('total')){
+                        transfer.loadSumData($tab);
+                    } else {
+                        transfer.getSumData($tab,transfer.searchData);
+                    }
+                    
                     transfer.getQuery($tab);
 
                     //报表内的操作
@@ -213,13 +225,19 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find(".T-totalCount").text((data.total.adultCount ? data.total.adultCount : 0) + " 大" + (data.total.childCount ? data.total.childCount : 0) + " 小");
-                $tab.find(".T-totalNeed").text(data.total.transitSMoney);
-                $tab.find(".T-totalCost").text(data.total.transitPaySMoney);
-                $tab.find(".T-totalProfit").text(data.total.grossProfit);
-                $tab.find(".T-perProfit").text(data.total.perGrossProfit);
+                $tab.data('total',data.total);
+                transfer.loadSumData($tab);
             }
         });
+    };
+
+    transfer.loadSumData = function($tab,args){
+        var total = $tab.data("total");
+        $tab.find(".T-totalCount").text((total.adultCount ? total.adultCount : 0) + " 大" + (total.childCount ? total.childCount : 0) + " 小");
+        $tab.find(".T-totalNeed").text(total.transitSMoney);
+        $tab.find(".T-totalCost").text(total.transitPaySMoney);
+        $tab.find(".T-totalProfit").text(total.grossProfit);
+        $tab.find(".T-perProfit").text(total.perGrossProfit);
     };
 
     transfer.getQuery = function($tab){

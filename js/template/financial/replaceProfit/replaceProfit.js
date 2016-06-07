@@ -122,6 +122,12 @@ define(function(require, exports) {
                     replace.hotelList = hotelList;
                     replace.scenicList = scenicList;
                     replace.seatCountList = seatCountList;
+
+                    //监听搜索区修改
+                    replace.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
+                        event.preventDefault();
+                        replace.$tab.data('searchEdit', true);
+                    });
                 }
             }
         });
@@ -201,12 +207,18 @@ define(function(require, exports) {
                     replace.$tab.find('.T-list').html(html);
                     replace.$tab.find(".T-totalSize").text("共计 " + data.recordSize + " 条记录");
 
-                    replace.getSumData();
+                    if(!replace.$tab.data("searchEdit") && replace.$tab.data("total")){
+                        replace.loadSumData();
+                    } else {
+                        replace.getSumData();
+                    }
                     replace.getQuery();
                     Tools.setDatePicker(replace.$searchArea.find('.date-picker'),true);
                     //搜索按钮事件
                     replace.$tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
+                        replace.$tab.data("searchEdit",false);
+                        replace.$tab.data("total",false);
                         replace.listReplace(0);
                     });
                     //导出 
@@ -309,12 +321,17 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
-                    replace.$tab.find(".T-sumCostMoney").text(data.sumCostMoney);
-                    replace.$tab.find(".T-sumNeedGetMoney").text(data.sumNeedGetMoney);
-                    replace.$tab.find(".T-sumGrossProfit").text(data.sumGrossProfit);
+                    replace.$tab.data("total", data);
+                    replace.loadSumData();
                 }
             }
         });
+    };
+    replace.loadSumData = function(){
+        var total = replace.$tab.data("total");
+        replace.$tab.find(".T-sumCostMoney").text(total.sumCostMoney);
+        replace.$tab.find(".T-sumNeedGetMoney").text(total.sumNeedGetMoney);
+        replace.$tab.find(".T-sumGrossProfit").text(total.sumGrossProfit);
     };
 
     replace.getQuery = function(){
