@@ -208,7 +208,7 @@ define(function(require, exports) {
     GuideArrange.getDiffColor = function(colors) {
         var color;
         do {
-            color = '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+            color = '#' + ('00000' + (Math.random() * 0x253364 << 0).toString(16)).slice(-6);
             if (colors.indexOf(color) < 0) {
                 break;
             }
@@ -256,7 +256,7 @@ define(function(require, exports) {
                 }
 
                 if (k === end) {
-                    // 找完了，也没有合适的,新增一组
+                    // 找完了，也没有合适的,新增一组.
                     res[end] = [tmp];
                     j = end;
                 }
