@@ -87,7 +87,13 @@ define(function(require, exports) {
         innerProfit.$tab = $('#' + tabId);
         innerProfit.$searchArea = innerProfit.$tab.find('.T-search-area');
         Tools.setDatePicker(innerProfit.$searchArea.find('.datepicker'), true);
-        innerProfit.searchAreaList();
+
+        if(innerProfit.$tab.data("searchData")){
+            innerProfit.loadSearchList();
+        } else {
+            innerProfit.searchAreaList();
+        }
+        
         //搜索按钮事件
         innerProfit.$tab.find('.T-search').on('click', function(event) {
             event.preventDefault();
@@ -237,13 +243,9 @@ define(function(require, exports) {
             success:function(data){
                 var result = showDialog(data);
                 if(result){
-                    var $tabId = $("#"+tabId);
                     var lineProductNameList = data.lineProductNameList,
                         partnerAgencyNameList = data.partnerAgencyNameList,
                         toBusinessGroupNameList  = data.toBusinessGroupNameList;
-                    var lineProducts  = $tabId.find("input[name=lineProductName]"),
-                        partnerAgencyName  = $tabId.find("input[name=partnerAgencyName]"),
-                        toBusinessGroupName = $tabId.find("input[name=toBusinessGroupName]");
 
                     if(lineProductNameList !=null && lineProductNameList.length>0){
                         for(var i = 0;i<lineProductNameList.length;i++){
@@ -263,63 +265,79 @@ define(function(require, exports) {
                         }
                     }
 
-                    //线路产品
-                    lineProducts.autocomplete({
-                        minLength:0,
-                        change:function(event,ui){
-                            if(ui.item == null){
-                                $(this).next().val("");
-                            }
-                        },
-                        select:function(event,ui){
-                            $(this).blur();
-                            $(this).next().val(ui.item.id);
-                        }
-                    }).off("click").on("click", function(){
-                        var Obj = lineProducts;
-                        $(Obj).autocomplete('option','source',lineProductNameList);
-                        $(Obj).autocomplete('search', '');
-                    });
-
-                    //组团社
-                    partnerAgencyName.autocomplete({
-                        minLength:0,
-                        change:function(even,ui){
-                            if(ui.item == null){
-                                $(this).next().val("");
-                            }
-                        },
-                        select:function(evevt,ui){
-                            $(this).blur();
-                            $(this).next().val(ui.item.id);
-                        }
-                    }).off("click").on("click",function(){
-                        var Obj = partnerAgencyName;
-                        $(Obj).autocomplete("option","source",partnerAgencyNameList);
-                        $(Obj).autocomplete('search','');
-                    });
-
-                    //部门
-                    toBusinessGroupName.autocomplete({
-                        minLength:0,
-                        change:function(even,ui){
-                            if(ui.item == null){
-                                $(this).next().val("");
-                            }
-                        },
-                        select:function(evevt,ui){
-                            $(this).blur();
-                            $(this).next().val(ui.item.id);
-                        }
-                    }).off("click").on("click",function(){
-                        var Obj = toBusinessGroupName;
-                        $(Obj).autocomplete("option","source",toBusinessGroupNameList);
-                        $(Obj).autocomplete('search','');
-                    });
+                    innerProfit.lineProductNameList = lineProductNameList,
+                    innerProfit.partnerAgencyNameList = partnerAgencyNameList,
+                    innerProfit.toBusinessGroupNameList  = toBusinessGroupNameList;
+                    innerProfit.$tab.data("searchData",true);
+                    innerProfit.loadSearchList();
                 }
             }
         });   
     };   
+
+    innerProfit.loadSearchList = function(){
+        var $tabId = $("#"+tabId),
+            lineProductNameList = innerProfit.lineProductNameList,
+            partnerAgencyNameList = innerProfit.partnerAgencyNameList,
+            toBusinessGroupNameList  = innerProfit.toBusinessGroupNameList;
+            lineProducts  = $tabId.find("input[name=lineProductName]"),
+            partnerAgencyName  = $tabId.find("input[name=partnerAgencyName]"),
+            toBusinessGroupName = $tabId.find("input[name=toBusinessGroupName]");
+
+        //线路产品
+        lineProducts.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $(this).next().val("");
+                }
+            },
+            select:function(event,ui){
+                $(this).blur();
+                $(this).next().val(ui.item.id);
+            }
+        }).off("click").on("click", function(){
+            var Obj = lineProducts;
+            $(Obj).autocomplete('option','source',lineProductNameList);
+            $(Obj).autocomplete('search', '');
+        });
+
+        //组团社
+        partnerAgencyName.autocomplete({
+            minLength:0,
+            change:function(even,ui){
+                if(ui.item == null){
+                    $(this).next().val("");
+                }
+            },
+            select:function(evevt,ui){
+                $(this).blur();
+                $(this).next().val(ui.item.id);
+            }
+        }).off("click").on("click",function(){
+            var Obj = partnerAgencyName;
+            $(Obj).autocomplete("option","source",partnerAgencyNameList);
+            $(Obj).autocomplete('search','');
+        });
+
+        //部门
+        toBusinessGroupName.autocomplete({
+            minLength:0,
+            change:function(even,ui){
+                if(ui.item == null){
+                    $(this).next().val("");
+                }
+            },
+            select:function(evevt,ui){
+                $(this).blur();
+                $(this).next().val(ui.item.id);
+            }
+        }).off("click").on("click",function(){
+            var Obj = toBusinessGroupName;
+            $(Obj).autocomplete("option","source",toBusinessGroupNameList);
+            $(Obj).autocomplete('search','');
+        });
+    };
     
     innerProfit.url = function(path,method){
         var url = ''+APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token')+'';

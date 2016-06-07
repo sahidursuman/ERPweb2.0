@@ -99,7 +99,12 @@ define(function(require, exports) {
         TurnProfit.$tab = $('#' + tabId);
         TurnProfit.$searchArea = TurnProfit.$tab.find('.T-search-area');
 
-        TurnProfit.searchAreaList();
+        if(TurnProfit.$tab.data('searchData')){
+            TurnProfit.loadSearchList();
+        } else {
+            TurnProfit.searchAreaList();
+        }
+        
         Tools.setDatePicker(TurnProfit.$tab.find(".date-picker"), true);
         //搜索按钮事件
         TurnProfit.$tab.find('.T-search').on('click', function(event) {
@@ -261,10 +266,6 @@ define(function(require, exports) {
                         partnerAgencyNameList = data.partnerAgencyNameList, 
                         partnerLocalAgencyNameList  = data.partnerLocalAgencyNameList;
 
-                    var lineProducts  = $("#" + tabId + " input[name=lineProductName]"),
-                        groupCollective  = $("#" + tabId + " input[name=partnerAgencyName]"),
-                        partner = $("#" + tabId + " input[name=toBusinessGroupName]");
-
                     if(lineProductNameList !=null && lineProductNameList.length>0){
                         for(var i = 0;i<lineProductNameList.length;i++){
                             lineProductNameList[i].value = lineProductNameList[i].name
@@ -290,63 +291,78 @@ define(function(require, exports) {
                     partnerAgencyNameList.unshift(all);
                     partnerLocalAgencyNameList.unshift(all);
 
-                    //线路产品   
-                    lineProducts.autocomplete({
-                        minLength:0,
-                        change:function(event,ui){
-                            if(ui.item == null){
-                                $(this).next().val("");
-                            }
-                        },
-                        select:function(event,ui){
-                            $(this).blur();
-                            $(this).next().val(ui.item.id);
-                        }
-                    }).off("click").on("click", function(){
-                        var Obj = lineProducts;
-                        $(Obj).autocomplete('option','source',lineProductNameList);
-                        $(Obj).autocomplete('search', '');
-                    });
+                    TurnProfit.lineProductNameList = lineProductNameList,
+                    TurnProfit.partnerAgencyNameList = partnerAgencyNameList, 
+                    TurnProfit.partnerLocalAgencyNameList  = partnerLocalAgencyNameList; 
+                    TurnProfit.$tab.data('searchData',true);
 
-                    //组团社
-                    groupCollective.autocomplete({
-                        minLength:0,
-                        change:function(even,ui){
-                            if(ui.item == null){
-                                $(this).next().val("");
-                            }
-                        },
-                        select:function(evevt,ui){
-                            $(this).blur();
-                            $(this).next().val(ui.item.id);
-                        }
-                    }).off("click").on("click",function(){
-                        var Obj = groupCollective;
-                        $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
-                        $(Obj).autocomplete('search','');
-                    });
-
-                    //同行地接
-                    partner.autocomplete({
-                        minLength:0,
-                        change:function(even,ui){
-                            if(ui.item == null){
-                                $(this).next().val("");
-                            }
-                        },
-                        select:function(evevt,ui){
-                            $(this).blur();
-                            $(this).next().val(ui.item.id);
-                        }
-                    }).off("click").on("click",function(){
-                        var Obj = partner;
-                        $(Obj).autocomplete("option","source",partnerAgencyNameList);
-                        $(Obj).autocomplete('search','');
-                    });
+                    TurnProfit.loadSearchList();                   
                 }
             }
         });            
 	};
+    TurnProfit.loadSearchList = function(){
+        var lineProductNameList = TurnProfit.lineProductNameList,
+            partnerAgencyNameList = TurnProfit.partnerAgencyNameList, 
+            partnerLocalAgencyNameList  = TurnProfit.partnerLocalAgencyNameList,
+            lineProducts  = TurnProfit.$tab.find("input[name=lineProductName]"),
+            groupCollective  = TurnProfit.$tab.find("input[name=partnerAgencyName]"),
+            partner = TurnProfit.$tab.find("input[name=toBusinessGroupName]");
+
+        //线路产品   
+        lineProducts.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $(this).next().val("");
+                }
+            },
+            select:function(event,ui){
+                $(this).blur();
+                $(this).next().val(ui.item.id);
+            }
+        }).off("click").on("click", function(){
+            var Obj = lineProducts;
+            $(Obj).autocomplete('option','source',lineProductNameList);
+            $(Obj).autocomplete('search', '');
+        });
+
+        //组团社
+        groupCollective.autocomplete({
+            minLength:0,
+            change:function(even,ui){
+                if(ui.item == null){
+                    $(this).next().val("");
+                }
+            },
+            select:function(evevt,ui){
+                $(this).blur();
+                $(this).next().val(ui.item.id);
+            }
+        }).off("click").on("click",function(){
+            var Obj = groupCollective;
+            $(Obj).autocomplete("option","source",partnerLocalAgencyNameList);
+            $(Obj).autocomplete('search','');
+        });
+
+        //同行地接
+        partner.autocomplete({
+            minLength:0,
+            change:function(even,ui){
+                if(ui.item == null){
+                    $(this).next().val("");
+                }
+            },
+            select:function(evevt,ui){
+                $(this).blur();
+                $(this).next().val(ui.item.id);
+            }
+        }).off("click").on("click",function(){
+            var Obj = partner;
+            $(Obj).autocomplete("option","source",partnerAgencyNameList);
+            $(Obj).autocomplete('search','');
+        });
+    };
 
     exports.init = TurnProfit.initModule;
 });
