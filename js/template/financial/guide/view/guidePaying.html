@@ -1,7 +1,7 @@
 <div class="row check globalAdd">
     <!-- <div class="clearfix border col-sm-12"> -->
     <div>
-        <div class="T-search-area">
+        <div class="T-search-area" data-id={{id}} >
             <form class="form-inline" role="form" onsubmit="return false">
                 <div class="form-group mar-r-10">
                     <label>导游：</label>
@@ -168,7 +168,7 @@
             <button class="btn btn-xs btn-primary T-btn-close">
                 <i class="ace-icon fa fa-times-circle"></i> 关闭
             </button>
-            <button class="btn btn-xs btn-primary R-right T-saveClear" style="margin-left:20px" data-id={{id}} data-type="{{type}}" data-name="{{guideName}}" data-right="1200003" {{if borrow}}data-borrow="borrow"{{/if}}>
+            <button class="btn btn-xs btn-primary {{if !borrow}}R-right{{/if}} T-saveClear" style="margin-left:20px" data-id={{id}} data-type="{{type}}" data-name="{{guideName}}" {{if borrow}}data-borrow="borrow"{{else}} data-right="1200003"{{/if}}>
                 <i class="ace-icon fa fa-check-circle"></i> {{if borrow}}确认预支{{else}}确认付款{{/if}}
             </button>
         </div>
