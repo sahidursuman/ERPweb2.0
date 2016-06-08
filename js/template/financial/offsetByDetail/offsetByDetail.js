@@ -271,50 +271,6 @@ define(function(require, exports) {
             minLength: 0,
             change: function(event, ui) {
                 if (!ui.item) {
-                   $(this).nextAll().find('[name=resourceId]').val('');
-                }
-            },
-            select: function(event, ui) {
-                $(this).val(ui.item.name).nextAll('[name=resourceId]').val(ui.item.id).trigger('change');
-            }
-        }).off('click').on('click', function() {
-            $.ajax({
-                url:KingServices.build_url("cash","findUnits"),
-                type: 'POST',
-                data:"resourceType="+$tab.find('.T-resourceType').val(),
-            })
-            .done(function(data) {
-                if (showDialog(data)) {
-                    var list = data.units;
-                    if (list != null && list.length > 0) {
-                        for (var i = 0; i < list.length; i++) {
-                            list[i].value = list[i].name;
-                            list[i].id = list[i].id;
-                        };
-                    } else {
-                        layer.tips('没有内容', $obj, {
-                            tips: [1, '#3595CC'],
-                            time: 2000
-                        });
-                    }
-                    $obj.autocomplete('option', 'source', list);
-                    $obj.autocomplete('search', '');
-                }
-            });
-        })
-    };
-
-    /**
-     * [getResourceList 获取对方单位]
-     * @param  {[type]} $obj         [对方单位对象]
-     * @param  {[type]} resourceType [资源类型]
-     * @return {[type]}           
-     */
-    offsetByDetail.getResourceList = function($obj,$tab) {
-        $obj.autocomplete({
-            minLength: 0,
-            change: function(event, ui) {
-                if (!ui.item) {
                    $(this).val('').nextAll('[name=resourceId]').val('');
                 }
             },
