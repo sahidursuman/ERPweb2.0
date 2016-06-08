@@ -20,16 +20,20 @@ define(function(require, exports) {
          salesProfit.$tab=$("#tab-"+menuKey+"-content");
          salesProfit._initMain_event(salesProfit.$tab);
         //初始化模板
-        salesProfit._initMain(args);
+        salesProfit._getListMain(0, args);
+
+        //监听搜索区修改
+        salesProfit.$tab.find('.T-search-area').on('change', 'input,select', function(event) {
+            event.preventDefault();
+            salesProfit.$tab.data("searchEdit",true);
+        });
+
+        salesProfit.getPartnerList(salesProfit.$tab.find('[name=partnerAgencyName]'));
+        salesProfit.getBusinessList(salesProfit.$tab.find('[name=businessName]'));
+        salesProfit.getGroupMapList(salesProfit.$tab.find('[name=groupName]'));
+        salesProfit.getOPUserList(salesProfit.$tab.find('[name=outOPUserName]'));
     };
 
-    salesProfit._initMain = function(args){
-        
-         //listMain
-         salesProfit._getListMain(0, args);
-         //获取统计数据
-         salesProfit._getTotalData();
-    }
     salesProfit._getListMain=function(page, args){
         var args = salesProfit._getArgs(args,page);
         $.ajax({
@@ -43,6 +47,11 @@ define(function(require, exports) {
                 salesProfit.$tab.find('.T-salesProfit-list').html(html);
                 salesProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
 
+                if(!salesProfit.$tab.data("searchEdit") && salesProfit.$tab.data("total")){
+                    salesProfit._loadTotalData();
+                } else {
+                    salesProfit._getTotalData(args);
+                }
                 // 绑定翻页组件
                 laypage({
                     cont: salesProfit.$tab.find('.T-pagenation'), 
@@ -76,6 +85,11 @@ define(function(require, exports) {
                 endDate: salesProfit.$tab.find('[name=endTime]').val()
             }
         }
+        if(salesProfit.$tab && salesProfit.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            salesProfit.$tab.data("searchEdit",false);
+            salesProfit.$tab.data("total",false);
+        }
         return args;
     }
 
@@ -84,8 +98,7 @@ define(function(require, exports) {
         //点击搜索
         $tab.find('.T-search-area').on('click', '.T-search', function(event) { 
             event.preventDefault();
-            /* Act on the event */
-            salesProfit._initMain();
+            salesProfit._getListMain(0);
         });
 
         //点击线路产品事件
@@ -99,32 +112,31 @@ define(function(require, exports) {
 
         //格式化时间控件
         Tools.setDatePicker(salesProfit.$tab.find(".date-picker"),true);
-        salesProfit.getPartnerList(salesProfit.$tab.find('[name=partnerAgencyName]'));
-        salesProfit.getBusinessList(salesProfit.$tab.find('[name=businessName]'));
-        salesProfit.getGroupMapList(salesProfit.$tab.find('[name=groupName]'));
-        salesProfit.getOPUserList(salesProfit.$tab.find('[name=outOPUserName]'));
     };
 
  
     //获取统计数据
-    salesProfit._getTotalData = function(){
-        var args = salesProfit._getArgs();
+    salesProfit._getTotalData = function(args){
         $.ajax({
             url:KingServices.build_url("saleProfit","findTotal"),
             data:args,
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
-                    salesProfit.$tab.find('.T-totalCount').text(data.total.sumAdultCount+'大'+data.total.sumChildCount+'小');
-                    salesProfit.$tab.find('.T-totalNeed').text(data.total.sumIncome);
-                    salesProfit.$tab.find('.T-totalCost').text(data.total.sumCost);
-                    salesProfit.$tab.find('.T-totalProfit').text(data.total.sumProfit);
-                    salesProfit.$tab.find('.T-avgProfit').text(data.total.avgProfit);
+                    salesProfit.$tab.data("total",data.total);
+                    salesProfit._loadTotalData();
                 }
             }
         });
     };
-
+    salesProfit._loadTotalData = function(){
+        var total = salesProfit.$tab.data("total");
+        salesProfit.$tab.find('.T-totalCount').text(total.sumAdultCount+'大'+ total.sumChildCount+'小');
+        salesProfit.$tab.find('.T-totalNeed').text(total.sumIncome);
+        salesProfit.$tab.find('.T-totalCost').text(total.sumCost);
+        salesProfit.$tab.find('.T-totalProfit').text(total.sumProfit);
+        salesProfit.$tab.find('.T-avgProfit').text(total.avgProfit);
+    };
 
     //getPartnerList 获取客户的下拉数据
     salesProfit.getPartnerList = function($target){
@@ -137,7 +149,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.id).trigger('change');
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -183,7 +195,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.id).trigger('change');
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -230,7 +242,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.businessGroupId);
+                $target.blur().data("id", item.businessGroupId).trigger('change');
                 $target.nextAll('[name=groupName]').val('').data('id','');
             }
         }).off('click').on('click', function(event) {
@@ -276,7 +288,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.groupId);
+                $target.blur().data("id", item.groupId).trigger('change');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
