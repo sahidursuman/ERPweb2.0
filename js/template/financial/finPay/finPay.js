@@ -53,6 +53,10 @@ define(function(require, exports) {
 		}
 
 		args.pageNo = pageNo || 0;
+		if(FinPay.$tab && FinPay.$tab.data("searchEdit")){
+			args.pageNo = 0;
+			FinPay.$tab.data("searchEdit",false);
+		}
 		$.ajax(FinPay.covertArgs(args))
 		.done(function(data) {
 			if (showDialog(data)) {
@@ -398,6 +402,11 @@ define(function(require, exports) {
 	FinPay.initEvent = function() {
 		var $tab = $('#tab-'+ menuKey + '-content');
 
+		//监听搜索区修改
+		$tab.find('.T-search-area').on('change', 'input', function(event) {
+			event.preventDefault();
+			FinPay.$tab.data('searchEdit',true);
+		});
 		// 搜索区域
 		$tab.find('.T-business-type').on('change', function(event) {
 			event.preventDefault();
