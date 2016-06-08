@@ -28,7 +28,14 @@ define(function(require, exports) {
         data.searchParam = args;
         Tools.addTab(menuKey,"付款申请",listHeaderTemplate(data));
         Pay.getList(page,args);
-    }
+
+        Pay.$tab = $("#tab-" + menuKey + "-content");
+        //监听搜索区修改
+        Pay.$tab.find('.T-search-area').off().on('change', 'input,select', function(event) {
+            event.preventDefault();
+            Pay.$tab.data('searchEdit', true);
+        });
+    };
 
 	Pay.getList = function(page,args){
         args = Pay.getArgs(page,args);
@@ -40,10 +47,17 @@ define(function(require, exports) {
 		.done(function(data) {
 			if(showDialog(data)){
 				Pay.searchData = args;
-				Pay.$tab = $("#tab-" + menuKey + "-content");
+				
                 Pay.$tab.find('.T-list').html(listTableTemplate(data));
                 Pay.$tab.find('.T-sumItem').text("共计 " + data.searchParam.totalCount + " 条记录");
-				Pay.getSumData(args);
+
+                if(!Pay.$tab.data("searchEdit") && Pay.$tab.data("total")){
+                    Pay.loadSumData();
+                } else {
+                    Pay.getSumData(args);
+                }
+                Pay.$tab.data('searchEdit',false);
+				
 				if(args.pageNo == 0){
 					Pay.initList();
 				}
@@ -77,6 +91,9 @@ define(function(require, exports) {
             }
         }
         args.pageNo = page || 0;
+        if(Pay.$tab && Pay.$tab.data("searchEdit")){
+            args.pageNo = 0;
+        }
         return args;
     };
 
@@ -89,12 +106,21 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if(showDialog(data)){
+                Pay.$tab.data('total', data.total);
+                Pay.loadSumData();
                 Pay.$tab.find('.T-needPay').text(data.total.needPays);
                 Pay.$tab.find('.T-payed').text(data.total.payeds);
                 Pay.$tab.find('.T-unpay').text(data.total.unpays);
 			}
 		});
 	};
+
+    Pay.loadSumData = function(){
+        var total = Pay.$tab.data('total');
+        Pay.$tab.find('.T-needPay').text(total.needPays);
+        Pay.$tab.find('.T-payed').text(total.payeds);
+        Pay.$tab.find('.T-unpay').text(total.unpays);
+    };
 
 	Pay.initList = function(){
 		Tools.setDatePicker(Pay.$tab.find(".date-picker"), true);
@@ -104,12 +130,15 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Pay.$tab.data('searchEdit',true);
             Pay.getList(0);
         });
 
         //搜索按钮事件
         Pay.$tab.find(".T-btn-search").off().on('click',function(event) {
             event.preventDefault();
+            Pay.$tab.data('searchEdit',false);
+            Pay.$tab.data('total',false);
             Pay.getList(0);
         });
 
