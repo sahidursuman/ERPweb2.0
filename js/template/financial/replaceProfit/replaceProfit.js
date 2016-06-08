@@ -24,59 +24,32 @@ define(function(require, exports) {
     };
 
     replace.initModule = function() {
-        var dateJson = FinancialService.getInitDate();
-        replace.searchData = {
-            partnerAgencyName : "",
-            partnerAgencyId : "",
-            hotelName : "",
-            hotelId : "",
-            scenicName : "",
-            scenicId :"",
-            ticketType : "",
-            needSeatCount : "",
-            groupName : "",
-            outOPUserName : "",
-            startTime : dateJson.startDate,
-            endTime : dateJson.endDate,
-            sortType: 'auto'
-        };
+        var dateJson = FinancialService.getInitDate(),
+            args = {
+                startTime : dateJson.startDate,
+                endTime : dateJson.endDate,
+            };
         var data = {};
-        data.searchParam = replace.searchData;
-        var html = listMain(data);
-        Tools.addTab(menuKey,"代订利润",html);
+        data.searchParam = args;
+        Tools.addTab(menuKey,"代订利润",listMain(data));
 
-        replace.listMain("","","","","","","","",dateJson.startDate,dateJson.endDate, "", "","","");
+        replace.listMain(0,args);
     };
 
-    replace.listMain = function(partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName,businessGroupName,businessGroupId){
-        replace.searchData = {
-            partnerAgencyName : partnerAgencyName,
-            partnerAgencyId : partnerAgencyId,
-            hotelName : hotelName,
-            hotelId : hotelId,
-            scenicName : scenicName,
-            scenicId :scenicId,
-            ticketType : ticketType,
-            needSeatCount : seatCount,
-            startTime : startDate,
-            endTime : endDate,
-            groupName : groupName,
-            businessGroupName : businessGroupName,
-            businessGroupId :businessGroupId,
-            outOPUserName : outOPUserName,
-            sortType: 'auto'
-        };
+    replace.listMain = function(page,args){
+        args = replace.getArgs(page,args);
+        
         $.ajax({
             url : KingServices.build_url("profitBooking","getQueryTerms"),
             type  :"POST",
-            data : replace.searchData,
+            data : args,
             success:function(data){
                 layer.close(globalLoadingLayer);
                 var result = showDialog(data);
                 if(result){
                     replace.$tab = $("#tab-" + menuKey + "-content"),
                     replace.$searchArea = replace.$tab.find('.T-search-area');
-                    replace.listReplace(0);
+                    replace.listReplace(0,args);
                     var conditions = JSON.parse(data.conditions);
                         partnerAgencyList = conditions.agencies,
                         hotelList = conditions.hotels,
@@ -122,6 +95,7 @@ define(function(require, exports) {
                     replace.hotelList = hotelList;
                     replace.scenicList = scenicList;
                     replace.seatCountList = seatCountList;
+                    replace.getQuery();
 
                     //监听搜索区修改
                     replace.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
@@ -133,67 +107,59 @@ define(function(require, exports) {
         });
     };
 
-    replace.listReplace = function(page,partnerAgencyName,partnerAgencyId,hotelName,hotelId,scenicName,scenicId,ticketType,seatCount,startDate,endDate,outOPUserName,groupName,groupId,businessGroupName,businessGroupId,orderNumber){
-        if (replace.$searchArea && arguments.length === 1) {
-            // 初始化页面后，可以获取页面的参数
-            partnerAgencyName = replace.$searchArea.find("input[name=partnerAgencyName]").val(),
-            partnerAgencyId = replace.$searchArea.find("input[name=partnerAgencyId]").val(),
-            hotelName = replace.$searchArea.find("input[name=hotelName]").val(),
-            hotelId = replace.$searchArea.find("input[name=hotelId]").val(),
-            scenicName = replace.$searchArea.find("input[name=scenicName]").val(),
-            scenicId = replace.$searchArea.find("input[name=scenicId]").val(),
-            ticketType = replace.$searchArea.find("select[name=ticketType]").val(),
-            seatCount = replace.$searchArea.find("input[name=seatCount]").val(),
-            startDate = replace.$searchArea.find("input[name=startDate]").val(),
-            endDate = replace.$searchArea.find("input[name=endDate]").val(),
-            outOPUserName = replace.$searchArea.find("input[name=outOPUserName]").val(),
-            groupName = replace.$searchArea.find("input[name=groupName]").val(),
-            groupId = replace.$searchArea.find("input[name=groupName]").data('id'),
-            businessGroupName = replace.$searchArea.find("input[name=businessName]").val(),
-            businessGroupId = replace.$searchArea.find("input[name=businessGroupName]").data('id');
-            orderNumber = replace.$searchArea.find("input[name=orderNumber]").val();
+    replace.getArgs = function(page,args){
+        var args = args || {};
+        if(replace.$tab){
+            args = {
+                pageNo : page || 0,
+                partnerAgencyName : replace.$searchArea.find("input[name=partnerAgencyName]").val(),
+                partnerAgencyId : replace.$searchArea.find("input[name=partnerAgencyId]").val(),
+                hotelName : replace.$searchArea.find("input[name=hotelName]").val(),
+                hotelId : replace.$searchArea.find("input[name=hotelId]").val(),
+                scenicName : replace.$searchArea.find("input[name=scenicName]").val(),
+                scenicId : replace.$searchArea.find("input[name=scenicId]").val(),
+                ticketType : replace.$searchArea.find("select[name=ticketType]").val(),
+                seatCount : replace.$searchArea.find("input[name=seatCount]").val(),
+                startDate : replace.$searchArea.find("input[name=startDate]").val(),
+                endDate : replace.$searchArea.find("input[name=endDate]").val(),
+                outOPUserName : replace.$searchArea.find("input[name=outOPUserName]").val(),
+                groupName : replace.$searchArea.find("input[name=groupName]").val(),
+                groupId : replace.$searchArea.find("input[name=groupName]").data('id'),
+                businessGroupName : replace.$searchArea.find("input[name=businessName]").val(),
+                businessGroupId : replace.$searchArea.find("input[name=businessGroupName]").data('id'),
+                orderNumber : replace.$searchArea.find("input[name=orderNumber]").val()
+            }
         }
-        if(startDate > endDate){
-            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
-        partnerAgencyName = (partnerAgencyName == "全部") ? "" : partnerAgencyName;
-        hotelName = (hotelName == "全部") ? "" : hotelName;
-        scenicName = (scenicName == "全部") ? "" : scenicName;
-        seatCount = (seatCount == "全部") ? "" : seatCount;
-        // 修正页码
-        page = page || 0;
-        replace.searchData = {
-            pageNo : page,
-            partnerAgencyName : partnerAgencyName,
-            partnerAgencyId : partnerAgencyId,
-            hotelName : hotelName,
-            hotelId : hotelId,
-            scenicName : scenicName,
-            scenicId :scenicId,
-            ticketType : ticketType,
-            needSeatCount : seatCount,
-            startTime : startDate,
-            endTime : endDate,
-            groupName : groupName,
-            businessGroupName : businessGroupName,
-            outOPUserName : outOPUserName,
-            orderNumber : orderNumber,
-            sortType: 'auto'
-        };
 
-        if (page == -1) {
-            if (!replace.searchData.startTime || !replace.searchData.endTime) {
+        args.partnerAgencyName = (args.partnerAgencyName == "全部") ? "" : args.partnerAgencyName;
+        args.hotelName = (args.hotelName == "全部") ? "" : args.hotelName;
+        args.scenicName = (args.scenicName == "全部") ? "" : args.scenicName;
+        args.seatCount = (args.seatCount == "全部") ? "" : args.seatCount;
+        args.sortType = "auto";
+
+        if(replace.$tab && replace.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            replace.$tab.data("searchEdit",false);
+            replace.$tab.data("total",false);
+        }
+        return args;
+    };
+
+    replace.listReplace = function(page,args){
+        args = replace.getArgs(page,args);
+
+        if (args.pageNo == -1) {
+            if (!args.startTime || !args.endTime) {
                 showMessageDialog("请选择时间区间"); 
                 return false;
             }
-            exportXLS( APP_ROOT + 'back/export.do?method=exportBookingOrderProfit&token='+ $.cookie("token") +'&'+ $.param(replace.searchData));
+            exportXLS( APP_ROOT + 'back/export.do?method=exportBookingOrderProfit&token='+ $.cookie("token") +'&'+ $.param(args));
             return;
         }
         $.ajax({
             url : KingServices.build_url("profitBooking","listFinancialBookingOrder"),
             type  :"POST",
-            data : replace.searchData,
+            data : args,
             success:function(data){
                 layer.close(globalLoadingLayer);
                 var result = showDialog(data);
@@ -210,15 +176,13 @@ define(function(require, exports) {
                     if(!replace.$tab.data("searchEdit") && replace.$tab.data("total")){
                         replace.loadSumData();
                     } else {
-                        replace.getSumData();
+                        replace.getSumData(args);
                     }
-                    replace.getQuery();
+                    
                     Tools.setDatePicker(replace.$searchArea.find('.date-picker'),true);
                     //搜索按钮事件
                     replace.$tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
-                        replace.$tab.data("searchEdit",false);
-                        replace.$tab.data("total",false);
                         replace.listReplace(0);
                     });
                     //导出 
@@ -250,7 +214,7 @@ define(function(require, exports) {
                     laypage({
                         cont: replace.$tab.find('.T-pagenation'),
                         pages: data.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 replace.listReplace(obj.curr - 1);
@@ -313,11 +277,11 @@ define(function(require, exports) {
         });
     };
 
-    replace.getSumData = function(){
+    replace.getSumData = function(args){
         $.ajax({
             url: KingServices.build_url('profitBooking', 'getStatistics'),
             type: 'POST',
-            data: replace.searchData,
+            data: args,
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
@@ -349,7 +313,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=partnerAgencyId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=partnerAgencyId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $partner.autocomplete('search', '');
@@ -365,7 +329,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=hotelId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=hotelId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $hotel.autocomplete('search', '');
@@ -381,7 +345,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=scenicId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=scenicId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $scenic.autocomplete('search', '');
@@ -397,6 +361,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name=seatCount]').val(ui.item.value);
             }
         }).on("click",function(){
@@ -419,7 +384,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.id).trigger('change');
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -457,7 +422,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.groupId);
+                $target.blur().data("id", item.groupId).trigger('change');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
@@ -505,7 +470,7 @@ define(function(require, exports) {
             select:function(event,ui){
                 var item = ui.item;
                 $target.blur().data("id", item.businessGroupId);
-                $target.nextAll('[name=groupName]').val('').data('id','');
+                $target.nextAll('[name=groupName]').val('').data('id','').trigger('change');
 
             }
         }).off('click').on('click', function(event) {

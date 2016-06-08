@@ -45,7 +45,7 @@ define(function(require, exports) {
                     laypage({
                         cont: innerProfit.$tab.find('.T-pagenation'),
                         pages: data.totalPage, 
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 innerProfit.listInnerProfit(obj.curr - 1);
@@ -295,7 +295,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 $(this).blur();
-                $(this).next().val(ui.item.id);
+                $(this).next().val(ui.item.id).trigger('change');
             }
         }).off("click").on("click", function(){
             var Obj = lineProducts;
@@ -313,7 +313,7 @@ define(function(require, exports) {
             },
             select:function(evevt,ui){
                 $(this).blur();
-                $(this).next().val(ui.item.id);
+                $(this).next().val(ui.item.id).trigger('change');
             }
         }).off("click").on("click",function(){
             var Obj = partnerAgencyName;
@@ -331,7 +331,7 @@ define(function(require, exports) {
             },
             select:function(evevt,ui){
                 $(this).blur();
-                $(this).next().val(ui.item.id);
+                $(this).next().val(ui.item.id).trigger('change');
             }
         }).off("click").on("click",function(){
             var Obj = toBusinessGroupName;

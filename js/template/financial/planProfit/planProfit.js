@@ -17,44 +17,20 @@ define(function(require, exports) {
 	};
 
     plan.initModule = function() {
-        var dateJson = FinancialService.getInitDate();
-        plan.searchData = {
-            pageNo : 0,
-            tripNumber : "",
-            lineProductName : "",
-            lineProductId : "",
-            guideName : "",
-            guideId : "",
-            tripPlanType : "",
-            start : dateJson.startDate,
-            end : dateJson.endDate,
-            billStatus : "",
-            sortType: 'auto'
-        };
+        var dateJson = FinancialService.getInitDate(),
+            args = {
+                start : dateJson.startDate,
+                end : dateJson.endDate,
+                billStatus : ""
+            };
         var data = {};
-        data.searchParam = plan.searchData;
-        var html = listMainTemplate(data);
-        Tools.addTab(menuKey,"单团利润",html);
+        data.searchParam = args;
+        Tools.addTab(menuKey,"单团利润",listMainTemplate(data));
         
-        plan.listMain("","","","","","",dateJson.startDate,dateJson.endDate,"");
+        plan.listMain(args);
     };
 
-    plan.listMain = function(tripNumber,lineProductName,lineProductId,guideName,guideId,tripPlanType,startTime,endTime,billStatus){
-        plan.searchData = {
-            pageNo : 0,
-            tripNumber : tripNumber,
-            lineProductName : lineProductName,
-            lineProductId : lineProductId,
-            guideName : guideName,
-            guideId : guideId,
-            tripPlanType : tripPlanType,
-            start : startTime,
-            end : endTime,
-            billStatus : billStatus,
-            sortType: 'auto'
-        };
-        var searchParam = JSON.stringify(plan.searchData);
-
+    plan.listMain = function(args){
         $.ajax({
             url: KingServices.build_url('financialTrip', 'findSelectValue'),
             type: 'POST',
@@ -64,7 +40,7 @@ define(function(require, exports) {
                     plan.$tab = $("#tab-" + menuKey + "-content"),
                     plan.$searchArea = plan.$tab.find('.T-search-area');
 
-                    plan.listPlan(0);
+                    plan.listPlan(0,args);
 
                     var lineProductList = JSON.parse(data.lineProducts),
                         guideList = JSON.parse(data.guides);
@@ -88,6 +64,7 @@ define(function(require, exports) {
 
                     plan.lineProductList = lineProductList;
                     plan.guideList = guideList;
+                    plan.getQuery();
 
                     Tools.setDatePicker(plan.$tab.find(".date-picker"),true);
                     //监听搜索区修改
@@ -106,25 +83,12 @@ define(function(require, exports) {
                     //搜索按钮事件
                     plan.$tab.find('.T-search').off().on('click', function(event) {
                         event.preventDefault();
-                        plan.$tab.data('searchEdit', false);
-                        plan.$tab.data('total',false);
                         plan.listPlan(0);
                     });
 
                     //导出报表事件 btn-hotelExport
                     plan.$tab.find(".T-btn-export").click(function(){
-                        var argsData = {
-                            tripNumber : plan.$searchArea.find("input[name=tripNumber]").val(),
-                            lineProductName : plan.$searchArea.find("input[name=lineProductName]").val(),
-                            lineProductId : plan.$searchArea.find("input[name=lineProductId]").val(),
-                            guideName : plan.$searchArea.find("input[name=guideName]").val(),
-                            guideId : plan.$searchArea.find("input[name=guideId]").val(),
-                            tripPlanType : plan.$searchArea.find("select[name=tripPlanType]").val(),
-                            start : plan.$searchArea.find("input[name=startTime]").val(),
-                            end : plan.$searchArea.find("input[name=endTime]").val(),
-                            billStatus : plan.$searchArea.find(".T-status button").data("value"),
-                            sortType: 'auto'
-                        };
+                        var argsData = plan.getArgs();
                         if(!argsData.start || !argsData.end){
                             showMessageDialog("请选择时间区间");
                             return false;
@@ -136,48 +100,46 @@ define(function(require, exports) {
         });
     };
 
-    plan.listPlan = function(page,tripNumber,lineProductName,lineProductId,guideName,guideId,tripPlanType,startTime,endTime,billStatus){
-        if (plan.$searchArea && arguments.length === 1) {
-            // 初始化页面后，可以获取页面的参数
-            tripNumber = plan.$searchArea.find("input[name=tripNumber]").val(),
-            lineProductName = plan.$searchArea.find("input[name=lineProductName]").val(),
-            lineProductId = plan.$searchArea.find("input[name=lineProductId]").val(),
-            guideName = plan.$searchArea.find("input[name=guideName]").val(),
-            guideId = plan.$searchArea.find("input[name=guideId]").val(),
-            tripPlanType = plan.$searchArea.find("select[name=tripPlanType]").val(),
-            startTime = plan.$searchArea.find("input[name=startTime]").val(),
-            endTime = plan.$searchArea.find("input[name=endTime]").val(),
-            billStatus = plan.$searchArea.find(".T-status button").data("value")
+    plan.getArgs = function(page,args){
+        var args = args || {};
+        if(plan.$tab){
+            args = {
+                pageNo : page || 0,
+                tripNumber : plan.$searchArea.find("input[name=tripNumber]").val(),
+                lineProductName : plan.$searchArea.find("input[name=lineProductName]").val(),
+                lineProductId : plan.$searchArea.find("input[name=lineProductId]").val(),
+                guideName : plan.$searchArea.find("input[name=guideName]").val(),
+                guideId : plan.$searchArea.find("input[name=guideId]").val(),
+                tripPlanType : plan.$searchArea.find("select[name=tripPlanType]").val(),
+                start : plan.$searchArea.find("input[name=startTime]").val(),
+                end : plan.$searchArea.find("input[name=endTime]").val(),
+                billStatus : plan.$searchArea.find(".T-status button").data("value")
+            }
         }
-        if(startTime > endTime){
-            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
-            return false;
+        args.tripNumber = (args.tripNumber == "全部") ? "" : args.tripNumber;
+        args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
+        args.guideName = (args.guideName == "全部") ? "" : args.guideName;
+
+        args.sortType = "auto";
+        if(plan.$tab && plan.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            plan.$tab.data("searchEdit",false);
+            plan.$tab.data("total",false);
         }
-        tripNumber = (tripNumber == "全部") ? "" : tripNumber;
-        lineProductName = (lineProductName == "全部") ? "" : lineProductName;
-        guideName = (guideName == "全部") ? "" : guideName;
+        //导出报表参数
+        if(arguments.length === 0){
+            delete args.pageNo;
+        }
+        return args;
+    };
 
-        // 修正页码
-        page = page || 0;
-        plan.searchData = {
-            pageNo : page,
-            tripNumber : tripNumber,
-            lineProductName : lineProductName,
-            lineProductId : lineProductId,
-            guideName : guideName,
-            guideId : guideId,
-            tripPlanType : tripPlanType,
-            start : startTime,
-            end : endTime,
-            billStatus : billStatus,
-            sortType: 'auto'
-        };
+    plan.listPlan = function(page,args){
+        args = plan.getArgs(page,args);
 
-        var searchParam = JSON.stringify(plan.searchData);
         $.ajax({
             url:KingServices.build_url("financialTrip","findPager"),
             type: "POST",
-            data: { searchParam : searchParam},
+            data: { searchParam : JSON.stringify(args)},
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
@@ -191,19 +153,14 @@ define(function(require, exports) {
                     if(!plan.$tab.data('searchEdit') && plan.$tab.data('total')){
                         plan.loadSumData(plan.$tab);
                     } else {
-                        plan.getSumData(plan.$tab);
+                        plan.getSumData(plan.$tab,args);
                     }
-                    plan.getQuery();
 
                     // plan.$tab.find(".T-tripDetail").on("click",function(){
                     //     var id = $(this).closest('tr').data("id");
                     //     KingServices.tripDetail(id);
                     // });
 
-                    //核算中转
-                    plan.$tab.find(".T-checkTurn").off().on("click",function(){
-                        plan.listPlan(0); 
-                    });
 
                     plan.$tab.find('.T-toTripAccount').off().on('click',function(){
                         var id = $(this).closest('tr').data('id');
@@ -216,7 +173,7 @@ define(function(require, exports) {
                     laypage({
                         cont: plan.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 plan.listPlan(obj.curr - 1);
@@ -228,12 +185,11 @@ define(function(require, exports) {
         });
     };
 
-    plan.getSumData = function($tab){
-        var searchParam = JSON.stringify(plan.searchData);
+    plan.getSumData = function($tab,args){
         $.ajax({
             url: KingServices.build_url('financialTrip', 'findTotal'),
             type: 'POST',
-            data: { searchParam : searchParam},
+            data: { searchParam : JSON.stringify(args)},
             success: function(data) {
                 var result = showDialog(data);
                 if(result){
@@ -285,7 +241,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=lineProductId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=lineProductId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $lineProduct.autocomplete('search', '');
@@ -301,7 +257,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=guideId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=guideId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $guide.autocomplete('search', '');

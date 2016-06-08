@@ -81,6 +81,10 @@ define(function(require, exports) {
             }
         }
 
+        args.lineProductName = (args.lineProductName  == "全部") ? "" : args.lineProductName;
+        args.partnerAgencyName = (args.partnerAgencyName  == "全部") ? "" : args.partnerAgencyName;
+        args.toBusinessGroupName = (args.toBusinessGroupName  == "全部") ? "" : args.toBusinessGroupName;
+
         args.sortType = 'auto';
         if(TurnProfit.$tab && TurnProfit.$tab.data("searchEdit")){
             args.pageNo = 0;
@@ -319,7 +323,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 $(this).blur();
-                $(this).next().val(ui.item.id);
+                $(this).next().val(ui.item.id).trigger('change');
             }
         }).off("click").on("click", function(){
             var Obj = lineProducts;
@@ -337,7 +341,7 @@ define(function(require, exports) {
             },
             select:function(evevt,ui){
                 $(this).blur();
-                $(this).next().val(ui.item.id);
+                $(this).next().val(ui.item.id).trigger('change');
             }
         }).off("click").on("click",function(){
             var Obj = groupCollective;
@@ -355,7 +359,7 @@ define(function(require, exports) {
             },
             select:function(evevt,ui){
                 $(this).blur();
-                $(this).next().val(ui.item.id);
+                $(this).next().val(ui.item.id).trigger('change');
             }
         }).off("click").on("click",function(){
             var Obj = partner;

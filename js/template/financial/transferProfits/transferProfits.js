@@ -63,7 +63,6 @@ define(function(require, exports) {
 
     transfer.listTransfer = function(page,args){
         args = transfer.getArgs(page,args);
-        console.log(args);
 
         $.ajax({
             url:KingServices.build_url("profitOutRemark","findPager"),
@@ -84,7 +83,7 @@ define(function(require, exports) {
                     if(!$tab.data('searchEdit') && $tab.data('total')){
                         transfer.loadSumData($tab);
                     } else {
-                        transfer.getSumData($tab,transfer.searchData);
+                        transfer.getSumData($tab,args);
                     }
                     
                     transfer.getQuery($tab);
@@ -233,7 +232,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=lineProductId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=lineProductId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $lineProduct.autocomplete('search', '');
@@ -249,7 +248,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $partner.autocomplete('search', '');

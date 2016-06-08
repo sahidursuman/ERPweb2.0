@@ -149,7 +149,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.id).trigger('change');
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -195,7 +195,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.id).trigger('change');
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -242,7 +242,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.businessGroupId);
+                $target.blur().data("id", item.businessGroupId).trigger('change');
                 $target.nextAll('[name=groupName]').val('').data('id','');
             }
         }).off('click').on('click', function(event) {
@@ -288,7 +288,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.groupId);
+                $target.blur().data("id", item.groupId).trigger('change');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
