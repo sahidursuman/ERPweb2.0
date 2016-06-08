@@ -123,12 +123,25 @@ define(function(require,exports){
 			var trLen = $tbObj.find('tr').length;
 			Infrastructure.addAccountant($obj,args,trLen);
 		});
+		//监听tr是否change
+		$obj.find('.T-accObjList').off('change').on('change','input,select',function () {
+			var $tr = $(this).closest('tr');
+			$tr.data('ischange',true);
+		})
 		//修改科目名称
 		$obj.find('.T-accObjList').on('click','.T-edit',function(){
 
 			var $tr = $(this).closest('tr');
-			$(this).html('保存')
-			Infrastructure.editAccountant($tr,args);
+			if(!!$tr.data('ischange')){
+				Infrastructure.installAccData($tr,args);
+			} else {
+				if($(this).find('span').text() == '编辑') {
+					Infrastructure.editAccountant($tr,args);
+				}else {
+					//还原未更改数据
+					Infrastructure.revertData($tr);
+				};
+			}
 		});
 	};
 	//新增会计科目
@@ -183,6 +196,7 @@ define(function(require,exports){
 		var oldTitle = $obj.attr('title'),
 			oldStatus = $obj.attr('status'),
 			oldType = $obj.attr('type');
+		$obj.find('span').text('保存')
 		var html = '<input type="text" name="subjectName" value='+oldTitle+'>';
 		$obj.find('.title').html(html);
 		var selected = '';
@@ -202,9 +216,37 @@ define(function(require,exports){
 		if(oldType == 2){ typeHtml += selected2; }
 		typeHtml += '>转账</option></select>';
 		$obj.find('.T-type').html(typeHtml);
-		$obj.find('.T-edit').off('click').on('click',function(){
-			Infrastructure.installAccData($obj,args);
-		});
+		
+	};
+	//还原未更改数据
+	Infrastructure.revertData = function ($obj) {
+		var oldTitle = $obj.attr('title'),
+			oldStatus = $obj.attr('status'),
+			oldType = $obj.attr('type');
+		$obj.find('span').text('编辑')
+		var html = oldTitle;
+		$obj.find('.title').html(html);
+		var selected = '';
+		if (oldStatus == 0) {
+			selected = 'selected="selected"'
+		};
+		var selectHtml = '';
+		if(oldStatus == 0){
+			selectHtml = '已停用';
+		}else{
+			selectHtml = '已启用';
+		};
+		$obj.find('.status').html(selectHtml);
+
+		var typeHtml = '';
+		if(oldType == 0){
+			typeHtml = '收入';
+		}else if (oldType == 1) {
+			typeHtml = '支出';
+		}else {
+			typeHtml = '转账';
+		};
+		$obj.find('.T-type').html(typeHtml);
 	};
 	//组装会计科目数据
 	Infrastructure.installAccData = function($obj,args){
