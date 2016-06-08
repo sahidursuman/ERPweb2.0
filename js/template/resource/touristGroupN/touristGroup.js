@@ -1437,7 +1437,7 @@ define(function(require, exports) {
                 });
 
                 if (!!remark && $layer.find('[name=remark]').val().length == 0 && remark.length > 0) {
-                    $layer.find('[name=remark]').val(remark)
+                    $layer.find('.T-replace-remark').val(remark)
                 }
 
                 //保存
