@@ -51,6 +51,10 @@ define(function(require, exports) {
         }
 
         args.pageNo = pageNo || 0;
+        if(FinIncome.$tab && FinIncome.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            FinIncome.$tab.data('searchEdit', false);
+        }
         $.ajax(FinIncome.covertArgs(args))
             .done(function(data) {
                 if (showDialog(data)) {
@@ -255,6 +259,12 @@ define(function(require, exports) {
      */
     FinIncome.initEvent = function() {
         var $tab = $('#tab-' + menuKey + '-content');
+
+        //监听搜索区修改
+        $tab.find('.T-search-area').on('change', 'input', function(event) {
+            event.preventDefault();
+            FinIncome.$tab.data('searchEdit',true);
+        });
         //状态框选择事件
         $tab.find(".T-finance-status").on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
