@@ -103,9 +103,10 @@ define(function(require, exports) {
         innerProfit.$tab.find('.T-option').on('click', function(event) {
             event.preventDefault();
             var $that = $(this),
-                id = $that.closest('tr').data('id'),
-                transferId = $that.closest('tr').attr('tgTransferId');
-                lineProductId = $that.closest('tr').attr('lineProductId');
+                $tr = $that.closest('tr'),
+                id = $tr.data('id'),
+                transferId = $tr.attr('tgTransferId');
+                lineProductId = $tr.attr('lineProductId');
             if ($that.hasClass('T-showTourist')) {
                 // 查看游客小组
                 innerProfit.clickFlag = 1;
@@ -120,9 +121,9 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-showTransPay')) {
                 // 查看内转明细
                 innerProfit.viewTransfer(this);
-            } else if($that.hasClass('T-lineProductDetail')){
-                //查看线路产品
-                KingServices.viewInnerInfo(transferId,1)
+            } else if($that.hasClass('T-viewParentTouristGroup')){
+                //查看内转小组的父小组的明细
+                KingServices.viewTouristGroup($tr.data('pid'),1);
             }
         });
     };
