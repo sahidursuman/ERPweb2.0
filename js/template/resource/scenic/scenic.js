@@ -145,7 +145,7 @@ define(function(require,exports){
 		});
 
 
-		Tools.descToolTip($(".T-ctrl-tip"));
+		Tools.descToolTip($(".T-ctrl-tip"),1);
 	};
 
 	//添加景区管理

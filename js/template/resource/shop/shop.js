@@ -158,7 +158,7 @@ define(function(require, exports) {
 		});
 
 		// 绑定简介
-		Tools.descToolTip(shop.$tab.find('.T-desc-tip'));
+		Tools.descToolTip(shop.$tab.find('.T-desc-tip'),1);
 	};
 
 	/**

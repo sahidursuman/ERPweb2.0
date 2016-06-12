@@ -62,7 +62,16 @@ define(function(require, exports) {
 	    	    	        	errMsg: '期初日期不能为空'
 	    	    	        }
 	    	        ]
-	    	    }  
+	    	    },{	// 期初日期
+	    	    	$ele: $obj.find('input[name="aliasName"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '账户名称不能为空'
+	    	    	        }
+	    	        ]
+	    	    }    
                 ]);
 			return validator;
 		}

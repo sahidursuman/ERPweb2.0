@@ -1697,7 +1697,7 @@ define(function(require, exports){
 			        '</button>'+
 				'</div>'+
 				'<div class="div-h-30 mar-t-5" index="1">'+
-					'<button class="btn btn-danger btn-sm btn-white T-currGuide pull-right">'+
+					'<button class="btn btn-danger btn-sm btn-white T-delShopGuide pull-right">'+
 			            '<i class="ace-icon fa fa-minus bigger-110 icon-only"></i>'+
 			        '</button>'+
 					'<input type="text" name="currGuideName" class="w-70" />'+

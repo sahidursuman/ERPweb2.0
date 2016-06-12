@@ -38,7 +38,7 @@ define(function(require, exports) {
 	//导游业绩页面list
 	tourguidPerObj.listtourguidPer=function(page,sortType,order,startTime,endTime,guideId,guideName,shop,shopItem, shopId, shopItemId ){
 
-	   if (!!tourguidPerObj.$tab) {
+	   if (!!tourguidPerObj.$tab && arguments.length === 1) {
 	   		//初始化页面后可以获取页面参数
 	   		order=tourguidPerObj.$tab.find('[name=sortType]').val();
 	   		sortType=tourguidPerObj.$tab.find('[name=orderBy]').val();
@@ -47,7 +47,7 @@ define(function(require, exports) {
 	   		shop=tourguidPerObj.$tab.find('input[name=shop]').val();
 	   		shopId=tourguidPerObj.$tab.find('input[name=shopId]').val();
 	   		shopItem=tourguidPerObj.$tab.find('input[name=shopItem]').val();
-	   		shopItemId=tourguidPerObj.$tab.find('input[name=shopItemId]').val();
+	   		//shopItemId=tourguidPerObj.$tab.find('input[name=shopItemId]').val();
 	   		guideId =tourguidPerObj.$tab.find('input[name=guidChooseId]').val();
 	   		guideName =tourguidPerObj.$tab.find('input[name=guideName]').val();
 	   };
@@ -97,7 +97,7 @@ define(function(require, exports) {
 						    curr: (page + 1),
 						    jump: function(obj, first) {
 						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		tourguidPerObj.listtourguidPer(obj.curr -1,sortType,order,startTime,endTime,guideId,guideName);
+						    		tourguidPerObj.listtourguidPer(obj.curr -1);
 						    	}
 						    }
 						});
@@ -333,8 +333,8 @@ define(function(require, exports) {
 				tripPlanId=$that.attr('data-tripPlanId'),
 				shopArrangeId=$that.attr('data-arrangeId'),
 				guideArrangeId = $that.attr('guideArrangeId');
-			var shopName = $tab.find('.T-guideSingle-search').data('shopname');
-				policyName = $tab.find('.T-guideSingle-search').data('policyname');
+			var shopName = $tab.find('.T-search-area').data('shopname') || "";
+				policyName = $tab.find('.T-search-area').data('policyname') || "";
 
 			$.ajax({
 				url:KingServices.build_url('financial/shopAccount','consumeMoney'),
