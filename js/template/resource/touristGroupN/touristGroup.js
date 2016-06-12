@@ -848,7 +848,11 @@ define(function(require, exports) {
             }else if($that.hasClass('T-hotel')){
                 touristGroup.updateJionGroupHotel(1, $that, type);
             }else if($that.hasClass('T-line-cope')){
-    			touristGroup.updateJionGroupMoney($that, 1, type);
+                var remark = '';
+                if (!id) {
+                    remark = $tab.find('.T-other-info-cont [name=remark]').val();
+                }
+    			touristGroup.updateJionGroupMoney($that, 1, type, remark);
     		}else if($that.hasClass('T-delete')){
                 deleteList($tr, id);
                 if($tab.find('.T-part-group-list tr').length === 0){
@@ -1358,7 +1362,7 @@ define(function(require, exports) {
     };
 
     //更新/查看 应收团款
-    touristGroup.updateJionGroupMoney = function($that, type, optionType){
+    touristGroup.updateJionGroupMoney = function($that, type, optionType, remark){
         if (optionType === 2) {
             $that = $that.prev();
         }
@@ -1431,7 +1435,11 @@ define(function(require, exports) {
                         $layer.find('.T-now-money').addClass('hidden');
                     }
                 });
-                
+
+                if (!!remark && $layer.find('[name=remark]').val().length == 0 && remark.length > 0) {
+                    $layer.find('.T-replace-remark').val(remark)
+                }
+
                 //保存
                 $layer.find('.T-btn-save').on('click', function(){
                     if(!validate.form())return;
