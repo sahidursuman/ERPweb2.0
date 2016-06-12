@@ -545,7 +545,7 @@ define(function(require, exports) {
     /**
      * 查看游客管理
      * @param  {number} id 游客ID
-     * @return {[type]}    [description]
+     * @return {string}    'inner':表示是内转
      */
     touristGroup.touristGroupView = function(id, type){
         $.ajax({
