@@ -88,7 +88,6 @@
                             {{if guideCount>1}}
                                 <div class="div-h-30"></div>
                             {{/if}}
-
                             <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
                         <td rowspan="{{arrange.selfPayItem.length}}">
                             {{if guideCount>1}}
@@ -119,6 +118,7 @@
                                     <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                     <input name="badStatus" value="{{itemSet.badStatus}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                     <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
+                                    <input name="sumIpt" type="hidden">
                                     <td>
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
@@ -598,6 +598,7 @@
                             {{if index >0}}
                                 <tr selfPayId="{{arrange.selfPayId}}" whichDay = "{{arrange.whichDay}}"
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
+                                    <input name="sumIpt" type="hidden">
                                     <td class="{{if index+1 == arrange.selfPayItem.length}}breakFlag{{/if}}">
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>

@@ -39,7 +39,7 @@
             {{if hotelArrange.listMap.length}}
                 {{each hotelArrange.listMap as arrange index}}
                     <tr whichDay = "{{arrange.whichDay}}"  arrangeType="hotelArrange" class="oldData">
-                        
+                        <input name="sumIpt" type="hidden">
                         <td rowspan="{{arrange.items.length}}">
                         {{if guideCount > 1}}
                             <div class="div-h-30"></div>
@@ -376,6 +376,7 @@
                             {{each arrange.items as result i}}
                                 {{if i > 0}}
                                     <tr arrangeType="hotelArrange" whichDay = "{{arrange.whichDay}}">
+                                    <input name="sumIpt" type="hidden">
                                     <input name="hotelArrangeId" value="{{result.id}}" type="hidden" /><!-- 安排id -->
                                     <input name="badStatus" value="{{result.badStatus}}" type="hidden" /><!-- 是否坏账 -->
                                     <input name="isConfirmAccount" value="{{result.isConfirmAccount}}" type="hidden" /><!-- 是否对账 -->

@@ -43,7 +43,7 @@
     {{each ticketArrange.listMap as arrange index}}
     <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}"
     isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="ticketArrange" class="oldData">
-
+        <input name="sumIpt" type="hidden">
         <td rowspan="1">
         {{if guideCount > 1}}
             <div class="div-h-30"></div>
