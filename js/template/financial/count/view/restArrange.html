@@ -39,6 +39,7 @@
         {{if restaurantArrange.listMap.length}}
             {{each restaurantArrange.listMap as arrange index}}
                 <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange" class="oldData">
+                        <input name="sumIpt" type="hidden">
                         <td rowspan="{{arrange.items.length}}">
                             {{if guideCount > 1}}
                                 <div class="div-h-30"></div>
@@ -417,6 +418,7 @@
                     {{each arrange.items as result i}}
                         {{if i > 0}}
                             <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange">
+                                    <input name="sumIpt" type="hidden">
                                     <input name="restaurantArrangeId" value="{{result.id}}" type="hidden" /><!-- 安排id -->
                                     <input name="badStatus" value="{{result.badStatus}}" type="hidden" /><!-- 是否坏账 -->
                                     <input name="isConfirmAccount" value="{{result.isConfirmAccount}}" type="hidden" /><!-- 是否对账 -->

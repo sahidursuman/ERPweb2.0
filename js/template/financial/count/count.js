@@ -429,22 +429,19 @@ define(function(require, exports){
 		$insureObj.off('change').on('change','input',function(){
 			Count.autoInsureanceSum($(this),$obj);
 		});
-		//触发页面的change事件
-		$obj.find('input[type=hidden]').trigger('change');
 		//计算团收入
 		Count.tripIncome($obj);
 		//计算成本
 		Count.tripCost($obj);
+		//触发页面的change事件
+		$obj.find('input[name=sumIpt]').trigger('change');
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
 			var id = $obj.find('.financial-tripPlanId').val();
 			
 			KingServices.viewTripDetail(id);
 		});
-		//触发页面的change事件
-		$obj.find('input[type=hidden]').trigger('change',function(){
-			Count.formatDays($(this),$obj);
-		});
+		
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
 			FinancialService.viewBillImage(this);
@@ -844,7 +841,7 @@ define(function(require, exports){
 		//计算团收入
 		Count.tripIncome($obj);
 		//触发页面的change事件
-		$obj.find('input').change();
+		$obj.find('input[name=sumIpt]').trigger('change');
 		//按钮事件--保存信息
 		$obj.find('.T-saveCount').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
@@ -1300,7 +1297,7 @@ define(function(require, exports){
 			Count.autoInsureanceSum($(this),$obj);
 		});
 		//触发页面的change事件
-		$obj.find('input').trigger('change');
+		$obj.find('input[name=sumIpt]').trigger('change');
 
 		//计算团收入
 		Count.tripIncome($obj);

@@ -71,7 +71,8 @@
                     {{if arrange != null}}
                         <tr class=" oldData noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}" shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange" 
                         isConfirmAccount = "{{arrange.isConfirmAccount}}">
-
+                            
+                            
                             <td rowspan="{{arrange.itemList.length}}">
                             <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> </td><!-- 日期 -->
                             
@@ -80,6 +81,7 @@
                                 <input type="hidden" name="shopId" value="{{arrange.shopId}}">
                             </td><!-- 购物店 -->
                             <input value="{{arrange.settlementMoney}}" name="settlementMoney" type="hidden"><!-- 用于当已对账时计算购物返佣的取值 -->
+                            <input name="sumIpt" type="hidden">
                             {{if arrange.itemList != null}}
                                 {{each arrange.itemList as itemSet index}}
                                     {{if index == 0}}
@@ -466,6 +468,8 @@
                             <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}"
                                 {{if index == 1}}class="noSumRate {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}T-noSubmit{{/if}}"{{/if }}
                                 arrangeType="shopArrange">
+
+                                
                                 <td>
                                     {{if guideCount > 1}}
                                         <div class="div-h-30"></div>
@@ -474,6 +478,7 @@
                                         {{itemSet.itemName}}
                                         <input name="shopPolicyId" value="{{itemSet.itemId}}" type="hidden" />
                                         <input name="shopPolicyArrId" value="{{itemSet.id}}" type="hidden" />
+                                        <input name="sumIpt" type="hidden">
                                     </span>
                                     {{if index == 1 &&  arrange.isConfirmAccount != 1}}
                                         <button class="btn btn-success btn-sm btn-white T-addShop pull-right">

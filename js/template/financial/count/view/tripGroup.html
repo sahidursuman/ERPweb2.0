@@ -17,6 +17,7 @@
     {{if touristGroup.touristGroups.length}}
         {{each touristGroup.touristGroups as touristGroup index}}
             <tr id="{{touristGroup.id}}">
+                <input name="sumIpt" type="hidden">
                 <td>{{index+1}}</td>
                 <td>{{touristGroup.partnerAgencyName}}</td>
                 <td><a href="#" class="T-viewTouristGroup">{{touristGroup.orderNumber}}</a></td>

@@ -29,6 +29,7 @@
         {{if otherIncome.listMap.length}}
             {{each otherIncome.listMap as otherInCome}}
                 <tr otherInId="{{otherInCome.id}}" whichDay="{{otherInCome.whichDay}}" class="oldData">
+                    <input name="sumIpt" type="hidden">
                     <td>
                         <span>{{otherInCome.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
                     </td><!-- 日期 -->
