@@ -15,7 +15,7 @@
     </div>
     
     <form action="">
-        <div class="viewAccountsMain">
+        <div class="viewAccountsMain view-InfoPrint">
             <p>
                 <span>致</span> 
                 <span style="margin-left: 4px;">{{partnerAgency.travelAgencyName}}</span> 
@@ -39,44 +39,46 @@
                     <span>(代订日期)</span>
                     <span>{{partnerAgency.date}}</span>
                 {{/if}}
-                <span class="mar-l-8">(代订项目)</span> <span>
-                {{if bookingBusCompanyInfo.length}}
-                    车辆
-                    {{if bookingTicketInfo.length  || bookingHotelInfo.length || bookingScenicInfo.length}}
-                        、
+                <span class="mar-l-8">(代订项目)</span> 
+                <span>
+                    {{if bookingBusCompanyInfo.length}}
+                        车辆
+                        {{if bookingTicketInfo.length  || bookingHotelInfo.length || bookingScenicInfo.length}}
+                            、
+                        {{/if}}
                     {{/if}}
-                {{/if}}
-                {{if bookingHotelInfo.length}}
-                    酒店
-                    {{if bookingTicketInfo.length || bookingScenicInfo.length}}
-                        、
+                    {{if bookingHotelInfo.length}}
+                        酒店
+                        {{if bookingTicketInfo.length || bookingScenicInfo.length}}
+                            、
+                        {{/if}}
                     {{/if}}
-                {{/if}}
-                {{if bookingScenicInfo.length}}
-                    景区
-                    {{if bookingTicketInfo.length}}
-                        、
+                    {{if bookingScenicInfo.length}}
+                        景区
+                        {{if bookingTicketInfo.length}}
+                            、
+                        {{/if}}
                     {{/if}}
-                {{/if}}
-                {{if bookingTicketInfo.length}}票务{{/if}}
-                ,</span> 
+                    {{if bookingTicketInfo.length}}票务{{/if}}
+                    ,
+                </span> 
                 <span>现将该团费用结算列表如下,请审阅并盖章、签字回执我社！</span>
             </p>
             <table class="table whereQ whereTwo" style="width: 100%;">
                 {{if bookingBusCompanyInfo.length}}
                     {{each bookingBusCompanyInfo as rs index}}
                         {{if index == 0}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paR" rowspan="{{bookingBusCompanyInfo.length}}">车辆</td>
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>用车时间：{{rs.startUseTime | dateFormat: 'yyyy-MM-dd'}}至{{rs.endUseTime | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
                             </tr>
                         {{else}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>用车时间：{{rs.startUseTime | dateFormat: 'yyyy-MM-dd'}}至{{rs.endUseTime | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
                             </tr>
@@ -87,10 +89,10 @@
                 {{if bookingHotelInfo.length}}
                     {{each bookingHotelInfo as rs index}}
                         {{if index == 0}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paR" rowspan="{{bookingHotelInfo.length}}">酒店</td>
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>
                                     住店时间：{{rs.checkInTime | dateFormat: 'yyyy-MM-dd'}}
                                     {{if rs.checkOutTime != ""}}
@@ -99,9 +101,9 @@
                                 </td>
                             </tr>
                         {{else}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>
                                     住店时间：{{rs.checkInTime | dateFormat: 'yyyy-MM-dd'}}
                                     {{if rs.checkOutTime != ""}}
@@ -116,15 +118,15 @@
                 {{if bookingScenicInfo.length}}
                     {{each bookingScenicInfo as rs index}}
                         {{if index == 0}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paR" rowspan="{{bookingScenicInfo.length}}">景区</td>
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>日期：{{rs.startDate | dateFormat: 'yyyy-MM-dd'}}</span>
                                 </td>
                             </tr>
                         {{else}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paL">
                                     {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
                                     <span>日期：{{rs.startDate | dateFormat: 'yyyy-MM-dd'}}</span>
@@ -137,17 +139,17 @@
                 {{if bookingTicketInfo.length}}
                     {{each bookingTicketInfo as rs index}}
                         {{if index == 0}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paR" rowspan="{{bookingTicketInfo.length}}">票务</td>
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>日期：{{rs.startTime}}</span>
                                 </td>
                             </tr>
                         {{else}}
-                            <tr>
+                            <tr class="view-TranAccountsPrint">
                                 <td class="textaR-paL">
-                                    {{if rs.required != "" && rs.required != null}}要求：<span>{{rs.required}}</span>,{{/if}}
+                                    {{if rs.required != "" && rs.required != null}}<span>要求：{{rs.required}}</span>,{{/if}}
                                     <span>日期：{{rs.startTime}}</span>
                                 </td>
                             </tr>
@@ -169,9 +171,9 @@
                     <tbody class="addCostTbody">
                         {{if needGet.feeList.length}}
                             {{each needGet.feeList as rs index}}
-                                <tr>
+                                <tr class="view-TranAccountsPrint">
                                     <td>
-                                        {{rs.type | getFeeItemText}}
+                                        <span>{{rs.type | getFeeItemText}}</span>
                                     </td>
                                     <td>
                                         <span class="F-float F-count">{{rs.count}}</span>
@@ -192,45 +194,54 @@
                     </tbody>
             </table>
             <table class="table whereQ" style="width: 100%;margin-top: -20px;">
-                <tr>
-                    
-                </tr>
-                <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">应收</td>
+                
+                <tr class="view-TranAccountsPrint">
+                    <td style="text-align: right;padding-right:60px;width: 160px"><span>应收</span></td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{partnerAgency.sumNeedGetMoney}}</span>
                     </td>
                 </tr>
-                <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">已收</td>
+                <tr class="view-TranAccountsPrint">
+                    <td style="text-align: right;padding-right:60px;width: 160px"><span>已收</span></td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{partnerAgency.getedMoney}}</span>
                     </td>
                 </tr>
-                <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">预收款</td>
+                <tr class="view-TranAccountsPrint">
+                    <td style="text-align: right;padding-right:60px;width: 160px"><span>预收款</span></td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{partnerAgency.preIncomeMoney}}</span>
                     </td>
                 </tr>
-                <tr>
-                    <td style="text-align: right;padding-right:60px;width: 160px">未收</td>
+                <tr class="view-TranAccountsPrint">
+                    <td style="text-align: right;padding-right:60px;width: 160px"><span>未收</span></td>
                     <td class="textaR-paL">
                         <span class="F-float F-money">{{partnerAgency.unIncomeMoney}}</span>
                     </td>
                 </tr>
                 {{if !!partnerAgency.remark}}
-                <tr>
+                <tr class="view-TranAccountsPrint">
                     <td colspan="2"  class="text-a-l">备注：{{partnerAgency.remark}}</td>
                 </tr>
                 {{/if}}
-                <tr>
+                <tr class="view-TranAccountsPrint">
                     <td colspan="2" class="text-a-l">请仔细阅读并盖章确认之后回传！谢谢！</td>
                 </tr>
             </table>
-            <p style="text-align: right;margin-top: 10px;"><span class="{{if !!operateUser.realName || !!operateUser.realName}}{{else}}hidden{{/if}}"><span>外联销售：</span> <span>{{operateUser.realName}}</span> <span>{{operateUser.mobileNumber}}</span></span></p>
-            <p style="text-align: right;margin-top: -8px;" class="{{if !!operateUser.traFaxNumber}}{{else}}hidden{{/if}}">传真：{{operateUser.traFaxNumber}}</p>
-            <p style="text-align: right;margin-top: -8px;"><span>{{operateUser.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
+
+            <p style="text-align: right;margin-top: 10px;">
+                <span class="{{if !!operateUser.realName || !!operateUser.realName}}{{else}}hidden{{/if}}">外联销售：</span> 
+                <span>{{operateUser.realName}}</span> 
+                <span>{{operateUser.mobileNumber}}</span>
+            </p>
+
+            <p style="text-align: right;margin-top: -8px;" class="{{if !!operateUser.traFaxNumber}}{{else}}hidden{{/if}}">
+                传真：{{operateUser.traFaxNumber}}
+            </p>
+
+            <p style="text-align: right;margin-top: -8px;">
+                <span>{{operateUser.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span>
+            </p>
         </div>
     </form>
     <div class="form-inline col-xs-12 hidden" style="text-align: center;margin-top: 30px;"> 
