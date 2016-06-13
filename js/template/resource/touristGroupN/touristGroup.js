@@ -749,7 +749,7 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupMoney($that, 0, 2);
             }
         });
-        $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
+        $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"], [name="singlePlanDefine-add"]', function(){
             var $that = $(this);
             if($that.hasClass('T-single-group')){
                 $tab.find('.T-is-hidden, .T-add-join-group, .T-add-send-group').removeClass('hidden');
