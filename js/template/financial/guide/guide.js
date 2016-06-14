@@ -66,7 +66,7 @@ define(function(require, exports) {
 
             args.guideName = guideName;
         }
-
+        if(FinGuide.$tab && FinGuide.$tab.data('searchEdit')) { FinGuide.guideList = false;}//
         args = FinancialService.getChangeArgs(args,FinGuide.$tab);
 
         $.ajax({
@@ -123,7 +123,12 @@ define(function(require, exports) {
             $datepicker = $searchArea.find('.datepicker');
 
         // 导游绑定
-        FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()])
+        if(FinGuide.guideList){
+            FinGuide.loadGuideNameList($searchArea.find('.T-search-name'));
+        } else {
+            FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()],true);
+        }
+        
         // 绑定时间控件
         Tools.setDatePicker($datepicker, true);
         FinancialService.searchChange(FinGuide.$tab);
@@ -166,7 +171,7 @@ define(function(require, exports) {
         });
     };
 
-    FinGuide.getGuideNameList = function($obj, valArray) {
+    FinGuide.getGuideNameList = function($obj, valArray,isMain) {
         var args = {};
 
         if (!!valArray && valArray.length === 2) {
@@ -183,30 +188,31 @@ define(function(require, exports) {
                 data.guideList[i].value = data.guideList[i].realname;
                 data.guideList[i].id = data.guideList[i].guideId;
             }
-            var all = {
-                id: '',
-                value: '全部'
-            };
-            FinGuide.guideList = data.guideList.slice(all);
-            if($obj){
-                data.guideList.unshift(all);
-                $obj.autocomplete({
-                    minLength: 0,
-                    source : data.guideList,
-                    change: function(event, ui) {
-                        if (!ui.item) {
-                            $(this).data('id', '');
-                        }
-                    },
-                    select: function(event, ui) {
-                        $(this).trigger('change');
-                        $(this).blur().data('id', ui.item.id);
-                    }
-                }).on("click", function() {
-                    $obj.autocomplete('search', '');
-                });
-            }
+            FinGuide.guideList = JSON.stringify(data.guideList);
+            FinGuide.loadGuideNameList($obj);
         });
+    };
+
+    FinGuide.loadGuideNameList = function($obj){
+        if($obj){
+            var list = FinancialService.parseList(FinGuide.guideList);
+            
+            $obj.autocomplete({
+                minLength: 0,
+                source : list,
+                change: function(event, ui) {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).trigger('change');
+                    $(this).blur().data('id', ui.item.id);
+                }
+            }).on("click", function() {
+                $obj.autocomplete('search', '');
+            });
+        }
     };
 
     /**
@@ -1198,7 +1204,7 @@ define(function(require, exports) {
             name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
-            source : FinGuide.guideList,
+            source : JSON.parse(FinGuide.guideList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);

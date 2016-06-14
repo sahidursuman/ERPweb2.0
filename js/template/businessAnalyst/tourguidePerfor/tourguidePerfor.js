@@ -23,8 +23,7 @@ define(function(require, exports) {
 		},
 		$searchArea:false,
 		$tab:false,
-		$guideTab:false,
-		autocompleteDate:{}
+		$guideTab:false
 	};
 
 	/**
@@ -38,7 +37,7 @@ define(function(require, exports) {
 	//导游业绩页面list
 	tourguidPerObj.listtourguidPer=function(page,sortType,order,startTime,endTime,guideId,guideName,shop,shopItem, shopId, shopItemId ){
 
-	   if (!!tourguidPerObj.$tab && arguments.length === 1) {
+	   if (!!tourguidPerObj.$tab) {
 	   		//初始化页面后可以获取页面参数
 	   		order=tourguidPerObj.$tab.find('[name=sortType]').val();
 	   		sortType=tourguidPerObj.$tab.find('[name=orderBy]').val();
@@ -47,7 +46,7 @@ define(function(require, exports) {
 	   		shop=tourguidPerObj.$tab.find('input[name=shop]').val();
 	   		shopId=tourguidPerObj.$tab.find('input[name=shopId]').val();
 	   		shopItem=tourguidPerObj.$tab.find('input[name=shopItem]').val();
-	   		//shopItemId=tourguidPerObj.$tab.find('input[name=shopItemId]').val();
+	   		shopItemId=tourguidPerObj.$tab.find('input[name=shopItemId]').val();
 	   		guideId =tourguidPerObj.$tab.find('input[name=guidChooseId]').val();
 	   		guideName =tourguidPerObj.$tab.find('input[name=guideName]').val();
 	   };
@@ -75,48 +74,57 @@ define(function(require, exports) {
 			success : function(data){
 				var result = showDialog(data);
 				if(result){
-				       var html=listTemplate(data);
-	                   Tools.addTab(menuKey,"导游业绩",html);
-	                   //初始化JQuery对象
-				       tourguidPerObj.$tab=$("#" + tabId);//最大区域模块
-				       tourguidPerObj.$searchArea=tourguidPerObj.$tab.find('.T-search-area');//搜索模块区域
-				       //初始化页面控件
-				       Tools.setDatePicker(tourguidPerObj.$tab.find('.datepicker'), true);
-				       //初始化页面绑定事件
-				       tourguidPerObj.init_event(startTime,endTime);
-				       //autocomplete数据
-				       tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
-
-				       //商品AutoList
-					   tourguidPerObj.autoShopList(tourguidPerObj.$tab);
-
-				       	// 绑定翻页组件
-						laypage({
-						    cont: tourguidPerObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
-						    pages: data.totalPage, //总页数
-						    curr: (page + 1),
-						    jump: function(obj, first) {
-						    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-						    		tourguidPerObj.listtourguidPer(obj.curr -1);
-						    	}
-						    }
-						});
-
-					//autocomplete
-					$.ajax({
+			       var html=listTemplate(data);
+                   Tools.addTab(menuKey,"导游业绩",html);
+                   //初始化JQuery对象
+			       tourguidPerObj.$tab=$("#" + tabId);//最大区域模块
+			       tourguidPerObj.$searchArea=tourguidPerObj.$tab.find('.T-search-area');//搜索模块区域
+			       //初始化页面控件
+			       Tools.setDatePicker(tourguidPerObj.$tab.find('.datepicker'), true);
+			       //初始化页面绑定事件
+			       tourguidPerObj.init_event(startTime,endTime);
+			       //autocomplete数据
+			       if(tourguidPerObj.guideList){
+						tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
+			       } else {
+			       		//autocomplete
+						$.ajax({
 						    url : KingServices.build_url("Performance","getQueryTerms"),
 							type: "POST",
 							success:function(data){
 								var result = showDialog(data);
 								if(result){
-									tourguidPerObj.autocompleteDate.guideList=data.guideList;
+									tourguidPerObj.guideList=data.guideList;
+									tourguidPerObj.guideChooseList(tourguidPerObj.$tab);
 								}
 							}
+						});
+			       }				       
+
+			       	//商品AutoList
+			       	if(tourguidPerObj.shopList){
+			       	    tourguidPerObj.showList(tourguidPerObj.$tab.find('[name=shop]'));
+			       	} else {
+			       		tourguidPerObj.autoShopList(tourguidPerObj.$tab);
+			        }					   
+
+			       	// 绑定翻页组件
+					laypage({
+					    cont: tourguidPerObj.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
+					    pages: data.totalPage, //总页数
+					    curr: (page + 1),
+					    jump: function(obj, first) {
+					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
+					    		tourguidPerObj.listtourguidPer(obj.curr -1,sortType,order,startTime,endTime,guideId,guideName);
+					    	}
+					    }
 					});
 				}
 			}
 		});
-	};
+	}
+
+	
 
     //初始化页面绑定事件
     tourguidPerObj.init_event=function(startTime,endTime){
@@ -162,7 +170,7 @@ define(function(require, exports) {
 			}
 		}).click(function(){
 			var obj = this;
-			var listObj = tourguidPerObj.autocompleteDate.guideList;
+			var listObj = tourguidPerObj.guideList;
 			if(listObj !=null && listObj.length>0){
 				for(var i=0;i<listObj.length;i++){
 					listObj[i].value = listObj[i].realname;
@@ -177,7 +185,7 @@ define(function(require, exports) {
 
 
 	/**
-	 * [autocompleteDate 获取客户、团号和购物店列表]
+	 * [ 获取客户、团号和购物店列表]
 	 * @return {[type]} [description]
 	 */
 	tourguidPerObj.autoShopList = function($tab) {
@@ -193,7 +201,8 @@ define(function(require, exports) {
 				for(var i = 0;i<shopList.length;i++){
 					shopList[i].value = shopList[i].shopName;
 				};
-				tourguidPerObj.showList($shop,shopList);
+				tourguidPerObj.shopList = shopList;
+				tourguidPerObj.showList($shop);
 			}
 		});
 		
@@ -202,7 +211,7 @@ define(function(require, exports) {
 	 * [下拉列表展示]
 	 * @return {[type]} [description]
 	 */
-	tourguidPerObj.showList = function($obj,dataList){
+	tourguidPerObj.showList = function($obj){
 		var name = $obj.attr('name');
 		$obj.autocomplete({
 			minLength:0,
@@ -221,7 +230,7 @@ define(function(require, exports) {
 			}
 		}).off('click').on('click',function(){
 			var obj = $(this);
-			obj.autocomplete('option','source', dataList);
+			obj.autocomplete('option','source', tourguidPerObj.shopList);
 			obj.autocomplete('search', '');
 		});
 	};	
@@ -236,6 +245,7 @@ define(function(require, exports) {
 				url: KingServices.build_url('shop','findPolicyByShopId'),
 				type: 'POST',
 				data:{id:shopId},
+				showLoading:false,
 				success:function(data){
 					 //商品列表
 					var shopItemList = JSON.parse(data.shopPolicyList);
@@ -333,8 +343,8 @@ define(function(require, exports) {
 				tripPlanId=$that.attr('data-tripPlanId'),
 				shopArrangeId=$that.attr('data-arrangeId'),
 				guideArrangeId = $that.attr('guideArrangeId');
-			var shopName = $tab.find('.T-search-area').data('shopname') || "";
-				policyName = $tab.find('.T-search-area').data('policyname') || "";
+			var shopName = $tab.find('.T-guideSingle-search').data('shopname');
+				policyName = $tab.find('.T-guideSingle-search').data('policyname');
 
 			$.ajax({
 				url:KingServices.build_url('financial/shopAccount','consumeMoney'),
@@ -346,6 +356,7 @@ define(function(require, exports) {
 					policyname: policyName
 				},
 				type:'POST',
+				showLoading:false,
 				success:function(data){
 					var sumPlayList = data.sumPlayList;
 					var newSumPlayList = [];

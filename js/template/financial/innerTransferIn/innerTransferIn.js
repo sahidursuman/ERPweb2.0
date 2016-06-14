@@ -61,7 +61,12 @@ define(function(require, exports) {
                 // 绑定事件
                 FinTransIn.$tab = $tab = $('#tab-' + menuKey + '-content');
                 FinTransIn.initList(args,$tab);
-                FinTransIn.getQuery(FinTransIn.$tab.find('input[name=businessGroupName]'));
+                if(FinTransIn.groupList){
+                    FinTransIn.loadGroupList(FinTransIn.$tab.find('input[name=businessGroupName]'));
+                } else {
+                    FinTransIn.getQuery(FinTransIn.$tab.find('input[name=businessGroupName]'));
+                }
+                
 				FinTransIn.getSumData(data.sumInnerTransferIncomeList[0],FinTransIn.$tab);
                 // 缓存页面
                 FinTransIn.listPageNo = args.pageNo;
@@ -103,33 +108,35 @@ define(function(require, exports) {
                         for(var i = 0;i<businessGroupList.length;i++){
                             businessGroupList[i].value = businessGroupList[i].name;
                         }
-                        var all = { id: '', value: '全部' };
-                        FinTransIn.groupList = businessGroupList.slice(all);
-                        if(!!$obj){
-                            businessGroupList.unshift(all);
-                            $obj.autocomplete({
-                                minLength:0,
-                                source : businessGroupList,
-                                change:function(event,ui){
-                                    if(ui.item == null){
-                                        var $div = $obj.closest('div');
-                                        $obj.find('input[name=toBusinessGroupId]').val('');
-                                    }
-                                },
-                                select:function(event,ui){
-                                    $obj.trigger('change');
-                                    var $div = $obj.closest('div');
-                                    $div.find('input[name=toBusinessGroupId]').val(ui.item.id);
-                                }
-                            }).on("click",function(){
-                                $obj.autocomplete('search', '');
-                            });
-                        }
+                        FinTransIn.groupList = JSON.stringify(businessGroupList);
+                        FinTransIn.loadGroupList($obj);
                     };
                 }
             }
         });
 	};
+
+    FinTransIn.loadGroupList = function(){
+        if(!!$obj){
+            $obj.autocomplete({
+                minLength:0,
+                source : FinancialService.parseList(FinTransIn.groupList),
+                change:function(event,ui){
+                    if(ui.item == null){
+                        var $div = $obj.closest('div');
+                        $obj.find('input[name=toBusinessGroupId]').val('');
+                    }
+                },
+                select:function(event,ui){
+                    $obj.trigger('change');
+                    var $div = $obj.closest('div');
+                    $div.find('input[name=toBusinessGroupId]').val(ui.item.id);
+                }
+            }).on("click",function(){
+                $obj.autocomplete('search', '');
+            });
+        }
+    };
 
     //初始化列表页面的事件绑定
     FinTransIn.initList = function(args,$tab) {
@@ -695,7 +702,7 @@ define(function(require, exports) {
             name = $obj.val();;
         $obj.autocomplete({
             minLength: 0,
-            source : FinTransIn.groupList,
+            source : JSON.parse(FinTransIn.groupList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);

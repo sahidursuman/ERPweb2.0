@@ -3,35 +3,29 @@
         <div class="form-inline T-search-area">
             <div class="form-group mar-r-10">
                 <label class="control-label pull-left"><span>团号&nbsp;</span> </label>
-                <input type="text" value="{{searchParam.tripNumber}}" name="chooseTripNumber" class="T-tripNumber" placeholder="请输入团号" />
+                <input type="text" value="" name="chooseTripNumber" class="T-tripNumber" placeholder="请输入团号" />
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label pull-left"><span>收客单号&nbsp;</span> </label>
-                <input type="text" value="{{searchParam.orderNumber}}" name="orderNumber" class="T-orderNumber" placeholder="请输入收客单号" />
+                <input type="text" value="" name="orderNumber" class="T-orderNumber" placeholder="请输入收客单号" />
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label pull-left"><span>游客&nbsp;</span> </label>
-                <input type="text" value="{{searchParam.contactInfo}}" name="contactInfo" class="T-contactInfo" placeholder="联系人或联系电话" />
+                <input type="text" value="" name="contactInfo" class="T-contactInfo" placeholder="联系人或联系电话" />
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label"><span>线路产品 </span></label>
-                <input type="text" value="{{searchParam.lineProductName}}" name="chooseLineProductName" placeholder="全部线路产品" />
-                <input type="hidden" value="{{searchParam.lineProductId}}" name="lineProductId" />
+                <input type="text" value="" name="chooseLineProductName" placeholder="全部线路产品" />
+                <input type="hidden" value="" name="lineProductId" />
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label"><span>导游 </span></label>
-                <input type="text" value="{{searchParam.guideName}}" name="chooseGuideRealName" placeholder="全部的导游" />
-                <input type="hidden" value="{{searchParam.guideId}}" name="guideId" />
+                <input type="text" value="" name="chooseGuideRealName" placeholder="全部的导游" />
+                <input type="hidden" value="" name="guideId" />
             </div>
             <div class="form-group btn-group T-time-status mar-r-10">
-                <button data-value="{{searchParam.timeStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
-                    <span>
-                        {{if searchParam.timeStatus == 0}}
-                            出团日期
-                        {{else}}
-                            完团日期
-                        {{/if}}
-                    </span>
+                <button data-value="" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
+                    <span>出团日期</span>
                     <i class="ace-icon fa fa-angle-down icon-on-right"></i>
                 </button>
                 <ul class="dropdown-menu">
@@ -40,26 +34,14 @@
                 </ul>
             </div>
             <div class="form-group mar-r-10">
-                <input type="text" value="{{searchParam.startTime}}" name="startTime" class=" datepicker" style="width:88px;" placeholder="开始日期" />
+                <input type="text" value="" name="startTime" class=" datepicker" style="width:88px;" placeholder="开始日期" />
                 <label class="control-label"><span>至</span></label>
-                <input type="text" value="{{searchParam.endTime}}" name="endTime" class=" datepicker" style="width:88px;" placeholder="结束日期" />
+                <input type="text" value="" name="endTime" class=" datepicker" style="width:88px;" placeholder="结束日期" />
             </div>
             <div class="form-group btn-status btn-group mar-r-10">
                 <label>状态 </label>
-                <button data-value="{{searchParam.billStatus}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
-                    <span>
-						{{if searchParam.billStatus == '-1'}}
-							待报账
-						{{else if searchParam.billStatus == '0'}}
-							待审核
-						{{else if searchParam.billStatus == '1'}}
-							计调已审
-						{{else if searchParam.billStatus == '2'}}
-							财务已审
-						{{else}}
-							全部
-						{{/if}}				
-					</span>
+                <button data-value="" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
+                    <span>全部</span>
                     <i class="ace-icon fa fa-angle-down icon-on-right"></i>
                 </button>
                 <ul class="dropdown-menu T-sleect-ul" style="margin-left:28px;margin-top:-3px;">
@@ -77,12 +59,12 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label mar-r-20">收入：<span class="F-float F-money">{{financialTripPlan.getAllMoney}}</span></label>
-            <label class="control-label mar-r-20">成本：<span class="F-float F-money">{{financialTripPlan.payAllMoney}}</span></label>
-            <label class="control-label mar-r-20">毛利：<span class="F-float F-money">{{financialTripPlan.grossProfitMoney}}</span></label>
-            <label class="control-label mar-r-20">人均毛利(不含小孩)：<span class="F-float F-money">{{financialTripPlan.perGrossProfitMoney}}</span></label>
-            <label class="control-label mar-r-20">人数：<span class="F-float F-count">{{financialTripPlan.adultCount}}</span>大<span class="F-float F-count">{{financialTripPlan.childCount}}</span>小</label>
-            <label class="control-label">团数：<span class="F-float F-count">{{financialTripPlan.tripNumber}}</span></label>
+            <label class="control-label mar-r-20">收入：<span class="F-float F-money T-income"></span></label>
+            <label class="control-label mar-r-20">成本：<span class="F-float F-money T-cost"></span></label>
+            <label class="control-label mar-r-20">毛利：<span class="F-float F-money T-profit"></span></label>
+            <label class="control-label mar-r-20">人均毛利(不含小孩)：<span class="F-float F-money T-preProfit"></span></label>
+            <label class="control-label mar-r-20">人数：<span class="T-peopleCount"></span></label>
+            <label class="control-label">团数：<span class="F-float F-count T-tripCount"</span></label>
         </div>
     </div>
     <div class="col-xs-12 T-counterList"></div>
