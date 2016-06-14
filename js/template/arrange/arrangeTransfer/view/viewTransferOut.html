@@ -47,7 +47,13 @@
                                 <!-- 其他费用 -->
                                 {{each touristGroup.touristGroupTransferFeeList as transferFee}} {{if transferFee!=null}}
                                 <tr>
-                                    <td>{{transferFee.name}}</td>
+                                    <td>
+                                        {{if transferFee.name == '酒店费用' || transferFee.type == 8}}
+                                            单房差
+                                        {{else}}
+                                            {{transferFee.name}}
+                                        {{/if}}
+                                    </td>
                                     <td><span class="F-float F-count">{{transferFee.count}}</span></td>
                                     <td><span class="F-float F-money">{{transferFee.price}}</span></td>
                                     <td><span class="F-float F-money">{{transferFee.count*transferFee.price}}</span></td>
