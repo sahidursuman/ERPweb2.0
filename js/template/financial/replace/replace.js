@@ -48,6 +48,8 @@ define(function(require, exports) {
 				accountStatus : Replace.$tab.find(".T-finance-status").find("button").data("value")
 			};
 		}
+
+		args = FinancialService.getChangeArgs(args,Replace.$tab);
 		$.ajax({
 			url : KingServices.build_url('financial/bookingAccount', 'listPager'),
 			type: 'post',
@@ -87,6 +89,7 @@ define(function(require, exports) {
 
 		Replace.chooseCustomer($searchArea.find('.T-search-customer'));
 		Tools.setDatePicker($datepicker, true);
+		FinancialService.searchChange(Replace.$tab);
 		$searchArea.find('.T-btn-search').off().on('click', function(event) {
 			event.preventDefault();
 			Replace.getList();
@@ -162,6 +165,7 @@ define(function(require, exports) {
 					        }
 					    },
 					    select: function(event, ui) {
+					    	$(this).trigger('change');
 					        $(this).blur().data('id', ui.item.id);
 					    }
 					}).on('click', function(){

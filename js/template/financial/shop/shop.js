@@ -48,6 +48,7 @@ define(function(require, exports) {
             var shopName = $tab.find('.T-search-name').val().trim();
             args.shopName = shopName === '全部' ? '' : shopName;
         }
+        args = FinancialService.getChangeArgs(args,FinShop.$tab);
         $.ajax({
             url: KingServices.build_url('financial/shopAccount', 'listPager'),
             type: 'post',
@@ -117,6 +118,7 @@ define(function(require, exports) {
         });
         Tools.setDatePicker($searchArea.find('.datepicker'), true);
         FinShop.getShopName($searchArea.find('.T-search-name'));
+        FinancialService.searchChange($tab);
         // 报表内的操作
         $tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -166,6 +168,7 @@ define(function(require, exports) {
                             }
                         },
                         select: function(event, ui) {
+                            $(this).trigger('change');
                             $(this).blur().data('id', ui.item.id);
                         }
                     }).on('click', function() {

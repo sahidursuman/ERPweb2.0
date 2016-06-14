@@ -50,6 +50,7 @@ define(function(require, exports) {
         }
         args.pageNo = args.page || 0;
         args.sortType = "auto";
+        args = FinancialService.getChangeArgs(args,FinTransIn.$tab);
         $.ajax({
             url: KingServices.build_url("account/innerTransferIn","listInnerTransferIncome"),
             type: 'post',
@@ -116,6 +117,7 @@ define(function(require, exports) {
                                     }
                                 },
                                 select:function(event,ui){
+                                    $obj.trigger('change');
                                     var $div = $obj.closest('div');
                                     $div.find('input[name=toBusinessGroupId]').val(ui.item.id);
                                 }
@@ -144,6 +146,7 @@ define(function(require, exports) {
             FinTransIn.getList({pageNo : 0}, $tab);
         });
         Tools.setDatePicker($tab.find('.datepicker'), true);
+        FinancialService.searchChange($tab);
         // 报表内的操作
         $tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();

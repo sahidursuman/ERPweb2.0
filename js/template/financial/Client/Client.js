@@ -87,6 +87,7 @@ define(function(require, exports) {
                 }
             }
         }
+        args = FinancialService.getChangeArgs(args,Client.$tab);
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listPager'),
             type : 'POST',
@@ -101,7 +102,7 @@ define(function(require, exports) {
                 laypage({
                     cont: Client.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
                     pages: data.searchParam.totalPage, //总页数
-                    curr: (page + 1),
+                    curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             Client.listClient(obj.curr - 1);
@@ -120,6 +121,7 @@ define(function(require, exports) {
         Client.getPartnerAgencyList(Client.$tab.find('.T-search-head-office'));
         Client.getTravelAgencyList(Client.$tab.find('.T-search-customer'));
         Tools.setDatePicker(Client.$searchArea.find(".date-picker"), true);
+        FinancialService.searchChange(Client.$tab);
 
         //搜索按钮事件
         Client.$searchArea.find('.T-btn-search').on('click', function(event) {
@@ -890,6 +892,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
+                $(this).trigger('change');
                 $(this).blur().data('id', ui.item.id);
                 Client.$searchArea.find('.T-search-customer').data('ajax', false).val('全部');
             }
@@ -955,6 +958,7 @@ define(function(require, exports) {
                         }
                     },
                     select: function(event, ui) {
+                        $(this).trigger('change');
                         $(this).blur().data('id', ui.item.id);
                     }
                 }).on("click",function(){

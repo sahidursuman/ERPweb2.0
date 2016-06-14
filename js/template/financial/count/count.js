@@ -73,22 +73,26 @@ define(function(require, exports){
 		timeStatus = timeStatus || 0
 		//修正页码
 		pageNo = pageNo || 0;
+
+		var args = {
+			tripNumber:tripNumber,
+            lineProductId:lineProductId,
+            guideId:guideId,
+            endTime:endTime,
+            startTime:startTime,
+            billStatus:status,
+            lineProductName:lineProductName,
+            guideName:guideName,
+            timeStatus : timeStatus,
+            orderNumber : orderNumber,
+            contactInfo : contactInfo
+		};
+		args = FinancialService.getChangeArgs(args,Count.$listTab)
+
 		$.ajax({
 			url:KingServices.build_url("financialTripPlan","findFinancialListPageCount"),
 			type:'POST',
-			data:{
-                tripNumber:tripNumber,
-                lineProductId:lineProductId,
-                guideId:guideId,
-                endTime:endTime,
-                startTime:startTime,
-                billStatus:status,
-                lineProductName:lineProductName,
-                guideName:guideName,
-                timeStatus : timeStatus,
-                orderNumber : orderNumber,
-                contactInfo : contactInfo
-			},
+			data:args,
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -99,20 +103,7 @@ define(function(require, exports){
 					Count.$listTab = $listTabId;
 					Count.$searchArea = $listTabId.find('.T-search-area');
 					//获取主体列表数据
-					Count.$args={
-						pageNo:pageNo,
-		                tripNumber:tripNumber,
-		                lineProductId:lineProductId,
-		                guideId:guideId,
-		                endTime:endTime,
-		                startTime:startTime,
-		                billStatus:status,
-		                lineProductName:lineProductName,
-		                guideName:guideName,
-		                timeStatus : timeStatus,
-		                orderNumber : orderNumber,
-		                contactInfo : contactInfo
-					};
+					Count.$args=args;
 					//获取主体列表数据
 					Count.listCountBody(Count.$args);
                 	//格式化日期
@@ -134,6 +125,7 @@ define(function(require, exports){
 		var $searchObj = Count.$searchArea;
 			$listObj = Count.$listTab;
 
+		FinancialService.searchChange(Count.$listTab);
 		//搜索事件
 		$searchObj.find(".T-search").on('click',function(event){
 			event.preventDefault();
@@ -5186,7 +5178,7 @@ define(function(require, exports){
 				}
 			},
 			select:function(event,ui){
-				$(this).blur();
+				$(this).blur().trigger('change');
 				$(this).closest('div').find('input[name="lineProductId"]').val(ui.item.id);
 			}
 		}).off("click").on("click", function(){
@@ -5221,7 +5213,7 @@ define(function(require, exports){
 	            }
 	        },
 	        select: function(event, ui) {
-	            $(this).blur();
+	            $(this).blur().trigger('change');
 	            $(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
 	        }
 	    }).off("click").on("click", function() {

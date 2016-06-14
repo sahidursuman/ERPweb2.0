@@ -67,6 +67,8 @@ define(function(require, exports) {
             args.guideName = guideName;
         }
 
+        args = FinancialService.getChangeArgs(args,FinGuide.$tab);
+
         $.ajax({
             url: KingServices.build_url('account/guideFinancial', 'listSumFinancialGuide'),
             type: 'POST',
@@ -124,6 +126,7 @@ define(function(require, exports) {
         FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()])
         // 绑定时间控件
         Tools.setDatePicker($datepicker, true);
+        FinancialService.searchChange(FinGuide.$tab);
 
 
         $searchArea.find('.T-btn-search').on('click', function(event) {
@@ -196,6 +199,7 @@ define(function(require, exports) {
                         }
                     },
                     select: function(event, ui) {
+                        $(this).trigger('change');
                         $(this).blur().data('id', ui.item.id);
                     }
                 }).on("click", function() {

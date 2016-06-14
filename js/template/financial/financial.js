@@ -1081,3 +1081,21 @@ FinancialService.viewBillImage = function(obj) {
         }
     });
 }
+
+
+//搜索区修改(暂用)
+FinancialService.searchChange = function($tab){
+    $tab.find('.T-search-area').on('change', 'input,select', function(event) {
+        event.preventDefault();
+        $tab.data("searchEdit",true);
+    });
+};
+
+//页码重置(暂用)
+FinancialService.getChangeArgs = function(args,$tab){
+    if($tab && $tab.data("searchEdit")){
+        args.pageNo = 0;
+        $tab.data("searchEdit",false);
+    }
+    return args;
+};
