@@ -1081,3 +1081,31 @@ FinancialService.viewBillImage = function(obj) {
         }
     });
 }
+
+
+//搜索区修改(暂用)
+FinancialService.searchChange = function($tab){
+    $tab.find('.T-search-area').on('change', 'input,select', function(event) {
+        event.preventDefault();
+        $tab.data("searchEdit",true);
+    });
+};
+
+//页码重置(暂用)
+FinancialService.getChangeArgs = function(args,$tab){
+    if($tab && $tab.data("searchEdit")){
+        args.pageNo = 0;
+        $tab.data("searchEdit",false);
+        if($tab.data("total")){
+            $tab.data("total",false);
+        }
+    }
+    return args;
+};
+//
+var all = {id:"",value:"全部"};
+FinancialService.parseList = function(list){
+    var temp = JSON.parse(list);
+    temp.unshift(all);
+    return temp;
+};

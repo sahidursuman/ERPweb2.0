@@ -48,6 +48,7 @@ define(function(require, exports) {
             var shopName = $tab.find('.T-search-name').val().trim();
             args.shopName = shopName === '全部' ? '' : shopName;
         }
+        args = FinancialService.getChangeArgs(args,FinShop.$tab);
         $.ajax({
             url: KingServices.build_url('financial/shopAccount', 'listPager'),
             type: 'post',
@@ -59,7 +60,12 @@ define(function(require, exports) {
                 FinShop.$tab = $tab = $('#tab-' + menuKey + '-content');
                 FinShop.init_event($tab);
                 //获取合计金额
-                FinShop.getSumMoney(args, $tab);
+                if(!FinShop.$tab.data("searchEdit") && FinShop.$tab.data("total")){
+                    FinShop.loadSumMoney($tab);
+                } else {
+                    FinShop.getSumMoney(args, $tab);
+                }
+               
                 // 缓存页面
                 FinShop.listPageNo = args.pageNo;
                 // 绑定翻页组件
@@ -84,15 +90,20 @@ define(function(require, exports) {
             type: "POST",
             success: function(data) {
                 if (showDialog(data)) {
-                    tabId.find('.T-sumCount').text(data.sumCount);
-                    tabId.find('.T-sumOrderMoney').text(data.sumContractMoney);
-                    tabId.find('.T-sumContractMoney').text(data.sumRebateMoney);
-                    tabId.find('.T-sumStMoney').text(data.sumSettlementMoney);
-                    tabId.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
-                    tabId.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+                    tabId.data("total",data);
+                    FinShop.loadSumMoney(tabId);
                 }
             }
         });
+    };
+    FinShop.loadSumMoney = function(tabId){
+        var total = tabId.data("total");
+        tabId.find('.T-sumCount').text(total.sumCount);
+        tabId.find('.T-sumOrderMoney').text(total.sumContractMoney);
+        tabId.find('.T-sumContractMoney').text(total.sumRebateMoney);
+        tabId.find('.T-sumStMoney').text(total.sumSettlementMoney);
+        tabId.find('.T-sumReceiveMoney').text(total.sumReceiveMoney);
+        tabId.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
     };
     /**
      * 初始化列表页面的事件绑定
@@ -116,7 +127,13 @@ define(function(require, exports) {
             FinShop.getList(0, $tab);
         });
         Tools.setDatePicker($searchArea.find('.datepicker'), true);
-        FinShop.getShopName($searchArea.find('.T-search-name'));
+        if(FinShop.shopList){
+            FinShop.loadShopList($searchArea.find('.T-search-name'));
+        } else {
+            FinShop.getShopName($searchArea.find('.T-search-name'));
+        }
+        
+        FinancialService.searchChange($tab);
         // 报表内的操作
         $tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -153,27 +170,30 @@ define(function(require, exports) {
                     data.shopList[i].value = data.shopList[i].shopName;
                     data.shopList[i].id = data.shopList[i].shopId;
                 }
-                var all = { id: '', value: '全部' };
-                FinShop.shopList = data.shopList.slice(all);
-                if(!!$obj){
-                    data.shopList.unshift(all);
-                    $obj.autocomplete({
-                        minLength: 0,
-                        source : data.shopList,
-                        change: function(event, ui) {
-                            if (!ui.item) {
-                                $(this).data('id', '');
-                            }
-                        },
-                        select: function(event, ui) {
-                            $(this).blur().data('id', ui.item.id);
-                        }
-                    }).on('click', function() {
-                        $obj.autocomplete('search','');
-                    });
-                }
+                FinShop.shopList = JSON.stringify(data.shopList);
+                FinShop.loadShopList($obj)
             }
         });
+    };
+
+    FinShop.loadShopList = function($obj){
+        if(!!$obj){
+            $obj.autocomplete({
+                minLength: 0,
+                source : FinancialService.parseList(FinShop.shopList),
+                change: function(event, ui) {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).trigger('change');
+                    $(this).blur().data('id', ui.item.id);
+                }
+            }).on('click', function() {
+                $obj.autocomplete('search','');
+            });
+        }
     };
 
     /**
@@ -700,7 +720,7 @@ define(function(require, exports) {
             name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
-            source : FinShop.shopList,
+            source : JSON.parse(FinShop.shopList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);

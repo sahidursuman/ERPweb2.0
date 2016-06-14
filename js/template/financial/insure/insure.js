@@ -45,6 +45,7 @@ define(function(require, exports) {
             accountStatus : accountStatus == undefined ? "2" : accountStatus,
   			sortType: 'auto'
   		};
+        Insure.searchData = FinancialService.getChangeArgs(Insure.searchData,Insure.$tab);
   		var searchParam = JSON.stringify(Insure.searchData);
 	  	$.ajax({
 	       url:KingServices.build_url("account/insuranceFinancial","listSumFinancialInsurance"),
@@ -71,7 +72,7 @@ define(function(require, exports) {
                     laypage({
                         cont: Insure.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (Insure.searchData.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
                                 Insure.listInsure(obj.curr -1);
@@ -92,6 +93,7 @@ define(function(require, exports) {
   	Insure.initList = function(startDate,endDate, accountStatus){
         Insure.getQueryList();
         Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);
+        FinancialService.searchChange(Insure.$tab);
 
  		//搜索按钮事件
         Insure.$tab.find('.T-search').on('click', function(event) {
@@ -663,6 +665,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $obj.trigger('change');
                 $obj.blur().nextAll('input[name="insuranceId"]').val(ui.item.id);
                 if (!isMainList) {
                     $tab.find('input[name="accountInfo"]').val('');

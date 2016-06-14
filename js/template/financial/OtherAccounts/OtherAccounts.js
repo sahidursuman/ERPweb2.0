@@ -39,6 +39,7 @@ define(function(require, exports) {
             accountStatus : accountStatus == undefined ? "2" : accountStatus,
             sortType: 'auto'
         }
+        OtherAccounts.searchData = FinancialService.getChangeArgs(OtherAccounts.searchData,OtherAccounts.$tab);
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOther"),
             type: "POST",
@@ -83,6 +84,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象
         var $container = $(".T-other");
         var $obj = OtherAccounts.$tab.find('.T-search-head-office');
+        FinancialService.searchChange(OtherAccounts.$tab);
         OtherAccounts.getTravelAgencyList($obj);
         //搜索按钮事件
         OtherAccounts.$tab.find('.T-search').click(function(event) {
@@ -327,7 +329,7 @@ define(function(require, exports) {
                         }
                     },
                     select: function(event, ui) {
-                        $obj.val(ui.item.name).closest('.tab-pane-menu').find('.T-search').trigger('click');
+                        $obj.val(ui.item.name).trigger("change").closest('.tab-pane-menu').find('.T-search').trigger('click');
                     },
                     source: OtherAccounts.projList,
                 }).off('click').on('click', function() {
