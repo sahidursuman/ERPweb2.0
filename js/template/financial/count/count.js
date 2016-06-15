@@ -111,7 +111,7 @@ define(function(require, exports){
 				guideName : Count.$searchArea.find('input[name=chooseGuideRealName]').val(),
 				endTime : Count.$searchArea.find('input[name=endTime]').val(),
 				startTime : Count.$searchArea.find('input[name=startTime]').val(),
-				status : Count.$searchArea.find(".T-select-status").attr("data-value"),
+				billStatus : Count.$searchArea.find(".T-select-status").attr("data-value"),
 				timeStatus : Count.$searchArea.find(".T-time-status").find('button').data("value") || 0,
 				orderNumber : Count.$searchArea.find('input[name=orderNumber]').val(),
 				contactInfo : Count.$searchArea.find('input[name=contactInfo]').val()
