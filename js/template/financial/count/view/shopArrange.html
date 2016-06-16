@@ -131,8 +131,18 @@
                                                                 <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
                                                             {{/if}}
                                                         {{else}}
-                                                            <span>{{guideArrange.listMap[0].guideName}}</span>
-                                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                            {{if arrange.isConfirmAccount == 1}}
+                                                                {{if !!rs.id}}
+                                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                                {{else}}
+                                                                    <i class="fa fa-exclamation hct-count-hint" 
+                                                                       title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                                {{/if}}
+                                                            {{else}}
+                                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                            {{/if}}
                                                         {{/if}}
                                                         
                                                         {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
@@ -534,8 +544,18 @@
                                                         <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
                                                     {{/if}}
                                                 {{else}}
-                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
-                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                    {{if arrange.isConfirmAccount == 1}}
+                                                        {{if !!rs.id}}
+                                                            <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                        {{else}}
+                                                            <i class="fa fa-exclamation hct-count-hint" 
+                                                               title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                        {{/if}}
+                                                    {{else}}
+                                                        <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                        <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                    {{/if}}
                                                 {{/if}}
                                                 
                                                 {{if guideCount > 1 && arrange.isConfirmAccount != 1}}
