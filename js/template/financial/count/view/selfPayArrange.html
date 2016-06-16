@@ -276,14 +276,8 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-
-                                        {{if itemSet.badStatus == 1}}
-                                            <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                        {{else}}
-                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
-                                            <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" 
-                                            {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
+                                        <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" 
+                                        {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             
                                     </td>
 
@@ -782,17 +776,7 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-
-                                        {{if tripPlan.billStatus == -1}}
-                                            {{if itemSet.badStatus == 1}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{else}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{/if}}
-                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
-                                        {{else}}
-                                            <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
+                                        <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                     </td>
 
                                     <td name="realCount">
