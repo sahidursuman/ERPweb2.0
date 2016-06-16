@@ -5892,7 +5892,7 @@ define(function(require, exports){
 					selfPayItemId:selfPayItemId,
 					realMarketPrice:Count.changeTwoDecimal($that.find('[name=marketPrice]').val()),
 					realPrice:Count.changeTwoDecimal($that.find('[name=price]').val()),
-					customerRebateMoney:$that.find('[name=customerRebateMoney]').val(),
+					customerRebateMoney:0,
 					guideDetails:Count.getSelfGuideData($that)
 				};
 				saveJson.addSelfPayArrangeList.push(addArange)	
