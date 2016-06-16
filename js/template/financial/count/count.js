@@ -3172,7 +3172,6 @@ define(function(require, exports){
 					'<span style="color:#bbb;">查看</span>'+
 				'</div>'+
 			'</td>'+
-			'<td>'+divHtml+'<input name="customerRebateMoney" type="text" class="w-70 F-float F-money"></td>'+
 			'<td name="travelAgencyRate">'+
 				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+

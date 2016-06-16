@@ -44,7 +44,6 @@
         <thead>
             <tr class="bg-blur">
                 <th colspan="16">消费</th>
-                <th rowspan="2">人数返佣</th>
                 <th colspan="2">社佣</th>
                 <th colspan="2">导佣</th>
                 <th colspan="2">全陪</th>
@@ -412,14 +411,6 @@
                                         {{/if}}<!-- 单据 -->
                                     </td>
                                     
-                                    <td>
-                                        {{if guideCount>1}}
-                                            <div class="div-h-30"></div>
-                                        {{/if}}
-
-                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
-                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
-                                    </td>
 
                                     <td name="travelAgencyRate">
                                         {{if guideCount>1}}
@@ -911,14 +902,7 @@
                                         {{/if}}<!-- 单据 -->
                                     </td>
                                     
-                                    <td>
-                                        {{if guideCount>1}}
-                                            <div class="div-h-30"></div>
-                                        {{/if}}
-
-                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
-                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
-                                    </td>
+                                   
 
                                     <td name="travelAgencyRate">
                                         {{if guideCount>1}}
