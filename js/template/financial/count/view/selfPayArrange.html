@@ -55,8 +55,7 @@
             <tr class="bg-blur">
                 <th><span class="necessary">*</span>时间</th>
                 <th><span class="necessary">*</span>自费商家</th>
-                <th><span class="necessary">*</span>项目</t
-                h>
+                <th><span class="necessary">*</span>项目</th>
                 <th><span class="necessary">*</span>单价</th>
                 <th><span class="necessary">*</span>导游</th>
                 <th><span class="necessary">*</span>应收数量</th>
@@ -123,11 +122,8 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
-                                        {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" 
                                         {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
                                     </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
@@ -140,7 +136,7 @@
                                         {{/if}}
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
+                                                <div class="mar-t-5 div-h-30 min-w-100" index="{{index+1}}" guideId = "{{rs.id}}" >
                                                     {{if guideCount>1}}
                                                         {{if rs.guideName == "" || rs.guideName == null}}
                                                             <input type="text" name="guideName" class="w-70">
@@ -150,8 +146,18 @@
                                                             <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
                                                         {{/if}}
                                                     {{else}}
-                                                        {{guideArrange.listMap[0].guideName}}
-                                                        <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
+                                                        {{if itemSet.isConfirmAccount == 1}}
+                                                            {{if !!rs.id}}
+                                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                            {{else}}
+                                                                <i class="fa fa-exclamation hct-count-hint" 
+                                                                   title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                            {{/if}}
+                                                        {{else}}
+                                                            <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                        {{/if}}
                                                     {{/if}}
                                                     
                                                 {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
@@ -162,7 +168,7 @@
                                                 </div>
                                             {{/each}}
                                         {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
+                                            <div class="mar-t-5 div-h-30 min-w-100" index="1">
                                                 {{if guideCount > 1 && itemSet.isConfirmAccount != 1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
@@ -271,17 +277,14 @@
                                             <div class="div-h-30"></div>
                                         {{/if}}
 
-                                        {{if tripPlan.billStatus == -1}}
-                                            {{if itemSet.badStatus == 1}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{else}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{/if}}
-                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
+                                        {{if itemSet.badStatus == 1}}
+                                            <span class="price F-float F-money">{{itemSet.realPrice}}</span>
                                         {{else}}
+                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
                                             <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" 
                                             {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                         {{/if}}
+                                            
                                     </td>
 
                                     <td name="realCount">
@@ -623,11 +626,7 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-
-                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
-                                        {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
                                     </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
@@ -640,7 +639,7 @@
                                         {{/if}}
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
+                                                <div class="mar-t-5 div-h-30 min-w-100" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">
                                                         {{if guideCount>1}}
                                                             {{if rs.guideName == "" || rs.guideName == null}}
@@ -652,8 +651,18 @@
                                                             {{/if}}
                                                             
                                                         {{else}}
-                                                            {{guideArrange.listMap[0].guideName}}
-                                                            <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
+                                                            {{if itemSet.isConfirmAccount == 1}}
+                                                                {{if !!rs.id}}
+                                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                                {{else}}
+                                                                    <i class="fa fa-exclamation hct-count-hint" 
+                                                                       title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                                {{/if}}
+                                                            {{else}}
+                                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                            {{/if}}
                                                         {{/if}}
                                                     </span>
                                                     
@@ -665,7 +674,7 @@
                                                 </div>
                                             {{/each}}
                                         {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
+                                            <div class="mar-t-5 div-h-30 min-w-100" index="1">
                                             {{if guideCount > 1 && itemSet.isConfirmAccount != 1}}
                                                 <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                     <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
