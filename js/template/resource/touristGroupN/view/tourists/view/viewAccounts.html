@@ -16,7 +16,7 @@
 	</div>
 	
 	<form action="">
-		<div class="viewAccountsMain">
+		<div class="viewAccountsMain view-InfoPrint">
 			<p>
 				<span>致</span> 
 				<span style="margin-left: 4px;">{{partnerAgency.travelAgencyName}}</span> 
@@ -31,28 +31,28 @@
 				<span>现将该团费用结算列表如下,请审阅并盖章、签字回执我社！</span>
 			</p>
 			<table class="table whereQ whereTwo" style="width: 100%;">
-				<tr>
-					<td class="textaR-paR">人数</td>
-					<td class="textaR-paL">{{touristGroup.count}}</td>
-					<td class="textaR-paR">联系人</td>
+				<tr class="view-TranAccountsPrint">
+					<td class="textaR-paR"><span>人数</span></td>
+					<td class="textaR-paL"><span>{{touristGroup.count}}</span></td>
+					<td class="textaR-paR"><span>联系人</span></td>
 					<td class="textaR-paL"><span>{{touristGroup.contactName}}</span><span class="mar-l-5">{{touristGroup.contactPhone}}</span></td>
 				</tr>
-				<tr>
-					<td class="textaR-paR">出团日期</td>
-					<td class="textaR-paL">{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
-					<td class="textaR-paR">完团日期</td>
-					<td class="textaR-paL">{{touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+				<tr class="view-TranAccountsPrint">
+					<td class="textaR-paR"><span>出团日期</span></td>
+					<td class="textaR-paL"><span>{{touristGroup.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+					<td class="textaR-paR"><span>完团日期</td>
+					<td class="textaR-paL"><span>{{touristGroup.endTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
 				</tr>
-				<tr>
-					<td class="textaR-paR">团号</td>
-					<td class="textaR-paL">{{touristGroup.tripNumber}}</td>
-					<td class="textaR-paR">针对客源</td>
-					<td class="textaR-paL">{{if touristGroup.customerType == 0}}散客{{/if}}{{if touristGroup.customerType == 1}}团体{{/if}}</td>
+				<tr class="view-TranAccountsPrint">
+					<td class="textaR-paR"><span>团号</span></td>
+					<td class="textaR-paL"><span>{{touristGroup.tripNumber}}</span></td>
+					<td class="textaR-paR"><span>针对客源</span></td>
+					<td class="textaR-paL"><span>{{if touristGroup.customerType == 0}}散客{{/if}}{{if touristGroup.customerType == 1}}团体{{/if}}</span></td>
 				</tr>
-				<tr>
-					<td class="textaR-paR">导游</td>
-					<td class="textaR-paL">{{touristGroup.guidName}}</td>
-					<td class="textaR-paR">全陪</td>
+				<tr class="view-TranAccountsPrint">
+					<td class="textaR-paR"><span>导游</span></td>
+					<td class="textaR-paL"><span>{{touristGroup.guidName}}</span></td>
+					<td class="textaR-paR"><span>全陪</span></td>
 					<td class="textaR-paL"><span>{{touristGroup.accompanyGuideName}}</span><span class="mar-l-5">{{touristGroup.accompanyGuideMobile}}</span></td>
 				</tr>
 			</table>
@@ -69,9 +69,9 @@
 					</thead>
 					<tbody class="addCostTbody">
 						{{each touristGroup.touristGroupFeeList as touristGroup}}
-							<tr data-entity-id="{{touristGroup.id}}">
+							<tr class="view-TranAccountsPrint" data-entity-id="{{touristGroup.id}}">
 								<td>
-									{{touristGroup.name}}
+									<span>{{touristGroup.name}}</span>
 								</td>
 								<td>
 									<span class="F-float F-count">{{touristGroup.count}}</span>
@@ -92,26 +92,26 @@
 					</tbody>
 			</table>
 			<table class="table whereQ" style="width: 100%;margin-top: -20px;">
-				<tr>
-					<td style="text-align: right;padding-right:60px;width: 160px">应收</td>
+				<tr class="view-TranAccountsPrint">
+					<td style="text-align: right;padding-right:60px;width: 160px"><span>应收</span></td>
 					<td class="textaR-paL">
 						<span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
 					</td>
 				</tr>
-				<tr>
-					<td style="text-align: right;padding-right:60px;width: 160px">已收</td>
+				<tr class="view-TranAccountsPrint">
+					<td style="text-align: right;padding-right:60px;width: 160px"><span>已收</span></td>
 					<td class="textaR-paL">
 						<span class="F-float F-money">{{touristGroup.payedMoney}}</span>
 					</td>
 				</tr>
-				<tr>
-					<td style="text-align: right;padding-right:60px;width: 160px">现收</td>
+				<tr class="view-TranAccountsPrint">
+					<td style="text-align: right;padding-right:60px;width: 160px"><span>现收</span></td>
 					<td class="textaR-paL">
 						<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
 					</td>
 				</tr>
-				<tr>
-					<td style="text-align: right;padding-right:60px;width: 160px">未收</td>
+				<tr class="view-TranAccountsPrint">
+					<td style="text-align: right;padding-right:60px;width: 160px"><span>未收</span></td>
 					<td class="textaR-paL">
 						<span class="F-float F-money">{{touristGroup.UnIncomeMoney}}</span>
 					</td>
@@ -120,8 +120,16 @@
 					<td colspan="2" class="text-a-l"><span style="margin-left: 10px;">请仔细阅读并盖章确认之后回传！谢谢！</span></td>
 				</tr>
 			</table>
-			<p style="text-align: right;margin-top: 10px;"><span class="{{if !!touristGroup.outOPUserName || !!touristGroup.outOPUserName}}{{else}}hidden{{/if}}"><span>外联销售：</span> <span>{{touristGroup.outOPUserName}}</span> <span>{{touristGroup.outOPUserMobileNumberr}}</span></span></p>
-			<p style="text-align: right;margin-top: -8px;" class="{{if !!touristGroup.faxNumber}}{{else}}hidden{{/if}}">传真：{{touristGroup.faxNumber}}</p>
+			<p style="text-align: right;margin-top: 10px;">
+				<span class="{{if !!touristGroup.outOPUserName || !!touristGroup.outOPUserName}}{{else}}hidden{{/if}}">
+					<span>外联销售：</span> 
+					<span>{{touristGroup.outOPUserName}}</span> 
+					<span>{{touristGroup.outOPUserMobileNumberr}}</span>
+				</span>
+			</p>
+			<p style="text-align: right;margin-top: -8px;" class="{{if !!touristGroup.faxNumber}}{{else}}hidden{{/if}}">
+				<span>传真：{{touristGroup.faxNumber}}</span>
+			</p>
 			<p style="text-align: right;margin-top: -8px;"><span>{{touristGroup.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
 		</div>
 	</form>

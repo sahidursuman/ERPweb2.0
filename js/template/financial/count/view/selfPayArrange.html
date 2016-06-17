@@ -44,7 +44,6 @@
         <thead>
             <tr class="bg-blur">
                 <th colspan="16">消费</th>
-                <th rowspan="2">人数返佣</th>
                 <th colspan="2">社佣</th>
                 <th colspan="2">导佣</th>
                 <th colspan="2">全陪</th>
@@ -55,8 +54,7 @@
             <tr class="bg-blur">
                 <th><span class="necessary">*</span>时间</th>
                 <th><span class="necessary">*</span>自费商家</th>
-                <th><span class="necessary">*</span>项目</t
-                h>
+                <th><span class="necessary">*</span>项目</th>
                 <th><span class="necessary">*</span>单价</th>
                 <th><span class="necessary">*</span>导游</th>
                 <th><span class="necessary">*</span>应收数量</th>
@@ -88,7 +86,6 @@
                             {{if guideCount>1}}
                                 <div class="div-h-30"></div>
                             {{/if}}
-
                             <span class="whichDay">{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span></td>                    
                         <td rowspan="{{arrange.selfPayItem.length}}">
                             {{if guideCount>1}}
@@ -119,15 +116,13 @@
                                     <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                     <input name="badStatus" value="{{itemSet.badStatus}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                     <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
+                                    <input name="sumIpt" type="hidden">
                                     <td>
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
-                                        {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" 
                                         {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
                                     </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
@@ -140,7 +135,7 @@
                                         {{/if}}
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
+                                                <div class="mar-t-5 div-h-30 min-w-100" index="{{index+1}}" guideId = "{{rs.id}}" >
                                                     {{if guideCount>1}}
                                                         {{if rs.guideName == "" || rs.guideName == null}}
                                                             <input type="text" name="guideName" class="w-70">
@@ -150,8 +145,18 @@
                                                             <input name="guideArrangeId" value="{{rs.guideArrangeId}}" type="hidden" />
                                                         {{/if}}
                                                     {{else}}
-                                                        {{guideArrange.listMap[0].guideName}}
-                                                        <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
+                                                        {{if itemSet.isConfirmAccount == 1}}
+                                                            {{if !!rs.id}}
+                                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                            {{else}}
+                                                                <i class="fa fa-exclamation hct-count-hint" 
+                                                                   title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                            {{/if}}
+                                                        {{else}}
+                                                            <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                        {{/if}}
                                                     {{/if}}
                                                     
                                                 {{if itemSet.isConfirmAccount != 1 && guideCount>1}}
@@ -162,7 +167,7 @@
                                                 </div>
                                             {{/each}}
                                         {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
+                                            <div class="mar-t-5 div-h-30 min-w-100" index="1">
                                                 {{if guideCount > 1 && itemSet.isConfirmAccount != 1}}
                                                     <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                         <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
@@ -270,18 +275,9 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-
-                                        {{if tripPlan.billStatus == -1}}
-                                            {{if itemSet.badStatus == 1}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{else}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{/if}}
-                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
-                                        {{else}}
-                                            <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" 
-                                            {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
+                                        <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" 
+                                        {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                            
                                     </td>
 
                                     <td name="realCount">
@@ -415,14 +411,6 @@
                                         {{/if}}<!-- 单据 -->
                                     </td>
                                     
-                                    <td>
-                                        {{if guideCount>1}}
-                                            <div class="div-h-30"></div>
-                                        {{/if}}
-
-                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
-                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
-                                    </td>
 
                                     <td name="travelAgencyRate">
                                         {{if guideCount>1}}
@@ -598,6 +586,7 @@
                             {{if index >0}}
                                 <tr selfPayId="{{arrange.selfPayId}}" whichDay = "{{arrange.whichDay}}"
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
+                                    <input name="sumIpt" type="hidden">
                                     <td class="{{if index+1 == arrange.selfPayItem.length}}breakFlag{{/if}}">
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
@@ -622,11 +611,7 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-
-                                        {{if editStatus != 1}}<span class="F-float F-money realMarketPrice">{{itemSet.realMarketPrice}}</span>
-                                        {{else}}
                                         <input type="text" name="marketPrice" value="{{itemSet.realMarketPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
                                     </td><!-- 单价 -->
 
                                     <td name="selfGuideName">
@@ -639,7 +624,7 @@
                                         {{/if}}
                                         {{if itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
-                                                <div class="mar-t-5 div-h-30" index="{{index+1}}" guideId = "{{rs.id}}">
+                                                <div class="mar-t-5 div-h-30 min-w-100" index="{{index+1}}" guideId = "{{rs.id}}">
                                                     <span class="guideName">
                                                         {{if guideCount>1}}
                                                             {{if rs.guideName == "" || rs.guideName == null}}
@@ -651,8 +636,18 @@
                                                             {{/if}}
                                                             
                                                         {{else}}
-                                                            {{guideArrange.listMap[0].guideName}}
-                                                            <input name="guideArrangeId" value="{{guideArrange.listMap[0].id}}" type="hidden" />
+                                                            {{if itemSet.isConfirmAccount == 1}}
+                                                                {{if !!rs.id}}
+                                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                                {{else}}
+                                                                    <i class="fa fa-exclamation hct-count-hint" 
+                                                                       title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                                {{/if}}
+                                                            {{else}}
+                                                                <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                                <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                            {{/if}}
                                                         {{/if}}
                                                     </span>
                                                     
@@ -664,7 +659,7 @@
                                                 </div>
                                             {{/each}}
                                         {{else}}
-                                            <div class="mar-t-5 div-h-30" index="1">
+                                            <div class="mar-t-5 div-h-30 min-w-100" index="1">
                                             {{if guideCount > 1 && itemSet.isConfirmAccount != 1}}
                                                 <button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right"> 
                                                     <i class="ace-icon fa fa-minus bigger-110 icon-only"></i>
@@ -772,17 +767,7 @@
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
                                         {{/if}}
-
-                                        {{if tripPlan.billStatus == -1}}
-                                            {{if itemSet.badStatus == 1}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{else}}
-                                                <span class="price F-float F-money">{{itemSet.realPrice}}</span>
-                                            {{/if}}
-                                            <input type="hidden" name="price" value="{{itemSet.realPrice}}"/>
-                                        {{else}}
-                                            <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
-                                        {{/if}}
+                                        <input type="text" name="price" value="{{itemSet.realPrice}}" class="w-50" {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                     </td>
 
                                     <td name="realCount">
@@ -917,14 +902,7 @@
                                         {{/if}}<!-- 单据 -->
                                     </td>
                                     
-                                    <td>
-                                        {{if guideCount>1}}
-                                            <div class="div-h-30"></div>
-                                        {{/if}}
-
-                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
-                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
-                                    </td>
+                                   
 
                                     <td name="travelAgencyRate">
                                         {{if guideCount>1}}

@@ -429,22 +429,19 @@ define(function(require, exports){
 		$insureObj.off('change').on('change','input',function(){
 			Count.autoInsureanceSum($(this),$obj);
 		});
-		//触发页面的change事件
-		$obj.find('input[type=hidden]').trigger('change');
 		//计算团收入
 		Count.tripIncome($obj);
 		//计算成本
 		Count.tripCost($obj);
+		//触发页面的change事件
+		$obj.find('input[name=sumIpt]').trigger('change');
 		//按钮时间--安排预算表
 		$obj.find('.T-tripPlanArrange').off('click').on('click',function() {
 			var id = $obj.find('.financial-tripPlanId').val();
 			
 			KingServices.viewTripDetail(id);
 		});
-		//触发页面的change事件
-		$obj.find('input[type=hidden]').trigger('change',function(){
-			Count.formatDays($(this),$obj);
-		});
+		
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
 			FinancialService.viewBillImage(this);
@@ -844,7 +841,7 @@ define(function(require, exports){
 		//计算团收入
 		Count.tripIncome($obj);
 		//触发页面的change事件
-		$obj.find('input').change();
+		$obj.find('input[name=sumIpt]').trigger('change');
 		//按钮事件--保存信息
 		$obj.find('.T-saveCount').off('click').on('click',function(){
 			var id = $(this).attr('data-entity-id');
@@ -1300,7 +1297,7 @@ define(function(require, exports){
 			Count.autoInsureanceSum($(this),$obj);
 		});
 		//触发页面的change事件
-		$obj.find('input').trigger('change');
+		$obj.find('input[name=sumIpt]').trigger('change');
 
 		//计算团收入
 		Count.tripIncome($obj);
@@ -3085,7 +3082,7 @@ define(function(require, exports){
 	                    '<i class="ace-icon fa fa-plus  bigger-110 icon-only"></i>'+
 	                '</button>'+
 				'</div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
+				'<div class="div-h-30 mar-t-5 min-w-100" index="1">'+
 					'<input type="text" name="guideName" class="w-70"/>'+
 					'<input type="hidden" name="guideArrangeId"/>'+
 					'<button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right">'+
@@ -3175,7 +3172,6 @@ define(function(require, exports){
 					'<span style="color:#bbb;">查看</span>'+
 				'</div>'+
 			'</td>'+
-			'<td>'+divHtml+'<input name="customerRebateMoney" type="text" class="w-70 F-float F-money"></td>'+
 			'<td name="travelAgencyRate">'+
 				divHtml+
 				'<div class="div-h-30 mar-t-5" index="1">'+
@@ -3218,7 +3214,7 @@ define(function(require, exports){
 					'<input name="billRemark" class="w-70" type="text">'+
 				'</div>'+
 			'</td>'+
-			'<td>'+divHtml+'未对账<a class="T-selfArrDel" href="javascript:void(0)" style="margin-left:14px;">删除</a></td>'+
+			'<td>'+divHtml+'未对账&nbsp;&nbsp;<a class="T-selfArrDel" href="javascript:void(0)">删除</a></td>'+
 			
 			'</tr>';
 		$obj.append(html);
@@ -5896,7 +5892,7 @@ define(function(require, exports){
 					selfPayItemId:selfPayItemId,
 					realMarketPrice:Count.changeTwoDecimal($that.find('[name=marketPrice]').val()),
 					realPrice:Count.changeTwoDecimal($that.find('[name=price]').val()),
-					customerRebateMoney:$that.find('[name=customerRebateMoney]').val(),
+					customerRebateMoney:0,
 					guideDetails:Count.getSelfGuideData($that)
 				};
 				saveJson.addSelfPayArrangeList.push(addArange)	

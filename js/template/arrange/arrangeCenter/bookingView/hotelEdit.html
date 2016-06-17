@@ -79,10 +79,10 @@
                 {{each arrangeList as rs}}
                     <tr data-id="{{rs.id}}">
                         <td>
-                            <input name="enterTime" value="{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
+                            <input name="enterTime" value="{{rs.enterTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker T-action-blur"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
-                            <input name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
+                            <input name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd'}}" type="text" class="datepicker T-action-blur"{{if !!rs.isConfirmAccount}} disabled{{/if}} />
                         </td>
                         <td>
                             <select name="hotelLevel" class="col-sm-12"{{if !!rs.isConfirmAccount}} disabled{{/if}}>
@@ -130,10 +130,10 @@
                 {{else if status != 1}}
                     <tr>
                         <td>
-                            <input name="enterTime" type="text" class="datepicker" />
+                            <input name="enterTime" type="text" class="datepicker T-action-blur" />
                         </td>
                         <td>
-                            <input name="leaveTime" type="text" class="datepicker" />
+                            <input name="leaveTime" type="text" class="datepicker T-action-blur" />
                         </td>
                         <td>
                             <select name="hotelLevel" class="col-sm-12">

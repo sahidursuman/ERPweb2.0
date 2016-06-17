@@ -59,7 +59,7 @@
                 <th>客户</th>
                 <!-- <th>组团社</th> -->
                 <th>收客部门</th>   
-                <th>团款应收</th>
+                <th>本段团款</th>
                 <th>接收部门</th>
                 <th>内转成本</th>  
                 <th>毛利</th>
@@ -68,8 +68,8 @@
             </thead>
             <tbody class="T-list">
             {{each touristGroupInnerTransferList as innerTransferList index}}
-            <tr data-id = "{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}"> 
-                <td><a href="javascript:void(0)" class="T-option T-lineProductDetail">{{if innerTransferList.orderNumber == null || innerTransferList.orderNumber == ""}}-{{else}}{{innerTransferList.orderNumber}}{{/if}}</a></td>
+            <tr data-id="{{innerTransferList.touristGroupId}}" lineProductId="{{innerTransferList.lineProductId}}" tgTransferId = "{{innerTransferList.InnerTransferId}}" data-pid="{{innerTransferList.pid}}"> 
+                <td><a href="javascript:void(0)" class="T-option T-viewParentTouristGroup">{{if innerTransferList.orderNumber == null || innerTransferList.orderNumber == ""}}-{{else}}{{innerTransferList.orderNumber}}{{/if}}</a></td>
                 <!-- <td>{{innerTransferList.fromBusinessGroupName}}</td> --> 
                 <td>{{innerTransferList.lineProductName}}</td>
                 <!--给日期转码-->
@@ -82,14 +82,12 @@
                 </td>
                 <td>{{if innerTransferList.area == null || innerTransferList.area == ""}}-{{else}}{{innerTransferList.area}}{{/if}}</td>
                 <td>{{if !innerTransferList.fromBusinessGroupName}}无{{else}}{{innerTransferList.fromBusinessGroupName}}{{/if}}</td>
-                <td><a href="javascript:void(0)" class="T-option T-showIncomeDetail">
-                        <span class="F-float F-money">{{innerTransferList.needInComeMoney}}</span>
-                    </a>
+                <td>
+                    <span class="F-float F-money">{{innerTransferList.needInComeMoney}}</span>
                 </td>
                 <td>{{if innerTransferList.toBusinessGroupName == null || innerTransferList.toBusinessGroupName == ""}}无{{else}}{{innerTransferList.toBusinessGroupName}}{{/if}}</td> 
-                <td><a href="javascript:void(0)" class="T-option T-showTransPay" data-inner-id = "{{innerTransferList.InnerTransferId}}">
-                        <span class="F-float F-money">{{innerTransferList.transNeedPayAllMoney}}</span>
-                    </a>
+                <td>
+                    <span class="F-float F-money">{{innerTransferList.transNeedPayAllMoney}}</span>
                 </td>
                 <td>
                     <span class="F-float F-money" style="color: red">{{innerTransferList.grossProfit}}</span>
