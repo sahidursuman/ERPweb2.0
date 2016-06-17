@@ -29,6 +29,7 @@
         {{if otherIncome.listMap.length}}
             {{each otherIncome.listMap as otherInCome}}
                 <tr otherInId="{{otherInCome.id}}" whichDay="{{otherInCome.whichDay}}" class="oldData">
+                    <input name="sumIpt" type="hidden">
                     <td>
                         <span>{{otherInCome.dateTime | dateFormat: 'yyyy-MM-dd'}}</span>
                     </td><!-- 日期 -->
@@ -38,18 +39,13 @@
                     </td><!-- 项目 -->
 
                     <td>
-                        {{if tripPlan.billStatus == -1}}
+                        {{if editStatus == 2}}
                             <span>{{otherInCome.realPrice}}</span>
-                            <input style="width:90px;" type="hidden" name="price" value="{{otherInCome.realPrice}}" old="{{otherInCome.realPrice}}"/>
+                            <input type="hidden" name="price" value="{{otherInCome.realPrice}}"/>
                         {{else}}
-                            {{if editStatus == 2}}
-                                <span>{{otherInCome.realPrice}}</span>
-                                <input type="hidden" name="price" value="{{otherInCome.realPrice}}"/>
-                            {{else}}
-                                <input  type="text" class="F-float F-money w-70" 
-                                name="price" value="{{otherInCome.realPrice}}"  maxlength="11"
-                                {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
-                            {{/if}}
+                            <input  type="text" class="F-float F-money w-70" 
+                            name="price" value="{{otherInCome.realPrice}}"  maxlength="11"
+                            {{if otherInCome.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                         {{/if}}
                     </td><!-- 单价 -->
 
