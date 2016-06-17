@@ -21,7 +21,8 @@ define(function(require, exports, module) {
             updateHotel : require('./view/booking/update/updateHotel'),//编辑酒店
             updateTicket : require('./view/booking/update/updateTicket'),//编辑票务
             updateScenic : require('./view/booking/update/updateScenic'),//编辑景区
-            updateBus : require('./view/booking/update/updateBus'),//编辑景区
+            updateBus : require('./view/booking/update/updateBus'),//编辑车
+            updateOther : require('./view/booking/update/updateOther'),//编辑其它
             updateMoney : require('./view/booking/update/updateMoney'),//编辑应收
             updaeGuestInfo : require('./view/booking/update/updaeGuestInfo'),//编辑客人信息
             view : require('./view/booking/view/view'),//查看页面
@@ -31,6 +32,7 @@ define(function(require, exports, module) {
             viewScenic : require('./view/booking/view/viewScenic'),//查看酒店
             viewMoney : require('./view/booking/view/viewMoney'),//查看酒店
             viewBus : require('./view/booking/view/viewBus'),//查看车
+            viewOther : require('./view/booking/view/viewOther'),//查看其它
             viewGuestInfo : require('./view/booking/view/viewGuestInfo'),//查看客人信息
         },
         bookingOrder = {
@@ -194,6 +196,11 @@ define(function(require, exports, module) {
                 data.busId = data.bus.id;
                 data.bus = JSON.stringify(data.bus || null);
             }
+            if(!!data.other){
+                data.otherNeedPayMoney = data.other.needPayMoney;
+                data.otherId = data.other.id;
+                data.other = JSON.stringify(data.other || null);
+            }
             if(!!data.needGet){
                 data.needGetNeedPayMoney = data.needGet.sumNeedGetMoney;
                 data.needGet = JSON.stringify(data.needGet || null);
@@ -311,6 +318,8 @@ define(function(require, exports, module) {
                 bookingOrder.updateScenic($that, type);
             }else if($that.hasClass('T-bus')){
                 bookingOrder.updateBus($that, type);
+            }else if($that.hasClass('T-other')){
+                bookingOrder.updateOther($that, type);
             }else if($that.hasClass('T-clear')){
                 clearItem($that);
             }
@@ -366,6 +375,9 @@ define(function(require, exports, module) {
                     break;
                 case "ticket":
                     tps = "确定清空票务数据？";
+                    break;
+                case "other":
+                    tps = "确定清空其它数据？";
                     break;
             }
             if($that.prevAll('input[type="text"]').val() !== ""){
@@ -679,6 +691,61 @@ define(function(require, exports, module) {
     };
 
     /**
+     * 编辑其它代订
+     * @param  {[type]} $that      [description]
+     * @param  {[type]} optionType [description]
+     * @return {[type]}            [description]
+     */
+    bookingOrder.updateOther = function($that, optionType){
+        var data = $that.data('json') || {}, 
+            html = "";
+
+        if(typeof data !== "object"){
+            data = JSON.parse(data);
+        }
+
+        if(!!data.feeDel){
+            data.feeDel = JSON.stringify(data.feeDel);
+        }
+        
+        if(optionType === 2){
+            html = T.viewOther(data);
+            html = Tools.filterMoney(html);
+            html = Tools.filterCount(html);
+            html = Tools.filterUnPoint(html)[0].outerHTML;
+        }else{
+            html = T.updateOther(data);
+        }
+        layer.open({
+            type: 1,
+            title: "其它代订",
+            skin: 'layui-layer-rim', //加上边框
+            area: '890px', //宽高
+            zIndex:1028,
+            content: html,
+            scrollbar: false,
+            success:function(obj, index){
+                var $layer = $(obj);
+                var validate = bookingOrder.bindLayerCommonFeeEvents($layer, index, optionType);
+                //保存
+                $layer.find('.T-btn-save').on('click', function(){
+                    if(!validate.form())return;
+                    var baseInfo = {
+                            date : $layer.find('[name="date"]').val(),
+                        },
+                        commonData = F.assemblyLayerData($layer);
+                    $.extend(baseInfo, commonData);
+                    console.log(commonData)
+                    $that.val(commonData.needPayMoney).data('json', JSON.stringify(baseInfo)).data('clear', '0');
+                    bookingOrder.saveData($that.closest('.T-container'), false, false, true);
+                    F.sumBookingSubtotal($that.closest('.T-container'));
+                    layer.close(index);
+                });
+            }
+        });
+    };
+
+    /**
      * 编辑应收
      * @param  {[type]} $that      [description]
      * @param  {[type]} optionType [description]
@@ -825,6 +892,8 @@ define(function(require, exports, module) {
                 option = '<option value="9">景区费用</option>';
             }else if(type == "4"){
                 option = '<option value="4">车辆费用</option>';
+            }else if(type == "5"){
+                option = '<option value="5">其它费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
                          '<option value="2">小孩结算价</option>'+
@@ -998,6 +1067,22 @@ define(function(require, exports, module) {
         }
         bookingOrderJson.bus = busJson;
 
+        var $other = $baseInfo.find('.T-other'),
+            otherJson = $other.data('json'),
+            otherId = $other.data('id');
+
+        otherJson = typeof otherJson !== "object" ? JSON.parse(otherJson || null) : otherJson;
+        if(!!otherId && !$.isEmptyObject(otherJson)){
+            otherJson.id = otherId;
+        }
+        if(!!otherJson && !$.isEmptyObject(otherJson)){
+            otherJson.deleteFeeIds = F.assemblyFeeDelIds(otherJson.feeDel);
+        }
+        if($other.data('clear') == "1" && !!otherId){
+            bookingOrderJson.delOtherInfoId = otherId;
+        }
+        bookingOrderJson.other = otherJson;
+
         var receivableJson = $baseInfo.find('.T-receivable').data('json');
         receivableJson = typeof receivableJson !== "object" ? JSON.parse(receivableJson || null) : receivableJson;
         if(!$.isEmptyObject(receivableJson)){
@@ -1019,8 +1104,6 @@ define(function(require, exports, module) {
             var hctBookingOrderAdd = window.localStorage.getItem("hct_booking_order_add");
             hctBookingOrderAdd = JSON.parse(hctBookingOrderAdd || null) || {};
             hctBookingOrderAdd[bookingOrder.openAddTime] = bookingOrderJson;
-            console.log(bookingOrderJson)
-            console.log(hctBookingOrderAdd);
             window.localStorage.setItem("hct_booking_order_add", JSON.stringify(hctBookingOrderAdd));
             return false;
         }else if(!!isCache){
@@ -1232,7 +1315,8 @@ define(function(require, exports, module) {
             ticketMoney = $tab.find('.T-ticket').val() || 0,
             scenicMoney = $tab.find('.T-scenic').val() || 0,
             busMoney = $tab.find('.T-bus').val() || 0;
-        $tab.find('[name="bookingSubtotal"]').val(hotelMoney*1 + ticketMoney*1 + scenicMoney*1 + busMoney*1);
+            otherMoney = $tab.find('.T-other').val() || 0,
+        $tab.find('[name="bookingSubtotal"]').val(hotelMoney*1 + ticketMoney*1 + scenicMoney*1 + busMoney*1 + otherMoney*1);
         return this;
     };
 
