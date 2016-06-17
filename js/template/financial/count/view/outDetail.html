@@ -67,6 +67,10 @@
                                                     <th class="th-border">客户信息</th>
                                                     <th class="th-border">游客信息</th>
                                                     <th class="th-border">费用项</th>
+                                                    <th class="th-border">单价</th>
+                                                    <th class="th-border">数量</th>
+                                                    <th class="th-border">天数</th>
+                                                    <th class="th-border">金额</th>
                                                     <th class="th-border">说明</th>
                                                     <th class="th-border">应收</th>
                                                     <th class="th-border">结算</th>
@@ -101,12 +105,25 @@
                                                                             </td>
                                                                             
                                                                             <td>
-                                                                                <span>
-                                                                                    {{groupFee.name}}:
-                                                                                    {{groupFee.count}}x{{groupFee.price}}={{groupFee.count*groupFee.price}}
-                                                                                </span>
+                                                                                <span>{{groupFee.name}}</span>
                                                                             </td>
 
+                                                                            <td>
+                                                                               <span class="F-float F-money">{{groupFee.price}}</span> 
+                                                                            </td>
+
+                                                                            <td>
+                                                                               <span class="F-float F-count">{{groupFee.count}}</span> 
+                                                                            </td>
+
+                                                                            <td>
+                                                                               <span class="F-float F-count">{{groupFee.days}}</span> 
+                                                                            </td>
+
+                                                                            <td>
+                                                                               <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
+                                                                            </td>
+    
                                                                             <td style="max-width:150px;">
                                                                                 <span style="max-width:150px;">
                                                                                     {{groupFee.remark}}
@@ -126,13 +143,26 @@
                                                                         </tr>
                                                                     {{else index>0}}
                                                                         <tr class="view-accountsPrint">
-                                                                            <td style="max-width:150px;">
-                                                                                <span>
-                                                                                    {{groupFee.name}}:
-                                                                                    {{groupFee.count}}x{{groupFee.price}}={{groupFee.count*groupFee.price}}
-                                                                                </span>
+                                                                            <td>
+                                                                                <span>{{groupFee.name}}</span>
+                                                                                
                                                                             </td>
 
+                                                                            <td>
+                                                                               <span class="F-float F-money">{{groupFee.price}}</span> 
+                                                                            </td>
+
+                                                                            <td>
+                                                                               <span class="F-float F-count">{{groupFee.count}}</span> 
+                                                                            </td>
+
+                                                                            <td>
+                                                                               <span class="F-float F-count">{{groupFee.days}}</span> 
+                                                                            </td>
+
+                                                                            <td>
+                                                                               <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
+                                                                            </td>
                                                                             <td style="max-width:150px;">
                                                                                 <span style="max-width:150px;">
                                                                                     {{groupFee.remark}}
@@ -146,7 +176,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr>
-                                                    <td colspan="5" style="text-align:left">合计</td>
+                                                    <td colspan="9" style="text-align:left">合计</td>
                                                     <td class="td-border">
                                                     <span class="F-float F-money">{{tripIncomeMap.groupIncomeMap.sumNeedPayAllMoney}}</span></td>
                                                     <td class="td-border">
