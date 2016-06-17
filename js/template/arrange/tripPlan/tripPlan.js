@@ -1900,9 +1900,22 @@ define(function(require, exports) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
                         if(memberInfo){
-                            var name = F.getName(memberInfo),
-                                mobileNumber = F.getPhone(memberInfo),
-                                idCardNumber = F.getIdCard(memberInfo);
+                            var personInfo = memberInfo.split(/\s/);
+                            for (var k = personInfo.length; k >= 0 ; k--) {
+                                if (personInfo[k] == '') {
+                                    personInfo.splice(k,1)
+                                }
+                            }
+
+                            var name = F.getName(personInfo[0]), mobileNumber = '', idCardNumber = '';
+                            for (var j = 1; j < personInfo.length; j++) {
+                                if (!!personInfo[j] && trim(personInfo[j]).length === 11) {
+                                    mobileNumber = F.getPhone(personInfo[j]);
+                                }else if (!!personInfo[j] && trim(personInfo[j]).length === 18) {
+                                    idCardNumber = F.getIdCard(personInfo[j]);
+                                }
+                            }
+
                             if(name != "" || !!mobileNumber || !!idCardNumber){
                                 touristGroupMemberList.push({
                                     name : name,
@@ -1911,7 +1924,7 @@ define(function(require, exports) {
                                 });
                                 $obj.append(T.touristsList({touristGroupMemberList:[{
                                     name : name,
-                                    mobileNumber : F.getPhone(memberInfo),
+                                    mobileNumber : mobileNumber,
                                     idCardNumber : idCardNumber
                                 }]}));
                             }

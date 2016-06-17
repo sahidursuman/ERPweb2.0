@@ -69,6 +69,7 @@
 					<tr>
 						<th>费用项</th>
 						<th>数量</th>
+						{{if type != 1}}<th>日期</th>{{/if}}
 						<th>单价</th>
 						<th>金额</th>
 						<th>说明</th>
@@ -85,8 +86,9 @@
 							{{rs.type | getFeeItemText}}
 						</td>
 						<td class="F-float F-count">{{rs.count}}</td>
+						{{if type != 1}}<td>{{rs.days}}</td>{{/if}}
 						<td class="F-float F-money">{{rs.price}}</td>
-						<td class="F-float F-money T-money">{{rs.price*rs.count}}</td>
+						<td class="F-float F-money T-money">{{rs.price*rs.count*(rs.days || 1)}}</td>
 						<td>{{rs.remark}}</td>
 						{{if isFeeAdjust}}
 						<td></td>
@@ -98,8 +100,9 @@
 					<tr>
 						<td>{{rs.type | getFeeItemText:2}}</td>
 						<td class="F-float F-count">{{rs.count}}</td>
+						{{if type != 1}}<td>{{rs.days}}</td>{{/if}}
 						<td class="F-float F-money">{{rs.price}}</td>
-						<td class="F-float F-money T-money">{{rs.price*rs.count}}</td>
+						<td class="F-float F-money T-money">{{rs.price*rs.count*(rs.days || 1)}}</td>
 						<td>{{rs.remark}}</td>
 						{{if isFeeAdjust}}
 						<td></td>

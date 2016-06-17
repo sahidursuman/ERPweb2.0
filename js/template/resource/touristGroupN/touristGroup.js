@@ -545,7 +545,7 @@ define(function(require, exports) {
     /**
      * 查看游客管理
      * @param  {number} id 游客ID
-     * @return {[type]}    [description]
+     * @return {string}    'inner':表示是内转
      */
     touristGroup.touristGroupView = function(id, type){
         $.ajax({
@@ -749,7 +749,7 @@ define(function(require, exports) {
                 touristGroup.updateJionGroupMoney($that, 0, 2);
             }
         });
-        $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"]', function(){
+        $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"], [name="singlePlanDefine-add"]', function(){
             var $that = $(this);
             if($that.hasClass('T-single-group')){
                 $tab.find('.T-is-hidden, .T-add-join-group, .T-add-send-group').removeClass('hidden');
@@ -1017,7 +1017,7 @@ define(function(require, exports) {
         var feeList = jsonData.touristGroupFeeJsonAdd || jsonData.lineFee,
             needPayAllMoney = 0;
         for(var i=0; i<feeList.length; i++){
-            needPayAllMoney += feeList[i].price * feeList[i].count;
+            needPayAllMoney += feeList[i].price * feeList[i].count * (feeList[i].days || 1);
         }
         jsonData.needPayAllMoney = needPayAllMoney;
 
@@ -1450,6 +1450,7 @@ define(function(require, exports) {
                             feeList.push(
                                 {
                                     count : $layer.find('[name="count"]').val(),
+                                    days : $layer.find('[name="days"]').val(),
                                     price : $layer.find('[name="price"]').val(),
                                     remark : $layer.find('[name="remark"]').val(),
                                     type : $layer.find('[name="type"]').val()
@@ -1884,7 +1885,8 @@ define(function(require, exports) {
         var $tbody = $layer.find('.T-fee-list');
         //添加
         $layer.find('.T-add-fee').on('click', function(){
-            var  option = "";
+            var option = "",
+                days = '';
             if($tbody.data('type') == "1"){
                 option = '<option value="4">车辆费用</option>';
             }else if($tbody.data('type') == "2"){
@@ -1910,10 +1912,11 @@ define(function(require, exports) {
                          '<option value="10">自费费用</option>'+
                          '<option value="11">票务费用</option>'+
                          '<option value="12">其他费用</option>';
+                days = '<td><input type="text" class="col-xs-12 T-option" name="days"></td>';
             }
             $tbody.append('<tr>'+
                 '<td><select class="col-xs-12" name="type">'+option+'</select></td>'+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+days+
                 '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+
                 '<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>'+
                 '<td><input type="text" class="col-xs-12" name="remark"></td>'+
@@ -3063,7 +3066,7 @@ define(function(require, exports) {
         //计算金额
         calcMoney : function($that, $tab){
             var $tr = $that.closest('tr'),
-                price = $tr.find('[name="count"]').val() * $tr.find('[name="price"]').val()
+                price = $tr.find('[name="count"]').val() * $tr.find('[name="price"]').val() * ($tr.find('[name=days]').val() || 1)
             $tr.find('[name="money"]').val(isNaN(price) ? 0 : price);
             if($tab.find('[name="sumNeedGetMoney"]').length > 0){
                 $tab.find('[name="sumNeedGetMoney"]').val(F.calcRece($tab));
@@ -3093,6 +3096,7 @@ define(function(require, exports) {
                 var $that = $(this),
                     id = $that.data('id'),
                     type = $that.find('[name="type"]').val(),
+                    days = $that.find('[name="days"]').val(),
                     count = $that.find('[name="count"]').val(),
                     price = $that.find('[name="price"]').val(),
                     remark = $that.find('[name="remark"]').val();
@@ -3100,6 +3104,7 @@ define(function(require, exports) {
                     var jsonData = {
                         type : type,
                         count : count,
+                        days : days,
                         price : price,
                         remark : remark
                     }

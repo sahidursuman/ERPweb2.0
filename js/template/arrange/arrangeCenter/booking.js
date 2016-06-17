@@ -291,8 +291,8 @@ define(function(require, exports) {
         });
         return this;
         function addHotel(){
-            var html =  '<tr><td><input name="enterTime" type="text" class="datepicker" /></td>'+
-                        '<td><input name="leaveTime" type="text" class="datepicker" /></td>'+
+            var html =  '<tr><td><input name="enterTime" type="text" class="datepicker T-action-blur" /></td>'+
+                        '<td><input name="leaveTime" type="text" class="datepicker T-action-blur" /></td>'+
                         '<td><select name="hotelLevel" class="col-sm-12">'+
                         '    <option selected="selected" value="">--全部--</option>'+
                         '    <option value="1">三星以下</option>'+
