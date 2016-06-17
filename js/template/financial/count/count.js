@@ -3082,7 +3082,7 @@ define(function(require, exports){
 	                    '<i class="ace-icon fa fa-plus  bigger-110 icon-only"></i>'+
 	                '</button>'+
 				'</div>'+
-				'<div class="div-h-30 mar-t-5" index="1">'+
+				'<div class="div-h-30 mar-t-5 min-w-100" index="1">'+
 					'<input type="text" name="guideName" class="w-70"/>'+
 					'<input type="hidden" name="guideArrangeId"/>'+
 					'<button class="btn btn-danger btn-sm btn-white T-delSelfGuide pull-right">'+
@@ -3215,7 +3215,7 @@ define(function(require, exports){
 					'<input name="billRemark" class="w-70" type="text">'+
 				'</div>'+
 			'</td>'+
-			'<td>'+divHtml+'未对账<a class="T-selfArrDel" href="javascript:void(0)" style="margin-left:14px;">删除</a></td>'+
+			'<td>'+divHtml+'未对账&nbsp;&nbsp;<a class="T-selfArrDel" href="javascript:void(0)">删除</a></td>'+
 			
 			'</tr>';
 		$obj.append(html);

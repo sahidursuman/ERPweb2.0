@@ -1900,7 +1900,7 @@ define(function(require, exports) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
                         if(memberInfo){
-                            var personInfo = memberInfo.split(' ');
+                            var personInfo = memberInfo.split(/\s/);
                             for (var k = personInfo.length; k >= 0 ; k--) {
                                 if (personInfo[k] == '') {
                                     personInfo.splice(k,1)
