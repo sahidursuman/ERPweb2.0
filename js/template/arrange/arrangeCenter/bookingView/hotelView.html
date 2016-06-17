@@ -60,10 +60,11 @@
                         <th class="th-border">星级</th>
                         <th class="th-border"><span class="necessary">*</span>酒店</th>
                         <th class="th-border"><span class="necessary">*</span>房型</th>
+                        <th class="th-border">天数</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
                         <th class="th-border" width="110">优惠</th>
-                        <th class="th-border" width="110">应收</th>
+                        <th class="th-border" width="110">应付</th>
                         <th class="th-border">预付款</th>
                         <th class="th-border">备注</th>
                     </tr>
@@ -87,6 +88,7 @@
                         <td>
                             {{rs.hotelRoomType}}
                         </td>
+                        <td>{{rs.days}}</td>
                         <td class="F-float F-money">
                             {{rs.costPrice}}
                         </td>

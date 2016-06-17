@@ -12,7 +12,7 @@ define(function(require, exports) {
 	    	        ]
 	    	    },
 				{	//姓名
-					$ele: $obj.find('input[name="names"]'),
+					$ele: $obj.find('.R-childGroupName'),
 					rules: [
 						{
 							type: 'null',
