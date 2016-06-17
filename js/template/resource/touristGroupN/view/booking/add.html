@@ -12,7 +12,7 @@
                     <tr>
                         <th rowspan="2">客户</th>
                         <th rowspan="2">代订日期</th>
-                        <th colspan="4">代订项目</th>
+                        <th colspan="5">代订项目</th>
                         <th rowspan="2">代订小计</th>
                         <th rowspan="2">应收</th>
                         <th rowspan="2">游客信息</th>
@@ -24,6 +24,7 @@
                         <th width="150">票务</th>
                         <th width="150">景区</th>
                         <th width="150">旅游车</th>
+                        <th width="150">其它</th>
                     </tr>
                 </thead>
                 <tbody class="T-booking-info">
@@ -48,7 +49,11 @@
                             <input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly placeholder="点击填写旅游车" {{if !!bus}}value="{{busNeedPayMoney}}" data-json="{{bus}}"{{/if}} data-id="{{busId}}">
                             <a class="cursor T-action T-clear" data-status="bus">清空</a>
                         </td>
-                        <td><input type="text" class="col-xs-12 F-float F-money" readonly name="bookingSubtotal" value="{{(hotelNeedPayMoney||0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0)}}"></td>
+                        <td>
+                            <input type="text" class="w-100 hct-cursor T-action T-other F-float F-money" readonly placeholder="点击填写其它" {{if !!other}}value="{{otherNeedPayMoney}}" data-json="{{other}}"{{/if}} data-id="{{otherId}}">
+                            <a class="cursor T-action T-clear" data-status="bus">清空</a>
+                        </td>
+                        <td><input type="text" class="col-xs-12 F-float F-money" readonly name="bookingSubtotal" value="{{(hotelNeedPayMoney||0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0) + (otherNeedPayMoney||0)}}"></td>
                         <td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float F-money" readonly name="" placeholder="点击填写应收" {{if !!needGet}}value="{{needGetNeedPayMoney}}" data-json="{{needGet}}"{{/if}}></td>
                         <td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" placeholder="点击填写客人信息" {{if !!tourist}}value="{{touristInfo}}" data-json="{{tourist}}"{{/if}}></td>
                         <td><input type="text" class="col-xs-12" name="mobileNumber" readonly value="{{touristMobileNumber}}"></td>

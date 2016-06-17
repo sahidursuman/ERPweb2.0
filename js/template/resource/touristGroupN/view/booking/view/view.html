@@ -17,7 +17,7 @@
                     <tr>
                         <th rowspan="2">客户</th>
                         <th rowspan="2">代订日期</th>
-                        <th colspan="4">代订项目</th>
+                        <th colspan="5">代订项目</th>
                         <th rowspan="2">代订小计</th>
                         <th rowspan="2">应收</th>
                         <th rowspan="2">游客信息</th>
@@ -29,6 +29,7 @@
                         <th width="110">票务</th>
                         <th width="110">景区</th>
                         <th width="110">旅游车</th>
+                        <th width="110">其它</th>
                     </tr>
                 </thead>
                 <tbody class="T-booking-info">
@@ -45,6 +46,7 @@
                         <td><a class="cursor T-action T-ticket F-float F-money" data-json="{{ticket}}">{{ticketNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-scenic F-float F-money" data-json="{{scenic}}">{{scenicNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-bus F-float F-money" data-json="{{bus}}">{{busNeedPayMoney}}</a></td>
+                        <td><a class="cursor T-action T-other F-float F-money" data-json="{{other}}">{{otherNeedPayMoney}}</a></td>
                         <td><span class="F-float F-money">{{(hotelNeedPayMoney || 0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0)}}</span></td>
                         <td><a class="cursor T-action T-receivable F-float F-money" data-json="{{needGet}}">{{needGetNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-guest-info" data-json="{{tourist}}">{{touristInfo}}</a></td>
