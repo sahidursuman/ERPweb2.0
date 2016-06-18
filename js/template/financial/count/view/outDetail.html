@@ -324,7 +324,37 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr  class="view-accountsPrint">
-                                                    <td colspan="9" style="text-align:left" class="T-sum-td">合计</td>
+                                                    <td colspan="3" style="text-align:left" class="T-sum-td">合计</td>
+                                                    <td style="text-align:right;">
+                                                        <span style="font-weight: bold;">打单&nbsp;&nbsp;</span>
+                                                    </td>
+                                                    <td style="text-align:left">   
+                                                        &nbsp;&nbsp;
+                                                        <span>导佣：</span>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.moneySum.gMoney}}</span>&nbsp;&nbsp;
+                                                        <span>社佣：</span>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.moneySum.tMoney}}</span>
+                                                    </td>
+                                                    <td style="text-align:right;">
+                                                        <span style="font-weight: bold;">人数&nbsp;&nbsp;</span>
+                                                    </td>
+                                                    <td style="text-align:left">   
+                                                        &nbsp;&nbsp;
+                                                        <span>导佣：</span>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.personSum.gMoney}}</span>&nbsp;&nbsp;
+                                                        <span>社佣：</span>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.personSum.tMoney}}</span>
+                                                    </td>
+                                                    <td style="text-align:right;">
+                                                        <span style="font-weight: bold;">停车&nbsp;&nbsp;</span>
+                                                    </td>
+                                                    <td style="text-align:left">   
+                                                        &nbsp;&nbsp;
+                                                        <span>导佣：</span>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.busSum.gMoney}}</span>&nbsp;&nbsp;
+                                                        <span>社佣：</span>
+                                                        <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.busSum.tMoney}}</span>
+                                                    </td>
                                                     <td>
                                                         <span class="F-float F-money">{{tripIncomeMap.shopIncomeMap.sumNeedPayAllMoney}}</span>
                                                     </td>
