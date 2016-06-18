@@ -93,7 +93,7 @@
                  <td>
                      <input type="hidden" name="isConfirmAccount" value="{{if outOther.isConfirmAccount == 0}}0{{else if outOther.isConfirmAccount == 1}}1{{/if}}"> {{if outOther.isConfirmAccount == 0}}未对账{{else if outOther.isConfirmAccount == 1}}已对账{{/if}}</td>
 
-                 <td><a class="cursor {{if outOther.isConfirmAccount != 1}}T-other-delete{{/if}}" data-catename="other" title="删除">删除</a></td>
+                 <td><a class="cursor {{if outOther.isConfirmAccount != 1}}T-other-delete{{/if}}"  {{if outOther.isConfirmAccount == 1}}style="color:#bbb;"{{/if}} data-catename="other" title="删除">删除</a></td>
              </tr>{{/if}}{{/each}}
             </tbody>
         </table>
