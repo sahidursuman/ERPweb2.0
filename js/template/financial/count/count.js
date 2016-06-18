@@ -1685,7 +1685,7 @@ define(function(require, exports){
 					newThisCol = thisColspan + 1
 				$that.attr('colspan',newThisCol);
 			});
-		$obj.find('th[colspan]').attr('colspan',nweThColspan);
+		$obj.find('th[colspan=4]').attr('colspan',nweThColspan);
 	};
 	//设置打印时的样式T-img-th
 	Count.setPrintStyle = function($obj){
@@ -1699,7 +1699,7 @@ define(function(require, exports){
 					newThisCol = thisColspan - 1
 				$that.attr('colspan',newThisCol);
 			});
-			$obj.find('th[colspan]').attr('colspan',nweThColspan);
+			$obj.find('th[colspan=5]').attr('colspan',nweThColspan);
 	};
 	//质量统计
 	Count.getquality = function(id){
