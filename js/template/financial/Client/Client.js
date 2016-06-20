@@ -53,7 +53,6 @@ define(function(require, exports) {
                 partnerAgencyType: '',
                 sortType : "desc"
             };
-// ====================================================================================================================
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
