@@ -1538,18 +1538,15 @@ define(function(require, exports){
 						guidePay[i].taskJson = JSON.parse(guidePay[i].taskJson);
 					};
 
-					//循环去除购物导拥、购物社佣的空格
-					var tRateList = data.tripIncomeMap.shopIncomeMap.shopIncomeMapList;
-					for(var i = 0;i<tRateList.length;i++){
-						var itemList = tRateList[i].shopArrangeItemList;
-						for(var j = 0;j<itemList.length;j++){
-							itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
-							itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
-						}
-					};
-					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = tRateList;
+					//计算购物的合计
+					var ret = Count.sumShopRebtMoney(data.tripIncomeMap.shopIncomeMap.shopIncomeMapList);
+					data.tripIncomeMap.shopIncomeMap.shopIncomeMapList = ret.tRateList;
+					data.tripIncomeMap.shopIncomeMap.personSum = ret.personSum;
+					data.tripIncomeMap.shopIncomeMap.busSum = ret.busSum;
+					data.tripIncomeMap.shopIncomeMap.moneySum = ret.moneySum;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
 
+					
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -1567,6 +1564,43 @@ define(function(require, exports){
 			}
 		});
 		
+	};
+	//计算购物合计
+	Count.sumShopRebtMoney = function(data) {
+		var ret = {
+			tRateList: data,
+			personSum: {
+				gMoney: 0,
+				tMoney: 0
+			},
+			busSum: {
+				gMoney: 0,
+				tMoney: 0
+			},
+			moneySum: {
+				gMoney: 0,
+				tMoney: 0
+			}
+		};
+		for(var i = 0;i<ret.tRateList.length;i++){
+			var itemList = ret.tRateList[i].shopArrangeItemList;
+			for(var j = 0;j<itemList.length;j++){
+				itemList[j].travelAgencyRate = Math.round(itemList[j].travelAgencyRate*100);
+				itemList[j].guideRate = Math.round(itemList[j].guideRate*100);
+				if(itemList[j].name == '人数返佣'){
+					ret.personSum.gMoney += itemList[j].guideRebateMoney;
+					ret.personSum.tMoney += itemList[j].travelAgencyRebateMoney;
+				}else if(itemList[j].name == "停车返佣") {
+					ret.busSum.gMoney += itemList[j].guideRebateMoney;
+					ret.busSum.tMoney += itemList[j].travelAgencyRebateMoney;
+				}else {
+					ret.moneySum.gMoney += itemList[j].guideRebateMoney;
+					ret.moneySum.tMoney += itemList[j].travelAgencyRebateMoney;
+				} 
+			}
+
+		};
+		return ret
 	};
 	//校验每个明细tab是否应该显示
 	Count.isShowTabByData = function(data){
@@ -1651,7 +1685,7 @@ define(function(require, exports){
 					newThisCol = thisColspan + 1
 				$that.attr('colspan',newThisCol);
 			});
-		$obj.find('th[colspan]').attr('colspan',nweThColspan);
+		$obj.find('th[colspan=4]').attr('colspan',nweThColspan);
 	};
 	//设置打印时的样式T-img-th
 	Count.setPrintStyle = function($obj){
@@ -1665,7 +1699,7 @@ define(function(require, exports){
 					newThisCol = thisColspan - 1
 				$that.attr('colspan',newThisCol);
 			});
-			$obj.find('th[colspan]').attr('colspan',nweThColspan);
+			$obj.find('th[colspan=5]').attr('colspan',nweThColspan);
 	};
 	//质量统计
 	Count.getquality = function(id){
