@@ -418,10 +418,11 @@ define(function(require, exports) {
         $tab.find('.T-fee-list').on('blur', '.T-calculate', function(event){
             event.preventDefault();
             var $that = $(this), $tr = $that.closest('tr');
-            if($that.hasClass('T-count') || $that.hasClass('T-price')){
+            if($that.hasClass('T-count') || $that.hasClass('T-price') || $that.hasClass('T-days')){
                 var count = $tr.find('[name="count"]').val() || 0,
-                    price = $tr.find('[name="price"]').val() || 0;
-                    $tr.find('[name="money"]').val(Tools.toFixed(count * price));
+                    price = $tr.find('[name="price"]').val() || 0,
+                    days = $tr.find('[name="days"]').val() || 0;
+                    $tr.find('[name="money"]').val(Tools.toFixed(count * price * days));
                     $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
             }
             var money = 0;
@@ -898,6 +899,7 @@ define(function(require, exports) {
                 type: $that.find('[name="type"]').val(),
                 id : $that.data("id") || "",
                 price : $that.find('[name="price"]').val(),
+                days : $that.find('[name="days"]').val(),
                 remark : $that.find('[name="feeRemark"]').val()
             });
         });
