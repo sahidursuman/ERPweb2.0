@@ -71,8 +71,8 @@
 					<tr>
 						<th>费用项</th>
 						<th>数量</th>
-						{{if type != 1}}<th>天数</th>{{/if}}
 						<th>单价</th>
+						{{if type != 1}}<th>天数</th>{{/if}}
 						<th>金额</th>
 						<th>说明</th>
 						<th width="50">操作</th>
@@ -88,8 +88,8 @@
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
-						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days" value="{{rs.days || 1}}"></td>{{/if}}
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
+						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days" value="{{rs.days || 1}}"></td>{{/if}}
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count*(rs.days || 1)}}"></td>
 						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>

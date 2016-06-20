@@ -16,7 +16,7 @@
     <tbody class="T-tripDetail">
     {{if touristGroup.touristGroups.length}}
         {{each touristGroup.touristGroups as touristGroup index}}
-            <tr id="{{touristGroup.id}}">
+            <tr id="{{touristGroup.id}}" data-pid="{{touristGroup.pid}}">
                 <input name="sumIpt" type="hidden">
                 <td>{{index+1}}</td>
                 <td>{{touristGroup.partnerAgencyName}}</td>
