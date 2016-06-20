@@ -47,7 +47,7 @@
                         <td><a class="cursor T-action T-scenic F-float F-money" data-json="{{scenic}}">{{scenicNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-bus F-float F-money" data-json="{{bus}}">{{busNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-other F-float F-money" data-json="{{other}}">{{otherNeedPayMoney}}</a></td>
-                        <td><span class="F-float F-money">{{(hotelNeedPayMoney || 0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0)}}</span></td>
+                        <td><span class="F-float F-money">{{(hotelNeedPayMoney || 0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0) + (otherNeedPayMoney || 0)}}</span></td>
                         <td><a class="cursor T-action T-receivable F-float F-money" data-json="{{needGet}}">{{needGetNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-guest-info" data-json="{{tourist}}">{{touristInfo}}</a></td>
                         <td>{{touristMobileNumber}}</td>
