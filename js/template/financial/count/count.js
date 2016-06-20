@@ -1548,8 +1548,11 @@ define(function(require, exports){
 					//合并相同的资源
 					data.tripPayMap.hotelPayMap.hotelPayMapList = Count.mergeSourse(data.tripPayMap.hotelPayMap.hotelPayMapList, 'hotelName');
 					data.tripPayMap.scenicPayMap.scenicPayMapList = Count.mergeSourse(data.tripPayMap.scenicPayMap.scenicPayMapList, 'scenicName');
-					console.log(data.tripPayMap.scenicPayMap.scenicPayMapList);
-
+					data.tripPayMap.restaurantPayMap.restaurantPayMapList = Count.mergeSourse(data.tripPayMap.restaurantPayMap.restaurantPayMapList, 'restaurantName');
+					data.tripPayMap.ticketPayMap.ticketPayMapList = Count.mergeSourse(data.tripPayMap.ticketPayMap.ticketPayMapList, 'ticketName');
+					data.tripPayMap.busPayMap.busPayMapList = Count.mergeSourse(data.tripPayMap.busPayMap.busPayMapList, 'busCompanyName');
+					data.tripPayMap.selfPayPayMap.selfpPayPayMapList = Count.mergeSourse(data.tripPayMap.selfPayPayMap.selfpPayPayMapList, 'selfPayName');
+					console.log(data.tripPayMap.selfPayPayMap);
 
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
@@ -1600,7 +1603,6 @@ define(function(require, exports){
 		        tempArr.length = 0;
 			}
 		}
-		console.info(newDataArr);
 		return newDataArr;
 	};
 	//计算购物合计
