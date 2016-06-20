@@ -323,7 +323,7 @@ define(function(require, exports){
 		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
 		}).on('click','.T-viewTouristGroup',function(){
-			var id = $(this).closest('tr').attr('id');
+			var id = $(this).closest('tr').data('pid');
 			KingServices.viewTouristGroup(id);
 		});
 		//按钮事件--单团核算表
@@ -530,7 +530,7 @@ define(function(require, exports){
 		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
 		}).on('click','.T-viewTouristGroup',function(){
-			var id = $(this).closest('tr').attr('id');
+			var id = $(this).closest('tr').data('pid');
 			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
@@ -981,7 +981,7 @@ define(function(require, exports){
 		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
 		}).on('click','.T-viewTouristGroup',function(){
-			var id = $(this).closest('tr').attr('id');
+			var id = $(this).closest('tr').data('pid');
 			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
@@ -1545,8 +1545,15 @@ define(function(require, exports){
 					data.tripIncomeMap.shopIncomeMap.busSum = ret.busSum;
 					data.tripIncomeMap.shopIncomeMap.moneySum = ret.moneySum;
 					data.tripPayMap.guidePayMap.guidePayMapList = guidePay;
+					//合并相同的资源
+					data.tripPayMap.hotelPayMap.hotelPayMapList = Count.mergeSourse(data.tripPayMap.hotelPayMap.hotelPayMapList, 'hotelName');
+					data.tripPayMap.scenicPayMap.scenicPayMapList = Count.mergeSourse(data.tripPayMap.scenicPayMap.scenicPayMapList, 'scenicName');
+					data.tripPayMap.restaurantPayMap.restaurantPayMapList = Count.mergeSourse(data.tripPayMap.restaurantPayMap.restaurantPayMapList, 'restaurantName');
+					data.tripPayMap.ticketPayMap.ticketPayMapList = Count.mergeSourse(data.tripPayMap.ticketPayMap.ticketPayMapList, 'ticketName');
+					data.tripPayMap.busPayMap.busPayMapList = Count.mergeSourse(data.tripPayMap.busPayMap.busPayMapList, 'busCompanyName');
+					data.tripPayMap.selfPayPayMap.selfpPayPayMapList = Count.mergeSourse(data.tripPayMap.selfPayPayMap.selfpPayPayMapList, 'selfPayName');
+					console.log(data.tripPayMap.selfPayPayMap);
 
-					
 					var html = outDetailTempLate(data);
 					Tools.addTab(menuKey+'-outDetail','单团核算',html);
 
@@ -1564,6 +1571,39 @@ define(function(require, exports){
 			}
 		});
 		
+	};
+
+	//合并相同资源的数据
+	Count.mergeSourse = function(data, key) {
+		// 1. 排序
+		data.sort(function(a, b) {
+			return a[key] > b[key];
+		});
+		// 构造新的数据结构
+		// 1. 将相同的资源主体放到同一个对象中
+		// 2. 计算应付结算合计
+		var newDataArr = [], tempArr = [];
+		for(var i = 0,len = data.length,newKey; i <len; i++) {
+			newKey = data[i][key],sumPay = 0,sumSettle = 0,sumMap = {};
+			if(i+1<len && newKey == data[i+1][key]){
+				tempArr.push(data[i]);
+			} else {
+				tempArr.push(data[i]);
+				for(var j = 0;j<tempArr.length;j++) {
+					var listData = tempArr[j];
+					sumPay += listData.needPayAllMoney;
+					sumSettle += listData.settlementMoney;
+				};
+				sumMap.sumPay = sumPay;
+				sumMap.sumSettle = sumSettle;
+		        newDataArr.push({
+		        	listMap: tempArr.slice(0),
+		        	sumMap: sumMap
+		        });
+		        tempArr.length = 0;
+			}
+		}
+		return newDataArr;
 	};
 	//计算购物合计
 	Count.sumShopRebtMoney = function(data) {

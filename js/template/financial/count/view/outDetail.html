@@ -14,7 +14,7 @@
                 <td class="text-a-l"><label>责任计调：{{tripBaseInfo.dutyOPUserName}}</label></td>
                 <td colspan="3" class="text-a-l"><label>
                     {{each tripBaseInfo.guideList as guide}}
-                        导游：{{guide.guideName}}&nbsp;&nbsp;{{guide.guideCardNumber}}&nbsp;&nbsp;&nbsp;
+                        <span style="margin-left:3px;">导游：{{guide.guideName}}{{guide.guideCardNumber}}</span> 
                     {{/each}}
                 </label></td>
             </tr>
@@ -758,142 +758,145 @@
                                                     <th class="th-border">司机</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th>
                                                     <th class="th-border">结算</th>
+                                                    <th class="th-border">结算合计</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{if tripPayMap.busPayMap != null}}
                                                     {{if tripPayMap.busPayMap.busPayMapList != null}}
                                                         {{each tripPayMap.busPayMap.busPayMapList as item}}
-                                                            {{if item.payTypeDetails.length && !!item.payTypeDetails.length}}
-                                                                {{each item.payTypeDetails as payDetail i}}
-                                                                    {{if i == 0}}
-                                                                        <tr class="view-accountsPrint">
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.startTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.endTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>
-                                                                                    {{if item.taskType == 0}}
-                                                                                        全程
-                                                                                    {{else if item.taskType == 1}}
-                                                                                        接机
-                                                                                    {{else if item.taskType == 2}}
-                                                                                        送机
-                                                                                    {{else if item.taskType == 3}}
-                                                                                        前段
-                                                                                    {{else if item.taskType == 4}}
-                                                                                        中段
-                                                                                    {{else if item.taskType == 5}}
-                                                                                        后段
-                                                                                    {{/if}}
-                                                                                </span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.busCompanyName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.licenseNumber}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.driverName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.reduceMoney}}</span>
-                                                                            </td>
-                                                                            <td class="T-noprint " rowspan="{{item.payTypeDetails.length}}">
-                                                                                {{if item.billImage != null && item.billImage != ""}}
-                                                                                <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                                {{else}}
-                                                                                    <span style="color:#bbb;">查看</span>
+                                                            {{each item.listMap as rs i}}
+                                                                {{if i == 0}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.startTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.endTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>
+                                                                                {{if rs.taskType == 0}}
+                                                                                    全程
+                                                                                {{else if rs.taskType == 1}}
+                                                                                    接机
+                                                                                {{else if rs.taskType == 2}}
+                                                                                    送机
+                                                                                {{else if rs.taskType == 3}}
+                                                                                    前段
+                                                                                {{else if rs.taskType == 4}}
+                                                                                    中段
+                                                                                {{else if rs.taskType == 5}}
+                                                                                    后段
                                                                                 {{/if}}
-                                                                            </td>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td>
-                                                                                <span class="F-float F-money">{{payDetail.money}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{else}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td>
-                                                                                <span class="F-float F-money">{{payDetail.money}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{/if}}
-                                                                {{/each}}
-                                                            {{else}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td>
-                                                                        <span>{{item.startTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.endTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>
-                                                                            {{if item.taskType == 0}}
-                                                                                全程
-                                                                            {{else if item.taskType == 1}}
-                                                                                接机
-                                                                            {{else if item.taskType == 2}}
-                                                                                送机
-                                                                            {{else if item.taskType == 3}}
-                                                                                前段
-                                                                            {{else if item.taskType == 4}}
-                                                                                中段
-                                                                            {{else if item.taskType == 5}}
-                                                                                后段
+                                                                            </span>
+                                                                        </td>
+                                                                        <td rowspan="{{item.listMap.length}}">
+                                                                            <span>{{rs.busCompanyName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.licenseNumber}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.driverName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
                                                                             {{/if}}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.busCompanyName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.licenseNumber}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.driverName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.reduceMoney}}</span>
-                                                                    </td>
-                                                                    <td class="T-noprint ">
-                                                                        {{if item.billImage != null && item.billImage != ""}}
-                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                        {{else}}
-                                                                            <span style="color:#bbb;">查看</span>
-                                                                        {{/if}}
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-momey">{{item.sumMap.sumPay}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-momey">{{item.sumMap.sumSettle}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{else}}
+                                                                <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.startTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.endTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>
+                                                                                {{if rs.taskType == 0}}
+                                                                                    全程
+                                                                                {{else if rs.taskType == 1}}
+                                                                                    接机
+                                                                                {{else if rs.taskType == 2}}
+                                                                                    送机
+                                                                                {{else if rs.taskType == 3}}
+                                                                                    前段
+                                                                                {{else if rs.taskType == 4}}
+                                                                                    中段
+                                                                                {{else if rs.taskType == 5}}
+                                                                                    后段
+                                                                                {{/if}}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.licenseNumber}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.driverName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{/if}}
+                                                            {{/each}}
+                                                                
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
@@ -939,100 +942,110 @@
                                                     <th class="th-border">人数</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th>
                                                     <th class="th-border">结算</th>
+                                                    <th class="th-border">结算合计</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{if tripPayMap.restaurantPayMap != null}}
                                                     {{if tripPayMap.restaurantPayMap.restaurantPayMapList != null}}
                                                         {{each tripPayMap.restaurantPayMap.restaurantPayMapList as item}}
-                                                            {{if item.payTypeDetails.length && !!item.payTypeDetails}}
-                                                                {{each item.payTypeDetails as payDetail i}}
-                                                                    {{if i == 0}}
-                                                                        <tr class="view-accountsPrint">
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.dateTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.restaurantName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.type}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.price}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.memberCount}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.reduceMoney}}</span>
-                                                                            </td>
-                                                                            <td class="T-noprint" rowspan="{{item.payTypeDetails.length}}">
-                                                                                {{if item.billImage != null && item.billImage != ""}}
-                                                                                <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                                {{else}}
-                                                                                    <span style="color:#bbb;">查看</span>
-                                                                                {{/if}}
-                                                                            </td>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{else}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
-                                                                        </tr>
-                                                                    {{/if}}
-                                                                {{/each}}
-                                                            {{else}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td>
-                                                                        <span>{{item.dateTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.restaurantName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.type}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.price}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.memberCount}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.reduceMoney}}</span>
-                                                                    </td>
-                                                                    <td class="T-noprint ">
-                                                                        {{if item.billImage != null && item.billImage != ""}}
-                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                        {{else}}
-                                                                            <span style="color:#bbb;">查看</span>
-                                                                        {{/if}}
-                                                                    </td>
-                                                                    <td><span>-</span></td>
-                                                                    <td><span>-</span></td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            {{/if}}
+                                                            {{each item.listMap as rs i}}
+                                                                {{if i == 0}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td rowspan="{{item.listMap.length}}">
+                                                                            <span>{{rs.restaurantName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.type}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.memberCount}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumPay}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumSettle}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{else}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.type}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.memberCount}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                               {{/if}}
+                                                            {{/each}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
@@ -1078,104 +1091,113 @@
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th> 
                                                     <th class="th-border">结算</th>
+                                                    <th class="th-border">结算合计</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{if tripPayMap.hotelPayMap != null}}
                                                     {{if tripPayMap.hotelPayMap.hotelPayMapList != null}}
                                                         {{each tripPayMap.hotelPayMap.hotelPayMapList as item}}
-                                                            {{if item.payTypeDetails.length && !!item.payTypeDetails}}
-                                                                {{each item.payTypeDetails as payDetail i}}
-                                                                    {{if i == 0}}
-                                                                        <tr class="view-accountsPrint">
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.dateTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.hotelName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.roomType}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.price}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.count}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.reduceMoney}}</span>
-                                                                            </td>
-                                                                            <td class="T-noprint " rowspan="{{item.payTypeDetails.length}}">
-                                                                                {{if item.billImage != null && item.billImage != ""}}
-                                                                                <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                                {{else}}
-                                                                                    <span style="color:#bbb;">查看</span>
-                                                                                {{/if}}
-                                                                            </td>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{else}}
-                                                                        <tr>
-                                                                           <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td> 
-                                                                        </tr>
-                                                                    {{/if}}
-                                                                {{/each}}
-                                                            {{else}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td>
-                                                                        <span>{{item.dateTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.hotelName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.roomType}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.price}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.count}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.reduceMoney}}</span>
-                                                                    </td>
-                                                                    <td class="T-noprint ">
-                                                                        {{if item.billImage != null && item.billImage != ""}}
-                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                        {{else}}
-                                                                            <span style="color:#bbb;">查看</span>
-                                                                        {{/if}}
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            {{/if}}
+                                                            {{each item.listMap as rs i}}
+                                                                {{if i == 0}}
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+
+                                                                        <td rowspan="{{item.listMap.length}}">
+                                                                            <span>{{rs.hotelName}}</span>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <span>{{rs.roomType}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-count">{{rs.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumPay}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumSettle}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                               {{else}}
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <span>{{rs.roomType}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-count">{{rs.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td >
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                               {{/if}}    
+                                                            {{/each}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
@@ -1221,104 +1243,110 @@
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th>
                                                     <th class="th-border">结算</th>
+                                                    <th class="th-border">应付合计</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{if tripPayMap.scenicPayMap != null}}
                                                     {{if tripPayMap.scenicPayMap.scenicPayMapList != null}}
                                                         {{each tripPayMap.scenicPayMap.scenicPayMapList as item}}
-                                                            {{if item.payTypeDetails.length && !!item.payTypeDetails}}
-                                                                {{each item.payTypeDetails as payDetail i}}
-                                                                    {{if i == 0}}
-                                                                        <tr class="view-accountsPrint">
-                                                                            <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span>{{item.dateTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span>{{item.scenicName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span>{{item.scenicItemName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span>{{item.price}}</span>
-                                                                            </td>
-                                                                             <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span>{{item.count}}</span>
-                                                                            </td>
-                                                                             <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span>{{item.reduceMoney}}</span>
-                                                                            </td>
-                                                                            <td class="T-noprint " rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                {{if item.billImage != null && item.billImage != ""}}
-                                                                                <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                                {{else}}
-                                                                                    <span style="color:#bbb;">查看</span>
-                                                                                {{/if}}
-                                                                            </td>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.title}}</span></td>
-                                                                            <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.lenght}}">
-                                                                                <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{else}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.title}}</span></td>
-                                                                        </tr>
-                                                                    {{/if}}
-                                                                {{/each}}
-                                                            {{else}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td>
-                                                                        <span>{{item.dateTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.scenicName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.scenicItemName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.price}}</span>
-                                                                    </td>
-                                                                     <td>
-                                                                        <span>{{item.count}}</span>
-                                                                    </td>
-                                                                     <td>
-                                                                        <span>{{item.reduceMoney}}</span>
-                                                                    </td>
-                                                                    <td class="T-noprint ">
-                                                                        {{if item.billImage != null && item.billImage != ""}}
-                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                        {{else}}
-                                                                            <span style="color:#bbb;">查看</span>
-                                                                        {{/if}}
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            {{/if}}
+                                                            {{each item.listMap as rs i}}
+                                                                {{if i == 0}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td rowspan="{{item.listMap.length}}">
+                                                                            <span>{{rs.scenicName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.scenicItemName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                         <td>
+                                                                            <span>{{rs.count}}</span>
+                                                                        </td>
+                                                                         <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails && rs.payTypeDetails.length}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumPay}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumSettle}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{else}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.scenicItemName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                         <td>
+                                                                            <span>{{rs.count}}</span>
+                                                                        </td>
+                                                                         <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails && rs.payTypeDetails.length}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{/if}}
+                                                            {{/each}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
@@ -1341,7 +1369,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                   </div>
                 {{/if}}
                 
                 {{if tripPayMap.ticketPayMap.ticketPayMapList.length != 0}}
@@ -1368,140 +1396,148 @@
                                                     <th class="th-border">票数</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th>
                                                     <th class="th-border">结算</th>
+                                                    <th class="th-border">结算合计</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{if tripPayMap.ticketPayMap != null}}
                                                     {{if tripPayMap.ticketPayMap.ticketPayMapList != null}}
                                                         {{each tripPayMap.ticketPayMap.ticketPayMapList as item}}
-                                                            {{if item.payTypeDetails.length && !!item.payTypeDetails}}
-                                                                {{each item.payTypeDetails as payDetail i}}
-                                                                    {{if i == 0}}
-                                                                        <tr class="view-accountsPrint">
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.dateTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.ticketName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>
-                                                                                    {{if item.ticketType == 1}}机票
-                                                                                        {{else if item.ticketType== 2}}汽车票
-                                                                                        {{else if item.ticketType == 3}}火车票
-                                                                                        {{else if item.ticketType == 4}}轮船票
-                                                                                    {{/if}}
-                                                                                </span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.shift}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.startingCity}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.arriveCity}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.seatLevel}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.price}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.count}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.reduceMoney}}</span>
-                                                                            </td>
-                                                                            <td class="T-noprint " rowspan="{{item.payTypeDetails.length}}">
-                                                                                {{if item.billImage != null && item.billImage != ""}}
-                                                                                <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                                {{else}}
-                                                                                    <span style="color:#bbb;">查看</span>
+                                                            {{each item.listMap as rs i}}
+                                                                {{if i == 0}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td rowspan="{{item.listMap.length}}">
+                                                                            <span>{{rs.ticketName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>
+                                                                                {{if rs.ticketType == 1}}机票
+                                                                                    {{else if rs.ticketType== 2}}汽车票
+                                                                                    {{else if rs.ticketType == 3}}火车票
+                                                                                    {{else if rs.ticketType == 4}}轮船票
                                                                                 {{/if}}
-                                                                            </td>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{else}}
-                                                                        <tr>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
-                                                                        </tr>
-                                                                    {{/if}}
-                                                                {{/each}}
-                                                            {{else}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td>
-                                                                        <span>{{item.dateTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.ticketName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>
-                                                                            {{if item.ticketType == 1}}机票
-                                                                                {{else if item.ticketType== 2}}汽车票
-                                                                                {{else if item.ticketType == 3}}火车票
-                                                                                {{else if item.ticketType == 4}}轮船票
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.shift}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.startingCity}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.arriveCity}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.seatLevel}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
                                                                             {{/if}}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.shift}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.startingCity}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.arriveCity}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.seatLevel}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.price}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.count}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.reduceMoney}}</span>
-                                                                    </td>
-                                                                    <td class="T-noprint ">
-                                                                        {{if item.billImage != null && item.billImage != ""}}
-                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                        {{else}}
-                                                                            <span style="color:#bbb;">查看</span>
-                                                                        {{/if}}
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumPay}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-money">{{item.sumMap.sumSettle}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{else}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>
+                                                                                {{if rs.ticketType == 1}}机票
+                                                                                    {{else if rs.ticketType== 2}}汽车票
+                                                                                    {{else if rs.ticketType == 3}}火车票
+                                                                                    {{else if rs.ticketType == 4}}轮船票
+                                                                                {{/if}}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.shift}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.startingCity}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.arriveCity}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.seatLevel}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{rs.settlementMoney}}</span>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                {{/if}}
+                                                            {{/each}}
+                                                                
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
@@ -1547,117 +1583,113 @@
                                                     <th class="th-border">应付数量</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th>
                                                     <th class="th-border">结算</th>
+                                                    <th class="th-border">结算合计</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{if tripPayMap.selfPayPayMap != null}}
                                                     {{if tripPayMap.selfPayPayMap.selfpPayPayMapList != null}}
                                                         {{each tripPayMap.selfPayPayMap.selfpPayPayMapList as item}}
-                                                            {{if item.payTypeDetails.length && !!item.payTypeDetails}}
-                                                                {{each item.payTypeDetails as payDetail i}}
-                                                                    {{if i == 0}}
-                                                                        <tr class="view-accountsPrint">
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.dateTime}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.selfPayName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.selfPayItemName}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.price}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.count}}</span>
-                                                                            </td>
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span>{{item.reduceMoney}}</span>
-                                                                            </td>
-                                                                            <td class="T-noprint " rowspan="{{item.payTypeDetails.length}}">
-                                                                                {{if item.billImage != null && item.billImage != ""}}
-                                                                                <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                                {{else}}
-                                                                                    <span style="color:#bbb;">查看</span>
-                                                                                {{/if}}
-                                                                            </td>
+                                                            {{each item.listMap as rs i}}
+                                                                {{if i == 0}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td rowspan="{{item.listMap.length}}">
+                                                                            <span>{{rs.selfPayName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.selfPayItemName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
 
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
 
-                                                                            <td>
-                                                                                <span class="F-float F-money">{{payDetail.money}}</span>
-                                                                            </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-momey">{{item.sumMap.sumPay}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                        <td  rowspan="{{item.listMap.length}}">
+                                                                            <span class="F-float F-momey">{{item.sumMap.sumSettle}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{else}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td>
+                                                                            <span>{{rs.dateTime}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.selfPayItemName}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>{{rs.reduceMoney}}</span>
+                                                                        </td>
+                                                                        <td class="T-noprint ">
+                                                                            {{if rs.billImage != null && rs.billImage != ""}}
+                                                                            <a href="javascript:void(0);" url="{{rs.billImage}}" class="btn-view">查看</a>
+                                                                            {{else}}
+                                                                                <span style="color:#bbb;">查看</span>
+                                                                            {{/if}}
+                                                                        </td>
 
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                            </td>
-
-                                                                            <td rowspan="{{item.payTypeDetails.length}}">
-                                                                                <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{else}}
-
-                                                                        <tr>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-
-                                                                            <td>
-                                                                                <span class="F-float F-money">{{payDetail.money}}</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    {{/if}}
-                                                                {{/each}}
-                                                            {{else}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td>
-                                                                        <span>{{item.dateTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.selfPayName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.selfPayItemName}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.price}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.count}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.reduceMoney}}</span>
-                                                                    </td>
-                                                                    <td class="T-noprint ">
-                                                                        {{if item.billImage != null && item.billImage != ""}}
-                                                                        <a href="javascript:void(0);" url="{{item.billImage}}" class="btn-view">查看</a>
-                                                                        {{else}}
-                                                                            <span style="color:#bbb;">查看</span>
-                                                                        {{/if}}
-                                                                    </td>
-
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-
-                                                                    <td>
-                                                                        <span>-</span>
-                                                                    </td>
-
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.settlementMoney}}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            {{/if}}
+                                                                        <td>
+                                                                            {{if !!rs.payTypeDetails}}
+                                                                                {{each rs.payTypeDetails as payDetail index}}
+                                                                                    <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                    <span class="F-falot F-money">{{payDetail.money}}</span>
+                                                                                    {{if index+1 != rs.payTypeDetails.length}}
+                                                                                        <hr class="mar-0">
+                                                                                    {{/if}}
+                                                                                {{/each}}
+                                                                            {{else}}
+                                                                                -
+                                                                            {{/if}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{/if}}
+                                                            {{/each}}
                                                         {{/each}}
                                                     {{/if}}
                                                 {{/if}}
