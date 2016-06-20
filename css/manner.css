@@ -1245,8 +1245,20 @@ select {
 .margin-leftGroup {
     margin-left: 74px;
 }
+.touristGroupViewSingle, .bookViewSingle, .transferViewSingle{
+    font-family: '微软雅黑'
+}
+.touristGroupViewSingle h4, .bookViewSingle h4, .transferViewSingle h4{
+    text-align: center;
+    font-weight: bold;
+}
 
 
+.bookViewSingle .view-TranAccountsPrint .th-border, 
+.touristGroupViewSingle .view-TranAccountsPrint .th-border, 
+.transferViewSingle .view-TranAccountsPrint .th-border{
+        color: #707070;
+    }
 /*关闭操作页面时的button键*/
 
 .ui-dialog .ui-dialog-buttonpane button.btn-heightMall {
@@ -2014,6 +2026,12 @@ p#back-top a span {
 }
 .viewAccountsMain{
     width: 650px;
+    margin: auto;
+    /*background-color: red;*/
+    font-size: 12px;
+}
+.viewSingleMain{
+    width: 750px;
     margin: auto;
     /*background-color: red;*/
     font-size: 12px;
@@ -2842,6 +2860,15 @@ a.gray span, .gray, .gray:hover, .gray:focus{
         font-size: 12px !important;
         padding: 7px 4px 7px 4px !important;
     }
+    /*代订核算单打印样式*/
+    .bookViewSingle .view-TranAccountsPrint td, .view-TranAccountsPrint th{
+        border: 1px solid #333 !important;
+    }
+    /*外转核算单打印样式*/
+    .transferViewSingle .view-TranAccountsPrint td, .view-TranAccountsPrint th{
+        border: 1px solid #333 !important;
+    }
+    
     .view-accountsPrint th,td{
         font-family: '宋体';
         font-size: 12px !important;

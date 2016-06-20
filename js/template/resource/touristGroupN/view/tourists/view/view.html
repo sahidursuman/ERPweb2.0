@@ -13,9 +13,15 @@
 			</div>
 			{{if type != "inner" && baseInfo.hideSettlement == 0}}
 			<div class="pull-right mar-r-15 mar-t-F6">
-				<button class="btn btn-sm btn-success export-Btn T-statementsBtn" style="height: 20px;line-height: 1px;">结算单</button>
+				<button class="btn btn-sm btn-success export-Btn T-statementsBtn" style="height: 20px;line-height: 1px;">游客结算单</button>
 			</div>
 			{{/if}}
+			<div class="pull-right mar-r-15 mar-t-F6">
+				<button class="btn btn-sm btn-success export-Btn T-singlesBtn" style="height: 20px;line-height: 1px;">中转核算单</button>
+			</div>
+			<div class="pull-right mar-r-15 mar-t-F6">
+            <button class="btn btn-sm btn-success export-Btn T-transfersBtn" style="height: 20px;line-height: 1px;">外转核算单</button>
+        </div>
 		</div>
 		<div class="col-xs-12">
 			<table class="table table-striped table-bordered table-hover hct-table-update">
