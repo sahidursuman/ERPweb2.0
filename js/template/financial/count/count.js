@@ -323,7 +323,7 @@ define(function(require, exports){
 		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
 		}).on('click','.T-viewTouristGroup',function(){
-			var id = $(this).closest('tr').attr('id');
+			var id = $(this).closest('tr').data('pid');
 			KingServices.viewTouristGroup(id);
 		});
 		//按钮事件--单团核算表
@@ -530,7 +530,7 @@ define(function(require, exports){
 		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
 		}).on('click','.T-viewTouristGroup',function(){
-			var id = $(this).closest('tr').attr('id');
+			var id = $(this).closest('tr').data('pid');
 			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
@@ -981,7 +981,7 @@ define(function(require, exports){
 		$tripCostObj.off('click').on('click','.T-viewCostDetail',function(){
 			Count.viewCostDetail($(this),data.touristGroup);
 		}).on('click','.T-viewTouristGroup',function(){
-			var id = $(this).closest('tr').attr('id');
+			var id = $(this).closest('tr').data('pid');
 			KingServices.viewTouristGroup(id);
 		});
 		//获取导游
