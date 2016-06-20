@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":403,"md5":"ea0c79135c5bc1d93f85d8779628b7c2"}*/
+/*TMODJS:{"debug":true,"version":405,"md5":"ea0c79135c5bc1d93f85d8779628b7c2"}*/
 define(function(require) {
     return require("../../../../../template")("resource/touristGroupN/view/booking/view/viewSettlement", function($data, $filename) {
         try {

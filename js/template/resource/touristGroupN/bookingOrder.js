@@ -27,6 +27,7 @@ define(function(require, exports, module) {
             updaeGuestInfo : require('./view/booking/update/updaeGuestInfo'),//编辑客人信息
             view : require('./view/booking/view/view'),//查看页面
             viewSettlementTemplate : require("./view/booking/view/viewSettlement"),//查看结算单
+            viewSingleTemplate : require('./view/booking/view/viewBookSingle'),//查看核算单
             viewHotel : require('./view/booking/view/viewHotel'),//查看酒店
             viewTicketl : require('./view/booking/view/viewTicket'),//查看票务
             viewScenic : require('./view/booking/view/viewScenic'),//查看酒店
@@ -301,6 +302,14 @@ define(function(require, exports, module) {
                 Tools.loadPluginScript(pluginKey);
                 bookingOrder.viewSettlement(bookingId);
         });
+
+        //核算单按钮事件
+        $tab.find('.T-bookSinglesBtn').off('click').on('click',function(){
+            var pluginKey = 'plugin_print';
+                Tools.loadPluginScript(pluginKey);
+                bookingOrder.viewSingleList(bookingId);
+        });
+
         $tab.find('.T-booking-info').on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this);
@@ -435,6 +444,41 @@ define(function(require, exports, module) {
             }
         });
     };
+
+    /**
+     * [viewSingleList 代订小组核算单]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+     bookingOrder.viewSingleList = function(id){ 
+            $.ajax({
+                url: KingServices.build_url("bookingOrderV2", "checkOrder"),
+                data: "id=" + 405,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                    html = T.viewSingleTemplate(data);
+                    var viewSingleLayer = layer.open({
+                        type: 1,
+                        title:"打印核算单",
+                        skin: 'layui-layer-rim',
+                        area: '850px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false,
+                        success:function(){
+                            //打印结算单页面
+                            var $outAccountsTab = $("#T-bookViewSingle");
+                            $outAccountsTab.off('click').on('click','.T-printSingleBtn',function(){
+                                bookingOrder.exportsOutAccounts($outAccountsTab);
+                            });
+                        }
+                }); 
+            }   
+        });           
+    };
+
     //打印页面
     bookingOrder.exportsOutAccounts = function($obj){
         $obj.print({

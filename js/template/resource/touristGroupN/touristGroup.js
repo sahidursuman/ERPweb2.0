@@ -22,6 +22,8 @@ define(function(require, exports) {
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
             viewAccountsTemplate : require('./view/tourists/view/viewAccounts'),//查看结算单
+            viewSingleTemplate : require('./view/tourists/view/viewSingle'),//查看中转核算单
+            viewTransferSingleTemplate : require("./view/tourists/view/viewTransferSingle"),//外转核算单
             chooseClient : require('./view/tourists/choose/chooseClient'),//选择客户
             chooseClientList : require('./view/tourists/choose/chooseClientList'),//选择客户列表
             chooseLineProduct : require('./view/tourists/choose/chooseLineProduct'),//选择线路产品
@@ -690,6 +692,69 @@ define(function(require, exports) {
         });       
     };
 
+    /**
+     * [viewSingleList 游客小组核算单]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+     touristGroup.viewSingleList = function(id){ 
+            $.ajax({
+                url: KingServices.build_url("outRemarkArrange", "viewSettlement"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                    html = T.viewSingleTemplate(data);
+                    var viewSingleLayer = layer.open({
+                        type: 1,
+                        title:"打印核算单",
+                        skin: 'layui-layer-rim',
+                        area: '850px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false
+                });
+                var $outAccountsTab = $("#T-touristGroupViewSingle");
+                    $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                    touristGroup.exportsOutAccounts($outAccountsTab);
+                    }); 
+                }
+                
+        });           
+    };
+
+/**
+ * [viewTranferSingleList 外转核算单]
+ * @param  {[type]} id [description]
+ * @return {[type]}    [description]
+ */
+    touristGroup.viewTranferSingleList = function(id){ 
+            $.ajax({
+                url: KingServices.build_url("customerOrder", "transferAccount"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                    html = T.viewTransferSingleTemplate(data);
+                    var viewSingleLayer = layer.open({
+                        type: 1,
+                        title:"打印核算单",
+                        skin: 'layui-layer-rim',
+                        area: '850px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false
+                }); 
+                var $outAccountsTab = $("#T-touristGroupViewSingle");
+                    $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                    touristGroup.exportsOutAccounts($outAccountsTab);
+                });
+            }   
+        });           
+    };
+
     //打印页面
     touristGroup.exportsOutAccounts = function($obj){
         $obj.print({
@@ -812,12 +877,28 @@ define(function(require, exports) {
                     $("body").find('[href="#tab-' + K.menu + '-content"]').trigger('click');                    
                 }
             });
-            //绑定答应结算单事件
+            //绑定打印结算单事件
             $tab.find('.T-statementsBtn').off('click').on('click',function(){
                 var pluginKey = 'plugin_print';
                     Tools.loadPluginScript(pluginKey);
                     touristGroup.viewAccountList($tab.find('.T-container').data('id'));
             });
+
+            //绑定中转核算单事件
+            $tab.find('.T-singlesBtn').off('click').on('click',function(id){
+                var pluginKey = 'plugin_print';
+                    Tools.loadPluginScript(pluginKey);
+                    touristGroup.viewSingleList($tab.find('.T-container').data('id'));
+            });
+
+
+            //绑定外转核算单事件
+            $tab.find('.T-transfersBtn').off('click').on('click',function(id){
+                var pluginKey = 'plugin_print';
+                    Tools.loadPluginScript(pluginKey);
+                    touristGroup.viewTranferSingleList($tab.find('.T-part-group-list tr').eq(0).data('id'));
+            });
+
             $tab.find('.T-money-adjust').on('click', function () {
                 touristGroup.adjustPayMoney($(this));
             });
