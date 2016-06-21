@@ -83,7 +83,7 @@
                 <tbody>
                     {{if !!checkOrder.needPay.hotel.arrangeList && checkOrder.needPay.hotel.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{checkOrder.needPay.hotel.arrangeList.length + 2}}" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th rowspan="{{checkOrder.needPay.hotel.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">酒店</th>
                         <th class="th-border">酒店名称</th>
                         <th class="th-border">房间类型</th>
                         <th class="th-border">入住日期</th>
@@ -109,7 +109,7 @@
                     
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{checkOrder.needPay.hotel.sumCostMoney}}</td>
                         <td>{{checkOrder.needPay.hotel.settlementMoney}}</td>
                     </tr>
@@ -121,7 +121,7 @@
                 <tbody>
                 {{if !!checkOrder.needPay.bus.arrangeList && checkOrder.needPay.bus.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th rowspan="{{checkOrder.needPay.bus.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">用车</th>
                         <th class="th-border">开始日期</th>
                         <th class="th-border">结束日期</th>
                         <th class="th-border">车座数</th>
@@ -149,7 +149,7 @@
                     
                     <tr>
                         <td>合计</td>
-                        <td colspan="6"></td>
+                        <td colspan="7"></td>
                         <td>{{checkOrder.needPay.bus.sumCostMoney}}</td>
                         <td>{{checkOrder.needPay.bus.settlementMoney}}</td>
                     </tr>
@@ -161,7 +161,7 @@
                 <tbody>
                 {{if !!checkOrder.needPay.scenic.arrangeList && checkOrder.needPay.scenic.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">景区</th>
+                        <th rowspan="{{checkOrder.needPay.scenic.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">景区</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">时段</th>
                         <th class="th-border">景区</th>
@@ -192,7 +192,7 @@
                    
                     <tr>
                         <td>合计</td>
-                        <td colspan="8"></td>
+                        <td colspan="9"></td>
                         <td>{{checkOrder.needPay.scenic.sumCostMoney}}</td>
                         <td>{{checkOrder.needPay.scenic.settlementMoney}}</td>
                     </tr>
@@ -204,7 +204,7 @@
                 <tbody>
                 {{if !!checkOrder.needPay.ticket.arrangeList && checkOrder.needPay.ticket.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="3" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th rowspan="{{checkOrder.needPay.ticket.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">票务</th>
                         <th class="th-border">票务公司</th>
                         <th class="th-border">类型</th>
                         <th class="th-border">出发城市</th>
@@ -237,7 +237,7 @@
                     
                     <tr>
                         <td>合计</td>
-                        <td colspan="9"></td>
+                        <td colspan="10"></td>
                         <td>{{checkOrder.needPay.ticket.sumCostMoney}}</td>
                         <td>{{checkOrder.needPay.ticket.settlementMoney}}</td>
                     </tr>
@@ -249,7 +249,7 @@
                 <tbody>
                 {{if !!checkOrder.needPay.other.arrangeList && checkOrder.needPay.other.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th rowspan="{{checkOrder.needPay.other.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">其它</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">联系人</th>
@@ -276,7 +276,7 @@
                     
                     <tr>
                         <td>合计</td>
-                        <td colspan="6"></td>
+                        <td colspan="7"></td>
                         <td>{{checkOrder.needPay.other.sumCostMoney}}</td>
                         <td>{{checkOrder.needPay.other.settlementMoney}}</td>
                     </tr>
