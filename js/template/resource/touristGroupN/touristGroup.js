@@ -706,23 +706,23 @@ define(function(require, exports) {
                 type: 'POST',
                 showLoading:false,
                 success:function(data){
-                    var result = showDialog(data);
+                    if (showDialog(data)) {
                     html = T.viewSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
-                });
-                var $outAccountsTab = $("#T-touristGroupViewSingle");
-                    $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
-                    touristGroup.exportsOutAccounts($outAccountsTab);
-                    }); 
+                    });
+                    var $outAccountsTab = $("#T-touristGroupViewSingle");
+                        $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                        touristGroup.exportsOutAccounts($outAccountsTab);
+                        }); 
+                    }
                 }
-                
         });           
     };
 
@@ -744,7 +744,7 @@ define(function(require, exports) {
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
