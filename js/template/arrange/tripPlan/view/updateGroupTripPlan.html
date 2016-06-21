@@ -237,7 +237,7 @@
 						<th class="th-border">操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-days">
+				<tbody class="T-dayList">
 				{{each tripPlanDayList as rs}}
 				<tr data-id="{{rs.id}}">
 					<td name="dateDays" data-which-day={{rs.whichDay}}><input type="text" class="col-xs-12 datepicker" name="whichDayDate" value=""></td>
@@ -421,6 +421,7 @@
 						<th class="th-border">费用项</th>
 						<th class="th-border">数量</th>
 						<th class="th-border">单价</th>
+						<th class="th-border">天数</th>
 						<th class="th-border">金额</th>
 						<th class="th-border">说明</th>
 						<th class="th-border">操作</th>
@@ -447,7 +448,8 @@
 						</td>
 						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate F-float F-count T-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate T-price F-float F-money" name="price" value="{{rs.price}}"></td>
-						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.count*rs.price}}"></td>
+						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12 T-calculate T-days" name="days" value="{{rs.days || 1}}"></td>
+						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.count*rs.price*(rs.days || 1)}}"></td>
 						<td><input type="text" {{if !!touristGroup.orderNumber  ||  !!tripPlan.quoteNumber}}readonly{{/if}} class="col-xs-12" name="feeRemark" value="{{rs.remark}}" maxlength="100"></td>
 						<td>{{if !!touristGroup.orderNumber == false  &&  !!tripPlan.quoteNumber == false}}<a class="cursor T-action T-delete" title="删除">删除</a>{{/if}}</td>
 					</tr>
