@@ -301,7 +301,8 @@ define(function(require, exports) {
     		if($that.hasClass('T-edit')){
     			touristGroup.touristGroupUpdate(id);
     		}else if($that.hasClass('T-view')){
-                touristGroup.touristGroupView(id);
+                var type = $(this).data('type');
+                touristGroup.touristGroupView(id,type);
             }else if($that.hasClass('T-del')){
                 showConfirmDialog("确定删除该条数据?", function() {
                     touristGroup.touristGroupDelete(id, $tab);
@@ -647,6 +648,7 @@ define(function(require, exports) {
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
                         }
                     }
+                    console.log(data)
                     if (Tools.addTab(K.view , '查看小组', T.view(data))) {
                         touristGroup.commonEvents($("#tab-" + K.view + "-content"), 1);
                     }
