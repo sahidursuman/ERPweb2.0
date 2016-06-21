@@ -40,6 +40,7 @@
                         <th class="th-border">天数</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">备注</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{tripFee.feeList.length}}">{{tripFee.partnerAgencyName}}</td>
@@ -52,8 +53,10 @@
                         <td>{{rs.days}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.needIncome}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -70,12 +73,13 @@
                         <td>{{rs.days}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.needIncome}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{tripFee.sumTripFee}}</td>
                     </tr>
                 </tbody>
