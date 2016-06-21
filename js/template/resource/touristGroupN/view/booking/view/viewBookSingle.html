@@ -82,6 +82,7 @@
             </table>
 
             <!-- 酒店 -->
+            {{if !!checkOrder.needPay.hotel}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <h5 style="color: #707070;margin-bottom:5px;margin-top:20px;font-weight: bold;">【成本明细】</h5>
                 <tbody>
@@ -120,7 +121,9 @@
                 {{/if}}
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!checkOrder.needPay.bus}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.bus.arrangeList && checkOrder.needPay.bus.arrangeList.length > 0}}
@@ -160,7 +163,9 @@
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!checkOrder.needPay.scenic}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.scenic.arrangeList && checkOrder.needPay.scenic.arrangeList.length > 0}}
@@ -203,7 +208,9 @@
                      {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!checkOrder.needPay.ticket}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.ticket.arrangeList && checkOrder.needPay.ticket.arrangeList.length > 0}}
@@ -248,7 +255,9 @@
                     {{/if}} 
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!checkOrder.needPay.other}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.other.arrangeList && checkOrder.needPay.other.arrangeList.length > 0}}
@@ -287,6 +296,7 @@
                     {{/if}} 
                 </tbody>
             </table>
+            {{/if}}
         </div>
     </form>
 

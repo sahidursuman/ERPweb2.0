@@ -147,12 +147,12 @@
                     </tr>
                 </tbody>
             </table>
-
+            {{if !!needPay.hotel}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.hotel.arrangeList && needPay.hotel.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{needPay.hotel.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th rowspan="{{needPay.hotel.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">酒店</th>
                         <th class="th-border">酒店名称</th>
                         <th class="th-border">入住日期</th>
                         <th class="th-border">房间类型</th>
@@ -183,12 +183,14 @@
                     {{/if}}
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!needPay.bus}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.bus.arrangeList && needPay.bus.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{needPay.bus.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th rowspan="{{needPay.bus.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">用车</th>
                         <th class="th-border">车队</th>
                         <th class="th-border">用车时间</th>
                         <th class="th-border">车费</th>
@@ -215,12 +217,14 @@
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!needPay.restaurant}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.restaurant.arrangeList && needPay.restaurant.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{needPay.restaurant.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">餐费</th>
+                        <th rowspan="{{needPay.restaurant.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">餐费</th>
                         <th class="th-border">餐厅名称</th>
                         <th class="th-border">用餐时间</th>
                         <th class="th-border">类型</th>
@@ -251,12 +255,14 @@
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!needPay.ticket}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.ticket.arrangeList && needPay.ticket.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{needPay.ticket.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th rowspan="{{needPay.ticket.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">票务</th>
                         <th class="th-border">票务公司</th>
                         <th class="th-border">乘坐时间</th>
                         <th class="th-border">类型-出发-到达</th>
@@ -289,12 +295,14 @@
                     {{/if}}
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!needPay.other}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.other.arrangeList && needPay.other.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{needPay.other.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th rowspan="{{needPay.other.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">其它</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">联系人</th>
@@ -327,6 +335,7 @@
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
         </div>        
     </form>
     <div class="form-inline col-xs-12 hidden" style="text-align: center;margin-top: 30px;"> 

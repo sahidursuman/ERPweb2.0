@@ -10,7 +10,7 @@
     <table class="table whereQ whereTwo" style="width: 100%;">
                 <tr class="view-TranAccountsPrint">
                     <td class="textaR-paR"><span>团号</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.orderNumber}}</span></td>
+                    <td class="textaR-paL"><span>{{if baseInfo.orderNumber !=null}}{{/if}}</span></td>
                     <td class="textaR-paR"><span>人数</span></td>
                     <td class="textaR-paL"><span>{{baseInfo.adultCount}}大</span> <span>{{baseInfo.childCount}}小</span></td>
                     <td class="textaR-paR"><span>日期</span></td>
@@ -113,7 +113,7 @@
             </table>
                 
 
-
+            {{}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <h5 style="color: #707070;margin-bottom:5px;margin-top:20px;font-weight: bold;">【成本明细】</h5>
                 <tbody>
@@ -150,10 +150,9 @@
                     {{/if}}
                 </tbody>
             </table>
-
+            {{if !!outRemarkArrange.busList && outRemarkArrange.busList.length > 0}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.busList && outRemarkArrange.busList.length > 0}}
                      <tr class="view-TranAccountsPrint">
                         <th rowspan="{{outRemarkArrange.busList.length +1}}" style="vertical-align: middle;" class="th-border">用车</th>
                         <th class="th-border">车队</th>
@@ -179,13 +178,14 @@
                         <td>{{outRemarkArrange.busNeedMoney}}</td>
                         <td>{{outRemarkArrange.busSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!outRemarkArrange.restaurantList && outRemarkArrange.restaurantList.length > 0}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.restaurantList && outRemarkArrange.restaurantList.length > 0}}
                      <tr class="view-TranAccountsPrint">
                         <th rowspan="{{outRemarkArrange.restaurantList.length +1}}" style="vertical-align: middle;" class="th-border">餐费</th>
                         <th class="th-border">餐厅名称</th>
@@ -215,13 +215,14 @@
                         <td>{{outRemarkArrange.restaurantNeedMoney}}</td>
                         <td>{{outRemarkArrange.restaurantSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!outRemarkArrange.ticketList && outRemarkArrange.ticketList.length > 0}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.ticketList && outRemarkArrange.ticketList.length > 0}}
                      <tr class="view-TranAccountsPrint">
                         <th rowspan="{{outRemarkArrange.ticketList.length +1}}" style="vertical-align: middle;" class="th-border">票务</th>
                         <th class="th-border">票务公司</th>
@@ -253,13 +254,14 @@
                         <td>{{outRemarkArrange.ticketNeedMoney}}</td>
                         <td>{{outRemarkArrange.ticketSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!outRemarkArrange.otherList && outRemarkArrange.otherList.length > 0}}   
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.otherList && outRemarkArrange.otherList.length > 0}}
                      <tr class="view-TranAccountsPrint">
                         <th rowspan="{{outRemarkArrange.otherList.length +1}}" style="vertical-align: middle;" class="th-border">其它</th>
                         <th class="th-border">项目</th>
@@ -291,9 +293,10 @@
                         <td>{{outRemarkArrange.otherNeedMoney}}</td>
                         <td>{{outRemarkArrange.otherSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
         </div>
     </form>
 
