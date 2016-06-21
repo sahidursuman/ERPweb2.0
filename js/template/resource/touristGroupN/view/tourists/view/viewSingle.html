@@ -40,6 +40,7 @@
                         <th class="th-border">天数</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">备注</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{tripFee.feeList.length}}">{{tripFee.partnerAgencyName}}</td>
@@ -52,8 +53,10 @@
                         <td>{{rs.days}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.needIncome}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -70,12 +73,13 @@
                         <td>{{rs.days}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.needIncome}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{tripFee.sumTripFee}}</td>
                     </tr>
                 </tbody>
@@ -115,7 +119,7 @@
                 <tbody>
                 {{if !!outRemarkArrange.hotelList && outRemarkArrange.hotelList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="7" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th rowspan="{{outRemarkArrange.hotelList.length +1}}" style="vertical-align: middle;" class="th-border">酒店</th>
                         <th class="th-border">酒店名称</th>
                         <th class="th-border">入住日期</th>
                         <th class="th-border">房间类型</th>
@@ -139,7 +143,7 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{outRemarkArrange.hotelNeedMoney}}</td>
                         <td>{{outRemarkArrange.hotelSettMoney}}</td>
                     </tr>
@@ -151,7 +155,7 @@
                 <tbody>
                 {{if !!outRemarkArrange.busList && outRemarkArrange.busList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="3" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th rowspan="{{outRemarkArrange.busList.length +1}}" style="vertical-align: middle;" class="th-border">用车</th>
                         <th class="th-border">车队</th>
                         <th class="th-border">用车时间</th>
                         <th class="th-border">车费</th>
@@ -171,7 +175,7 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="3"></td>
+                        <td colspan="4"></td>
                         <td>{{outRemarkArrange.busNeedMoney}}</td>
                         <td>{{outRemarkArrange.busSettMoney}}</td>
                     </tr>
@@ -183,7 +187,7 @@
                 <tbody>
                 {{if !!outRemarkArrange.restaurantList && outRemarkArrange.restaurantList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">餐费</th>
+                        <th rowspan="{{outRemarkArrange.restaurantList.length +1}}" style="vertical-align: middle;" class="th-border">餐费</th>
                         <th class="th-border">餐厅名称</th>
                         <th class="th-border">用餐时间</th>
                         <th class="th-border">类型</th>
@@ -207,7 +211,7 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{outRemarkArrange.restaurantNeedMoney}}</td>
                         <td>{{outRemarkArrange.restaurantSettMoney}}</td>
                     </tr>
@@ -219,7 +223,7 @@
                 <tbody>
                 {{if !!outRemarkArrange.ticketList && outRemarkArrange.ticketList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th rowspan="{{outRemarkArrange.ticketList.length +1}}" style="vertical-align: middle;" class="th-border">票务</th>
                         <th class="th-border">票务公司</th>
                         <th class="th-border">乘坐时间</th>
                         <th class="th-border">类型-出发-到达</th>
@@ -245,7 +249,7 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{outRemarkArrange.ticketNeedMoney}}</td>
                         <td>{{outRemarkArrange.ticketSettMoney}}</td>
                     </tr>
@@ -257,7 +261,7 @@
                 <tbody>
                 {{if !!outRemarkArrange.otherList && outRemarkArrange.otherList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th rowspan="{{outRemarkArrange.otherList.length +1}}" style="vertical-align: middle;" class="th-border">其它</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">联系人</th>
@@ -283,7 +287,7 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="6"></td>
+                        <td colspan="7"></td>
                         <td>{{outRemarkArrange.otherNeedMoney}}</td>
                         <td>{{outRemarkArrange.otherSettMoney}}</td>
                     </tr>
