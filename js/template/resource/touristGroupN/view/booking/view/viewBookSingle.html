@@ -46,7 +46,7 @@
                         {{each checkOrder.needGet.feeList as rs index}}
                         {{if checkOrder.needGet.feeList.length > 0}}
                         {{if index == 0}}
-                        <td>{{rs.type}}</td>
+                        <td>{{rs.type | getFeeItemText}}</td>
                         <td>{{rs.count}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.money}}</td>
@@ -75,7 +75,7 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="4"></td>
+                        <td colspan="5"></td>
                         <td>{{checkOrder.needGet.settlementMoney}}</td>
                     </tr>
                 </tbody>
