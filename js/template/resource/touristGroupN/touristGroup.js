@@ -710,7 +710,7 @@ define(function(require, exports) {
                     html = T.viewSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
-                        title:"打印核算单",
+                        title:"打印核算表",
                         skin: 'layui-layer-rim',
                         area: '850px', 
                         zIndex:1028,
@@ -742,7 +742,7 @@ define(function(require, exports) {
                     html = T.viewTransferSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
-                        title:"打印核算单",
+                        title:"打印核算表",
                         skin: 'layui-layer-rim',
                         area: '850px', 
                         zIndex:1028,
