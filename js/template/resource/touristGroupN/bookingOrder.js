@@ -453,7 +453,7 @@ define(function(require, exports, module) {
      bookingOrder.viewSingleList = function(id){ 
             $.ajax({
                 url: KingServices.build_url("bookingOrderV2", "checkOrder"),
-                data: "id=" + 405,
+                data: "id=" + id,
                 type: 'POST',
                 showLoading:false,
                 success:function(data){
@@ -461,7 +461,7 @@ define(function(require, exports, module) {
                     html = T.viewSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
-                        title:"打印核算单",
+                        title:"打印核算表",
                         skin: 'layui-layer-rim',
                         area: '850px', 
                         zIndex:1028,
