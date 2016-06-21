@@ -454,7 +454,7 @@ define(function(require, exports) {
     innerTransfer.innitAddFee = function($tab, validator) {
         var html = "<tr class=\"transferFee1SelectId\">" +
             "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>" +
-            "<option value=\"8\">单房差</option>" +
+            "<option value=\"8\">酒店费用</option>" +
             "<option value=\"12\">其他费用</option></select></td>" +
             "<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>" +
             "<td><input  name=\"price\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>" +
