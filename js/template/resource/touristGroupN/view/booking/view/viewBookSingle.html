@@ -1,6 +1,6 @@
 <div class="bookViewSingle" id="T-bookViewSingle">
     <h4>代订核算表</h4>
-    <div class="form-group pull-right globalAdd" style="margin-right: 45px">
+    <div class="form-group pull-right globalAdd" style="margin-right: 20px">
             <button class="btn btn-sm btn-success T-printSingleBtn T-noprint" style="height: 24px;">
                 <i class="ace-icon fa fa-print"></i>打印
             </button>
@@ -38,6 +38,7 @@
                         <th class="th-border">数量</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">说明</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{checkOrder.needGet.feeList.length}}">{{checkOrder.needGet.partnerAgencyName}}</td>
@@ -45,12 +46,14 @@
                         {{each checkOrder.needGet.feeList as rs index}}
                         {{if checkOrder.needGet.feeList.length > 0}}
                         {{if index == 0}}
-                        <td>{{rs.type}}</td>
+                        <td>{{rs.type | getFeeItemText}}</td>
                         <td>{{rs.count}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -66,6 +69,7 @@
                         <td>{{rs.count}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -73,11 +77,13 @@
                         <td>合计</td>
                         <td colspan="4"></td>
                         <td>{{checkOrder.needGet.settlementMoney}}</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
 
             <!-- 酒店 -->
+            {{if !!checkOrder.needPay.hotel}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <h5 style="color: #707070;margin-bottom:5px;margin-top:20px;font-weight: bold;">【成本明细】</h5>
                 <tbody>
@@ -116,7 +122,9 @@
                 {{/if}}
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!checkOrder.needPay.bus}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.bus.arrangeList && checkOrder.needPay.bus.arrangeList.length > 0}}
@@ -156,7 +164,9 @@
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!checkOrder.needPay.scenic}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.scenic.arrangeList && checkOrder.needPay.scenic.arrangeList.length > 0}}
@@ -199,7 +209,9 @@
                      {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!checkOrder.needPay.ticket}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.ticket.arrangeList && checkOrder.needPay.ticket.arrangeList.length > 0}}
@@ -244,7 +256,9 @@
                     {{/if}} 
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!checkOrder.needPay.other}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!checkOrder.needPay.other.arrangeList && checkOrder.needPay.other.arrangeList.length > 0}}
@@ -283,6 +297,7 @@
                     {{/if}} 
                 </tbody>
             </table>
+            {{/if}}
         </div>
     </form>
 
