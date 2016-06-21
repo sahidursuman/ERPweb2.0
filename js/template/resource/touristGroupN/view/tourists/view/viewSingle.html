@@ -13,8 +13,10 @@
                     <td class="textaR-paL"><span>{{if baseInfo.orderNumber !=null}}{{/if}}</span></td>
                     <td class="textaR-paR"><span>人数</span></td>
                     <td class="textaR-paL"><span>{{baseInfo.adultCount}}大</span> <span>{{baseInfo.childCount}}小</span></td>
-                    <td class="textaR-paR"><span>日期</span></td>
-                    <td class="textaR-paL" colspan="4"><span>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td class="textaR-paR"><span>接团日期</span></td>
+                    <td class="textaR-paL"><span>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td class="textaR-paR"><span>送团日期</span></td>
+                    <td class="textaR-paL"><span>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
                 </tr>
                 <tr class="view-TranAccountsPrint">
                     <td class="textaR-paR"><span>收入</span></td>
@@ -120,7 +122,7 @@
                 <tbody>
                 {{if !!outRemarkArrange.hotelList && outRemarkArrange.hotelList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.hotelList.length +1}}" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th rowspan="{{outRemarkArrange.hotelList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">酒店</th>
                         <th class="th-border">酒店名称</th>
                         <th class="th-border">入住日期</th>
                         <th class="th-border">房间类型</th>
@@ -155,7 +157,7 @@
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.busList.length +1}}" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th rowspan="{{outRemarkArrange.busList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">用车</th>
                         <th class="th-border">车队</th>
                         <th class="th-border">用车时间</th>
                         <th class="th-border">车费</th>
@@ -188,7 +190,7 @@
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.restaurantList.length +1}}" style="vertical-align: middle;" class="th-border">餐费</th>
+                        <th rowspan="{{outRemarkArrange.restaurantList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">餐费</th>
                         <th class="th-border">餐厅名称</th>
                         <th class="th-border">用餐时间</th>
                         <th class="th-border">类型</th>
@@ -225,7 +227,7 @@
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.ticketList.length +1}}" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th rowspan="{{outRemarkArrange.ticketList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">票务</th>
                         <th class="th-border">票务公司</th>
                         <th class="th-border">乘坐时间</th>
                         <th class="th-border">类型-出发-到达</th>
@@ -264,7 +266,7 @@
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.otherList.length +1}}" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th rowspan="{{outRemarkArrange.otherList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">其它</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">联系人</th>
