@@ -13,8 +13,10 @@
                     <td class="textaR-paL"><span>{{if baseInfo.orderNumber !=null}}{{/if}}</span></td>
                     <td class="textaR-paR"><span>人数</span></td>
                     <td class="textaR-paL"><span>{{baseInfo.adultCount}}大</span> <span>{{baseInfo.childCount}}小</span></td>
-                    <td class="textaR-paR"><span>日期</span></td>
-                    <td class="textaR-paL" colspan="4"><span>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td class="textaR-paR"><span>接团日期</span></td>
+                    <td class="textaR-paL"><span>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td class="textaR-paR"><span>送团日期</span></td>
+                    <td class="textaR-paL"><span>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
                 </tr>
                 <tr class="view-TranAccountsPrint">
                     <td class="textaR-paR"><span>收入</span></td>
