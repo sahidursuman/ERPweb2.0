@@ -2349,11 +2349,19 @@ define(function(require, exports){
 	//获取未对账的购物店的购物金额
 	Count.getShopMoney = function($tr){
 		var $nextTr = $tr.nextAll(),itemShopMoney = 0,
-			twoMoney = Count.changeTwoDecimal($tr.find('input[name=twoRebateMoney]').val()),
-			gMoney = Count.changeTwoDecimal($tr.find('input[name=guideRateMoney]').val()),
-			qMoney = Count.changeTwoDecimal($tr.find('input[name=quanpeiRebateMoney]').val()),
-			tMoney = Count.changeTwoDecimal($tr.find('input[name=travelAgencyRateMoney]').val());
-			
+			twoMoney = 0,gMoney = 0,qMoney = 0,tMoney = 0;
+		$tr.find('input[name=twoRebateMoney]').each(function() {
+			twoMoney += Count.changeTwoDecimal($(this).val());
+		});
+		$tr.find('input[name=travelAgencyRateMoney]').each(function() {
+			tMoney += Count.changeTwoDecimal($(this).val());
+		});
+		$tr.find('input[name=guideRateMoney]').each(function() {
+			gMoney += Count.changeTwoDecimal($(this).val());
+		});
+		$tr.find('input[name=quanpeiRebateMoney]').each(function() {
+			qMoney += Count.changeTwoDecimal($(this).val());
+		});
 		for(var i = 0;i<$nextTr.length;i++){
 			var $that = $nextTr.eq(i),
 				$guideRateMoney = $that.find('input[name=guideRateMoney]'),
@@ -3086,7 +3094,7 @@ define(function(require, exports){
 		var isConfirmAccount = $tr.find('input[name=isConfirmAccount]').val();
 		var cashMoney = 0,inCount = 0,inReduce = 0,
 			outReduce = 0,outMoney = 0,outCount = 0;
-			
+
 		divCount.each(function() {
 			thisIndex = $(this).attr('index');
 			sumMoney(thisIndex);
