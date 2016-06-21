@@ -463,7 +463,7 @@ define(function(require, exports, module) {
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false,

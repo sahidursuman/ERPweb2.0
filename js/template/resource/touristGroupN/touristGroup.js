@@ -712,7 +712,7 @@ define(function(require, exports) {
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '800px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
@@ -744,7 +744,7 @@ define(function(require, exports) {
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '800px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
