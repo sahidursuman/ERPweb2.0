@@ -87,13 +87,13 @@
                             {{each touristGroup.feeList as touristGroupFee}}
                                 {{touristGroupFee.name}} ：
                                 <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count*touristGroupFee.days}}</span><br />
                             {{/each}}
                         {{else}}
                             {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
                                 {{touristGroupFee.name}} ：
                                 <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count*touristGroupFee.days}}</span><br />
                             {{/each}}
                         {{/if}}
                     {{/if}}
