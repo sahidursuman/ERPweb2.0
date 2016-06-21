@@ -1982,7 +1982,7 @@ define(function(require, exports) {
             }else if($tbody.data('type') == "4"){
                 option = '<option value="1">大人结算价</option>'+
                          '<option value="2">小孩结算价</option>'+
-                         '<option value="8">单房差</option>'+
+                         '<option value="8">酒店费用</option>'+
                          '<option value="12">其他费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
