@@ -72,13 +72,13 @@
 						<th>费用项</th>
 						<th>数量</th>
 						<th>单价</th>
-						{{if type != 1}}<th>天数</th>{{/if}}
+						{{if type != 1 || !!isInnerTransferConfirm}}<th>天数</th>{{/if}}
 						<th>金额</th>
 						<th>说明</th>
 						<th width="50">操作</th>
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type}}data-type="4"{{/if}}>
+				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type || !!isInnerTransferConfirm}}data-type="4"{{/if}}>
 				{{if touristGroupFeeJsonAdd && touristGroupFeeJsonAdd.length > 0}}
 					{{each touristGroupFeeJsonAdd as rs}}
 					<tr data-id="{{rs.id}}">
@@ -89,7 +89,7 @@
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"></td>
-						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days" value="{{rs.days || 1}}"></td>{{/if}}
+						{{if type != 1 || !!isInnerTransferConfirm}}<td><input type="text" class="col-xs-12 T-option" name="days" value="{{rs.days || 1}}"></td>{{/if}}
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count*(rs.days || 1)}}"></td>
 						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
@@ -109,8 +109,8 @@
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count" value="{{rs.count}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>
-						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days" value="{{rs.days}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>{{/if}}
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price" value="{{rs.price}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>
+						{{if type != 1 || !!isInnerTransferConfirm}}<td><input type="text" class="col-xs-12 T-option" name="days" value="{{rs.days}}"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>{{/if}}
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly value="{{rs.price*rs.count}}"></td>
 						<td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}" maxlength="1000"  {{if rs.type == 3 || rs.type == 4 || rs.type == 5 || rs.type == 6 || rs.type == 7 || rs.type == 9 || rs.type == 10 || rs.type == 11}}disabled{{/if}}></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
@@ -128,8 +128,8 @@
 							</select>
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>
-						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days"></td>{{/if}}
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>
+						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days"></td>{{/if}}
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>
 						<td><input type="text" class="col-xs-12" name="remark" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>

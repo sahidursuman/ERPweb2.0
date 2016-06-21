@@ -1314,6 +1314,7 @@ define(function(require, exports) {
             $payMoney = $tr.find('.T-pay-money'),
             data = {
                 id : $tr.data('id'),
+                isInnerTransferConfirm: $tr.data('is-inner'),
                 subNeedPayMoney : $payMoney.text()
             };
 
@@ -1999,8 +2000,8 @@ define(function(require, exports) {
             }
             $tbody.append('<tr>'+
                 '<td><select class="col-xs-12" name="type">'+option+'</select></td>'+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+days+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+days+
                 '<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>'+
                 '<td><input type="text" class="col-xs-12" name="remark"></td>'+
                 '<td><a class="cursor T-action T-delete">删除</a></td>'+
