@@ -41,6 +41,7 @@
                         <th class="th-border">单价</th>
                         <th class="th-border">天数</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">备注</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{needGet.length}}">{{base.fromPartnerAgency}}</td>
@@ -53,8 +54,10 @@
                         <td>{{rs.price}}</td>
                         <td>{{rs.days}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -71,12 +74,13 @@
                         <td>{{rs.price}}</td>
                         <td>{{rs.days}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{needGetMap.needPayAllMoney}}</td>
                     </tr>
                 </tbody>
@@ -91,7 +95,6 @@
                         <th class="th-border">人数</th>
                         <th class="th-border">抵达日期</th>
                         <th class="th-border">离开日期</th>
-                        <th class="th-border">类别</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
@@ -107,14 +110,12 @@
                         {{each needPay.receive.feeList as rs index}}
                         {{if needPay.receive.feeList.length > 0}}
                         {{if index == 0}}
-                        <td>{{rs.type}}</td>
                         <td>{{rs.name}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.count}}</td>
                         <td>{{rs.money}}</td>
                         {{/if}}
                         {{else}}
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -131,7 +132,6 @@
                     {{if needPay.receive.feeList.length > 0}}
                     {{if index > 0}}
                     <tr class="view-TranAccountsPrint">
-                        <td>{{rs.type}}</td>
                         <td>{{rs.name}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.count}}</td>
@@ -142,7 +142,7 @@
 
                     <tr>
                         <td>合计</td>
-                        <td colspan="8"></td>
+                        <td colspan="7"></td>
                         <td>{{needPay.receive.lineNeedPayMoney}}</td>
                     </tr>
                 </tbody>

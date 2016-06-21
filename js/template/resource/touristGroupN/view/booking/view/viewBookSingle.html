@@ -38,6 +38,7 @@
                         <th class="th-border">数量</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">备注</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{checkOrder.needGet.feeList.length}}">{{checkOrder.needGet.partnerAgencyName}}</td>
@@ -49,8 +50,10 @@
                         <td>{{rs.count}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -66,6 +69,7 @@
                         <td>{{rs.count}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/each}}
