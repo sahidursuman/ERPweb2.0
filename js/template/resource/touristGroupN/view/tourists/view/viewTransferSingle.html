@@ -1,6 +1,6 @@
 <div class="transferViewSingle" id="T-touristGroupViewSingle">
     <h4>外转核算表</h4>
-    <div class="form-group pull-right globalAdd" style="margin-right: 45px">
+    <div class="form-group pull-right globalAdd" style="margin-right: 20px">
             <button class="btn btn-sm btn-success T-printAccountBtn T-noprint" style="height: 24px;">
                 <i class="ace-icon fa fa-print"></i>打印
             </button>
@@ -100,6 +100,7 @@
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">说明</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{needPay.receive.feeList.length}}">{{needPay.receive.transTravelAgencyName}}</td>
@@ -115,8 +116,10 @@
                         <td>{{rs.price}}</td>
                         <td>{{rs.count}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -137,6 +140,7 @@
                         <td>{{rs.price}}</td>
                         <td>{{rs.count}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/if}}{{/each}}
@@ -145,6 +149,7 @@
                         <td>合计</td>
                         <td colspan="7"></td>
                         <td>{{needPay.receive.lineNeedPayMoney}}</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
