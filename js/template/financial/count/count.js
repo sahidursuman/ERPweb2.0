@@ -3589,28 +3589,26 @@ define(function(require, exports){
 	Count.addOtherIn = function($obj,$parentObj){
 		var divHtml = Count.returnDivHtml($parentObj);
 		var td = '<td>'+
-				divHtml+
 				'<div  class="div-h-30 mar-t-5">'+
 					'<input name="guideArrangeId" type="hidden" />'+
 	            	'<input name="guideName"  type="text" class="w-70"/>'+
 	            '</div>'+
 			'</td>';
-		var	guideHtml = Count.addArrangeGuideHtml(td,'',$parentObj);
+		var	guideHtml = Count.addArrangeGuideHtml(td,'otherIn',$parentObj);
 		var html = '<tr class="oldData">'+
 			'<td class="countWhichDaysContainer"></td>'+
-			'<td>'+divHtml+'<input type="text" name="title" class="w-70"/></td>'+
-			'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
-			'<td>'+divHtml+'<input type="text" name="count" class="w-50"/></td>'+
-			'<td>'+divHtml+
-			'<span class="F-float F-money realneedPayMoney">0</span>'+
+			'<td><input type="text" name="title" class="w-70"/></td>'+
+			'<td><input type="text" name="price" class="w-70"/></td>'+
+			'<td><input type="text" name="count" class="w-50"/></td>'+
+			'<td><span class="F-float F-money realneedPayMoney">0</span>'+
 			'<input name="realneedPayMoney" type="hidden" /></td>'+
 			guideHtml+
-			'<td>'+divHtml+'<span style="color:#bbb;">查看</span></td>'+
-			'<td>'+divHtml+'<input type="text"  class="w-80" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
+			'<td><span style="color:#bbb;">查看</span></td>'+
+			'<td><input type="text" name="billRemark"/><a href="javascript:void(0)" class="T-otherInArrDel" style="margin-left:12px;">删除</a></td>'+
 			'</tr>';
 		$obj.append(html);
 		//设置下拉框
-		Count.setChooseDays($obj,$parentObj);
+		Count.setChooseDays($obj,$parentObj,'otherIn');
 		//获取导游
 		//获取导游
 		$obj.find('input[name=guideName]').each(function(){
@@ -5406,6 +5404,10 @@ define(function(require, exports){
 		var minDay = parseInt($parentObj.find('[name=minDay]').val());
 		var maxDay = parseInt($parentObj.find('[name=maxDay]').val());
 		var divHtml = Count.returnDivHtml($parentObj);
+		if(!!type && type == "otherIn"){
+			divHtml = '';
+		};
+		
         if(parseInt(days) < 1)return;
         if($obj){
             var tr = $obj.find("tr");
@@ -5414,7 +5416,7 @@ define(function(require, exports){
                 selectText += '<option value="'+(i)+'">'+Tools.addDay(startTime, i-1)+'</option>';
             }
             selectText += '</select>';
-            if(!!type){
+            if(!!type && type == "shop"){
             	tr.eq(tr.length-3).find(".countWhichDaysContainer").html(selectText);
             }else{
             	tr.eq(tr.length-1).find(".countWhichDaysContainer").html(selectText);
@@ -7135,6 +7137,11 @@ define(function(require, exports){
 					'<span class="guideName">'+guideName+'</span>'+
 					'<input name="guideArrangeId" type="hidden" value="'+guideArrangeId+'"/>'+
 				'</div>'+
+			'</td>';
+		}else if (tdName == 'otherIn'){
+			guideHtml = '<td rowspan="2" name="'+tdName+'">'+
+					'<span class="guideName">'+guideName+'</span>'+
+					'<input name="guideArrangeId" type="hidden" value="'+guideArrangeId+'"/>'+
 			'</td>';
 		}else{
 			guideHtml = '<td name="'+tdName+'">'+
