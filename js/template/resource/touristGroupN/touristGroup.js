@@ -301,7 +301,8 @@ define(function(require, exports) {
     		if($that.hasClass('T-edit')){
     			touristGroup.touristGroupUpdate(id);
     		}else if($that.hasClass('T-view')){
-                touristGroup.touristGroupView(id);
+                var type = $(this).data('type');
+                touristGroup.touristGroupView(id,type);
             }else if($that.hasClass('T-del')){
                 showConfirmDialog("确定删除该条数据?", function() {
                     touristGroup.touristGroupDelete(id, $tab);
@@ -647,6 +648,7 @@ define(function(require, exports) {
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
                         }
                     }
+                    console.log(data)
                     if (Tools.addTab(K.view , '查看小组', T.view(data))) {
                         touristGroup.commonEvents($("#tab-" + K.view + "-content"), 1);
                     }
@@ -704,23 +706,23 @@ define(function(require, exports) {
                 type: 'POST',
                 showLoading:false,
                 success:function(data){
-                    var result = showDialog(data);
+                    if (showDialog(data)) {
                     html = T.viewSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
-                        title:"打印核算单",
+                        title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
-                });
-                var $outAccountsTab = $("#T-touristGroupViewSingle");
-                    $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
-                    touristGroup.exportsOutAccounts($outAccountsTab);
-                    }); 
+                    });
+                    var $outAccountsTab = $("#T-touristGroupViewSingle");
+                        $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                        touristGroup.exportsOutAccounts($outAccountsTab);
+                        }); 
+                    }
                 }
-                
         });           
     };
 
@@ -740,9 +742,9 @@ define(function(require, exports) {
                     html = T.viewTransferSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
-                        title:"打印核算单",
+                        title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false

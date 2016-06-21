@@ -41,6 +41,7 @@
                         <th class="th-border">单价</th>
                         <th class="th-border">天数</th>
                         <th class="th-border">金额</th>
+                        <th class="th-border">说明</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{needGet.length}}">{{base.fromPartnerAgency}}</td>
@@ -53,8 +54,10 @@
                         <td>{{rs.price}}</td>
                         <td>{{rs.days}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -71,6 +74,7 @@
                         <td>{{rs.price}}</td>
                         <td>{{rs.days}}</td>
                         <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
                     </tr>
                     {{/if}}
                     {{/each}}
@@ -78,6 +82,7 @@
                         <td>合计</td>
                         <td colspan="5"></td>
                         <td>{{needGetMap.needPayAllMoney}}</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -91,7 +96,6 @@
                         <th class="th-border">人数</th>
                         <th class="th-border">抵达日期</th>
                         <th class="th-border">离开日期</th>
-                        <th class="th-border">类别</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">单价</th>
                         <th class="th-border">数量</th>
@@ -107,13 +111,16 @@
                         {{each needPay.receive.feeList as rs index}}
                         {{if needPay.receive.feeList.length > 0}}
                         {{if index == 0}}
-                        <td>{{rs.type}}</td>
                         <td>{{rs.name}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.count}}</td>
                         <td>{{rs.money}}</td>
                         {{/if}}
                         {{else}}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -126,7 +133,6 @@
                     {{if needPay.receive.feeList.length > 0}}
                     {{if index > 0}}
                     <tr class="view-TranAccountsPrint">
-                        <td>{{rs.type}}</td>
                         <td>{{rs.name}}</td>
                         <td>{{rs.price}}</td>
                         <td>{{rs.count}}</td>
@@ -137,17 +143,17 @@
 
                     <tr>
                         <td>合计</td>
-                        <td colspan="8"></td>
+                        <td colspan="7"></td>
                         <td>{{needPay.receive.lineNeedPayMoney}}</td>
                     </tr>
                 </tbody>
             </table>
-
+            {{if !!needPay.hotel}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.hotel.arrangeList && needPay.hotel.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="7" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th rowspan="{{needPay.hotel.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">酒店</th>
                         <th class="th-border">酒店名称</th>
                         <th class="th-border">入住日期</th>
                         <th class="th-border">房间类型</th>
@@ -171,19 +177,21 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{needPay.hotel.sumNeedPayMoney}}</td>
                         <td>{{needPay.hotel.sumSettlementMoney}}</td>
                     </tr>
                     {{/if}}
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!needPay.bus}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.bus.arrangeList && needPay.bus.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="3" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th rowspan="{{needPay.bus.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">用车</th>
                         <th class="th-border">车队</th>
                         <th class="th-border">用车时间</th>
                         <th class="th-border">车费</th>
@@ -203,19 +211,21 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="3"></td>
+                        <td colspan="4"></td>
                         <td>{{needPay.bus.sumNeedPayMoney}}</td>
                         <td>{{needPay.bus.sumSettlementMoney}}</td>
                     </tr>
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!needPay.restaurant}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.restaurant.arrangeList && needPay.restaurant.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">餐费</th>
+                        <th rowspan="{{needPay.restaurant.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">餐费</th>
                         <th class="th-border">餐厅名称</th>
                         <th class="th-border">用餐时间</th>
                         <th class="th-border">类型</th>
@@ -239,19 +249,21 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{needPay.restaurant.sumNeedPayMoney}}</td>
                         <td>{{needPay.restaurant.sumSettlementMoney}}</td>
                     </tr>
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!needPay.ticket}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.ticket.arrangeList && needPay.ticket.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th rowspan="{{needPay.ticket.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">票务</th>
                         <th class="th-border">票务公司</th>
                         <th class="th-border">乘坐时间</th>
                         <th class="th-border">类型-出发-到达</th>
@@ -277,19 +289,21 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="5"></td>
+                        <td colspan="6"></td>
                         <td>{{needPay.ticket.sumNeedPayMoney}}</td>
                         <td>{{needPay.ticket.sumSettlementMoney}}</td>
                     </tr>
                     {{/if}}
                 </tbody>
             </table>
-
+            {{/if}}
+            
+            {{if !!needPay.other}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
                 {{if !!needPay.other.arrangeList && needPay.other.arrangeList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="4" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th rowspan="{{needPay.other.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border head-nav-width">其它</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">联系人</th>
@@ -315,13 +329,14 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="6"></td>
+                        <td colspan="7"></td>
                         <td>{{needPay.other.sumNeedPayMoney}}</td>
                         <td>{{needPay.other.sumSettlementMoney}}</td>
                     </tr>
                     {{/if}}
                 </tbody>
             </table>
+            {{/if}}
         </div>        
     </form>
     <div class="form-inline col-xs-12 hidden" style="text-align: center;margin-top: 30px;"> 

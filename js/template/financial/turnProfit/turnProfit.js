@@ -28,18 +28,13 @@ define(function(require, exports) {
             orderNumber : "",
             startTime : dateJson.startDate,
             endTime : dateJson.endDate,
-            type : 1,
             sortType: 'auto' 
         };
-        TurnProfit.listTurnProfit(0,"","","","","","",dateJson.startDate,dateJson.endDate,1);
+        TurnProfit.listTurnProfit(0,"","","","","","",dateJson.startDate,dateJson.endDate);
     };
 
-    TurnProfit.listTurnProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,orderNumber,startTime,endTime,type) {
+    TurnProfit.listTurnProfit = function(page,lineProductId,lineProductName,partnerAgencyId,partnerAgencyName,toBusinessGroupId,toBusinessGroupName,orderNumber,startTime,endTime) {
         if (TurnProfit.$searchArea && arguments.length === 1) {
-            type = 1;
-            if(!TurnProfit.$tab.find(".T-checkTurn").is(":checked")){
-                type = 0;
-            }
         	TurnProfit.searchParam = {
 	        	pageNo: page,
 	        	lineProductId : TurnProfit.$searchArea.find("input[name=lineProductId]").val(),
@@ -51,7 +46,6 @@ define(function(require, exports) {
                 orderNumber : TurnProfit.$searchArea.find("input[name=orderNumber]").val(),
 	        	startTime : TurnProfit.$searchArea.find("input[name=startTime]").val(),
 	        	endTime : TurnProfit.$searchArea.find("input[name=endTime]").val(),
-                type : type,
 	        	sortType: 'auto' 
 	        }
         }
