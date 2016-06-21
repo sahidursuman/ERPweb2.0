@@ -22,6 +22,8 @@ define(function(require, exports) {
             update : require('./view/tourists/update/update'),//编辑页面
             view : require('./view/tourists/view/view'),//查看页面
             viewAccountsTemplate : require('./view/tourists/view/viewAccounts'),//查看结算单
+            viewSingleTemplate : require('./view/tourists/view/viewSingle'),//查看中转核算单
+            viewTransferSingleTemplate : require("./view/tourists/view/viewTransferSingle"),//外转核算单
             chooseClient : require('./view/tourists/choose/chooseClient'),//选择客户
             chooseClientList : require('./view/tourists/choose/chooseClientList'),//选择客户列表
             chooseLineProduct : require('./view/tourists/choose/chooseLineProduct'),//选择线路产品
@@ -299,7 +301,8 @@ define(function(require, exports) {
     		if($that.hasClass('T-edit')){
     			touristGroup.touristGroupUpdate(id);
     		}else if($that.hasClass('T-view')){
-                touristGroup.touristGroupView(id);
+                var type = $(this).data('type');
+                touristGroup.touristGroupView(id,type);
             }else if($that.hasClass('T-del')){
                 showConfirmDialog("确定删除该条数据?", function() {
                     touristGroup.touristGroupDelete(id, $tab);
@@ -645,6 +648,7 @@ define(function(require, exports) {
                             sendTrip[i].sendOther = JSON.stringify(sendTrip[i].sendOther || {});
                         }
                     }
+                    console.log(data)
                     if (Tools.addTab(K.view , '查看小组', T.view(data))) {
                         touristGroup.commonEvents($("#tab-" + K.view + "-content"), 1);
                     }
@@ -688,6 +692,69 @@ define(function(require, exports) {
                     }   
                 }
         });       
+    };
+
+    /**
+     * [viewSingleList 游客小组核算单]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+     touristGroup.viewSingleList = function(id){ 
+            $.ajax({
+                url: KingServices.build_url("outRemarkArrange", "viewSettlement"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    if (showDialog(data)) {
+                    html = T.viewSingleTemplate(data);
+                    var viewSingleLayer = layer.open({
+                        type: 1,
+                        title:"打印核算表",
+                        skin: 'layui-layer-rim',
+                        area: '720px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false
+                    });
+                    var $outAccountsTab = $("#T-touristGroupViewSingle");
+                        $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                        touristGroup.exportsOutAccounts($outAccountsTab);
+                        }); 
+                    }
+                }
+        });           
+    };
+
+/**
+ * [viewTranferSingleList 外转核算单]
+ * @param  {[type]} id [description]
+ * @return {[type]}    [description]
+ */
+    touristGroup.viewTranferSingleList = function(id){ 
+            $.ajax({
+                url: KingServices.build_url("customerOrder", "transferAccount"),
+                data: "id=" + id,
+                type: 'POST',
+                showLoading:false,
+                success:function(data){
+                    var result = showDialog(data);
+                    html = T.viewTransferSingleTemplate(data);
+                    var viewSingleLayer = layer.open({
+                        type: 1,
+                        title:"打印核算表",
+                        skin: 'layui-layer-rim',
+                        area: '720px', 
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false
+                }); 
+                var $outAccountsTab = $("#T-touristGroupViewSingle");
+                    $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                    touristGroup.exportsOutAccounts($outAccountsTab);
+                });
+            }   
+        });           
     };
 
     //打印页面
@@ -812,12 +879,28 @@ define(function(require, exports) {
                     $("body").find('[href="#tab-' + K.menu + '-content"]').trigger('click');                    
                 }
             });
-            //绑定答应结算单事件
+            //绑定打印结算单事件
             $tab.find('.T-statementsBtn').off('click').on('click',function(){
                 var pluginKey = 'plugin_print';
                     Tools.loadPluginScript(pluginKey);
                     touristGroup.viewAccountList($tab.find('.T-container').data('id'));
             });
+
+            //绑定中转核算单事件
+            $tab.find('.T-singlesBtn').off('click').on('click',function(id){
+                var pluginKey = 'plugin_print';
+                    Tools.loadPluginScript(pluginKey);
+                    touristGroup.viewSingleList($tab.find('.T-container').data('id'));
+            });
+
+
+            //绑定外转核算单事件
+            $tab.find('.T-transfersBtn').off('click').on('click',function(id){
+                var pluginKey = 'plugin_print';
+                    Tools.loadPluginScript(pluginKey);
+                    touristGroup.viewTranferSingleList($tab.find('.T-part-group-list tr').eq(0).data('id'));
+            });
+
             $tab.find('.T-money-adjust').on('click', function () {
                 touristGroup.adjustPayMoney($(this));
             });
@@ -1231,6 +1314,7 @@ define(function(require, exports) {
             $payMoney = $tr.find('.T-pay-money'),
             data = {
                 id : $tr.data('id'),
+                isInnerTransferConfirm: $tr.data('is-inner'),
                 subNeedPayMoney : $payMoney.text()
             };
 
@@ -1916,8 +2000,8 @@ define(function(require, exports) {
             }
             $tbody.append('<tr>'+
                 '<td><select class="col-xs-12" name="type">'+option+'</select></td>'+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+days+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+days+
                 '<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>'+
                 '<td><input type="text" class="col-xs-12" name="remark"></td>'+
                 '<td><a class="cursor T-action T-delete">删除</a></td>'+

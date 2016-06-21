@@ -2,17 +2,19 @@
     <form class="form-inline" role="form" onsubmit="return false">
         <div class="form-group mar-r-10">
             <label>总社 </label>
-            <input type="text" class="form-control T-search-head-office" style="width: 110px;" value="{{searchParam.headerAgencyName}}" maxlength="100" placeholder="所有总社">
+            <input type="hidden" name="headerAgencyId" value="{{searchParam.headerAgencyId}}">
+            <input type="text" name="headerAgencyName" class="form-control T-search-head-office" style="width: 110px;" value="{{searchParam.headerAgencyName}}" maxlength="100" placeholder="所有总社">
         </div>
         <div class="form-group mar-r-10">
             <label>客户 </label>
-            <input type="text" class="form-control T-search-customer" style="width: 110px;" value="{{searchParam.fromPartnerAgencyName}}" maxlength="100" placeholder="所有客户">
+            <input type="hidden" name="fromPartnerAgencyId" value="{{searchParam.fromPartnerAgencyId}}">
+            <input type="text" name="fromPartnerAgencyName" class="form-control T-search-customer" style="width: 110px;" value="{{searchParam.fromPartnerAgencyName}}" maxlength="100" placeholder="所有客户">
         </div>
         <div class="form-group mar-r-10">
             <label>账期 </label>
-            <input type="text" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
+            <input type="text" name="startDate" class="form-control date-picker T-search-start-date" value="{{searchParam.startDate}}">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
+            <input type="text" name="endDate" class="form-control date-picker T-search-end-date" value="{{searchParam.endDate}}">
         </div>
         <div class="form-group T-finance-status btn-group mar-r-10">
             <label>客户类型</label>
@@ -75,9 +77,10 @@
             </select>
         </div>
         <div class="form-group">
-            <button class="btn-sm search-btn T-btn-search">
+            <button class="btn-sm mar-r-20 search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
+            <button class="btn-sm search-btn  T-client-export R-right" data-right="1340001">导出报表</button>
         </div>
     </form>
     <div class="form-inline T-sum-area">

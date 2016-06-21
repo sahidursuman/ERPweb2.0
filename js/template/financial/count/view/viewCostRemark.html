@@ -2,8 +2,9 @@
     <thead>
         <tr>
             <th class="th-border">费用项</th>
-            <th class="th-border">数量</th>
             <th class="th-border">单价</th>
+            <th class="th-border">数量</th>
+            <th class="th-border">天数</th>
             <th class="th-border">金额</th>
             <th class="th-border">说明</th>
         </tr>
@@ -14,10 +15,12 @@
             {{each touristGroupFeeList as touristGroupFee index}}
                 <tr>
                     <td>{{touristGroupFee.name}}</td>
-                    <td>{{touristGroupFee.count}}</td>
-                    <td>{{touristGroupFee.price}}</td>
+                    <td><span class="F-float F-money">{{touristGroupFee.price}}</span></td>
+                    <td><span class="F-float F-count">{{touristGroupFee.count}}</span></td>
+                    <td><span class="F-float F-count">{{touristGroupFee.days}}</span></td>
                     <td>
-                        {{touristGroupFee.price*touristGroupFee.count}}
+                        <span class="F-float F-money">{{touristGroupFee.price*touristGroupFee.count}}</span>
+                        
                     </td>
                     <td>
                         {{touristGroupFee.remark}}

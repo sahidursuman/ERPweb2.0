@@ -31,7 +31,7 @@
         <td>{{touristGroup.status | getPartGroupStatusText}}</td>
         <td>
             <div class="btn-group" style="width:120px;">
-                <a data-entity-id="{{touristGroup.id}}" class="T-action T-view btn-touristGroup-view cursor">
+                <a data-entity-id="{{touristGroup.id}}" data-type="{{touristGroup.status}}" class="T-action T-view btn-touristGroup-view cursor">
 					查看
 				</a>
                 {{if touristGroup.innerFlag == 1 && touristGroup.status == 1}}

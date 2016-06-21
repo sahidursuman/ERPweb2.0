@@ -1,0 +1,309 @@
+<div class="bookViewSingle" id="T-bookViewSingle">
+    <h4>代订核算表</h4>
+    <div class="form-group pull-right globalAdd" style="margin-right: 20px">
+            <button class="btn btn-sm btn-success T-printSingleBtn T-noprint" style="height: 24px;">
+                <i class="ace-icon fa fa-print"></i>打印
+            </button>
+        </div>
+    <form action="">
+        <div class="viewSingleMain view-InfoPrint">
+    <table class="table whereQ whereTwo" style="width: 100%;">
+                <tr class="view-TranAccountsPrint">
+                    <td class="textaR-paR"><span>单号</span></td>
+                    <td class="textaR-paL"><span>{{checkOrder.base.orderNumber}}</span></td>
+                    <td class="textaR-paR"><span>人数</span></td>
+                    <td class="textaR-paL"><span>{{checkOrder.base.adultCount}}大</span> <span>{{checkOrder.base.childCount}}小</span></td>
+                    <td class="textaR-paR"><span>日期</span></td>
+                    <td class="textaR-paL" colspan="4"><span>{{checkOrder.base.date}}</span></td>
+                </tr>
+                <tr class="view-TranAccountsPrint">
+                    <td class="textaR-paR"><span>收入</span></td>
+                    <td class="textaR-paL"><span>{{checkOrder.base.settlementMoney}}</span></td>
+                    <td class="textaR-paR"><span>成本</span></td>
+                    <td class="textaR-paL"><span>{{checkOrder.base.paySettlementMoney}}</span></td>
+                    <td class="textaR-paR"><span>毛利</span></td>
+                    <td class="textaR-paL"><span>{{checkOrder.base.profit}}</span></td>
+                    <td class="textaR-paR"><span>毛利率</span></td>
+                    <td class="textaR-paL"><span>{{checkOrder.base.perCapitaProfit}}</span></td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered"> 
+                <h5 style="color: #707070;margin-bottom:5px;margin-top:20px;font-weight: bold;">【团款明细】</h5>
+                <tbody>
+                     <tr class="view-TranAccountsPrint">
+                        <th class="th-border">组团社</th>
+                        <th class="th-border">客人</th>
+                        <th class="th-border">费用项</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">金额</th>
+                        <th class="th-border">说明</th>
+                    </tr>
+                    <tr class="view-TranAccountsPrint">
+                        <td rowspan="{{checkOrder.needGet.feeList.length}}">{{checkOrder.needGet.partnerAgencyName}}</td>
+                        <td rowspan="{{checkOrder.needGet.feeList.length}}">{{checkOrder.needGet.touristRealname}}</td>
+                        {{each checkOrder.needGet.feeList as rs index}}
+                        {{if checkOrder.needGet.feeList.length > 0}}
+                        {{if index == 0}}
+                        <td>{{rs.type | getFeeItemText}}</td>
+                        <td>{{rs.count}}</td>
+                        <td>{{rs.price}}</td>
+                        <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
+                        {{/if}}
+                        {{else}}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        {{/if}}
+                        {{/each}}
+                    </tr>
+                    {{each checkOrder.needGet.feeList as rs index}}
+                    {{if index > 0}}
+                    <tr class="view-TranAccountsPrint">
+                         <td>{{rs.type}}</td>
+                        <td>{{rs.count}}</td>
+                        <td>{{rs.price}}</td>
+                        <td>{{rs.money}}</td>
+                        <td>{{rs.remark}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    <tr>
+                        <td>合计</td>
+                        <td colspan="4"></td>
+                        <td>{{checkOrder.needGet.settlementMoney}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 酒店 -->
+            {{if !!checkOrder.needPay.hotel}}
+            <table class="table table-bordered" style="margin-bottom: 10px;">
+                <h5 style="color: #707070;margin-bottom:5px;margin-top:20px;font-weight: bold;">【成本明细】</h5>
+                <tbody>
+                    {{if !!checkOrder.needPay.hotel.arrangeList && checkOrder.needPay.hotel.arrangeList.length > 0}}
+                     <tr class="view-TranAccountsPrint">
+                        <th rowspan="{{checkOrder.needPay.hotel.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th class="th-border">酒店名称</th>
+                        <th class="th-border">房间类型</th>
+                        <th class="th-border">入住日期</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">天数</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">结算</th>
+                    </tr>
+                    
+                    {{each checkOrder.needPay.hotel.arrangeList as rs}}
+                    <tr class="view-TranAccountsPrint">
+                        <td>{{rs.hotelName}}</td>
+                        <td>{{rs.hotelRoomType}}</td>
+                        <td>{{rs.enterTime}}</td>
+                        <td>{{rs.costPrice}}</td>
+                        <td>{{rs.roomCount}}</td>
+                        <td>{{rs.days}}</td>
+                        <td>{{rs.sumCostMoney}}</td>
+                        <td>{{rs.settlementMoney}}</td>
+                    </tr>
+                    {{/each}}
+                    
+                    <tr>
+                        <td>合计</td>
+                        <td colspan="6"></td>
+                        <td>{{checkOrder.needPay.hotel.sumCostMoney}}</td>
+                        <td>{{checkOrder.needPay.hotel.settlementMoney}}</td>
+                    </tr>
+                {{/if}}
+                </tbody>
+            </table>
+            {{/if}}
+            
+            {{if !!checkOrder.needPay.bus}}
+            <table class="table table-bordered" style="margin-bottom: 10px;">
+                <tbody>
+                {{if !!checkOrder.needPay.bus.arrangeList && checkOrder.needPay.bus.arrangeList.length > 0}}
+                     <tr class="view-TranAccountsPrint">
+                        <th rowspan="{{checkOrder.needPay.bus.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th class="th-border">开始日期</th>
+                        <th class="th-border">结束日期</th>
+                        <th class="th-border">车座数</th>
+                        <th class="th-border">车辆品牌</th>
+                        <th class="th-border">所属车队</th>
+                        <th class="th-border">车费</th>
+                        <th class="th-border">优惠</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">结算</th>
+                    </tr>
+                    
+                    {{each checkOrder.needPay.bus.arrangeList as rs}}
+                    <tr data-id="{{rs.id}}" class="view-TranAccountsPrint">
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.endTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.needSeatCount}}</td>
+                        <td>{{rs.needBusBrand}}</td>
+                        <td>{{rs.busCompanyName}}</td>
+                        <td class="F-float F-money">{{rs.fee}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.sumCostMoney}}</td>
+                        <td class="F-float F-money">{{rs.settlementMoney}}</td>
+                    </tr>
+                    {{/each}}
+                    
+                    <tr>
+                        <td>合计</td>
+                        <td colspan="7"></td>
+                        <td>{{checkOrder.needPay.bus.sumCostMoney}}</td>
+                        <td>{{checkOrder.needPay.bus.settlementMoney}}</td>
+                    </tr>
+                    {{/if}}
+                </tbody>
+            </table>
+            {{/if}}
+
+            {{if !!checkOrder.needPay.scenic}}
+            <table class="table table-bordered" style="margin-bottom: 10px;">
+                <tbody>
+                {{if !!checkOrder.needPay.scenic.arrangeList && checkOrder.needPay.scenic.arrangeList.length > 0}}
+                     <tr class="view-TranAccountsPrint">
+                        <th rowspan="{{checkOrder.needPay.scenic.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">景区</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">时段</th>
+                        <th class="th-border">景区</th>
+                        <th class="th-border">收费项目</th>
+                        <th class="th-border">时长</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">优惠</th>
+                        <th class="th-border">订单号</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">结算</th>
+                    </tr>
+                    {{each checkOrder.needPay.scenic.arrangeList as rs}}
+                    <tr data-id="{{rs.id}}" class="view-TranAccountsPrint">
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                        <td>{{rs.tourTime}}</td>
+                        <td>{{rs.scenicName}}</td>
+                        <td>{{rs.scenicItemName}}</td>
+                        <td>{{rs.tourDuration}}</td>
+                        <td class="F-float F-money">{{rs.costPrice}}</td>
+                        <td class="F-float F-count">{{rs.roomCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td>{{rs.orderNumber}}</td>
+                        <td class="F-float F-money">{{rs.sumCostMoney}}</td>
+                        <td class="F-float F-money">{{rs.settlementMoney}}</td>
+                    </tr>
+                    {{/each}}
+                   
+                    <tr>
+                        <td>合计</td>
+                        <td colspan="9"></td>
+                        <td>{{checkOrder.needPay.scenic.sumCostMoney}}</td>
+                        <td>{{checkOrder.needPay.scenic.settlementMoney}}</td>
+                    </tr>
+                     {{/if}}
+                </tbody>
+            </table>
+            {{/if}}
+
+            {{if !!checkOrder.needPay.ticket}}
+            <table class="table table-bordered" style="margin-bottom: 10px;">
+                <tbody>
+                {{if !!checkOrder.needPay.ticket.arrangeList && checkOrder.needPay.ticket.arrangeList.length > 0}}
+                     <tr class="view-TranAccountsPrint">
+                        <th rowspan="{{checkOrder.needPay.ticket.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th class="th-border">票务公司</th>
+                        <th class="th-border">类型</th>
+                        <th class="th-border">出发城市</th>
+                        <th class="th-border">到达城市</th>
+                        <th class="th-border">班次</th>
+                        <th class="th-border">时间</th>
+                        <th class="th-border">座位级别</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">优惠</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">结算</th>
+                    </tr>
+                    {{each checkOrder.needPay.ticket.arrangeList as rs}}
+                    <tr class="view-TranAccountsPrint">
+                        <td>{{rs.ticketName}}</td>
+                        <td>{{rs.type | getTicketText}}</td>
+                        <td>{{rs.startCity}}</td>
+                        <td>{{rs.arriveCity}}</td>
+                        <td>{{rs.shift}}</td>
+                        <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}</td>
+                        <td>{{rs.seatLevel}}</td>
+                        <td class="F-float F-money">{{rs.costPrice}}</td>
+                        <td class="F-float F-count">{{rs.roomCount}}</td>
+                        <td class="F-float F-money">{{rs.reduceMoney}}</td>
+                        <td class="F-float F-money">{{rs.sumCostMoney}}</td>
+                        <td class="F-float F-money">{{rs.settlementMoney}}</td>
+                    </tr>
+                    {{/each}}
+                    
+                    <tr>
+                        <td>合计</td>
+                        <td colspan="10"></td>
+                        <td>{{checkOrder.needPay.ticket.sumCostMoney}}</td>
+                        <td>{{checkOrder.needPay.ticket.settlementMoney}}</td>
+                    </tr>
+                    {{/if}} 
+                </tbody>
+            </table>
+            {{/if}}
+            
+            {{if !!checkOrder.needPay.other}}
+            <table class="table table-bordered" style="margin-bottom: 10px;">
+                <tbody>
+                {{if !!checkOrder.needPay.other.arrangeList && checkOrder.needPay.other.arrangeList.length > 0}}
+                     <tr class="view-TranAccountsPrint">
+                        <th rowspan="{{checkOrder.needPay.other.arrangeList.length + 1}}" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th class="th-border">日期</th>
+                        <th class="th-border">项目</th>
+                        <th class="th-border">联系人</th>
+                        <th class="th-border">联系电话</th>
+                        <th class="th-border">单价</th>
+                        <th class="th-border">数量</th>
+                        <th class="th-border">优惠</th>
+                        <th class="th-border">应付</th>
+                        <th class="th-border">结算</th>
+                    </tr>
+                    {{each checkOrder.needPay.other.arrangeList as rs}}
+                    <tr class="view-TranAccountsPrint">
+                        <td>{{rs.date}}</td>
+                        <td>{{rs.name}}</td>
+                        <td>{{rs.managerName}}</td>
+                        <td>{{rs.mobileNumber}}</td>
+                        <td>{{rs.price}}</td>
+                        <td>{{rs.roomCount}}</td>
+                        <td>{{rs.reduceMoney}}</td>
+                        <td>{{rs.sumCostMoney}}</td>
+                        <td>{{rs.settlementMoney}}</td>
+                    </tr>
+                    {{/each}}
+                    
+                    <tr>
+                        <td>合计</td>
+                        <td colspan="7"></td>
+                        <td>{{checkOrder.needPay.other.sumCostMoney}}</td>
+                        <td>{{checkOrder.needPay.other.settlementMoney}}</td>
+                    </tr>
+                    {{/if}} 
+                </tbody>
+            </table>
+            {{/if}}
+        </div>
+    </form>
+
+
+
+    <!-- <div class="form-inline col-xs-12 hidden" style="text-align: center;margin-top: 30px;"> 
+        <button class="btn btn-sm btn-primary T-btn-cancel T-noprint" style="height:24px;width: 75px;font-size: 12px;line-height: 10px;"> <i class="ace-icon fa fa-times"></i> 关闭 </button>
+    </div> -->
+</div>
