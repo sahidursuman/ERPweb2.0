@@ -453,7 +453,7 @@ define(function(require, exports, module) {
      bookingOrder.viewSingleList = function(id){ 
             $.ajax({
                 url: KingServices.build_url("bookingOrderV2", "checkOrder"),
-                data: "id=" + 405,
+                data: "id=" + id,
                 type: 'POST',
                 showLoading:false,
                 success:function(data){
