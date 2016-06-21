@@ -418,6 +418,9 @@ define(function(require, exports) {
         $tab.find('.T-fee-list').on('blur', '.T-calculate', function(event){
             event.preventDefault();
             var $that = $(this), $tr = $that.closest('tr');
+            if($that.attr("readonly") || $that.is(":disabled")) {
+                return false;
+            }
             if($that.hasClass('T-count') || $that.hasClass('T-price') || $that.hasClass('T-days')){
                 var count = $tr.find('[name="count"]').val() || 0,
                     price = $tr.find('[name="price"]').val() || 0,
@@ -1817,8 +1820,8 @@ define(function(require, exports) {
         //计算应收
         calcRece : function($tab){
             var countMoney = 0;
-            $tab.find('.T-fee-list tr').each(function(index){
-                var money = $(this).find('[name="money"]').val() * 1;
+            $tab.find('.T-fee-list tr input[name="money"]').each(function(index){
+                var money = $(this).val() * 1;
                 countMoney += money;
             });
             return Tools.toFixed(countMoney);
