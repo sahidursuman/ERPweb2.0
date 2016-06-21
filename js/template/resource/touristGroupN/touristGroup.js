@@ -1314,6 +1314,7 @@ define(function(require, exports) {
             $payMoney = $tr.find('.T-pay-money'),
             data = {
                 id : $tr.data('id'),
+                isInnerTransferConfirm: $tr.data('is-inner'),
                 subNeedPayMoney : $payMoney.text()
             };
 
