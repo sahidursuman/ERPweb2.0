@@ -638,7 +638,7 @@ define(function(require, exports) {
         //行程安排
         $tab.find('.T-add-days').on('click', function(event){
             event.preventDefault();
-            var $days = $tab.find('.T-days'),
+            var $days = $tab.find('.T-dayList'),
                 lenWhichDay = $days.data('length-whichDay');
             $days.append(travelArrange({lineProductDayList:[{whichDay: ''}]}));
             
@@ -778,7 +778,7 @@ define(function(require, exports) {
         });
 
         //绑定行程表内事件
-        $tab.find(".T-days").on('click', '.T-action', function(event){
+        $tab.find(".T-dayList").on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this);
             if($that.hasClass('T-update-detail')){
@@ -789,7 +789,7 @@ define(function(require, exports) {
                 function removeDay() {
                     $that.closest('tr').remove();
                     var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
-                        lenWhichDay = $tab.find('.T-days').data('length-whichDay');
+                        lenWhichDay = $tab.find('.T-dayList').data('length-whichDay');
                     // if(whichDay == lenWhichDay){
                     //     F.arrangeDate($tab);
                     // }
@@ -850,7 +850,7 @@ define(function(require, exports) {
         }
         var isDateRepear = 0,
             dateArray = [],
-            $dateTr = $tab.find('.T-days tr');
+            $dateTr = $tab.find('.T-dayList tr');
         $dateTr.each(function(index) {
             var $this = $(this);
             dateArray.push($this.find('[name=whichDayDate]').val())
@@ -1028,7 +1028,7 @@ define(function(require, exports) {
     tripPlan.getTripPlanDays = function($tab) {
         var args = [];
 
-        $tab.find('.T-days tr').each(function(index) {
+        $tab.find('.T-dayList tr').each(function(index) {
             var $that = $(this), 
                 repastDetail = ($that.find('[name="repastDetailM"]').is(":checked") ? 1 : 0) + ',';
 
@@ -1538,7 +1538,7 @@ define(function(require, exports) {
                 }];
 
                 quoteId = $tr.data('quote-id');
-                $tab.find(".T-days").html("");
+                $tab.find(".T-dayList").html("");
                 $tab.find(".T-tourists-list").html("");
                 $tab.find(".T-fee-list").html("");
                 $tab.find('[name=travelAgencyName]').val($tr.find('[name=travelAgencyName]').val());
@@ -1705,7 +1705,7 @@ define(function(require, exports) {
                             data.lineProductDayList[i].n = repastDetail[1];
                             data.lineProductDayList[i].e = repastDetail[2];
                         }
-                        $tab.find(".T-days").html(travelArrange(data));
+                        $tab.find(".T-dayList").html(travelArrange(data));
                         $tab.find('input[name="lineProductName"]').trigger('change');
                         //KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
                         F.arrangeDate($tab, 1);
@@ -1831,7 +1831,7 @@ define(function(require, exports) {
             var $time = $tab.find('[name="startTime"]'),
                 startTime = $time.val(),
                 endTime = $tab.find('[name="endTime"]'),
-                $tr = $tab.find('.T-days tr');
+                $tr = $tab.find('.T-dayList tr');
             
             var lengthWhichDay = 1;
             $tr.each(function(index){
@@ -1854,7 +1854,7 @@ define(function(require, exports) {
         calcWhicDay : function($tab) {
             var $time = $tab.find('[name="startTime"]'),
                 startTime = $time.val(),
-                $tr = $tab.find('.T-days tr');
+                $tr = $tab.find('.T-dayList tr');
 
             if (!!startTime) {
                 $tr.each(function(index) {
