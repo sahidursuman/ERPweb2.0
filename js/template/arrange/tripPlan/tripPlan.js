@@ -1900,10 +1900,11 @@ define(function(require, exports) {
             var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val()),
                 touristGroupMemberList = [];
             if (data != "") {
-                var dataArray = data.split(/\r?\n/);
+                var dataArray = data.split(/\r?\n/),  canPass = -1, listArr = [], allData = [];
                 if (dataArray.length > 0) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
+                        allData = [0,0,0];
                         if(memberInfo){
                             var personInfo = memberInfo.split(/\s/);
                             for (var k = personInfo.length; k >= 0 ; k--) {
@@ -1912,29 +1913,53 @@ define(function(require, exports) {
                                 }
                             }
 
-                            var name = F.getName(personInfo[0]), mobileNumber = '', idCardNumber = '';
-                            for (var j = 1; j < personInfo.length; j++) {
+                            var name = F.getName(personInfo[0]), mobileNumber = '', idCardNumber = '', effective = 0;
+                            for (var j = 0; j < personInfo.length; j++) {
                                 if (!!personInfo[j] && trim(personInfo[j]).length === 11) {
                                     mobileNumber = F.getPhone(personInfo[j]);
+                                    effective++;
+                                    allData[1]++;
                                 }else if (!!personInfo[j] && trim(personInfo[j]).length === 18) {
                                     idCardNumber = F.getIdCard(personInfo[j]);
+                                    effective++;
+                                    allData[2]++;
+                                }else if (!!F.getName(personInfo[j])) {
+                                    name = F.getName(personInfo[j]);
+                                    effective++;
+                                    allData[0]++;
                                 }
                             }
-
+                            if (effective > 3) {
+                                canPass = i+1;
+                                break;
+                            }
                             if(name != "" || !!mobileNumber || !!idCardNumber){
                                 touristGroupMemberList.push({
                                     name : name,
                                     mobileNumber : mobileNumber,
                                     idCardNumber : idCardNumber
                                 });
-                                $obj.append(T.touristsList({touristGroupMemberList:[{
+                                listArr.push(T.touristsList({touristGroupMemberList:[{
                                     name : name,
                                     mobileNumber : mobileNumber,
                                     idCardNumber : idCardNumber
                                 }]}));
                             }
-                            layer.close(addVisotorMoreLayer);
                         }
+                    }
+                    if (canPass == -1) {
+                        $obj.append(listArr.join(''))
+                        layer.close(addVisotorMoreLayer);
+                    }else {
+                        var name = '';
+                        if (allData[0] > 1) {
+                            name = '姓名';
+                        } else if (allData[1] > 1) {
+                            name = '手机号码';
+                        } else if (allData[2] > 1) {
+                            name = '证件号';
+                        }
+                        showMessageDialog('第'+canPass+'行数据格式错误，“'+name+'”有多个');
                     }
                     if(fn){
                         fn($obj, touristGroupMemberList);
