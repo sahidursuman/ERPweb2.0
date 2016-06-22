@@ -65,14 +65,17 @@
 		<div class="col-xs-12 mar-t-20">
 			<label class="control-label" style="width: 35px;"></label><button class="btn btn-sm btn-success T-add-fee"> <i class="ace-icon fa fa-plus"></i> 新增费用项 </button>
 		</div>
-		<div class="col-xs-12 mar-t-20">
+		<div class="col-xs-12 mar-t-10">
+			<p class="red">*单位解释：默认为1，针对某些客户需要按照吃几餐/住几晚来对账结算,请修改即可</p>
+		</div>
+		<div class="col-xs-12 mar-t-5">
 			<table class="table table-striped table-new table-bordered table-hover">
 				<thead>
 					<tr>
 						<th>费用项</th>
 						<th>数量</th>
 						<th>单价</th>
-						{{if type != 1 || !!isInnerTransferConfirm}}<th>天数</th>{{/if}}
+						{{if type != 1 || !!isInnerTransferConfirm}}<th>单位</th>{{/if}}
 						<th>金额</th>
 						<th>说明</th>
 						<th width="50">操作</th>
@@ -129,7 +132,7 @@
 						</td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>
 						<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>
-						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days"></td>{{/if}}
+						{{if type != 1}}<td><input type="text" class="col-xs-12 T-option" name="days" value="1"></td>{{/if}}
 						<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>
 						<td><input type="text" class="col-xs-12" name="remark" maxlength="1000"></td>
 						<td><a class="cursor T-action T-delete">删除</a></td>
