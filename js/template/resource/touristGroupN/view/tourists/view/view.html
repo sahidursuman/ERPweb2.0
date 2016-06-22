@@ -46,7 +46,7 @@
 					</tr>
 				</thead>
 				<tbody class="T-team-info">
-					<tr>
+					<tr data-is-inner="{{baseInfo.isInnerTransferConfirm}}">
 						<td>{{baseInfo.fromPartnerAgency}}{{if baseInfo.fromPartnerAgencyContactName != ""}}（{{baseInfo.fromPartnerAgencyContactName}}）{{/if}}</td>
 						<td>{{baseInfo.lineProductName}}</td>
 						<td>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</td>

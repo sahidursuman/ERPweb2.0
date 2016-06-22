@@ -116,7 +116,7 @@
                                     <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                     <input name="badStatus" value="{{itemSet.badStatus}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                     <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
-                                    <input name="sumIpt" type="hidden">
+                                    <!-- <input name="sumIpt" type="hidden"> -->
                                     <td>
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
@@ -217,13 +217,13 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <span class="F-float F-money needInReduceMoney">0</span>
+                                                    <span class="needInReduceMoney">0</span>
                                                     <input name="needInReduceMoney" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <span class="F-float F-money needInReduceMoney">0</span>
+                                                <span class="needInReduceMoney">0</span>
                                                 <input name="needInReduceMoney" type="hidden"/>
                                             </div>
                                         {{/if}}
@@ -237,13 +237,13 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <span class="F-float F-money needIncome">0</span>
+                                                    <span class="needIncome">0</span>
                                                     <input name="needIncome" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <span class="F-float F-money needIncome">0</span>
+                                                <span class="needIncome">0</span>
                                                 <input name="needIncome" type="hidden"/>
                                             </div>
                                         {{/if}}
@@ -331,16 +331,16 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                     {{if itemSet.badStatus == 1}}
-                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                        <span class="realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                     {{else}}
-                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                        <span class="realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                     {{/if}}
                                                     <input name="realNeedPayMoney" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                <span class="realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                 <input name="realNeedPayMoney" type="hidden"/>
                                             </div>
                                         {{/if}}<!-- 应付 -->
@@ -351,7 +351,7 @@
                                             <div class="div-h-30"></div>
                                         {{/if}}
 
-                                        <span class="F-float F-money payedMoney">{{itemSet.payedMoney}}</span><!-- 社付 -->
+                                        <span class="payedMoney">{{itemSet.payedMoney}}</span><!-- 社付 -->
                                     </td>
 
                                     <td name="guidePayedMoney">
@@ -550,6 +550,7 @@
                                                         <input type="text" class="w-70" name="billRemark" 
                                                         value="{{rs.billRemark}}" 
                                                         {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                        <input name="sumIpt" type="hidden">
                                                 </div>
                                             {{/each}}
                                         {{else}}
@@ -586,7 +587,7 @@
                             {{if index >0}}
                                 <tr selfPayId="{{arrange.selfPayId}}" whichDay = "{{arrange.whichDay}}"
                                 isConfirmAccount="{{itemSet.isConfirmAccount}}" arrangeType="selfArrange">
-                                    <input name="sumIpt" type="hidden">
+                                    
                                     <td class="{{if index+1 == arrange.selfPayItem.length}}breakFlag{{/if}}">
                                         {{if guideCount>1}}
                                             <div class="div-h-30"></div>
@@ -710,13 +711,13 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <span class="F-float F-money needInReduceMoney">0</span>
+                                                    <span class="needInReduceMoney">0</span>
                                                     <input name="needInReduceMoney" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <span class="F-float F-money needInReduceMoney">0</span>
+                                                <span class="needInReduceMoney">0</span>
                                                 <input name="needInReduceMoney" type="hidden"/>
                                             </div>
                                         {{/if}}
@@ -730,13 +731,13 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <span class="F-float F-money needIncome">0</span>
+                                                    <span class="needIncome">0</span>
                                                     <input name="needIncome" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <span class="F-float F-money needIncome">0</span>
+                                                <span class="needIncome">0</span>
                                                 <input name="needIncome" type="hidden"/>
                                             </div>
                                         {{/if}}
@@ -821,16 +822,16 @@
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
                                                     {{if itemSet.badStatus == 1}}
-                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                        <span class="realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                     {{else}}
-                                                        <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                        <span class="realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                     {{/if}}
                                                     <input name="realNeedPayMoney" type="hidden"/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <span class="F-float F-money realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
+                                                <span class="realNeedPayMoney">{{rs.realNeedPayMoney}}</span>
                                                 <input name="realNeedPayMoney" type="hidden"/>
                                             </div>
                                         {{/if}}<!-- 应付 -->
@@ -841,7 +842,7 @@
                                             <div class="div-h-30"></div>
                                         {{/if}}
 
-                                        <span class="F-float F-money payedMoney">{{itemSet.payedMoney}}</span><!-- 社付 -->
+                                        <span class="payedMoney">{{itemSet.payedMoney}}</span><!-- 社付 -->
                                     </td>
 
                                     <td name="guidePayedMoney">
@@ -1041,6 +1042,7 @@
                                                         <input type="text" class="w-70" name="billRemark" 
                                                         value="{{rs.billRemark}}" 
                                                         {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
+                                                        <input name="sumIpt" type="hidden">
                                                 </div>
                                             {{/each}}
                                         {{else}}

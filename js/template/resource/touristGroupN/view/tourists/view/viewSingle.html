@@ -1,6 +1,6 @@
 <div class="touristGroupViewSingle" id="T-touristGroupViewSingle">
     <h4>中转核算表</h4>
-    <div class="form-group pull-right globalAdd" style="margin-right: 45px">
+    <div class="form-group pull-right globalAdd" style="margin-right: 20px">
             <button class="btn btn-sm btn-success T-printAccountBtn T-noprint" style="height: 24px;">
                 <i class="ace-icon fa fa-print"></i>打印
             </button>
@@ -9,22 +9,24 @@
         <div class="viewSingleMain view-InfoPrint">
     <table class="table whereQ whereTwo" style="width: 100%;">
                 <tr class="view-TranAccountsPrint">
-                    <td class="textaR-paR"><span>团号</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.orderNumber}}</span></td>
+                    <td class="textaR-paR"><span>单号</span></td>
+                    <td><span>{{baseInfo.orderNumber}}</span></td>
                     <td class="textaR-paR"><span>人数</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.adultCount}}大</span> <span>{{baseInfo.childCount}}小</span></td>
-                    <td class="textaR-paR"><span>日期</span></td>
-                    <td class="textaR-paL" colspan="4"><span>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td><span>{{baseInfo.adultCount}}大</span> <span>{{baseInfo.childCount}}小</span></td>
+                    <td class="textaR-paR"><span>接团日期</span></td>
+                    <td><span>{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
+                    <td class="textaR-paR"><span>送团日期</span></td>
+                    <td><span>{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}</span></td>
                 </tr>
                 <tr class="view-TranAccountsPrint">
                     <td class="textaR-paR"><span>收入</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.sumTransitMoney}}</span></td>
+                    <td><span>{{baseInfo.sumTransitMoney}}</span></td>
                     <td class="textaR-paR"><span>成本</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.transitPaySMoney}}</span></td>
+                    <td><span>{{baseInfo.transitPaySMoney}}</span></td>
                     <td class="textaR-paR"><span>毛利</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.grossProfitMoney}}</span></td>
+                    <td><span>{{baseInfo.grossProfitMoney}}</span></td>
                     <td class="textaR-paR"><span>人均毛利</span></td>
-                    <td class="textaR-paL"><span>{{baseInfo.perGrossProfitMoney}}</span></td>
+                    <td><span>{{baseInfo.perGrossProfitMoney}}</span></td>
                 </tr>
             </table>
             
@@ -37,10 +39,10 @@
                         <th class="th-border">客人</th>
                         <th class="th-border">费用项</th>
                         <th class="th-border">数量</th>
-                        <th class="th-border">天数</th>
                         <th class="th-border">单价</th>
+                        <th class="th-border">单位</th>
                         <th class="th-border">金额</th>
-                        <th class="th-border">备注</th>
+                        <th class="th-border">说明</th>
                     </tr>
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{tripFee.feeList.length}}">{{tripFee.partnerAgencyName}}</td>
@@ -50,8 +52,8 @@
                         {{if index == 0}}
                         <td>{{rs.name}}</td>
                         <td>{{rs.count}}</td>
-                        <td>{{rs.days}}</td>
                         <td>{{rs.price}}</td>
+                        <td>{{rs.days}}</td>
                         <td>{{rs.needIncome}}</td>
                         <td>{{rs.remark}}</td>
                         {{/if}}
@@ -79,8 +81,9 @@
                     {{/each}}
                     <tr>
                         <td>合计</td>
-                        <td colspan="6"></td>
+                        <td colspan="5"></td>
                         <td>{{tripFee.sumTripFee}}</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -113,13 +116,13 @@
             </table>
                 
 
-
+            {{}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <h5 style="color: #707070;margin-bottom:5px;margin-top:20px;font-weight: bold;">【成本明细】</h5>
                 <tbody>
                 {{if !!outRemarkArrange.hotelList && outRemarkArrange.hotelList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.hotelList.length +1}}" style="vertical-align: middle;" class="th-border">酒店</th>
+                        <th rowspan="{{outRemarkArrange.hotelList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">酒店</th>
                         <th class="th-border">酒店名称</th>
                         <th class="th-border">入住日期</th>
                         <th class="th-border">房间类型</th>
@@ -150,12 +153,11 @@
                     {{/if}}
                 </tbody>
             </table>
-
+            {{if !!outRemarkArrange.busList && outRemarkArrange.busList.length > 0}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.busList && outRemarkArrange.busList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.busList.length +1}}" style="vertical-align: middle;" class="th-border">用车</th>
+                        <th rowspan="{{outRemarkArrange.busList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">用车</th>
                         <th class="th-border">车队</th>
                         <th class="th-border">用车时间</th>
                         <th class="th-border">车费</th>
@@ -179,15 +181,16 @@
                         <td>{{outRemarkArrange.busNeedMoney}}</td>
                         <td>{{outRemarkArrange.busSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!outRemarkArrange.restaurantList && outRemarkArrange.restaurantList.length > 0}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.restaurantList && outRemarkArrange.restaurantList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.restaurantList.length +1}}" style="vertical-align: middle;" class="th-border">餐费</th>
+                        <th rowspan="{{outRemarkArrange.restaurantList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">餐费</th>
                         <th class="th-border">餐厅名称</th>
                         <th class="th-border">用餐时间</th>
                         <th class="th-border">类型</th>
@@ -215,15 +218,16 @@
                         <td>{{outRemarkArrange.restaurantNeedMoney}}</td>
                         <td>{{outRemarkArrange.restaurantSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!outRemarkArrange.ticketList && outRemarkArrange.ticketList.length > 0}}
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.ticketList && outRemarkArrange.ticketList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.ticketList.length +1}}" style="vertical-align: middle;" class="th-border">票务</th>
+                        <th rowspan="{{outRemarkArrange.ticketList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">票务</th>
                         <th class="th-border">票务公司</th>
                         <th class="th-border">乘坐时间</th>
                         <th class="th-border">类型-出发-到达</th>
@@ -253,15 +257,16 @@
                         <td>{{outRemarkArrange.ticketNeedMoney}}</td>
                         <td>{{outRemarkArrange.ticketSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
 
+            {{if !!outRemarkArrange.otherList && outRemarkArrange.otherList.length > 0}}   
             <table class="table table-bordered" style="margin-bottom: 10px;">
                 <tbody>
-                {{if !!outRemarkArrange.otherList && outRemarkArrange.otherList.length > 0}}
                      <tr class="view-TranAccountsPrint">
-                        <th rowspan="{{outRemarkArrange.otherList.length +1}}" style="vertical-align: middle;" class="th-border">其它</th>
+                        <th rowspan="{{outRemarkArrange.otherList.length +1}}" style="vertical-align: middle;" class="th-border head-nav-width">其它</th>
                         <th class="th-border">项目</th>
                         <th class="th-border">日期</th>
                         <th class="th-border">联系人</th>
@@ -291,9 +296,10 @@
                         <td>{{outRemarkArrange.otherNeedMoney}}</td>
                         <td>{{outRemarkArrange.otherSettMoney}}</td>
                     </tr>
-                    {{/if}}
+                    
                 </tbody>
             </table>
+            {{/if}}
         </div>
     </form>
 

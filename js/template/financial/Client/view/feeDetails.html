@@ -5,7 +5,7 @@
                 <th>费用项</th>
                 <th>数量</th>
                 <th>单价</th>
-                <th>天数</th>
+                <th>单位</th>
                 <th>金额</th>
                 <th>说明</th>
             </tr>
@@ -17,7 +17,7 @@
                     <td>{{rs.count}}</td>
                     <td><span class="F-float F-money">{{rs.price}}</span></td>
                     <td><span class="F-float F-count">{{rs.days}}</span></td>
-                    <td><span class="F-float F-money">{{rs.count * rs.price}}</span></td>
+                    <td><span class="F-float F-money">{{rs.count * rs.price*rs.days}}</span></td>
                     <td>{{rs.remark}}</td>
                 </tr>
                 {{/each}}

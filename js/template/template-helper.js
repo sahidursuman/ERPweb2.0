@@ -130,7 +130,7 @@ template.helper("getFeeItemType2", function(type) {
     type = type || 1;
     res += '<option value="1" '+(type == 1?'selected':'')+'>大人结算价</option>';
     res += '<option value="2" '+(type == 2?'selected':'')+'>小孩结算价</option>';
-    res += '<option value="8" '+(type == 8?'selected':'')+'>单房差</option>';
+    res += '<option value="8" '+(type == 8?'selected':'')+'>酒店费用</option>';
     res += '<option value="12" '+(type == 12?'selected':'')+'>其他费用</option>';
     return res;
 });
@@ -144,7 +144,7 @@ template.helper("getFeeItemText", function(type, showType) {
         case 6: return "保险费用";
         case 7: return "导服费";
         case 8: 
-            if(showType == 2) return "单房差";
+            if(showType == 2) return "酒店费用";
             else return "酒店费用";
         case 9: return "景区费用";
         case 10: return "自费费用";
