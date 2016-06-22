@@ -41,6 +41,7 @@
                 {{each busCompanyArranges.listMap as arrange index}}
                     <tr busArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}"
                     isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="busArrange" class="oldData">
+                        <input name="sumIpt" type="hidden">
                         <td>
                             {{if guideCount > 1 }}
                             <div class="div-h-30"></div>
@@ -169,8 +170,18 @@
                                                     <input name="guideName"  type="text" class="w-70" 
                                                     {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled" {{/if}}/>
                                                 {{else}}
-                                                    <span>{{guideArrange.listMap[0].guideName}}</span>
-                                                    <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                    {{if arrange.isConfirmAccount == 1}}
+                                                        {{if !!rs.id}}
+                                                            <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                            <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                        {{else}}
+                                                            <i class="fa fa-exclamation hct-count-hint" 
+                                                               title="该笔账务已对账，无法进行实销操作，请取消对账后再进行实销" ></i>
+                                                        {{/if}}
+                                                    {{else}}
+                                                        <span>{{guideArrange.listMap[0].guideName}}</span>
+                                                        <input name="guideArrangeId" type="hidden" value="{{guideArrange.listMap[0].id}}"/>
+                                                    {{/if}}
                                                 {{/if}}
                                             {{else}}
                                                 <span class="guideName">{{rs.guideName}}</span>
