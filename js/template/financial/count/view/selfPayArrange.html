@@ -193,7 +193,7 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="incomeCount" value="{{rs.incomeCount}}" class="w-50" type="text" 
+                                                    <input name="incomeCount" value="{{rs.incomeCount}}" class="F-float F-count w-50" type="text" 
                                                     {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}} 
                                                         readOnly="readOnly" 
                                                     {{/if}}/>
@@ -288,14 +288,14 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                        <input type="text" class="F-float F-money w-50" name="realCount" 
+                                                        <input type="text" class="F-float F-count w-50" name="realCount" 
                                                         value="{{rs.realCount}}" 
                                                         {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input type="text" class="F-float F-money w-50" name="realCount" 
+                                                <input type="text" class="F-float F-count w-50" name="realCount" 
                                                 {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
                                         {{/if}}<!-- 应付数量 -->
@@ -687,7 +687,7 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                    <input name="incomeCount" value="{{rs.incomeCount}}" class="w-50" type="text" 
+                                                    <input name="incomeCount" value="{{rs.incomeCount}}" class="w-50 F-float F-count" type="text" 
                                                     {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}} 
                                                         readOnly="readOnly" 
                                                     {{/if}}/>
@@ -779,14 +779,14 @@
                                         {{if !!itemSet.guideDetails && itemSet.guideDetails.length}}
                                             {{each itemSet.guideDetails as rs index}}
                                                 <div class="mar-t-5 div-h-30" index="{{index+1}}">
-                                                        <input type="text" class="F-float F-money w-50" name="realCount" 
+                                                        <input type="text" class="F-float F-count w-50" name="realCount" 
                                                         value="{{rs.realCount}}" 
                                                         {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                                 </div>
                                             {{/each}}
                                         {{else}}
                                             <div class="mar-t-5 div-h-30" index="1">
-                                                <input type="text" class="F-float F-money w-50" name="realCount" 
+                                                <input type="text" class="F-float F-count w-50" name="realCount" 
                                                 {{if itemSet.isConfirmAccount == 1 || itemSet.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                                             </div>
                                         {{/if}}<!-- 应付数量 -->
