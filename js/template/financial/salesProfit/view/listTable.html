@@ -7,18 +7,15 @@
         <td>{{if (rs.adultCount == null || rs.adultCount == "") && (rs.childCount == null || rs.childCount == "")}}
                 -
             {{else}}
-                {{if (rs.adultCount != null || rs.adultCount != "")}}
-                    <span class="F-float F-count">{{rs.adultCount}}</span> 大 
-                {{/if}}
-                {{if (rs.childCount != null || rs.childCount != "")}}
-                    <span class="F-float F-count">{{rs.childCount}}</span> 小 
-                {{/if}}
+                {{if (rs.adultCount != null && rs.adultCount != "")}}{{rs.adultCount}}{{else}}0{{/if}} 大 
+                {{if (rs.childCount != null && rs.childCount != "")}}{{rs.childCount}}{{else}}0{{/if}} 小 
             {{/if}}
         </td>
         <td>{{if !rs.partnerAgencyName}}-{{else}}{{rs.partnerAgencyName}}{{/if}}</td>
         <td>{{rs.outOPUserName}}</td>
         <td>{{rs.businessName}}-{{rs.groupName}}</td>
         <td>{{if (!rs.tripIncome && rs.tripIncome!= '0')}}-{{else}}<span class="F-float F-money">{{rs.tripIncome}}</span>{{/if}}</td>
+        <td>{{if (!rs.currentMoneyProfit && rs.currentMoneyProfit!= '0')}}-{{else}}<span class="F-float F-money">{{rs.currentMoneyProfit}}</span>{{/if}}</td>
         <td>{{if (!rs.orderIncome &&  rs.orderIncome!= '0')}}-{{else}}<span class="F-float F-money">{{rs.orderIncome}}</span>{{/if}}</td>
         <td>{{if (!rs.outCost && rs.outCost!= '0')}}-{{else}}<span class="F-float F-money">{{rs.outCost}}</span>{{/if}}</td>
         <td>{{if (!rs.tripCost && rs.tripCost!= '0')}}-{{else}}<span class="F-float F-money">{{rs.tripCost}}</span>{{/if}}</td>

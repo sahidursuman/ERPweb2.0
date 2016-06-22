@@ -8,8 +8,11 @@
                 <input type="text" class="pull-left w-150" name="orderNumber" disabled value="{{orderNumber}}">
             </div>
              <div class="pull-right mar-r-15 mar-t-F6">
-            <button class="btn btn-sm btn-success settlement-Btn T-viewSettle">代订结算单</button>
-        </div>
+                <button class="btn btn-sm btn-success settlement-Btn T-viewSettle">代订结算单</button>
+            </div>
+            <div class="pull-right mar-r-15 mar-t-F6">
+                <button class="btn btn-sm btn-success export-Btn T-bookSinglesBtn" style="height: 20px;line-height: 1px;">代订核算表</button>
+            </div>
         </div>
         <div class="col-xs-12 mar-t-10">
             <table class="table table-striped table-bordered table-hover hct-table-update">
@@ -17,7 +20,7 @@
                     <tr>
                         <th rowspan="2">客户</th>
                         <th rowspan="2">代订日期</th>
-                        <th colspan="4">代订项目</th>
+                        <th colspan="5">代订项目</th>
                         <th rowspan="2">代订小计</th>
                         <th rowspan="2">应收</th>
                         <th rowspan="2">游客信息</th>
@@ -29,6 +32,7 @@
                         <th width="110">票务</th>
                         <th width="110">景区</th>
                         <th width="110">旅游车</th>
+                        <th width="110">其它</th>
                     </tr>
                 </thead>
                 <tbody class="T-booking-info">
@@ -45,7 +49,8 @@
                         <td><a class="cursor T-action T-ticket F-float F-money" data-json="{{ticket}}">{{ticketNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-scenic F-float F-money" data-json="{{scenic}}">{{scenicNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-bus F-float F-money" data-json="{{bus}}">{{busNeedPayMoney}}</a></td>
-                        <td><span class="F-float F-money">{{(hotelNeedPayMoney || 0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0)}}</span></td>
+                        <td><a class="cursor T-action T-other F-float F-money" data-json="{{other}}">{{otherNeedPayMoney}}</a></td>
+                        <td><span class="F-float F-money">{{(hotelNeedPayMoney || 0) + (ticketNeedPayMoney||0) + (scenicNeedPayMoney||0) + (busNeedPayMoney||0) + (otherNeedPayMoney || 0)}}</span></td>
                         <td><a class="cursor T-action T-receivable F-float F-money" data-json="{{needGet}}">{{needGetNeedPayMoney}}</a></td>
                         <td><a class="cursor T-action T-guest-info" data-json="{{tourist}}">{{touristInfo}}</a></td>
                         <td>{{touristMobileNumber}}</td>

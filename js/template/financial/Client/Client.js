@@ -53,7 +53,6 @@ define(function(require, exports) {
                 partnerAgencyType: '',
                 sortType : "desc"
             };
-
         if(Client.$tab){
             args = {
                 pageNo : (page || 0),
@@ -62,7 +61,9 @@ define(function(require, exports) {
                 accountStatus:Client.$tab.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$tab.find(".T-money-status").find("button").data("value"),
                 partnerAgencyType: Client.$tab.find("[name=partnerAgencyType]").val(),
-                sortType : Client.$tab.find("select[name=orderBy]").val()
+                sortType : Client.$tab.find("select[name=orderBy]").val(),
+                fromPartnerAgencyId: Client.$tab.find("input[name=fromPartnerAgencyId]").val(),
+                headerAgencyId: Client.$tab.find("input[name=headerAgencyId]").val() ,
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -130,7 +131,24 @@ define(function(require, exports) {
             event.preventDefault();
             Client.listClient(0);
         });
+        // 导出
+        Client.$searchArea.find(".T-client-export").click(function() {
+            var args = {
+                fromPartnerAgencyId: Client.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+                headerAgencyId: Client.$searchArea.find("input[name=headerAgencyId]").val() ,
+                headerAgencyName: Client.$searchArea.find("input[name=headerAgencyName]").val(),
+                fromPartnerAgencyName: Client.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
+                
+                startDate : Client.$searchArea.find('.T-search-start-date').val(),
+                endDate : Client.$searchArea.find('.T-search-end-date').val(),
+                partnerAgencyType: Client.$searchArea.find("[name=partnerAgencyType]").val(),
+                accountStatus:Client.$searchArea.find(".T-finance-status").find("button").data("value"),
+                unReceivedMoney : Client.$searchArea.find(".T-money-status").find("button").data("value"),
+                sortType : Client.$searchArea.find("select[name=orderBy]").val()
 
+            };
+            FinancialService.exportReport(args, "exportCustomer");
+        });
         //状态框选择事件
         Client.$searchArea.find(".T-finance-status").on('click','a',function(event){
             event.preventDefault();//阻止相应控件的默认事件
@@ -891,6 +909,7 @@ define(function(require, exports) {
             },
             select: function(event, ui) {
                 $(this).blur().data('id', ui.item.id);
+                $(this).closest('div').find('input[name="headerAgencyId"]').val(ui.item.id);
                 Client.$searchArea.find('.T-search-customer').data('ajax', false).val('全部');
             }
         }).on("click",function(){
@@ -956,6 +975,7 @@ define(function(require, exports) {
                     },
                     select: function(event, ui) {
                         $(this).blur().data('id', ui.item.id);
+                        $(this).closest('div').find('input[name="fromPartnerAgencyId"]').val(ui.item.id);
                     }
                 }).on("click",function(){
                     $obj.autocomplete('search', '');
