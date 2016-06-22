@@ -314,7 +314,7 @@ define(function(require, exports) {
             }
     	});
 
-        //导出游客名单
+        //导出游客保险名单
         $searchArea.find('.T-export').on('click', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -322,6 +322,20 @@ define(function(require, exports) {
                 dateType = $searchArea.find('[name="dateType"]').val();
             if (!!startTime && dateType == "0") {
                 exportXLS(KingServices.build_url("export","exportBuyInsuranceMember")+"&"+$.param(getArgs($searchArea)));
+            }else{
+                showMessageDialog("请在高级选项里选择接团日期！");
+                return;
+            };
+        });
+
+        //导出游客名单
+        $searchArea.find('.T-export-list').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var startTime = $searchArea.find('input[name="tripTime"]').val(),
+                dateType = $searchArea.find('[name="dateType"]').val();
+            if (!!startTime && dateType == "0") {
+                exportXLS(KingServices.build_url("export","exportMember")+"&"+$.param(getArgs($searchArea)));
             }else{
                 showMessageDialog("请在高级选项里选择接团日期！");
                 return;
