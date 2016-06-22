@@ -380,7 +380,7 @@ define(function(require, exports) {
                     errMsg: '应收不能为空'
                 }]
 	    	},
-	    	{
+            {
                 $ele: $obj.find('input[name="count"]'),
                 rules: [
                 {
@@ -390,6 +390,18 @@ define(function(require, exports) {
                 {
                     type: 'NoNumber',
                     errMsg: '数量必须为正整数'
+                }]
+            },
+            {
+                $ele: $obj.find('input[name="days"]'),
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '天数不能为空'
+                },
+                {
+                    type: 'positive-int',
+                    errMsg: '天数必须为正整数'
                 }]
             },
             {

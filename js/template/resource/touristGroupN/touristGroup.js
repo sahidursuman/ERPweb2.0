@@ -1982,7 +1982,7 @@ define(function(require, exports) {
             }else if($tbody.data('type') == "4"){
                 option = '<option value="1">大人结算价</option>'+
                          '<option value="2">小孩结算价</option>'+
-                         '<option value="8">单房差</option>'+
+                         '<option value="8">酒店费用</option>'+
                          '<option value="12">其他费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
@@ -1996,7 +1996,7 @@ define(function(require, exports) {
                          '<option value="10">自费费用</option>'+
                          '<option value="11">票务费用</option>'+
                          '<option value="12">其他费用</option>';
-                days = '<td><input type="text" class="col-xs-12 T-option" name="days"></td>';
+                days = '<td><input type="text" class="col-xs-12 T-option" name="days" value="1"></td>';
             }
             $tbody.append('<tr>'+
                 '<td><select class="col-xs-12" name="type">'+option+'</select></td>'+
