@@ -720,23 +720,23 @@ define(function(require, exports) {
                 type: 'POST',
                 showLoading:false,
                 success:function(data){
-                    var result = showDialog(data);
+                    if (showDialog(data)) {
                     html = T.viewSingleTemplate(data);
                     var viewSingleLayer = layer.open({
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
-                });
-                var $outAccountsTab = $("#T-touristGroupViewSingle");
-                    $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
-                    touristGroup.exportsOutAccounts($outAccountsTab);
-                    }); 
+                    });
+                    var $outAccountsTab = $("#T-touristGroupViewSingle");
+                        $outAccountsTab.off('click').on('click','.T-printAccountBtn',function(){
+                        touristGroup.exportsOutAccounts($outAccountsTab);
+                        }); 
+                    }
                 }
-                
         });           
     };
 
@@ -758,7 +758,7 @@ define(function(require, exports) {
                         type: 1,
                         title:"打印核算表",
                         skin: 'layui-layer-rim',
-                        area: '850px', 
+                        area: '720px', 
                         zIndex:1028,
                         content: html,
                         scrollbar: false
@@ -1328,6 +1328,7 @@ define(function(require, exports) {
             $payMoney = $tr.find('.T-pay-money'),
             data = {
                 id : $tr.data('id'),
+                isInnerTransferConfirm: $tr.data('is-inner'),
                 subNeedPayMoney : $payMoney.text()
             };
 
@@ -1995,7 +1996,7 @@ define(function(require, exports) {
             }else if($tbody.data('type') == "4"){
                 option = '<option value="1">大人结算价</option>'+
                          '<option value="2">小孩结算价</option>'+
-                         '<option value="8">单房差</option>'+
+                         '<option value="8">酒店费用</option>'+
                          '<option value="12">其他费用</option>';
             }else{
                 option = '<option value="1">大人结算价</option>'+
@@ -2009,12 +2010,12 @@ define(function(require, exports) {
                          '<option value="10">自费费用</option>'+
                          '<option value="11">票务费用</option>'+
                          '<option value="12">其他费用</option>';
-                days = '<td><input type="text" class="col-xs-12 T-option" name="days"></td>';
+                days = '<td><input type="text" class="col-xs-12 T-option" name="days" value="1"></td>';
             }
             $tbody.append('<tr>'+
                 '<td><select class="col-xs-12" name="type">'+option+'</select></td>'+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+days+
-                '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-count" name="count"></td>'+
+                '<td><input type="text" class="col-xs-12 T-option F-float F-money" name="price"></td>'+days+
                 '<td><input type="text" class="col-xs-12 F-float F-money" name="money" readonly></td>'+
                 '<td><input type="text" class="col-xs-12" name="remark"></td>'+
                 '<td><a class="cursor T-action T-delete">删除</a></td>'+

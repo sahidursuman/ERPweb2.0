@@ -69,7 +69,7 @@
                                                     <th class="th-border">费用项</th>
                                                     <th class="th-border">单价</th>
                                                     <th class="th-border">数量</th>
-                                                    <th class="th-border">天数</th>
+                                                    <th class="th-border">单位</th>
                                                     <th class="th-border">金额</th>
                                                     <th class="th-border">说明</th>
                                                     <th class="th-border">应收</th>
@@ -121,7 +121,7 @@
                                                                             </td>
 
                                                                             <td>
-                                                                               <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
+                                                                               <span class="F-float F-money">{{groupFee.price*groupFee.count*groupFee.days}}</span> 
                                                                             </td>
     
                                                                             <td style="max-width:150px;">
@@ -827,13 +827,13 @@
                                                                             {{/if}}
                                                                         </td>
                                                                         <td  rowspan="{{item.listMap.length}}">
-                                                                            <span class="F-float F-momey">{{item.sumMap.sumPay}}</span>
+                                                                            <span class="F-float F-money">{{item.sumMap.sumPay}}</span>
                                                                         </td>
                                                                         <td>
-                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
                                                                         </td>
                                                                         <td  rowspan="{{item.listMap.length}}">
-                                                                            <span class="F-float F-momey">{{item.sumMap.sumSettle}}</span>
+                                                                            <span class="F-float F-money">{{item.sumMap.sumSettle}}</span>
                                                                         </td>
                                                                     </tr>
                                                                 {{else}}
@@ -891,7 +891,7 @@
                                                                             {{/if}}
                                                                         </td>
                                                                         <td>
-                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
                                                                         </td>
                                                                     </tr>
                                                                 {{/if}}
@@ -1637,13 +1637,13 @@
                                                                         </td>
 
                                                                         <td  rowspan="{{item.listMap.length}}">
-                                                                            <span class="F-float F-momey">{{item.sumMap.sumPay}}</span>
+                                                                            <span class="F-float F-money">{{item.sumMap.sumPay}}</span>
                                                                         </td>
                                                                         <td>
-                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
                                                                         </td>
                                                                         <td  rowspan="{{item.listMap.length}}">
-                                                                            <span class="F-float F-momey">{{item.sumMap.sumSettle}}</span>
+                                                                            <span class="F-float F-money">{{item.sumMap.sumSettle}}</span>
                                                                         </td>
                                                                     </tr>
                                                                 {{else}}
@@ -1685,7 +1685,7 @@
                                                                             {{/if}}
                                                                         </td>
                                                                         <td>
-                                                                            <span class="F-float F-momey">{{rs.needPayAllMoney}}</span>
+                                                                            <span class="F-float F-money">{{rs.needPayAllMoney}}</span>
                                                                         </td>
                                                                     </tr>
                                                                 {{/if}}

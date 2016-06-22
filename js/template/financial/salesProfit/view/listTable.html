@@ -7,12 +7,8 @@
         <td>{{if (rs.adultCount == null || rs.adultCount == "") && (rs.childCount == null || rs.childCount == "")}}
                 -
             {{else}}
-                {{if (rs.adultCount != null || rs.adultCount != "")}}
-                    <span class="F-float F-count">{{rs.adultCount}}</span> 大 
-                {{/if}}
-                {{if (rs.childCount != null || rs.childCount != "")}}
-                    <span class="F-float F-count">{{rs.childCount}}</span> 小 
-                {{/if}}
+                {{if (rs.adultCount != null && rs.adultCount != "")}}{{rs.adultCount}}{{else}}0{{/if}} 大 
+                {{if (rs.childCount != null && rs.childCount != "")}}{{rs.childCount}}{{else}}0{{/if}} 小 
             {{/if}}
         </td>
         <td>{{if !rs.partnerAgencyName}}-{{else}}{{rs.partnerAgencyName}}{{/if}}</td>

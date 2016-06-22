@@ -1255,7 +1255,9 @@ select {
     text-align: center;
     font-weight: bold;
 }
-
+.head-nav-width{
+   width: 75px; 
+}
 
 .bookViewSingle .view-TranAccountsPrint .th-border, 
 .touristGroupViewSingle .view-TranAccountsPrint .th-border, 
@@ -2034,7 +2036,7 @@ p#back-top a span {
     font-size: 12px;
 }
 .viewSingleMain{
-    width: 750px;
+    width: 670px;
     margin: auto;
     /*background-color: red;*/
     font-size: 12px;
