@@ -16,6 +16,7 @@
     <tbody class="T-count-guide">
     {{each guideArrange.listMap as arrange index}}
         <tr arrangeid = "{{arrange.id}}" isAccountGuide = "{{arrange.isAccountGuide}}">
+            <input name="sumIpt" type="hidden">
             <td>
                 {{each arrange.taskJson as rs}}
                     <div class="mar-t-5">

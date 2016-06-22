@@ -744,7 +744,7 @@ define(function(require, exports) {
 		transfer.newAddFee=function($tab,validator){
 			var html="<tr class=\"transferFee1SelectId\" data-entity-id=\"\" >"+
 		    "<td><select name=\"type\" class=\"col-sm-10 col-sm-offset-1\"><option value=\"1\">大人结算价</option><option value=\"2\">小孩结算价</option>"+
-            "<option value=\"8\">单房差</option><option value=\"12\">其它费用</option></select></td>"+
+            "<option value=\"8\">酒店费用</option><option value=\"12\">其它费用</option></select></td>"+
 			"<td><input  name=\"count\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right count T-count T-calc F-float F-count\" maxlength=\"6\" /></td>"+
 			"<td><input  name=\"otherPrice\" type=\"text\" class=\"col-sm-10 col-sm-offset-1  no-padding-right price T-price T-calc F-float F-money\" maxlength=\"9\" /></td>"+
             "<td><input  name=\"payMoney\" type=\"text\" class=\"col-sm-10 col-sm-offset-1   no-padding-right T-payMoney F-float F-money\" maxlength=\"6\" readonly=\"readonly\" /></td>"+

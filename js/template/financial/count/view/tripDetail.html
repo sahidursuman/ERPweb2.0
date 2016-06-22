@@ -204,6 +204,8 @@
                                 {{each shopArrange.listMap as arrange index}}
                                     {{if arrange != null}}
                                     <tr class="oldData noSumRate " shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}" arrangeType="shopArrange" isConfirmAccount = "{{arrange.isConfirmAccount}}">
+
+                                        <input name="sumIpt" type="hidden">
                                         <td rowspan="{{arrange.itemList.length}}">
                                             <span>{{arrange.dateTime | dateFormat: 'yyyy-MM-dd'}}</span> 
                                         </td>
@@ -493,6 +495,7 @@
                                                     <tr shopArrangeId="{{arrange.id}}" shopId="{{arrange.shopId}}" whichDay = "{{arrange.whichDay}}"
                                                         {{if index == 1}}class="noSumRate "{{/if}}
                                                         arrangeType="shopArrange">
+                                                        <input name="sumIpt" type="hidden">
                                                         <td>
                                                             {{if guideCount > 1}}
                                                                 <div class="div-h-30"></div>
@@ -787,7 +790,7 @@
                     <thead>
                         <tr class="bg-blur">
                             <th colspan="16">消费</th>
-                            <th rowspan="2">人数返佣</th>
+                            
                             <th colspan="2">社佣</th>
                             <th colspan="2">导佣</th>
                             <th colspan="2">全陪</th>
@@ -826,6 +829,7 @@
                             {{if selfpayArrange.listMap.length}}
                                 {{each selfpayArrange.listMap as arrange index}}
                                     <tr selfPayId="{{arrange.selfPayId}}" badStatus = "{{arrange.badStatus}}" whichDay = "{{arrange.whichDay}}" arrangeType="selfArrange" class="oldData">
+
                                         <td rowspan="{{arrange.selfPayItem.length}}">
                                         {{if guideCount > 1}}
                                             <div class="div-h-30"></div>
@@ -853,6 +857,8 @@
                                                     <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                                     <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                                     <input name="badStatus" value="{{itemSet.badStatus}}" type="hidden"><!-- 用于计算未对账时的取值 -->
+                                                    <!-- 用于计算 -->
+                                                    <input name="sumIpt" type="hidden">
                                                     <td>
                                                         {{if guideCount > 1}}
                                                             <div class="div-h-30"></div>
@@ -1082,11 +1088,6 @@
                                                             -
                                                         {{/if}}<!-- 单据 -->
                                                     </td>
-                                                    
-                                                    <td>
-                                                        <span class="F-float F-money">{{itemSet.customerRebateMoney}}</span>
-                                                        <input type="hidden" value="{{itemSet.customerRebateMoney}}"><!-- 人数返佣 -->
-                                                    </td>
 
                                                     <td name="travelAgencyRate">
                                                         {{if guideCount > 1}}
@@ -1265,6 +1266,8 @@
                                                     <input name="isConfirmAccount" value="{{itemSet.isConfirmAccount}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                                     <input name="settlementMoney" value="{{itemSet.settlementMoney}}" type="hidden"><!-- 用于计算未对账时的取值 -->
                                                     <input name="badStatus" value="{{itemSet.badStatus}}" type="hidden"><!-- 用于计算未对账时的取值 -->
+                                                    <!-- 用于模板计算 -->
+                                                    <input name="sumIpt" type="hidden">
                                                     <td>
                                                         {{if guideCount > 1}}
                                                             <div class="div-h-30"></div>
@@ -1483,10 +1486,6 @@
                                                                 <span style="color:#bbb;">查看</span>
                                                             </div>
                                                         {{/if}}<!-- 单据 -->
-                                                    </td>
-                                                    
-                                                    <td>
-                                                        <span class="customerRebateMoney">{{arrange.customerRebateMoney}}</span>
                                                     </td>
 
                                                     <td name="travelAgencyRate">

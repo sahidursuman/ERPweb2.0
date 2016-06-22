@@ -16,7 +16,8 @@
     <tbody class="T-tripDetail">
     {{if touristGroup.touristGroups.length}}
         {{each touristGroup.touristGroups as touristGroup index}}
-            <tr id="{{touristGroup.id}}">
+            <tr id="{{touristGroup.id}}" data-pid="{{touristGroup.pid}}">
+                <input name="sumIpt" type="hidden">
                 <td>{{index+1}}</td>
                 <td>{{touristGroup.partnerAgencyName}}</td>
                 <td><a href="#" class="T-viewTouristGroup">{{touristGroup.orderNumber}}</a></td>
@@ -85,14 +86,14 @@
                         <a href="#" class="T-viewCostDetail">
                             {{each touristGroup.feeList as touristGroupFee}}
                                 {{touristGroupFee.name}} ：
-                                <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.days}}</span>=
+                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count*touristGroupFee.days}}</span><br />
                             {{/each}}
                         {{else}}
                             {{each touristGroup.touristGroupSubFeeList as touristGroupFee}}
                                 {{touristGroupFee.name}} ：
                                 <span class="F-float F-money">{{touristGroupFee.price}}</span>&nbsp;X&nbsp;<span class="F-float F-count">{{touristGroupFee.count}}</span>=
-                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count}}</span><br />
+                                <span class="F-float F-money">{{touristGroupFee.price * touristGroupFee.count*touristGroupFee.days}}</span><br />
                             {{/each}}
                         {{/if}}
                     {{/if}}

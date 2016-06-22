@@ -418,10 +418,14 @@ define(function(require, exports) {
         $tab.find('.T-fee-list').on('blur', '.T-calculate', function(event){
             event.preventDefault();
             var $that = $(this), $tr = $that.closest('tr');
-            if($that.hasClass('T-count') || $that.hasClass('T-price')){
+            if($that.attr("readonly") || $that.is(":disabled")) {
+                return false;
+            }
+            if($that.hasClass('T-count') || $that.hasClass('T-price') || $that.hasClass('T-days')){
                 var count = $tr.find('[name="count"]').val() || 0,
-                    price = $tr.find('[name="price"]').val() || 0;
-                    $tr.find('[name="money"]').val(Tools.toFixed(count * price));
+                    price = $tr.find('[name="price"]').val() || 0,
+                    days = $tr.find('[name="days"]').val() || 0;
+                    $tr.find('[name="money"]').val(Tools.toFixed(count * price * days));
                     $tab.find('[name="needPayAllMoney"]').val(F.calcRece($tab));
             }
             var money = 0;
@@ -634,7 +638,7 @@ define(function(require, exports) {
         //行程安排
         $tab.find('.T-add-days').on('click', function(event){
             event.preventDefault();
-            var $days = $tab.find('.T-days'),
+            var $days = $tab.find('.T-dayList'),
                 lenWhichDay = $days.data('length-whichDay');
             $days.append(travelArrange({lineProductDayList:[{whichDay: ''}]}));
             
@@ -774,7 +778,7 @@ define(function(require, exports) {
         });
 
         //绑定行程表内事件
-        $tab.find(".T-days").on('click', '.T-action', function(event){
+        $tab.find(".T-dayList").on('click', '.T-action', function(event){
             event.preventDefault();
             var $that = $(this);
             if($that.hasClass('T-update-detail')){
@@ -785,7 +789,7 @@ define(function(require, exports) {
                 function removeDay() {
                     $that.closest('tr').remove();
                     var whichDay = $that.closest('tr').find('[name="dateDays"]').data('which-day'),
-                        lenWhichDay = $tab.find('.T-days').data('length-whichDay');
+                        lenWhichDay = $tab.find('.T-dayList').data('length-whichDay');
                     // if(whichDay == lenWhichDay){
                     //     F.arrangeDate($tab);
                     // }
@@ -846,7 +850,7 @@ define(function(require, exports) {
         }
         var isDateRepear = 0,
             dateArray = [],
-            $dateTr = $tab.find('.T-days tr');
+            $dateTr = $tab.find('.T-dayList tr');
         $dateTr.each(function(index) {
             var $this = $(this);
             dateArray.push($this.find('[name=whichDayDate]').val())
@@ -898,6 +902,7 @@ define(function(require, exports) {
                 type: $that.find('[name="type"]').val(),
                 id : $that.data("id") || "",
                 price : $that.find('[name="price"]').val(),
+                days : $that.find('[name="days"]').val(),
                 remark : $that.find('[name="feeRemark"]').val()
             });
         });
@@ -1023,7 +1028,7 @@ define(function(require, exports) {
     tripPlan.getTripPlanDays = function($tab) {
         var args = [];
 
-        $tab.find('.T-days tr').each(function(index) {
+        $tab.find('.T-dayList tr').each(function(index) {
             var $that = $(this), 
                 repastDetail = ($that.find('[name="repastDetailM"]').is(":checked") ? 1 : 0) + ',';
 
@@ -1533,7 +1538,7 @@ define(function(require, exports) {
                 }];
 
                 quoteId = $tr.data('quote-id');
-                $tab.find(".T-days").html("");
+                $tab.find(".T-dayList").html("");
                 $tab.find(".T-tourists-list").html("");
                 $tab.find(".T-fee-list").html("");
                 $tab.find('[name=travelAgencyName]').val($tr.find('[name=travelAgencyName]').val());
@@ -1700,7 +1705,7 @@ define(function(require, exports) {
                             data.lineProductDayList[i].n = repastDetail[1];
                             data.lineProductDayList[i].e = repastDetail[2];
                         }
-                        $tab.find(".T-days").html(travelArrange(data));
+                        $tab.find(".T-dayList").html(travelArrange(data));
                         $tab.find('input[name="lineProductName"]').trigger('change');
                         //KingServices.viewOptionalScenic($tab.find('.T-days .T-scenicItem'));
                         F.arrangeDate($tab, 1);
@@ -1815,8 +1820,8 @@ define(function(require, exports) {
         //计算应收
         calcRece : function($tab){
             var countMoney = 0;
-            $tab.find('.T-fee-list tr').each(function(index){
-                var money = $(this).find('[name="money"]').val() * 1;
+            $tab.find('.T-fee-list tr input[name="money"]').each(function(index){
+                var money = $(this).val() * 1;
                 countMoney += money;
             });
             return Tools.toFixed(countMoney);
@@ -1826,7 +1831,7 @@ define(function(require, exports) {
             var $time = $tab.find('[name="startTime"]'),
                 startTime = $time.val(),
                 endTime = $tab.find('[name="endTime"]'),
-                $tr = $tab.find('.T-days tr');
+                $tr = $tab.find('.T-dayList tr');
             
             var lengthWhichDay = 1;
             $tr.each(function(index){
@@ -1849,7 +1854,7 @@ define(function(require, exports) {
         calcWhicDay : function($tab) {
             var $time = $tab.find('[name="startTime"]'),
                 startTime = $time.val(),
-                $tr = $tab.find('.T-days tr');
+                $tr = $tab.find('.T-dayList tr');
 
             if (!!startTime) {
                 $tr.each(function(index) {
@@ -1900,9 +1905,22 @@ define(function(require, exports) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
                         if(memberInfo){
-                            var name = F.getName(memberInfo),
-                                mobileNumber = F.getPhone(memberInfo),
-                                idCardNumber = F.getIdCard(memberInfo);
+                            var personInfo = memberInfo.split(/\s/);
+                            for (var k = personInfo.length; k >= 0 ; k--) {
+                                if (personInfo[k] == '') {
+                                    personInfo.splice(k,1)
+                                }
+                            }
+
+                            var name = F.getName(personInfo[0]), mobileNumber = '', idCardNumber = '';
+                            for (var j = 1; j < personInfo.length; j++) {
+                                if (!!personInfo[j] && trim(personInfo[j]).length === 11) {
+                                    mobileNumber = F.getPhone(personInfo[j]);
+                                }else if (!!personInfo[j] && trim(personInfo[j]).length === 18) {
+                                    idCardNumber = F.getIdCard(personInfo[j]);
+                                }
+                            }
+
                             if(name != "" || !!mobileNumber || !!idCardNumber){
                                 touristGroupMemberList.push({
                                     name : name,
@@ -1911,7 +1929,7 @@ define(function(require, exports) {
                                 });
                                 $obj.append(T.touristsList({touristGroupMemberList:[{
                                     name : name,
-                                    mobileNumber : F.getPhone(memberInfo),
+                                    mobileNumber : mobileNumber,
                                     idCardNumber : idCardNumber
                                 }]}));
                             }

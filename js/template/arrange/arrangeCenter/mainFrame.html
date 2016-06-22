@@ -135,11 +135,11 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group mar-r-20">
+                                <div class="form-group mar-r-20 T-shuttleType T-arrange-feild">
                                     <label>类型 </label>
                                     <select name="shuttleType" id="">
-                                        <option class="T-arrange-feild hidden" value="">全部</option>
-                                        <option value="1" selected>接团</option>
+                                        <option value="">全部</option>
+                                        <option value="1" >接团</option>
                                         <option value="2">送团</option>
                                         <option value="3">返程住宿</option>
                                     </select>
@@ -876,6 +876,7 @@
                     <li class="w-80 text-center"><a data-toggle="tab" href="#booking-hotel-arrange">房</a></li>
                     <li class="w-80 text-center"><a data-toggle="tab" href="#booking-scenic-arrange">景</a></li>
                     <li class="w-80 text-center"><a data-toggle="tab" href="#booking-ticket-arrange">票</a></li>
+                    <li class="w-80 text-center"><a data-toggle="tab" href="#booking-other-arrange">它</a></li>
                 </ul>
                 <div class="tab-content no-border no-padding mar-t-20">
                     <!-- 车辆安排 -->
@@ -1055,6 +1056,49 @@
                         </form>
                         <div class="T-table-area"></div>
                     </div>
+
+                    <!-- 其他安排 -->
+                    <div class="tab-pane fade" id="booking-other-arrange" data-target="other">
+                        <form class="T-search-area" role="form" onsubmit="return false">
+                            <div class="form-inline">
+                                <div class="form-group mar-r-10">
+                                    <label>代订单号</label>
+                                    <input type="text" class="form-control" name="orderNumber" />
+                                </div>
+                                <div class="form-group mar-r-10">
+                                    <label>销售时间</label>
+                                    <input type="text" class="form-control datepicker" name="date" />
+                                </div>
+                                <div class="form-group mar-r-20">
+                                    <label>外联销售</label>
+                                    <input type="text" name="outOPUserName" value="" class="form-control" />
+                                    <input type="hidden" name="outOPUserId">
+                                </div>
+                                <div class="form-group r-20 mar-r-20">
+                                    <label>状态 </label>
+                                    <select name="status">
+                                        <option value="">全部</option>
+                                        <option value="0">未完成</option>
+                                        <option value="1">已完成</option>
+                                    </select>
+                                </div>
+                                <div class="form-group checkbox mar-r-20">
+                                    <label>
+                                        <input  type="checkbox" class="ace T-assign-check" value="1"> <span class="lbl"> 指派给我 </span> 
+                                    </label>
+                                </div>
+                                <div class="form-group ">
+                                    <button class=" btn-sm mar-r-10 search-btn T-search">
+                                        <i class="ace-icon fa fa-search"></i> 搜索
+                                    </button>
+                                    <!-- <button class="btn btn-sm htc-btn btn-success T-group-export">导出</button> -->
+                                </div>
+                            </div>
+                        </form>
+                        <!-- end of search-area -->
+                        <div class="T-table-area"></div>
+                    </div>
+
                 </div>
             </div>
         </div>

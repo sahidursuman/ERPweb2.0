@@ -13,6 +13,7 @@
     <tbody class="T-count-insurance">
         {{each insuranceArrange as arrange}}
             <tr>
+                <input name="sumIpt" type="hidden">
                 <td>{{arrange.name}}</td>
                 <td>{{arrange.type}}</td>
                 <td><span class="F-float F-money">{{arrange.realPrice}}</span></td>

@@ -28,9 +28,7 @@
             </tr>
             <tr>
                 <td style="text-align: left;">
-                    <label class="control-label mar-r-20">类型：{{if viewmian.shuttleType == 1}}接团{{else if viewmian.shuttleType == 2}}送团 {{/if}}</label>
-                    <label class="control-label mar-r-20">班次：{{viewmian.shift}}</label>
-                    <label class="control-label mar-r-20">抵达时间：{{viewmian.arriveTime}}</label>
+                    <label class="control-label mar-r-20">类型：{{if viewmian.shuttleType == 1}}接团{{else if viewmian.shuttleType == 2}}送团{{else if shuttleType == 3}}返程住宿 {{/if}}</label>
                     <label class="control-label mar-r-20"> <b> 要求：{{viewmian.require}} </b></label>
                 </td>
             </tr>

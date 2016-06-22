@@ -10,19 +10,23 @@ define(function(require, exports) {
             busList: require('./bookingView/busList'),
             hotelList: require('./bookingView/hotelList'),
             scenicList: require('./bookingView/scenceList'),
-            ticketList: require('./bookingView/ticketList')
+            ticketList: require('./bookingView/ticketList'),
+            otherList: require('./bookingView/otherList')  
         },
         editTemplate = {
             busEdit: require('./bookingView/busEdit'),
             hotelEdit: require('./bookingView/hotelEdit'),
             scenicEdit: require('./bookingView/scenceEdit'),
             ticketEdit: require('./bookingView/ticketEdit'),
+            otherEdit:  require('./bookingView/otherEdit')
+
         },
         viewTemplate = {
             busView: require('./bookingView/busView'),
             hotelView: require('./bookingView/hotelView'),
             scenicView: require('./bookingView/scenceView'),
             ticketView: require('./bookingView/ticketView'),
+            otherView:  require('./bookingView/otherView')
         },
 
         tabKey = 'booking_arrange_part',
@@ -80,9 +84,13 @@ define(function(require, exports) {
                         case 'ticket':
                             BookingArrange.ticketPageNo = args.pageNo;
                             break;
+                        case 'other':
+                            BookingArrange.otherPageNo = args.pageNo;
+                            break;
                         default:
                             break;
                     }
+
                     laypage({
                         cont: $container.find('.T-pagenation'),
                         pages: data.totalPage, //总页数
@@ -169,6 +177,9 @@ define(function(require, exports) {
                 break;
             case 'ticket':
                 BookingArrange._initTicketEvent($tab);
+                break;
+            case 'other':
+                BookingArrange._initOtherEvent($tab);
                 break;
             default:
                 break;
@@ -280,8 +291,8 @@ define(function(require, exports) {
         });
         return this;
         function addHotel(){
-            var html =  '<tr><td><input name="enterTime" type="text" class="datepicker" /></td>'+
-                        '<td><input name="leaveTime" type="text" class="datepicker" /></td>'+
+            var html =  '<tr><td><input name="enterTime" type="text" class="datepicker T-action-blur" /></td>'+
+                        '<td><input name="leaveTime" type="text" class="datepicker T-action-blur" /></td>'+
                         '<td><select name="hotelLevel" class="col-sm-12">'+
                         '    <option selected="selected" value="">--全部--</option>'+
                         '    <option value="1">三星以下</option>'+
@@ -435,6 +446,61 @@ define(function(require, exports) {
         }
     };
 
+
+
+    /**
+     * 初始化它安排事件
+     * @param  {[type]} $tab [description]
+     * @return {[type]}      [description]
+     */
+    BookingArrange._initOtherEvent = function($tab){
+        var validate = rule.transferOtherCheck($tab);
+
+        $tab.find('.T-otherList').on('click', '.T-other-delete', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var $that = $(this), $tr = $that.closest('tr'), id = $tr.data('id');
+            BookingArrange.delArrangeList($tr, id);
+
+        }).on('change', '.T-action-blur', function(event) {
+            event.preventDefault();
+            var $that = $(this), 
+                $tr = $that.closest('tr'),
+                sumCostMoney = ($tr.find('.T-price').val() || 0) * 
+                                ($tr.find('.T-roomCount').val() || 0) - 
+                                ($tr.find('.T-reduceMoney').val() || 0);
+            $tr.find('.T-sumCostMoney').val(isNaN(sumCostMoney) ? 0 : sumCostMoney);
+        });
+
+        $tab.find('.T-other-add').on('click', function(){
+            addOther();
+        });
+        $tab.find('.T-other-save').on('click', function(){
+            if(!validate.form())return;
+            BookingArrange.saveOtherData($tab, validate);
+        });
+
+        function addOther(){
+             var html = '<tr data-id="">' +
+                        '<td><input class="col-sm-12 T-datePicker datepicker" name="date" type="text" value="" /></td>' +
+                        '<td><input class="col-sm-12" name="name" type="text" value="" maxlength="30" /></td>' +
+                        '<td><input class="col-sm-12" name="managerName" type="text" value="" maxlength="20" /></td>' +
+                        '<td><input class="col-sm-12" name="mobileNumber" type="text" maxlength="11" value="" /></td>' +
+                        '<td><input class="col-sm-12 T-action-blur T-price F-float F-money" name="price" type="text" maxlength="9" value="" /></td>' +
+                        '<td><input class="col-sm-12 T-action-blur T-roomCount F-float F-count" name="roomCount" type="text" maxlength="9" value="" /></td>' +
+                        '<td><input class="col-sm-12 T-action-blur T-reduceMoney F-float F-money" name="reduceMoney" type="text" maxlength="9" value="" /></td>' +
+                        '<td><input class="col-sm-12 T-sumCostMoney F-float F-money" name="sumCostMoney" readonly="readonly" type="text" value="" /></td>' +
+                        '<td><input class="col-sm-12 F-float F-money" name="prePayMoney" type="text" maxlength="9" value="" /></td>' +
+                        '<td><input class="col-sm-12" name="remark" type="text" value="" maxlength="1000"/></td>' +
+                        '<td>--</td>' +
+                        '<td><a class="cursor T-other-delete" data-catename="other" title="删除">删除</a></td>' +
+                        '</tr>';
+            $tab.find('.T-otherList').append(html);
+            Tools.setDatePicker($tab.find('.datepicker'));
+            rule.transferOtherUpdate(validate);
+        }
+    };
+
     /**
      * 保存车安排
      * @param  {[type]} $tab     [description]
@@ -484,6 +550,60 @@ define(function(require, exports) {
         
         BookingArrange.submitDataToServer($tab, data);
     };
+
+
+
+       /**
+     * 保存车安排
+     * @param  {[type]} $tab     [description]
+     * @param  {[type]} validate [description]
+     * @return {[type]}          [description]
+     */
+    BookingArrange.saveOtherData = function ($tab, validate){
+        var data = {
+                id : $tab.find('.base-info').data('id'),
+                item : 'other',
+                status : $tab.find('.T-finishedArrange').is(':checked') ? 1 : 0,
+                delIds : null
+            },
+            $otherList = $tab.find('.T-otherList'),
+            $tr = $otherList.find('tr'), 
+            ids = $otherList.data('del-json'),
+            otherList = [];
+        $tr.each(function(){
+            var $that = $(this),
+                id = $that.data('id'),
+                arrangeJson = {
+                    id : $that.data('id'),
+                    date : $that.find('[name="date"]').val(),
+                    name : $that.find('[name="name"]').val(),
+                    managerName : $that.find('[name="managerName"]').val(),
+                    mobileNumber : $that.find('[name="mobileNumber"]').val(),
+                    roomCount : $that.find('[name="roomCount"]').val(),
+                    price : $that.find('[name="price"]').val(),
+                    sumCostMoney : $that.find('[name="sumCostMoney"]').val(),
+                    prePayMoney : $that.find('[name="prePayMoney"]').val(),
+                    reduceMoney : $that.find('[name="reduceMoney"]').val(),
+                    remark : $that.find('[name="remark"]').val()
+                };
+            if(!!id){
+                arrangeJson.id = id;
+            }
+            otherList.push(arrangeJson);
+        });
+        if(typeof ids !== "object"){
+            ids = JSON.parse(ids || null);
+        }
+        if(!!ids && $.type(ids) === "array"){
+            data.delIds = BookingArrange.assemblyDelIds(ids);
+        }
+        if(otherList.length > 0){
+            data.arrangeList = JSON.stringify(otherList);
+        }
+    
+        BookingArrange.submitDataToServer($tab, data);
+    };
+
     /**
      * 保存房安排
      * @param  {[type]} $tab     [description]
@@ -666,6 +786,9 @@ define(function(require, exports) {
                             break;
                         case 'ticket':
                             pageNo = BookingArrange.ticketPageNo;
+                            break;
+                        case 'ticket':
+                            pageNo = BookingArrange.otherPageNo;
                             break;
                         default:
                             break;
