@@ -128,6 +128,7 @@
                 <th>数量</th>
                 <th>优惠</th>
                 <th>账面应付</th>
+                <th>预付款申请</th>
                 <th>已付金额</th>
                 <th>单据</th>
                 <th>结算金额</th>
@@ -153,10 +154,11 @@
                 <td>{{if rs.accountTime == null || rs.accountTime == ""}}-{{else}}{{rs.accountTime | dateFormat: 'yyyy-MM-dd'}}{{/if}}</td>
                 <td>{{rs.name}}</td>
                 <td>{{rs.orderNumber}}</td>
-                <td>{{rs.price}}</td>
-                <td>{{rs.memberCount}}</td>
-                <td>{{if rs.reduceMoney==null || rs.reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
-                <td>{{rs.needPayMoney}}</td>
+                <td class="F-float F-money">{{rs.price}}</td>
+                <td class="F-float F-count">{{rs.memberCount}}</td>
+                <td class="F-float F-money">{{if rs.reduceMoney==null || rs.reduceMoney == ""}}0{{else}}{{rs.reduceMoney}}{{/if}}</td>
+                <td class="F-float F-money">{{rs.needPayMoney}}</td>
+                <td><a class="{{if rs.payRecoredId}}T-option T-payRequest{{else}}black{{/if}}" data-preid="{{rs.payRecoredId}}"><span class="F-float F-money">{{rs.prePayMoney}}</span></a></td>
                 <td class="align-left">
                     <a class="T-option T-payedDetail">
                         <span class="in-block">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></span>

@@ -269,6 +269,8 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
+			} else if($that.hasClass('T-payRequest')){
+				KingServices.getPayment($(this).data("preid"));
 			}
 		});
 		//给全选按钮绑定事件: 未去重
@@ -423,6 +425,9 @@ define(function(require, exports) {
 					data.financialTicketList = FinancialService.isGuidePay(data.financialTicketList);
 					data.financialTicketList = FinancialService.getTempDate(data.financialTicketList,Ticket.payingJson);
 					var html = payingTableTemplate(data);
+					html = Tools.filterCount(html);
+					html = Tools.filterMoney(html);
+					html = Tools.filterUnPoint(html);
 					Ticket.$clearingTab.find('.T-checkList').html(html);
 					Ticket.clear_init(args,Ticket.$clearingTab);
 				} else {
@@ -516,6 +521,8 @@ define(function(require, exports) {
 			}else if($that.hasClass('T-view-details')){
 				// 查看对账
 				Ticket.viewDetails(id);
+			} else if($that.hasClass('T-payRequest')){
+				KingServices.getPayment($(this).data("preid"));
 			}
 		});
 

@@ -229,6 +229,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
+            } else if($that.hasClass('T-payRequest')){
+                KingServices.getPayment($(this).data("preid"));
             }
         });
         //时间控件
@@ -550,6 +552,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-viewhandle')) {
                 // 查看对账明细
                 OtherAccounts.viewOrderDetail(id);
+            } else if($that.hasClass('T-payRequest')){
+                KingServices.getPayment($(this).data("preid"));
             }
         });
         FinancialService.initPayEvent($tab);
