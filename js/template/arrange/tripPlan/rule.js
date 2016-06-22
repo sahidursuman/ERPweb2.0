@@ -194,6 +194,17 @@ define(function(require, exports) {
                     errMsg: '单价必须为数字'
                 }]
             },{
+                $ele: $obj.find('input[name="days"]'),
+                rules: [
+                {
+                    type: 'null',
+                    errMsg: '天数不能为空'
+                },
+                {
+                    type: 'positive-int',
+                    errMsg: '天数必须为正整数'
+                }]
+            },{
                 $ele: $obj.find('input[name="planTouristCount"]'),
                 rules: [{
                     type: 'positive-int',

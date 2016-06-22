@@ -2434,7 +2434,7 @@ define(function(require, exports) {
 			},
 			select :function(event, ui){
 				var $tr = $(this).blur().closest('tr');
-				checkBusCompay($tr, 'driverName');
+				// checkBusCompay($tr, 'driverName');
 				$tr.find("input[name=CompanyName]").val(ui.item.busCompanyName);
 				$tr.find("input[name=busCompanyId]").val(ui.item.id).trigger('change');
 				$.ajax({

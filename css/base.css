@@ -914,7 +914,9 @@ input.datepicker:not([class^="col-"]) {
 .min-w-1050 {
 	min-width: 1050px;
 }
-
+.min-w-100 {
+	min-width: 100px;
+}
 /*数量input的宽度*/
 .w-50 {
 	width: 50px;

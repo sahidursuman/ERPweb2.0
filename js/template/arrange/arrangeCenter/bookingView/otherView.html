@@ -1,0 +1,105 @@
+<div class="globalAdd">
+<div class="base-info container-fluid" data-id="{{bookingOrder.id}}">
+    <div class="hct-view-container">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">代订单号</div>
+                        <div class="hct-view-content">{{bookingOrder.orderNumber}}</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">客人信息</div>
+                        <div class="hct-view-content">{{bookingOrder.touristRealname}} {{bookingOrder.adultCount}}大{{bookingOrder.childCount}}小</div>
+                    </td>
+                    <td class="hct-view-group col-xs-4">
+                        <div class="hct-view-title">外联销售</div>
+                        <div class="hct-view-content">{{bookingOrder.outOPUserName}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="hct-view-group col-xs-12" colspan="3">
+                        <div class="hct-view-title">销售时间</div>
+                        <div class="hct-view-content">{{bookingOrder.date | dateFormat: 'yyyy-MM-dd'}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="ui-sortable-handle">
+        <div class="form-group form-inline">
+        <label class="middle mar-r-10 title-size">它</label>
+        </div>
+    <p class="panel mar-t-20 hct-mh-required">现其它要求：{{required}}</p>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+             <table class="table table-striped table-bordered table-hover otherListTable margin-top" style="border:1px solid #ddd;">
+            <thead>
+                <tr>
+                    <th class="th-border"><span class="necessary">*</span>日期</th>
+                    <th class="th-border"><span class="necessary">*</span>项目</th>
+                    <th class="th-border">联系人</th>
+                    <th class="th-border">联系电话</th>
+                    <th class="th-border">单价</th>
+                    <th class="th-border">数量</th>
+                    <th class="th-border">优惠</th>
+                    <th class="th-border">应付款</th>
+                    <th class="th-border">预付款</th>
+                    <th class="th-border">备注</th>
+                    <th class="th-border">对账状态</th>
+                </tr>
+            </thead>
+            <tbody>
+         {{each arrangeList as outOther}}
+           {{if outOther != null && outOther.name != null}}
+             <tr data-id="{{outOther.id}}">
+                 <td>
+                     {{outOther.date | dateFormat: 'yyyy-MM-dd'}}
+                 </td>
+                 <td>
+                    {{outOther.name}}
+                 </td>
+                 <td>
+                    {{outOther.managerName}}
+                 </td>
+                 <td>
+                  {{outOther.mobileNumber}}
+                 </td>
+                 <td>
+                     {{outOther.price}}
+                 </td>
+                 <td>
+                     {{outOther.roomCount}}
+                 </td>
+                 <td>
+                    {{outOther.reduceMoney}}
+                 </td>
+                 <td>
+                     {{outOther.sumCostMoney}}
+                 </td>
+                 <td>
+                     {{outOther.prePayMoney}}
+                 </td>
+                 <td>
+                     {{outOther.remark}}
+                 </td>
+                 <td>
+                     {{if outOther.isConfirmAccount == 0}}未对账{{else if outOther.isConfirmAccount == 1}}已对账{{/if}}
+                 </td>
+             </tr>{{/if}}{{/each}}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+<div class="text-center mar-t-20">
+    <button class="btn btn-sm btn-primary mar-r-20 T-btn-close"> <i class="ace-icon fa fa-times-circle"></i> 关闭 </button>
+    <span class="checkbox checkbox-inline mar-0">
+        <label>
+            <input name="status" type="checkbox" class="ace T-finishedArrange" disabled {{if status == 1}}checked{{/if}}>
+            <span class="lbl font-w"> 其他安排完成</span>
+        </label>
+    </span>
+</div>
+</div>
