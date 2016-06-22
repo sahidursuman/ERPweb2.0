@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":2,"md5":"c588ac3e6250c3ab281617a1ec8a27e6"}*/
+/*TMODJS:{"debug":true,"version":3,"md5":"c588ac3e6250c3ab281617a1ec8a27e6"}*/
 define(function(require) {
     return require("../../../template")("arrange/arrangeCenter/transferView/viewHotel", function($data, $filename) {
         try {
