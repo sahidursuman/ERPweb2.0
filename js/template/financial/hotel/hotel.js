@@ -655,6 +655,8 @@ define(function(require, exports) {
                 // 代收金额
                 var $that=$(this);
                 hotel.planCollection($tab, $that);
+            } else if($that.hasClass('T-payRequest')){
+                KingServices.getPayment($(this).data("preid"));
             }
         });
     };
