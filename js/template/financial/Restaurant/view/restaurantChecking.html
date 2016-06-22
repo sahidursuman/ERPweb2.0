@@ -99,7 +99,7 @@
 			    <td><span class="F-float F-count">{{rs.memberCount}}</span></td>
 			    <td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
 			    <td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
-                <td><a class="{{if rs.payRecoredId}}T-option T-payRequest{{else}}black{{/if}}" data-preid="{{rs.payRecoredId}}"><span class="F-float F-money">{{rs.prePayMoney}}</span></a></td>
+                <td><a class="{{if rs.payRecoredId}}T-option T-payRequest{{else}}black{{/if}}" data-preid="{{rs.payRecoredId}}" {{if !rs.payRecoredId}}title="没有预付款记录"{{/if}}><span class="F-float F-money">{{rs.prePayMoney}}</span></a></td>
 			    <td class="align-left">
                     <a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">
                         <span class="in-block">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></span>
