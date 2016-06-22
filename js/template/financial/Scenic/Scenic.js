@@ -707,6 +707,8 @@ define(function(require, exports) {
             } else if ($that.hasClass('T-needPayDetail')) {
                 // 应收明细
                 scenic.needPayDetail(id);
+            } else if($that.hasClass('T-payRequest')){
+                KingServices.getPayment($(this).data("preid"));
             }
         });
     };

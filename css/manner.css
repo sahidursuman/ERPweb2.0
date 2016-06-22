@@ -2755,6 +2755,10 @@ a.gray span, .gray, .gray:hover, .gray:focus{
     color:#bbb;
 }
 
+a.black span, .black, .black:hover, .black:focus{
+    color:#000;
+}
+
 /*列表内部小列表*/
 .table-inner-list{
     list-style-type: none;

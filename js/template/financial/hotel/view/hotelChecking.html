@@ -68,6 +68,7 @@
                 <th>数量</th>
                 <th>优惠</th>
                 <th>账面应付</th>
+                <th>预付款申请</th>
                 <th>已付金额</th>
                 <th>单据</th>
                 <th><span class="necessary">*</span>结算金额</th>
@@ -89,6 +90,7 @@
 				<td><span class="F-float F-count">{{rs.memberCount}}</span></td>  
 				<td><span class="F-float F-money">{{rs.reduceMoney}}</span></td>
 				<td><span class="F-float F-money">{{rs.needPayMoney}}</span></td>
+                <td><a class="{{if rs.payRecoredId}}T-option T-payRequest{{else}}black{{/if}}" data-preid="{{rs.payRecoredId}}"><span class="F-float F-money">{{rs.prePayMoney}}</span></a></td>
 				<td class="align-left">
                     <a class="T-option T-payedDetail" data-money="{{rs.payedMoney + rs.realGuidePayMoney}}">
                         <span class="in-block">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></span>
