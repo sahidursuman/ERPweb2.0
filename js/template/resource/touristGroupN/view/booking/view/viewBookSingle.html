@@ -43,8 +43,8 @@
                     <tr class="view-TranAccountsPrint">
                         <td rowspan="{{checkOrder.needGet.feeList.length}}">{{checkOrder.needGet.partnerAgencyName}}</td>
                         <td rowspan="{{checkOrder.needGet.feeList.length}}">{{checkOrder.needGet.touristRealname}}</td>
-                        {{each checkOrder.needGet.feeList as rs index}}
                         {{if checkOrder.needGet.feeList.length > 0}}
+                        {{each checkOrder.needGet.feeList as rs index}}
                         {{if index == 0}}
                         <td>{{rs.type | getFeeItemText}}</td>
                         <td>{{rs.count}}</td>
@@ -52,15 +52,14 @@
                         <td>{{rs.money}}</td>
                         <td>{{rs.remark}}</td>
                         {{/if}}
+                        {{/each}}
                         {{else}}
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         {{/if}}
-                        {{/each}}
                     </tr>
                     {{each checkOrder.needGet.feeList as rs index}}
                     {{if index > 0}}
