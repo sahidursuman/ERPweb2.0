@@ -185,12 +185,18 @@
                                             {{if itemSet.guideDetails.length}}
                                                 {{each itemSet.guideDetails as rs index}}
                                                     <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                        -
+                                                        <input name="shopGuideMoney" class="w-70" type="text" value="{{rs.consumeMoney}}" 
+                                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                            readonly="readonly"
+                                                        {{/if}}/>
                                                     </div>
                                                 {{/each}}
                                             {{else}}
                                                 <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                    -
+                                                    <input name="shopGuideMoney" class="w-70" type="text" value="{{itemSet.consumeMoney}}" 
+                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                        readonly="readonly"
+                                                    {{/if}}/>
                                                 </div>
                                             {{/if}}
                                         </td><!-- 金额 -->
@@ -597,25 +603,24 @@
                                     {{if itemSet.guideDetails.length}}
                                         {{each itemSet.guideDetails as rs i}}
                                             <div class="mar-t-5 div-h-30" index = "{{i+1}}">
-                                                {{if index > 1}}
-                                                    <input name="shopGuideMoney" class="w-70" type="text" value="{{rs.consumeMoney}}" 
-                                                    {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                                        readonly="readonly"
-                                                    {{/if}}/>
-                                                {{else}}
-                                                    -
-                                                {{/if}}
+                                                <input name="shopGuideMoney" class="w-70" type="text" value="{{rs.consumeMoney}}" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                    readonly="readonly"
+                                                {{/if}}/>
                                             </div>
                                         {{/each}}
                                     {{else}}
                                     <div class="mar-t-5 div-h-30" index = "1">
-                                        {{if index > 1}}
-                                            <input name="shopGuideMoney" class="w-70" type="text" 
+                                        {{if index == 1}}
+                                            <input name="shopGuideMoney" class="w-70" type="text" value="{{itemSet.consumeMoney}}"
                                             {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
                                                 readonly="readonly"
                                             {{/if}}/>
                                         {{else}}
-                                            -
+                                            <input name="shopGuideMoney" class="w-70" type="text" 
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                readonly="readonly"
+                                            {{/if}}/>
                                         {{/if}}
                                     </div>
                                     {{/if}} 

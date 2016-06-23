@@ -2562,6 +2562,13 @@ KingServices.viewDetails = function(id){
 	});
 }
 
+//支付预付款
+KingServices.getPayment = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.funancial_paymentRequisition,function(module){
+		module.getPayment(id);
+	});
+};
+
 //添加资源函数
 KingServices.addResourceFunction = function(e){
 	var $this = $(this),

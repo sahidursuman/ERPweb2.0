@@ -128,7 +128,7 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if(showDialog(data)){
-				if(Tools.addTab(menuKey+"_pay","付款",payTemplate(data))){
+				if(Tools.addTab(menuKey+"_pay","支付预付款",payTemplate(data))){
 					var $tab = $("#tab-" + menuKey + "_pay-content");
 					Pay.initEvent($tab);
 				} else {
@@ -232,4 +232,5 @@ define(function(require, exports) {
 	};
 
 	exports.init = Pay.initModule;
+    exports.getPayment = Pay.getPayment;
 });

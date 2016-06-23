@@ -61,6 +61,7 @@
                 <th>数量</th>
                 <th>优惠</th>
                 <th>账面应付</th>
+                <th>预付款申请</th>
                 <th>已付金额</th>
                 <th>单据</th>
                 <th>结算金额</th>
@@ -82,6 +83,7 @@
                 <td class="F-float F-count">{{Checking.memberCount}}</td>
                 <td class="F-float F-money">{{Checking.reduceMoney}}</td>
                 <td class="F-float F-money">{{Checking.needPayMoney}}</td>
+                <td><a class="{{if Checking.payRecoredId}}T-action T-payRequest{{else}}black{{/if}}" data-preid="{{Checking.payRecoredId}}" {{if !Checking.payRecoredId}}title="没有预付款记录"{{/if}}><span class="F-float F-money">{{Checking.prePayMoney}}</span></a></td>
                 <td class="align-left">
                     <a class="T-action T-lookDetail T-payedDetail" data-money="{{Checking.agencyPayedMoney + Checking.guidePayedMoney}}">
                         <span class="in-block">{{"社付："}}<span class="F-float F-money">{{Checking.agencyPayedMoney}}</span></span>
