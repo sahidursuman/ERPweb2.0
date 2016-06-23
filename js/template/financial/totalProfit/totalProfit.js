@@ -50,6 +50,8 @@ define(function(require, exports) {
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
                 groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
                 outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
+                creatorName: TotalProfit.$searchArea.find("input[name=creatorName]").val(),
+                creatorId: TotalProfit.$searchArea.find("input[name=creatorName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
                 businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
                 lineProduct: TotalProfit.$searchArea.find("input[name=lineProduct]").val(),
@@ -67,6 +69,7 @@ define(function(require, exports) {
         })
 
         TotalProfit.getOPUserList(TotalProfit.$searchArea.find('[name="outOPUserName"]'));
+        TotalProfit.getCreatorList(TotalProfit.$searchArea.find('[name="creatorName"]'));
         TotalProfit.getGroupMapList(TotalProfit.$searchArea.find('[name="groupName"]'));
         TotalProfit.getBusinessList(TotalProfit.$searchArea.find('[name="businessName"]'));
         TotalProfit.$searchArea.on('click', '.T-Choose-product', function(event) {
@@ -102,6 +105,8 @@ define(function(require, exports) {
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
                 groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
                 outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
+                creatorName: TotalProfit.$searchArea.find("input[name=creatorName]").val(),
+                creatorId: TotalProfit.$searchArea.find("input[name=creatorName]").data("id"),
                 businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
                 businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
                 lineProduct: TotalProfit.$searchArea.find("input[name=lineProduct]").val(),
@@ -342,6 +347,46 @@ define(function(require, exports) {
                     $target.autocomplete('search', '');
                 }
             })
+        })
+    };
+
+    TotalProfit.getCreatorList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.id);
+            }
+        }).one('click', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: KingServices.build_url('financial/customerAccount', 'selectCreator'),
+                type: 'post',
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var creatorList = data.creatorList || false;
+                    if (!!creatorList) {
+                        for (var i = 0, len = creatorList.length;i < len; i++) {
+                            creatorList[i].id = creatorList[i].creator;
+                            creatorList[i].value = creatorList[i].creatorName;
+                        }
+
+                        $target.autocomplete('option', 'source', creatorList).data('ajax', true);
+                        $target.autocomplete('search', '');
+                    }
+                }
+            });
+        }).on('click', function(event) {
+            event.preventDefault();
+            if ($target.data('ajax')) {
+                $target.autocomplete('search', '');
+            }
         })
     };
 

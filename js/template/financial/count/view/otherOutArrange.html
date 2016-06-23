@@ -65,7 +65,7 @@
                                 <span class="F-float F-money">{{arrange.realPrice}}</span>
                                 <input type="hidden" name="price" value="{{arrange.realPrice}}"/>
                             {{else}}
-                                <input type="text" name="price" class="w-70" value="{{arrange.realPrice}}" 
+                                <input type="text" name="price" class="w-70 F-float F-money" value="{{arrange.realPrice}}" 
                                 {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}readOnly="readOnly"{{/if}}/>
                             {{/if}}
                         </td><!-- 单价 -->
@@ -198,11 +198,11 @@
                                 {{each arrange.guideDetails as rs index}}
                                     <div class="div-h-30 mar-t-5" index="{{index+1}}">
                                         {{if editStatus == 2}}
-                                            <span class="F-float F-money realCount">{{rs.realCount}}</span>
+                                            <span class="F-float F-count realCount">{{rs.realCount}}</span>
                                             <input type="hidden" name="guideRealCount" value="{{rs.realCount}}"/>
                                         {{else}}
                                             <input type="text" name="guideRealCount" value="{{rs.realCount}}" 
-                                            class="F-float F-money w-50" 
+                                            class="F-float F-count w-50" 
                                             {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
                                         {{/if}}
                                     </div>
@@ -215,7 +215,7 @@
                                     {{if editStatus == 2}}
                                         -
                                     {{else}}
-                                        <input name="guideRealCount" type="text" class="w-50" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
+                                        <input name="guideRealCount" type="text" class="w-50 F-float F-count" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
                                     {{/if}}
                                     
                                 </div>
@@ -243,7 +243,8 @@
                                                 <span class="F-float F-money">{{rs.guidePayedMoney}}</span>
                                                 <input type="hidden" name="guidePayedMoney" value="{{rs.guidePayedMoney}}"/>
                                             {{else}}
-                                                <select name="payType" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled"{{/if}}>
+                                                <select name="payType" 
+                                                {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}}disabled="disabled"{{/if}}>
                                                     <option value="0" {{if rs.realPayType == 0}}{{/if}}>现金</option>
                                                     <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
                                                     <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
@@ -266,7 +267,7 @@
                                                 <option value="1" {{if rs.realPayType == 1}}selected=true{{/if}}>刷卡</option>
                                                 <option value="2" {{if rs.realPayType == 2}}selected=true{{/if}}>签单</option>
                                             </select>
-                                            <input name="guidePayedMoney" type="text" class="w-70" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
+                                            <input name="guidePayedMoney" type="text" class="w-70 F-float F-money" {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1 }}readOnly="readOnly" {{/if}}/>
                                         {{/if}}
                                     </p>
                                     
