@@ -156,7 +156,8 @@
         var res = "";
         return type = type || 1, res += '<option value="1" ' + (1 == type ? "selected" : "") + ">大人结算价</option>", 
         res += '<option value="2" ' + (2 == type ? "selected" : "") + ">小孩结算价</option>", 
-        res += '<option value="8" ' + (8 == type ? "selected" : "") + ">酒店费用</option>", res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
+        res += '<option value="8" ' + (8 == type ? "selected" : "") + ">酒店费用</option>", 
+        res += '<option value="12" ' + (12 == type ? "selected" : "") + ">其他费用</option>";
     }), template.helper("getFeeItemText", function(type, showType) {
         switch (1 * type) {
           case 1:
