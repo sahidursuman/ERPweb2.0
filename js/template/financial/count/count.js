@@ -4296,6 +4296,8 @@ define(function(require, exports){
 								$tr.next().find('.sumConsumeMoney').text(sumBus);
 								$tr.find('input[name=sumConsumeMoney]').val(sumPerson);
 								$tr.next().find('input[name=sumConsumeMoney]').val(sumBus);
+								$tr.find('input[name="shopGuideMoney"]').val(sumPerson);
+								$tr.next().find('input[name="shopGuideMoney"]').val(sumBus);
 								tRate = $tr.next().find('input[name=travelAgencyRate]').val();
 								tMoney = sumBus*(Math.round(tRate)/100);
 								$tr.next().find('input[name=travelAgencyRateMoney]').val(tMoney);

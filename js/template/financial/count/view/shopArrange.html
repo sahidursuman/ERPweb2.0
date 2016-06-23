@@ -193,7 +193,7 @@
                                                 {{/each}}
                                             {{else}}
                                                 <div class="mar-t-5 div-h-30" index = "{{index+1}}">
-                                                    <input name="shopGuideMoney" class="w-70" type="text" 
+                                                    <input name="shopGuideMoney" class="w-70" type="text" value="{{itemSet.consumeMoney}}" 
                                                     {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
                                                         readonly="readonly"
                                                     {{/if}}/>
@@ -611,10 +611,17 @@
                                         {{/each}}
                                     {{else}}
                                     <div class="mar-t-5 div-h-30" index = "1">
-                                        <input name="shopGuideMoney" class="w-70" type="text" 
-                                        {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
-                                            readonly="readonly"
-                                        {{/if}}/>
+                                        {{if index == 1}}
+                                            <input name="shopGuideMoney" class="w-70" type="text" value="{{itemSet.consumeMoney}}"
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                readonly="readonly"
+                                            {{/if}}/>
+                                        {{else}}
+                                            <input name="shopGuideMoney" class="w-70" type="text" 
+                                            {{if arrange.isConfirmAccount == 1 || arrange.badStatus == 1}} 
+                                                readonly="readonly"
+                                            {{/if}}/>
+                                        {{/if}}
                                     </div>
                                     {{/if}} 
                                 </td><!-- 金额 -->
