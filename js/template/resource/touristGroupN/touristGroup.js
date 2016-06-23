@@ -819,13 +819,13 @@ define(function(require, exports) {
             }else if($that.hasClass('T-search-trip')){
                 touristGroup.chooseLineProduct($that);
             }else if($that.hasClass('T-receivable')){
-                if(type === 0){
+                if(!type){
                     touristGroup.updateMoneyAndGuest($that, 0);
                 }else{
                     touristGroup.updateJionGroupMoney($that, 0, type)
                 }
             }else if($that.hasClass('T-guest-info')){
-                if(type === 0){
+                if(!type){
                     touristGroup.updateMoneyAndGuest($that, type);
                 }else{
                     touristGroup.updateGuestInfo($that, type)
