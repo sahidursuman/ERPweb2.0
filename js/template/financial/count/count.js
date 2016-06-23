@@ -701,13 +701,17 @@ define(function(require, exports){
 		//餐费处理--计算、新增
 		var $restObj = $listObj.find('.T-count-restaurant');
 		$restObj.off('change').on('change','input',function(){
-			var nameFlag = $(this).attr('name');
+			var nameFlag = $(this).attr('name'),$that = $(this);
 			if(restNoneAutoFields.indexOf(nameFlag)<0){
 				//校验输入的数据是否合法
 				Count.calculateCost($(this));
+				/*if(nameFlag == 'guideRealCount') {
+					$that.val(Tools.toFixed($(this).val(),1));
+				}*/
 				//计算金额
 				Count.autoRestaurantSum($(this),$obj);
 			}
+
 			Count.formatDays($(this),$obj);
 		});
 		$restObj.off('click').on('click','.T-restArrDel',function(){
@@ -2318,8 +2322,11 @@ define(function(require, exports){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgQuanpMoney += sum;
 		});
-			$sumConsumeMoney.val(sumSGmoney)//金额小计
+		
+		if($obj.attr('name') == "shopGuideMoney"){
 			$showConsumeMoney.text(sumSGmoney);
+			$sumConsumeMoney.val(sumSGmoney)//金额小计
+		}
 		sumMoney = Count.changeTwoDecimal(sumShopMoney);//购物收入
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
@@ -3582,8 +3589,8 @@ define(function(require, exports){
 		var html = '<tr class="oldData">'+
 			'<td class="countWhichDaysContainer"></td>'+
 			'<td><input type="text" name="title" class="w-70"/></td>'+
-			'<td><input type="text" name="price" class="w-70"/></td>'+
-			'<td><input type="text" name="count" class="w-50"/></td>'+
+			'<td><input type="text" name="price" class="w-70 F-float F-money"/></td>'+
+			'<td><input type="text" name="count" class="w-50 F-float F-money"/></td>'+
 			'<td><span class="F-float F-money realneedPayMoney">0</span>'+
 			'<input name="realneedPayMoney" type="hidden" /></td>'+
 			guideHtml+
@@ -3689,8 +3696,8 @@ define(function(require, exports){
 			'<td>'+divHtml+'<input type="text" name="companyName" style="width:150px;"/><input type="hidden" name="companyId"></td>'+
 			'<td>'+divHtml+'<input type="text" name="licenseNumber" style="width:90px;"/><input type="hidden" name="busId"></td>'+
 			'<td>'+divHtml+'<input type="text" name="seatCount" style="width:90px;"/></td>'+
-			'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
-			'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70"/></td>'+
+			'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/></td>'+
+			'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70 F-float F-money"/></td>'+
 			'<td>'+divHtml+'<span class="BusneedPayMoney">0</span></td>'+
 			'<td>'+divHtml+'0</td>'+
 			guideHtml+
@@ -3703,7 +3710,7 @@ define(function(require, exports){
 						'<option value="1">刷卡</option>'+
 						'<option value="2">签单</option>'+
 					'</select>'+
-					'<input name="guidePayedMoney" type="text" class="w-50"/>'+
+					'<input name="guidePayedMoney" type="text" class="w-50 F-float F-money"/>'+
 					'</p>'+
 				'</div>'+
 			'</td>'+
@@ -3777,11 +3784,11 @@ define(function(require, exports){
 		'<option value="晚餐">晚餐</option>'+
 		'</select>'+
 		'</td>'+
-		'<td>'+divHtml+'<input type="text" name="price" class="w-70"/><input type="hidden" name="standardId"></td>'+
+		'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/><input type="hidden" name="standardId"></td>'+
 		'<td>'+divHtml+
 		'<span class="F-float F-money realCount">0</span>'+
 		'<input type="hidden" name="realCount" /></td>'+
-		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+'<span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>'+divHtml+'0</td>'+
 		guideTdHtml+
@@ -3849,11 +3856,11 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="hotelName" style="width:90px;"/><input name="hotelId" type="hidden"></td>'+
 		'<td>'+divHtml+'<input type="text" name="hotelRoom" style="width:90px;"/><input name="hotelRoomId" type="hidden"></td>'+
-		'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+
 		'<span class="F-float F-money realCount">0</span>'+
 		'<input type="hidden" name="realCount" /></td>'+
-		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+'<span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>'+divHtml+'0</td>'+
 		guideTdHtml+
@@ -3910,11 +3917,11 @@ define(function(require, exports){
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="scenicName" style="width:90px;"/><input type="hidden" name="scenicId"></td>'+
 		'<td>'+divHtml+'<input type="text" name="scenicItem" style="width:90px;"/><input type="hidden" name="scenicItemId"></td>'+
-		'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+
-		'<span class="F-float F-money realCount">0</span>'+
+		'<span class="F-float F-count realCount">0</span>'+
 		'<input type="hidden" name="realCount" /></td>'+
-		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+'<span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>'+divHtml+'0</td>'+
 		guideTdHtml+
@@ -3983,11 +3990,11 @@ define(function(require, exports){
 		'<td>'+divHtml+'<input type="text" name="endArea" style="width:60px;"/></td>'+
 		'<td>'+divHtml+'<input type="text" name="shift" style="width:60px;"/></td>'+
 		'<td>'+divHtml+'<input type="text" name="seatLevel" class="w-70"/></td>'+
-		'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+
-		'<span class="F-float F-money realCount">0</span>'+
+		'<span class="F-float F-count realCount">0</span>'+
 		'<input type="hidden" name="realCount" /></td>'+
-		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+'<span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>'+divHtml+'0</td>'+
 		guideTdHtml+
@@ -4052,11 +4059,11 @@ define(function(require, exports){
 		var html = '<tr arrangeType="otherArrange" class="oldData">'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="addOtherOutName" class="w-80"/></td>'+
-		'<td>'+divHtml+'<input type="text" name="price" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+
-		'<span class="F-float F-money realCount">0</span>'+
+		'<span class="F-float F-count realCount">0</span>'+
 		'<input type="hidden" name="realCount" /></td>'+
-		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70"/></td>'+
+		'<td>'+divHtml+'<input type="text" name="realReduceMoney" class="w-70 F-float F-money"/></td>'+
 		'<td>'+divHtml+'<span class="realNeedPayMoney">0</span><input type="hidden" value="0" name="realNeedPayMoney"></td>'+
 		'<td>'+divHtml+'0</td>'+
 		guideTdHtml+
@@ -6599,7 +6606,7 @@ define(function(require, exports){
 			'</div>';
 
 		var countHtml = '<div style="margin-top:'+marTop+'px;" index = '+(index+1)+'>'+
-			'<input name="guideRealCount" class="w-50" type="text">'+
+			'<input name="guideRealCount" class="w-50 F-float F-count" type="text">'+
 			'</div>';
 
 		
@@ -6611,7 +6618,7 @@ define(function(require, exports){
 				'<option value="1">刷卡</option>'+
 				'<option value="2">签单</option>'+
 				'</select>'+
-				'<input name="guidePayedMoney" class="w-70" type="text">'+
+				'<input name="guidePayedMoney" class="w-70 F-float F-money" type="text">'+
 			'</p>'+
 			'</div>';
 
@@ -7069,7 +7076,7 @@ define(function(require, exports){
 		'<td name="guideRealCount">'+
 			divHtml+
 			'<div class="div-h-30 mar-t-5" index="1">'+
-				'<input name="guideRealCount" type="text" class="w-50"/>'+
+				'<input name="guideRealCount" type="text" class="w-50 F-float F-count"/>'+
 			'</div>'+
 		'</td>'+
 		'<td name="guidePayedMoney">'+
@@ -7080,7 +7087,7 @@ define(function(require, exports){
 					'<option value="1">刷卡</option>'+
 					'<option value="2">签单</option>'+
 				'</select>'+
-				'<input name="guidePayedMoney" type="text" class="w-70"/>'+
+				'<input name="guidePayedMoney" type="text" class="w-70 F-float F-money"/>'+
 			'</div>'+
 		'</td>'+
 		'<td name="billImage">'+
