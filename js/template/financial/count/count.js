@@ -7129,7 +7129,7 @@ define(function(require, exports){
 				'</div>'+
 			'</td>';
 		}else if (tdName == 'otherIn'){
-			guideHtml = '<td rowspan="2" name="'+tdName+'">'+
+			guideHtml = '<td name="'+tdName+'">'+
 					'<span class="guideName">'+guideName+'</span>'+
 					'<input name="guideArrangeId" type="hidden" value="'+guideArrangeId+'"/>'+
 			'</td>';
