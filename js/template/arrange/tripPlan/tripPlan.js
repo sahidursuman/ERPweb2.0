@@ -1892,18 +1892,24 @@ define(function(require, exports) {
             return trim(name ? name[0] : " ").replace(/\s+/g, " ");
         },
         getPhone : function(str){
-            var phone = str.match(/(^|\s)(1[34587]\d{9})|(0[1-9]\d{1,2}[-\s]\d{7,8})(\s|$)/ig);
+            var phone = '';
+            if (str.match(/^\d+$/)) {
+                phone = str.match(/(^|\s)(1[34587]\d{9})|(0[1-9]\d{1,2}[-\s]\d{7,8})(\s|$)/ig);
+            }
             return trim(phone ? phone[0] : " ");
         },
         getIdCard : function(str){
-            var idCard = str.match(/(^|\s)\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)(\s|$)/ig);
+            var idCard = '';
+            if (str.match(/^\d|X+$/)) {
+                idCard = str.match(/(^|\s)\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)(\s|$)/ig);
+            }
             return trim(idCard ? idCard[0] : " ");
         },
         saveVisitorMore : function($panelObj, addVisotorMoreLayer, $obj, fn){
             var data = trim($panelObj.find('textarea[name=batchTouristGroupMember]').val()),
                 touristGroupMemberList = [];
             if (data != "") {
-                var dataArray = data.split(/\r?\n/),  canPass = -1, listArr = [], allData = [];
+                var dataArray = data.split(/\r?\n/),  canPass = -1, listArr = [], allData = [], discription = '', isError = 0, threeStatus = 0;
                 if (dataArray.length > 0) {
                     for (var i = 0; i < dataArray.length; i++) {
                         var memberInfo = trim(dataArray[i]);
@@ -1920,16 +1926,41 @@ define(function(require, exports) {
                             for (var j = 0; j < personInfo.length; j++) {
                                 if (!!personInfo[j] && trim(personInfo[j]).length === 11) {
                                     mobileNumber = F.getPhone(personInfo[j]);
-                                    effective++;
-                                    allData[1]++;
+                                    if (!!mobileNumber) {
+                                        effective++;
+                                        allData[1]++;
+                                    } else {
+                                        canPass = i+1;
+                                        isError = 1;
+                                        threeStatus = 2;
+                                        break;
+                                    }
                                 }else if (!!personInfo[j] && trim(personInfo[j]).length === 18) {
                                     idCardNumber = F.getIdCard(personInfo[j]);
-                                    effective++;
-                                    allData[2]++;
+                                    if (!!idCardNumber) {
+                                        effective++;
+                                        allData[2]++;
+                                    } else {
+                                        canPass = i+1;
+                                        isError = 1;
+                                        threeStatus = 3;
+                                        break;
+                                    }
                                 }else if (!!F.getName(personInfo[j])) {
                                     name = F.getName(personInfo[j]);
-                                    effective++;
-                                    allData[0]++;
+                                    if (!!name) {
+                                        effective++;
+                                        allData[0]++;
+                                    } else {
+                                        canPass = i+1;
+                                        isError = 1;
+                                        threeStatus = 1;
+                                        break;
+                                    }
+                                }else {
+                                    canPass = i+1;
+                                    isError = 1;
+                                    break;
                                 }
                             }
                             if (effective > 3 || allData[0] == 0 || (allData[1] == 0 && allData[2] == 0) || allData[0] > 1 || allData[1] > 1 || allData[2] > 1) {
@@ -1955,18 +1986,30 @@ define(function(require, exports) {
                         layer.close(addVisotorMoreLayer);
                     }else {
                         var name = '';
-                        if (allData[0] > 1) {
-                            discription = '“姓名”存在多个';
+                        if (isError == 1) {
+                            switch (threeStatus) {
+                                case 1:
+                                    discription = '，“姓名”格式不正确';
+                                    break;
+                                case 2:
+                                    discription = '，“手机号”格式不正确';
+                                    break;
+                                case 3:
+                                    discription = '，“身份证号”格式不正确';
+                                    break;
+                            }
+                        } else if (allData[0] > 1) {
+                            discription = '，“姓名”存在多个';
                         } else if (allData[1] > 1) {
-                            discription = '“手机号码”存在多个';
+                            discription = '，“手机号码”存在多个';
                         } else if (allData[2] > 1) {
-                            discription = '“证件号”存在多个';
+                            discription = '，“身份证号”存在多个';
                         } else if (allData[0] == 0) {
-                            discription = '缺少“姓名”'
+                            discription = '，缺少“姓名”'
                         } else if (allData[1] == 0 && allData[2] == 0) {
-                            discription = '“证件号”和“电话”必填一项'
+                            discription = '，“身份证号”和“电话”必填一项'
                         }
-                        showMessageDialog('第'+canPass+'行数据格式错误，'+discription);
+                        showMessageDialog('第'+canPass+'行数据格式错误'+discription);
                     }
                     if(fn){
                         fn($obj, touristGroupMemberList);
