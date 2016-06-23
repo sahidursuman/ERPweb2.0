@@ -2322,11 +2322,9 @@ define(function(require, exports){
 			var sum = Count.changeTwoDecimal($(this).val());
 			sumgQuanpMoney += sum;
 		});
+		$showConsumeMoney.text(sumSGmoney);
+		$sumConsumeMoney.val(sumSGmoney)//金额小计
 		
-		if($obj.attr('name') == "shopGuideMoney"){
-			$showConsumeMoney.text(sumSGmoney);
-			$sumConsumeMoney.val(sumSGmoney)//金额小计
-		}
 		sumMoney = Count.changeTwoDecimal(sumShopMoney);//购物收入
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
