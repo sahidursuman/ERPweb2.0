@@ -1885,7 +1885,10 @@ define(function(require, exports) {
         },
         getName : function(str){
             //return trim(str.replace(/[^\u4e00-\u9fa5a-zA-Z\s]/ig, "").replace(/\s+/g, " "));
-            var name = str.match(/(^|\s)([\u4e00-\u9fa5a-zA-Z\s]+)(\s|$)/ig);
+            var name = '';
+            if (!str.match(/^\d+$/)) {
+                name = str.match(/(^|\s)([\u4e00-\u9fa5a-zA-Z\d\s]+)(\s|$)/ig);
+            }
             return trim(name ? name[0] : " ").replace(/\s+/g, " ");
         },
         getPhone : function(str){
@@ -1929,7 +1932,7 @@ define(function(require, exports) {
                                     allData[0]++;
                                 }
                             }
-                            if (effective > 3) {
+                            if (effective > 3 || allData[0] == 0 || (allData[1] == 0 && allData[2] == 0) || allData[0] > 1 || allData[1] > 1 || allData[2] > 1) {
                                 canPass = i+1;
                                 break;
                             }
@@ -1953,13 +1956,17 @@ define(function(require, exports) {
                     }else {
                         var name = '';
                         if (allData[0] > 1) {
-                            name = '姓名';
+                            discription = '“姓名”存在多个';
                         } else if (allData[1] > 1) {
-                            name = '手机号码';
+                            discription = '“手机号码”存在多个';
                         } else if (allData[2] > 1) {
-                            name = '证件号';
+                            discription = '“证件号”存在多个';
+                        } else if (allData[0] == 0) {
+                            discription = '缺少“姓名”'
+                        } else if (allData[1] == 0 && allData[2] == 0) {
+                            discription = '“证件号”和“电话”必填一项'
                         }
-                        showMessageDialog('第'+canPass+'行数据格式错误，“'+name+'”有多个');
+                        showMessageDialog('第'+canPass+'行数据格式错误，'+discription);
                     }
                     if(fn){
                         fn($obj, touristGroupMemberList);
