@@ -3588,7 +3588,7 @@ define(function(require, exports){
 			'<td class="countWhichDaysContainer"></td>'+
 			'<td><input type="text" name="title" class="w-70"/></td>'+
 			'<td><input type="text" name="price" class="w-70 F-float F-money"/></td>'+
-			'<td><input type="text" name="count" class="w-50 F-float F-money"/></td>'+
+			'<td><input type="text" name="count" class="w-50 F-float F-count"/></td>'+
 			'<td><span class="F-float F-money realneedPayMoney">0</span>'+
 			'<input name="realneedPayMoney" type="hidden" /></td>'+
 			guideHtml+
