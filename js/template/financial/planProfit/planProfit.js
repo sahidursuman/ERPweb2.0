@@ -192,6 +192,11 @@ define(function(require, exports) {
                         plan.$tab.find(".T-turn").show();
                     }
                     plan.$tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
+                     if(!plan.$tab.data('searchEdit') && plan.$tab.data('_total')){
+                        plan._loadSumData(plan.$tab);
+                    } else {
+                        plan._getSumData(plan.$tab,plan.searchData);
+                    }
 
 			    	plan.getSumData(plan.$tab,operateCalculteOut);
                     plan.getQuery();
@@ -227,6 +232,32 @@ define(function(require, exports) {
                 }
             }
         });
+    };
+
+    plan._getSumData = function($tab,args){
+        $.ajax({
+            url: KingServices.build_url('financialTrip', 'findTotal'),
+            type: 'POST',
+            data: { searchParam : JSON.stringify(args)},
+            success: function(data) {
+                var result = showDialog(data);
+                if(result){
+                    $tab.data("_total",data.total.head);
+                    plan._loadSumData($tab);
+                }
+            }
+        });
+    };
+
+    plan._loadSumData = function($tab){
+        var total = $tab.data("_total");//total 
+        $tab.find('.T-totalCount').text(total.adultCount+'大'+ total.childCount+'小');
+        $tab.find('.T-totalTrip').text(total.tripPlanTotal);
+        $tab.find('.T-totalInCome').text(total.totalIncome);
+        $tab.find('.T-totalPay').text(total.tripPlanPaySMoney);
+        $tab.find('.T-groProfit').text(total.grossProfit);
+        $tab.find('.T-perProssPro').text(total.perCapitaProfit);
+        $tab.find('.T-tripProfit').text(total.tripPlanProfit);
     };
 
     plan.getSumData = function($tab,operateCalculteOut){
