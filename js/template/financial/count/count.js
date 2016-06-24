@@ -1390,7 +1390,11 @@ define(function(require, exports){
 
 		//车费列表 
 		var busHtml = busArrangeTemplate(data);
-		$obj.find('.T-bus').html(busHtml);
+		$obj.find('.T-bus').html(busHtml)
+		.on('click', '.T-payedDetail', function(event) {
+			event.preventDefault();
+			FinancialService.viewPayed($(this).closest("tr").attr("busArrangeId"),KingServices.build_url("account/financialBusCompany", "getPayedMoneyDetailOfBus"));
+		});;
 
 		//餐费列表 
 		var restHtml = restArrangeTemplate(data);
