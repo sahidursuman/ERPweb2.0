@@ -1081,7 +1081,8 @@ define(function(require, exports) {
         var html = '<div class="col-xs-12 form-inline" style="padding-top:10px;">'+
                         '<label class="pull-left control-label">收客单号</label>'+
                         '<input type="text" class="form-control pull-left mar-l-10 T-orderNumber" placeholder="请输入收客单号" name="orderNumber">'+
-                        '<button class=" btn-sm T-btn-search search-btn "> <i class="ace-icon fa fa-search"></i> 搜索 </button>'+
+                        '<label class="pull-left control-label mar-l-20">联系人姓名</label><input type="text" class="form-control pull-left mar-l-10 T-contactName" placeholder="请输入联系人姓名" name="orderNumber">'+
+                        '<button class=" btn-sm T-btn-search search-btn mar-l-20"> <i class="ace-icon fa fa-search"></i> 搜索 </button>'+
                     '</div><div class="col-xs-12 T-team-search globalAdd" style="padding-top: 10px;"></div>';
         var searchTravelLinelayer = layer.open({
             type: 1,
@@ -1103,15 +1104,16 @@ define(function(require, exports) {
         var $layer = $("#layui-layer"+searchTravelLinelayer);
         $layer.find('.T-btn-search').on('click', function(event) {
             event.preventDefault();
-            var orderNumber = $layer.find('[name="orderNumber"]').val();
-            tripPlan.getTouristGroupList(0, orderNumber);
+            var orderNumber = $layer.find('[name="orderNumber"]').val(),
+                contactMemberName = $layer.find('.T-contactName').val();
+            tripPlan.getTouristGroupList(0, orderNumber, contactMemberName);
         });
     };
-    tripPlan.getTouristGroupList = function(page, orderNumber){
+    tripPlan.getTouristGroupList = function(page, orderNumber, contactMemberName){
         $.ajax({
             url : KingServices.build_url('touristGroup', 'getTouristGroupListByT'),
             type : 'POST',
-            data : {pageNo : page || 0, orderNumber : orderNumber || ""}
+            data : {pageNo : page || 0, orderNumber : orderNumber || "", contactMemberName: contactMemberName}
         }).done(function(data){
             if(showDialog(data)){
                 var $team = $(".T-team-search");
