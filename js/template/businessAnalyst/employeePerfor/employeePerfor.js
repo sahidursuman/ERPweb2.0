@@ -210,6 +210,10 @@ define(function(require, exports) {
                 $tab.find('.T-transAdChilTotalCount').text(data.transAdultCount + "大" + data.transChildCount + "小");
                 $tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount + "大" + data.innerChildCount + "小");
                 $tab.find('.T-orderTotalCount').text(data.orderCount);
+                $tab.find('.T-sTotalGrossProfit').text(data.sTotalGrossProfit);
+                $tab.find('.T-tTotalGrossProfit').text(data.tTotalGrossProfit);
+                $tab.find('.T-sPreTotalGrossProfit').text(data.sPreTotalGrossProfit);
+                $tab.find('.T-tPreTotalGrossProfit').text(data.tPreTotalGrossProfit);
             })
     }
 

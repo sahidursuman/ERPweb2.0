@@ -29,6 +29,22 @@ define(function(require, exports) {
          salesProfit._getListMain(0, args);
          //获取统计数据
          salesProfit._getTotalData();
+
+         salesProfit.$tab.on('click', '.T-viewTouristOrBooking', function () {
+            var $this = $(this),
+                $tr = $this.closest('tr'),
+                id = $tr.data('id'),
+                type = $tr.data('type');
+
+            switch (type) {
+                case 'tourist':
+                    KingServices.viewTouristGroup(id);
+                break;
+                case 'booking':
+                    KingServices.replaceDetail(id);
+                break;
+            }
+         });
     }
     salesProfit._getListMain=function(page, args){
         var args = salesProfit._getArgs(args,page);
