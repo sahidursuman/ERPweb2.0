@@ -15,7 +15,7 @@
     <td>{{rs.checkTime | dateFormat:"yyyy-MM-dd hh:mm:ss"}}</td>
     <td>{{rs.checkUserName}}</td>
     {{else}}
-    <td><input type="text" class="F-float F-money" name="settlementMoney" value="{{if rs.change}}{{rs.settlementMoney}}{{else}}{{rs.needPay}}{{/if}}" /></td>
+    <td><input type="text" class="F-float F-money" name="settlementMoney" value="{{if rs.change}}{{rs.settlementMoney}}{{else if rs.realNeedPay}}{{rs.realNeedPay}}{{else}}{{rs.needPay}}{{/if}}" /></td>
     <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
     <td>-</td>
     <td>-</td>
