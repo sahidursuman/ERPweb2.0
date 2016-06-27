@@ -11,10 +11,11 @@ define(function(require, exports) {
 		listTableTemplate = require('./view/listTable');
 
 	var FinPay = {
-		currentType: 0,
+		currentType: 11,
 		accountStatus:2,
 		moduleKeys: ['financial_innerTransfer_out', 'financial_transfer', 'financial_restaurant', 'financial_rummery', 'financial_busCompany',
-					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts','financial_guide']
+					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts','financial_guide'],
+		allKeys: ['inner','transfer','restaurant','hotel','busCompany','ticket','scenic','selfPay','insurance','other','guide']
 	};
 
 	/**
@@ -30,7 +31,6 @@ define(function(require, exports) {
 			FinPay.initEvent();
 		}
 
-		FinPay.currentType = 0;
 		FinPay.getList();
 	};
 
@@ -147,12 +147,17 @@ define(function(require, exports) {
 				resArgs.guideName = args.name;
 				beJson = false;
 				break;
+			case 11:
+				options.url = KingServices.build_url('account/financialPayMoney', 'listPayMoney');
+				resArgs.resourceName = args.name;
+				resArgs.startAccountTime = args.accountTimes;
+				resArgs.endAccountTime = args.accountTimee;
+				break;	
 			default:
 				break;
 		}
-		
-		resArgs.startDate = args.startDate;
-		resArgs.endDate = args.endDate;
+			resArgs.startDate = args.startDate;
+			resArgs.endDate = args.endDate;
 		if (beJson) {
 			options.data = {searchParam: JSON.stringify(resArgs)};
 		} else {
@@ -384,7 +389,27 @@ define(function(require, exports) {
 					data.totalPage = data.totalPage;
 					data.totalCount = data.recordSize;
 					break;
+				case 11:
+					var src = data.resultList;
+					for (var i = 0, len = src.length, tmp; i < len; i ++) {
+						tmp = src[i];
+						list.push({
+							orgName: tmp.resourceName,
+							needPayMoney: tmp.settlementMoney,
+							payedMoney: tmp.payedMoney,
+							id: tmp.resourceId,
+							unPayedMoney: tmp.unPayedMoney,
+							type: tmp.type
+						});
+					}
+					data.totalPage = data.totalPage;
+					data.totalCount = data.totalCount;
+					data.sumNeedPayMoney = data.settlementMoney;
+					data.sumPaiedMoney = data.payedMoney;
+					data.sumUnPaiedMoney = data.unPayedMoney;
+					break;
 			}
+
 		}
 
 		data.list = list;
@@ -441,12 +466,18 @@ define(function(require, exports) {
 				name: $tr.children('td').eq(0).text(),
 				startDate: $tab.find('.T-start').val(),
 				endDate: $tab.find('.T-end').val(),
-				accountStatus : FinPay.accountStatus
-			}
+				accountStatus : FinPay.accountStatus,
+				type: FinPay.currentType
+			},type = $tr.data('type');
+
 			if($(this).hasClass('T-pay-borrow')){
 				options.borrow = true;
 			}
+			if(!!type){
+				options.type = FinPay.allKeys.indexOf(type);
+			}
 			FinPay.doIncomeTask(options);
+
 		});
 
 		FinPay.$tab = $tab;
@@ -459,7 +490,7 @@ define(function(require, exports) {
 	 */
 	FinPay.doIncomeTask = function(options) {
 		if (!!options) {
-			var moduleKey = FinPay.moduleKeys[FinPay.currentType];
+			var moduleKey = FinPay.moduleKeys[options.type];
 
 			seajs.use(ASSETS_ROOT + modalScripts[moduleKey], function(module){
 				module.initPay(options);
