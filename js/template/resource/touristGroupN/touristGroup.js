@@ -1581,6 +1581,11 @@ define(function(require, exports) {
         var $layer = $(obj);
         var $tbody = $layer.find('.T-addTouristTbody'),
             validate = rule.checkGuest($layer);
+        $layer.off().on('click', '.T-btn-close', function(event) {
+            event.preventDefault();
+            layer.close(index);
+        });
+
         $layer.find('.T-add-tourist-more').on('click', function(){
             touristGroup.batchAddTourists($layer, validate);
         });
