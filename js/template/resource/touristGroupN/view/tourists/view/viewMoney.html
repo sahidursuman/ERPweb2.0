@@ -78,7 +78,7 @@
 						{{/if}}
 					</tr>
 				</thead>
-				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type || !!isInnerTransferConfirm}}data-type="4"{{/if}}>
+				<tbody class="T-fee-list" data-del-json="{{if !!type}}{{lineFeeDel}}{{else}}{{touristGroupFeeJsonDel}}{{/if}}" {{if !!type ||isInnerTransferConfirm =='1'}}data-type="4"{{/if}}>
 				{{if touristGroupFeeJsonAdd && touristGroupFeeJsonAdd.length > 0}}
 					{{each touristGroupFeeJsonAdd as rs}}
 					<tr data-id="{{rs.id}}">
