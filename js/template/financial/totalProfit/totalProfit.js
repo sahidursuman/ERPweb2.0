@@ -100,7 +100,7 @@ define(function(require, exports) {
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
-                fromPartnerAgencyName : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
+                fromPartnerAgencyName: TotalProfit.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
@@ -114,6 +114,7 @@ define(function(require, exports) {
                 lineProductId: TotalProfit.$searchArea.find("input[name=lineProductId]").val(),
                 pageNo: page || 0
             }
+            console.log(args);
         }
         if (page == -1) {
             if (!args.startTime || !args.endTime) {
