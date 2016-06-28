@@ -15,7 +15,7 @@ define(function(require, exports) {
 		accountStatus:2,
 		moduleKeys: ['financial_innerTransfer_out', 'financial_transfer', 'financial_restaurant', 'financial_rummery', 'financial_busCompany',
 					'financial_ticket', 'financial_scenic', 'financial_self', 'financial_insure', 'financial_Other_accounts','financial_guide'],
-		allKeys: ['inner','transfer','restaurant','hotel','busCompany','ticket','scenic','selfPay','insurance','other','guide']
+		allKeys: ['inner','transfer','restaurant','hotel','busCompany','ticket','scenic','selfpay','insurance','other','guide']
 	};
 
 	/**
