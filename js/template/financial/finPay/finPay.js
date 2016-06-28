@@ -30,7 +30,7 @@ define(function(require, exports) {
 		if (Tools.addTab(menuKey, '财务付款', listTemplate(data))) {
 			FinPay.initEvent();
 		}
-
+		FinPay.currentType = 11,
 		FinPay.getList();
 	};
 
