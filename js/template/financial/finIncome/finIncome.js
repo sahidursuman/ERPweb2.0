@@ -112,6 +112,8 @@ define(function(require, exports) {
                 params.accountTimes = args.startTime;
                 params.accountTimee = args.endTime;
                 params.incomeStatus = args.accountStatus;
+                params.resourceName = args.name;
+
             }
             $.ajax({
                     url: KingServices.build_url(path, src),
