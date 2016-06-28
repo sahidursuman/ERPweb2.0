@@ -158,17 +158,17 @@ define(function(require, exports) {
 
     plan.getArgs = function(page,args){
         args = args || [];
-        if(plan.$tab && plan.$tab.data("searchEdit")){
+        if(plan.$tab && (plan.$tab.data("searchEdit") || args.length == 0)){
             args = {
-                tripNumber : plan.$searchArea.find("input[name=tripNumber]").val(),
-                lineProductName : plan.$searchArea.find("input[name=lineProductName]").val(),
-                lineProductId : plan.$searchArea.find("input[name=lineProductId]").val(),
-                guideName : plan.$searchArea.find("input[name=guideName]").val(),
-                guideId : plan.$searchArea.find("input[name=guideId]").val(),
-                tripPlanType : plan.$searchArea.find("select[name=tripPlanType]").val(),
-                start : plan.$searchArea.find("input[name=startTime]").val(),
-                end : plan.$searchArea.find("input[name=endTime]").val(),
-                billStatus : plan.$searchArea.find(".T-status button").data("value")
+                tripNumber : plan.$tab.find("input[name=tripNumber]").val(),
+                lineProductName : plan.$tab.find("input[name=lineProductName]").val(),
+                lineProductId : plan.$tab.find("input[name=lineProductId]").val(),
+                guideName : plan.$tab.find("input[name=guideName]").val(),
+                guideId : plan.$tab.find("input[name=guideId]").val(),
+                tripPlanType : plan.$tab.find("select[name=tripPlanType]").val(),
+                start : plan.$tab.find("input[name=startTime]").val(),
+                end : plan.$tab.find("input[name=endTime]").val(),
+                billStatus : plan.$tab.find(".T-status button").data("value")
             }
         }
 
