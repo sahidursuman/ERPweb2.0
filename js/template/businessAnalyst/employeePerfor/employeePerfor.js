@@ -205,7 +205,8 @@ define(function(require, exports) {
             })
             .done(function(data) {
             	var $tab = PerformanceFun.$tab;
-                $tab.find('.T-tripTotalCount').text(data.tripCount);
+                $tab.find('.T-sCount').text(data.sCount);
+                $tab.find('.T-tCount').text(data.tCount);
                 $tab.find('.T-adChilTotalCount').text(data.adultCount + "大" + data.childCount + "小");
                 $tab.find('.T-transAdChilTotalCount').text(data.transAdultCount + "大" + data.transChildCount + "小");
                 $tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount + "大" + data.innerChildCount + "小");
