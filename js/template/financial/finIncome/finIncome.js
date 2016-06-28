@@ -39,12 +39,13 @@ define(function(require, exports) {
      */
     FinIncome.getList = function(pageNo) {
         if (FinIncome.$tab) {
-            var args = {
+            var org = FinIncome.$tab.find('.T-org-name').val(),
+                args = {
                     startTime: FinIncome.$tab.find('.T-start').val(),
                     endTime: FinIncome.$tab.find('.T-end').val(),
                     accountStatus : FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value")
-                },
-                org = FinIncome.$tab.find('.T-org-name').val();
+                };
+                
 
             if (!!org && org != '全部') {
                 args.name = org;
@@ -105,6 +106,10 @@ define(function(require, exports) {
                 startDate: args.startTime,
                 accountStatus: args.accountStatus,
                 endDate: args.endTime,
+                resourceName: args.name,
+                travelAgencyName: args.name,
+                shopName: args.name,
+                fromPartnerAgencyName: args.name
             };             
             var src = 'listPagerTotal';
             if (FinIncome.currentType == 4) {
@@ -113,6 +118,9 @@ define(function(require, exports) {
                 params.accountTimee = args.endTime;
                 params.incomeStatus = args.accountStatus;
                 params.resourceName = args.name;
+                params.travelAgencyName = args.name;
+                params.shopName = args.name;
+                params.fromPartnerAgencyName = args.name;
 
             }
             $.ajax({
