@@ -1687,8 +1687,8 @@ define(function(require, exports) {
                             $tab.find('[name="isContainSelfPay"]').attr('checked', quote.isContainSelfPay == 1 ? true : false);
                             $tab.find('[name="adultCount"]').val(quote.adultCount).attr('readonly', 'readonly');
                             $tab.find('[name="childCount"]').val(quote.childCount).attr('readonly', 'readonly');
-                            $tab.find('[name="startTime"]').val(quote.startTime);
-                            $tab.find('[name="endTime"]').val(quote.endTime);
+                            // $tab.find('[name="startTime"]').val(quote.startTime);
+                            // $tab.find('[name="endTime"]').val(quote.endTime);
                             $tab.find('[name="lineProductName"]').data('entity-days', dayList.length);
                         }else if(!$.isEmptyObject(data.lineProduct)){
                             var line = data.lineProduct,

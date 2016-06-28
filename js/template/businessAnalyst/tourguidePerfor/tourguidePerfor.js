@@ -47,7 +47,7 @@ define(function(require, exports) {
 	   		shop=tourguidPerObj.$tab.find('input[name=shop]').val();
 	   		shopId=tourguidPerObj.$tab.find('input[name=shopId]').val();
 	   		shopItem=tourguidPerObj.$tab.find('input[name=shopItem]').val();
-	   		//shopItemId=tourguidPerObj.$tab.find('input[name=shopItemId]').val();
+	   		shopItemId=tourguidPerObj.$tab.find('input[name=shopItemId]').val();
 	   		guideId =tourguidPerObj.$tab.find('input[name=guidChooseId]').val();
 	   		guideName =tourguidPerObj.$tab.find('input[name=guideName]').val();
 	   };
