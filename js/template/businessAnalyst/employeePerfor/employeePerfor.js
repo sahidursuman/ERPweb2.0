@@ -57,9 +57,9 @@ define(function(require, exports) {
                     $status.add($childDepartment).addClass('hidden');
                     $personType.removeClass('hidden');
 
-                    index = 0;
+                    index = 1;
                     if ($personType.val() === '0') {
-                        index = 1;
+                        index = 0;
                     }
                     break;
                 case 2: // 部门
