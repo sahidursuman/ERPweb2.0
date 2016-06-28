@@ -11,9 +11,10 @@ define(function(require, exports) {
         listTableTemplate = require('./view/listTable');
 
     var FinIncome = {
-        currentType: 0,
+        currentType: 4,
         accountStatus:2,
-        moduleKeys: ['financial_Client', 'financial_innerTransfer_in', 'financial_shop', 'financial_replace', 'financial_Other_accounts']
+        moduleKeys: ['financial_Client', 'financial_innerTransfer_in', 'financial_shop', 'financial_replace', 'financial_Other_accounts'],
+        allKeys   : ['customer', 'inner', 'shop', 'booking'], // 全部时，type转换公式
     };
 
     /**
@@ -28,7 +29,7 @@ define(function(require, exports) {
             FinIncome.initEvent();
         }
 
-        FinIncome.currentType = 0;
+        FinIncome.currentType = 4;
         FinIncome.getList(0);
     };
 
@@ -69,9 +70,11 @@ define(function(require, exports) {
                             path = 'financial/shopAccount';
                         } else if (type == 3) {
                             path = 'financial/bookingAccount';
-                        };
+                        } else if (type == 4) {
+                            path = 'account/financialIncomeMoney'
+                        }
                         FinIncome.getSumMoney(FinIncome.$tab, args, path);
-                    } else {
+                    } else  {
                         FinIncome.getSumMoney(FinIncome.$tab, args, path, data.sumInnerTransferIncome);
                     }
                     FinIncome.$tab.find('.T-sumItem').html('共计 ' + data.totalCount + ' 条记录');
@@ -95,16 +98,23 @@ define(function(require, exports) {
             tabid.find('.T-sumNeedInMoney').text(finData.sumSettlementMoney);
             tabid.find('.T-sumReceiveMoney').text(finData.sumAlreadyIncomeMoney);
             tabid.find('.T-sumUnReceivedMoney').text(finData.sumUnIncomeMoney);
-            tabid.find(".T-finance-status").find("button").data("value");
+            tabid.find(".T-finance-status").find("button").data("value")
         } else {
             var params = {
                 pageNo: args.pageNo,
                 startDate: args.startTime,
                 accountStatus: args.accountStatus,
                 endDate: args.endTime,
-            }; //
+            };             
+            var src = 'listPagerTotal';
+            if (FinIncome.currentType == 4) {
+                src = "listIncomeMoneyTotal";
+                params.accountTimes = args.startTime;
+                params.accountTimee = args.endTime;
+                params.incomeStatus = args.accountStatus;
+            }
             $.ajax({
-                    url: KingServices.build_url(path, 'listPagerTotal'),
+                    url: KingServices.build_url(path, src),
                     type: 'POST',
                     data: params,
                     showLoading: false
@@ -153,6 +163,13 @@ define(function(require, exports) {
                 resArgs.endDate = args.endTime;
                 resArgs.shopName = args.name;
                 break;
+            case 4: //全部
+                options.url = KingServices.build_url('account/financialIncomeMoney','listIncomeMoney');
+                resArgs.accountTimes = args.startTime;
+                resArgs.accountTimee = args.endTime;
+                resArgs.resourceName = args.name;
+                resArgs.incomeStatus = args.accountStatus;
+                break;
             default: //代订账务
                 options.url = KingServices.build_url('financial/bookingAccount', 'listPager');
                 resArgs.startDate = args.startTime;
@@ -160,7 +177,6 @@ define(function(require, exports) {
                 resArgs.travelAgencyName = args.name;
                 break;
         }
-
         options.data = resArgs;
         return options;
     };
@@ -225,6 +241,26 @@ define(function(require, exports) {
                     data.totalPage = data.searchParam.totalPage;
                     data.totalCount = data.searchParam.recordSize;
                     break;
+
+                     //全部
+                case 4:
+                    var src = data.resultList;
+                    data.searchParam = {};
+                    data.searchParam.accountStatus = data.incomeStatus;
+                    for (var i = 0, len = src.length, tmp; i < len;i++) {
+                        tmp = src[i];
+                        list.push({
+                            orgName: tmp.resourceName,
+                            needPayMoney: tmp.settlementMoney,
+                            payedMoney: tmp.incomeMoney,
+                            unPayedMoney: tmp.unIncomeMoney, 
+                            id: tmp.resourceId,
+                            type: tmp.type
+                        })
+                    }
+                    data.totalPage = data.totalPage;
+                    data.totalCount = data.totalCount;
+                    break;
                 default: //代订账务
                     var src = data.bookingAccountList;
                     for (var i = 0, len = src.length, tmp; i < len; i++) {
@@ -259,6 +295,7 @@ define(function(require, exports) {
         $tab.find(".T-finance-status").on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
             var $that = $(this);
+            
             // 设置选择的效果
             $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
             FinIncome.getList();
@@ -280,7 +317,8 @@ define(function(require, exports) {
         });
 
         // 收款
-        $tab.find('.T-list').on('click', '.T-income-task', function(event) {
+        $tab.find('.T-list').on('click', '.T-income-task', function(event)
+         {
             event.preventDefault();
             var $tr = $(this).closest('tr'),
                 options = {
@@ -288,8 +326,15 @@ define(function(require, exports) {
                     name: $tr.children('td').eq(0).text(),
                     startDate: $tab.find('.T-start').val(),
                     endDate: $tab.find('.T-end').val(),
-                    accountStatus : FinIncome.accountStatus
-                }
+                    accountStatus : FinIncome.accountStatus,
+                    type: FinIncome.currentType
+                },
+                type = $tr.data('type');
+
+            if (!!type) {
+                options.type = FinIncome.allKeys.indexOf(type);
+            }
+
             FinIncome.doIncomeTask(options);
         });
 
@@ -298,13 +343,13 @@ define(function(require, exports) {
 
     /**
      * 执行收款
-     * @param  {int} id 收款记录
+     * @param  {object}  options 收款的数据对象
+     * @param  {string}  type 全部时的收款类型  
      * @return {[type]}    [description]
      */
     FinIncome.doIncomeTask = function(options) {
         if (!!options) {
-            var moduleKey = FinIncome.moduleKeys[FinIncome.currentType];
-
+            var moduleKey = FinIncome.moduleKeys[options.type];
             seajs.use(ASSETS_ROOT + modalScripts[moduleKey], function(module) {
                 module.initIncome(options);
             });
