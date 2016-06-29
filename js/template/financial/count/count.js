@@ -77,6 +77,7 @@ define(function(require, exports){
     	Count.getLineproductData($lineProductObj);
     	var $guideObj = Count.$searchArea.find('input[name=chooseGuideRealName]');//获取导游
     	Count.getGuideData($guideObj);
+    	Count.getOpList(Count.$searchArea.find('input[name=dutyOPUserName]'));
 
 		//搜索事件
 		$searchObj.find(".T-search").on('click',function(event){
@@ -109,6 +110,8 @@ define(function(require, exports){
 				lineProductName : Count.$searchArea.find('input[name=chooseLineProductName]').val(),
 				guideId : Count.$searchArea.find('input[name=guideId]').val(),
 				guideName : Count.$searchArea.find('input[name=chooseGuideRealName]').val(),
+				dutyOPUserId : Count.$searchArea.find('input[name=dutyOPUserId]').val(),
+				dutyOPUserName : Count.$searchArea.find('input[name=dutyOPUserName]').val(),
 				endTime : Count.$searchArea.find('input[name=endTime]').val(),
 				startTime : Count.$searchArea.find('input[name=startTime]').val(),
 				billStatus : Count.$searchArea.find(".T-select-status").attr("data-value"),
@@ -5363,6 +5366,50 @@ define(function(require, exports){
 	            }
 	        });
 	    });
+	};
+
+	//获取搜索区域数据--责任计调
+	Count.getOpList = function($obj) {
+	    $obj.autocomplete({
+	        minLength: 0,
+	        change: function(event, ui) {
+	            if (ui.item == null) {
+	                $(this).closest('div').find('input[name="dutyOPUserId"]').val('');
+	            }
+	        },
+	        select: function(event, ui) {
+	            $(this).blur().trigger('change');
+	            $(this).closest('div').find('input[name="dutyOPUserId"]').val(ui.item.id);
+	        }
+	    }).one("click", function() {
+	        var obj = this;
+	        $.ajax({
+	            url: KingServices.build_url("tripController", "selectDutyOPUser"),
+	            type: 'POST',
+	            showLoading: false,
+	            success: function(data) {
+	                var result = showDialog(data);
+	                if (result) {
+	                    var opList = data.outOPUsers;
+	                    if (opList != null && opList.length > 0) {
+	                        // 按拼音排序
+	                        Tools.sortByPinYin(opList, 'realName');
+
+	                        for (var i = 0; i < opList.length; i++) {
+	                            opList[i].value = opList[i].realName;
+	                        }
+	                    }
+	                    $(obj).autocomplete('option', 'source', opList);
+	                    $(obj).autocomplete('search', '').data("ajax",true);
+	                }
+	            }
+	        });
+	    }).on('click', function(event) {
+	    	event.preventDefault();
+	    	if($obj.data("ajax")){
+	    		$obj.autocomplete('search', '');
+	    	}
+	    });;
 	};
 
 	//格式化日期控件
