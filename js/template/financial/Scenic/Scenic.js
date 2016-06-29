@@ -43,6 +43,8 @@ define(function(require, exports) {
             sortType: scenic.$searchArea ? scenic.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
+       scenic.searchData =  FinancialService.getChangeArgs(scenic.searchData,scenic.$tab);
+
         var searchParam = JSON.stringify(scenic.searchData);
         $.ajax({
             url:KingServices.build_url("financial/financialScenic","listSumFinancialScenic"),
@@ -70,7 +72,7 @@ define(function(require, exports) {
 					laypage({
 					    cont: scenic.$tab.find('.T-pagenation'),
 					    pages: data.searchParam.totalPage,
-					    curr: (page + 1),
+					    curr: (scenic.searchData.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {
 					    		scenic.listScenic(obj.curr -1);
@@ -91,6 +93,7 @@ define(function(require, exports) {
     scenic.initList = function(startDate,endDate,accountStatus){
     	scenic.getQueryList();
         Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
+        FinancialService.searchChange(scenic.$tab);
 
         //搜索按钮事件
         scenic.$tab.find('.T-search').on('click', function(event) {
@@ -674,6 +677,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $obj.trigger('change');
                 $obj.blur().nextAll('input[name="scenicId"]').val(ui.item.id);
                 if (!isMainList) {
                     $tab.find('input[name="accountInfo"]').val('');

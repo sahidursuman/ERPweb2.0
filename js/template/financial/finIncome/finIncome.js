@@ -53,6 +53,11 @@ define(function(require, exports) {
         }
 
         args.pageNo = pageNo || 0;
+        if(FinIncome.$tab && FinIncome.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            FinIncome.$tab.data('searchEdit', false);
+            FinIncome.$tab.data("total",false);
+        }
         $.ajax(FinIncome.covertArgs(args))
             .done(function(data) {
                 if (showDialog(data)) {
@@ -74,8 +79,15 @@ define(function(require, exports) {
                         } else if (type == 4) {
                             path = 'account/financialIncomeMoney'
                         }
-                        FinIncome.getSumMoney(FinIncome.$tab, args, path);
-                    } else  {
+                       
+                        console.log(!FinIncome.$tab.data("searchEdit"));
+                        console.log(FinIncome.$tab.data("total"));
+                        if(!FinIncome.$tab.data("searchEdit") && FinIncome.$tab.data("total")){
+                            FinIncome.loadSumData(FinIncome.$tab);
+                        } else {
+                            FinIncome.getSumMoney(FinIncome.$tab, args, path);
+                        }
+                    } else {
                         FinIncome.getSumMoney(FinIncome.$tab, args, path, data.sumInnerTransferIncome);
                     }
                     FinIncome.$tab.find('.T-sumItem').html('共计 ' + data.totalCount + ' 条记录');
@@ -131,13 +143,17 @@ define(function(require, exports) {
                 })
                 .done(function(data) {
                     if (showDialog(data)) {
-                        tabid.find('.T-sumNeedInMoney').text(data.sumSettlementMoney);
-                        tabid.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
-                        tabid.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+                        tabid.data("total",data);
+                        FinIncome.loadSumData(tabid);
                     }
                 });
         }
-
+    };
+    FinIncome.loadSumData = function(tabid){
+        var total = tabid.data("total");
+        tabid.find('.T-sumNeedInMoney').text(total.sumSettlementMoney);
+        tabid.find('.T-sumReceiveMoney').text(total.sumReceiveMoney);
+        tabid.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
     };
     /**
      * 处理查询参数，适应不同接口的需要
@@ -301,6 +317,12 @@ define(function(require, exports) {
      */
     FinIncome.initEvent = function() {
         var $tab = $('#tab-' + menuKey + '-content');
+
+        //监听搜索区修改
+        $tab.find('.T-search-area').on('change', 'input', function(event) {
+            event.preventDefault();
+            FinIncome.$tab.data('searchEdit',true);
+        });
         //状态框选择事件
         $tab.find(".T-finance-status").on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
@@ -308,6 +330,7 @@ define(function(require, exports) {
             
             // 设置选择的效果
             $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+            FinIncome.$tab.data('searchEdit',true);
             FinIncome.getList();
         });
 
@@ -316,6 +339,7 @@ define(function(require, exports) {
             event.preventDefault();
             FinIncome.currentType = $(this).val() * 1;
             FinIncome.$tab.find('.T-org-name').val('');
+            FinIncome.$tab.data('searchEdit',true);
             FinIncome.getList();
         });
 

@@ -29,6 +29,10 @@ define(function(require, exports){
 			args.accountStatus = $tab.find(".T-borrow-status").find("button").data("value");
 		}
 		args.guideName = (args.guideName == "全部") ? "" : args.guideName;
+		if($tab && $tab.data("searchEdit")){
+			args.pageNo = 0;
+			$tab.data('searchEdit', false);
+		}
 
 		$.ajax({
 			url: KingServices.build_url("account/guideFinancial","guideLoanList"),
@@ -50,7 +54,7 @@ define(function(require, exports){
                     jump: function(obj, first) {
                         if (!first) { 
                             args.pageNo = obj.curr-1;
-                            guideBorrow.getList(args);
+                            guideBorrow.getList(args,guideBorrow.$tab);
                         }
                     }
                 });
@@ -64,6 +68,10 @@ define(function(require, exports){
 		$tab.find(".T-btn-search").off().on('click',function(event) {
 			event.preventDefault();
 			guideBorrow.getList({pageNo : 0},$tab);
+		});
+		$tab.find('.T-search-area').on('change', 'input,select', function(event) {
+			event.preventDefault();
+			$tab.data('searchEdit',true);
 		});
 		//状态框选择事件
         $tab.find(".T-borrow-status a").off().on('click',function(event){
@@ -90,41 +98,45 @@ define(function(require, exports){
 	};
 
 	guideBorrow.getGuideList = function($obj){
-		$.ajax({
-            url:KingServices.build_url('account/guideFinancial','selectGuideName'),
-            showLoading:false,
-            success:function(data){
-                if(showDialog(data)){
-                    var guideList = data.guideList;
-                    if(guideList.length > 0){
-                        for(var i=0; i < guideList.length; i++){
-                        	guideList[i].id = guideList[i].guideId;
-                        	guideList[i].value = guideList[i].guideName;
-                        }
-                        guideList.unshift({id : "",value : "全部"});
-                    }else{
-                        layer.tips('没有内容', $obj, {
-                            tips: [1, '#3595CC'],
-                            time: 2000
-                        });
-                    }
-
-                    $obj.autocomplete({
-				        minLength:0,
-				        source : guideList,
-				        change :function(event, ui){
-				            if(ui.item == null){
-				                $obj.val('').nextAll('input[name=guideId]').val('');
-				            }
-				        },
-				        select :function(event, ui){
-			                $obj.nextAll('input[name=guideId]').val(ui.item.id);
-				        }
-				    }).on("click",function(){
-			            $obj.autocomplete('search','');
-			        });
-                }
-            }
+		$obj.autocomplete({
+	        minLength:0,
+	        change :function(event, ui){
+	            if(ui.item == null){
+	                $obj.val('').nextAll('input[name=guideId]').val('');
+	            }
+	        },
+	        select :function(event, ui){
+                $obj.nextAll('input[name=guideId]').val(ui.item.id).trigger('change');
+	        }
+	    }).one("click",function(){
+	    	if(!guideBorrow.guideList){
+		    	$.ajax({
+		            url:KingServices.build_url('account/guideFinancial','selectGuideName'),
+		            showLoading:false,
+		            success:function(data){
+		                if(showDialog(data)){
+		                    var guideList = data.guideList;
+		                    if(guideList.length > 0){
+		                        for(var i=0; i < guideList.length; i++){
+		                        	guideList[i].id = guideList[i].guideId;
+		                        	guideList[i].value = guideList[i].guideName;
+		                        }
+		                        guideList.unshift({id : "",value : "全部"});
+		                        guideBorrow.guideList = guideList;
+		                        
+		                        $obj.autocomplete('option', 'source', guideList);
+			                    $obj.autocomplete('search', '');
+		                    }
+		                }
+		            }
+		        });
+		    } else {
+		    	$obj.autocomplete('option', 'source', guideBorrow.guideList);
+		    }
+	    }).on("click",function(){
+	    	if(guideBorrow.guideList){
+	    		$obj.autocomplete('search','');
+	    	}
         });
 	};
 

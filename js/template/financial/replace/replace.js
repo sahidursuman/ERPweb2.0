@@ -48,6 +48,8 @@ define(function(require, exports) {
 				accountStatus : Replace.$tab.find(".T-finance-status").find("button").data("value")
 			};
 		}
+
+		args = FinancialService.getChangeArgs(args,Replace.$tab);
 		$.ajax({
 			url : KingServices.build_url('financial/bookingAccount', 'listPager'),
 			type: 'post',
@@ -85,8 +87,14 @@ define(function(require, exports) {
 		var $searchArea = Replace.$tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
-		Replace.chooseCustomer($searchArea.find('.T-search-customer'));
+		
+		if(Replace.customerList){
+            Replace.loadCustomerList($searchArea.find('.T-search-customer'));
+        } else {
+            Replace.chooseCustomer($searchArea.find('.T-search-customer'));
+        }
 		Tools.setDatePicker($datepicker, true);
+		FinancialService.searchChange(Replace.$tab);
 		$searchArea.find('.T-btn-search').off().on('click', function(event) {
 			event.preventDefault();
 			Replace.getList();
@@ -149,27 +157,30 @@ define(function(require, exports) {
 	                data.partnerAgencyList[i].value = data.partnerAgencyList[i].fromPartnerAgencyName;
 	                data.partnerAgencyList[i].id = data.partnerAgencyList[i].partnerAgencyId;
 	            }
-	            var all = {id:'', value: '全部'};
-	            Replace.customerList = data.partnerAgencyList.slice(all);
-	            if(!!$obj){
-	            	data.partnerAgencyList.unshift(all);
-		            $obj.autocomplete({
-						minLength: 0,
-						source : data.partnerAgencyList,
-					    change: function(event, ui) {
-					        if (!ui.item)  {
-					            $(this).data('id', '');
-					        }
-					    },
-					    select: function(event, ui) {
-					        $(this).blur().data('id', ui.item.id);
-					    }
-					}).on('click', function(){
-					    $obj.autocomplete('search', '');
-					});
-	            }
+	            Replace.customerList = JSON.stringify(data.partnerAgencyList);
+	            Replace.loadCustomerList($obj);
         	}
 		});
+	};
+
+	Replace.loadCustomerList = function($obj){
+		if(!!$obj){
+            $obj.autocomplete({
+				minLength: 0,
+				source : FinancialService.parseList(Replace.customerList),
+			    change: function(event, ui) {
+			        if (!ui.item)  {
+			            $(this).data('id', '');
+			        }
+			    },
+			    select: function(event, ui) {
+			    	$(this).trigger('change');
+			        $(this).blur().data('id', ui.item.id);
+			    }
+			}).on('click', function(){
+			    $obj.autocomplete('search', '');
+			});
+        }
 	};
 	/**
 	 * 对账
@@ -859,7 +870,7 @@ define(function(require, exports) {
 			name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
-            source : Replace.customerList,
+            source : JSON.parse(Replace.customerList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);

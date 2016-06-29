@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="T-search-area">
-        <div class="form-horizontal form-group ">
+    <div class="">
+        <div class="form-horizontal form-group T-search-area">
             <label>行程 </label>
             <input class="mar-r-10" type="text" style="width: 220px" placeholder="行程" name="lineProductName" value="{{searchParam.lineProductName}}" />
             <input type="hidden" name="lineProductId" value="{{searchParam.lineProductId}}" />
@@ -15,8 +15,6 @@
             </select>
             <label>收客单号 </label>
             <input class="mar-r-10 min-w-200" type="text" placeholder="收客单号" name="orderNumber" value="{{searchParam.orderNumber}}" />
-        </div>
-        <div class="form-group">
             <label>开始日期 </label>
             <input class="date-picker mar-r-10" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startTime}}" style="width:100px;" />
             <label>结束日期 </label>
