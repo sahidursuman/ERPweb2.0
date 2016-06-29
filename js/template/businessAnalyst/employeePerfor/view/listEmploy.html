@@ -9,19 +9,34 @@
 	</colgroup>
 	<thead>
 		<tr class="bg-blur">
-			<th class="col-sm-1">员工</th>
-			<th class="col-sm-1">发团量</th>
-			<th class="col-sm-2">发客量</th>
-			<th class="col-sm-1">外转客量</th>
-			<th class="col-sm-1">内转转出量</th>
-			<th class="col-sm-2">代订单量</th>
+			<th rowspan="2" class="col-sm-1">员工</th>
+			<th colspan="2" class="col-sm-1">发团量</th>
+			<th colspan="2" class="col-sm-2">团毛利</th>
+			<th colspan="2" class="col-sm-2">团均毛利</th>
+			<th rowspan="2" class="col-sm-2">发客量</th>
+			<th rowspan="2" class="col-sm-1">外转客量</th>
+			<th rowspan="2" class="col-sm-1">内转转出量</th>
+			<th rowspan="2" class="col-sm-2">代订单量</th>
+		</tr>
+		<tr class="bg-blur">
+		    <th>散客</th>
+			<th>团队</th>
+			<th>散客</th>
+			<th>团队</th>
+			<th>散客</th>
+			<th>团队</th>
 		</tr>
 	</thead>
 	<tbody>
 		{{each result as empL}}
 		   <tr>
 	   		    <td>{{empL.name}}</td>
-	   		    <td>{{empL.tripCount}}</td>
+	   		    <td>{{empL.sCount}}</td>
+	   		    <td>{{empL.tCount}}</td>
+	   		    <td>{{empL.sSumGrossProfit}}</td> 
+	   		    <td>{{empL.tSumGrossProfit}}</td>
+	   		    <td>{{empL.sPreSumGrossProfit}}</td>
+	   		    <td>{{empL.tPreSumGrossProfit}}</td>
 	   			<td>{{empL.adultCount}}大{{empL.childCount}}小</td>
 	   			<td>{{empL.transAdultCount}}大{{empL.transChildCount}}小</td>
 	   		    <td>{{empL.innerAdultCount}}大{{empL.innerChildCount}}小</td>
@@ -31,7 +46,12 @@
 
 		<tr style="background-color:#effef4">
 			<td class="text-bold">合计</td>
-			<td class="T-tripTotalCount">0</td>
+			<td class="T-sCount">0</td>
+			<td class="T-tCount">0</td>
+			<td class="T-sTotalGrossProfit"></td>
+			<td class="T-tTotalGrossProfit"></td>
+			<td class="T-sPreTotalGrossProfit"></td>
+			<td class="T-tPreTotalGrossProfit"></td>
 			<td class="T-adChilTotalCount">0</td>
 			<td class="T-transAdChilTotalCount">0</td>
 			<td class="T-innerAdChilTotalCount">0</td>

@@ -1,5 +1,5 @@
 {{each result as rs}}
-<tr data-id="{{rs.id}}" data-type="{{rs.type}}">
+<tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-type="{{rs.type}}" data-confirm="{{rs.isConfirmAccount}}">
     <td>{{rs.type}}</td>
     <td>{{rs.accountType}}</td>
     <td>{{rs.accountTime}}</td>
@@ -7,8 +7,25 @@
     <td>{{rs.unitName}}</td>
     <td>{{rs.resourceName}}</td>
     <td><span class="F-float F-money">{{rs.needPay}}</span></td>
-    <td><span class="F-float F-money">{{rs.payed}}</span></td>
-    <td><span class="F-float F-money">{{rs.unpay}}</span></td>
-    <td><a class="cursor T-pay">付款</a></td>
+    <td><span class="F-float F-money T-payedDetail" data-money="{{rs.payed}}">{{rs.payed}}</span></td>
+    <td class="F-float F-money" name="unPayedMoney">{{if rs.change}}{{rs.unPayedMoney}}{{else}}{{rs.unpay}}{{/if}}</td>
+    {{if rs.isConfirmAccount}}
+    <td><span class="F-float F-money">{{rs.realNeedPay}}</span></td>
+    <td>{{rs.checkRemark}}</td>
+    <td>{{rs.checkTime | dateFormat:"yyyy-MM-dd hh:mm:ss"}}</td>
+    <td>{{rs.checkUserName}}</td>
+    {{else}}
+    <td><input type="text" class="F-float F-money" name="settlementMoney" value="{{if rs.change}}{{rs.settlementMoney}}{{else}}{{rs.realNeedPay}}{{/if}}" /></td>
+    <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
+    <td>-</td>
+    <td>-</td>
+    {{/if}}
+    <td><label class="pos-rel">
+            <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} />
+            <span class="lbl"></span> 对账
+        </label>
+        <a class="cursor"> |</a>
+        <a class="cursor T-pay">付款</a>
+    </td>
 </tr>
 {{/each}}

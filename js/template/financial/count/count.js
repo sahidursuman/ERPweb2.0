@@ -1390,7 +1390,11 @@ define(function(require, exports){
 
 		//车费列表 
 		var busHtml = busArrangeTemplate(data);
-		$obj.find('.T-bus').html(busHtml);
+		$obj.find('.T-bus').html(busHtml)
+		.on('click', '.T-payedDetail', function(event) {
+			event.preventDefault();
+			FinancialService.viewPayed($(this).closest("tr").attr("busArrangeId"),KingServices.build_url("account/financialBusCompany", "getPayedMoneyDetailOfBus"));
+		});;
 
 		//餐费列表 
 		var restHtml = restArrangeTemplate(data);
@@ -1911,7 +1915,7 @@ define(function(require, exports){
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,'shopGuideName',$parentObj);
 		var guideShopMoneyHtml = Count.shopPersonAndBusGuide($obj,$parentObj);
-		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+'>'+
+		var html = '<tr shopId = '+shopId+' whichDay = '+whichDay+' arrangeType="shopArrange">'+
 			'<td>'+divHtml+
 				'<input type="text" name="shopPolicy" class="w-70"/>'+
 				'<input type="hidden" name="shopPolicyId" />'+
@@ -2285,7 +2289,7 @@ define(function(require, exports){
 		//设置总金额
 		Count.autoShopSumCost($obj,$parentObj);
 	};
-	//购物--总金额计算
+	//购物--总金额计算(剔除导佣、社佣的计算)
 	Count.autoShopSumCost = function($obj,$parentObj){
 		var $tr = $obj.closest('tr'),
 			$shopList = $parentObj.find('.T-count-shopping'),
@@ -2326,6 +2330,9 @@ define(function(require, exports){
 		$sumConsumeMoney.val(sumSGmoney)//金额小计
 		
 		sumMoney = Count.changeTwoDecimal(sumShopMoney);//购物收入
+
+		//计算社佣
+		
 	        
     	var $mainTable = $parentObj.find('.T-main-table');
 		$mainTable.find('.tripIncome-shopIncomeMoney').text(sumMoney);
@@ -4288,6 +4295,29 @@ define(function(require, exports){
 								};
 								sumPerson = Count.changeTwoDecimal(adultCount)*Count.changeTwoDecimal(ui.item.customerRebateMoney);
 								sumBus = Count.changeTwoDecimal(busNumber)*Count.changeTwoDecimal(ui.item.parkingRebateMoney);
+								if(sumPerson == 0){
+									$tr.find('td[name="shopGuideName"]').find('.T-delShopGuide').each(function(){
+										$(this).trigger('click');
+									});
+								}else{
+									var len = $tr.find('td[name="shopGuideName"]').find('.T-delShopGuide').length;
+									if(!len){
+										$tr.find('.T-shopGuide').trigger('click');
+									}
+									
+								}
+
+								if(sumBus == 0){
+									$tr.next().find('td[name="shopGuideName"]').find('.T-delShopGuide').each(function(){
+										$(this).trigger('click');
+									});
+								}else{
+									var len = $tr.next().find('td[name="shopGuideName"]').find('.T-delShopGuide').length;
+									if(!len){
+										$tr.next().find('.T-shopGuide').trigger('click');
+									}
+									
+								}
 								$tr.find('input[name=shopId]').val(ui.item.id);
 								$tr.find('input[name=shopPolicy]').val('');
 								$tr.find('.sumConsumeMoney').text(sumPerson);
@@ -4299,6 +4329,7 @@ define(function(require, exports){
 								tRate = $tr.next().find('input[name=travelAgencyRate]').val();
 								tMoney = sumBus*(Math.round(tRate)/100);
 								$tr.next().find('input[name=travelAgencyRateMoney]').val(tMoney);
+
 								Count.getShopPolicy($tr,$parentObj);
 								//计算金额
 								Count.autoShopSum($(this),$parentObj);
