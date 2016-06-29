@@ -57,9 +57,9 @@ define(function(require, exports) {
                     $status.add($childDepartment).addClass('hidden');
                     $personType.removeClass('hidden');
 
-                    index = 0;
+                    index = 1;
                     if ($personType.val() === '0') {
-                        index = 1;
+                        index = 0;
                     }
                     break;
                 case 2: // 部门
@@ -205,11 +205,16 @@ define(function(require, exports) {
             })
             .done(function(data) {
             	var $tab = PerformanceFun.$tab;
-                $tab.find('.T-tripTotalCount').text(data.tripCount);
+                $tab.find('.T-sCount').text(data.sCount);
+                $tab.find('.T-tCount').text(data.tCount);
                 $tab.find('.T-adChilTotalCount').text(data.adultCount + "大" + data.childCount + "小");
                 $tab.find('.T-transAdChilTotalCount').text(data.transAdultCount + "大" + data.transChildCount + "小");
                 $tab.find('.T-innerAdChilTotalCount').text(data.innerAdultCount + "大" + data.innerChildCount + "小");
                 $tab.find('.T-orderTotalCount').text(data.orderCount);
+                $tab.find('.T-sTotalGrossProfit').text(data.sTotalGrossProfit);
+                $tab.find('.T-tTotalGrossProfit').text(data.tTotalGrossProfit);
+                $tab.find('.T-sPreTotalGrossProfit').text(data.sPreTotalGrossProfit);
+                $tab.find('.T-tPreTotalGrossProfit').text(data.tPreTotalGrossProfit);
             })
     }
 
