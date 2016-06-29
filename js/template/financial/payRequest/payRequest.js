@@ -26,8 +26,11 @@ define(function(require, exports) {
         args = Pay.getArgs(page,args);
         var data = {};
         data.searchParam = args;
-        Tools.addTab(menuKey,"付款申请",listHeaderTemplate(data));
-        Pay.getList(page,args);
+        if(Tools.addTab(menuKey,"付款申请",listHeaderTemplate(data))){
+            Pay.getList(page,args);
+        } else {
+            Pay.$tab.data("next",args);
+        } 
     }
 
 	Pay.getList = function(page,args){
@@ -41,9 +44,23 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				Pay.searchData = args;
 				Pay.$tab = $("#tab-" + menuKey + "-content");
-                Pay.$tab.find('.T-list').html(listTableTemplate(data));
+                if(Pay.checkTemp && Pay.checkTemp.length > 0){
+                    data.result = FinancialService.getCheckTempData(data.result,Pay.checkTemp);
+                    var total = Pay.$tab.data("total");
+                    total.unpays = Pay.checkTemp.sumUnPayedMoney;
+                    Pay.$tab.data("total",total);
+                }
+
+                var html = listTableTemplate(data);
+                html = Tools.filterMoney(html);
+                html = Tools.filterUnPoint(html);
+                Pay.$tab.find('.T-list').html(html);
                 Pay.$tab.find('.T-sumItem').text("共计 " + data.searchParam.totalCount + " 条记录");
-				Pay.getSumData(args);
+				if(Pay.$tab &&　Pay.$tab.data("total")){
+                     Pay.loadSumData();
+                } else {
+                    Pay.getSumData(args);
+                }
 				if(args.pageNo == 0){
 					Pay.initList();
 				}
@@ -55,7 +72,14 @@ define(function(require, exports) {
                     curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) {
-                            Pay.getList(obj.curr - 1,args);
+                            var temp = FinancialService.checkSaveJson(Pay.$tab,Pay.checkTemp,new FinRule(0));
+                            if(!temp){
+                                return false;
+                            } else {
+                                Pay.checkTemp = temp;
+                                Pay.$tab.data('isEdited',false);
+                                Pay.getList(obj.curr - 1,args);
+                            }
                         }
                     }
                 });
@@ -65,7 +89,7 @@ define(function(require, exports) {
 
     Pay.getArgs = function(page,args){
         args = args || [];
-        if(Pay.$tab && args){
+        if(Pay.$tab && args.length == 0){
             args = {
                 type : Pay.$tab.find('.T-business-type').val(),
                 accountType : Pay.$tab.find('.T-accountType').val(),
@@ -75,6 +99,8 @@ define(function(require, exports) {
                 resourceName : Pay.$tab.find('.T-resourceName').val(),
                 accountStatus : Pay.$tab.find(".T-finance-status").find("button").data("value")
             }
+            Pay.checkTemp = false;
+            Pay.$tab.data('total', false);
         }
         args.pageNo = page || 0;
         return args;
@@ -89,12 +115,17 @@ define(function(require, exports) {
 		})
 		.done(function(data) {
 			if(showDialog(data)){
-                Pay.$tab.find('.T-needPay').text(data.total.needPays);
-                Pay.$tab.find('.T-payed').text(data.total.payeds);
-                Pay.$tab.find('.T-unpay').text(data.total.unpays);
+                Pay.$tab.data("total",data.total);
+                Pay.loadSumData();
 			}
 		});
 	};
+    Pay.loadSumData = function(){
+        var total = Pay.$tab.data("total");
+        Pay.$tab.find('.T-needPay').text(total.needPays);
+        Pay.$tab.find('.T-payed').text(total.payeds);
+        Pay.$tab.find('.T-unpay').text(total.unpays);
+    };
 
 	Pay.initList = function(){
 		Tools.setDatePicker(Pay.$tab.find(".date-picker"), true);
@@ -117,7 +148,74 @@ define(function(require, exports) {
             event.preventDefault();
             Pay.getPayment($(this).closest('tr').data('id'));
         });
+
+        //复选框事件初始化
+        FinancialService.initCheckBoxs(Pay.$tab.find(".T-checkAll"),Pay.$tab.find(".T-checkList tr .T-checkbox"));
+        //确认对账按钮事件
+        Pay.$tab.find(".T-saveCheck").off().click(function(){ 
+            FinancialService.changeUncheck(Pay.$tab.find(".T-checkTr"),function(){
+                Pay.saveChecking(Pay.$tab);
+            });
+        });
+
+        
+        // 监听修改
+        Pay.$tab.find(".T-checkList").off('change').on('change',"input,textarea",function(event) {
+            event.preventDefault();
+            $(this).closest('tr').data("change",true);
+            Pay.$tab.data('isEdited', true);
+        });
+        Pay.$tab.off(SWITCH_TAB_SAVE).off(SWITCH_TAB_BIND_EVENT).off(CLOSE_TAB_SAVE).on(SWITCH_TAB_BIND_EVENT, function(event) {
+            event.preventDefault();
+            Pay.checkTemp = false;
+            Pay.$tab.data('total', false);
+            Pay.getListHeader(Pay.$tab.data('next').pageNo,Pay.$tab.data('next'));
+        })
+        // 保存后关闭
+        .on('close.tab.save', function(event) {
+            event.preventDefault();
+            Pay.saveChecking(Pay.$tab);
+        }) 
+        // 监听保存，并切换tab
+        .on('switch.tab.save', function(event,tab_id,title,html) {
+            event.preventDefault();
+            Pay.saveChecking(Pay.$tab,Pay.$tab.data('next'));
+        }).on(CLOSE_TAB_SAVE_NO, function(event) {
+            event.preventDefault();
+            Pay.checkTemp = false;
+            Pay.$tab.data('total', false);
+        });
+        FinancialService.updateUnpayMoney(Pay.$tab,new FinRule(0));
+
 	};
+
+    //审核数据保存
+    Pay.saveChecking = function($tab,args){
+        var argumentsLen = arguments.length,
+            checkSaveJson = FinancialService.checkSaveJson(Pay.$tab,Pay.checkTemp,new FinRule(0),true);
+        if(!checkSaveJson){ return false; }
+
+        $.ajax({
+            url:KingServices.build_url("account/paymentRecored","auditorRealNeedPay"),
+            type:"POST",
+            data:{ realNeedPayList : checkSaveJson },
+            success:function(data){
+                var result = showDialog(data);
+                if(result){
+                    showMessageDialog(data.message,function(){
+                        Pay.checkTemp = false;
+                        $tab.data('isEdited',false);
+                        $tab.data('total',false);
+                        if(argumentsLen === 1){
+                            Pay.getListHeader(0);
+                        } else {
+                            Pay.getListHeader(args.pageNo,args);
+                        }
+                    });
+                }
+            }
+        });
+    };
 
 	//付款
 	Pay.getPayment = function(id){
