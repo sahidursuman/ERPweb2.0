@@ -164,6 +164,39 @@ define(function(require, exports) {
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             Client.listClient(0);
         });
+
+        //未收减去预收勾选事件
+        Client.$searchArea.on('click','.T-sumUnIncome',function() {
+
+            //找到所有的tr  is(':checked')
+            var $that = $(this),$trList = Client.$tab.find('.T-list').find('tr'),checkStatus = $that.is(':checked');
+            //遍历tr
+            $trList.each(function() {
+                function changeTwoDecimal($val){
+                    var newVal = parseFloat($val);
+
+                    if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                        return 0;
+                    }
+                    var newVal = Math.round($val*100)/100;
+                    return newVal;
+                };
+                //准备数据
+                var settlementMoney = changeTwoDecimal($(this).find('.T-settlementMoney').text()),
+                    receiveMoney = changeTwoDecimal($(this).find('.T-receiveMoney').text()),
+                    balance = changeTwoDecimal($(this).find('.T-sumBalance').text()),
+                    unReceivedMoney = $(this).data('unincome'),
+                    $unReceivedMoney = $(this).find('.T-unReceivedMoney'),
+                    result = 0;
+                if(checkStatus){
+                    result = changeTwoDecimal((settlementMoney-receiveMoney-balance));
+                } else {
+                    result = unReceivedMoney;
+                }
+                $unReceivedMoney.text(result);
+
+            });
+        })
         // 报表内的操作
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -208,6 +241,7 @@ define(function(require, exports) {
                 $tab.find('.T-travelIncome').text(data.sumAgencyMoney);
                 $tab.find('.T-guideIncome').text(data.sumGuideMoney);
                 $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+                $tab.find('.T-sumBalance').text(data.sumBalance);
             }
         });
         
