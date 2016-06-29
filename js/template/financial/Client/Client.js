@@ -88,6 +88,8 @@ define(function(require, exports) {
                 }
             }
         }
+        if(Client.$tab && Client.$tab.data('searchEdit')) { Client.partnerAgencyList = false;}
+        args = FinancialService.getChangeArgs(args,Client.$tab);
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listPager'),
             type : 'POST',
@@ -96,13 +98,12 @@ define(function(require, exports) {
             if(showDialog(data)){
                 Tools.addTab(menuKey, "客户账务", listTemplate(data));
                 Client.listPage = args.pageNo;
-                Client.initList();
-                Client.getListSumData(args,$('#' + tabId));
+                Client.initList(args);
                 // 绑定翻页组件
                 laypage({
                     cont: Client.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
                     pages: data.searchParam.totalPage, //总页数
-                    curr: (page + 1),
+                    curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             Client.listClient(obj.curr - 1);
@@ -113,14 +114,27 @@ define(function(require, exports) {
         });
     };
 
-    Client.initList = function(){
+    Client.initList = function(args){
         // 初始化jQuery 对象
         Client.$tab = $('#' + tabId);
 
+        if(!Client.$tab.data("searchEdit") && Client.$tab.data("total")){
+            Client.loadListSumData(Client.$tab);
+        } else {
+            Client.getListSumData(args,Client.$tab);
+        }
+                
+
         Client.$searchArea = Client.$tab.find('.T-search-area');
         Client.getPartnerAgencyList(Client.$tab.find('.T-search-head-office'));
-        Client.getTravelAgencyList(Client.$tab.find('.T-search-customer'));
+        if(Client.partnerAgencyList) {
+            Client.loadTravelAgencyList(Client.$tab.find('.T-search-customer'));
+        } else {
+            Client.getTravelAgencyList(Client.$tab.find('.T-search-customer'));
+        }
+        
         Tools.setDatePicker(Client.$searchArea.find(".date-picker"), true);
+        FinancialService.searchChange(Client.$tab);
 
         //搜索按钮事件
         Client.$searchArea.find('.T-btn-search').on('click', function(event) {
@@ -201,17 +215,21 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find('.T-sumCount').text(data.sumCount);
-                $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
-                $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
-                $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
-                $tab.find('.T-travelIncome').text(data.sumAgencyMoney);
-                $tab.find('.T-guideIncome').text(data.sumGuideMoney);
-                $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+                $tab.data("total",data);
+                Client.loadListSumData($tab);
             }
         });
-        
     };  
+    Client.loadListSumData = function($tab){
+        var total = $tab.data("total");
+        $tab.find('.T-sumCount').text(total.sumCount);
+        $tab.find('.T-sumContractMoney').text(total.sumContractMoney);
+        $tab.find('.T-sumStMoney').text(total.sumSettlementMoney);
+        $tab.find('.T-sumReceiveMoney').text(total.sumReceiveMoney);
+        $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
+        $tab.find('.T-guideIncome').text(total.sumGuideMoney);
+        $tab.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
+    };
 
     Client.ClientCheck = function(pageNo, args, $tab, isView){
         if(!!$tab){
@@ -908,6 +926,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
+                $(this).trigger('change');
                 $(this).blur().data('id', ui.item.id);
                 $(this).closest('div').find('input[name="headerAgencyId"]').val(ui.item.id);
                 Client.$searchArea.find('.T-search-customer').data('ajax', false).val('全部');
@@ -961,27 +980,29 @@ define(function(require, exports) {
                 data.fromPartnerAgencyList[i].value = data.fromPartnerAgencyList[i].fromPartnerAgencyName;
                 data.fromPartnerAgencyList[i].id = data.fromPartnerAgencyList[i].fromPartnerAgencyId;
             }
-            var all = {id:'', value: '全部'};
-            Client.partnerAgencyList = data.fromPartnerAgencyList.slice(all);
-            if(!!$obj){
-                data.fromPartnerAgencyList.unshift(all);
-                $obj.autocomplete({
-                    minLength: 0,
-                    source : data.fromPartnerAgencyList,
-                    change: function(event, ui) {
-                        if (!ui.item)  {
-                            $(this).data('id', '');
-                        }
-                    },
-                    select: function(event, ui) {
-                        $(this).blur().data('id', ui.item.id);
-                        $(this).closest('div').find('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-                    }
-                }).on("click",function(){
-                    $obj.autocomplete('search', '');
-                });
-            }
+            Client.partnerAgencyList = JSON.stringify(data.fromPartnerAgencyList);
+            Client.loadTravelAgencyList($obj);
         });       
+    };
+
+    Client.loadTravelAgencyList = function($obj){
+        if(!!$obj){
+            $obj.autocomplete({
+                minLength: 0,
+                source : FinancialService.parseList(Client.partnerAgencyList),
+                change: function(event, ui) {
+                    if (!ui.item)  {
+                        $(this).data('id', '');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).trigger('change');
+                    $(this).blur().data('id', ui.item.id);
+                }
+            }).on("click",function(){
+                $obj.autocomplete('search', '');
+            });
+        }
     };
 
     /**
@@ -1138,7 +1159,7 @@ define(function(require, exports) {
             name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
-            source : Client.partnerAgencyList,
+            source : JSON.parse(Client.partnerAgencyList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);

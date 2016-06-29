@@ -39,6 +39,7 @@ define(function(require, exports) {
 			args.endDate = $tab.find('.T-search-end-date').val();
 			args.accountStatus = $tab.find(".T-finance-status").find("button").data("value")
 		}
+		args = FinancialService.getChangeArgs(args,Ticket.$tab);
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
 			type : 'POST',
@@ -92,6 +93,7 @@ define(function(require, exports) {
 
 		Ticket.getTicketNameList($searchArea.find('.T-search-name'));
 		Tools.setDatePicker($datepicker, true);
+		FinancialService.searchChange($tab);
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
@@ -147,6 +149,7 @@ define(function(require, exports) {
 		        }
 			},
 			select: function(event, ui) {
+				$(this).trigger('change');
 		        $(this).blur().data('id', ui.item.id);
 		    }
 		}).on('click', function(event){

@@ -48,6 +48,8 @@ define(function(require, exports) {
             sortType: restaurant.$searchArea ? restaurant.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
+        restaurant.searchData = FinancialService.getChangeArgs(restaurant.searchData,restaurant.$tab);
+
         var searchParam = JSON.stringify(restaurant.searchData);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
@@ -75,7 +77,7 @@ define(function(require, exports) {
                     laypage({
                         cont: restaurant.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (restaurant.searchData.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
                                 restaurant.listRestaurant(obj.curr - 1);
@@ -96,6 +98,7 @@ define(function(require, exports) {
     restaurant.initList = function(startDate,endDate,accountStatus){
         restaurant.getQueryList();
         Tools.setDatePicker(restaurant.$tab.find(".date-picker"),true);
+        FinancialService.searchChange(restaurant.$tab);
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
@@ -633,6 +636,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name="restaurantId"]').val(ui.item.id);
             }
         }).on("click",function(){

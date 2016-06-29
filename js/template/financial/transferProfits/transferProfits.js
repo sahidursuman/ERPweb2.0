@@ -7,41 +7,26 @@ define(function(require, exports) {
 
     var transfer = {
     	searchData : false,
-        $searchArea: false,
         lineProductList : false,
         partnerAgencyList : false
 	};
 
     transfer.initModule = function(isTurn) {
-        var dateJson = FinancialService.getInitDate();
-        transfer.searchData = {
-            pageNo : 0,
-            startTime : dateJson.startDate,
-            endTime : dateJson.endDate,
-        };
+        var dateJson = FinancialService.getInitDate(),
+            args = {
+                pageNo : 0,
+                startTime : dateJson.startDate,
+                endTime : dateJson.endDate,
+            };
         var data = {};
-        data.searchParam = transfer.searchData;
+        data.searchParam = args;
         var html = listMainTemplate(data);
         Tools.addTab(menuKey,"中转利润",html);
         
-        transfer.listMain("","","","","","",dateJson.startDate,dateJson.endDate);
+        transfer.listMain(args);
     };
 
-    transfer.listMain = function(lineProductName,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,customerType,orderNumber,startTime,endTime){
-        transfer.searchData = {
-            pageNo : 0,
-            lineProductName : lineProductName,
-            lineProductId : lineProductId,
-            fromPartnerAgencyName : fromPartnerAgencyName,
-            fromPartnerAgencyId : fromPartnerAgencyId,
-            customerType : customerType,
-            orderNumber : orderNumber,
-            startTime : startTime,
-            endTime : endTime,
-            sortType: 'auto'
-        };
-        var searchParam = JSON.stringify(transfer.searchData);
-
+    transfer.listMain = function(args){
         $.ajax({
             url: KingServices.build_url('profitOutRemark', 'listProfitOutSelect'),
             type: 'POST',
@@ -58,12 +43,16 @@ define(function(require, exports) {
                     }
 
                     //搜索事件
-                    var  $tab = $("#tab-" + menuKey + "-content");
-                    transfer.$searchArea = $tab.find('.T-search-area');
-                    transfer.listTransfer(0);
+                    transfer.$tab = $("#tab-" + menuKey + "-content");
+                    transfer.listTransfer(0,args);
                     
-                    Tools.setDatePicker($tab.find(".date-picker"),true);
-                    $tab.find(".T-search").off().on('click', function(event) {
+                    Tools.setDatePicker(transfer.$tab.find(".date-picker"),true);
+                    //监听搜索区修改
+                    transfer.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
+                        event.preventDefault();
+                        transfer.$tab.data('searchEdit', true);
+                    });
+                    transfer.$tab.find(".T-search").off().on('click', function(event) {
                         event.preventDefault();
                         transfer.listTransfer(0);
                     });
@@ -72,45 +61,13 @@ define(function(require, exports) {
         });
     };
 
-    transfer.listTransfer = function(pageNo,lineProductName,lineProductId,fromPartnerAgencyName,fromPartnerAgencyId,customerType,orderNumber,startTime,endTime){
-        if (transfer.$searchArea && arguments.length === 1) {
-            // 初始化页面后，可以获取页面的参数
-            lineProductName = transfer.$searchArea.find("input[name=lineProductName]").val(),
-            lineProductId = transfer.$searchArea.find("input[name=lineProductId]").val(),
-            fromPartnerAgencyName = transfer.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
-            fromPartnerAgencyId = transfer.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
-            customerType = transfer.$searchArea.find("select[name=customerType]").val(),
-            orderNumber = transfer.$searchArea.find("input[name=orderNumber]").val(),
-            startTime = transfer.$searchArea.find("input[name=startTime]").val(),
-            endTime = transfer.$searchArea.find("input[name=endTime]").val(),
-            billStatus = transfer.$searchArea.find(".T-status button").data("value")
-        }
-        if(startTime > endTime){
-            showMessageDialog("开始时间不能大于结束时间，请重新选择！");
-            return false;
-        }
-        lineProductName = (lineProductName == "全部") ? "" : lineProductName;
-        fromPartnerAgencyName = (fromPartnerAgencyName == "全部") ? "" : fromPartnerAgencyName;
-
-        // 修正页码
-        pageNo = pageNo || 0;
-        transfer.searchData = {
-            pageNo : pageNo,
-            lineProductName : lineProductName,
-            lineProductId : lineProductId,
-            fromPartnerAgencyName : fromPartnerAgencyName,
-            fromPartnerAgencyId : fromPartnerAgencyId,
-            customerType : customerType,
-            orderNumber : orderNumber,
-            startTime : startTime,
-            endTime : endTime,
-            sortType: 'auto'
-        };
+    transfer.listTransfer = function(page,args){
+        args = transfer.getArgs(page,args);
 
         $.ajax({
             url:KingServices.build_url("profitOutRemark","findPager"),
             type: "POST",
-            data: transfer.searchData,
+            data: args,
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
@@ -123,7 +80,12 @@ define(function(require, exports) {
                     var $tab = $("#tab-" + menuKey + "-content");
                     $tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
 
-                    transfer.getSumData($tab,transfer.searchData);
+                    if(!$tab.data('searchEdit') && $tab.data('total')){
+                        transfer.loadSumData($tab);
+                    } else {
+                        transfer.getSumData($tab,args);
+                    }
+                    
                     transfer.getQuery($tab);
 
                     //报表内的操作
@@ -145,7 +107,7 @@ define(function(require, exports) {
                     laypage({
                         cont: $tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (pageNo + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 transfer.listTransfer(obj.curr - 1);
@@ -155,6 +117,34 @@ define(function(require, exports) {
                 }
             }
         });
+    };
+
+    transfer.getArgs = function(page,args){
+        var args = args || {};
+        if(transfer.$tab){
+            args = {
+                pageNo : page || 0,
+                lineProductName : transfer.$tab.find("input[name=lineProductName]").val(),
+                lineProductId : transfer.$tab.find("input[name=lineProductId]").val(),
+                fromPartnerAgencyName : transfer.$tab.find("input[name=fromPartnerAgencyName]").val(),
+                fromPartnerAgencyId : transfer.$tab.find("input[name=fromPartnerAgencyId]").val(),
+                customerType : transfer.$tab.find("select[name=customerType]").val(),
+                orderNumber : transfer.$tab.find("input[name=orderNumber]").val(),
+                startTime : transfer.$tab.find("input[name=startTime]").val(),
+                endTime : transfer.$tab.find("input[name=endTime]").val(),
+                billStatus : transfer.$tab.find(".T-status button").data("value")
+            };
+        }
+        args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
+        args.fromPartnerAgencyName = (args.fromPartnerAgencyName == "全部") ? "" : args.fromPartnerAgencyName;
+        args.sortType = 'auto';
+
+        if(transfer.$tab && transfer.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            transfer.$tab.data("searchEdit",false);
+            transfer.$tab.data("total",false);
+        }
+        return args;
     };
 
     //查看游客小组
@@ -213,13 +203,19 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find(".T-totalCount").text((data.total.adultCount ? data.total.adultCount : 0) + " 大" + (data.total.childCount ? data.total.childCount : 0) + " 小");
-                $tab.find(".T-totalNeed").text(data.total.transitSMoney);
-                $tab.find(".T-totalCost").text(data.total.transitPaySMoney);
-                $tab.find(".T-totalProfit").text(data.total.grossProfit);
-                $tab.find(".T-perProfit").text(data.total.perGrossProfit);
+                $tab.data('total',data.total);
+                transfer.loadSumData($tab);
             }
         });
+    };
+
+    transfer.loadSumData = function($tab,args){
+        var total = $tab.data("total");
+        $tab.find(".T-totalCount").text((total.adultCount ? total.adultCount : 0) + " 大" + (total.childCount ? total.childCount : 0) + " 小");
+        $tab.find(".T-totalNeed").text(total.transitSMoney);
+        $tab.find(".T-totalCost").text(total.transitPaySMoney);
+        $tab.find(".T-totalProfit").text(total.grossProfit);
+        $tab.find(".T-perProfit").text(total.perGrossProfit);
     };
 
     transfer.getQuery = function($tab){
@@ -236,7 +232,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=lineProductId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=lineProductId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $lineProduct.autocomplete('search', '');
@@ -252,7 +248,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
-                $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id);
+                $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id).trigger('change');
             }
         }).on("click",function(){
             $partner.autocomplete('search', '');
