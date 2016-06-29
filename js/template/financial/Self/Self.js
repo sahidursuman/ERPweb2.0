@@ -716,20 +716,16 @@ define(function(require, exports) {
         return sumData;
     };
 
-    Self.initPay = function(options){
-        Self.showBtnFlag = true;
-        var args = {
-            pageNo : 0,
-            selfPayId : options.id,
-            selfPayName : options.name,
-            startTime : options.startDate,
-            endTime : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+    Self.initPay = function(args){
+        if(args.isCheck){
+            Self.Getcheck(args);
+        } else {
+            Self.showBtnFlag = true;
+            args.isAutoPay = 2;
+            Self.GetClear(args); 
         }
-        Self.GetClear(args); 
     };
 
     exports.init = Self.initModule;
-    exports.initPay = Self.initPay;
+    exports.initPayment = Self.initPay;
 });

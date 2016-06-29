@@ -260,18 +260,14 @@ define(function(require, exports) {
      * @param  {object} options 付款参数
      * @return {[type]}         [description]
      */
-    scenic.initPay = function(options) {
-        var args = {
-            pageNo : 0,
-            scenicId : options.id,
-            scenicName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isOuter : true,
-            isAutoPay : 2
+    scenic.initPay = function(args) {
+        if(args.isCheck){
+            scenic.scenicCheck(args);
+        } else {
+            args.isOuter = true;
+            args.isAutoPay = 2;
+            scenic.scenicClear(args);
         }
-        scenic.scenicClear(args);
     }
     //结算
     scenic.scenicClear = function(args,$tab){
@@ -718,5 +714,5 @@ define(function(require, exports) {
     };
 
     exports.init = scenic.initModule;
-    exports.initPay = scenic.initPay;
+    exports.initPayment = scenic.initPay;
 });

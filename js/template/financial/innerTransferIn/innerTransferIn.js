@@ -725,20 +725,12 @@ define(function(require, exports) {
     };
 
     FinTransIn.initPay = function(options){
-        var args = {
-                pageNo:0,
-                businessGroupId:options.id,
-                businessGroupName:options.name,
-                startAccountTime:options.startDate,
-                endAccountTime:options.endDate,
-                accountStatus : options.accountStatus
-            };
         FinTransIn.isOut = true;
         FinTransIn.getQuery();
-        FinTransIn.getCheckList(args,null,2); 
+        FinTransIn.getCheckList(options,null,2); 
     };
 
     // 暴露方法
     exports.init = FinTransIn.initModule;
-    exports.initIncome = FinTransIn.initPay;
+    exports.initPayment = FinTransIn.initPay;
 });

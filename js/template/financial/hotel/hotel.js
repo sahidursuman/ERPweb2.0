@@ -754,15 +754,7 @@ define(function(require, exports) {
         });
     };
 
-    hotel.initPay = function(options){
-        var args = {
-            pageNo : 0,
-            hotelId : options.id,
-            hotelName : options.name,
-            startTime : options.startDate,
-            endTime : options.endDate,
-            accountStatus : options.accountStatus
-        };
+    hotel.initPay = function(args){
         $.ajax({
             url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
             type:"POST",
@@ -778,8 +770,12 @@ define(function(require, exports) {
                         }
                     }
                     hotel.hotelList = hotelList;
-                    args.isAutoPay=2;
-                    hotel.hotelClear(args);
+                    if(args.isCheck){
+                        hotel.hotelCheck(args);
+                    } else {
+                        args.isAutoPay=2;
+                        hotel.hotelClear(args);
+                    }
                 }
             }
         });
@@ -787,5 +783,5 @@ define(function(require, exports) {
     };
 
     exports.init = hotel.initModule;
-    exports.initPay = hotel.initPay;
+    exports.initPayment = hotel.initPay;
 });

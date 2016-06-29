@@ -736,17 +736,14 @@ define(function(require, exports) {
         $tab.find('.T-clear-auto').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
     };
     //暴露方法
-    OtherAccounts.initPayModule = function(options) {
-        OtherAccounts.showBtnFlag = true;
-        var args = {
-            pageNo : 0,
-            name : options.name,
-            startAccountTime : options.startDate,
-            endAccountTime : options.endDate,
-            accountStatus : options.accountStatus
-        };
-        OtherAccounts.AccountsPayment(args);
+    OtherAccounts.initPayModule = function(args) {
+        if(args.isCheck){
+            OtherAccounts.AccountsChecking(args);
+        } else {
+            OtherAccounts.showBtnFlag = true;
+            OtherAccounts.AccountsPayment(args);
+        } 
     };
     exports.init = OtherAccounts.initModule;
-    exports.initPay = OtherAccounts.initPayModule;
+    exports.initPayment = OtherAccounts.initPayModule;
 })

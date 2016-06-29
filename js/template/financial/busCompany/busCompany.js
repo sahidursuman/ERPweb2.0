@@ -787,13 +787,7 @@ define(function(require, exports) {
         });
     };
 
-    busCompany.initPay = function(options) {
-        var args = {
-            pageNo : 0,
-            startTime : options.startDate,
-            endTime : options.endDate,
-            accountStatus : options.accountStatus,
-        }
+    busCompany.initPay = function(args) {
         $.ajax({
             url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
             type: "POST",
@@ -808,15 +802,17 @@ define(function(require, exports) {
                         }
                     }
                     busCompany.busCompanyList = busCompanyList;
-                    args.busCompanyId = options.id;
-                    args.busCompanyName = options.name;
-                    args.isAutoPay = 2;
-                    busCompany.busCompanyClear(args);
+                    if(args.isCheck){
+                        busCompany.busCompanyCheck(args);
+                    } else {
+                        args.isAutoPay = 2;
+                        busCompany.busCompanyClear(args);
+                    }
                 }
             }
         });
     };
 
     exports.init = busCompany.initModule;
-    exports.initPay = busCompany.initPay;
+    exports.initPayment = busCompany.initPay;
 });

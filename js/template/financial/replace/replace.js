@@ -732,11 +732,9 @@ define(function(require, exports) {
 		Replace.balanceList(args);
 	};
 	Replace.initIncome = function(args){
-		Replace.balanceId = args.id;
+		Replace.balanceId = args.partnerAgencyId;
 		Replace.balanceName = args.name;
 		Replace.isBalanceSource = true;
-		args.pageNo = 0;
-		args.partnerAgencyId = args.id;
 		Replace.chooseCustomer();
 		Replace.balanceList(args);
 	};
@@ -1006,5 +1004,5 @@ define(function(require, exports) {
     };
 
 	exports.init = Replace.initModule;
-	exports.initIncome = Replace.initIncome;
+	exports.initPayment = Replace.initIncome;
 });

@@ -701,20 +701,16 @@ define(function(require, exports) {
         });
     };
 
-    Insure.initPay = function(options){
-        Insure.showBtnFlag = true;
-        var args = {
-            pageNo : 0,
-            insuranceId : options.id,
-            insuranceName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+    Insure.initPay = function(args){
+        if(args.isCheck){
+            Insure.GetChecking(args);
+        } else {
+            Insure.showBtnFlag = true;
+            args.isAutoPay = 2;
+            Insure.getClearing(args); 
         }
-        Insure.getClearing(args); 
     };
 
     exports.init = Insure.initModule;
-    exports.initPay = Insure.initPay;
+    exports.initPayment = Insure.initPay;
 });

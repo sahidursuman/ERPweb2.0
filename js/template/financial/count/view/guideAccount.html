@@ -15,7 +15,7 @@
     </thead>
     <tbody class="T-count-guide">
     {{each guideArrange.listMap as arrange index}}
-        <tr arrangeid = "{{arrange.id}}" isAccountGuide = "{{arrange.isAccountGuide}}">
+        <tr arrangeid = "{{arrange.id}}" isAccountGuide = "{{arrange.isAccountGuide}}" data-id="{{arrange.guideId}}" data-name="{{arrange.guideName}}" data-type="guide">
             <input name="sumIpt" type="hidden">
             <td>
                 {{each arrange.taskJson as rs}}
@@ -83,7 +83,12 @@
                     <input type="text" name="remark" value="{{arrange.remark}}" {{if arrange.isConfirmAccount == 1}}readOnly="readOnly"{{/if}}/>
                 {{/if}}
             </td>
-            <td>{{if arrange.isConfirmAccount == 0}}未对账{{else}}已对账{{/if}}</td>
+            <td>{{if arrange.isConfirmAccount == 0}}
+                    <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-check{{else}}black{{/if}}">未对账</a>
+                {{else}}
+                    <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-clear{{else}}black{{/if}}">已对账</a>
+                {{/if}}
+            </td>
         </tr>
     {{/each}}
     </tbody>

@@ -1231,16 +1231,19 @@ define(function(require, exports) {
     };
 
     FinGuide.initPayModule = function(options) {
-        options.guideId = options.id;
-        delete(options.id);
-        options.isOuter = FinGuide.isOuter = true;
         FinGuide.getGuideNameList(false,[options.startDate,options.endDate]);
-        FinGuide.initOperationModule(options, 1)
+        
+        if(options.isCheck){
+            FinGuide.initOperationModule(options, 0);
+        } else {
+            options.isOuter = FinGuide.isOuter = true;
+            FinGuide.initOperationModule(options, 1);
+        }
     };
 
     // 暴露方法
     exports.init = FinGuide.initModule;
-    exports.initPay = FinGuide.initPayModule;
+    exports.initPayment = FinGuide.initPayModule;
 	exports.viewFeeDetail = FinGuide.viewFeeDetail;
     exports.payment = FinGuide.payment;
     exports.paymentDetail = FinGuide.paymentDetail;
