@@ -1081,3 +1081,12 @@ FinancialService.viewBillImage = function(obj) {
         }
     });
 }
+
+//财务公共页面调用
+var finTempPath = "" + ASSETS_ROOT + "js/template/financial/financialTemplate/finTemp.js";
+//url，接口请求url
+FinancialService.viewPayed = function(id,url) {
+    seajs.use(finTempPath,function(module){
+        module.payedDetail(id,url);
+    });
+}
