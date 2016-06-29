@@ -375,16 +375,7 @@ define(function(require, exports) {
 		}
 	};
 
-	Ticket.initPay = function(options){
-		Ticket.isBalanceSource = true;
-		var args = {
-			pageNo : 0,
-			ticketId : options.id,
-			ticketName : options.name,
-			startDate : options.startDate,
-			endDate : options.endDate,
-			accountStatus : options.accountStatus
-		}
+	Ticket.initPay = function(args){
 		$.ajax({
 			url : KingServices.build_url('account/arrangeTicketFinancial', 'listSumFinancialTicket'),
 			type : 'POST',
@@ -397,8 +388,14 @@ define(function(require, exports) {
 					ticketNameList[i].value = ticketNameList[i].ticketName;
 				}
 				Ticket.ticketNameList = ticketNameList;
-				args.type = 1;
-				Ticket.clearingList(args);
+				if(args.isCheck){
+					Ticket.checkingList(args);
+				} else {
+					Ticket.isBalanceSource = true;
+					args.type = 1;
+					Ticket.clearingList(args);
+				}
+				
 			}
 		});
 	};
@@ -706,5 +703,5 @@ define(function(require, exports) {
     };
 	//暴露方法
 	exports.init = Ticket.initModule;
-	exports.initPay = Ticket.initPay;
+	exports.initPayment = Ticket.initPay;
 });

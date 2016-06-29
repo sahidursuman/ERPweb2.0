@@ -14,7 +14,7 @@ define(function(require, exports) {
         currentType: 4,
         accountStatus:2,
         moduleKeys: ['financial_Client', 'financial_innerTransfer_in', 'financial_shop', 'financial_replace', 'financial_Other_accounts'],
-        allKeys   : ['customer', 'inner', 'shop', 'booking'], // 全部时，type转换公式
+        allKeys   : ['customer', 'inner_in', 'shop', 'booking'], // 全部时，type转换公式
     };
 
     /**
@@ -337,33 +337,16 @@ define(function(require, exports) {
                     startDate: $tab.find('.T-start').val(),
                     endDate: $tab.find('.T-end').val(),
                     accountStatus : FinIncome.accountStatus,
-                    type: FinIncome.currentType
+                    type: FinIncome.allKeys[FinIncome.currentType]
                 },
                 type = $tr.data('type');
-
-            if (!!type) {
-                options.type = FinIncome.allKeys.indexOf(type);
+            if(!!type){
+                options.type = type;
             }
-
-            FinIncome.doIncomeTask(options);
+            FinancialService.accountList(options);
         });
 
         FinIncome.$tab = $tab;
-    };
-
-    /**
-     * 执行收款
-     * @param  {object}  options 收款的数据对象
-     * @param  {string}  type 全部时的收款类型  
-     * @return {[type]}    [description]
-     */
-    FinIncome.doIncomeTask = function(options) {
-        if (!!options) {
-            var moduleKey = FinIncome.moduleKeys[options.type];
-            seajs.use(ASSETS_ROOT + modalScripts[moduleKey], function(module) {
-                module.initIncome(options);
-            });
-        }
     };
 
     // 暴露方法

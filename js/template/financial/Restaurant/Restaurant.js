@@ -694,17 +694,9 @@ define(function(require, exports) {
         });
     };
 
-    restaurant.initPay = function(options){
-        var args = {
-            pageNo : 0,
-            restaurantId : options.id,
-            restaurantName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
-        };
-         $.ajax({
+    restaurant.initPay = function(args){
+        args.isAutoPay = 2;
+        $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
             type:"POST",
             data:{ searchParam : JSON.stringify(args) },
@@ -720,13 +712,17 @@ define(function(require, exports) {
                         }
                     }
                     restaurant.restaurantList = restaurantList;
-                    args.isAutoPay = 2;
-                    restaurant.restaurantClear(args);
+                    if(args.isCheck){
+                        restaurant.restaurantCheck(args);
+                    } else {
+                        args.isAutoPay = 2;
+                        restaurant.restaurantClear(args);
+                    }
                 }
             }
         });
     };
 
     exports.init = restaurant.initModule;
-    exports.initPay = restaurant.initPay;
+    exports.initPayment = restaurant.initPay;
 });

@@ -1035,15 +1035,7 @@ define(function(require, exports) {
         })
     };
 
-    Transfer.initPay = function(options){
-        var args = {
-            pageNo : 0,
-            partnerAgencyId : options.id,
-            partnerAgencyName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
-            accountStatus : options.accountStatus
-        }
+    Transfer.initPay = function(args){
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
             type:"POST",
@@ -1098,5 +1090,5 @@ define(function(require, exports) {
     };
 
     exports.init = Transfer.initModule;
-    exports.initPay = Transfer.initPay;
+    exports.initPayment = Transfer.initPay;
 });

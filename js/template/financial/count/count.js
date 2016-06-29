@@ -1364,6 +1364,25 @@ define(function(require, exports){
 			Count.viewTripLog(id);
 		});
 
+		//对账、付款跳转
+		$obj.find(".T-toAccount").off().on('click', function(event) {
+			event.preventDefault();
+			var $this = $(this),
+                $tr = $this.closest('tr'),
+			    args = {
+			    	id: $tr.data("id"),
+			    	name: $tr.data("name"),
+			    	tripNumber: $obj.find('.T-tripNumber').text(),
+			    	startDate: $tr.data("start"),
+			    	endDate: $tr.data("end"),
+			    	type: $tr.data("type")
+			    };
+
+			if($this.hasClass('T-check')){
+               args.isCheck = true;
+			}
+			FinancialService.accountList(args);
+		});
 		Count.loading = false;
 	};
 	//加载list
@@ -7349,6 +7368,7 @@ define(function(require, exports){
 		};
 		return newRateArr;
 	};
+
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

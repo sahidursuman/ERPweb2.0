@@ -521,15 +521,8 @@ define(function(require, exports) {
      */
     Client.initIncome = function(options) {
         Client.getTravelAgencyList();
-        Client.ClientClear(0, {
-            pageNo:0,
-            fromPartnerAgencyId: options.id,
-            partnerAgencyName: options.name,
-            startDate: options.startDate,
-            endDate: options.endDate,
-            accountStatus : options.accountStatus,
-            type: 1
-        });
+        options.type = 1;
+        Client.ClientClear(0, options);
     }
 
     Client.ClientClear = function(pageNo, args, $tab) {
@@ -1216,5 +1209,5 @@ define(function(require, exports) {
     };
 
     exports.init = Client.initModule;
-    exports.initIncome = Client.initIncome;
+    exports.initPayment = Client.initIncome;
 });

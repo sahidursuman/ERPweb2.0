@@ -40,7 +40,7 @@
             {{if busCompanyArranges.listMap.length}}
                 {{each busCompanyArranges.listMap as arrange index}}
                     <tr busArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}"
-                    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="busArrange" class="oldData">
+                    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="busArrange" class="oldData" data-id="{{arrange.companyId}}" data-name="{{arrange.companyName}}" data-type="busCompany" data-start="{{arrange.startTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.endTime | dateFormat:'yyyy-MM-dd'}}">
                         <input name="sumIpt" type="hidden">
                         <td>
                             {{if guideCount > 1 }}
@@ -334,9 +334,9 @@
 
                         <td>
                             {{if arrange.isConfirmAccount == 0}}
-                                未对账
+                                <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-check{{else}}black{{/if}}">未对账</a>
                             {{else}}
-                                已对账
+                                <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-clear{{else}}black{{/if}}">已对账</a>
                             {{/if}}
                             {{if editStatus != 2}}
                                 &nbsp;&nbsp;

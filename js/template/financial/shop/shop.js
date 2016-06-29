@@ -199,9 +199,11 @@ define(function(require, exports) {
     };
     FinShop.initPay = function(args){
         FinShop.getShopName();
-        args.shopId = args.id;
-        args.shopName = args.name;
-        FinShop.settlement(args);
+        if(args.isCheck){
+            FinShop.accountChecking(args);
+        } else {
+            FinShop.settlement(args);
+        }
     };
     /**
      * 对账和收款列表
@@ -799,5 +801,5 @@ define(function(require, exports) {
 
     // 暴露方法
     exports.init = FinShop.initModule;
-    exports.initIncome = FinShop.initPay;
+    exports.initPayment = FinShop.initPay;
 });
