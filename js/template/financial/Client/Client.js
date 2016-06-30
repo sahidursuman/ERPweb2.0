@@ -64,6 +64,7 @@ define(function(require, exports) {
                 sortType : Client.$tab.find("select[name=orderBy]").val(),
                 fromPartnerAgencyId: Client.$tab.find("input[name=fromPartnerAgencyId]").val(),
                 headerAgencyId: Client.$tab.find("input[name=headerAgencyId]").val() ,
+                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -152,14 +153,13 @@ define(function(require, exports) {
                 headerAgencyId: Client.$searchArea.find("input[name=headerAgencyId]").val() ,
                 headerAgencyName: Client.$searchArea.find("input[name=headerAgencyName]").val(),
                 fromPartnerAgencyName: Client.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
-                
                 startDate : Client.$searchArea.find('.T-search-start-date').val(),
                 endDate : Client.$searchArea.find('.T-search-end-date').val(),
                 partnerAgencyType: Client.$searchArea.find("[name=partnerAgencyType]").val(),
                 accountStatus:Client.$searchArea.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$searchArea.find(".T-money-status").find("button").data("value"),
-                sortType : Client.$searchArea.find("select[name=orderBy]").val()
-
+                sortType : Client.$searchArea.find("select[name=orderBy]").val(),
+                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
             FinancialService.exportReport(args, "exportCustomer");
         });
@@ -178,6 +178,13 @@ define(function(require, exports) {
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
             Client.listClient(0);
         });
+
+        //未收减去预收勾选事件
+        Client.$searchArea.on('click','.T-sumUnIncome',function() {
+            Client.clacReceivedMoney();
+            
+        })
+        Client.clacReceivedMoney();
         // 报表内的操作
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -207,6 +214,38 @@ define(function(require, exports) {
         });
     };
 
+    Client.clacReceivedMoney = function () {
+        //找到所有的tr  is(':checked')
+        var $that = Client.$searchArea.find('.T-sumUnIncome');
+            $trList = Client.$tab.find('.T-list').find('tr'), 
+            checkStatus = $that.is(':checked');
+        //遍历tr
+        $trList.each(function() {
+            function changeTwoDecimal($val){
+                var newVal = parseFloat($val);
+
+                if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                    return 0;
+                }
+                var newVal = Math.round($val*100)/100;
+                return newVal;
+            };
+            //准备数据
+            var settlementMoney = changeTwoDecimal($(this).find('.T-settlementMoney').text()),
+                receiveMoney = changeTwoDecimal($(this).find('.T-receiveMoney').text()),
+                balance = changeTwoDecimal($(this).find('.T-advance').text()),
+                unReceivedMoney = $(this).data('unincome'),
+                $unReceivedMoney = $(this).find('.T-unReceivedMoney'),
+                result = 0;
+            if(checkStatus){
+                result = changeTwoDecimal((settlementMoney-receiveMoney-balance));
+            } else {
+                result = unReceivedMoney;
+            }
+            $unReceivedMoney.text(result);
+        });
+    };
+
     Client.getListSumData = function(args,$tab){
         $.ajax({
             url: KingServices.build_url('financial/customerAccount', 'listPagerTotal'),
@@ -215,8 +254,19 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
+<<<<<<< HEAD
+                $tab.find('.T-sumCount').text(data.sumCount);
+                $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
+                $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
+                $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
+                $tab.find('.T-travelIncome').text(data.sumAgencyMoney);
+                $tab.find('.T-guideIncome').text(data.sumGuideMoney);
+                $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+                $tab.find('.T-sumBalance').text(data.sumBalance);
+=======
                 $tab.data("total",data);
                 Client.loadListSumData($tab);
+>>>>>>> remotes/origin/release-1.9.9.4
             }
         });
     };  

@@ -1218,6 +1218,7 @@ FinancialService.accountList = function(options) {
 };
 
 
+
 //搜索区修改(暂用)
 FinancialService.searchChange = function($tab){
     $tab.find('.T-search-area').on('change', 'input,select', function(event) {
