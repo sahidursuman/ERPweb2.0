@@ -32,17 +32,17 @@
     <tbody class="T-tourguidPer-list">
         {{each shopListdata as rs index}}
         <tr>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}" style="text-align:left">
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length}}{{else}}1{{/if}}" style="text-align:left">
                 <span>线路：{{rs.lineName}}</span><br/>
                 <span>客户：{{rs.partnerAgencyName}}</span><br/>
                 <span>团号：{{rs.tripNumber}}</span><br/>
                 <span>人数：{{rs.touristAdultCount}}大{{rs.touristChildCount}}小</span><br/>
 
             </td>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}" style="text-align:left">
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length}}{{else}}1{{/if}}" style="text-align:left">
                 <span>{{rs.guidName}}</span><br/><span>{{rs.guideMobileNumber}}</span>
             </td>
-            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length+1}}{{else}}1{{/if}}">{{rs.startTime |dateFormat: 'yyyy.MM.dd'}}<br/> - <br/> {{rs.endTime |dateFormat: 'yyyy.MM.dd'}}</td>
+            <td class="P-tdFontSize" rowspan="{{if rs.shopList.length}}{{rs.shopList.length}}{{else}}1{{/if}}">{{rs.startTime |dateFormat: 'yyyy.MM.dd'}}<br/> - <br/> {{rs.endTime |dateFormat: 'yyyy.MM.dd'}}</td>
             {{if rs.shopList.length == 0}}
                 <td></td>
                 <td></td>
@@ -52,19 +52,38 @@
                 <td></td>
                 <td></td>
                 <td></td>
+            {{else}}
+                {{each rs.shopList as shop index}}
+                {{if index == 0}}                    
+                    <td class="P-tdFontSize">{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
+                    <td class="P-tdFontSize">{{shop.shopName}}</td>
+                    <td class="P-tdFontSize" data-shoparrangeid = "{{shop.shopArrangeId}}" data-tripplanid = "{{shop.tripPlanId}}">
+                        <a href="javascript:void(0)" class="T-option T-consumeMoney"><span class='F-float F-money'>{{shop.consumeMoney}}</span></a>
+                    </td>
+                    <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.aveconsumeMoney}}</span></td>
+                    <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.guideRebateMoney}}</span></td>
+                    <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.travelAgencyRebateMoney}}</span></td>
+                    <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.sumRebateMoney}}</span></td>
+                    <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.aveRebateMoney}}</span></td>
+                {{/if}}
+                {{/each}}
             {{/if}}
         </tr>
         {{each rs.shopList as shop index}}
-        <tr shopArrangeId = "{{shop.shopArrangeId}}" tripPlanId = "{{shop.tripPlanId}}">
+        {{if index > 0}}
+        <tr>
             <td class="P-tdFontSize">{{shop.inStoreDate |dateFormat: 'yyyy-MM-dd'}}</td>
             <td class="P-tdFontSize">{{shop.shopName}}</td>
-            <td class="P-tdFontSize"><a href="javascript:void(0)" class="T-option T-consumeMoney"><span class='F-float F-money'>{{shop.consumeMoney}}</span></a></td>
+            <td class="P-tdFontSize" data-shoparrangeid = "{{shop.shopArrangeId}}" data-tripplanid = "{{shop.tripPlanId}}">
+                <a href="javascript:void(0)" class="T-option T-consumeMoney"><span class='F-float F-money'>{{shop.consumeMoney}}</span></a>
+            </td>
             <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.aveconsumeMoney}}</span></td>
             <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.guideRebateMoney}}</span></td>
             <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.travelAgencyRebateMoney}}</span></td>
             <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.sumRebateMoney}}</span></td>
             <td class="P-tdFontSize"><span class='F-float F-money'>{{shop.aveRebateMoney}}</span></td>
         </tr>
+        {{/if}}
         {{/each}}
         {{/each}}
         
