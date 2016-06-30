@@ -2,6 +2,7 @@
     <thead>
         <tr class="bg-blur T-tr-fixed">
             <th>代订单号</th>
+            <th>客户名称</th>
             <th>用车时间</th>
             <th>要求</th>
             <th>安排结果</th>
@@ -17,6 +18,7 @@
             data-end-use-time="{{rs.endUseTime | dateFormat: 'yyyy-MM-dd'}}"
             >
             <td>{{rs.orderNumber}}</td>
+            <td>{{rs.partnerAgencyName}}</td>
             <td>{{rs.startUseTime | dateFormat: 'yyyy-MM-dd'}} - {{rs.endUseTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{rs.required}}</td>
             <td>{{#rs.arrangeResult || "-"}}</td>

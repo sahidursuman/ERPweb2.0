@@ -2,6 +2,7 @@
     <thead> 
         <tr class="bg-blur">
             <th>代订单号</th>
+            <th>客户名称</th>
             <th>销售时间</th>
             <th>要求</th>
             <th>安排结果</th>
@@ -14,6 +15,7 @@
         {{each bookingOrderList as item}}
             <tr data-id="{{item.id}}">
                 <td>{{item.orderNumber}}</td>
+                <td>{{item.partnerAgencyName}}</td>
                 <td>{{item.date | dateFormat: 'yyyy-MM-dd' }}</td>
                 <td>{{item.required}}</td>
                  <td>{{#item.arrangeResult || "-"}}</td>
