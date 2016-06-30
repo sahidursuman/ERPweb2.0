@@ -57,7 +57,6 @@ define(function(require, exports) {
             .done(function(data) {
                 if (showDialog(data)) {
                     data = FinIncome.covertResponse(data);
-
                     FinIncome.$tab.find('.T-list').html(listTableTemplate(data));
                     //获取合计数据
                     var type = FinIncome.$tab.find('select[name=T-business-type]').val(),
@@ -315,6 +314,11 @@ define(function(require, exports) {
         $tab.find('.T-business-type').on('change', function(event) {
             event.preventDefault();
             FinIncome.currentType = $(this).val() * 1;
+            if(FinIncome.currentType != 4) {
+                $tab.find('.T-finIncome-export').addClass('hide');
+            }else {
+                $tab.find('.T-finIncome-export').removeClass('hide');
+            }
             FinIncome.$tab.find('.T-org-name').val('');
             FinIncome.getList();
         });
@@ -325,6 +329,18 @@ define(function(require, exports) {
             event.preventDefault();
             FinIncome.getList();
         });
+        //导出
+        $tab.find('.T-finIncome-export').on('click',function () {
+            var args = {
+                type:FinIncome.$tab.find(".T-business-type").val(),
+                resourceName: FinIncome.$tab.find(".T-org-name").val(),
+                accountTimes: FinIncome.$tab.find("input[name=accountTimes]").val(),
+                accountTimee: FinIncome.$tab.find("input[name=accountTimee]").val(),
+                incomeStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value"),
+                accountStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value")
+            };
+            FinancialService.exportReport(args, "exportFinancialIncomeMoney");
+        })
 
         // 收款
         $tab.find('.T-list').on('click', '.T-income-task', function(event)

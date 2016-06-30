@@ -427,6 +427,11 @@ define(function(require, exports) {
 		$tab.find('.T-business-type').on('change', function(event) {
 			event.preventDefault();
 			FinPay.currentType = $(this).val()*1;
+			if(FinPay.currentType != 11) {
+                $tab.find('.T-finPay-export').addClass('hide');
+            }else {
+                $tab.find('.T-finPay-export').removeClass('hide');
+            }
 			FinPay.$tab.find('.T-org-name').val('');
 			FinPay.getList();
 		});
@@ -446,6 +451,18 @@ define(function(require, exports) {
 		$tab.find('.T-btn-search').on('click', function(event) {
 		    event.preventDefault();
 		    FinPay.getList();
+		});
+
+		//导出
+		$tab.find('.T-finPay-export').on('click',function () {
+			var args = {
+                type:FinPay.$tab.find(".T-business-type").val(),
+                resourceName:FinPay.$tab.find(".T-org-name").val(),
+                startDate: FinPay.$tab.find("input[name=accountTimes]").val(),
+                endDate: FinPay.$tab.find("input[name=accountTimee]").val(),
+                incomeStatus:FinPay.$tab.find(".T-finance-status").find("button").data("value")
+            };
+			FinancialService.exportReport({searchParam: JSON.stringify(args)}, "exportFinancialPayMoney");
 		});
 
 		//状态框选择事件
