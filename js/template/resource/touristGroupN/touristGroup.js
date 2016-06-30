@@ -432,6 +432,7 @@ define(function(require, exports) {
                             if(!!memberJson.isContactUser){
                                 data.baseInfo.mobileNumber = memberJson.mobileNumber;
                                 data.baseInfo.name = memberJson.name;
+                                data.baseInfo.remark = memberJson.remark;
                                 break;
                             }
                         }
@@ -581,6 +582,7 @@ define(function(require, exports) {
                             if(!!memberJson.isContactUser){
                                 data.baseInfo.mobileNumber = memberJson.mobileNumber;
                                 data.baseInfo.name = memberJson.name;
+                                data.baseInfo.remark = memberJson.remark;
                                 break;
                             }
                         }
@@ -1324,6 +1326,7 @@ define(function(require, exports) {
             '<td><select name="idCardType" value="idCardTypeId" class="col-xs-12"><option value="0" selected="selected">身份证</option><option value="1">护照</option><option value="2">其它</option></select></td>' +
             '<td><input name="idCardNumber" type="text" class="col-sm-12  no-padding-right" /></td>' +
             '<td><label><input type="checkbox" class="ace " value="1" name="isContactUser"><span class="lbl"></span></label></td>' +
+            '<td><input type="text" class="col-xs-12" name="remark"></td>'+
             '<td><a class="cursor T-action T-delete">删除</a></td>' +
             '</tr>';
         var $tbody = $obj.find('.T-addTouristTbody')
@@ -2485,7 +2488,7 @@ define(function(require, exports) {
         seajs.use("" + ASSETS_ROOT + modalScripts.arrange_plan,function(module){
             module.addVisotorMore($obj.find('.T-addTouristTbody'), function($layer, data){
                 var $tr = $layer.find('tr[data-default="1"]');
-                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == "" && data.length > 0){
+                if($tr.length > 0 && $tr.find('[name="name"]').val() == ""&&$tr.find('[name="mobileNumber"]').val() == ""&&$tr.find('[name="idCardNumber"]').val() == ""&&$tr.find('[name="remark"]').val() == "" && data.length > 0){
                     $tr.remove();
                 }
                 touristGroup.memberNumber($layer);
@@ -3476,11 +3479,13 @@ define(function(require, exports) {
                 var $that = $(this),
                     id = $that.data('id'),
                     name = $that.find('[name="name"]').val(),
+                    remark = $that.find('[name="remark"]').val(),
                     mobileNumber = $that.find('[name="mobileNumber"]').val();
-                if(name != "" || mobileNumber != ""){
+                if(name != "" || remark != "" || mobileNumber != ""){
                     var jsonData = {
                         name : name,
                         mobileNumber : mobileNumber,
+                        remark : remark,
                         idCardType : $that.find('[name="idCardType"]').val(),
                         idCardNumber : $that.find('[name="idCardNumber"]').val(),
                         isContactUser : $that.find('[name="isContactUser"]').is(":checked") ? 1 : 0
