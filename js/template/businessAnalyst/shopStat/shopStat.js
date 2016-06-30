@@ -202,8 +202,8 @@ define(function(require, exports) {
 			if($that.hasClass('T-consumeMoney')){
 
 				//查看总打单金额
-				var shopArrangeId = $that.closest('tr').attr('shopArrangeId'),
-					tripPlanId = $that.closest('tr').attr('tripPlanId');
+				var shopArrangeId = $that.closest('td').data('shoparrangeid'),
+					tripPlanId = $that.closest('td').data('tripplanid');
 				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId,-1);
 			};
 		});
