@@ -16,9 +16,9 @@
         </div>
         <div class="form-group input-daterange mar-r-10">
             <label>账期：</label>
-            <input type="text" class="form-control T-datepicker T-start" value="{{startDate}}">
+            <input type="text" class="form-control T-datepicker T-start" name="accountTimes" value="{{startDate}}">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" class="form-control T-datepicker T-end" value="{{endDate}}">
+            <input type="text" class="form-control T-datepicker T-end" name="accountTimee" value="{{endDate}}">
         </div>
         <div class="form-group T-finance-status btn-group mar-r-10">
             <button data-value="{{accountStatus}}" data-toggle="dropdown" class="btn-sm dropdown-toggle block-up" aria-expanded="false">
@@ -49,6 +49,7 @@
             <button class="btn-sm search-btn T-btn-search">
                 <i class="ace-icon fa fa-search"></i> 搜索
             </button>
+                <button class="btn-sm search-btn mar-l-15 T-finIncome-export">导出报表</button>
         </div>
     </form>
 </div>

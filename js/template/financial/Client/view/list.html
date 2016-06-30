@@ -108,6 +108,18 @@
             <label class="control-label">未收金额合计：</label>
             <label class="control-label F-float F-money T-sumUnReceivedMoney"></label>
         </div>
+        <div class="form-group mar-r-20">
+            <label class="control-label">预收余额合计：</label>
+            <label class="control-label F-float F-money T-sumBalance"></label>
+        </div>
+        <div class="form-group mar-r-20 hct-button-right">
+            <label>
+                <input type="checkbox" class="ace T-sumUnIncome" value="1" {{if searchParam.checkBalance}}checked{{/if}} />
+                <span class="lbl">
+                    未收是否减掉预收余额
+                </span>
+            </label>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -121,6 +133,7 @@
                     <th>合同金额</th>
                     <th>结算金额</th>
                     <th>已收</th>
+                    <th>预收余额</th>
                     <th>未收金额</th>
                     <th>对账进度</th>
                     <th>收款进度</th>
@@ -129,17 +142,39 @@
             </thead>
             <tbody class="T-list">
                 {{each customerAccountList as rs}}
-                <tr data-id='{{rs.fromPartnerAgencyId}}' accountStatus='{{searchParam.accountStatus}}'>
+                <tr data-id='{{rs.fromPartnerAgencyId}}' accountStatus='{{searchParam.accountStatus}}' 
+                data-unincome="{{rs.unReceivedMoney}}">
                     <td>{{rs.headerAgencyName}}</td>
                     <td>{{rs.fromPartnerAgencyName}}</td>
                     <td><span class="F-float F-count">{{rs.sumAdultCount}}</span>大
                         <span class="F-float F-count">{{rs.sumChildCount}}</span>小
                     </td>
                     <td><span class="F-float F-money">{{rs.contractMoney}}</span></td>
-                    <td><span class="F-float F-money">{{rs.settlementMoney}}</span></td>
-                    <td><span class="F-float F-money">{{rs.receiveMoney}}</span></td>
-                    <td>{{if rs.unReceivedMoney != 0}}<span class="F-float F-money" style="color:#FF0000;">{{rs.unReceivedMoney}}</span>{{else}}{{rs.unReceivedMoney}}{{/if}}</td>
-                    <td>{{if rs.checkStep == rs.allRecord}}<span style="color:#00CC00;">{{rs.checkStep}}/{{rs.allRecord}}</span>{{else}}<span style="color:#FF9900;">{{rs.checkStep}}/{{rs.allRecord}}</span>{{/if}}</td>
+                    <td><span class="F-float F-money T-settlementMoney">{{rs.settlementMoney}}</span></td>
+                    <td><span class="F-float F-money T-receiveMoney">{{rs.receiveMoney}}</span></td>
+                    <td><span class="F-float F-money T-advance">{{rs.balance}}</span></td>
+                    <td>
+                        {{if rs.unReceivedMoney != 0}}
+                            <span class="F-float F-money T-unReceivedMoney" style="color:#FF0000;">
+                                {{rs.unReceivedMoney}}
+                            </span>
+                        {{else}}
+                            <span class="F-float F-money T-unReceivedMoney">
+                                {{rs.unReceivedMoney}}
+                            </span>
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{if rs.checkStep == rs.allRecord}}
+                            <span style="color:#00CC00;">
+                                {{rs.checkStep}}/{{rs.allRecord}}
+                            </span>
+                        {{else}}
+                            <span style="color:#FF9900;">
+                                {{rs.checkStep}}/{{rs.allRecord}}
+                            </span>
+                        {{/if}}
+                    </td>
                     <td>{{if rs.reciveStep == rs.allRecord}}<span style="color:#00CC00;">{{rs.reciveStep}}/{{rs.allRecord}}</span>{{else}}<span style="color:#FF9900;">{{rs.reciveStep}}/{{rs.allRecord}}</span>{{/if}}</td>
                     <td>
                         <a class="cursor T-action T-view">查看</a>

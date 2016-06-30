@@ -1,4 +1,2 @@
-/*TMODJS:{"debug":true,"version":17,"md5":"8ee36d141b56de326cb35feccc6e6686"}*/
-define(function(require) {
-    return require("../../../template")("financial/finIncome/view/listHeader", ' <div class="form-group mar-r-20"> <label class="control-label">应收金额合计：</label> <label class="control-label F-float F-money T-sumNeedInMoney"></label> </div> <div class="form-group mar-r-20"> <label class="control-label">已收金额合计：</label> <label class="control-label F-float F-money T-sumReceiveMoney"></label> </div> <div class="form-group"> <label class="control-label">未收金额合计：</label> <label class="control-label F-float F-money T-sumUnReceivedMoney"></label> </div>');
-});
+/*TMODJS:{"debug":true,"version":19,"md5":"6346c7a42ddd4ac27b07c8114087c7f0"}*/
+define(function(require){return require('../../../template')('financial/finIncome/view/listHeader', ' <div class="form-group mar-r-20"> <label class="control-label">结算金额合计：</label> <label class="control-label F-float F-money T-sumNeedInMoney"></label> </div> <div class="form-group mar-r-20"> <label class="control-label">已收金额合计：</label> <label class="control-label F-float F-money T-sumReceiveMoney"></label> </div> <div class="form-group"> <label class="control-label">未收金额合计：</label> <label class="control-label F-float F-money T-sumUnReceivedMoney"></label> </div>');});
