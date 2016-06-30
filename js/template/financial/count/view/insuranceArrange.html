@@ -12,7 +12,7 @@
     </thead>
     <tbody class="T-count-insurance">
         {{each insuranceArrange as arrange}}
-            <tr>
+            <tr data-id="{{arrange.insuranceId}}" data-name="{{arrange.name}}" data-type="insurance">
                 <input name="sumIpt" type="hidden">
                 <td>{{arrange.name}}</td>
                 <td>{{arrange.type}}</td>

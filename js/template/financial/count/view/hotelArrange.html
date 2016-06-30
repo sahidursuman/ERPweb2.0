@@ -38,7 +38,7 @@
         {{if hotelArrange!= null}}
             {{if hotelArrange.listMap.length}}
                 {{each hotelArrange.listMap as arrange index}}
-                    <tr whichDay = "{{arrange.whichDay}}"  arrangeType="hotelArrange" class="oldData">
+                    <tr whichDay = "{{arrange.whichDay}}"  arrangeType="hotelArrange" class="oldData" data-id="{{arrange.hotelId}}" data-name="{{arrange.hotelName}}" data-type="hotel" data-start="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}">
                         <input name="sumIpt" type="hidden">
                         <td rowspan="{{arrange.items.length}}">
                         {{if guideCount > 1}}
@@ -347,9 +347,9 @@
 
                                     <td>
                                         {{if result.isConfirmAccount == 0}}
-                                            未对账
+                                            <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-check{{else}}black{{/if}}">未对账</a>
                                         {{else}}
-                                            已对账
+                                            <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-clear{{else}}black{{/if}}">已对账</a>
                                         {{/if}}
                                         {{if editStatus != 2}}
                                             &nbsp;&nbsp;
@@ -668,9 +668,9 @@
 
                                     <td>
                                         {{if result.isConfirmAccount == 0}}
-                                            未对账
+                                            <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-check{{else}}black{{/if}}">未对账</a>
                                         {{else}}
-                                            已对账
+                                            <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-clear{{else}}black{{/if}}">已对账</a>
                                         {{/if}}
                                         {{if editStatus != 2}}
                                             &nbsp;&nbsp;

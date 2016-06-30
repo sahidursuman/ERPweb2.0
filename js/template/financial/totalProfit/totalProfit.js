@@ -32,36 +32,22 @@ define(function(require, exports) {
     TotalProfit.initEvents = function($obj,data){
         TotalProfit.$tab = $('#tab-'+ menuKey + '-content');
         TotalProfit.$searchArea = TotalProfit.$tab.find('.T-search-area');
+        TotalProfit.getListData(0,data);
 
         //格式化时间控件
         Tools.setDatePicker(TotalProfit.$tab.find(".date-picker"),true);
 
         TotalProfit.getPartnerList(TotalProfit.$searchArea.find('input[name=fromPartnerAgencyName]'));
 
+        //监听搜索区修改
+        TotalProfit.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
+            event.preventDefault();
+            TotalProfit.$tab.data('searchEdit', true);
+        });
         //搜索按钮事件
         TotalProfit.$searchArea.find('.T-search').off().on('click', function(){
-            var args = {
-                orderNumber: TotalProfit.$searchArea.find("input[name=orderNumber]").val(),
-                startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
-                endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
-                fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
-                type: TotalProfit.$searchArea.find("select[name=type]").val(),
-                outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
-                groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
-                groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
-                outOPUserId: TotalProfit.$searchArea.find("input[name=outOPUserName]").data("id"),
-                creatorName: TotalProfit.$searchArea.find("input[name=creatorName]").val(),
-                creatorId: TotalProfit.$searchArea.find("input[name=creatorName]").data("id"),
-                businessGroupName: TotalProfit.$searchArea.find("input[name=businessName]").val(),
-                businessGroupId: TotalProfit.$searchArea.find("input[name=businessName]").data("id"),
-                lineProduct: TotalProfit.$searchArea.find("input[name=lineProduct]").val(),
-                lineProductId: TotalProfit.$searchArea.find("input[name=lineProductId]").val()
-            };
-            //获取数据列表
-            TotalProfit.getListData(0, args);
-            // 获取统计数据
-            TotalProfit.getCountData(args);
-        }).trigger('click');
+            TotalProfit.getListData(0);
+        });
 
         //导出
         TotalProfit.$searchArea.find('.T-export').off().on('click', function(){
@@ -100,6 +86,7 @@ define(function(require, exports) {
                 startTime: TotalProfit.$searchArea.find("input[name=startTime]").val(),
                 endTime: TotalProfit.$searchArea.find("input[name=endTime]").val(),
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
+                fromPartnerAgencyName: TotalProfit.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
@@ -113,6 +100,7 @@ define(function(require, exports) {
                 lineProductId: TotalProfit.$searchArea.find("input[name=lineProductId]").val(),
                 pageNo: page || 0
             }
+            console.log(args);
         }
         if (page == -1) {
             if (!args.startTime || !args.endTime) {
@@ -121,6 +109,12 @@ define(function(require, exports) {
             }
             exportXLS( APP_ROOT + 'back/export.do?method=exportTotalProfit&token='+ $.cookie("token") +'&'+ $.param(args));
             return;
+        }
+
+        if(TotalProfit.$tab && TotalProfit.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            TotalProfit.$tab.data("searchEdit",false);
+            TotalProfit.$tab.data("total",false);
         }
 
         $.ajax({
@@ -137,6 +131,14 @@ define(function(require, exports) {
                     TotalProfit.$tab.find('.T-list').html(html);
 
                     TotalProfit.$tab.find('.T-recordSize').html(Tools.getRecordSizeDesc(data.searchParam.totalCount));
+
+                    // 获取统计数据
+                    if(!TotalProfit.$tab.data("searchEdit") && TotalProfit.$tab.data("total")){
+                        TotalProfit.loadSumData();
+                    } else {
+                        TotalProfit.getCountData(args);
+                    }
+                    
                     //点击线路产品事件
                     TotalProfit.$tab.find('.T-list').find('.T-transfer').off('click').on('click',function(){
                         var id = $(this).closest('tr').attr("lineProductId");
@@ -165,14 +167,20 @@ define(function(require, exports) {
             type:'POST',
             success:function(data){
                 if(showDialog(data)){
-                    TotalProfit.$tab.find('.T-totalCount').text(data.total.sumAdultCount+'大'+data.total.sumChildCount+'小');
-                    TotalProfit.$tab.find('.income').text(data.total.income);
-                    TotalProfit.$tab.find('.cost').text(data.total.cost);
-                    TotalProfit.$tab.find('.profit').text(data.total.profit);
-                    TotalProfit.$tab.find('.T-avgProfit').text(data.total.preProfit);
+                    TotalProfit.$tab.data('total', data.total);
+                    TotalProfit.loadSumData();
                 } 
             }
         });
+    };
+
+    TotalProfit.loadSumData = function(){
+        var total = TotalProfit.$tab.data("total");
+        TotalProfit.$tab.find('.T-totalCount').text(total.sumAdultCount+'大'+total.sumChildCount+'小');
+        TotalProfit.$tab.find('.income').text(total.income);
+        TotalProfit.$tab.find('.cost').text(total.cost);
+        TotalProfit.$tab.find('.profit').text(total.profit);
+        TotalProfit.$tab.find('.T-avgProfit').text(total.preProfit);
     };
 
     TotalProfit.getPartnerList = function($obj){
@@ -185,6 +193,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name=fromPartnerAgencyId]').val(ui.item.id);
             }
         }).one("click",function(){
@@ -227,7 +236,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.id);
+                $target.blur().data("id", item.id).trigger('change');
             }
         }).one('click', function(event) {
             event.preventDefault();
@@ -274,7 +283,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.businessGroupId);
+                $target.blur().data("id", item.businessGroupId).trigger('change');
                 $target.nextAll('[name=groupName]').val('').data('id','');
             }
         }).off('click').on('click', function(event) {
@@ -320,7 +329,7 @@ define(function(require, exports) {
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.groupId);
+                $target.blur().data("id", item.groupId).trigger('change');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();

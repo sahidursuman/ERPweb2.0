@@ -23,10 +23,16 @@
             {{/if}}
         </td>
         <td class="align-left"><a href="javascript:void(0)" class="T-viewDetail in-block">社付：<span class="travelPayedMoney F-float F-money">{{checking.payedMoney}}</span></a></td>
-        <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{if checking.backMoney}}{{checking.backMoney}}{{else}}{{checking.punishMoney}}{{/if}}" name="settlementMoney" {{if checking.isConfirmAccount == 1}} disabled="disabled"{{/if}}></td>
+        <td>{{if checking.isConfirmAccount == 1}}<span class="F-float F-money">{{if checking.backMoney}}{{checking.backMoney}}{{else}}{{checking.punishMoney}}{{/if}}</span>
+            {else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{if checking.backMoney}}{{checking.backMoney}}{{else}}{{checking.punishMoney}}{{/if}}" name="settlementMoney" />
+            {{/if}}
+        </td>
         <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
         <td class="T-unReceivedMoney F-float F-money" name="unPayedMoney">{{checking.unPayedMoney}}</td>
-        <td><span><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000" {{if checking.isConfirmAccount == 1}}disabled{{/if}}>{{checking.checkRemark}}</textarea></td>
+        <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}
+            {[else}}<textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{checking.checkRemark}}</textarea>
+            {{/if}}
+        </td>
         <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}{{/if}}</td>
         <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkRealname == null || checking.checkRealname == ""}}-{{else}}{{checking.checkRealname}}{{/if}}{{/if}}</td>
         <td>

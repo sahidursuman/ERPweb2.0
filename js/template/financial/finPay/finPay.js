@@ -53,6 +53,10 @@ define(function(require, exports) {
 		}
 
 		args.pageNo = pageNo || 0;
+		if(FinPay.$tab && FinPay.$tab.data("searchEdit")){
+			args.pageNo = 0;
+			FinPay.$tab.data("searchEdit",false);
+		}
 		$.ajax(FinPay.covertArgs(args))
 		.done(function(data) {
 			if (showDialog(data)) {
@@ -423,6 +427,11 @@ define(function(require, exports) {
 	FinPay.initEvent = function() {
 		var $tab = $('#tab-'+ menuKey + '-content');
 
+		//监听搜索区修改
+		$tab.find('.T-search-area').on('change', 'input', function(event) {
+			event.preventDefault();
+			FinPay.$tab.data('searchEdit',true);
+		});
 		// 搜索区域
 		$tab.find('.T-business-type').on('change', function(event) {
 			event.preventDefault();
@@ -484,35 +493,20 @@ define(function(require, exports) {
 				startDate: $tab.find('.T-start').val(),
 				endDate: $tab.find('.T-end').val(),
 				accountStatus : FinPay.accountStatus,
-				type: FinPay.currentType
+				type: FinPay.allKeys[FinPay.currentType]
 			},type = $tr.data('type');
 
 			if($(this).hasClass('T-pay-borrow')){
 				options.borrow = true;
 			}
 			if(!!type){
-				options.type = FinPay.allKeys.indexOf(type);
+				options.type = type;
 			}
-			FinPay.doIncomeTask(options);
+			FinancialService.accountList(options);
 
 		});
 
 		FinPay.$tab = $tab;
-	};
-
-	/**
-	 * 执行收款
-	 * @param  {int} id 收款记录
-	 * @return {[type]}    [description]
-	 */
-	FinPay.doIncomeTask = function(options) {
-		if (!!options) {
-			var moduleKey = FinPay.moduleKeys[options.type];
-
-			seajs.use(ASSETS_ROOT + modalScripts[moduleKey], function(module){
-				module.initPay(options);
-			});
-		}
 	};
 
 	// 暴露方法

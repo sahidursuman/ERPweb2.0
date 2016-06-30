@@ -250,6 +250,7 @@ define(function(require, exports) {
 	                    $obj.closest('div').find('input[name=lineProduct]').val(lineData.lineProductName);
 	                    $obj.closest('div').find('.T-clear-line').removeClass('hidden');
 	                    layer.close(index);
+	                    $obj.trigger('change');
 	                });
 	                //关闭
 	                $layer.find('.T-btn-close').on('click', function(){

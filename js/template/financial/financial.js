@@ -1090,3 +1090,156 @@ FinancialService.viewPayed = function(id,url) {
         module.payedDetail(id,url);
     });
 }
+
+//调用各账务模块对账、付款页面
+var allKeys = {
+    customer: "financial_Client",
+    inner_in: "financial_innerTransfer_in",
+    shop: "financial_shop",
+    booking: "financial_replace",
+    inner: "financial_innerTransfer_out",
+    transfer: "financial_transfer",
+    guide: "financial_guide",
+    restaurant: "financial_restaurant",
+    hotel: "financial_rummery",
+    busCompany: "financial_busCompany",
+    ticket: "financial_ticket",
+    scenic: "financial_scenic",
+    selfpay: "financial_self",
+    insurance: "financial_insure",
+    other: "financial_Other_accounts"
+};
+
+//不同模块的参数转换
+FinancialService.covertArgs = function(args){
+    var retArgs = {
+        pageNo:0,
+        startDate: args.startDate,
+        endDate: args.endDate,
+        type: args.type,
+        accountStatus: args.accountStatus,
+        isCheck: args.isCheck
+    };
+    switch(args.type){
+        case "customer"://客户账务
+            retArgs.fromPartnerAgencyId = args.id;
+            retArgs.partnerAgencyName = args.name;
+            break;
+        case "inner_in"://内转转入
+            retArgs.businessGroupId = args.id;
+            retArgs.businessGroupName = args.name;
+            retArgs.startAccountTime = args.startDate;
+            retArgs.endAccountTime = args.endDate;
+            break;
+        case "shop"://购物账务
+            retArgs.shopId = args.id;
+            retArgs.shopName = args.name;
+            retArgs.tripMessage = args.tripNumber;
+            break;
+        case "booking"://代订账务
+            retArgs.partnerAgencyId = args.id;
+            retArgs.name = args.name;
+            break;
+        case "inner"://内转转出
+            retArgs.toBusinessGroupId = args.id;
+            retArgs.toBusinessGroupName = args.name;
+            break;
+        case "transfer"://外转账务
+            retArgs.partnerAgencyId = args.id;
+            retArgs.partnerAgencyName = args.name;
+            break;
+        case "restaurant"://餐厅账务
+            retArgs.restaurantId = args.id;
+            retArgs.restaurantName = args.name;
+            retArgs.accountInfo = args.tripNumber;
+            break;
+        case "hotel"://酒店账务
+            retArgs.hotelId = args.id;
+            retArgs.hotelName = args.name;
+            retArgs.accountInfo = args.tripNumber;
+            retArgs.startTime = args.startDate;
+            retArgs.endTime = args.endDate;
+            break;
+        case "busCompany"://车队账务
+            retArgs.busCompanyId = args.id;
+            retArgs.busCompanyName = args.name;
+            retArgs.startTime = args.startDate;
+            retArgs.endTime = args.endDate;
+            retArgs.accountInfo = args.tripNumber;
+            retArgs.
+            break;
+        case "ticket"://票务账务
+            retArgs.ticketId = args.id;
+            retArgs.ticketName = args.name;
+            retArgs.accountInfo = args.tripNumber;
+            break;
+        case "scenic"://景区账务
+            retArgs.scenicId = args.id;
+            retArgs.scenicName = args.name;
+            retArgs.accountInfo = args.tripNumber;
+            break;
+        case "selfpay"://自费账务
+            retArgs.selfPayId = args.id;
+            retArgs.selfPayName = args.name;
+            retArgs.startTime = args.startDate;
+            retArgs.endTime = args.endDate;
+            retArgs.tripInfo = args.tripNumber;
+            break;
+        case "insurance"://保险账务
+            retArgs.insuranceId = args.id;
+            retArgs.insuranceName = args.name;
+            retArgs.accountInfo = args.tripNumber;
+            break;
+        case "other"://其他账务
+            retArgs.name = args.name;
+            retArgs.startAccountTime = args.startDate;
+            retArgs.endAccountTime = args.endDate;
+            retArgs.info = args.tripNumber;
+            break;
+        case "guide"://导游账务
+            retArgs.guideId = args.id;
+            retArgs.guideName = args.name;
+            retArgs.tripPlanNumber = args.tripNumber;
+            break;
+    }
+
+    return retArgs;
+};
+//跳转到对账、收/付款
+FinancialService.accountList = function(options) {
+    if (!!options) {
+        options = FinancialService.covertArgs(options);
+        var moduleKey = allKeys[options.type];
+
+        seajs.use(ASSETS_ROOT + modalScripts[moduleKey], function(module){
+            module.initPayment(options);
+        });
+    }
+
+
+//搜索区修改(暂用)
+FinancialService.searchChange = function($tab){
+    $tab.find('.T-search-area').on('change', 'input,select', function(event) {
+        event.preventDefault();
+        $tab.data("searchEdit",true);
+    });
+};
+
+//页码重置(暂用)
+FinancialService.getChangeArgs = function(args,$tab){
+    if($tab && $tab.data("searchEdit")){
+        args.pageNo = 0;
+        $tab.data("searchEdit",false);
+        if($tab.data("total")){
+            $tab.data("total",false);
+        }
+    }
+    return args;
+};
+//
+var all = {id:"",value:"全部"};
+FinancialService.parseList = function(list){
+    var temp = JSON.parse(list);
+    temp.unshift(all);
+    return temp;
+};

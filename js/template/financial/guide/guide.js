@@ -66,6 +66,8 @@ define(function(require, exports) {
 
             args.guideName = guideName;
         }
+        if(FinGuide.$tab && FinGuide.$tab.data('searchEdit')) { FinGuide.guideList = false;}//
+        args = FinancialService.getChangeArgs(args,FinGuide.$tab);
 
         $.ajax({
             url: KingServices.build_url('account/guideFinancial', 'listSumFinancialGuide'),
@@ -121,9 +123,15 @@ define(function(require, exports) {
             $datepicker = $searchArea.find('.datepicker');
 
         // 导游绑定
-        FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()])
+        if(FinGuide.guideList){
+            FinGuide.loadGuideNameList($searchArea.find('.T-search-name'));
+        } else {
+            FinGuide.getGuideNameList($searchArea.find('.T-search-name'), [$datepicker.eq(0).val(), $datepicker.eq(1).val()],true);
+        }
+        
         // 绑定时间控件
         Tools.setDatePicker($datepicker, true);
+        FinancialService.searchChange(FinGuide.$tab);
 
 
         $searchArea.find('.T-btn-search').on('click', function(event) {
@@ -163,7 +171,7 @@ define(function(require, exports) {
         });
     };
 
-    FinGuide.getGuideNameList = function($obj, valArray) {
+    FinGuide.getGuideNameList = function($obj, valArray,isMain) {
         var args = {};
 
         if (!!valArray && valArray.length === 2) {
@@ -180,29 +188,31 @@ define(function(require, exports) {
                 data.guideList[i].value = data.guideList[i].realname;
                 data.guideList[i].id = data.guideList[i].guideId;
             }
-            var all = {
-                id: '',
-                value: '全部'
-            };
-            FinGuide.guideList = data.guideList.slice(all);
-            if($obj){
-                data.guideList.unshift(all);
-                $obj.autocomplete({
-                    minLength: 0,
-                    source : data.guideList,
-                    change: function(event, ui) {
-                        if (!ui.item) {
-                            $(this).data('id', '');
-                        }
-                    },
-                    select: function(event, ui) {
-                        $(this).blur().data('id', ui.item.id);
-                    }
-                }).on("click", function() {
-                    $obj.autocomplete('search', '');
-                });
-            }
+            FinGuide.guideList = JSON.stringify(data.guideList);
+            FinGuide.loadGuideNameList($obj);
         });
+    };
+
+    FinGuide.loadGuideNameList = function($obj){
+        if($obj){
+            var list = FinancialService.parseList(FinGuide.guideList);
+            
+            $obj.autocomplete({
+                minLength: 0,
+                source : list,
+                change: function(event, ui) {
+                    if (!ui.item) {
+                        $(this).data('id', '');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).trigger('change');
+                    $(this).blur().data('id', ui.item.id);
+                }
+            }).on("click", function() {
+                $obj.autocomplete('search', '');
+            });
+        }
     };
 
     /**
@@ -1194,7 +1204,7 @@ define(function(require, exports) {
             name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
-            source : FinGuide.guideList,
+            source : JSON.parse(FinGuide.guideList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);
@@ -1221,16 +1231,19 @@ define(function(require, exports) {
     };
 
     FinGuide.initPayModule = function(options) {
-        options.guideId = options.id;
-        delete(options.id);
-        options.isOuter = FinGuide.isOuter = true;
         FinGuide.getGuideNameList(false,[options.startDate,options.endDate]);
-        FinGuide.initOperationModule(options, 1)
+        
+        if(options.isCheck){
+            FinGuide.initOperationModule(options, 0);
+        } else {
+            options.isOuter = FinGuide.isOuter = true;
+            FinGuide.initOperationModule(options, 1);
+        }
     };
 
     // 暴露方法
     exports.init = FinGuide.initModule;
-    exports.initPay = FinGuide.initPayModule;
+    exports.initPayment = FinGuide.initPayModule;
 	exports.viewFeeDetail = FinGuide.viewFeeDetail;
     exports.payment = FinGuide.payment;
     exports.paymentDetail = FinGuide.paymentDetail;
