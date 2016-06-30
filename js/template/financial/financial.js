@@ -1215,6 +1215,7 @@ FinancialService.accountList = function(options) {
             module.initPayment(options);
         });
     }
+};
 
 
 //搜索区修改(暂用)
