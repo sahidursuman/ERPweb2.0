@@ -31,7 +31,7 @@ define(function(require, exports) {
 			FinPay.initEvent();
 		}
 		FinPay.currentType = 11,
-		FinPay.getList();
+		FinPay.getList(); 
 	};
 
 	/**
