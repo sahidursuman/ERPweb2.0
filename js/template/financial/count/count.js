@@ -1367,8 +1367,8 @@ define(function(require, exports){
 			    	id: $tr.data("id"),
 			    	name: $tr.data("name"),
 			    	tripNumber: $obj.find('.T-tripNumber').text(),
-			    	startDate: $tr.data("start"),
-			    	endDate: $tr.data("end"),
+			    	// startDate: $tr.data("start"),
+			    	// endDate: $tr.data("end"),
 			    	type: $tr.data("type")
 			    };
 
@@ -1385,11 +1385,11 @@ define(function(require, exports){
 		$obj.find('.T-tripCost').html(tripGroupHtml)
 		if(data.editStatus !=2){
 			//加载购物安排列表
-			var shopHtml = shopArrangeTemplate(data);
+			var shopHtml = Count.filterUnAuth(shopArrangeTemplate(data));
 			$obj.find('.T-shop-add').html(shopHtml);
 
 			//加载自费安排列表
-			var selfHtml = selfArrangeTemplate(data);
+			var selfHtml = Count.filterUnAuth(selfArrangeTemplate(data));
 			$obj.find('.T-self-add').html(selfHtml);
 		};
 
@@ -1398,11 +1398,11 @@ define(function(require, exports){
 		$obj.find('.T-income').html(otherInHtml);
 		
 		//保险列表
-		var insuranceHtml = insuranceArrangeTemplate(data);
+		var insuranceHtml = Count.filterUnAuth(insuranceArrangeTemplate(data));
 		$obj.find('.T-insurance').html(insuranceHtml);
 
 		//车费列表 
-		var busHtml = busArrangeTemplate(data);
+		var busHtml = Count.filterUnAuth(busArrangeTemplate(data));
 		$obj.find('.T-bus').html(busHtml)
 		.on('click', '.T-payedDetail', function(event) {
 			event.preventDefault();
@@ -1410,27 +1410,27 @@ define(function(require, exports){
 		});;
 
 		//餐费列表 
-		var restHtml = restArrangeTemplate(data);
+		var restHtml = Count.filterUnAuth(restArrangeTemplate(data));
 		$obj.find('.T-restaurant').html(restHtml);
 
 		//房费列表 
-		var hotelHtml = hotelArrangeTemplate(data);
+		var hotelHtml = Count.filterUnAuth(hotelArrangeTemplate(data));
 		$obj.find('.T-hotel').html(hotelHtml);
 
 		//景区费用列表列表 
-		var scenicHtml = scenicArrangeTemplate(data);
+		var scenicHtml = Count.filterUnAuth(scenicArrangeTemplate(data));
 		$obj.find('.T-scenic').html(scenicHtml);
 
 		//票务费用列表列表 
-		var ticketHtml = ticketArrangeTemplate(data);
+		var ticketHtml = Count.filterUnAuth(ticketArrangeTemplate(data));
 		$obj.find('.T-ticket').html(ticketHtml);
 
 		//其他支出费用列表列表  guideTamplate
-		var otherOutHtml = otherOutTemplate(data);
+		var otherOutHtml = Count.filterUnAuth(otherOutTemplate(data));
 		$obj.find('.T-otherOut').html(otherOutHtml);
 
 		//导游列表
-		var guideHtml = guideTamplate(data);
+		var guideHtml = Count.filterUnAuth(guideTamplate(data));
 		$obj.find('.T-guide').html(guideHtml);
 		//页面事件 
 		if(data.editStatus == 0){
@@ -7405,6 +7405,46 @@ define(function(require, exports){
 			}
 		};
 		return newRateArr;
+	};
+
+	//权限过滤
+	Count.filterUnAuth = function(obj) {
+		if(!obj){
+			return;
+		}
+		var $obj = $(obj);
+		$obj.find(".R-right").each(function(){
+			var auth = Count.authCheck($(this).data("right"));
+			if(!auth){
+				$(this).removeClass('T-toAccount').addClass('black');
+			} else if(auth == "check" && $(this).hasClass('T-clear')){
+				//如果同时有取消对账和付款权限，付款权限优先
+				$(this).removeClass('T-clear').addClass('T-check');
+			}
+		});
+		return $obj;
+	}
+
+	Count.authCheck = function(codes){
+		var auth = false;
+		if (!IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip){
+			return res;
+		}
+		var functionList = IndexData.userInfo.listUserFunctionShip;
+		codes = (codes+'').split('|');	//考虑权限合并的情况
+
+		if(Object.prototype.toString.call(codes) === '[object Array]'){
+			codes.forEach(function(code,index) {
+				if (functionList.indexOf(code) >= 0) {
+					if(index == 0){
+						auth = "check";
+					} else if(index == 1){
+						auth = "clear";
+					}
+				}
+			});
+		}
+		return auth;
 	};
 
 	exports.init = Count.initModule;

@@ -333,9 +333,9 @@
                                 <div class="div-h-30"></div>
                             {{/if}}
                             {{if arrange.isConfirmAccount == 0}}
-                                <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-check{{else}}black{{/if}}">未对账</a>
+                                <a class="R-right {{if editStatus == 1}}T-toAccount T-check{{else}}black{{/if}}" data-right="1320002">未对账</a>
                             {{else}}
-                                <a class="{{if tripPlan.billStatus > -1}}T-toAccount T-clear{{else}}black{{/if}}">已对账</a>
+                                <a class="R-right {{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}" data-right="1320005|1320003">已对账</a>
                             {{/if}}
                             {{if editStatus != 2}}
                                 &nbsp;&nbsp;
