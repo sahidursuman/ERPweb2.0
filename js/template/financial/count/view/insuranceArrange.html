@@ -12,7 +12,7 @@
     </thead>
     <tbody class="T-count-insurance">
         {{each insuranceArrange as arrange}}
-            <tr data-id="{{arrange.insuranceId}}" data-name="{{arrange.name}}" data-type="insurance">
+            <tr data-id="{{arrange.insuranceId}}" data-name="{{arrange.name}}" data-type="insurance" data-start="{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}">
                 <input name="sumIpt" type="hidden">
                 <td>{{arrange.name}}</td>
                 <td>{{arrange.type}}</td>
