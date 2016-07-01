@@ -254,14 +254,6 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find('.T-sumCount').text(data.sumCount);
-                $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
-                $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
-                $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
-                $tab.find('.T-travelIncome').text(data.sumAgencyMoney);
-                $tab.find('.T-guideIncome').text(data.sumGuideMoney);
-                $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
-                $tab.find('.T-sumBalance').text(data.sumBalance);
                 $tab.data("total",data);
                 Client.loadListSumData($tab);
             }
