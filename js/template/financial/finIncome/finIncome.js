@@ -16,7 +16,7 @@ define(function(require, exports) {
         moduleKeys: ['financial_Client', 'financial_innerTransfer_in', 'financial_shop', 'financial_replace', 'financial_Other_accounts'],
         allKeys   : ['customer', 'inner_in', 'shop', 'booking'], // 全部时，type转换公式
     };
-
+ 
     /**
      * 初始化页面
      * @return {[type]} [description]
@@ -356,12 +356,11 @@ define(function(require, exports) {
         //导出
         $tab.find('.T-finIncome-export').on('click',function () {
             var args = {
-                type:FinIncome.$tab.find(".T-business-type").val(),
                 resourceName: FinIncome.$tab.find(".T-org-name").val(),
                 accountTimes: FinIncome.$tab.find("input[name=accountTimes]").val(),
                 accountTimee: FinIncome.$tab.find("input[name=accountTimee]").val(),
-                // incomeStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value"),
-                accountStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value")
+                incomeStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value"),
+                accountStatus : FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value")
             };
             FinancialService.exportReport(args, "exportFinancialIncomeMoney");
         })
