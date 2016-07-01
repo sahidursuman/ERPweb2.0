@@ -276,6 +276,7 @@ define(function(require, exports) {
         $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
         $tab.find('.T-guideIncome').text(total.sumGuideMoney);
         $tab.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
+        $tab.find('.T-sumBalance').text(total.sumBalance);
     };
 
     Client.ClientCheck = function(pageNo, args, $tab, isView){
