@@ -1367,8 +1367,8 @@ define(function(require, exports){
 			    	id: $tr.data("id"),
 			    	name: $tr.data("name"),
 			    	tripNumber: $obj.find('.T-tripNumber').text(),
-			    	startDate: $tr.data("start"),
-			    	endDate: $tr.data("end"),
+			    	// startDate: $tr.data("start"),
+			    	// endDate: $tr.data("end"),
 			    	type: $tr.data("type")
 			    };
 
