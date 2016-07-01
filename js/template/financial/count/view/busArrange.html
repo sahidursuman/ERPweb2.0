@@ -334,9 +334,9 @@
 
                         <td>
                             {{if arrange.isConfirmAccount == 0}}
-                                <a class="{{if editStatus == 1}}T-toAccount T-check{{else}}black{{/if}}">未对账</a>
+                                <a class="R-right {{if editStatus == 1}}T-toAccount T-check{{else}}black{{/if}}" data-right="1230002">未对账</a>
                             {{else}}
-                                <a class="{{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}">已对账</a>
+                                <a class="R-right {{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}" data-right="1230005|1230003">已对账</a>
                             {{/if}}
                             {{if editStatus != 2}}
                                 &nbsp;&nbsp;
