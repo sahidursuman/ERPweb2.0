@@ -378,7 +378,7 @@
                         {{if arrange.items.length}}
                             {{each arrange.items as result i}}
                                 {{if i > 0}}
-                                <tr  whichDay="{{arrange.whichDay}}" arrangeType="scenicArrange">
+                                <tr  whichDay="{{arrange.whichDay}}" arrangeType="scenicArrange" data-id="{{arrange.scenicId}}" data-name="{{arrange.scenicName}}" data-type="scenic" data-start="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}">
                                     <input name="sumIpt" type="hidden">
                                     <input name="scenicArrangeId" value="{{result.id}}" type="hidden" /><!-- 安排id -->
                                     <input name="badStatus" value="{{result.badStatus}}" type="hidden" /><!-- 是否坏账 -->
