@@ -3,6 +3,7 @@
     <thead>
         <tr class="bg-blur">
             <th>代订单号</th>
+            <th>客户名称</th>
             <th>类型</th>
             <th>出发时间</th>
             <th>路程</th>
@@ -24,6 +25,7 @@
             data-seat-level="{{rs.seatLevel}}"
             data-member-count="{{rs.memberCount}}">
             <td>{{rs.orderNumber}}</td>
+            <td>{{rs.partnerAgencyName}}</td>
             <td>{{rs.type | getTicketText}}</td>
             <td>{{rs.startTime | dateFormat: 'yyyy-MM-dd hh:mm'}}</td>
             <td>{{rs.startingCity}} - {{rs.arriveCity}}</td>

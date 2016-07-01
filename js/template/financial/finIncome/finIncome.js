@@ -360,7 +360,7 @@ define(function(require, exports) {
                 resourceName: FinIncome.$tab.find(".T-org-name").val(),
                 accountTimes: FinIncome.$tab.find("input[name=accountTimes]").val(),
                 accountTimee: FinIncome.$tab.find("input[name=accountTimee]").val(),
-                incomeStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value"),
+                // incomeStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value"),
                 accountStatus: FinIncome.$tab.find(".T-finance-status").find("button").data("value")
             };
             FinancialService.exportReport(args, "exportFinancialIncomeMoney");

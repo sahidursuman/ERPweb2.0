@@ -1,9 +1,15 @@
 <div class="T-search-area search-area globalAdd">
-	<input name="partnerAgency_travelAgencyName" class="col-xs-2 input-default-height T-partnerAgencyName guideInputListAging" value="{{searchParam.travelAgencyName}}" placeholder="请输入客户名称、联系人或联系电话关键词"/>&nbsp;
-	<button class="btn-sm btn-partnerAgency-search search-btn T-partnerAgency-search" style="margin-left: -8px">
-		<i class="ace-icon fa fa-search"></i>
-		搜索
-	</button>
+	<label>客户相关信息 </label>
+	<input name="partnerAgency_travelAgencyName" class="input-default-height T-partnerAgencyName guideInputListAging" value="{{searchParam.travelAgencyName}}" placeholder="请输入客户名称、联系人或联系电话关键词" style="width:250px;" />
+	
+	<label style="margin-left: 20px">类型 </label>
+	<select name="type">
+		<option value="">全部</option>
+		<option value="0" {{if searchParam.type == 0}}selected{{/if}}>地接社</option>
+		<option value="1" {{if searchParam.type == 1}}selected{{/if}}>组团社</option>
+		<option value="2" {{if searchParam.type == 2}}selected{{/if}}>地接社和组团社</option>
+	</select>
+
 	<div class="btn-group T-select-status" style="margin-left: 20px">
 		<button data-value="{{searchParam.status}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up" aria-expanded="false">
 			<span>
@@ -30,6 +36,10 @@
 			</li>
 		</ul>
 	</div>
+	<button class="btn-sm btn-partnerAgency-search search-btn T-partnerAgency-search" style="margin-left: 20px">
+		<i class="ace-icon fa fa-search"></i>
+		搜索
+	</button>
 	<button class="btn btn-sm btn-success btn-partnerAgency-add R-right T-partnerAgency-add" data-right="1150002" style="margin-left: 20px">
 		<i class="ace-icon fa fa-plus"></i>
 		新增客户

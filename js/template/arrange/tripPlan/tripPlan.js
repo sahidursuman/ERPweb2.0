@@ -879,6 +879,7 @@ define(function(require, exports) {
                 isContactUser : $that.find('[name="isContactUser"]').is(":checked") ? 1 : 0,
                 mobileNumber : $that.find('[name="mobileNumber"]').val(),
                 name : $that.find('[name="name"]').val(),
+                remark : $that.find('[name="remark"]').val()
             });
         });
         if(!isMobileNumber){
