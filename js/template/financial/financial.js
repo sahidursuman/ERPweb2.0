@@ -432,6 +432,26 @@ FinancialService.updateSumPayMoney = function($tab,rule){
     });
 };
 
+//财务对账行处理
+FinancialService.checkAuthFilter = function(checkTr,codes){
+    codes = (codes+'').split('|'); 
+    if(Object.prototype.toString.call(codes) === '[object Array]'){
+        codes.forEach(function(code,index) {
+            if (!isAuth(code)) {
+                checkTr.each(function(i){
+                    var $tr = checkTr.eq(i),
+                        confirm = $tr.data("confirm");
+                    if(index == 0 &&　!confirm){//没有对账权限
+                        $tr.find('input[type=text],textarea,input[type=checkbox]').prop("disabled",true);
+                    }　else if(index == 1 && confirm){//没有取消对账权限
+                        $tr.find('input[type=checkbox]').prop("disabled",true);
+                    }
+                });
+            }
+        });
+    }
+};
+
 //付款-翻页暂存数据读取
 FinancialService.getTempDate = function(resultList,tempJson,isGuide){//isGuide标识是否为导游付款
     if(!!tempJson && tempJson.length){
@@ -633,25 +653,23 @@ FinancialService.initCheckBoxs = function($checkAll,checkboxList){//$checkAll全
 
     //给全选按钮绑定事件
     $checkAll.click(function(){
-        if($checkAll.is(":checked")){
-            checkboxList.each(function(i){
-                $(this).prop("checked",true);
-                if($(this).closest('tr').data("confirm") == 0){
-                    $(this).closest('tr').data("change",true);
-                    $(this).closest('.tab-pane').data("isEdited",true);
-                }else{
-                    $(this).closest('tr').data("change",false);
-                }
-            });
-        } else{
-            checkboxList.each(function(i){
-                if(!$(this).prop("disabled")){
+        checkboxList.each(function(i){
+            if(!$(this).prop("disabled")){
+                if($checkAll.is(":checked")){
+                    $(this).prop("checked",true);
+                    if($(this).closest('tr').data("confirm") == 0){
+                        $(this).closest('tr').data("change",true);
+                        $(this).closest('.tab-pane').data("isEdited",true);
+                    }else{
+                        $(this).closest('tr').data("change",false);
+                    }
+                } else{
                     $(this).closest('tr').data("change",true);
                     $(this).closest('.tab-pane').data("isEdited",true);
                     $(this).prop("checked",false);
-                }                                
-            });
-        } 
+                }
+            }
+        });
     });
 
     checkboxList.on("click",function(){
