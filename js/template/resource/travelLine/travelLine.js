@@ -443,7 +443,7 @@ define(function(require, exports) {
 				ue = init_editor("schedule-detail-editor-" + time,{zIndex:99999999}, EDITOR_HEIGHT);
 				if (!! data.description) {
 					ue.ready(function(){
-						ue.setContent(decodeURIComponent(data.description));
+						ue.setContent(data.description);
 					});
 				}		
 				
@@ -451,7 +451,7 @@ define(function(require, exports) {
 				//给提交按钮绑定事件
                 $container.find(".T-btn-submit").on('click' , function() {
                 	var content = UE.getEditor($container.find('.T-editor').prop('id')).getContent()
-                	$this.data('entity-content', encodeURIComponent(content))
+                	$this.data('entity-content', content)
                    	layer.close(updateDetailsLayer);
                 });
 				// 取消按钮绑定事件
@@ -723,7 +723,7 @@ define(function(require, exports) {
 					   	whichDay: $tr.data('day') + 1,
 						BriefTrip: $tr.find("input[name=BriefTrip]").val(),
 						LodgingPlace: $tr.find("input[name=LodgingPlace]").val(),
-						detail: $tr.find(".T-details").data('entity-content'),
+						detail: encodeURIComponent($tr.find(".T-details").data('entity-content')),
 						roadScenic: $tr.find("input[name=chooseScenic]").val(),
 						scenicItemIds: ResTravelLine.jsonToString($tr.find('input[name=chooseScenic]').data('propover'))
 					}, repastDetail = [];

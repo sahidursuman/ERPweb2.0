@@ -813,7 +813,7 @@ define(function(require, exports) {
         //小组信息表内操作
         $tab.find('.T-team-info').on('click', '.T-action', function(event){
             event.preventDefault();
-            var $that = $(this);
+            var $that = $(this), isInner = $that.closest('tr').attr('data-is-inner')
             if($that.hasClass('T-client')){
                 touristGroup.chooseClient($that);
             }else if($that.hasClass('T-search-trip')){
@@ -836,7 +836,7 @@ define(function(require, exports) {
             }else if($that.hasClass('T-add-client')){
                 KingServices.addPartnerAgency(function(formData){});
             }else if($that.hasClass('T-fee-adjust')){
-                touristGroup.updateJionGroupMoney($that, 0, 2);
+                touristGroup.updateJionGroupMoney($that, 0, 2,'',isInner);
             }
         });
         $tab.find('.T-team-info').on('change', '[name="singlePlanDefine"], [name="singlePlanDefine-add"]', function(){
@@ -1581,6 +1581,11 @@ define(function(require, exports) {
         var $layer = $(obj);
         var $tbody = $layer.find('.T-addTouristTbody'),
             validate = rule.checkGuest($layer);
+        $layer.off().on('click', '.T-btn-close', function(event) {
+            event.preventDefault();
+            layer.close(index);
+        });
+
         $layer.find('.T-add-tourist-more').on('click', function(){
             touristGroup.batchAddTourists($layer, validate);
         });
@@ -1696,14 +1701,17 @@ define(function(require, exports) {
     };
 
     //更新/查看 应收团款
-    touristGroup.updateJionGroupMoney = function($that, type, optionType, remark){
+    touristGroup.updateJionGroupMoney = function($that, type, optionType, remark, isInnerTransferConfirm){
         if (optionType === 2) {
             $that = $that.prev();
         }
         var title = "应收团款", data = {}, moneyData = $that.data('json'), html = "", groupType = $that.closest('.T-container').data('type');
         if(typeof moneyData !== "object"){
             moneyData = JSON.parse(moneyData || "{}");
+        }else{
+            moneyData.isInnerTransferConfirm = isInnerTransferConfirm;
         }
+
         if(!!type){
             moneyData.type = type;
             title = "线路应付";
