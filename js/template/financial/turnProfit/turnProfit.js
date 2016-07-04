@@ -26,12 +26,12 @@ define(function(require, exports) {
 
     TurnProfit.listTurnProfit = function(page,args) {
         args = TurnProfit.getArgs(page,args);
-        if (args.page == -1) {
-            if (!TurnProfit.searchParam.startTime || !TurnProfit.searchParam.endTime) {
+        if (args.pageNo == -1) {
+            if (!args.startTime || !args.endTime) {
                 showMessageDialog("请选择时间区间"); 
                 return false;
             }
-            exportXLS( APP_ROOT + 'back/export.do?method=exportArrangeTransferProfit&token='+ $.cookie("token") + '&' + $.param(TurnProfit.searchParam));
+            exportXLS( APP_ROOT + 'back/export.do?method=exportArrangeTransferProfit&token='+ $.cookie("token") + '&' + $.param(args));
             return;
         }
         $.ajax({

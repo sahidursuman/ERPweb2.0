@@ -267,7 +267,7 @@ define(function(require, exports) {
                         Replace.getCheckSumData(args,Replace.$checkingTab);
                     }
                     //取消对账权限过滤
-                    checkDisabled(data.bookinAccountList,Replace.$checkingTab.find(".T-checkTr"),Replace.$checkingTab.find(".T-checkList").data("right"));
+                    FinancialService.checkAuthFilter(Replace.$checkingTab.find(".T-checkTr"),Replace.$checkingTab.find(".T-checkList").data("right"));
 					Replace.CM_event(Replace.$checkingTab,args,true);
 				} else {
 					Replace.$checkingTab.data('next', args)

@@ -135,7 +135,7 @@
                 <th style="min-width: 115px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-checkList">
+        <tbody class="T-checkList" data-right="1280002|1280005">
             {{if customerAccountList != null}}
         	{{each customerAccountList as rs listIndex}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-gid="{{rs.touristGroupId}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" data-status="{{rs.status}}">
@@ -201,11 +201,11 @@
                 <td>{{rs.checkUserName}}</td>
                 <td>
                     {{if view == 1}}{{else}}
-                    <label class="pos-rel  R-right" {{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}>
+                    <label class="pos-rel">
                         <input type="checkbox" class="ace T-checkbox"  {{ if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1) }} checked="checked" {{/if}}/> 
                         <span class="lbl">对账</span>
                     </label>
-                    <label class="cursor R-right"{{ if rs.isConfirmAccount }} data-right="1280005" {{else}}  data-right="1280002"  {{/if}}><a> |</a></label>{{/if}}
+                    <label class="cursor"><a> |</a></label>{{/if}}
                     <a class="cursor T-action T-view">查看</a>
                 </td>
             </tr>

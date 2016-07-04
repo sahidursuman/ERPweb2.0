@@ -85,7 +85,7 @@
                     <th width="110">对账</th>
                 </tr>
             </thead>
-            <tbody class="T-checkList" data-right="1300005">
+            <tbody class="T-checkList" data-right="1300002|1300005">
                 {{each financialTransferList as rs}}
                 <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.change}}change="true"{{/if}} {{if rs.outFeeList.length> 0}}data-trans="true"{{/if}}>
                     <td rowspan="{{rs.rowLen}}"><a class="T-option T-orderNumber" data-id="{{rs.arrangeId}}">{{rs.orderNumber}}</a></td>

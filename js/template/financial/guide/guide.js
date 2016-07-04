@@ -703,7 +703,7 @@ define(function(require, exports) {
                                 }
                                 $tab.find('.T-sumPayMoney').val(sumPayMoney);
                             }
-                            html = filterUnAuth(payingTableTemplate(data));
+                            html = payingTableTemplate(data);
                             if(FinGuide.payingJson && FinGuide.payingJson.length > 0){
                                 $tab.data('isEdited',true);
                             }
@@ -722,6 +722,8 @@ define(function(require, exports) {
                         if (!type) {
                             //给全选按钮绑定事件: 未去重
                             FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+                            //对账、取消对账权限过滤
+                            FinancialService.checkAuthFilter($tab.find(".T-checkTr"),$tab.find(".T-checkList").data("right"));
                         }
                         var validator = new FinRule(type ? (FinGuide.isOuter ? 3 : 1) : 3);
                         FinancialService.updateSumPayMoney($tab, validator);

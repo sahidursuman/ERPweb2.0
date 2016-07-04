@@ -54,7 +54,7 @@ define(function(require, exports){
 		var html = listHeaderTamplate();
 		Tools.addTab(listTabId,'报账审核',html);
 		//获取主体列表数据
-		Count.listCountBody(0);
+		Count.listCountBody(0,{});
     	
     	//搜索区域事件绑定
     	Count.initListHeaderEvents();

@@ -169,6 +169,7 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Client.$tab.data("searchEdit",true);
             Client.listClient(0);
         });
         Client.$searchArea.find(".T-money-status").on('click','a',function(event){
@@ -176,13 +177,14 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+             Client.$tab.data("searchEdit",true);
             Client.listClient(0);
         });
 
         //未收减去预收勾选事件
         Client.$searchArea.on('click','.T-sumUnIncome',function() {
             Client.clacReceivedMoney();
-            Client.loadListSumData(Client.$tab);
+            
         })
         Client.clacReceivedMoney();
         // 报表内的操作
@@ -261,15 +263,13 @@ define(function(require, exports) {
     };  
     Client.loadListSumData = function($tab){
         var total = $tab.data("total");
-        var isSumUnIncome = $tab.find('.T-sumUnIncome').prop('checked'),
-            sumUnReceivedMoney = isSumUnIncome ? (total.sumUnReceivedMoney - total.sumBalance) : total.sumUnReceivedMoney;
         $tab.find('.T-sumCount').text(total.sumCount);
         $tab.find('.T-sumContractMoney').text(total.sumContractMoney);
         $tab.find('.T-sumStMoney').text(total.sumSettlementMoney);
         $tab.find('.T-sumReceiveMoney').text(total.sumReceiveMoney);
         $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
         $tab.find('.T-guideIncome').text(total.sumGuideMoney);
-        $tab.find('.T-sumUnReceivedMoney').text(sumUnReceivedMoney);
+        $tab.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
         $tab.find('.T-sumBalance').text(total.sumBalance);
     };
 
@@ -325,6 +325,7 @@ define(function(require, exports) {
                     }
                     
                     Client.initCheck($tab,args,isView);
+                    FinancialService.checkAuthFilter($tab.find(".T-checkTr"),$tab.find(".T-checkList").data("right"));
                     Client.viewFeeDetails($tab,resultList);
                 } else {
                     Client.$checkTab.data("next",args);

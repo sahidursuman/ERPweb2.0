@@ -291,8 +291,8 @@ define(function(require, exports) {
                             total.sumUnReceiveMoney = FinShop.checkTemp.sumUnPayedMoney;
                             $theTab.data('total',total);
                         };
-                        //取消对账权限过滤
-                        checkDisabled(data.shopAccountList,$theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
+                        //对账、取消对账权限过滤
+                        FinancialService.checkAuthFilter($theTab.find(".T-checkTr"),$theTab.find(".T-checkList").data("right"));
                         FinShop.sumShopMoney(FinShop.$checkingTab);
                     }
                     /**

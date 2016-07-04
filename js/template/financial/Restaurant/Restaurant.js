@@ -173,8 +173,7 @@ define(function(require, exports) {
                             restaurant.$checkTab.data('isEdited',true);
                         }
                         restaurant.initCheck(args,restaurant.$checkTab); 
-                        //取消对账权限过滤
-                        checkDisabled(frList,restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
+                        FinancialService.checkAuthFilter(restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
                     } else {
                         restaurant.$checkTab.data('next', args);
                     }

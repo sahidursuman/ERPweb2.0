@@ -176,8 +176,8 @@ define(function(require, exports) {
                             hotel.$checkTab.data('isEdited',true);
                         }
                         hotel.initCheck(args,hotel.$checkTab); 
-                        //取消对账权限过滤
-                        checkDisabled(fhList,hotel.$checkTab.find(".T-checkTr"),hotel.$checkTab.find(".T-checkList").data("right"));
+                        //对账、取消对账权限过滤
+                        FinancialService.checkAuthFilter(hotel.$checkTab.find(".T-checkTr"),hotel.$checkTab.find(".T-checkList").data("right"));
                     } else {
                         hotel.$checkTab.data('next',args);
                     }

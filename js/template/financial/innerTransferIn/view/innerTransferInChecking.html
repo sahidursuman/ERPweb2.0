@@ -98,7 +98,7 @@
                  <th style="width:105px">对账</th>  
             </tr>
             </thead>   
-            <tbody class="T-checkList" data-right="1360005">
+            <tbody class="T-checkList" data-right="1360001|1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
             <tr class="T-checkTr {{if checking.change}}success{{/if}}" data-id="{{checking.id}}" data-confirm ="{{checking.isConfirmAccount}}" {{if checking.change}}data-change="true"{{/if}}>
                 <td>{{checking.orderNumber}}</td>
