@@ -117,7 +117,7 @@
                 <th>对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList" data-right="1290005">
+        <tbody class="T-list T-checkList" data-right="1290002|1290005">
         {{each bookinAccountList as rs index}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.orderNumber}}</td>

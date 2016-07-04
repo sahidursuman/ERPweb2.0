@@ -39,6 +39,7 @@ define(function(require, exports) {
             accountStatus : accountStatus == undefined ? "2" : accountStatus,
             sortType: 'auto'
         }
+        OtherAccounts.searchData = FinancialService.getChangeArgs(OtherAccounts.searchData,OtherAccounts.$tab);
         $.ajax({
             url: KingServices.build_url("account/arrangeOtherFinancial", "listFinancialOther"),
             type: "POST",
@@ -83,6 +84,7 @@ define(function(require, exports) {
         // 初始化jQuery 对象
         var $container = $(".T-other");
         var $obj = OtherAccounts.$tab.find('.T-search-head-office');
+        FinancialService.searchChange(OtherAccounts.$tab);
         OtherAccounts.getTravelAgencyList($obj);
         //搜索按钮事件
         OtherAccounts.$tab.find('.T-search').click(function(event) {
@@ -329,7 +331,7 @@ define(function(require, exports) {
                         }
                     },
                     select: function(event, ui) {
-                        $obj.val(ui.item.name).closest('.tab-pane-menu').find('.T-search').trigger('click');
+                        $obj.val(ui.item.name).trigger("change").closest('.tab-pane-menu').find('.T-search').trigger('click');
                     },
                     source: OtherAccounts.projList,
                 }).off('click').on('click', function() {
@@ -734,17 +736,14 @@ define(function(require, exports) {
         $tab.find('.T-clear-auto').html(disable ? '<i class="ace-icon fa fa-times"></i> 取消下账' : '<i class="ace-icon fa fa-check-circle"></i> 自动下账').toggleClass('btn-primary btn-warning');
     };
     //暴露方法
-    OtherAccounts.initPayModule = function(options) {
-        OtherAccounts.showBtnFlag = true;
-        var args = {
-            pageNo : 0,
-            name : options.name,
-            startAccountTime : options.startDate,
-            endAccountTime : options.endDate,
-            accountStatus : options.accountStatus
-        };
-        OtherAccounts.AccountsPayment(args);
+    OtherAccounts.initPayModule = function(args) {
+        if(args.isCheck){
+            OtherAccounts.AccountsChecking(args);
+        } else {
+            OtherAccounts.showBtnFlag = true;
+            OtherAccounts.AccountsPayment(args);
+        } 
     };
     exports.init = OtherAccounts.initModule;
-    exports.initPay = OtherAccounts.initPayModule;
+    exports.initPayment = OtherAccounts.initPayModule;
 })

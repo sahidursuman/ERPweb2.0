@@ -112,6 +112,7 @@
                 <th class="th-border">年龄</th>
                 <th class="th-border">客源地</th>
                 <th class="th-border">是否联系人</th>
+                <th class="th-border">游客备注</th>
                 {{if basicInfo.tripPlanType == 0}}
                 <th class="th-border">全陪</th>
                 <th class="th-border">全陪电话</th>
@@ -144,7 +145,9 @@
                     <td>{{item.touristGroupMemberList[0].age}}</td>
                     <td>{{item.touristGroupMemberList[0].area}}</td>
                     <td>{{if item.touristGroupMemberList[0].isContactUser == 1}}是{{else}}{{/if}}</td>
+                    <td>{{item.touristGroupMemberList[0].remark}}</td>
                     {{else}}
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -174,6 +177,7 @@
                     <td>{{member.age}}</td>
                     <td>{{member.area}}</td>
                     <td>{{if member.isContactUser == 1}}是{{else}}{{/if}}</td>
+                    <td>{{member.remark}}</td>
                 </tr>
                 {{/if}}
                 {{/each}}

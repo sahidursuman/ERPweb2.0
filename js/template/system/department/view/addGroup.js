@@ -1,4 +1,4 @@
-/*TMODJS:{"debug":true,"version":3,"md5":"296066080ffd06f01cd13b2c94bda435"}*/
+/*TMODJS:{"debug":true,"version":4,"md5":"296066080ffd06f01cd13b2c94bda435"}*/
 define(function(require) {
     return require("../../../template")("system/department/view/addGroup", function($data, $filename) {
         try {

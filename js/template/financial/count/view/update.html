@@ -11,7 +11,7 @@
                 <td style="text-align:left"><label  style="font-weight: bold;">天数：<span class="T-ProductDays" style="font-weight: bold;">{{tripPlan.days}}</span></label></td>
             </tr>
             <tr>
-                <td style="text-align:left"><label style="font-weight: bold;">团号：{{tripPlan.tripNumber}}</label></td>
+                <td style="text-align:left"><label style="font-weight: bold;">团号：<span class="T-tripNumber">{{tripPlan.tripNumber}}</span></label></td>
                 <td style="text-align:left"><label  style="font-weight: bold;">出团日期:<span style="font-weight: bold;" class = "startTime_Choose" name="startTime_Choose">{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}</span></label></td>
                 <td style="text-align:left"><label style="font-weight: bold;">完团日期：{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}</label></td>
                 <td style="text-align:left"><label  style="font-weight: bold;">团队人数：{{tripPlan.adultCount}}大{{tripPlan.childCount}}小</label></td>

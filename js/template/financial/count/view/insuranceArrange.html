@@ -12,7 +12,7 @@
     </thead>
     <tbody class="T-count-insurance">
         {{each insuranceArrange as arrange}}
-            <tr>
+            <tr data-id="{{arrange.insuranceId}}" data-name="{{arrange.name}}" data-type="insurance" data-start="{{tripPlan.startTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{tripPlan.endTime | dateFormat:'yyyy-MM-dd'}}">
                 <input name="sumIpt" type="hidden">
                 <td>{{arrange.name}}</td>
                 <td>{{arrange.type}}</td>
@@ -25,9 +25,9 @@
                 <td><span class="F-float F-money">{{arrange.payedMoney}}</span></td>
                 <td>
                     {{if arrange.isConfirmAccount == 0}}
-                        未对账
+                        <a class="R-right {{if editStatus == 1}}T-toAccount T-check{{else}}black{{/if}}" data-right="1270002">未对账</a>
                     {{else}}
-                        已对账
+                        <a class="R-right {{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}" data-right="1270005|1270003">已对账</a>
                     {{/if}}
                 </td>
             </tr>
