@@ -183,7 +183,7 @@ define(function(require, exports) {
                         }
                         busCompany.initCheck(args,busCompany.$checkTab);
                         //取消对账权限过滤
-                        checkDisabled(fbList, busCompany.$checkTab.find(".T-checkTr"), busCompany.$checkTab.find(".T-checkList").data("right"));
+                        FinancialService.checkAuthFilter(busCompany.$checkTab.find(".T-checkTr"), busCompany.$checkTab.find(".T-checkList").data("right"));
                     } else {
                         busCompany.$checkTab.data('next',args);
                     }

@@ -197,7 +197,7 @@ define(function(require, exports) {
                     //取消对账权限过滤
                     var checkTr = Transfer.$checkTab.find(".T-checkTr");
                     var rightCode = Transfer.$checkTab.find(".T-checkList").data("right");
-                    checkDisabled(ftList,checkTr,rightCode);
+                    FinancialService.checkAuthFilter(checkTr,rightCode);
 
                     //绑定翻页组件
                     laypage({
