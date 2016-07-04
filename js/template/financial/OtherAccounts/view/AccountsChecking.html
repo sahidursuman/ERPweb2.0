@@ -91,7 +91,7 @@
                     </a>
                 </td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td>{{if Checking.isConfirmAccount}}{{Checking.settlementMoney}}
+                <td>{{if Checking.isConfirmAccount}}<span class="F-float F-money">{{Checking.settlementMoney}}</span>
                     {{else}}
                     <input type="text" class="col-sm-12 money F-float F-money" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" />
                    {{/if}}
