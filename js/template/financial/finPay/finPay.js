@@ -469,6 +469,7 @@ define(function(require, exports) {
                 resourceName:FinPay.$tab.find(".T-org-name").val(),
                 startDate: FinPay.$tab.find("input[name=accountTimes]").val(),
                 endDate: FinPay.$tab.find("input[name=accountTimee]").val(),
+                incomeStatus: FinPay.$tab.find(".T-finance-status").find("button").data("value"),
                 accountStatus: FinPay.$tab.find(".T-finance-status").find("button").data("value")
             };
 			FinancialService.exportReport({searchParam: JSON.stringify(args)}, "exportFinancialPayMoney");
