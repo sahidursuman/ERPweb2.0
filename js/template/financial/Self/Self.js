@@ -43,6 +43,8 @@ define(function(require, exports) {
             accountStatus : accountStatus,
             sortType: Self.$searchArea ? Self.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
+
+        Self.searchData = FinancialService.getChangeArgs(Self.searchData,Self.$tab);
         $.ajax({
             url: KingServices.build_url("account/selfPayFinancial", "listFinancialSummaryOfSelfPay"),
             type: "POST",
@@ -67,7 +69,7 @@ define(function(require, exports) {
                     laypage({
                         cont: Self.$tab.find('.T-pagenation'),
                         pages: data.totalPage,
-                        curr: (page + 1),
+                        curr: (Self.searchData.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
                                 Self.listSelf(obj.curr -1);
@@ -88,6 +90,7 @@ define(function(require, exports) {
     Self.initList = function(startDate,endDate,accountStatus) {
         Self.bindTraderList();
         Tools.setDatePicker(Self.$tab.find(".date-picker"),true);
+        FinancialService.searchChange(Self.$tab);
 
         //搜索按钮事件
         Self.$tab.find('.T-search').on('click', function(event) {
@@ -650,6 +653,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $obj.trigger('change');
                 $obj.blur().nextAll('input[name="selfPayId"]').val(ui.item.id);
                 if (!isMainList) {
                     $tab.find('input[name="tripInfo"]').val('');
@@ -712,20 +716,16 @@ define(function(require, exports) {
         return sumData;
     };
 
-    Self.initPay = function(options){
-        Self.showBtnFlag = true;
-        var args = {
-            pageNo : 0,
-            selfPayId : options.id,
-            selfPayName : options.name,
-            startTime : options.startDate,
-            endTime : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
+    Self.initPay = function(args){
+        if(args.isCheck){
+            Self.Getcheck(args);
+        } else {
+            Self.showBtnFlag = true;
+            args.isAutoPay = 2;
+            Self.GetClear(args); 
         }
-        Self.GetClear(args); 
     };
 
     exports.init = Self.initModule;
-    exports.initPay = Self.initPay;
+    exports.initPayment = Self.initPay;
 });

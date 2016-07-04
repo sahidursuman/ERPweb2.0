@@ -40,17 +40,19 @@ define(function(require,exports) {
 			accountStatus = InnerTransferOut.$tab.find(".T-finance-status").find("button").data("value");
 		};
 		pageNo = pageNo || 0;
+		var args = {
+			pageNo:pageNo,
+			toBusinessGroupId:toBusinessGroupId,
+			toBusinessGroupName:toBusinessGroupName,
+			startDate:startDate,
+			endDate:endDate,
+			accountStatus:accountStatus,
+			sortType:'auto'
+		};
+		args = FinancialService.getChangeArgs(args,InnerTransferOut.$tab);
 		$.ajax({
 			url:KingServices.build_url("account/innerTransferOutFinancial","listSumFinancialInnerTransferOut"),
-			data:{
-				pageNo:pageNo,
-				toBusinessGroupId:toBusinessGroupId,
-				toBusinessGroupName:toBusinessGroupName,
-				startDate:startDate,
-				endDate:endDate,
-				accountStatus:accountStatus,
-				sortType:'auto'
-			},
+			data:args,
 			type:'POST',
 			success:function(data){
 				var result = showDialog(data);
@@ -77,7 +79,7 @@ define(function(require,exports) {
 						laypage({
 						cont:InnerTransferOut.$tab.find(".T-pagenation"),
 						pages:data.totalPage,
-						curr:(pageNo+1),
+						curr:(args.pageNo+1),
 						jump:function(obj,first){
 							if(!first){
 								InnerTransferOut.listInnerTransfer(obj.curr - 1);
@@ -100,6 +102,7 @@ define(function(require,exports) {
 	InnerTransferOut.inieEvent = function($obj){
 		//格式化日期控件
 		Tools.setDatePicker($obj.find(".date-picker"), true);
+		FinancialService.searchChange($obj);
 		//搜索事件
 		$obj.find(".T-search").on('click',function(event){
 			event.preventDefault();
@@ -228,7 +231,7 @@ define(function(require,exports) {
 						var fiList= data.list;
                 		var checkTr = $tab.find(".T-checkTr");
                 		var rightCode = $tab.find(".T-checkList").data("right");
-                		checkDisabled(fiList,checkTr,rightCode);
+                		FinancialService.checkAuthFilter(checkTr,rightCode);
 					}else{
 					    var autoValidator = args.showBtnFlag == true ? new FinRule(3) : new FinRule(2),
 					    	settlermentValidator = args.showBtnFlag == true ? new FinRule(3):new FinRule(1);
@@ -717,6 +720,7 @@ define(function(require,exports) {
 								}
 							},
 							select:function(event,ui){
+								$(this).trigger('change');
 								var $div = $(this).closest('div');
 								$div.find('input[name=toBusinessGroupId]').val(ui.item.id);
 							}
@@ -766,18 +770,9 @@ define(function(require,exports) {
 		var newVal = Math.round($val*100)/100;
 		return newVal;
 	};
-	InnerTransferOut.initPay = function(options){
-		var args = {
-			pageNo:0,
-			startDate:options.startDate,
-			endDate:options.endDate,
-			accountStatus:options.accountStatus,
-		};
-		InnerTransferOut.getToBusinessGroupName(false,args);
-
-		args.toBusinessGroupId = options.id;
-		args.toBusinessGroupName = options.name;
+	InnerTransferOut.initPay = function(args){
 		args.showBtnFlag = true;
+		InnerTransferOut.getToBusinessGroupName(false,args);
         InnerTransferOut.settlement(args,0); 
     };
 
@@ -813,5 +808,5 @@ define(function(require,exports) {
         });
     };
 	exports.init = InnerTransferOut.initModule;
-	exports.initPay = InnerTransferOut.initPay;
+	exports.initPayment = InnerTransferOut.initPay;
 });

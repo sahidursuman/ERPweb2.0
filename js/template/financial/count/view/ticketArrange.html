@@ -42,7 +42,7 @@
     {{if !!ticketArrange.listMap && ticketArrange.listMap.length}}
     {{each ticketArrange.listMap as arrange index}}
     <tr badStatus = "{{arrange.badStatus}}" ticketArrangeId="{{arrange.id}}"
-    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="ticketArrange" class="oldData">
+    isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="ticketArrange" class="oldData" data-id="{{arrange.ticketId}}" data-name="{{arrange.ticketName}}" data-type="ticket" data-start="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}">
         <input name="sumIpt" type="hidden">
         <td rowspan="1">
         {{if guideCount > 1}}
@@ -374,9 +374,9 @@
             <div class="div-h-30"></div>
             {{/if}}
             {{if arrange.isConfirmAccount == 0}}
-                未对账
+                <a class="R-right {{if editStatus == 1}}T-toAccount T-check{{else}}black{{/if}}" data-right="1210002">未对账</a>
             {{else}}
-                已对账
+                <a class="R-right {{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}" data-right="1210005|1210003">已对账</a>
             {{/if}}
             {{if editStatus != 2}}
                 &nbsp;&nbsp;

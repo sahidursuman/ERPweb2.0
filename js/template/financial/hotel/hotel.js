@@ -50,6 +50,8 @@ define(function(require, exports) {
             sortType: hotel.$searchArea ? hotel.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
+        hotel.searchData = FinancialService.getChangeArgs(hotel.searchData,hotel.$tab);
+
         var searchParam = JSON.stringify(hotel.searchData);
         $.ajax({
             url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
@@ -77,7 +79,7 @@ define(function(require, exports) {
 					laypage({
 					    cont: hotel.$tab.find('.T-pagenation'),
 					    pages: data.searchParam.totalPage,
-					    curr: (page + 1),
+					    curr: (hotel.searchData.pageNo + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {
 					    		hotel.listHotel(obj.curr -1);
@@ -98,6 +100,7 @@ define(function(require, exports) {
     hotel.initList = function(startDate,endDate,accountStatus){
     	hotel.getQueryList();
         Tools.setDatePicker(hotel.$tab.find(".date-picker"),true,"",true);
+        FinancialService.searchChange(hotel.$tab);
 
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
@@ -173,8 +176,8 @@ define(function(require, exports) {
                             hotel.$checkTab.data('isEdited',true);
                         }
                         hotel.initCheck(args,hotel.$checkTab); 
-                        //取消对账权限过滤
-                        checkDisabled(fhList,hotel.$checkTab.find(".T-checkTr"),hotel.$checkTab.find(".T-checkList").data("right"));
+                        //对账、取消对账权限过滤
+                        FinancialService.checkAuthFilter(hotel.$checkTab.find(".T-checkTr"),hotel.$checkTab.find(".T-checkList").data("right"));
                     } else {
                         hotel.$checkTab.data('next',args);
                     }
@@ -629,6 +632,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name="hotelId"]').val(ui.item.id);
             }
         }).on("click",function(){
@@ -750,15 +754,7 @@ define(function(require, exports) {
         });
     };
 
-    hotel.initPay = function(options){
-        var args = {
-            pageNo : 0,
-            hotelId : options.id,
-            hotelName : options.name,
-            startTime : options.startDate,
-            endTime : options.endDate,
-            accountStatus : options.accountStatus
-        };
+    hotel.initPay = function(args){
         $.ajax({
             url:KingServices.build_url("account/financialHotel","listSumFinancialHotel"),
             type:"POST",
@@ -774,8 +770,12 @@ define(function(require, exports) {
                         }
                     }
                     hotel.hotelList = hotelList;
-                    args.isAutoPay=2;
-                    hotel.hotelClear(args);
+                    if(args.isCheck){
+                        hotel.hotelCheck(args);
+                    } else {
+                        args.isAutoPay=2;
+                        hotel.hotelClear(args);
+                    }
                 }
             }
         });
@@ -783,5 +783,5 @@ define(function(require, exports) {
     };
 
     exports.init = hotel.initModule;
-    exports.initPay = hotel.initPay;
+    exports.initPayment = hotel.initPay;
 });

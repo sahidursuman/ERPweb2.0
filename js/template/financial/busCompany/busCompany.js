@@ -51,6 +51,8 @@ define(function(require, exports) {
             sortType: busCompany.$searchArea ? busCompany.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
+        busCompany.searchData = FinancialService.getChangeArgs(busCompany.searchData,busCompany.$tab);
+
         var searchParam = JSON.stringify(busCompany.searchData);
         $.ajax({
             url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
@@ -79,7 +81,7 @@ define(function(require, exports) {
                     laypage({
                         cont: busCompany.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (busCompany.searchData.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
                                 busCompany.listBusCompany(obj.curr - 1);
@@ -101,6 +103,7 @@ define(function(require, exports) {
     busCompany.initList = function(startDate, endDate,accountStatus) {
         busCompany.getQueryList();
         Tools.setDatePicker(busCompany.$tab.find(".date-picker"), true);
+        FinancialService.searchChange(busCompany.$tab);
         //状态框选择事件
         busCompany.$tab.find(".T-finance-status").on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
@@ -180,7 +183,7 @@ define(function(require, exports) {
                         }
                         busCompany.initCheck(args,busCompany.$checkTab);
                         //取消对账权限过滤
-                        checkDisabled(fbList, busCompany.$checkTab.find(".T-checkTr"), busCompany.$checkTab.find(".T-checkList").data("right"));
+                        FinancialService.checkAuthFilter(busCompany.$checkTab.find(".T-checkTr"), busCompany.$checkTab.find(".T-checkList").data("right"));
                     } else {
                         busCompany.$checkTab.data('next',args);
                     }
@@ -642,6 +645,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name="busCompanyId"]').val(ui.item.id);
             }
         }).on("click", function() {
@@ -783,13 +787,7 @@ define(function(require, exports) {
         });
     };
 
-    busCompany.initPay = function(options) {
-        var args = {
-            pageNo : 0,
-            startTime : options.startDate,
-            endTime : options.endDate,
-            accountStatus : options.accountStatus,
-        }
+    busCompany.initPay = function(args) {
         $.ajax({
             url: KingServices.build_url("account/financialBusCompany", "listSumFinancialBusCompany"),
             type: "POST",
@@ -804,15 +802,17 @@ define(function(require, exports) {
                         }
                     }
                     busCompany.busCompanyList = busCompanyList;
-                    args.busCompanyId = options.id;
-                    args.busCompanyName = options.name;
-                    args.isAutoPay = 2;
-                    busCompany.busCompanyClear(args);
+                    if(args.isCheck){
+                        busCompany.busCompanyCheck(args);
+                    } else {
+                        args.isAutoPay = 2;
+                        busCompany.busCompanyClear(args);
+                    }
                 }
             }
         });
     };
 
     exports.init = busCompany.initModule;
-    exports.initPay = busCompany.initPay;
+    exports.initPayment = busCompany.initPay;
 });

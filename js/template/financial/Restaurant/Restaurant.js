@@ -48,6 +48,8 @@ define(function(require, exports) {
             sortType: restaurant.$searchArea ? restaurant.$searchArea.find("select[name=orderBy]").val() : "desc"
         };
 
+        restaurant.searchData = FinancialService.getChangeArgs(restaurant.searchData,restaurant.$tab);
+
         var searchParam = JSON.stringify(restaurant.searchData);
         $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
@@ -75,7 +77,7 @@ define(function(require, exports) {
                     laypage({
                         cont: restaurant.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (restaurant.searchData.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
                                 restaurant.listRestaurant(obj.curr - 1);
@@ -96,6 +98,7 @@ define(function(require, exports) {
     restaurant.initList = function(startDate,endDate,accountStatus){
         restaurant.getQueryList();
         Tools.setDatePicker(restaurant.$tab.find(".date-picker"),true);
+        FinancialService.searchChange(restaurant.$tab);
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
@@ -170,8 +173,7 @@ define(function(require, exports) {
                             restaurant.$checkTab.data('isEdited',true);
                         }
                         restaurant.initCheck(args,restaurant.$checkTab); 
-                        //取消对账权限过滤
-                        checkDisabled(frList,restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
+                        FinancialService.checkAuthFilter(restaurant.$checkTab.find(".T-checkTr"),restaurant.$checkTab.find(".T-checkList").data("right"));
                     } else {
                         restaurant.$checkTab.data('next', args);
                     }
@@ -633,6 +635,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name="restaurantId"]').val(ui.item.id);
             }
         }).on("click",function(){
@@ -694,17 +697,9 @@ define(function(require, exports) {
         });
     };
 
-    restaurant.initPay = function(options){
-        var args = {
-            pageNo : 0,
-            restaurantId : options.id,
-            restaurantName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
-            accountStatus : options.accountStatus,
-            isAutoPay : 2
-        };
-         $.ajax({
+    restaurant.initPay = function(args){
+        args.isAutoPay = 2;
+        $.ajax({
             url:KingServices.build_url("account/arrangeRestaurantFinancial","listSumFinancialRestaurant"),
             type:"POST",
             data:{ searchParam : JSON.stringify(args) },
@@ -720,13 +715,17 @@ define(function(require, exports) {
                         }
                     }
                     restaurant.restaurantList = restaurantList;
-                    args.isAutoPay = 2;
-                    restaurant.restaurantClear(args);
+                    if(args.isCheck){
+                        restaurant.restaurantCheck(args);
+                    } else {
+                        args.isAutoPay = 2;
+                        restaurant.restaurantClear(args);
+                    }
                 }
             }
         });
     };
 
     exports.init = restaurant.initModule;
-    exports.initPay = restaurant.initPay;
+    exports.initPayment = restaurant.initPay;
 });

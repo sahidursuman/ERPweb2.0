@@ -2,6 +2,7 @@
     <thead>
         <tr class="bg-blur">
             <th>代订单号</th>
+            <th>客户名称</th>
             <th width="85">入住日期</th>
             <th width="85">离店日期</th>
             <th width="70">星级</th>
@@ -17,6 +18,7 @@
     {{each bookingOrderList as rs}}
         <tr data-id="{{rs.id}}">
             <td>{{rs.orderNumber}}</td>
+            <td>{{rs.partnerAgencyName}}</td>
             <td>{{rs.checkInTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{rs.checkOutTime | dateFormat: 'yyyy-MM-dd'}}</td>
             <td>{{rs.hotelLevel | getHotelLevelDesc}}</td>

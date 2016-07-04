@@ -15,6 +15,8 @@
 										<th class="th-border">是否为联系人</th>
 										<th class="th-border">客源地</th>
 										<th class="th-border">年龄</th>
+										<th class="th-border">备注</th>
+
 									</tr>
 								</thead>
 
@@ -38,6 +40,7 @@
 									</td>
 									<td>{{if memberList.idCardType==0}}{{memberList.area}}{{else}}-{{/if}}</td>
 									<td>{{if memberList.idCardType==0}}{{memberList.age}}{{else}}-{{/if}}</td>
+									<td>{{memberList.remark}}</td>
 								</tr>{{/each}}
 								</tbody>
 							</table>

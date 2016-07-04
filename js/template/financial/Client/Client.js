@@ -64,6 +64,7 @@ define(function(require, exports) {
                 sortType : Client.$tab.find("select[name=orderBy]").val(),
                 fromPartnerAgencyId: Client.$tab.find("input[name=fromPartnerAgencyId]").val(),
                 headerAgencyId: Client.$tab.find("input[name=headerAgencyId]").val() ,
+                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
 
             var $office = Client.$tab.find('.T-search-head-office'),
@@ -88,6 +89,8 @@ define(function(require, exports) {
                 }
             }
         }
+        if(Client.$tab && Client.$tab.data('searchEdit')) { Client.partnerAgencyList = false;}
+        args = FinancialService.getChangeArgs(args,Client.$tab);
         $.ajax({
             url : KingServices.build_url('financial/customerAccount', 'listPager'),
             type : 'POST',
@@ -96,13 +99,12 @@ define(function(require, exports) {
             if(showDialog(data)){
                 Tools.addTab(menuKey, "客户账务", listTemplate(data));
                 Client.listPage = args.pageNo;
-                Client.initList();
-                Client.getListSumData(args,$('#' + tabId));
+                Client.initList(args);
                 // 绑定翻页组件
                 laypage({
                     cont: Client.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
                     pages: data.searchParam.totalPage, //总页数
-                    curr: (page + 1),
+                    curr: (args.pageNo + 1),
                     jump: function(obj, first) {
                         if (!first) { // 避免死循环，第一次进入，不调用页面方法
                             Client.listClient(obj.curr - 1);
@@ -113,14 +115,27 @@ define(function(require, exports) {
         });
     };
 
-    Client.initList = function(){
+    Client.initList = function(args){
         // 初始化jQuery 对象
         Client.$tab = $('#' + tabId);
 
+        if(!Client.$tab.data("searchEdit") && Client.$tab.data("total")){
+            Client.loadListSumData(Client.$tab);
+        } else {
+            Client.getListSumData(args,Client.$tab);
+        }
+                
+
         Client.$searchArea = Client.$tab.find('.T-search-area');
         Client.getPartnerAgencyList(Client.$tab.find('.T-search-head-office'));
-        Client.getTravelAgencyList(Client.$tab.find('.T-search-customer'));
+        if(Client.partnerAgencyList) {
+            Client.loadTravelAgencyList(Client.$tab.find('.T-search-customer'));
+        } else {
+            Client.getTravelAgencyList(Client.$tab.find('.T-search-customer'));
+        }
+        
         Tools.setDatePicker(Client.$searchArea.find(".date-picker"), true);
+        FinancialService.searchChange(Client.$tab);
 
         //搜索按钮事件
         Client.$searchArea.find('.T-btn-search').on('click', function(event) {
@@ -138,14 +153,13 @@ define(function(require, exports) {
                 headerAgencyId: Client.$searchArea.find("input[name=headerAgencyId]").val() ,
                 headerAgencyName: Client.$searchArea.find("input[name=headerAgencyName]").val(),
                 fromPartnerAgencyName: Client.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
-                
                 startDate : Client.$searchArea.find('.T-search-start-date').val(),
                 endDate : Client.$searchArea.find('.T-search-end-date').val(),
                 partnerAgencyType: Client.$searchArea.find("[name=partnerAgencyType]").val(),
                 accountStatus:Client.$searchArea.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$searchArea.find(".T-money-status").find("button").data("value"),
-                sortType : Client.$searchArea.find("select[name=orderBy]").val()
-
+                sortType : Client.$searchArea.find("select[name=orderBy]").val(),
+                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
             FinancialService.exportReport(args, "exportCustomer");
         });
@@ -155,6 +169,7 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            Client.$tab.data("searchEdit",true);
             Client.listClient(0);
         });
         Client.$searchArea.find(".T-money-status").on('click','a',function(event){
@@ -162,8 +177,16 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+             Client.$tab.data("searchEdit",true);
             Client.listClient(0);
         });
+
+        //未收减去预收勾选事件
+        Client.$searchArea.on('click','.T-sumUnIncome',function() {
+            Client.clacReceivedMoney();
+            
+        })
+        Client.clacReceivedMoney();
         // 报表内的操作
         Client.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
@@ -193,6 +216,38 @@ define(function(require, exports) {
         });
     };
 
+    Client.clacReceivedMoney = function () {
+        //找到所有的tr  is(':checked')
+        var $that = Client.$searchArea.find('.T-sumUnIncome');
+            $trList = Client.$tab.find('.T-list').find('tr'), 
+            checkStatus = $that.is(':checked');
+        //遍历tr
+        $trList.each(function() {
+            function changeTwoDecimal($val){
+                var newVal = parseFloat($val);
+
+                if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                    return 0;
+                }
+                var newVal = Math.round($val*100)/100;
+                return newVal;
+            };
+            //准备数据
+            var settlementMoney = changeTwoDecimal($(this).find('.T-settlementMoney').text()),
+                receiveMoney = changeTwoDecimal($(this).find('.T-receiveMoney').text()),
+                balance = changeTwoDecimal($(this).find('.T-advance').text()),
+                unReceivedMoney = $(this).data('unincome'),
+                $unReceivedMoney = $(this).find('.T-unReceivedMoney'),
+                result = 0;
+            if(checkStatus){
+                result = changeTwoDecimal((settlementMoney-receiveMoney-balance));
+            } else {
+                result = unReceivedMoney;
+            }
+            $unReceivedMoney.text(result);
+        });
+    };
+
     Client.getListSumData = function(args,$tab){
         $.ajax({
             url: KingServices.build_url('financial/customerAccount', 'listPagerTotal'),
@@ -201,17 +256,22 @@ define(function(require, exports) {
         })
         .done(function(data) {
             if(showDialog(data)){
-                $tab.find('.T-sumCount').text(data.sumCount);
-                $tab.find('.T-sumContractMoney').text(data.sumContractMoney);
-                $tab.find('.T-sumStMoney').text(data.sumSettlementMoney);
-                $tab.find('.T-sumReceiveMoney').text(data.sumReceiveMoney);
-                $tab.find('.T-travelIncome').text(data.sumAgencyMoney);
-                $tab.find('.T-guideIncome').text(data.sumGuideMoney);
-                $tab.find('.T-sumUnReceivedMoney').text(data.sumUnReceivedMoney);
+                $tab.data("total",data);
+                Client.loadListSumData($tab);
             }
         });
-        
     };  
+    Client.loadListSumData = function($tab){
+        var total = $tab.data("total");
+        $tab.find('.T-sumCount').text(total.sumCount);
+        $tab.find('.T-sumContractMoney').text(total.sumContractMoney);
+        $tab.find('.T-sumStMoney').text(total.sumSettlementMoney);
+        $tab.find('.T-sumReceiveMoney').text(total.sumReceiveMoney);
+        $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
+        $tab.find('.T-guideIncome').text(total.sumGuideMoney);
+        $tab.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
+        $tab.find('.T-sumBalance').text(total.sumBalance);
+    };
 
     Client.ClientCheck = function(pageNo, args, $tab, isView){
         if(!!$tab){
@@ -265,6 +325,7 @@ define(function(require, exports) {
                     }
                     
                     Client.initCheck($tab,args,isView);
+                    FinancialService.checkAuthFilter($tab.find(".T-checkTr"),$tab.find(".T-checkList").data("right"));
                     Client.viewFeeDetails($tab,resultList);
                 } else {
                     Client.$checkTab.data("next",args);
@@ -521,15 +582,8 @@ define(function(require, exports) {
      */
     Client.initIncome = function(options) {
         Client.getTravelAgencyList();
-        Client.ClientClear(0, {
-            pageNo:0,
-            fromPartnerAgencyId: options.id,
-            partnerAgencyName: options.name,
-            startDate: options.startDate,
-            endDate: options.endDate,
-            accountStatus : options.accountStatus,
-            type: 1
-        });
+        options.type = 1;
+        Client.ClientClear(0, options);
     }
 
     Client.ClientClear = function(pageNo, args, $tab) {
@@ -908,6 +962,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event, ui) {
+                $(this).trigger('change');
                 $(this).blur().data('id', ui.item.id);
                 $(this).closest('div').find('input[name="headerAgencyId"]').val(ui.item.id);
                 Client.$searchArea.find('.T-search-customer').data('ajax', false).val('全部');
@@ -961,27 +1016,29 @@ define(function(require, exports) {
                 data.fromPartnerAgencyList[i].value = data.fromPartnerAgencyList[i].fromPartnerAgencyName;
                 data.fromPartnerAgencyList[i].id = data.fromPartnerAgencyList[i].fromPartnerAgencyId;
             }
-            var all = {id:'', value: '全部'};
-            Client.partnerAgencyList = data.fromPartnerAgencyList.slice(all);
-            if(!!$obj){
-                data.fromPartnerAgencyList.unshift(all);
-                $obj.autocomplete({
-                    minLength: 0,
-                    source : data.fromPartnerAgencyList,
-                    change: function(event, ui) {
-                        if (!ui.item)  {
-                            $(this).data('id', '');
-                        }
-                    },
-                    select: function(event, ui) {
-                        $(this).blur().data('id', ui.item.id);
-                        $(this).closest('div').find('input[name="fromPartnerAgencyId"]').val(ui.item.id);
-                    }
-                }).on("click",function(){
-                    $obj.autocomplete('search', '');
-                });
-            }
+            Client.partnerAgencyList = JSON.stringify(data.fromPartnerAgencyList);
+            Client.loadTravelAgencyList($obj);
         });       
+    };
+
+    Client.loadTravelAgencyList = function($obj){
+        if(!!$obj){
+            $obj.autocomplete({
+                minLength: 0,
+                source : FinancialService.parseList(Client.partnerAgencyList),
+                change: function(event, ui) {
+                    if (!ui.item)  {
+                        $(this).data('id', '');
+                    }
+                },
+                select: function(event, ui) {
+                    $(this).trigger('change');
+                    $(this).blur().data('id', ui.item.id);
+                }
+            }).on("click",function(){
+                $obj.autocomplete('search', '');
+            });
+        }
     };
 
     /**
@@ -1138,7 +1195,7 @@ define(function(require, exports) {
             name = $obj.val();
         $obj.autocomplete({
             minLength: 0,
-            source : Client.partnerAgencyList,
+            source : JSON.parse(Client.partnerAgencyList),
             change: function(event,ui) {
                 if (!ui.item)  {
                     $obj.val(name);
@@ -1216,5 +1273,5 @@ define(function(require, exports) {
     };
 
     exports.init = Client.initModule;
-    exports.initIncome = Client.initIncome;
+    exports.initPayment = Client.initIncome;
 });

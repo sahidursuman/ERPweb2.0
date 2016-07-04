@@ -22,13 +22,14 @@ define(function(require,exports){
 	 * 客户管理的初始化
 	 */
 	 PartnerAgency.initModule = function(){
-	 	PartnerAgency.listPartnerAgency(0,"",1);
+	 	PartnerAgency.listPartnerAgency(0,"",1,"");
 	 };
 	//客户管理的list页面
-	PartnerAgency.listPartnerAgency = function(pageNo,partnerAgencyName,status){
+	PartnerAgency.listPartnerAgency = function(pageNo,partnerAgencyName,status,type){
 		if(PartnerAgency.$searchArea && arguments.length === 1){
 			partnerAgencyName = PartnerAgency.$searchArea.find('input[name=partnerAgency_travelAgencyName]').val();
 			status = PartnerAgency.$searchArea.find(".T-select-status").find("button").data("value");
+			type = PartnerAgency.$searchArea.find('select[name=type]').val();
 		}
 		//修正页码
 		pageNo = pageNo || 0;
@@ -40,6 +41,7 @@ define(function(require,exports){
 				pageNo:pageNo,
 				travelAgencyName:partnerAgencyName,
 				status:status,
+				type: type,
 				sortType:"auto"
 			},
 			success:function(data){
