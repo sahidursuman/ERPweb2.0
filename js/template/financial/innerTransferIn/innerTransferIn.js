@@ -116,7 +116,7 @@ define(function(require, exports) {
         });
 	};
 
-    FinTransIn.loadGroupList = function(){
+    FinTransIn.loadGroupList = function($obj){
         if(!!$obj){
             $obj.autocomplete({
                 minLength:0,
@@ -217,10 +217,9 @@ define(function(require, exports) {
                         }
                         FinTransIn.initCheck(args,FinTransIn.$checkTab,1);
                         //取消对账权限过滤
-                        var fiList= data.innerTransferIncomeDetailsList
                         var checkTr = FinTransIn.$checkTab.find(".T-checkTr");
                         var rightCode = FinTransIn.$checkTab.find(".T-checkList").data("right");
-                        checkDisabled(fiList,checkTr,rightCode);
+                        FinancialService.checkAuthFilter(checkTr,rightCode);
                     } else {
                         FinTransIn.$clearTab = $('#tab-' + menuKey + '-clearing-content');
                         FinTransIn.getClearList(args,FinTransIn.$clearTab);

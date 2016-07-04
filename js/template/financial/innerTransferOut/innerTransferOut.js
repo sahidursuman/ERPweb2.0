@@ -231,7 +231,7 @@ define(function(require,exports) {
 						var fiList= data.list;
                 		var checkTr = $tab.find(".T-checkTr");
                 		var rightCode = $tab.find(".T-checkList").data("right");
-                		checkDisabled(fiList,checkTr,rightCode);
+                		FinancialService.checkAuthFilter(checkTr,rightCode);
 					}else{
 					    var autoValidator = args.showBtnFlag == true ? new FinRule(3) : new FinRule(2),
 					    	settlermentValidator = args.showBtnFlag == true ? new FinRule(3):new FinRule(1);
