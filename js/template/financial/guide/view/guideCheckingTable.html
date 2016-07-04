@@ -34,11 +34,11 @@
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>
-        <label class="pos-rel  R-right" {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}>
+        <label class="pos-rel">
             <input type="checkbox" class="ace T-checkbox" {{ if (guide.change && guide.isChecked == 1) || (!guide.change && guide.isConfirmAccount == 1) }} checked="checked" {{/if}}/> 
             <span class="lbl">对账</span>
         </label>
-        <label class="cursor"  {{ if guide.isConfirmAccount }} data-right="1200005" {{else}} data-right="1200002" {{/if}}> <a data-right="1200003"> |</a></label>
+        <label class="cursor"> |</a></label>
         <a class="cursor T-action T-view" data-right="1200003">查看</a>
     </td>
 </tr>

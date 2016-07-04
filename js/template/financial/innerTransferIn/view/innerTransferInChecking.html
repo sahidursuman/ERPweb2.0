@@ -98,7 +98,7 @@
                  <th style="width:105px">对账</th>  
             </tr>
             </thead>   
-            <tbody class="T-checkList" data-right="1360005">
+            <tbody class="T-checkList" data-right="1360001|1360005">
             {{each innerTransferIncomeDetailsList as checking index}}
             <tr class="T-checkTr {{if checking.change}}success{{/if}}" data-id="{{checking.id}}" data-confirm ="{{checking.isConfirmAccount}}" {{if checking.change}}data-change="true"{{/if}}>
                 <td>{{checking.orderNumber}}</td>
@@ -129,10 +129,15 @@
                         <span class="in-block">导游现收：<span class="F-float F-money">{{checking.currentNeedPayMoney}}</span></span>
                     </a>
                 </td>
-                <td><input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}></td>
+                <td>{{if checking.isConfirmAccount}}<span class="F-float F-money">{{checking.backMoney}}</span>
+                    {{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{checking.backMoney}}" name="settlementMoney" />
+                    {{/if}}
+                </td>
                 <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
                 <td class="T-unReceivedMoney F-float F-money" name="unPayedMoney">{{if checking.unPayedMoney}}{{checking.unPayedMoney}}{{else}}{{checking.unIncomeMoney}}{{/if}}</td>
-                <td><textarea class="col-sm-12 hct-textarea T-remark" maxlength="1000" name="checkRemark" {{if checking.isConfirmAccount}} disabled="disabled"{{/if}}>{{checking.checkRemark}}</textarea>
+                <td>{{if checking.isConfirmAccount}}{{checking.checkRemark}}
+                    {{else}}<textarea class="col-sm-12 hct-textarea T-remark" maxlength="1000" name="checkRemark" }>{{checking.checkRemark}}</textarea>
+                    {{/if}}
                 </td>
                 <td>{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                 <td>{{if checking.checkUserName == null || checking.checkUserName == ""}}-{{else}}{{checking.checkUserName}}{{/if}}</td>

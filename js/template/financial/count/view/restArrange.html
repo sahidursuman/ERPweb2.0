@@ -38,7 +38,7 @@
     {{if restaurantArrange != null}}
         {{if restaurantArrange.listMap.length}}
             {{each restaurantArrange.listMap as arrange index}}
-                <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange" class="oldData">
+                <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange" class="oldData" data-id="{{arrange.restaurantId}}" data-name="{{arrange.restaurantName}}" data-type="restaurant" data-start="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}">
                         <input name="sumIpt" type="hidden">
                         <td rowspan="{{arrange.items.length}}">
                             {{if guideCount > 1}}
@@ -390,9 +390,9 @@
 
                                     <td>
                                         {{if result.isConfirmAccount == 0}}
-                                            未对账
+                                            <a class="R-right {{if editStatus == 1 && arrange.isChoose == 0}}T-toAccount T-check{{else}}black{{/if}}" data-right="1240002">未对账</a>
                                         {{else}}
-                                            已对账
+                                            <a class="R-right {{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}" data-right="1240005|1240003">已对账</a>
                                         {{/if}}
                                         {{if editStatus != 2}}
                                             &nbsp;&nbsp;
@@ -424,7 +424,7 @@
                 {{if arrange.items.length}}
                     {{each arrange.items as result i}}
                         {{if i > 0}}
-                            <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange">
+                            <tr isChoose="{{arrange.isChoose}}" whichDay="{{arrange.whichDay}}" arrangeType="restArrange" data-id="{{arrange.restaurantId}}" data-name="{{arrange.restaurantName}}" data-type="restaurant" data-start="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}">
                                     <input name="sumIpt" type="hidden">
                                     <input name="restaurantArrangeId" value="{{result.id}}" type="hidden" /><!-- 安排id -->
                                     <input name="badStatus" value="{{result.badStatus}}" type="hidden" /><!-- 是否坏账 -->
@@ -716,9 +716,9 @@
 
                                     <td>
                                         {{if result.isConfirmAccount == 0}}
-                                            未对账
+                                            <a class="R-right {{if editStatus == 1 && arrange.isChoose == 0}}T-toAccount T-check{{else}}black{{/if}}" data-right="1240002">未对账</a>
                                         {{else}}
-                                            已对账
+                                            <a class="R-right {{if editStatus == 1}}T-toAccount T-clear{{else}}black{{/if}}" data-right="1240005|1240003">已对账</a>
                                         {{/if}}
                                         {{if editStatus != 2}}
                                             &nbsp;&nbsp;

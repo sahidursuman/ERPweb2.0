@@ -723,6 +723,7 @@
 		                <th class="th-border">年龄</th>
 		                <th class="th-border">客源地</th>
 						<th class="th-border">是否联系人</th>
+						<th class="th-border">备注</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -736,6 +737,7 @@
 						<td>{{rs.age}}</td>
 						<td>{{rs.area}}</td>
 						<td>{{if rs.isContactUser}}是{{else}}-{{/if}}</td>
+						<td>{{rs.remark}}</td>
 					</tr>
 				{{/each}}
 				</tbody>

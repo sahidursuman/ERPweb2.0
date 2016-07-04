@@ -51,114 +51,81 @@ define(function(require, exports){
 	};
 	//暴露的方法--初始化列表
 	Count.initModule = function(){
-		Count.listCountHeader(0,'','','','','','','','','','')
-	};
-	//列表头部
-	Count.listCountHeader = function(pageNo,tripNumber,lineProductId,lineProductName,guideId,guideName,startTime,endTime,status,orderNumber,contactInfo){
-		var timeStatus;
-		if(Count.$searchArea && arguments.length === 1){
-			tripNumber = Count.$searchArea.find('input[name=chooseTripNumber]').val();
-			lineProductId = Count.$searchArea.find('input[name=lineProductId]').val();
-			lineProductName = Count.$searchArea.find('input[name=chooseLineProductName]').val();
-			guideId = Count.$searchArea.find('input[name=guideId]').val();
-			guideName = Count.$searchArea.find('input[name=chooseGuideRealName]').val();
-			endTime = Count.$searchArea.find('input[name=endTime]').val();
-			startTime = Count.$searchArea.find('input[name=startTime]').val();
-			status = Count.$searchArea.find(".T-select-status").attr("data-value");
-			timeStatus = Count.$searchArea.find(".T-time-status").find('button').data("value");
-			orderNumber = Count.$searchArea.find('input[name=orderNumber]').val();
-			contactInfo = Count.$searchArea.find('input[name=contactInfo]').val();
-		} 
-		timeStatus = timeStatus || 0
-		//修正页码
-		pageNo = pageNo || 0;
-		$.ajax({
-			url:KingServices.build_url("financialTripPlan","findFinancialListPageCount"),
-			type:'POST',
-			data:{
-                tripNumber:tripNumber,
-                lineProductId:lineProductId,
-                guideId:guideId,
-                endTime:endTime,
-                startTime:startTime,
-                billStatus:status,
-                lineProductName:lineProductName,
-                guideName:guideName,
-                timeStatus : timeStatus,
-                orderNumber : orderNumber,
-                contactInfo : contactInfo
-			},
-			success:function(data){
-				var result = showDialog(data);
-				if(result){
-					var html = listHeaderTamplate(data);
-					Tools.addTab(listTabId,'报账审核',html);
-					Count.shopClickCount = 0;
-					var $listTabId = $("#tab-"+listTabId+"-content");
-					Count.$listTab = $listTabId;
-					Count.$searchArea = $listTabId.find('.T-search-area');
-					
-					//获取主体列表数据
-					Count.$args={
-						pageNo:pageNo,
-		                tripNumber:tripNumber,
-		                lineProductId:lineProductId,
-		                guideId:guideId,
-		                endTime:endTime,
-		                startTime:startTime,
-		                billStatus:status,
-		                lineProductName:lineProductName,
-		                guideName:guideName,
-		                timeStatus : timeStatus,
-		                orderNumber : orderNumber,
-		                contactInfo : contactInfo
-					};
-					//获取主体列表数据
-					Count.listCountBody(Count.$args);
-                	//格式化日期
-                	Count.setDatePicker(Count.$searchArea.find('.datepicker'));
-                	//获取搜索区域的列表数据
-                	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
-                	Count.getLineproductData($lineProductObj);
-                	var $guideObj = Count.$searchArea.find('input[name=chooseGuideRealName]');//获取导游
-                	Count.getGuideData($guideObj);
-                	//搜索区域事件绑定
-                	Count.initListHeaderEvents();
-				}
-			}
-		});
+		var html = listHeaderTamplate();
+		Tools.addTab(listTabId,'报账审核',html);
+		//获取主体列表数据
+		Count.listCountBody(0,{});
+    	
+    	//搜索区域事件绑定
+    	Count.initListHeaderEvents();
 	};
 
 	//搜索区域事件
 	Count.initListHeaderEvents = function(){
+		Count.shopClickCount = 0;
+		var $listTabId = $("#tab-"+listTabId+"-content");
+		Count.$listTab = $listTabId;
+		Count.$searchArea = $listTabId.find('.T-search-area');
 		var $searchObj = Count.$searchArea;
 			$listObj = Count.$listTab;
+
+		FinancialService.searchChange(Count.$listTab);
+		//格式化日期
+    	Count.setDatePicker(Count.$searchArea.find('.datepicker'));
+    	//获取搜索区域的列表数据
+    	var $lineProductObj = Count.$searchArea.find("input[name=chooseLineProductName]");//获取线路
+    	Count.getLineproductData($lineProductObj);
+    	var $guideObj = Count.$searchArea.find('input[name=chooseGuideRealName]');//获取导游
+    	Count.getGuideData($guideObj);
+    	Count.getOpList(Count.$searchArea.find('input[name=dutyOPUserName]'));
 
 		//搜索事件
 		$searchObj.find(".T-search").on('click',function(event){
 			event.preventDefault();
-			Count.listCountHeader(0);
+			Count.listCountBody(0);
 		});
 		//状态栏事件
 		$searchObj.find(".T-sleect-ul").on('click','a',function(){
 			$(this).closest('div').find(".T-select-status").attr("data-value",$(this).attr("data-value"));
 			$(this).closest('div').find("span").text($(this).text());
-			Count.listCountHeader(0);
+			Count.$listTab.data("searchEdit",true);
+			Count.listCountBody(0);
 		});
         $searchObj.find(".T-time-status").on('click','a',function(event){
             event.preventDefault();//阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
-            Count.listCountHeader(0);
+            Count.$listTab.data("searchEdit",true);
+            Count.listCountBody(0);
         });
 	};
 	//获取主体列表数据
-	Count.listCountBody = function($data){
+	Count.listCountBody = function(page,args){
+		args = args || {};
+		if(Count.$searchArea && arguments.length === 1){
+			args = {
+				tripNumber : Count.$searchArea.find('input[name=chooseTripNumber]').val(),
+				lineProductId : Count.$searchArea.find('input[name=lineProductId]').val(),
+				lineProductName : Count.$searchArea.find('input[name=chooseLineProductName]').val(),
+				guideId : Count.$searchArea.find('input[name=guideId]').val(),
+				guideName : Count.$searchArea.find('input[name=chooseGuideRealName]').val(),
+				dutyOPUserId : Count.$searchArea.find('input[name=dutyOPUserId]').val(),
+				dutyOPUserName : Count.$searchArea.find('input[name=dutyOPUserName]').val(),
+				endTime : Count.$searchArea.find('input[name=endTime]').val(),
+				startTime : Count.$searchArea.find('input[name=startTime]').val(),
+				billStatus : Count.$searchArea.find(".T-select-status").attr("data-value"),
+				timeStatus : Count.$searchArea.find(".T-time-status").find('button').data("value") || 0,
+				orderNumber : Count.$searchArea.find('input[name=orderNumber]').val(),
+				contactInfo : Count.$searchArea.find('input[name=contactInfo]').val()
+			}
+		}
+		args.pageNo = page || 0;
+		args = FinancialService.getChangeArgs(args,Count.$listTab)
 		$.ajax({
 			url:KingServices.build_url("financialTripPlan","listFinancialTripPlan"),
 			type:'POST',
-			data:$data,
+			data:args,
 			success:function(data){
 				var result = showDialog(data);
 				if(result){
@@ -170,14 +137,19 @@ define(function(require, exports){
 					html = Tools.filterMoney(html);
 					html = Tools.filterUnPoint(html);      
 					Count.$listTab.find(".T-counterList").html(html); 
+					if(!Count.$listTab.data("searchEdit") && Count.$listTab.data("total")){
+						Count.loadListSumData(Count.$listTab);
+					} else {
+						Count.getListSumData(args,Count.$listTab);
+					}
 					Count.listEvents();
 					laypage({
 	                    cont: Count.$listTab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
 	                    pages: data.totalPage, //总页数
-	                    curr: ($data.pageNo + 1),
+	                    curr: (args.pageNo + 1),
 	                    jump: function(obj, first) {
 	                        if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-	                            Count.listCountHeader(obj.curr -1);
+	                            Count.listCountBody(obj.curr -1);
 	                        }
 	                    }
                 	});
@@ -253,6 +225,28 @@ define(function(require, exports){
 
 		});
 	};
+
+	Count.getListSumData = function(args,$tab){
+		$.ajax({
+			url: KingServices.build_url("financialTripPlan","findFinancialListPageCount"),
+			type: 'POST',
+			data: args,
+		})
+		.done(function(data) {
+			$tab.data("total",data.financialTripPlan);
+			Count.loadListSumData($tab);
+		});
+	}
+	Count.loadListSumData = function($tab){
+		var total = $tab.data("total");
+		$tab.find('.T-income').text(total.getAllMoney);
+		$tab.find('.T-cost').text(total.payAllMoney);
+		$tab.find('.T-profit').text(total.grossProfitMoney);
+		$tab.find('.T-preProfit').text(total.perGrossProfitMoney);
+		$tab.find('.T-peopleCount').text(total.adultCount + " 大 " + total.childCount + " 小");
+		$tab.find('.T-tripCount').text(total.tripNumber);
+	};
+
 	//单团明细
 	Count.viewTripDetail = function($id){
 		$.ajax({
@@ -1364,6 +1358,25 @@ define(function(require, exports){
 			Count.viewTripLog(id);
 		});
 
+		//对账、付款跳转
+		$obj.find(".T-toAccount").off().on('click', function(event) {
+			event.preventDefault();
+			var $this = $(this),
+                $tr = $this.closest('tr'),
+			    args = {
+			    	id: $tr.data("id"),
+			    	name: $tr.data("name"),
+			    	tripNumber: $obj.find('.T-tripNumber').text(),
+			    	// startDate: $tr.data("start"),
+			    	// endDate: $tr.data("end"),
+			    	type: $tr.data("type")
+			    };
+
+			if($this.hasClass('T-check')){
+               args.isCheck = true;
+			}
+			FinancialService.accountList(args);
+		});
 		Count.loading = false;
 	};
 	//加载list
@@ -1372,11 +1385,11 @@ define(function(require, exports){
 		$obj.find('.T-tripCost').html(tripGroupHtml)
 		if(data.editStatus !=2){
 			//加载购物安排列表
-			var shopHtml = shopArrangeTemplate(data);
+			var shopHtml = Count.filterUnAuth(shopArrangeTemplate(data));
 			$obj.find('.T-shop-add').html(shopHtml);
 
 			//加载自费安排列表
-			var selfHtml = selfArrangeTemplate(data);
+			var selfHtml = Count.filterUnAuth(selfArrangeTemplate(data));
 			$obj.find('.T-self-add').html(selfHtml);
 		};
 
@@ -1385,11 +1398,11 @@ define(function(require, exports){
 		$obj.find('.T-income').html(otherInHtml);
 		
 		//保险列表
-		var insuranceHtml = insuranceArrangeTemplate(data);
+		var insuranceHtml = Count.filterUnAuth(insuranceArrangeTemplate(data));
 		$obj.find('.T-insurance').html(insuranceHtml);
 
 		//车费列表 
-		var busHtml = busArrangeTemplate(data);
+		var busHtml = Count.filterUnAuth(busArrangeTemplate(data));
 		$obj.find('.T-bus').html(busHtml)
 		.on('click', '.T-payedDetail', function(event) {
 			event.preventDefault();
@@ -1397,27 +1410,27 @@ define(function(require, exports){
 		});;
 
 		//餐费列表 
-		var restHtml = restArrangeTemplate(data);
+		var restHtml = Count.filterUnAuth(restArrangeTemplate(data));
 		$obj.find('.T-restaurant').html(restHtml);
 
 		//房费列表 
-		var hotelHtml = hotelArrangeTemplate(data);
+		var hotelHtml = Count.filterUnAuth(hotelArrangeTemplate(data));
 		$obj.find('.T-hotel').html(hotelHtml);
 
 		//景区费用列表列表 
-		var scenicHtml = scenicArrangeTemplate(data);
+		var scenicHtml = Count.filterUnAuth(scenicArrangeTemplate(data));
 		$obj.find('.T-scenic').html(scenicHtml);
 
 		//票务费用列表列表 
-		var ticketHtml = ticketArrangeTemplate(data);
+		var ticketHtml = Count.filterUnAuth(ticketArrangeTemplate(data));
 		$obj.find('.T-ticket').html(ticketHtml);
 
 		//其他支出费用列表列表  guideTamplate
-		var otherOutHtml = otherOutTemplate(data);
+		var otherOutHtml = Count.filterUnAuth(otherOutTemplate(data));
 		$obj.find('.T-otherOut').html(otherOutHtml);
 
 		//导游列表
-		var guideHtml = guideTamplate(data);
+		var guideHtml = Count.filterUnAuth(guideTamplate(data));
 		$obj.find('.T-guide').html(guideHtml);
 		//页面事件 
 		if(data.editStatus == 0){
@@ -1491,7 +1504,7 @@ define(function(require, exports){
         		if(result){
         			showMessageDialog(data.message);
         			Count.updateExamine(financialTripPlanId);
-        			Count.listCountHeader(0);
+        			Count.listCountBody(0);
         		}
         	}
         });
@@ -1513,7 +1526,7 @@ define(function(require, exports){
                 	showMessageDialog(data.message);
                 	if(billStatus == 0) {
                 		Tools.closeTab(updateTabId);
-                		Count.listCountHeader(0);
+                		Count.listCountBody(0);
                 	}else{
                 		Count.updateExamine(financialTripPlanId);
                 	}
@@ -5288,7 +5301,7 @@ define(function(require, exports){
 				}
 			},
 			select:function(event,ui){
-				$(this).blur();
+				$(this).blur().trigger('change');
 				$(this).closest('div').find('input[name="lineProductId"]').val(ui.item.id);
 			}
 		}).off("click").on("click", function(){
@@ -5323,7 +5336,7 @@ define(function(require, exports){
 	            }
 	        },
 	        select: function(event, ui) {
-	            $(this).blur();
+	            $(this).blur().trigger('change');
 	            $(this).closest('div').find('input[name="guideId"]').val(ui.item.id);
 	        }
 	    }).off("click").on("click", function() {
@@ -5353,6 +5366,50 @@ define(function(require, exports){
 	            }
 	        });
 	    });
+	};
+
+	//获取搜索区域数据--责任计调
+	Count.getOpList = function($obj) {
+	    $obj.autocomplete({
+	        minLength: 0,
+	        change: function(event, ui) {
+	            if (ui.item == null) {
+	                $(this).closest('div').find('input[name="dutyOPUserId"]').val('');
+	            }
+	        },
+	        select: function(event, ui) {
+	            $(this).blur().trigger('change');
+	            $(this).closest('div').find('input[name="dutyOPUserId"]').val(ui.item.id);
+	        }
+	    }).one("click", function() {
+	        var obj = this;
+	        $.ajax({
+	            url: KingServices.build_url("tripController", "selectDutyOPUser"),
+	            type: 'POST',
+	            showLoading: false,
+	            success: function(data) {
+	                var result = showDialog(data);
+	                if (result) {
+	                    var opList = data.outOPUsers;
+	                    if (opList != null && opList.length > 0) {
+	                        // 按拼音排序
+	                        Tools.sortByPinYin(opList, 'realName');
+
+	                        for (var i = 0; i < opList.length; i++) {
+	                            opList[i].value = opList[i].realName;
+	                        }
+	                    }
+	                    $(obj).autocomplete('option', 'source', opList);
+	                    $(obj).autocomplete('search', '').data("ajax",true);
+	                }
+	            }
+	        });
+	    }).on('click', function(event) {
+	    	event.preventDefault();
+	    	if($obj.data("ajax")){
+	    		$obj.autocomplete('search', '');
+	    	}
+	    });;
 	};
 
 	//格式化日期控件
@@ -5768,7 +5825,7 @@ define(function(require, exports){
 				var result = showDialog(data);
 				if(result){
 					showMessageDialog(data.message);
-        			Count.listCountHeader(0);
+        			Count.listCountBody(0);
             		Tools.closeTab(ReimbursementId);
 				}
 			}
@@ -7349,6 +7406,47 @@ define(function(require, exports){
 		};
 		return newRateArr;
 	};
+
+	//权限过滤
+	Count.filterUnAuth = function(obj) {
+		if(!obj){
+			return;
+		}
+		var $obj = $(obj);
+		$obj.find(".R-right").each(function(){
+			var auth = Count.authCheck($(this).data("right"));
+			if(!auth){
+				$(this).removeClass('T-toAccount').addClass('black');
+			} else if(auth == "check" && $(this).hasClass('T-clear')){
+				//如果同时有取消对账和付款权限，付款权限优先
+				$(this).removeClass('T-clear').addClass('T-check');
+			}
+		});
+		return $obj;
+	}
+
+	Count.authCheck = function(codes){
+		var auth = false;
+		if (!IndexData.userInfo || !IndexData.userInfo.listUserFunctionShip){
+			return res;
+		}
+		var functionList = IndexData.userInfo.listUserFunctionShip;
+		codes = (codes+'').split('|');	//考虑权限合并的情况
+
+		if(Object.prototype.toString.call(codes) === '[object Array]'){
+			codes.forEach(function(code,index) {
+				if (functionList.indexOf(code) >= 0) {
+					if(index == 0){
+						auth = "check";
+					} else if(index == 1){
+						auth = "clear";
+					}
+				}
+			});
+		}
+		return auth;
+	};
+
 	exports.init = Count.initModule;
 	exports.tripDetail = Count.viewTripDetail;
 	exports.viewTripAccount = Count.viewTripAccount;

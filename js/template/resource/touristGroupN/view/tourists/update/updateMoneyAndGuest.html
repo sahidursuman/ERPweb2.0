@@ -103,6 +103,7 @@
                                         <th>证件类型</th>
                                         <th>证件号</th>
                                         <th>设为联系人</th>
+                                        <th>备注</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
@@ -125,6 +126,7 @@
                                                 <span class="lbl"></span>
                                             </label>
                                         </td>
+                                        <td><input type="text" class="col-xs-12" name="remark" value="{{rs.remark}}"></td>
                                         <td><a class="cursor T-action T-delete">删除</a></td>
                                     </tr>
                                     {{/each}}
@@ -145,6 +147,7 @@
                                                 <span class="lbl"></span>
                                             </label>
                                         </td>
+                                        <td><input type="text" class="col-xs-12" name="remark"></td>
                                         <td><a class="cursor T-action T-delete">删除</a></td>
                                     </tr>
                                 {{/if}}

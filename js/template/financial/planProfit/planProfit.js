@@ -21,12 +21,11 @@ define(function(require, exports) {
             args = {
                 start : dateJson.startDate,
                 end : dateJson.endDate,
-                billStatus: ""
+                billStatus : ""
             };
         var data = {};
         data.searchParam = args;
-        var html = listMainTemplate(data);
-        Tools.addTab(menuKey,"单团利润",html);
+        Tools.addTab(menuKey,"单团利润",listMainTemplate(data));
         
         plan.listMain(args);
     };
@@ -65,18 +64,20 @@ define(function(require, exports) {
 
                     plan.lineProductList = lineProductList;
                     plan.guideList = guideList;
+                    plan.getQuery();
 
                     Tools.setDatePicker(plan.$tab.find(".date-picker"),true);
                     //监听搜索区修改
-                    plan.$tab.off().on('change', 'input,select', function(event) {
+                    plan.$tab.find(".T-search-area").off().on('change', 'input,select', function(event) {
                         event.preventDefault();
-                        plan.$tab.data('searchEdit',true);
+                        plan.$tab.data('searchEdit', true);
                     });
+
                     plan.$tab.find('.T-status').off().on('click', 'a', function(event) {
                         event.preventDefault();
                         var $that = $(this);
                         $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
-                        plan.$tab.data('searchEdit',true);
+                        plan.$tab.data('searchEdit', true);
                         plan.listPlan(0);
                     });
                     //搜索按钮事件
@@ -87,18 +88,7 @@ define(function(require, exports) {
 
                     //导出报表事件 btn-hotelExport
                     plan.$tab.find(".T-btn-export").click(function(){
-                        var argsData = {
-                            tripNumber : plan.$searchArea.find("input[name=tripNumber]").val(),
-                            lineProductName : plan.$searchArea.find("input[name=lineProductName]").val(),
-                            lineProductId : plan.$searchArea.find("input[name=lineProductId]").val(),
-                            guideName : plan.$searchArea.find("input[name=guideName]").val(),
-                            guideId : plan.$searchArea.find("input[name=guideId]").val(),
-                            tripPlanType : plan.$searchArea.find("select[name=tripPlanType]").val(),
-                            start : plan.$searchArea.find("input[name=startTime]").val(),
-                            end : plan.$searchArea.find("input[name=endTime]").val(),
-                            billStatus : plan.$searchArea.find(".T-status button").data("value"),
-                            sortType: 'auto'
-                        };
+                        var argsData = plan.getArgs();
                         if(!argsData.start || !argsData.end){
                             showMessageDialog("请选择时间区间");
                             return false;
@@ -108,6 +98,39 @@ define(function(require, exports) {
                 }
             }
         });
+    };
+
+    plan.getArgs = function(page,args){
+        var args = args || {};
+        if(plan.$tab){
+            args = {
+                pageNo : page || 0,
+                tripNumber : plan.$searchArea.find("input[name=tripNumber]").val(),
+                lineProductName : plan.$searchArea.find("input[name=lineProductName]").val(),
+                lineProductId : plan.$searchArea.find("input[name=lineProductId]").val(),
+                guideName : plan.$searchArea.find("input[name=guideName]").val(),
+                guideId : plan.$searchArea.find("input[name=guideId]").val(),
+                tripPlanType : plan.$searchArea.find("select[name=tripPlanType]").val(),
+                start : plan.$searchArea.find("input[name=startTime]").val(),
+                end : plan.$searchArea.find("input[name=endTime]").val(),
+                billStatus : plan.$searchArea.find(".T-status button").data("value")
+            }
+        }
+        args.tripNumber = (args.tripNumber == "全部") ? "" : args.tripNumber;
+        args.lineProductName = (args.lineProductName == "全部") ? "" : args.lineProductName;
+        args.guideName = (args.guideName == "全部") ? "" : args.guideName;
+
+        args.sortType = "auto";
+        if(plan.$tab && plan.$tab.data("searchEdit")){
+            args.pageNo = 0;
+            plan.$tab.data("searchEdit",false);
+            plan.$tab.data("total",false);
+        }
+        //导出报表参数
+        if(arguments.length === 0){
+            delete args.pageNo;
+        }
+        return args;
     };
 
     plan.listPlan = function(page,args){
@@ -126,7 +149,8 @@ define(function(require, exports) {
                     html = Tools.filterUnPoint(html);
 			    	$("#tab-" + menuKey + "-content").find(".T-planProfit-list").html(html);
                     plan.$tab.find(".T-totalSize").text("共计 " + data.searchParam.totalCount + " 条记录");
-                     if(!plan.$tab.data('searchEdit') && plan.$tab.data('total')){
+
+                    if(!plan.$tab.data('searchEdit') && plan.$tab.data('total')){
                         plan.loadSumData(plan.$tab);
                     } else {
                         plan.getSumData(plan.$tab,args);
@@ -144,7 +168,7 @@ define(function(require, exports) {
                     laypage({
                         cont: plan.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (args.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) { 
                                 plan.listPlan(obj.curr - 1,args);
@@ -249,7 +273,6 @@ define(function(require, exports) {
             totalDataHtml = Tools.filterUnPoint(totalDataHtml);
             $tab.find(".T-planProfit-list").append(totalDataHtml);
         }
-        
     };
 
     plan.getQuery = function(){

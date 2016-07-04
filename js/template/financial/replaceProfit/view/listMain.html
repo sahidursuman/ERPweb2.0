@@ -1,44 +1,46 @@
 <div class="row globalAdd">
-    <div class="col-xs-12 T-search-area">
-        <div class="">
-            <label>客户 </label>
-            <input class="mar-r-10" type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" placeholder="客户" />
-            <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
-            <label>代订单号 </label>
-            <input class="mar-r-10" type="text" value="{{searchParam.orderNumber}}" name="orderNumber" placeholder="代订单号" />
-            <label>外联销售 </label>
-            <input class="mar-r-10" type="text" value="{{searchParam.outOPUserName}}" name="outOPUserName" placeholder="外联销售" />
-            <label>部门 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="businessName" placeholder="部门" />
-            <label>子部门 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="groupName" placeholder="子部门" />
-            <label>酒店 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.hotelName}}" name="hotelName" placeholder="酒店" />
-            <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
-          
-        </div>
-        <div class="mar-t-10">
-            <label>景区 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.scenicName}}" name="scenicName" placeholder="景区" />
-            <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" /> 
-        	<label>票务 </label>
-            <select name="ticketType" class="mar-r-10">
-                <option value="" {{if searchParam.ticketType=="" }}selected="selected" {{/if}}>全部</option>
-                <option value="1" {{if searchParam.ticketType==1 }}selected="selected" {{/if}}>飞机票</option>
-                <option value="2" {{if searchParam.ticketType==2 }}selected="selected" {{/if}}>汽车票</option>
-                <option value="3" {{if searchParam.ticketType==3 }}selected="selected" {{/if}}>火车票</option>
-                <option value="4" {{if searchParam.ticketType==4 }}selected="selected" {{/if}}>轮船票</option>
-            </select>
-            <label>旅游车 </label>
-            <input type="text" class="mar-r-10" value="{{searchParam.needSeatCount}}" name="seatCount" placeholder="旅游车" />
-            <label>开始日期 </label>
-            <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" style="width:100px;" />
-            <label>结束日期 </label>
-            <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" style="width:100px;" />
-            <button class="search-btn btn-sm btn-height T-search mar-r-10">
-                <i class="ace-icon fa fa-search"></i>搜索
-            </button>
-            <button class="search-btn btn-sm btn-height T-export">导出</button>
+    <div class="col-xs-12">
+        <div class="T-search-area">
+            <div class="">
+                <label>客户 </label>
+                <input class="mar-r-10" type="text" value="{{searchParam.partnerAgencyName}}" name="partnerAgencyName" placeholder="客户" />
+                <input type="hidden" value="{{searchParam.partnerAgencyId}}" name="partnerAgencyId" />
+                <label>代订单号 </label>
+                <input class="mar-r-10" type="text" value="{{searchParam.orderNumber}}" name="orderNumber" placeholder="代订单号" />
+                <label>外联销售 </label>
+                <input class="mar-r-10" type="text" value="{{searchParam.outOPUserName}}" name="outOPUserName" placeholder="外联销售" />
+                <label>部门 </label>
+                <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="businessName" placeholder="部门" />
+                <label>子部门 </label>
+                <input type="text" class="mar-r-10" value="{{searchParam.groupName}}" name="groupName" placeholder="子部门" />
+                <label>酒店 </label>
+                <input type="text" class="mar-r-10" value="{{searchParam.hotelName}}" name="hotelName" placeholder="酒店" />
+                <input type="hidden" value="{{searchParam.hotelId}}" name="hotelId" />
+              
+            </div>
+            <div class="mar-t-10">
+                <label>景区 </label>
+                <input type="text" class="mar-r-10" value="{{searchParam.scenicName}}" name="scenicName" placeholder="景区" />
+                <input type="hidden" value="{{searchParam.scenicId}}" name="scenicId" /> 
+            	<label>票务 </label>
+                <select name="ticketType" class="mar-r-10">
+                    <option value="" {{if searchParam.ticketType=="" }}selected="selected" {{/if}}>全部</option>
+                    <option value="1" {{if searchParam.ticketType==1 }}selected="selected" {{/if}}>飞机票</option>
+                    <option value="2" {{if searchParam.ticketType==2 }}selected="selected" {{/if}}>汽车票</option>
+                    <option value="3" {{if searchParam.ticketType==3 }}selected="selected" {{/if}}>火车票</option>
+                    <option value="4" {{if searchParam.ticketType==4 }}selected="selected" {{/if}}>轮船票</option>
+                </select>
+                <label>旅游车 </label>
+                <input type="text" class="mar-r-10" value="{{searchParam.needSeatCount}}" name="seatCount" placeholder="旅游车" />
+                <label>开始日期 </label>
+                <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" value="{{searchParam.startTime}}" type="text" style="width:100px;" />
+                <label>结束日期 </label>
+                <input class="date-picker mar-r-10" name="endDate" placeholder="结束日期" value="{{searchParam.endTime}}" type="text" style="width:100px;" />
+                <button class="search-btn btn-sm btn-height T-search mar-r-10">
+                    <i class="ace-icon fa fa-search"></i>搜索
+                </button>
+                <button class="search-btn btn-sm btn-height T-export">导出</button>
+            </div>
         </div>
         <div style="margin:8px 0px;">
             <label class="mar-r-20">应收合计：<span class="T-sumNeedGetMoney F-float F-money"></span></label>

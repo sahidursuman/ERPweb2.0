@@ -50,6 +50,8 @@ define(function(require, exports) {
             sortType: 'auto'
         };
 
+        Transfer.searchData = FinancialService.getChangeArgs(Transfer.searchData,Transfer.$tab);
+
         var searchParam = JSON.stringify(Transfer.searchData);
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
@@ -70,7 +72,7 @@ define(function(require, exports) {
                     laypage({
                         cont: Transfer.$tab.find('.T-pagenation'),
                         pages: data.searchParam.totalPage,
-                        curr: (page + 1),
+                        curr: (Transfer.searchData.pageNo + 1),
                         jump: function(obj, first) {
                             if (!first) {
                                 Transfer.listTransfer(obj.curr - 1);
@@ -93,6 +95,7 @@ define(function(require, exports) {
 	Transfer.initList = function(startDate,endDate,accountStatus){
         Transfer.getQueryList();
         Tools.setDatePicker(Transfer.$tab.find(".date-picker"),true);
+        FinancialService.searchChange(Transfer.$tab);
 
         //搜索按钮事件
         Transfer.$tab.find('.T-search').on('click',function(event) {
@@ -194,7 +197,7 @@ define(function(require, exports) {
                     //取消对账权限过滤
                     var checkTr = Transfer.$checkTab.find(".T-checkTr");
                     var rightCode = Transfer.$checkTab.find(".T-checkList").data("right");
-                    checkDisabled(ftList,checkTr,rightCode);
+                    FinancialService.checkAuthFilter(checkTr,rightCode);
 
                     //绑定翻页组件
                     laypage({
@@ -719,6 +722,7 @@ define(function(require, exports) {
                 }
             },
             select: function(event,ui) {
+                $(this).trigger('change');
                 $(this).blur().nextAll('input[name="partnerAgencyId"]').val(ui.item.id);
             }
         }).on("click",function(){
@@ -1035,15 +1039,7 @@ define(function(require, exports) {
         })
     };
 
-    Transfer.initPay = function(options){
-        var args = {
-            pageNo : 0,
-            partnerAgencyId : options.id,
-            partnerAgencyName : options.name,
-            startDate : options.startDate,
-            endDate : options.endDate,
-            accountStatus : options.accountStatus
-        }
+    Transfer.initPay = function(args){
         $.ajax({
             url:KingServices.build_url("account/financialTransfer","listSumTransfer"),
             type:"POST",
@@ -1098,5 +1094,5 @@ define(function(require, exports) {
     };
 
     exports.init = Transfer.initModule;
-    exports.initPay = Transfer.initPay;
+    exports.initPayment = Transfer.initPay;
 });

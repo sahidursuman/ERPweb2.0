@@ -15,6 +15,7 @@
 						<th>证件类型</th>
 						<th>证件号</th>
 						<th>设为联系人</th>
+						<th>备注</th>
 					</tr>
 				</thead>
 				<tbody class="T-addTouristTbody" data-del-json="{{touristGroupMemberJsonDel}}">
@@ -27,6 +28,7 @@
 						<td>{{rs.idCardType | getCardText}}</td>
 						<td>{{rs.idCardNumber}}</td>
 						<td>{{if rs.isContactUser == 1}}是{{/if}}</td>
+						<td>{{rs.remark}}</td>
 					</tr>
 					{{/each}}
 				{{/if}}
