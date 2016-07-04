@@ -84,7 +84,7 @@
                 <th style="min-width: 110px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-checkList" data-right="1220005">
+        <tbody class="T-checkList" data-right="1250002|1250005">
             {{each financialScenicListData as rs index}}
 		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
             {{if rs.change}}data-change="true"{{/if}}>
@@ -117,7 +117,7 @@
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
 				<td>
-				    <label class="pos-rel R-right" {{if rs.isConfirmAccount}} data-right="1250005"{{else}}data-right="1250002"{{/if}}>
+				    <label class="pos-rel">
 				   	    <input type="checkbox" class="ace T-checkbox" {{if (rs.change && rs.isChecked == 1) || (!rs.change && rs.isConfirmAccount == 1)}}checked="checked"{{/if}} />
 				   		  <span class="lbl">对账</span>
 				    </label>

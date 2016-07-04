@@ -94,7 +94,7 @@
                 <th style="min-width: 110px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList">
+        <tbody class="T-list T-checkList" data-right="1210002|1210005">
         {{each financialTicketList as rs index}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.tripNumber}}{{if rs.tripNumber && rs.lineProductName}}，{{/if}}{{rs.lineProductName}}{{if (rs.lineProductName  && rs.guideName) || (rs.tripNumber && !rs.lineProductName && rs.guideName)}}，{{/if}}{{rs.guideName}}</td>

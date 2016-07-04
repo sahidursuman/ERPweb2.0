@@ -176,7 +176,7 @@ define(function(require, exports) {
                         validator = (new FinRule(0)).check(scenic.$checkTab.find(".T-checkList"));                       
 
                         //取消对账权限过滤
-                        checkDisabled(fhList,scenic.$checkTab.find(".T-checkTr"),scenic.$checkTab.find(".T-checkList").data("right"));
+                        FinancialService.checkAuthFilter(scenic.$checkTab.find(".T-checkTr"),scenic.$checkTab.find(".T-checkList").data("right"));
                     } else {
                        scenic.$checkTab.data('next',args);
                     }
