@@ -169,7 +169,7 @@ define(function(require, exports) {
                         //取消对账权限过滤
                         var checkTr = Self.$checkTab.find(".T-checkTr");
                         var rightCode = Self.$checkTab.find(".T-checkList").data("right");
-                        checkDisabled(fsList,checkTr,rightCode);                    
+                        FinancialService.checkAuthFilter(checkTr,rightCode);                  
                     } else {
                         Self.$checkTab.data('next',args);
                     }

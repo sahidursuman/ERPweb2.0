@@ -184,7 +184,7 @@ define(function(require, exports) {
                         //取消对账权限过滤
                         var checkTr = Insure.$checkTab.find(".T-checkTr");
                         var rightCode = Insure.$checkTab.find(".T-checkList").data("right");
-                        checkDisabled(fiList,checkTr,rightCode);
+                        FinancialService.checkAuthFilter(checkTr,rightCode);
                     } else {
                         Insure.$checkTab.data('next',args);
                     }
