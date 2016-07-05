@@ -38,6 +38,7 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val != ''){
             $cash.closest('div').toggleClass('hidden', val != 0);
             $card.closest('div').toggleClass('hidden', val  != 1 && val != 5);
+            $container.find(".T-loanBalance").toggleClass('hidden', val  != 8);
             if(val !=0){
                $container.find('input[name=cash-id]').val('');
             };
