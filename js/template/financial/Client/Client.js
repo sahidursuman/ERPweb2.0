@@ -265,6 +265,7 @@ define(function(require, exports) {
             if(showDialog(data)){
                 $tab.data("total",data);
                 Client.loadListSumData($tab);
+                Client.clacReceivedMoney();
             }
         });
     };  
