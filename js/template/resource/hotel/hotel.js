@@ -42,6 +42,9 @@ define(function(require, exports) {
 			},
 			success:function(data){
 				data.hotelList = JSON.parse(data.hotelList);
+				data.hotelList[1].isAuth = 1;
+				data.hotelList[2].isAuth = 2;
+				data.hotelList[3].isAuth = 3;
 				//data.searchParam.name = decodeURI(data.searchParam.name);
 				var result = showDialog(data);
 				if(result){
@@ -242,12 +245,14 @@ define(function(require, exports) {
 
 	//认证酒店
 	hotel.authenticationHotel = function(id) {
-		var html = authenticationTemplate();
+
+		var data = {};data.hotelId = id;
+		var html = authenticationTemplate(data);
 		hotel.$authenticationLayer = layer.open({
 			type: 1,
 			title: '酒店认证',
 			skin: 'layui-layer-rim',
-			area: '600px',
+			area: '650px',
 			zIndex: 1028,
 			content: html,
 			scrollbar: false,
@@ -264,6 +269,9 @@ define(function(require, exports) {
 	//事件初始化
 	hotel.initialization = function($obj) {
 
+		//省市区事件
+		KingServices.provinceCity($obj);
+
 		//图片初始化
 		$obj.find('.T-upimg').ace_file_input({
 			style:'well',
@@ -277,11 +285,16 @@ define(function(require, exports) {
 				hotel.imgCount += 1;
 				$div.data("needSubmit",true);
 			}
+			if($div.find(".T-original").length) {
+				$div.find(".T-original").addClass('hidden');
+			}
 			console.log(hotel.imgCount);
 		});
 
-		//勾选框的控制
+		
 		$obj.off('click').on('click','.T-isAgree',function() {
+
+			//勾选框的控制
 			var isAgree = $(this).is(':checked');
 			if(isAgree) {
 				$obj.find('.T-btn-save').prop('disabled',false);
@@ -289,22 +302,93 @@ define(function(require, exports) {
 				$obj.find('.T-btn-save').prop('disabled',true);
 			};
 		}).on('click','.T-btn-save',function() {
-			console.log(123);
+
+			//保存事件
+			if(hotel.imgCount > 0) {
+				hotel.upload($obj);
+			} else {
+				hotel.saveFormData($obj);
+			} 
+		}).on("click",".remove",function(){
+			var $container = $(this).closest('.T-imgContainer'),
+				$originalImg = $container.find(".T-original");
+			$container.data("url","");
+			if($originalImg){
+				$originalImg.removeClass('hidden');
+			}
+			company.imgCount -= 1;
 		});
 	};
 
 	//上传图片
-	hotel.uploadImg = function($obj) {
+	hotel.uploadImg = function($obj,$tab) {
 
+		//上传图片
+		var eleId = $obj.data("id");
+		console.log(eleId);
+	    $.ajaxFileUpload({
+	        url:'huochaitou/base.do?method=uploadImage',//处理图片脚本
+	        secureuri :false,
+	        fileElementId : eleId,//file控件id
+	        dataType : 'json',
+	        async: false,
+	        success : function(data){
+	        	console.log(data);
+	        	$obj.data("needSubmit",false);
+	        	$obj.data("url",data.url);
+	        	if($obj.find(".T-original").length) {
+	        		$obj.find(".T-original").addClass('hidden');
+	        	}
+	        	hotel.imgCount -= 1;
+	        	if(hotel.imgCount == 0){
+					hotel.saveFormData($tab);
+				}
+	        },
+	        error: function(data, status, e){
+	            alert(e);
+	        }
+		});
 	};
 
 	//循环上传
 	hotel.upload = function($tab) {
-
+		var $imgContainer = $tab.find('.T-imgContainer');
+		for(var i = 0,len = $imgContainer.length; i<len; i++){
+			var $that = $imgContainer.eq(i);
+			if($that.data('needSubmit')){
+				hotel.uploadImg($that,$tab);
+			}
+		};
 	}
 
 	//保存数据
 	hotel.saveFormData = function($tab) {
+		var form = $tab.find(".T-form").serialize(),
+			$imgContainer = $tab.find('.T-imgContainer');
+		var businessLicensePic = $imgContainer.eq(0).data("url"),
+		 	taxesCardPic = $imgContainer.eq(1).data("url");
+		if(businessLicensePic){
+			form += "&businessLicensePic=" + businessLicensePic;
+		}
+		if(taxesCardPic){
+			form += "&taxesCardPic=" + taxesCardPic;
+		}
+		console.log(form);
+		$.ajax({
+			url: hotel.url('upCerLication','view'),
+			type: 'POST',
+			data: form,
+			success: function(data) {
+				if(showDialog(data)){
+					showMessageDialog(data.message,function(){
+						layer.close(hotel.$authenticationLayer);
+						hotel.listHotel(0);
+						console.log(hotel.imgCount);
+					});
+				}
+			}
+
+		});
 
 	};
 	hotel.addHotel = function(fn){

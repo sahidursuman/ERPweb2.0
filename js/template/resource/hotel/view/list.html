@@ -66,12 +66,14 @@
 
 			<tbody>
 				{{each hotelList as hotel}}
-					<tr data-entity-id="{{hotel.id}}">
+					<tr data-entity-id="{{hotel.id}}" data-isauth="{{hotel.isAuth}}">
 					 	<td>
 					 		{{hotel.name}}--
 						 	<a class="T-action T-authentication">
-						 	{{if hotel.isAuth < 2 }}
+						 	{{if hotel.isAuth == 0 }}
 						 		<span style="color:#FF9900;">未认证</span>
+						 	{{else if hotel.isAuth == 1 }}
+						 		<span style="color:#FF9900;">认证中</span>
 						 	{{else if hotel.isAuth == 2}} 
 								<span style="color:green;">已认证</span>
 							{{else}}
@@ -111,8 +113,22 @@
 							{{/if}}
 
 						</td>
-						<td>{{hotel.mobileNumber}}</td>
-						<td>{{hotel.mobileNumber}}</td>
+						<td>
+							{{if !!hotel.userName}}
+								<span>{{hotel.userName}}</span>
+							{{else}}
+								-
+							{{/if}}
+						</td>
+
+						<td>
+							{{if !!hotel.password}}
+								<span>{{hotel.password}}</span>
+							{{else}}
+								-
+							{{/if}}
+						</td>
+
 						<td>
 							{{if hotel.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
