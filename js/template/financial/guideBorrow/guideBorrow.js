@@ -84,15 +84,15 @@ define(function(require, exports){
         $tab.on("click",'.T-borrow',function(){
         	var $tr = $(this).closest('tr'),
 				options = {
-				id: $tr.data('id'),
-				name: $tr.data('name'),
+				guideId: $tr.data('id'),
+				guideName: $tr.data('name'),
 				startDate: args.startDate,
 				endDate: args.endDate,
 				accountStatus : args.accountStatus,
 				borrow : true
 			}
 			seajs.use(ASSETS_ROOT + modalScripts.financial_guide, function(module){
-				module.initPay(options);
+				module.initPayment(options);
 			});
 		});
 	};
