@@ -17,7 +17,8 @@ define(function(require, exports) {
 		$tab : false,
 		$searchArea : false,
 		$addLayer : "",
-		$updateLayer : ""
+		$updateLayer : "",
+		imgCount: 0,
 	};
 	var ruleData = {};
 	hotel.initModule = function(){
@@ -252,19 +253,60 @@ define(function(require, exports) {
 			scrollbar: false,
 			success: function(layObj,index){
 				//初始化图片上传事件
-				$(layObj).find('.T-upimg').ace_file_input({
-					style:'well',
-					btn_choose:'选择图片',
-					btn_change:null,
-					droppable:true,
-					thumbnail:'large'
-				})
+				var $layObj = $(layObj);
+				hotel.initialization($layObj);
 			}
 
 		});
 	}
 
 
+	//事件初始化
+	hotel.initialization = function($obj) {
+
+		//图片初始化
+		$obj.find('.T-upimg').ace_file_input({
+			style:'well',
+			btn_choose:'选择图片',
+			btn_change:null,
+			droppable:true,
+			thumbnail:'large'
+		}).on("change",function(){
+			var $div = $(this).closest('div');
+			if(!$div.data("needSubmit")){
+				hotel.imgCount += 1;
+				$div.data("needSubmit",true);
+			}
+			console.log(hotel.imgCount);
+		});
+
+		//勾选框的控制
+		$obj.off('click').on('click','.T-isAgree',function() {
+			var isAgree = $(this).is(':checked');
+			if(isAgree) {
+				$obj.find('.T-btn-save').prop('disabled',false);
+			} else {
+				$obj.find('.T-btn-save').prop('disabled',true);
+			};
+		}).on('click','.T-btn-save',function() {
+			console.log(123);
+		});
+	};
+
+	//上传图片
+	hotel.uploadImg = function($obj) {
+
+	};
+
+	//循环上传
+	hotel.upload = function($tab) {
+
+	}
+
+	//保存数据
+	hotel.saveFormData = function($tab) {
+
+	};
 	hotel.addHotel = function(fn){
 		var html = addTemplate();
 		hotel.$addLayer = layer.open({

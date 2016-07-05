@@ -67,7 +67,18 @@
 			<tbody>
 				{{each hotelList as hotel}}
 					<tr data-entity-id="{{hotel.id}}">
-					 	<td>{{hotel.name}}--<a class="T-action T-authentication">未认证</a></td>
+					 	<td>
+					 		{{hotel.name}}--
+						 	<a class="T-action T-authentication">
+						 	{{if hotel.isAuth < 2 }}
+						 		<span style="color:#FF9900;">未认证</span>
+						 	{{else if hotel.isAuth == 2}} 
+								<span style="color:green;">已认证</span>
+							{{else}}
+								<span style="color:red;">认证失败</span>
+						 	{{/if}}
+						 	</a>
+					 	</td>
 						<td>
 						{{if hotel.level==1 }}
 							三星以下
