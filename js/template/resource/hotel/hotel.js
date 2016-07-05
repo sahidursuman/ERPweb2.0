@@ -10,7 +10,8 @@ define(function(require, exports) {
 		listTemplate = require("./view/list"),
 		addTemplate = require("./view/add"),
 		updateTemplate = require("./view/update"),
-		viewTemplate = require("./view/view");
+		viewTemplate = require("./view/view"),
+		authenticationTemplate = require('./view/accreditation');
 	
 	var hotel = {
 		$tab : false,
@@ -103,6 +104,9 @@ define(function(require, exports) {
 				var $this = $(this);
 				// 删除酒店
 				hotel.deleteHotel(id,$this);
+			} else if ($this.hasClass('T-authentication')){
+				//认证酒店
+				hotel.authenticationHotel(id);
 			}
 		});
 	};
@@ -217,7 +221,7 @@ define(function(require, exports) {
 			}
 		})
 	};
-  //删除酒店消息 
+    //删除酒店消息 
 	hotel.deleteHotel = function(id,$this){
 		if (!!id) {
 			showConfirmDialog("你确定要删除该酒店？", function() {
@@ -234,6 +238,32 @@ define(function(require, exports) {
 			})
 		}
 	}
+
+	//认证酒店
+	hotel.authenticationHotel = function(id) {
+		var html = authenticationTemplate();
+		hotel.$authenticationLayer = layer.open({
+			type: 1,
+			title: '酒店认证',
+			skin: 'layui-layer-rim',
+			area: '600px',
+			zIndex: 1028,
+			content: html,
+			scrollbar: false,
+			success: function(layObj,index){
+				//初始化图片上传事件
+				$(layObj).find('.T-upimg').ace_file_input({
+					style:'well',
+					btn_choose:'选择图片',
+					btn_change:null,
+					droppable:true,
+					thumbnail:'large'
+				})
+			}
+
+		});
+	}
+
 
 	hotel.addHotel = function(fn){
 		var html = addTemplate();

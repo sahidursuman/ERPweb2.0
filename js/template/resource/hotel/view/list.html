@@ -45,6 +45,8 @@
             	<col style="width:15%;"></col>
             	<col style="width:10%;"></col>
             	<col style="width:10%;"></col>
+            	<col style="width:10%;"></col>
+            	<col style="width:10%;"></col>
             	<col style="width:15%;"></col>
             </colgroup>
 			<thead>
@@ -55,6 +57,8 @@
 					
 					<th>联系电话</th>
 					<th>所在地区</th>
+					<th>登录账号</th>
+					<th>初始密码</th>
 					<th>启用标志</th>
 					<th>操作</th>
 				</tr>
@@ -63,7 +67,7 @@
 			<tbody>
 				{{each hotelList as hotel}}
 					<tr data-entity-id="{{hotel.id}}">
-					 	<td>{{hotel.name}}</td>
+					 	<td>{{hotel.name}}--<a class="T-action T-authentication">未认证</a></td>
 						<td>
 						{{if hotel.level==1 }}
 							三星以下
@@ -96,6 +100,8 @@
 							{{/if}}
 
 						</td>
+						<td>{{hotel.mobileNumber}}</td>
+						<td>{{hotel.mobileNumber}}</td>
 						<td>
 							{{if hotel.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
