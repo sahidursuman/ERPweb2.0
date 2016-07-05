@@ -184,7 +184,6 @@ define(function(require, exports) {
         //未收减去预收勾选事件
         Client.$searchArea.on('click','.T-sumUnIncome',function() {
             Client.clacReceivedMoney();
-            
         })
         Client.clacReceivedMoney();
         // 报表内的操作
@@ -221,17 +220,18 @@ define(function(require, exports) {
         var $that = Client.$searchArea.find('.T-sumUnIncome');
             $trList = Client.$tab.find('.T-list').find('tr'), 
             checkStatus = $that.is(':checked');
+
+        function changeTwoDecimal($val){
+            var newVal = parseFloat($val);
+
+            if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                return 0;
+            }
+            var newVal = Math.round($val*100)/100;
+            return newVal;
+        };
         //遍历tr
         $trList.each(function() {
-            function changeTwoDecimal($val){
-                var newVal = parseFloat($val);
-
-                if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
-                    return 0;
-                }
-                var newVal = Math.round($val*100)/100;
-                return newVal;
-            };
             //准备数据
             var settlementMoney = changeTwoDecimal($(this).find('.T-settlementMoney').text()),
                 receiveMoney = changeTwoDecimal($(this).find('.T-receiveMoney').text()),
@@ -239,6 +239,7 @@ define(function(require, exports) {
                 unReceivedMoney = $(this).data('unincome'),
                 $unReceivedMoney = $(this).find('.T-unReceivedMoney'),
                 result = 0;
+
             if(checkStatus){
                 result = changeTwoDecimal((settlementMoney-receiveMoney-balance));
             } else {
@@ -246,6 +247,12 @@ define(function(require, exports) {
             }
             $unReceivedMoney.text(result);
         });
+        var $sumUnReceivedMoney = Client.$tab.find('.T-sumUnReceivedMoney'),
+            sumUnReceivedMoney = $sumUnReceivedMoney.data('sum'),
+            sumBalance = changeTwoDecimal(Client.$tab.find('.T-sumBalance').text()),
+            res = 0;
+        res = checkStatus ? (sumUnReceivedMoney - sumBalance) : sumUnReceivedMoney;
+        $sumUnReceivedMoney.text(res);
     };
 
     Client.getListSumData = function(args,$tab){
@@ -270,6 +277,7 @@ define(function(require, exports) {
         $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
         $tab.find('.T-guideIncome').text(total.sumGuideMoney);
         $tab.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
+        $tab.find('.T-sumUnReceivedMoney').data('sum', total.sumUnReceivedMoney);
         $tab.find('.T-sumBalance').text(total.sumBalance);
     };
 
