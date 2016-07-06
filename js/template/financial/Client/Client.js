@@ -898,6 +898,7 @@ define(function(require, exports) {
                     showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Client.checkTemp = false;
+                        Client.$tab.data("searchEdit",true);
                         $tab.data("total","");
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
@@ -943,6 +944,7 @@ define(function(require, exports) {
                     showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Client.clearDataArray = false;
+                        Client.$tab.data("searchEdit",true);
                         $tab.data("total","");
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_clearing");
