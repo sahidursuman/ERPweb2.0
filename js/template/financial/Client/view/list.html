@@ -25,6 +25,16 @@
                 <option value="2" {{if searchParam.partnerAgencyType == 2}}selected{{/if}}>组团社和地接社</option>
             </select>
         </div>
+        
+        <div class="form-group mar-r-10">
+          <label>部门 </label>
+          <input class="w100 mar-r-10" type="text" placeholder="部门" name="businessName" value="{{searchParam.businessName}}" />
+          <input type="hidden" name="businessNameId" value="{{searchParam.businessGroupId}}" />
+          <label>子部门 </label>
+          <input class="w100" type="text" placeholder="子部门" name="groupName" value="{{searchParam.groupName}}" />
+          <input type="hidden" name="groupId" value="{{searchParam.groupId}}" />
+        </div>
+
         <div class="form-group T-finance-status btn-group mar-r-10">
             <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class="T-select-status btn-sm dropdown-toggle block-up" aria-expanded="false">
                 <span>
