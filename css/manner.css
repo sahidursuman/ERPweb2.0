@@ -188,6 +188,14 @@ label {
     color: #428bca;
 }
 
+.hct-hotel-font-20 {
+    font-size: 20px;
+}
+
+.hct-hotel-font-14 {
+    font-size: 14px;
+}
+
 .middle {
     vertical-align: middle;
 }

@@ -45,6 +45,8 @@
             	<col style="width:15%;"></col>
             	<col style="width:10%;"></col>
             	<col style="width:10%;"></col>
+            	<col style="width:10%;"></col>
+            	<col style="width:10%;"></col>
             	<col style="width:15%;"></col>
             </colgroup>
 			<thead>
@@ -55,6 +57,8 @@
 					
 					<th>联系电话</th>
 					<th>所在地区</th>
+					<th>登录账号</th>
+					<th>初始密码</th>
 					<th>启用标志</th>
 					<th>操作</th>
 				</tr>
@@ -62,8 +66,21 @@
 
 			<tbody>
 				{{each hotelList as hotel}}
-					<tr data-entity-id="{{hotel.id}}">
-					 	<td>{{hotel.name}}</td>
+					<tr data-entity-id="{{hotel.id}}" data-isauth="{{hotel.isAuth}}" data-hotel="{{hotel.name}}">
+					 	<td>
+					 		{{hotel.name}}--
+						 	<a class="T-action T-authentication">
+						 	{{if hotel.isAuth == 0 }}
+						 		<span style="color:#FF9900;">未认证</span>
+						 	{{else if hotel.isAuth == 1 }}
+						 		<span style="color:#FF9900;">认证中</span>
+						 	{{else if hotel.isAuth == 2}} 
+								<span style="color:green;">已认证</span>
+							{{else}}
+								<span style="color:red;">认证失败</span>
+						 	{{/if}}
+						 	</a>
+					 	</td>
 						<td>
 						{{if hotel.level==1 }}
 							三星以下
@@ -96,6 +113,22 @@
 							{{/if}}
 
 						</td>
+						<td>
+							{{if !!hotel.userName}}
+								<span>{{hotel.userName}}</span>
+							{{else}}
+								-
+							{{/if}}
+						</td>
+
+						<td>
+							{{if !!hotel.password}}
+								<span>{{hotel.password}}</span>
+							{{else}}
+								-
+							{{/if}}
+						</td>
+
 						<td>
 							{{if hotel.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>
