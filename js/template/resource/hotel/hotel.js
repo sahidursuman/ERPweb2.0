@@ -11,7 +11,9 @@ define(function(require, exports) {
 		addTemplate = require("./view/add"),
 		updateTemplate = require("./view/update"),
 		viewTemplate = require("./view/view"),
-		authenticationTemplate = require('./view/accreditation');
+		authenticationTemplate = require('./view/accreditation'),
+		auditTemplate = require('./view/audit'),
+		editAuditTemplate = require('./view/editAudit');
 	
 	var hotel = {
 		$tab : false,
@@ -42,9 +44,7 @@ define(function(require, exports) {
 			},
 			success:function(data){
 				data.hotelList = JSON.parse(data.hotelList);
-				data.hotelList[1].isAuth = 1;
-				data.hotelList[2].isAuth = 2;
-				data.hotelList[3].isAuth = 3;
+				data.hotelList[1].isAuth = 2 
 				//data.searchParam.name = decodeURI(data.searchParam.name);
 				var result = showDialog(data);
 				if(result){
@@ -97,7 +97,8 @@ define(function(require, exports) {
 		// 报表内的操作
 		hotel.$tab.find('.T-hotelList').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $this = $(this), id = $this.closest('tr').data('entity-id');
+			var $this = $(this), $tr = $this.closest('tr'),id = $tr.data('entity-id'),
+				name = $tr.data('hotel'),isAuth = $tr.data('isauth');
 			if ($this.hasClass('T-view')){
 				// 查看酒店信息
 				hotel.viewHotel(id);
@@ -110,7 +111,12 @@ define(function(require, exports) {
 				hotel.deleteHotel(id,$this);
 			} else if ($this.hasClass('T-authentication')){
 				//认证酒店
-				hotel.authenticationHotel(id);
+				if(isAuth == 0) {
+					hotel.authenticationHotel(id,name);
+				} else {
+					hotel.getHotel(id, name, isAuth);
+				}
+				
 			}
 		});
 	};
@@ -243,10 +249,75 @@ define(function(require, exports) {
 		}
 	}
 
+	//请求数据 
+	hotel.getHotel = function(id, name, isAuth) {
+		$.ajax({
+			url: hotel.url('findCertification','view'),
+			type: 'POST',
+			data: {
+				id: id
+			}
+		}).done(function(data) {
+			if(showDialog(data)){
+				
+				var imgUrl = data.ERP_IMG_URL,html = '';
+					data.hotelAudit = JSON.parse(data.hotelAudit);
+					//图片路径设置
+					var businessLicensePic = data.hotelAudit.businessLicensePic,
+						taxesCardPic = data.hotelAudit.taxesCardPic;
+					if(businessLicensePic != null && businessLicensePic != "") {
+						data.hotelAudit.businessLicensePic = imgUrl + businessLicensePic;
+					};
+					if(taxesCardPic != null && taxesCardPic != "") {
+						data.hotelAudit.taxesCardPic = imgUrl + taxesCardPic;
+					};
+					data.businessLicensePic = businessLicensePic;
+					data.taxesCardPic = taxesCardPic;
+				if(isAuth == 1){
+					html = auditTemplate(data);
+				} else {
+					html = editAuditTemplate(data);
+				}
+				
+				hotel.$auditLayer = layer.open({
+					type: 1,
+					title: '酒店认证',
+					skin: 'layui-layer-rim',
+					area: '650px',
+					zIndex: 1028,
+					content: html,
+					scrollbar: false,
+					success: function(layObj,index) {
+
+						var $layObj = $(layObj);
+						if(isAuth > 1) {
+							hotel.initialization($layObj,data,isAuth);
+						} else {
+							$layObj.find('.btn-view').off('click').on('click',function(){
+								hotel.viewBillImage(this,imgUrl);
+							});
+						}
+						
+					}
+				});
+
+			}
+		});
+	};
+
+	//查看图片
+	hotel.viewBillImage = function(obj,imgUrl) {
+		var url = $(obj).attr('url'),WEB_IMG_URL_BIG = url+imgUrl;
+		$(obj).viewer({
+            url: WEB_IMG_URL_BIG,
+        });
+	}
+
 	//认证酒店
-	hotel.authenticationHotel = function(id) {
+	hotel.authenticationHotel = function(id,name) {
 
 		var data = {};data.hotelId = id;
+			data.hotelName = name;
 		var html = authenticationTemplate(data);
 		hotel.$authenticationLayer = layer.open({
 			type: 1,
@@ -267,10 +338,21 @@ define(function(require, exports) {
 
 
 	//事件初始化
-	hotel.initialization = function($obj) {
+	hotel.initialization = function($obj,data,isAuth) {
 
 		//省市区事件
-		KingServices.provinceCity($obj);
+		if(!!data) {
+			if(data.hotelAudit.province != null )var provinceId = data.hotelAudit.province.id;
+			if(data.hotelAudit.city != null )var cityId = data.hotelAudit.city.id;
+			if(data.hotelAudit.district != null ) var districtId = data.hotelAudit.district.id;
+		};
+		
+		if(data.hotelAudit.isAuth == 0){
+			KingServices.provinceCity($obj);
+		} else {
+			KingServices.provinceCity($obj,provinceId,cityId,districtId);
+		};
+		
 
 		//图片初始化
 		$obj.find('.T-upimg').ace_file_input({

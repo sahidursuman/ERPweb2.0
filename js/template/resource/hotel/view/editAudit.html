@@ -1,7 +1,20 @@
 <div class="col-xs-12">
     <div class="page-header">
-        <span style="font-size:16px;">
-            注:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
+        <p>
+            <span class="hct-hotel-font-20">
+                {{if isAuth == 2}}
+                    已通过认证审核
+                {{else}}
+                    认证审核失败
+                {{/if}}
+            </span>
+        </p> 
+        <span class="hct-hotel-font-14">
+            {{if isAuth == 2}}
+                注:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
+            {{else}}
+                注:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
+            {{/if}}
         </span>
 
     </div>
@@ -11,7 +24,7 @@
                 <div class="form-group">
                     <label class="col-xs-2 control-label no-padding-right">商家名称</label>
                     <div class="col-xs-10">
-                        <input type="text" class="col-xs-10" name="hotelName" value="{{hotelName}}" 
+                        <input type="text" class="col-xs-10" name="hotelName" value="{{hotelAudit.hotelName}}" 
                                placeholder="商家名称务必和营业执照名称一致，否则审核不通过">
                         <input name="hotelId" value="{{hotelId}}" type="hidden">
                     </div>
@@ -35,7 +48,7 @@
                 <div class="form-group">
                     <label class="col-xs-2 control-label no-padding-right">地址</label>
                     <div class="col-xs-10">
-                        <input type="text" class="col-xs-10" name="street" placeholder="商家地址务必和营业执照名称一致，否则审核不通过">
+                        <input type="text" class="col-xs-10" name="street" value="{{hotelAudit.street}}" placeholder="商家地址务必和营业执照名称一致，否则审核不通过">
                     </div>
                 </div>
 
@@ -43,13 +56,13 @@
                     <label class="col-xs-2 control-label no-padding-right">酒店星级</label>
                     <div class="col-xs-10">
                         <select class="col-xs-10" name="level" style="margin-right:3px;height:24px !important;">
-                            <option selected="selected" value="1">三星以下</option>
-                            <option value="2">三星</option>
-                            <option value="3">准四星</option>
-                            <option value="4">四星</option>
-                            <option value="5">准五星</option>
-                            <option value="6">五星</option>
-                            <option value="7">五星以上</option>
+                            <option value="1" {{if hotelAudit.level == 1}}selected="selected"{{/if}}>三星以下</option>
+                            <option value="2" {{if hotelAudit.level == 2}}selected="selected"{{/if}}>三星</option>
+                            <option value="3" {{if hotelAudit.level == 3}}selected="selected"{{/if}}>准四星</option>
+                            <option value="4" {{if hotelAudit.level == 4}}selected="selected"{{/if}}>四星</option>
+                            <option value="5" {{if hotelAudit.level == 5}}selected="selected"{{/if}}>准五星</option>
+                            <option value="6" {{if hotelAudit.level == 6}}selected="selected"{{/if}}>五星</option>
+                            <option value="7" {{if hotelAudit.level == 7}}selected="selected"{{/if}}>五星以上</option>
                         </select>
                     </div>
                 </div>
@@ -58,10 +71,10 @@
                     <label class="col-xs-2 control-label no-padding-right">责任联系人</label>
                     <div class="col-xs-10">
                         <div class="col-xs-3">
-                            <input type="text" class="col-xs-12" name="managerName" style="margin-left:-12px" placeholder="姓名">
+                            <input type="text" class="col-xs-12" name="managerName" value="{{hotelAudit.managerName}}" style="margin-left:-12px" placeholder="姓名">
                         </div>
                         <div class="col-xs-7">
-                            <input type="text" class="col-xs-12" name="mobileNumber" style="margin-left:-20px" placeholder="手机号">
+                            <input type="text" class="col-xs-12" name="mobileNumber" value="{{hotelAudit.mobileNumber}}" style="margin-left:-20px" placeholder="手机号">
                         </div>
                     </div>
                 </div>
@@ -78,7 +91,11 @@
                     <div class="col-xs-8 T-imgContainer" data-id="businessLicensePic">
                         <label class="ace-file-input" style="height:170px;">
                             <input type="file" name="businessLicensePic" id="businessLicensePic" class="T-upimg" />
-                            
+                            {{if !!hotelAudit.businessLicensePic}}
+                                <div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
+                                    <img class="middle" src="{{hotelAudit.businessLicensePic}}" style="max-height:120px;max-width:185px;" />
+                                </div>
+                            {{/if}}
                         </label>
                     </div>
                 </div>
@@ -95,7 +112,11 @@
                     <div class="col-xs-8 T-imgContainer" data-id="taxesCardPic">
                         <label class="ace-file-input" style="height:170px;">
                             <input type="file" name="taxesCardPic" id="taxesCardPic" class="T-upimg" />
-                            
+                            {{if !!hotelAudit.taxesCardPic}}
+                                <div class="T-original" style="position:relative;top:0;z-index:99;margin-top:-123px;text-align:center;">
+                                    <img class="middle" src="{{hotelAudit.taxesCardPic}}" style="max-height:120px;max-width:185px;" />
+                                </div>
+                            {{/if}}
                         </label>
                     </div>
                 </div>
@@ -103,7 +124,7 @@
                 <div class="form-group" style="margin-top:-13px;">
                     <label class="col-xs-2 control-label no-padding-right"></label>
                     <div class="col-xs-10">
-                        <input type="checkbox" class="T-isAgree" style="margin-top:1px;">&nbsp;
+                        <input type="checkbox" checked class="T-isAgree" style="margin-top:1px;" disabled>&nbsp;
                         <span>
                             <a class="">我已阅读并同意《火柴头用户协议》</a>
                         </span>
@@ -112,7 +133,7 @@
 
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <button class="btn btn-block btn-primary T-btn-save R-right guideSubmit" disabled> <i class="ace-icon fa fa-check"></i> 提交信息 </button>
+                        <button class="btn btn-block btn-primary T-btn-save R-right guideSubmit"> <i class="ace-icon fa fa-check"></i> 提交信息 </button>
                     </div>
                 </div>
             </form>
