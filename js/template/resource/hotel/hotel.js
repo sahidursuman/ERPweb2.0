@@ -44,7 +44,6 @@ define(function(require, exports) {
 			},
 			success:function(data){
 				data.hotelList = JSON.parse(data.hotelList);
-				data.hotelList[1].isAuth = 2 
 				//data.searchParam.name = decodeURI(data.searchParam.name);
 				var result = showDialog(data);
 				if(result){
