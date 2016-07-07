@@ -17,6 +17,7 @@ define(function(require, exports) {
     };
 
     innerProfit.initModule = function() {
+        innerProfit.$tab = false;
         var dateJson = FinancialService.getInitDate(),
             args = {
                 startTime : dateJson.startDate,
