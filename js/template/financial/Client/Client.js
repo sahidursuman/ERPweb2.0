@@ -28,6 +28,7 @@ define(function(require, exports) {
     };
 
     Client.initModule = function() {
+        FinancialService.clearCache(Client.$tab);
         Client = $.extend({}, Client, 
             {
                 mock: true,
