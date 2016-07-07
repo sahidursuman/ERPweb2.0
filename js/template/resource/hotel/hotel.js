@@ -270,6 +270,7 @@ define(function(require, exports) {
 					if(taxesCardPic != null && taxesCardPic != "") {
 						data.hotelAudit.taxesCardPic = imgUrl + taxesCardPic;
 					};
+					data.hotelId = id;
 					data.businessLicensePic = businessLicensePic;
 					data.taxesCardPic = taxesCardPic;
 				if(isAuth == 1){
@@ -292,8 +293,28 @@ define(function(require, exports) {
 						if(isAuth > 1) {
 							hotel.initialization($layObj,data,isAuth);
 						} else {
+
+							//倒计时特效
+							var time = 10,$timeNum = $layObj.find('.T-timeNum'),timeShow = setInterval(timeOut,1000);
+							 	
+					        function timeOut() {
+					        	time--;
+					        	$timeNum.text(time);
+					        	if(time == 0){
+					        		clearInterval(timeShow);
+					        		layer.close(hotel.$auditLayer);
+					        	}
+					        }
+
 							$layObj.find('.btn-view').off('click').on('click',function(){
-								hotel.viewBillImage(this,imgUrl);
+
+								//查看图片
+								var url = $(this).attr('url'),WEB_IMG_URL_BIG = url+imgUrl;
+								$layObj.viewer({
+						            url: WEB_IMG_URL_BIG,
+						        });
+
+
 							});
 						}
 						
@@ -303,14 +324,6 @@ define(function(require, exports) {
 			}
 		});
 	};
-
-	//查看图片
-	hotel.viewBillImage = function(obj,imgUrl) {
-		var url = $(obj).attr('url'),WEB_IMG_URL_BIG = url+imgUrl;
-		$(obj).viewer({
-            url: WEB_IMG_URL_BIG,
-        });
-	}
 
 	//认证酒店
 	hotel.authenticationHotel = function(id,name) {
@@ -339,6 +352,9 @@ define(function(require, exports) {
 	//事件初始化
 	hotel.initialization = function($obj,data,isAuth) {
 
+		//表单验证
+		var auditValidator = rule.checkHotelAudit($obj);
+
 		//省市区事件
 		if(!!data) {
 			if(data.hotelAudit.province != null )var provinceId = data.hotelAudit.province.id;
@@ -346,7 +362,7 @@ define(function(require, exports) {
 			if(data.hotelAudit.district != null ) var districtId = data.hotelAudit.district.id;
 		};
 		
-		if(data.hotelAudit.isAuth == 0){
+		if(!!data && data.hotelAudit.isAuth == 0){
 			KingServices.provinceCity($obj);
 		} else {
 			KingServices.provinceCity($obj,provinceId,cityId,districtId);
@@ -384,6 +400,7 @@ define(function(require, exports) {
 			};
 		}).on('click','.T-btn-save',function() {
 
+			if (!auditValidator.form()) {return}
 			//保存事件
 			if(hotel.imgCount > 0) {
 				hotel.upload($obj);
