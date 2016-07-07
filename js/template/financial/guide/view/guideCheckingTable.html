@@ -27,10 +27,16 @@
     <td><span class="F-float F-money">{{guide.selfPayRebateMoney}}</span></td>
     <td><span class="F-float F-money">{{guide.guideIncomeMoney}}</span></td>
     <td><span class="F-float F-money">{{guide.zhangmiantuibu}}</span></td>
-    <td><input name="settlementMoney" type="text" class="money T-settlementMoney F-float F-money" value="{{guide.settlementMoney}}" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}> </td>
+    <td>{{if guide.isConfirmAccount}}<span class="F-float F-money">{{guide.settlementMoney}}</span>
+        {{else}}<input name="settlementMoney" type="text" class="money T-settlementMoney F-float F-money" value="{{guide.settlementMoney}}" /> 
+        {{/if}}
+    </td>
     <td class="T-payedDetail F-float F-money" data-money="{{guide.payedMoney}}"><a href="javascript:void(0);" class="T-action T-viewPayedMoney">{{guide.payedMoney}}</a></td>
     <td name="unPayedMoney"><span class="F-float F-money">{{guide.unPayedMoney}}</span></td>
-    <td><textarea class="col-sm-12 hct-textarea T-checkRemark" name="checkRemark" maxlength="1000" {{if guide.isConfirmAccount}} disabled="disabled"{{/if}}>{{guide.checkRemark}}</textarea></td>
+    <td>{{if guide.isConfirmAccount}}{{guide.checkRemark}}
+        {{else}}<textarea class="col-sm-12 hct-textarea T-checkRemark" name="checkRemark" maxlength="1000">{{guide.checkRemark}}</textarea>
+        {{/if}}
+    </td>
     <td>{{guide.checkTime}}</td>
     <td>{{guide.checkRealName}}</td>
     <td>

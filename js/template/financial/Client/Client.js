@@ -63,6 +63,10 @@ define(function(require, exports) {
                 partnerAgencyType: Client.$tab.find("[name=partnerAgencyType]").val(),
                 sortType : Client.$tab.find("select[name=orderBy]").val(),
                 fromPartnerAgencyId: Client.$tab.find("input[name=fromPartnerAgencyId]").val(),
+                businessName:Client.$tab.find('[name=businessName]').val(),
+                businessGroupId: Client.$tab.find('[name=businessName]').data('id'),
+                groupName: Client.$tab.find('[name=groupName]').val(),
+                groupId:  Client.$tab.find('[name=groupName]').data('id'),
                 headerAgencyId: Client.$tab.find("input[name=headerAgencyId]").val() ,
                 checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
@@ -124,8 +128,6 @@ define(function(require, exports) {
         } else {
             Client.getListSumData(args,Client.$tab);
         }
-                
-
         Client.$searchArea = Client.$tab.find('.T-search-area');
         Client.getPartnerAgencyList(Client.$tab.find('.T-search-head-office'));
         if(Client.partnerAgencyList) {
@@ -136,6 +138,9 @@ define(function(require, exports) {
         
         Tools.setDatePicker(Client.$searchArea.find(".date-picker"), true);
         FinancialService.searchChange(Client.$tab);
+
+        Client.getBusinessList(Client.$searchArea.find('[name=businessName]'));
+        Client.getGroupMapList(Client.$searchArea.find('[name=groupName]'));
 
         //搜索按钮事件
         Client.$searchArea.find('.T-btn-search').on('click', function(event) {
@@ -159,7 +164,11 @@ define(function(require, exports) {
                 accountStatus:Client.$searchArea.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$searchArea.find(".T-money-status").find("button").data("value"),
                 sortType : Client.$searchArea.find("select[name=orderBy]").val(),
-                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
+                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0,
+                businessName:Client.$tab.find('[name=businessName]').val(),
+                businessGroupId: Client.$tab.find('[name=businessName]').data('id'),
+                groupName: Client.$tab.find('[name=groupName]').val(),
+                groupId:  Client.$tab.find('[name=groupName]').data('id')
             };
             FinancialService.exportReport(args, "exportCustomer");
         });
@@ -199,7 +208,12 @@ define(function(require, exports) {
                     partnerAgencyName: $tr.children('td').eq(1).text(),
                     accountStatus: $tr.attr('accountStatus'),
                     startDate : Client.$tab.find('.T-search-start-date').val(),
-                    endDate : Client.$tab.find('.T-search-end-date').val()
+                    endDate : Client.$tab.find('.T-search-end-date').val(),
+                    businessName:Client.$tab.find('[name=businessName]').val(),
+                    businessGroupId: Client.$tab.find('[name=businessName]').data('id'),
+                    groupName: Client.$tab.find('[name=groupName]').val(),
+                    groupId:  Client.$tab.find('[name=groupName]').data('id')
+
                 };
 
             if ($that.hasClass('T-checking')) {
@@ -302,6 +316,10 @@ define(function(require, exports) {
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
                 //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+                data.searchParam.businessName = args.businessName || '';
+                data.searchParam.businessGroupId = args.businessGroupId  || '';
+                data.searchParam.groupName = args.groupName || '';
+                data.searchParam.groupId = args.groupId  || '';
                 var resultList = data.customerAccountList;
 
                 //费用明细处理
@@ -452,7 +470,11 @@ define(function(require, exports) {
                     accountStatus : args.accountStatus,
                     isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                     startCheck : $tab.find('.T-checkStartTime').val(),
-                    endCheck : $tab.find('.T-checkEndTime').val()
+                    endCheck : $tab.find('.T-checkEndTime').val(),
+                    businessName:$tab.find('[name=businessName]').val(),
+                    businessGroupId:$tab.find('[name=businessNameId]').data('id'),
+                    groupName: $tab.find('[name=groupName]').val(),
+                    groupId: $tab.find('[name=groupId]').val()
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
@@ -1281,6 +1303,100 @@ define(function(require, exports) {
         $tab.find(".T-sumSettlementMoney").text(total.sumSettlementMoney);
         $tab.find(".T-sumUnReceivedMoney").text(total.sumUnReceivedMoney);
         $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
+    };
+
+
+
+    /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    Client.getBusinessList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.businessGroupId);
+                $target.nextAll('[name=groupName]').val('').data('id','');
+            }
+        }).off('click').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url("group", "selectBusinessGroup"),
+                type: "POST",
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.businessGroupList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].businessGroupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
+                }
+            })
+        })
+    };
+
+    /**
+     * 绑定子部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    Client.getGroupMapList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.data("id", "");
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.blur().data("id", item.groupId);
+            }
+        }).off('click').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url("group", "selectGroup"),
+                type: "POST",
+                data: "businessGroupId=" + $target.closest('div').find('[name=businessName]').data('id'),
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.groupMapList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].groupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
+                }
+            })
+        })
     };
 
     exports.init = Client.initModule;

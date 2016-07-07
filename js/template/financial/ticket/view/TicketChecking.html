@@ -94,7 +94,7 @@
                 <th style="min-width: 110px;">对账</th>
             </tr>
         </thead>
-        <tbody class="T-list T-checkList">
+        <tbody class="T-list T-checkList" data-right="1210002|1210005">
         {{each financialTicketList as rs index}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{rs.tripNumber}}{{if rs.tripNumber && rs.lineProductName}}，{{/if}}{{rs.lineProductName}}{{if (rs.lineProductName  && rs.guideName) || (rs.tripNumber && !rs.lineProductName && rs.guideName)}}，{{/if}}{{rs.guideName}}</td>
@@ -114,9 +114,16 @@
                     </a>
                 </td>
                 <td>{{if !rs.billImage}}<span style="color:#bbb">查看</span>{{else}}<a class="cursor T-action T-view-receipts" url="{{rs.billImage}}">查看</a>{{/if}}</td>
-                <td><input type="text" class="col-sm-12 F-float F-money"  name="settlementMoney" value="{{rs.settlementMoney}}"{{if !!rs.isConfirmAccount}}disabled{{/if}}></td>
+                <td>{{if rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>
+                    {{else}}
+                    <input type="text" class="col-sm-12 F-float F-money"  name="settlementMoney" value="{{rs.settlementMoney}}"/>
+                    {{/if}}
+                </td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
-                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000" {{if !!rs.isConfirmAccount}}disabled{{/if}}>{{rs.checkRemark}}</textarea></td>
+                <td>{{if rs.isConfirmAccount}}{{rs.checkRemark}}
+                    {{else}}<textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
+                    {{/if}}
+                </td>
                 <td>{{rs.checkTime}}</td>
                 <td>{{rs.checkUserName}}</td>
                 <td>

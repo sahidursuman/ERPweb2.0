@@ -95,7 +95,8 @@ define(function(require, exports){
 			} else {
 				$that.addClass('packUp').removeClass('unfold');
 				$searchObj.find('.T-highSearch').removeClass('hidden');
-			}		
+			}
+			Count.$listTab.data("searchEdit",true);		
 		});
 		//状态栏事件
 		$searchObj.find(".T-sleect-ul").on('click','a',function(){
