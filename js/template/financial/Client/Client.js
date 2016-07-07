@@ -1322,7 +1322,7 @@ define(function(require, exports) {
             select:function(event,ui){
                 var item = ui.item;
                 $target.nextAll('[name=businessNameId]').val(item.businessGroupId);
-                $target.nextAll('[name=groupName]').val('').data('id','');
+                $target.nextAll('[name=groupId]').val('');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
