@@ -15,6 +15,7 @@ define(function(require, exports) {
      * 初始化模块
      */
     salesProfit.initModule = function() {
+        FinancialService.clearCache(salesProfit.$tab);
          var args= FinancialService.getInitDate() || {};
          Tools.addTab(menuKey,"销售利润",listMainTemp({searchParam : args}));
          salesProfit.$tab=$("#tab-"+menuKey+"-content");
