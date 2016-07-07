@@ -1247,7 +1247,7 @@ FinancialService.searchChange = function($tab){
 
 FinancialService.clearCache = function($tab, key) {
     key = key || 'total';
-    if ($tab) {
+    if ($tab && $tab.length) {
         $tab.removeData(key);
     }
 };
