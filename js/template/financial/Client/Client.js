@@ -1208,7 +1208,11 @@ define(function(require, exports) {
             contactRealname : $tab.find('.T-search-contact').val(),
             isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
             startCheck : $tab.find('.T-checkStartTime').val(),
-            endCheck : $tab.find('.T-checkEndTime').val()
+            endCheck : $tab.find('.T-checkEndTime').val(),
+            businessName: $tab.find('[name=businessName]').val(),
+            businessGroupId:$tab.find('[name=businessNameId]').val(),  
+            groupName:$tab.find('[name=groupName]').val(),  
+            groupId:$tab.find('[name=groupId]').val()
         }
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
@@ -1322,7 +1326,7 @@ define(function(require, exports) {
             select:function(event,ui){
                 var item = ui.item;
                 $target.nextAll('[name=businessNameId]').val(item.businessGroupId);
-                $target.nextAll('[name=groupName]').val('').data('id','');
+                $target.nextAll('[name=groupId]').val('');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
