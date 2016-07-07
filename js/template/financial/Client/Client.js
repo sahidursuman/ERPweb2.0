@@ -1327,6 +1327,8 @@ define(function(require, exports) {
                 var item = ui.item;
                 $target.nextAll('[name=businessNameId]').val(item.businessGroupId);
                 $target.nextAll('[name=groupId]').val('');
+                $target.trigger('change');
+
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
@@ -1372,6 +1374,7 @@ define(function(require, exports) {
             select:function(event,ui){
                 var item = ui.item;
                 $target.nextAll('[name=groupId]').val(item.groupId);
+                $target.trigger('change');
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
