@@ -1330,6 +1330,7 @@ define(function(require, exports) {
                 var item = ui.item;
                 $target.nextAll('[name=businessNameId]').val(item.businessGroupId);
                 $target.nextAll('[name=groupId]').val('');
+                $target.nextAll('[name=groupName]').val('');
                 $target.trigger('change');
 
             }
