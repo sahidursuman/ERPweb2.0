@@ -64,9 +64,9 @@ define(function(require, exports) {
                 sortType : Client.$tab.find("select[name=orderBy]").val(),
                 fromPartnerAgencyId: Client.$tab.find("input[name=fromPartnerAgencyId]").val(),
                 businessName:Client.$tab.find('[name=businessName]').val(),
-                businessGroupId: Client.$tab.find('[name=businessName]').data('id'),
+                businessGroupId: Client.$tab.find('[name=businessNameId]').val(),
                 groupName: Client.$tab.find('[name=groupName]').val(),
-                groupId:  Client.$tab.find('[name=groupName]').data('id'),
+                groupId:  Client.$tab.find('[name=groupId]').val(),
                 headerAgencyId: Client.$tab.find("input[name=headerAgencyId]").val() ,
                 checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
@@ -165,10 +165,10 @@ define(function(require, exports) {
                 unReceivedMoney : Client.$searchArea.find(".T-money-status").find("button").data("value"),
                 sortType : Client.$searchArea.find("select[name=orderBy]").val(),
                 checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0,
-                businessName:Client.$tab.find('[name=businessName]').val(),
-                businessGroupId: Client.$tab.find('[name=businessName]').data('id'),
-                groupName: Client.$tab.find('[name=groupName]').val(),
-                groupId:  Client.$tab.find('[name=groupName]').data('id')
+                businessName:Client.$searchArea.find('[name=businessName]').val(),
+                businessGroupId: Client.$searchArea.find('[name=businessNameId]').val(),
+                groupName: Client.$searchArea.find('[name=groupName]').val(),
+                groupId:  Client.$searchArea.find('[name=groupId]').val()
             };
             FinancialService.exportReport(args, "exportCustomer");
         });
@@ -210,9 +210,9 @@ define(function(require, exports) {
                     startDate : Client.$tab.find('.T-search-start-date').val(),
                     endDate : Client.$tab.find('.T-search-end-date').val(),
                     businessName:Client.$tab.find('[name=businessName]').val(),
-                    businessGroupId: Client.$tab.find('[name=businessName]').data('id'),
+                    businessGroupId: Client.$tab.find('[name=businessNameId]').val(),
                     groupName: Client.$tab.find('[name=groupName]').val(),
-                    groupId:  Client.$tab.find('[name=groupName]').data('id')
+                    groupId:  Client.$tab.find('[name=groupId]').val()
 
                 };
 
@@ -472,7 +472,7 @@ define(function(require, exports) {
                     startCheck : $tab.find('.T-checkStartTime').val(),
                     endCheck : $tab.find('.T-checkEndTime').val(),
                     businessName:$tab.find('[name=businessName]').val(),
-                    businessGroupId:$tab.find('[name=businessNameId]').data('id'),
+                    businessGroupId:$tab.find('[name=businessNameId]').val(),
                     groupName: $tab.find('[name=groupName]').val(),
                     groupId: $tab.find('[name=groupId]').val()
                 };
@@ -1316,12 +1316,12 @@ define(function(require, exports) {
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
-                    $target.data("id", "");
+                    $target.nextAll('[name=businessNameId]').val('');
                 }
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.businessGroupId);
+                $target.nextAll('[name=businessNameId]').val(item.businessGroupId);
                 $target.nextAll('[name=groupName]').val('').data('id','');
             }
         }).off('click').on('click', function(event) {
@@ -1362,12 +1362,12 @@ define(function(require, exports) {
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
-                    $target.data("id", "");
+                    $target.nextAll('[name=groupId]').val('');
                 }
             },
             select:function(event,ui){
                 var item = ui.item;
-                $target.blur().data("id", item.groupId);
+                $target.nextAll('[name=groupId]').val(item.groupId);
             }
         }).off('click').on('click', function(event) {
             event.preventDefault();
@@ -1375,7 +1375,7 @@ define(function(require, exports) {
             $.ajax({
                 url: KingServices.build_url("group", "selectGroup"),
                 type: "POST",
-                data: "businessGroupId=" + $target.closest('div').find('[name=businessName]').data('id'),
+                data: "businessGroupId=" + $target.closest('div').find('[name=businessNameId]').val(),
             })
             .done(function(data) {
                 if (showDialog(data)) {
