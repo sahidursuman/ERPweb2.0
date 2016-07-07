@@ -1,7 +1,7 @@
 <div class="col-xs-12">
     <div class="page-header">
         <p>
-            <span class="hct-hotel-font-20">
+            <span class="hct-hotel-font-20 mar-t-3">
                 {{if isAuth == 2}}
                     已通过认证审核
                 {{else}}
@@ -11,9 +11,9 @@
         </p> 
         <span class="hct-hotel-font-14">
             {{if isAuth == 2}}
-                注:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
+                注&nbsp;:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
             {{else}}
-                注:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
+                原因&nbsp;:&nbsp;{{hotelAudit.refuseRemark}}
             {{/if}}
         </span>
 
@@ -22,7 +22,7 @@
         <div class="col-xs-12">
             <form class="form-horizontal T-form" onsubmit="return false">
                 <div class="form-group">
-                    <label class="col-xs-2 control-label no-padding-right">商家名称</label>
+                    <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>酒店名称</label>
                     <div class="col-xs-10">
                         <input type="text" class="col-xs-10" name="hotelName" value="{{hotelAudit.hotelName}}" 
                                placeholder="商家名称务必和营业执照名称一致，否则审核不通过">
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-xs-2 control-label no-padding-right">所在地区</label>
+                    <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>所在地区</label>
                     <div class="col-xs-10">
                         <select class="col-xs-3" name="provinceId" style="margin-right:4px;height:24px !important;">
                             <option selected="selected" value="">未选择</option>
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-xs-2 control-label no-padding-right">地址</label>
+                    <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>酒店地址</label>
                     <div class="col-xs-10">
                         <input type="text" class="col-xs-10" name="street" value="{{hotelAudit.street}}" placeholder="商家地址务必和营业执照名称一致，否则审核不通过">
                     </div>
@@ -79,13 +79,6 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="col-xs-2 control-label no-padding-right">营业执照编号</label>
-                    <div class="col-xs-10">
-                        <input type="text" class="col-xs-10" name="businessLicenseNumber" placeholder="请输入营业执照编号">
-                    </div>
-                </div>
-
                 <div class="form-group" >
                     <label class="col-xs-2 control-label no-padding-right">上传营业执照</label>
                     <div class="col-xs-8 T-imgContainer" data-id="businessLicensePic">
@@ -97,13 +90,6 @@
                                 </div>
                             {{/if}}
                         </label>
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-top: -13px;">
-                    <label class="col-xs-2 control-label no-padding-right">纳税人资格证号</label>
-                    <div class="col-xs-10">
-                        <input type="text" class="col-xs-10" name="taxesCardNumber" placeholder="请输入纳税人资格证编号">
                     </div>
                 </div>
 

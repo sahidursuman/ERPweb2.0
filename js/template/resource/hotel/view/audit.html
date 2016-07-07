@@ -6,8 +6,11 @@
             </span>
         </p>
         <span class="hct-hotel-font-14">
-            1-2个工作日处理 并发布商家登录账号
+            1-2个工作日处理 并发布商家登录账号&nbsp;
         </span>
+        <p class="hct-hotel-font-14">
+            <span class="T-timeNum">10</span>秒后，自动关闭该页面。
+        </p>
 
     </div>
     <div class="row">
@@ -22,7 +25,7 @@
                      <tr>
                         <td class="style-myself">所在地区</td>
                         <td class="styleOne-self">
-                            {{if !!hotelAudit.province.name && !!hotelAudit.city.name && !!hotelAudit.district.name}}
+                            {{if !!hotelAudit.province && !!hotelAudit.city && !!hotelAudit.district}}
                                 {{hotelAudit.province.name}}--
                                 {{hotelAudit.city.name}}--
                                 {{hotelAudit.district.name}}
