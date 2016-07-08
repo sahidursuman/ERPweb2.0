@@ -244,15 +244,15 @@ define(function(require, exports) {
 	    	    	        	errMsg: '地址不能为空'
 	    	    	        }
 	    	        ]
-	    	    },{	//传真  
-	    	    	$ele: $obj.find('input[name="faxNumber"]'),
+	    	    },{	// 联系人电话
+	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
 	    	    	rules: [
 	    	    	        {
-	    	    	        	type: 'landline',
-	    	    	        	errMsg: '传真号码格式不正确'
+	    	    	        	type: 'mobile-phone',
+	    	    	        	errMsg: '联系电话格式不正确'
 	    	    	        }
 	    	        ]
-	    	    }   
+	    	    } ,  
                 ]);
 			return validator;
 		},
