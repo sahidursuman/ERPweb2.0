@@ -2,7 +2,7 @@
     <div class="page-header">
         <p>
             <span class="hct-hotel-font-20 mar-t-3">
-                {{if isAuth == 2}}
+                {{if hotelAudit.isAuth == 2}}
                     已通过认证审核
                 {{else}}
                     认证审核失败
@@ -10,7 +10,7 @@
             </span>
         </p> 
         <span class="hct-hotel-font-14">
-            {{if isAuth == 2}}
+            {{if hotelAudit.isAuth == 2}}
                 注&nbsp;:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
             {{else}}
                 原因&nbsp;:&nbsp;{{hotelAudit.refuseRemark}}
@@ -18,6 +18,7 @@
         </span>
 
     </div>
+    <input name="isAuth" value="{{hotelAudit.isAuth}}" type="hidden">
     <div class="row">
         <div class="col-xs-12">
             <form class="form-horizontal T-form" onsubmit="return false">
@@ -27,6 +28,7 @@
                         <input type="text" class="col-xs-10" name="hotelName" value="{{hotelAudit.hotelName}}" 
                                placeholder="商家名称务必和营业执照名称一致，否则审核不通过">
                         <input name="hotelId" value="{{hotelId}}" type="hidden">
+
                     </div>
                 </div>
 

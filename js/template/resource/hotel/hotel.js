@@ -259,7 +259,10 @@ define(function(require, exports) {
 		}).done(function(data) {
 			if(showDialog(data)){
 				
-				var imgUrl = data.ERP_IMG_URL,html = '';
+				if (data.hotelAudit == "null"){
+					showMessageDialog('数据异常');
+				} else {
+					var imgUrl = data.ERP_IMG_URL,html = '';
 					data.hotelAudit = JSON.parse(data.hotelAudit);
 					//图片路径设置
 					var businessLicensePic = data.hotelAudit.businessLicensePic,
@@ -273,53 +276,55 @@ define(function(require, exports) {
 					data.hotelId = id;
 					data.businessLicensePic = businessLicensePic;
 					data.taxesCardPic = taxesCardPic;
-				if(isAuth == 1){
-					html = auditTemplate(data);
-				} else {
-					html = editAuditTemplate(data);
+					if(isAuth == 1){
+						html = auditTemplate(data);
+					} else {
+						html = editAuditTemplate(data);
+					}
+					
+					hotel.$auditLayer = layer.open({
+						type: 1,
+						title: '酒店认证',
+						skin: 'layui-layer-rim',
+						area: '650px',
+						zIndex: 1028,
+						content: html,
+						scrollbar: false,
+						success: function(layObj,index) {
+
+							var $layObj = $(layObj);
+							if(isAuth > 1) {
+								hotel.initialization($layObj,data,isAuth);
+							} else {
+
+								//倒计时特效
+								var time = 10,$timeNum = $layObj.find('.T-timeNum'),timeShow = setInterval(timeOut,1000);
+								 	
+						        function timeOut() {
+						        	time--;
+						        	$timeNum.text(time);
+						        	if(time == 0){
+						        		clearInterval(timeShow);
+						        		layer.close(hotel.$auditLayer);
+						        	}
+						        }
+
+								$layObj.find('.btn-view').off('click').on('click',function(){
+
+									//查看图片
+									var url = $(this).attr('url'),WEB_IMG_URL_BIG = url+imgUrl;
+									$layObj.viewer({
+							            url: WEB_IMG_URL_BIG,
+							        });
+
+
+								});
+							}
+							
+						}
+					});
 				}
 				
-				hotel.$auditLayer = layer.open({
-					type: 1,
-					title: '酒店认证',
-					skin: 'layui-layer-rim',
-					area: '650px',
-					zIndex: 1028,
-					content: html,
-					scrollbar: false,
-					success: function(layObj,index) {
-
-						var $layObj = $(layObj);
-						if(isAuth > 1) {
-							hotel.initialization($layObj,data,isAuth);
-						} else {
-
-							//倒计时特效
-							var time = 10,$timeNum = $layObj.find('.T-timeNum'),timeShow = setInterval(timeOut,1000);
-							 	
-					        function timeOut() {
-					        	time--;
-					        	$timeNum.text(time);
-					        	if(time == 0){
-					        		clearInterval(timeShow);
-					        		layer.close(hotel.$auditLayer);
-					        	}
-					        }
-
-							$layObj.find('.btn-view').off('click').on('click',function(){
-
-								//查看图片
-								var url = $(this).attr('url'),WEB_IMG_URL_BIG = url+imgUrl;
-								$layObj.viewer({
-						            url: WEB_IMG_URL_BIG,
-						        });
-
-
-							});
-						}
-						
-					}
-				});
 
 			}
 		});
@@ -462,6 +467,7 @@ define(function(require, exports) {
 	//保存数据
 	hotel.saveFormData = function($tab) {
 		var form = $tab.find(".T-form").serialize(),
+			isAuth = $tab.find('input[name="isAuth"]').val(),
 			$imgContainer = $tab.find('.T-imgContainer');
 		var businessLicensePic = $imgContainer.eq(0).data("url"),
 		 	taxesCardPic = $imgContainer.eq(1).data("url");
@@ -479,7 +485,12 @@ define(function(require, exports) {
 			success: function(data) {
 				if(showDialog(data)){
 					showMessageDialog(data.message,function(){
-						layer.close(hotel.$authenticationLayer);
+						if(!!isAuth) {
+							layer.close(hotel.$auditLayer);
+						}else{
+							layer.close(hotel.$authenticationLayer);
+						}
+						
 						hotel.listHotel(0);
 						console.log(hotel.imgCount);
 					});
