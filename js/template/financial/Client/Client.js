@@ -15,7 +15,7 @@ define(function(require, exports) {
         ClientCheckTab = "financial_Client_checking",
         ClientClearTab = "financial_Client_clearing",
         tabId = "tab-"+menuKey+"-content",
-        addNoteHtml = "<div class='row' style='margin: 0; padding: 10px 10px 0;'><textarea name='note' class='col-sm-12' style='margin-bottom:20px;' max-length='200'></textarea><button class='btn btn-block btn-primary T-action T-saveNote'><i class='ace-icon fa fa-check'></i> 提交批注</button></div>";
+        addNoteHtml = "<div class='row' style='margin: 0; padding: 10px 10px 0;'><textarea name='note' class='col-sm-12' style='margin-bottom:20px;' maxlength='200'></textarea><button class='btn btn-block btn-primary T-action T-saveNote'><i class='ace-icon fa fa-check'></i> 提交批注</button></div>";
     
     var Client = {
         mock: false,
