@@ -14,7 +14,8 @@ define(function(require, exports) {
         feeDetailsTemplate = require('./view/feeDetails'),
         ClientCheckTab = "financial_Client_checking",
         ClientClearTab = "financial_Client_clearing",
-        tabId = "tab-"+menuKey+"-content";
+        tabId = "tab-"+menuKey+"-content",
+        addNoteHtml = "<div class='row' style='margin: 0; padding: 10px 10px 0;'><textarea name='note' class='col-sm-12' style='margin-bottom:20px;' max-length='200'></textarea><button class='btn btn-block btn-primary T-action T-saveNote'><i class='ace-icon fa fa-check'></i> 提交批注</button></div>";
     
     var Client = {
         mock: false,
@@ -484,6 +485,7 @@ define(function(require, exports) {
 
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+        Client.viewNote($tab.find('.T-addNote'));
 
         FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
@@ -498,6 +500,8 @@ define(function(require, exports) {
                 Client.viewDetails(id);
             }else if($that.hasClass('T-open-tourist')){
                 KingServices.viewTouristGroup($that.closest('tr').data('gid'));
+            } else if($that.hasClass('T-addNote')){
+                Client.addNote($that);
             }
         })
         .on('change', 'input', function(event) {
@@ -751,7 +755,7 @@ define(function(require, exports) {
             $tab.data("total","");
             Client.ClientClear(0, false, $tab);
         });
-
+        Client.viewNote($tab.find('.T-addNote'));
         //绑定表内事件
         var $body = $tab.find('.T-clearList').on('click', '.T-action', function(event){
             event.preventDefault();
@@ -764,6 +768,8 @@ define(function(require, exports) {
                 Client.viewDetails(id)
             }else if($that.hasClass('T-open-tourist')){
                 KingServices.viewTouristGroup($that.closest('tr').data('gid'));
+            } else if($that.hasClass('T-addNote')){
+                Client.addNote($that);
             }
         })
         .on('change', 'input', function(event) {
@@ -1407,6 +1413,65 @@ define(function(require, exports) {
             })
         })
     };
+
+    //添加批注
+    Client.addNote = function($obj){
+        layer.open({
+            type: 1,
+            title:"添加批注",
+            skin: 'layui-layer-rim', //加上边框
+            area: '500px', //宽高
+            zIndex:1028,
+            content: addNoteHtml,
+            scrollbar: false,
+            success: function(container,index){
+                var $container = $(container);
+                $container.off().on('click', '.T-action', function(event) {
+                    event.preventDefault();
+                    var $this = $(this);
+                    if($this.hasClass('T-saveNote')){
+                        var note = $container.find('[name=note]').val(),
+                            $td = $obj.closest('td');
+                        $.ajax({
+                            url: KingServices.build_url("financial/customerAccount", "saveCustomerAccountNotes"),
+                            type: 'POST',
+                            data: {
+                                id: $obj.closest("tr").data('id'),
+                                notes: note
+                            }
+                        }).done(function(data) {
+                            if(showDialog(data)){
+                                $obj.remove();
+                                $td.html("<span class='cursor T-action T-addNote' data-pop='" + data.notes + "'><i class='fa fa-info blue'></i></span>");
+                                 Client.viewNote($td.find('.T-addNote'));
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+
+                $container.find('.layui-layer-close').on('click', function(event) {
+                    event.preventDefault();
+                    $obj.val("");
+                });
+            }
+        });
+    };
+    //浮动查看批注
+    Client.viewNote = function($obj){
+        $obj.each(function(){
+            var $this = $(this), options = $this.data("pop");
+            if (!!options) {
+                if (typeof options === "string") {
+                    options = JSON.parse(options);
+                }
+
+                var html = "<div>" + options.remark + "</div><div class='info'>" + options.author + "<br />" + options.dateTime + "</p>";
+                Tools.descToolTip($this,2);
+                $this.data('bs.popover').options.content = html;
+            }
+        })
+    }
 
     exports.init = Client.initModule;
     exports.initPayment = Client.initIncome;

@@ -134,6 +134,7 @@
                 <th>返款金额</th>
                 <th>结算金额</th>
                 <th>未收金额</th>
+                <th>批注</th>
                 <th>备注</th>
                 <th>对账时间</th>
                 <th>对账人</th>
@@ -198,6 +199,12 @@
                 <td>{{if view == 1 || rs.isConfirmAccount}}<span class="F-float F-money">{{rs.backMoney}}</span>{{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.backMoney}}" name="settlementMoney" />{{/if}}</td>
                 <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                 <td class="T-unReceivedMoney F-float F-money">{{rs.unReceivedMoney}}</td>
+                <td>{{if rs.notes}}
+                    <span class="cursor T-action T-addNote" data-pop="{{rs.notes}}"><i class="fa fa-info blue"></i></span>
+                    {{else}}
+                    <input type="text" class="T-action T-addNote" style="width:60px;" />
+                    {{/if}}
+                </td>
                 <td>{{if view == 1 || rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}
                     <textarea class="col-sm-12 T-remark hct-textarea" maxlength="1000">{{rs.checkRemark}}</textarea>
                     {{/if}}
