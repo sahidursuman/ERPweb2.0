@@ -1426,6 +1426,9 @@ define(function(require, exports) {
             scrollbar: false,
             success: function(container,index){
                 var $container = $(container);
+                if($obj.hasClass('cursor')){
+                    $container.find('[name=note]').text($obj.data("pop").remark);
+                }
                 $container.off().on('click', '.T-action', function(event) {
                     event.preventDefault();
                     var $this = $(this);
@@ -1466,7 +1469,7 @@ define(function(require, exports) {
                     options = JSON.parse(options);
                 }
 
-                var html = "<div>" + options.remark + "</div><div class='info'>" + options.author + "<br />" + options.dateTime + "</p>";
+                var html = "<div>" + options.remark + "</div><div class='info'>" + options.author + "<span class='time'>" + options.dateTime + "</span></div>";
                 Tools.descToolTip($this,2);
                 $this.data('bs.popover').options.content = html;
             }

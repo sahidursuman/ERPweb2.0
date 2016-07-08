@@ -200,9 +200,9 @@
                 <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                 <td class="T-unReceivedMoney F-float F-money">{{rs.unReceivedMoney}}</td>
                 <td>{{if rs.notes}}
-                    <span class="cursor T-action T-addNote" data-pop="{{rs.notes}}"><i class="fa fa-info blue"></i></span>
-                    {{else}}
-                    <input type="text" class="T-action T-addNote" style="width:60px;" />
+                    <span class="{{if !(view == 1)}}cursor T-action{{/if}} T-addNote" data-pop="{{rs.notes}}"><i class="fa fa-info blue"></i></span>
+                    {{else if !(view == 1)}}
+                    <input type="text" class="T-action T-addNote" style="width:30px;" />
                     {{/if}}
                 </td>
                 <td>{{if view == 1 || rs.isConfirmAccount}}{{rs.checkRemark}}{{else}}
