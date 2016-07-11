@@ -69,17 +69,19 @@
 					<tr data-entity-id="{{hotel.id}}" data-isauth="{{hotel.isAuth}}" data-hotel="{{hotel.name}}">
 					 	<td>
 					 		{{hotel.name}}--
-					 		{{if hotel.isAuth != 2 }}
-							 	<a class="T-action T-authentication">
+						 	<a class="T-action T-authentication">
+							 	{{if hotel.isAuth == 0 }}
 							 		<span style="color:#FF9900;">未认证</span>
 							 	{{else if hotel.isAuth == 1 }}
 							 		<span style="color:#FF9900;">认证中</span>
 							 	{{else if hotel.isAuth == 3}} 
 									<span style="color:red;">认证失败</span>
-							 	</a>
-						 	{{else}}
-								<span style="color:green;">已认证</span>
+								{{/if}}
+						 	</a>
+						 	{{if hotel.isAuth == 2}}
+						 		<span style="color:green;">已认证</span>
 						 	{{/if}}
+						 	
 					 	</td>
 						<td>
 						{{if hotel.level==1 }}
