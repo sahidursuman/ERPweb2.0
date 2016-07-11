@@ -2515,6 +2515,11 @@ KingServices.selfPayMultiselect = function($this){
 		module.selfPayMultiselect($this);
 	});
 }
+KingServices.viewLineProductList = function($this, name, id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.getProductList($this, name, id);
+	});
+}
 KingServices.viewOptionalSelfPay = function($this){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
 		module.viewOptionalSelfPay($this);

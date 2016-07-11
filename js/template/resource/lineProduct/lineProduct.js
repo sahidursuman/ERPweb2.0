@@ -33,7 +33,7 @@ define(function(require, exports) {
 	 * @return {[type]} [description]
 	 */
 	ResLineProduct.initModule = function() {
-		ResLineProduct.getProductList(0,'','','', 1);
+		ResLineProduct.getProductList(0);
 	};
 
 	/**
@@ -43,29 +43,40 @@ define(function(require, exports) {
 	 * @param  {[type]} status [description]
 	 * @return {[type]}        [description]
 	 */
-	ResLineProduct.getProductList = function(page,name,type,customerType,status){
-		if (ResLineProduct.$tab && arguments.length === 1) {
-			name = ResLineProduct.$tab.find('.T-lineproduct-name').val();
-			type = ResLineProduct.$tab.find('.T-lineproduct-type').val();
-			customerType = ResLineProduct.$tab.find('select[name=customerType]').val();
-			status = ResLineProduct.$tab.find('.T-status').children('button').data('value');
-		}
+	ResLineProduct.getProductList = function(page, travelLineName, travelLineId){
+		var arg = {};
 
-		if (!page || page < 0) {
-			page = 0;
+		if (!!ResLineProduct.$tab) {
+			arg = {
+				name: ResLineProduct.$tab.find('.T-lineproduct-name').val(),
+				type: ResLineProduct.$tab.find('.T-lineproduct-type').val(),
+				customerType: ResLineProduct.$tab.find('select[name=customerType]').val(),
+				status: ResLineProduct.$tab.find('.T-status').children('button').data('value'),
+				travelLineName: ResLineProduct.$tab.find('[name=travelLineName]').val(),
+				travelLineId: ResLineProduct.$tab.find('[name=travelLineId]').val()
+			};
 		}
+		if (!!travelLineName && !!travelLineId) {
+			arg = {
+				travelLineName: travelLineName,
+				travelLineId: travelLineId
+			};
+		}
+		arg.page = page || 0;
 
 		$.ajax({
 			url: KingServices.build_url('lineProduct', 'listLineProduct'),
 			type:"POST",
 			showLoading:false,
 			data: {
-				pageNo: page,
-				name: name,
-				type: type,
-				customerType:customerType,
-				status: status,
-				sortType: 'auto'
+				pageNo: arg.page,
+				name: arg.name,
+				type: arg.type,
+				customerType:arg.customerType,
+				status: arg.status,
+				sortType: 'auto',
+				travelLineName: arg.travelLineName,
+				travelLineId: arg.travelLineId
 			},
 			success:function(data){
 				var result = showDialog(data);
@@ -83,6 +94,7 @@ define(function(require, exports) {
 					ResLineProduct.$tab = $("#tab-"+menuKey+"-content");
 					ResLineProduct.lineProductType(ResLineProduct.$tab);
 					ResLineProduct.needSeatCountS(ResLineProduct.$tab);
+					ResLineProduct.autocompleteTravelLine(ResLineProduct.$tab.find('.T-chooseTravelLine'));
 					// init event
 					ResLineProduct.init_event();
 					// 绑定翻页组件
@@ -101,7 +113,7 @@ define(function(require, exports) {
 		});
 
 	};
-// 线路类型
+	// 线路类型
 	ResLineProduct.lineProductType  = function($obj){
 			var lineProductType = $obj.find(".T-lineproduct-type");
 			lineProductType.autocomplete({
@@ -132,6 +144,40 @@ define(function(require, exports) {
 			})
 		};
 
+		ResLineProduct.autocompleteTravelLine = function ($obj) {
+			$obj.autocomplete ({
+				minLength: 0,
+				change: function (event, ui) {
+					if (ui.item === null) {
+						var $this = $(this),
+							$div = $this.closest('div');
+						$this.val('');
+						$div.find('[name=travelLineId]').val('');
+					}
+				},
+				select: function (event, ui) {
+					var $this = $(this),
+						$div = $this.closest('div');
+					$div.find('[name=travelLineId]').val(ui.item.id);
+				}
+			}).click(function () {
+				var obj = $(this);
+				var travelLineList = ResLineProduct.autocompleteDate.travelLineList;
+				for(var i = 0;i<travelLineList.length;i++){
+					// typeKey赋给value
+					travelLineList[i].value = travelLineList[i].name;
+				}
+				if(travelLineList.length) {
+					obj.autocomplete('option','source', travelLineList);
+					obj.autocomplete('search', '');
+				}else{
+					layer.tips('无数据', obj, {
+						tips: [1, '#3595CC'],
+						time: 2000
+					});
+				}
+			});
+		};
 
 		ResLineProduct.needSeatCountS  = function($obj){
 			var needSeatCountS = $obj.find(".T-needSeatCount");
@@ -3031,6 +3077,18 @@ define(function(require, exports) {
 					}
 				}
 			})
+			$.ajax({
+				url: KingServices.build_url('lineProduct', 'findAllTravelLine'),
+				dateType:"json",
+				type:"POST",
+				success:function(data){
+					var result = showDialog(data);
+					if(result){
+						ResLineProduct.autocompleteDate.travelLineList = data.travelLineList;
+
+					}
+				}
+			})
 		};
 	/**
 	 * 解决autocomplete点击sortable区域无法收起的问题
@@ -3061,4 +3119,5 @@ define(function(require, exports) {
 	exports.viewOptionalShop = ResLineProduct.viewOptionalShop;
 	exports.shopMultiselect = ResLineProduct.shopMultiselect;
 	exports.selfPayMultiselect = ResLineProduct.selfPayMultiselect;
+	exports.getProductList = ResLineProduct.getProductList;
 });
