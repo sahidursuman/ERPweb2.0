@@ -111,7 +111,7 @@ define(function(require, exports) {
 			} else if ($this.hasClass('T-authentication')){
 				//认证酒店
 				if(isAuth == 0) {
-					hotel.authenticationHotel(id,name);
+					hotel.authenticationHotel($this,id,name);
 				} else {
 					hotel.getHotel(id, name, isAuth);
 				}
@@ -331,10 +331,20 @@ define(function(require, exports) {
 	};
 
 	//认证酒店
-	hotel.authenticationHotel = function(id,name) {
+	hotel.authenticationHotel = function($obj,id,name) {
 
-		var data = {};data.hotelId = id;
+		var $tr = $obj.closest('tr'),street = $tr.data('street'),level = $tr.data('level'),
+			provinceId = $tr.find('input[name="provinceId"]').val(),
+			cityId = $tr.find('input[name="cityId"]').val(),
+			districtId = $tr.find('input[name="districtId"]').val(),
+			data = {};
+			data.hotelId = id;
 			data.hotelName = name;
+			data.street = street;
+			data.level = level;
+			data.provinceId = provinceId;
+			data.cityId = cityId;
+			data.districtId = districtId;
 		var html = authenticationTemplate(data);
 		hotel.$authenticationLayer = layer.open({
 			type: 1,
@@ -358,21 +368,20 @@ define(function(require, exports) {
 	hotel.initialization = function($obj,data,isAuth) {
 
 		//表单验证
-		var auditValidator = rule.checkHotelAudit($obj);
+		var auditValidator = rule.checkHotelAudit($obj),provinceId = 0,cityId = 0,districtId = 0;
 
 		//省市区事件
 		if(!!data) {
-			if(data.hotelAudit.province != null )var provinceId = data.hotelAudit.province.id;
-			if(data.hotelAudit.city != null )var cityId = data.hotelAudit.city.id;
-			if(data.hotelAudit.district != null ) var districtId = data.hotelAudit.district.id;
-		};
-		
-		if(!!data && data.hotelAudit.isAuth == 0){
-			KingServices.provinceCity($obj);
+			if(data.hotelAudit.province != null ) provinceId = data.hotelAudit.province.id;
+			if(data.hotelAudit.city != null ) cityId = data.hotelAudit.city.id;
+			if(data.hotelAudit.district != null ) districtId = data.hotelAudit.district.id;
 		} else {
-			KingServices.provinceCity($obj,provinceId,cityId,districtId);
+			if(!!$obj.find('input[name=province]').val()){provinceId = $obj.find('input[name=province]').val();}
+			if(!!$obj.find('input[name=city]').val()){cityId = $obj.find('input[name=city]').val();}
+			if(!!$obj.find('input[name=district]').val()){districtId = $obj.find('input[name=district]').val();}
 		};
 		
+		KingServices.provinceCity($obj,provinceId,cityId,districtId);
 
 		//图片初始化
 		$obj.find('.T-upimg').ace_file_input({
