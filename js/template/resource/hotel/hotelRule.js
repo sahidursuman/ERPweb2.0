@@ -199,7 +199,7 @@ define(function(require, exports) {
 
 		//对酒店认证进行验证
 		checkHotelAudit:function($obj){
-			var validator = $obj.formValidate([
+			var auditValidator = $obj.formValidate([
 	    	    {	//酒店名称
 	    	    	$ele: $obj.find('input[name="hotelName"]'),
 	    	    	rules: [
@@ -254,7 +254,7 @@ define(function(require, exports) {
 	    	        ]
 	    	    } ,  
                 ]);
-			return validator;
+			return auditValidator;
 		},
 		
 	}

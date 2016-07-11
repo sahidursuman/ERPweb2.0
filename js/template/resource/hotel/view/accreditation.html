@@ -29,13 +29,16 @@
                         <select class="col-xs-3" name="districtId" style="height:24px !important;">
                             <option selected="selected" value="">未选择</option>
                         </select>
+                        <input name="province" type="hidden" value="{{provinceId}}" />
+                        <input name="city" type="hidden" value="{{cityId}}" />
+                        <input name="district" type="hidden" value="{{districtId}}" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>酒店地址</label>
                     <div class="col-xs-10">
-                        <input type="text" class="col-xs-10" name="street" placeholder="商家地址务必和营业执照名称一致，否则审核不通过">
+                        <input type="text" class="col-xs-10" name="street" value="{{street}}" placeholder="商家地址务必和营业执照名称一致，否则审核不通过">
                     </div>
                 </div>
 
@@ -43,13 +46,13 @@
                     <label class="col-xs-2 control-label no-padding-right">酒店星级</label>
                     <div class="col-xs-10">
                         <select class="col-xs-10" name="level" style="margin-right:3px;height:24px !important;">
-                            <option selected="selected" value="1">三星以下</option>
-                            <option value="2">三星</option>
-                            <option value="3">准四星</option>
-                            <option value="4">四星</option>
-                            <option value="5">准五星</option>
-                            <option value="6">五星</option>
-                            <option value="7">五星以上</option>
+                            <option selected="selected" value="1" {{if level == 1}}selected{{/if}}>三星以下</option>
+                            <option value="2" {{if level == 2}}selected{{/if}}>三星</option>
+                            <option value="3" {{if level == 3}}selected{{/if}}>准四星</option>
+                            <option value="4" {{if level == 4}}selected{{/if}}>四星</option>
+                            <option value="5" {{if level == 5}}selected{{/if}}>准五星</option>
+                            <option value="6" {{if level == 6}}selected{{/if}}>五星</option>
+                            <option value="7" {{if level == 7}}selected{{/if}}>五星以上</option>
                         </select>
                     </div>
                 </div>
