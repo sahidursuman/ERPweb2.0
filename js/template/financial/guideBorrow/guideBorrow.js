@@ -81,7 +81,7 @@ define(function(require, exports){
             guideBorrow.getList({pageNo : 0},$tab);
         });
 
-        $tab.on("click",'.T-borrow',function(){
+        $tab.find(".T-borrow").off().on("click",function(){
         	var $tr = $(this).closest('tr'),
 				options = {
 				guideId: $tr.data('id'),
