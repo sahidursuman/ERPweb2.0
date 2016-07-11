@@ -70,16 +70,18 @@
 					 	<td>
 					 		{{hotel.name}}--
 						 	<a class="T-action T-authentication">
-						 	{{if hotel.isAuth == 0 }}
-						 		<span style="color:#FF9900;">未认证</span>
-						 	{{else if hotel.isAuth == 1 }}
-						 		<span style="color:#FF9900;">认证中</span>
-						 	{{else if hotel.isAuth == 2}} 
-								<span style="color:green;">已认证</span>
-							{{else}}
-								<span style="color:red;">认证失败</span>
-						 	{{/if}}
+							 	{{if hotel.isAuth == 0 }}
+							 		<span style="color:#FF9900;">未认证</span>
+							 	{{else if hotel.isAuth == 1 }}
+							 		<span style="color:#FF9900;">认证中</span>
+							 	{{else if hotel.isAuth == 3}} 
+									<span style="color:red;">认证失败</span>
+								{{/if}}
 						 	</a>
+						 	{{if hotel.isAuth == 2}}
+						 		<span style="color:green;">已认证</span>
+						 	{{/if}}
+						 	
 					 	</td>
 						<td>
 						{{if hotel.level==1 }}
