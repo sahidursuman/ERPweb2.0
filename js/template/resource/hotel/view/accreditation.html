@@ -1,0 +1,107 @@
+<div class="col-xs-12">
+    <div class="page-header">
+        <span style="font-size:16px;">
+            注&nbsp;:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付
+        </span>
+
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal T-form" onsubmit="return false">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>酒店名称</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="col-xs-10" name="hotelName" value="{{hotelName}}" 
+                               placeholder="商家名称务必和营业执照名称一致，否则审核不通过">
+                        <input name="hotelId" value="{{hotelId}}" type="hidden">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>所在地区</label>
+                    <div class="col-xs-10">
+                        <select class="col-xs-3" name="provinceId" style="margin-right:4px;height:24px !important;">
+                            <option selected="selected" value="">未选择</option>
+                        </select>
+                        <select class="col-xs-3" name="cityId" style="margin-right:4px;height:24px !important;">
+                            <option selected="selected" value="">未选择</option>
+                        </select>
+                        <select class="col-xs-3" name="districtId" style="height:24px !important;">
+                            <option selected="selected" value="">未选择</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label no-padding-right"><span class="necessary">*</span>酒店地址</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="col-xs-10" name="street" placeholder="商家地址务必和营业执照名称一致，否则审核不通过">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label no-padding-right">酒店星级</label>
+                    <div class="col-xs-10">
+                        <select class="col-xs-10" name="level" style="margin-right:3px;height:24px !important;">
+                            <option selected="selected" value="1">三星以下</option>
+                            <option value="2">三星</option>
+                            <option value="3">准四星</option>
+                            <option value="4">四星</option>
+                            <option value="5">准五星</option>
+                            <option value="6">五星</option>
+                            <option value="7">五星以上</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label no-padding-right">责任联系人</label>
+                    <div class="col-xs-10">
+                        <div class="col-xs-3">
+                            <input type="text" class="col-xs-12" name="managerName" style="margin-left:-12px" placeholder="姓名">
+                        </div>
+                        <div class="col-xs-7">
+                            <input type="text" class="col-xs-12" name="mobileNumber" style="margin-left:-20px" placeholder="手机号">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" >
+                    <label class="col-xs-2 control-label no-padding-right">上传营业执照</label>
+                    <div class="col-xs-8 T-imgContainer" data-id="businessLicensePic">
+                        <label class="ace-file-input" style="height:170px;">
+                            <input type="file" name="businessLicensePic" id="businessLicensePic" class="T-upimg" />
+                            
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:-13px;">
+                    <label class="col-xs-2 control-label no-padding-right">纳税人资格证</label>
+                    <div class="col-xs-8 T-imgContainer" data-id="taxesCardPic">
+                        <label class="ace-file-input" style="height:170px;">
+                            <input type="file" name="taxesCardPic" id="taxesCardPic" class="T-upimg" />
+                            
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top:-13px;">
+                    <label class="col-xs-2 control-label no-padding-right"></label>
+                    <div class="col-xs-10">
+                        <input type="checkbox" class="T-isAgree" style="margin-top:1px;">&nbsp;
+                        <span>
+                            <a class="">我已阅读并同意《火柴头用户协议》</a>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <button class="btn btn-block btn-primary T-btn-save R-right guideSubmit" disabled> <i class="ace-icon fa fa-check"></i> 提交信息 </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

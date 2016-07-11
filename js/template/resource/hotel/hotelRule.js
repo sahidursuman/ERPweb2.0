@@ -195,7 +195,67 @@ define(function(require, exports) {
 				}    
                 ]);
 			return timeValidator
-		}
+		},
+
+		//对酒店认证进行验证
+		checkHotelAudit:function($obj){
+			var validator = $obj.formValidate([
+	    	    {	//酒店名称
+	    	    	$ele: $obj.find('input[name="hotelName"]'),
+	    	    	rules: [
+    	    	        {
+    	    	        	type: 'null', 
+    	    	        	errMsg: '酒店名称不能为空'
+    	    	        }
+	    	        ]
+	    	    },
+	    	    {	// 所在地区--省
+	    	    	$ele: $obj.find('select[name="provinceId"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '所在省不能为空'
+	    	    	        }
+	    	        ]
+	    	    },{	// 所在地区--市
+	    	    	$ele: $obj.find('select[name="cityId"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '所在市不能为空'
+	    	    	        }
+	    	        ]
+	    	    },{	// 所在地区--区
+	    	    	$ele: $obj.find('select[name="districtId"]'),
+	    	    	rules: [
+							
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '所在地区不能为空'
+	    	    	        }
+	    	        ]
+	    	    },{	//地址
+	    	    	$ele: $obj.find('input[name="street"]'),
+	    	    	rules: [
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '地址不能为空'
+	    	    	        }
+	    	        ]
+	    	    },{	// 联系人电话
+	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
+	    	    	rules: [
+	    	    	        {
+	    	    	        	type: 'mobile-phone',
+	    	    	        	errMsg: '联系电话格式不正确'
+	    	    	        }
+	    	        ]
+	    	    } ,  
+                ]);
+			return validator;
+		},
 		
 	}
 	return rule;
