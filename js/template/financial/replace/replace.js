@@ -210,6 +210,7 @@ define(function(require, exports) {
 				args.contactId = Replace.$checkingTab.find(".T-search-contact").data("id");
 				args.creatorName = Replace.$checkingTab.find(".T-search-creator").val();
 				args.creatorId = Replace.$checkingTab.find(".T-search-creator").data("id");
+                args.projectName = Replace.$checkingTab.find('[name=projectName]').val();
 
                 args.busCompanyOrderStatus = '';
                 args.hotelOrderStatus = '';
@@ -413,7 +414,8 @@ define(function(require, exports) {
 	                    accountStatus : args.accountStatus,
 	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
 	                    contactId : $tab.find(".T-search-contact").data("id"),
-						creatorId : $tab.find(".T-search-creator").data("id")
+						creatorId : $tab.find(".T-search-creator").data("id"),
+                        projectName: $tab.find('[name=projectName]').val()
 	                };
 	            argsData.orderNumber = argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');
