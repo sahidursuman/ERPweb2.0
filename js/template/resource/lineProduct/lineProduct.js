@@ -57,10 +57,9 @@ define(function(require, exports) {
 			};
 		}
 		if (!!travelLineName && !!travelLineId) {
-			arg = {
-				travelLineName: travelLineName,
-				travelLineId: travelLineId
-			};
+			
+			arg.travelLineName = travelLineName;
+			arg.travelLineId = travelLineId;
 		}
 		arg.page = page || 0;
 
