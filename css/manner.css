@@ -196,6 +196,11 @@ label {
     font-size: 14px;
 }
 
+.hct-hotel-font-12 {
+    font-size: 12px;
+    color: #999999;
+}
+
 .middle {
     vertical-align: middle;
 }

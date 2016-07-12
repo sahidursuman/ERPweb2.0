@@ -72,17 +72,16 @@
 					 		{{hotel.name}}--
 						 	<a class="T-action T-authentication">
 							 	{{if hotel.isAuth == 0 }}
-							 		<span style="color:#FF9900;">未认证</span>
+							 		<img src="../../images/not_certified.png" title="认证后,可以享受在线支付权限">
 							 	{{else if hotel.isAuth == 1 }}
-							 		<span style="color:#FF9900;">认证审核中</span>
+							 		<img src="../../images/certification.png">&nbsp;
+							 		<span style="color:#FF9900;">审核中</span>
 							 	{{else if hotel.isAuth == 3}} 
-									<span style="color:red;">认证失败</span>
+							 		<img src="../../images/fail.png" title="认证失败">
 								{{/if}}
 						 	</a>
 						 	{{if hotel.isAuth == 2}}
-						 		<span class="" style="color:green;">已认证</span>
-						 		&nbsp;
-						 		<i class="fa fa-exclamation hct-count-hint" title="认证后,可以享受在线支付权限" ></i>
+						 		<img src="../../images/certified.png" title="已认证">&nbsp;
 						 	{{/if}}
 						 	
 					 	</td>
