@@ -315,7 +315,7 @@ function showConfirmMsg(message,confirmFn ,cancelFn,btnStr1,btnStr2){
 		draggable:false,
 		buttons: buttons,
 		open:function(event,ui){
-			$(this).find("p").text(message);
+			$(this).find("p").html(message);
 		}
 	});
 }
