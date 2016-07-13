@@ -82,32 +82,15 @@
 </div>
 <div class="row">
     <div class="overflow-x min-w-1050">
-    <table class="table table-striped table-bordered table-hover table-fixed hct_align_middle w-1500">
-        <colgroup> 
-            <col style="width:11%;"> 
-            <col style="width:6%;"> 
-            <col style="width:6%;">
-            <col style="width:8%;"> 
-            <col style="width:7%;"> 
-            <col style="width:10%;"> 
-            <col style="width:6%;">
-            <col style="width:5%;"> 
-            <col style="width:5%;"> 
-            <col style="width:6%;"> 
-            <col style="width:5%;"> 
-            <col style="width:7%;"> 
-            <col style="width:6%;"> 
-            <col style="width:5%;"> 
-            <col style="min-width: 110px;"> 
-        </colgroup>
+    <table class="table table-striped table-bordered table-hover hct_align_middle w-1500">
         <thead>
             <tr class="T-tr-fixed bg-blur">
                 <th>代订单号</th>
                 <th>代订日期（账期）</th>
                 <th>客户联系人</th>
                 <th>项目</th>
-                <th>项目名称</th>
-                <th>明细</th>
+                <th style="width: 150px;max-width: 150px;">项目名称</th>
+                <th style="width: 200px;max-width: 200px;">明细</th>
                 <th>录入人</th>
                 <th>代订金额</th>
                 <th>已收金额</th>
@@ -116,7 +99,7 @@
                 <th>备注</th>
                 <th>对账时间</th>
                 <th>对账人</th>
-                <th>对账</th>
+                <th style="width:120px;max-width:120px;">对账</th>
             </tr>
         </thead>
         <tbody class="T-list T-checkList" data-right="1290002|1290005">
@@ -126,8 +109,8 @@
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.partnerAgencyName}}</td>
                 <td>{{rs.projectName}}</td>
-                <td class="T-ctrl-tip" title="{{rs.projectList}}"><span>{{rs.projectList}}</span></td>
-                <td class="T-ctrl-tip" title="{{#rs.newDetail}}"><span>{{#rs.newDetail}}</span></td>
+                <td>{{rs.projectList}}</td>
+                <td>{{#rs.newDetail}}</td>
                 <td>{{rs.creatorName}}<br/>{{rs.creatorTime  | dateFormat:"yyyy-MM-dd"}}<br/>{{rs.creatorTime  | dateFormat:"hh:mm:ss"}}</td>
                 <td><span class="F-float F-money">{{rs.bookingMoney}}</span></td>
                 <td><a class="cursor T-action T-receive-money T-payedDetail F-float F-money" data-money="{{rs.receiveMoney}}">{{rs.receiveMoney}}</a></td>
