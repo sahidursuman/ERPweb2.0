@@ -244,7 +244,7 @@ define(function(require, exports) {
 					var detailList = data.bookinAccountList[j].detailList;
 					data.bookinAccountList[j].newDetail = '';
 					for(var i=0; i<detailList.length; i++){
-                        data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money + "<br>";
+                        data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money;
 					}
 					//data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 				}
@@ -585,7 +585,7 @@ define(function(require, exports) {
 						var detailList = data.bookinAccountList[j].detailList;
 						data.bookinAccountList[j].newDetail = '';
 						for(var i=0; i<detailList.length; i++){
-                            data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money + "<br>";
+                            data.bookinAccountList[j].newDetail += detailList[i].name + "：" + detailList[i].count + "×" + detailList[i].price + "=" + detailList[i].money;
                         }
 						//data.bookinAccountList[j].newDetail = Replace.clearComma(data.bookinAccountList[j].newDetail);
 					}

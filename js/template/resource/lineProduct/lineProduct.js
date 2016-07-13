@@ -46,7 +46,7 @@ define(function(require, exports) {
 	ResLineProduct.getProductList = function(page, travelLineName, travelLineId){
 		var arg = {};
 
-		if (!!ResLineProduct.$tab) {
+		if (!!ResLineProduct.$tab && arguments.length>1 ) {
 			arg = {
 				name: ResLineProduct.$tab.find('.T-lineproduct-name').val(),
 				type: ResLineProduct.$tab.find('.T-lineproduct-type').val(),
@@ -103,7 +103,7 @@ define(function(require, exports) {
 					    curr: (page + 1),
 					    jump: function(obj, first) {
 					    	if (!first) {  // 避免死循环，第一次进入，不调用页面方法
-					    		ResLineProduct.getProductList(obj.curr -1);
+					    		ResLineProduct.getProductList(obj.curr -1, '');
 					    	}
 					    }
 					});		
@@ -227,13 +227,13 @@ define(function(require, exports) {
 		ResLineProduct.$tab.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-			ResLineProduct.getProductList(0);
+			ResLineProduct.getProductList(0, '');
 		});
 
 		// 回车搜索
 		ResLineProduct.$tab.find('.T-lineproduct-name').keyup(function(e){
 			if(e.which == 13 && !window.forbiddenError){
-				ResLineProduct.getProductList(0);
+				ResLineProduct.getProductList(0, '');
 			}
 		});
 
@@ -245,7 +245,7 @@ define(function(require, exports) {
 			// 设置选择状态的效果
 			$that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
 
-			ResLineProduct.getProductList(0);
+			ResLineProduct.getProductList(0, '');
 		});
 
 		// 报表内的操作
