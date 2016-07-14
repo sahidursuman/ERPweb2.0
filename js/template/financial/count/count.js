@@ -79,10 +79,24 @@ define(function(require, exports){
     	Count.getGuideData($guideObj);
     	Count.getOpList(Count.$searchArea.find('input[name=dutyOPUserName]'));
 
-		//搜索事件
+		//搜索事件 T-high-search
 		$searchObj.find(".T-search").on('click',function(event){
 			event.preventDefault();
 			Count.listCountBody(0);
+		});
+
+		//高级搜索事件
+		$searchObj.find(".T-high-search").on('click',function(event){
+			event.preventDefault();
+			var $that = $(this);
+			if($that.hasClass('packUp')) {
+				 $that.addClass('unfold').removeClass('packUp');
+                $searchObj.find('.T-highSearch').addClass('hidden');
+			} else {
+				$that.addClass('packUp').removeClass('unfold');
+				$searchObj.find('.T-highSearch').removeClass('hidden');
+			}
+			Count.$listTab.data("searchEdit",true);		
 		});
 		//状态栏事件
 		$searchObj.find(".T-sleect-ul").on('click','a',function(){
@@ -118,9 +132,19 @@ define(function(require, exports){
 				timeStatus : Count.$searchArea.find(".T-time-status").find('button').data("value") || 0,
 				orderNumber : Count.$searchArea.find('input[name=orderNumber]').val(),
 				contactInfo : Count.$searchArea.find('input[name=contactInfo]').val()
+			};
+			if(Count.$searchArea.find('.T-high-search').hasClass('unfold')) {
+				args.contactInfo = '';
+				args.lineProductId = '';
+				args.lineProductName = '';
+				args.guideId = '';
+				args.guideName = '';
+				args.dutyOPUserId = '';
+				args.dutyOPUserName = '';
 			}
 		}
 		args.pageNo = page || 0;
+
 		args = FinancialService.getChangeArgs(args,Count.$listTab)
 		$.ajax({
 			url:KingServices.build_url("financialTripPlan","listFinancialTripPlan"),

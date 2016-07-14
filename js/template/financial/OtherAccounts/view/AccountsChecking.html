@@ -72,7 +72,7 @@
                 <th style="width:115px">对账</th>
             </tr>
         </thead>
-        <tbody class="T-checkListNum T-checkList" data-right="1320005">
+        <tbody class="T-checkListNum T-checkList" data-right="1320002|1320005">
             {{each financialOtherDetailsList as Checking index}}
             <tr class="T-checkTr {{if Checking.change}}success{{/if}}" data-id='{{Checking.id}}' data-entity-isConfirmAccount="{{Checking.isConfirmAccount}}" data-entity-settlementMoney="{{Checking.settlementMoney}}" data-confirm="{{Checking.isConfirmAccount}}"
             {{if Checking.change}}data-change="true"{{/if}}>
@@ -91,11 +91,17 @@
                     </a>
                 </td>
                 <td>{{if Checking.billImage != null && Checking.billImage !=""}}<a href="#" class="T-action T-viewInsuanceImg" url="{{Checking.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td>
-                    <input type="text" class="col-sm-12 F-float F-money" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" class="money" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>
+                <td>{{if Checking.isConfirmAccount}}<span class="F-float F-money">{{Checking.settlementMoney}}</span>
+                    {{else}}
+                    <input type="text" class="col-sm-12 money F-float F-money" maxlength="9" name="settlementMoney" value="{{Checking.settlementMoney}}" />
+                   {{/if}}
                 </td>
                 <td name="unPayedMoney" class="F-float F-money">{{Checking.unPayedMoney}}</td>
-                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000" {{if Checking.isConfirmAccount}} disabled="disabled" {{/if}}>{{Checking.checkRemark}}</textarea></td>
+                <td>{{if Checking.isConfirmAccount}}{{Checking.checkRemark}}
+                    {{else}}
+                    <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{Checking.checkRemark}}</textarea>
+                    {{/if}}
+                </td>
                 <td>{{Checking.checkTime}}</td>
                 <td>{{Checking.checkUser }}</td>
                 <td>

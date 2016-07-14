@@ -12,6 +12,7 @@ define(function(require, exports) {
 	};
 
     transfer.initModule = function(isTurn) {
+        FinancialService.clearCache(transfer.$tab);
         var dateJson = FinancialService.getInitDate(),
             args = {
                 pageNo : 0,

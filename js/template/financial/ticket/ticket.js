@@ -185,6 +185,8 @@ define(function(require, exports) {
                         Ticket.$checkingTab.data('isEdited',true);
                     }
 					Ticket.check_event(args,Ticket.$checkingTab);
+					//对账、取消对账权限过滤
+					FinancialService.checkAuthFilter(Ticket.$checkingTab.find(".T-checkTr"),Ticket.$checkingTab.find(".T-checkList").data("right"));
 				} else {
 					Ticket.$checkingTab.data('next',args);
 				}
