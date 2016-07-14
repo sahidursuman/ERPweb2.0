@@ -315,7 +315,7 @@ function showConfirmMsg(message,confirmFn ,cancelFn,btnStr1,btnStr2){
 		draggable:false,
 		buttons: buttons,
 		open:function(event,ui){
-			$(this).find("p").text(message);
+			$(this).find("p").html(message);
 		}
 	});
 }
@@ -2513,6 +2513,11 @@ KingServices.viewOptionalShop = function($this){
 KingServices.selfPayMultiselect = function($this){
 	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
 		module.selfPayMultiselect($this);
+	});
+}
+KingServices.viewLineProductList = function($this, name, id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_lineProduct,function(module){
+		module.getProductList($this, name, id);
 	});
 }
 KingServices.viewOptionalSelfPay = function($this){

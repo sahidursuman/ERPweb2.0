@@ -139,6 +139,10 @@ define(function(require, exports) {
 			if ($that.hasClass('T-add-lineproduct'))  {
 				// 预览
 				ResTravelLine.addLineProduct(id);
+			} else if ($that.hasClass('T-view-lineproduct')) {
+				//查看线路产品
+				var name = $that.closest('tr').find('.T-travelLineName').text();
+				KingServices.viewLineProductList(0, name, id);
 			} else if ($that.hasClass('T-preview'))  {
 				// 预览
 				ResTravelLine.preview(id);
