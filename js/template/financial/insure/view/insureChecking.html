@@ -72,7 +72,7 @@
                 <th style="width:108px">对账</th>
             </tr>
         </thead>
-        <tbody class="T-checkList" data-right="1270005">
+        <tbody class="T-checkList" data-right="1270002|1270005">
             {{each financialInsuranceList as rs index}}
             <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}" {{if rs.change}}data-change="true"{{/if}}>
                 <td>{{if rs.tripNumber !=null && rs.tripNumber != ""}}{{rs.tripNumber}}
@@ -93,11 +93,16 @@
                 <td><a class="{{if rs.payRecoredId}}T-option T-payRequest{{else}}black{{/if}}" data-preid="{{rs.payRecoredId}}" {{if !rs.payRecoredId}}title="没有预付款记录"{{/if}}><span class="F-float F-money">{{rs.prePayMoney}}</span></a></td>
                 <td class="align-left"><a class="T-option T-payedDetail in-block" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a href="#" class="T-option T-insuranceImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-                <td>
-                    <input type="text" class="col-sm-12 F-float F-money" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money">
+                <td>{{if rs.isConfirmAccount}}{{rs.settlementMoney}}
+                    {{else}}<input type="text" class="col-sm-12 F-float F-money" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money">
+                    {{/if}}
                 </td>
                 <td class="F-float F-money" name="unPayedMoney">{{rs.unPayedMoney}}</td>
-                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
+                <td>{{if rs.isConfirmAccount}}{{rs.checkRemark}}
+                    {{else}}
+                    <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
+                    {{/if}}
+                </td>
                 <td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>
                 <td>{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>
                 <td>

@@ -24,7 +24,7 @@
         </td>
         <td class="align-left"><a href="javascript:void(0)" class="T-viewDetail in-block">社付：<span class="travelPayedMoney F-float F-money">{{checking.payedMoney}}</span></a></td>
         <td>{{if checking.isConfirmAccount == 1}}<span class="F-float F-money">{{if checking.backMoney}}{{checking.backMoney}}{{else}}{{checking.punishMoney}}{{/if}}</span>
-            {else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{if checking.backMoney}}{{checking.backMoney}}{{else}}{{checking.punishMoney}}{{/if}}" name="settlementMoney" />
+            {{else}}<input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{if checking.backMoney}}{{checking.backMoney}}{{else}}{{checking.punishMoney}}{{/if}}" name="settlementMoney" />
             {{/if}}
         </td>
         <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>

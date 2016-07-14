@@ -15,6 +15,7 @@ define(function(require, exports) {
      * 初始化模块
      */
     salesProfit.initModule = function() {
+        FinancialService.clearCache(salesProfit.$tab);
          var args= FinancialService.getInitDate() || {};
          Tools.addTab(menuKey,"销售利润",listMainTemp({searchParam : args}));
          salesProfit.$tab=$("#tab-"+menuKey+"-content");
@@ -34,29 +35,6 @@ define(function(require, exports) {
         salesProfit.getOPUserList(salesProfit.$tab.find('[name=outOPUserName]'));
     };
 
-    salesProfit._initMain = function(args){
-        
-         //listMain
-         salesProfit._getListMain(0, args);
-         //获取统计数据
-         salesProfit._getTotalData();
-
-         salesProfit.$tab.on('click', '.T-viewTouristOrBooking', function () {
-            var $this = $(this),
-                $tr = $this.closest('tr'),
-                id = $tr.data('id'),
-                type = $tr.data('type');
-
-            switch (type) {
-                case 'tourist':
-                    KingServices.viewTouristGroup(id);
-                break;
-                case 'booking':
-                    KingServices.replaceDetail(id);
-                break;
-            }
-         });
-    }
     salesProfit._getListMain=function(page, args){
         var args = salesProfit._getArgs(args,page);
         $.ajax({
@@ -132,6 +110,22 @@ define(function(require, exports) {
             KingServices.viewLineProduct(id);
 
         });
+
+        $tab.on('click', '.T-viewTouristOrBooking', function () {
+            var $this = $(this),
+                $tr = $this.closest('tr'),
+                id = $tr.data('id'),
+                type = $tr.data('type');
+
+            switch (type) {
+                case 'tourist':
+                    KingServices.viewTouristGroup(id);
+                break;
+                case 'booking':
+                    KingServices.replaceDetail(id);
+                break;
+            }
+         });
 
         //格式化时间控件
         Tools.setDatePicker(salesProfit.$tab.find(".date-picker"),true);
