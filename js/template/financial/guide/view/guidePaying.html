@@ -85,7 +85,7 @@
                 <label class="control-label">付款方式：</label>
                 <select class="form-control T-sumPayType" name="sumPayType">
                     {{getPayTypeOptions}}
-                    <option value="8">借款余额</option>
+                    {{if borrow}}<option value="8">借款余额</option>{{/if}}
                 </select>
             </div>
 
