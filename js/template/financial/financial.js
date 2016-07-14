@@ -1246,6 +1246,13 @@ FinancialService.searchChange = function($tab){
     });
 };
 
+FinancialService.clearCache = function($tab, key) {
+    key = key || 'total';
+    if ($tab && $tab.length) {
+        $tab.removeData(key);
+    }
+};
+
 //页码重置(暂用)
 FinancialService.getChangeArgs = function(args,$tab){
     if($tab && $tab.data("searchEdit")){

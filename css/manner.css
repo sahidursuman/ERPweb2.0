@@ -1,4 +1,4 @@
-/*common*/
+﻿/*common*/
 .w100 {
     width: 100px;
 }
@@ -3013,4 +3013,18 @@ input.ace[type="checkbox"] + .lbl{white-space: nowrap;}
     width: 162px;
     height: 120px;
     
+.info{
+    color: #999;
+    font-size: 12px;
+    padding-top:5px;
+    border-top: 1px #ddd solid;
+    text-align: right;
+}
+.info .time{
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#desc-tooltip-containter2 .right{
+    margin-right:20px;
 }

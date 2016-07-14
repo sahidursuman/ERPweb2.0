@@ -18,6 +18,7 @@ define(function(require, exports) {
     };
 
     TotalProfit.initModule = function() {
+        FinancialService.clearCache(TotalProfit.$tab);
         var dateJson = FinancialService.getInitDate();
         TotalProfit.listTotalProfit(dateJson);
     };
