@@ -24,6 +24,7 @@ define(function(require, exports) {
      * 初始化模块
      */
     FinShop.initModule = function() {
+        FinancialService.clearCache(FinShop.$tab);
         FinShop.$tab = null;
         FinShop.getList();
     };
@@ -120,6 +121,7 @@ define(function(require, exports) {
             var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            FinShop.$tab.data("searchEdit",true);
             FinShop.getList(0,$tab);
         });
         $searchArea.find('.T-btn-search').on('click', function(event) {
