@@ -14,7 +14,8 @@ define(function(require, exports) {
         feeDetailsTemplate = require('./view/feeDetails'),
         ClientCheckTab = "financial_Client_checking",
         ClientClearTab = "financial_Client_clearing",
-        tabId = "tab-"+menuKey+"-content";
+        tabId = "tab-"+menuKey+"-content",
+        addNoteHtml = "<div class='row' style='margin: 0; padding: 10px 10px 0;'><textarea name='note' class='col-sm-12' style='margin-bottom:20px;' maxlength='200'></textarea><button class='btn btn-block btn-primary T-action T-saveNote'><i class='ace-icon fa fa-check'></i> 提交批注</button></div>";
     
     var Client = {
         mock: false,
@@ -28,6 +29,7 @@ define(function(require, exports) {
     };
 
     Client.initModule = function() {
+        FinancialService.clearCache(Client.$tab);
         Client = $.extend({}, Client, 
             {
                 mock: true,
@@ -63,6 +65,10 @@ define(function(require, exports) {
                 partnerAgencyType: Client.$tab.find("[name=partnerAgencyType]").val(),
                 sortType : Client.$tab.find("select[name=orderBy]").val(),
                 fromPartnerAgencyId: Client.$tab.find("input[name=fromPartnerAgencyId]").val(),
+                businessName:Client.$tab.find('[name=businessName]').val(),
+                businessGroupId: Client.$tab.find('[name=businessNameId]').val(),
+                groupName: Client.$tab.find('[name=groupName]').val(),
+                groupId:  Client.$tab.find('[name=groupId]').val(),
                 headerAgencyId: Client.$tab.find("input[name=headerAgencyId]").val() ,
                 checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
             };
@@ -124,8 +130,6 @@ define(function(require, exports) {
         } else {
             Client.getListSumData(args,Client.$tab);
         }
-                
-
         Client.$searchArea = Client.$tab.find('.T-search-area');
         Client.getPartnerAgencyList(Client.$tab.find('.T-search-head-office'));
         if(Client.partnerAgencyList) {
@@ -136,6 +140,9 @@ define(function(require, exports) {
         
         Tools.setDatePicker(Client.$searchArea.find(".date-picker"), true);
         FinancialService.searchChange(Client.$tab);
+
+        Client.getBusinessList(Client.$searchArea.find('[name=businessName]'));
+        Client.getGroupMapList(Client.$searchArea.find('[name=groupName]'));
 
         //搜索按钮事件
         Client.$searchArea.find('.T-btn-search').on('click', function(event) {
@@ -159,7 +166,11 @@ define(function(require, exports) {
                 accountStatus:Client.$searchArea.find(".T-finance-status").find("button").data("value"),
                 unReceivedMoney : Client.$searchArea.find(".T-money-status").find("button").data("value"),
                 sortType : Client.$searchArea.find("select[name=orderBy]").val(),
-                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0
+                checkBalance: Client.$tab.find('.T-sumUnIncome').prop('checked') ? 1 : 0,
+                businessName:Client.$searchArea.find('[name=businessName]').val(),
+                businessGroupId: Client.$searchArea.find('[name=businessNameId]').val(),
+                groupName: Client.$searchArea.find('[name=groupName]').val(),
+                groupId:  Client.$searchArea.find('[name=groupId]').val()
             };
             FinancialService.exportReport(args, "exportCustomer");
         });
@@ -184,7 +195,6 @@ define(function(require, exports) {
         //未收减去预收勾选事件
         Client.$searchArea.on('click','.T-sumUnIncome',function() {
             Client.clacReceivedMoney();
-            
         })
         Client.clacReceivedMoney();
         // 报表内的操作
@@ -200,7 +210,12 @@ define(function(require, exports) {
                     partnerAgencyName: $tr.children('td').eq(1).text(),
                     accountStatus: $tr.attr('accountStatus'),
                     startDate : Client.$tab.find('.T-search-start-date').val(),
-                    endDate : Client.$tab.find('.T-search-end-date').val()
+                    endDate : Client.$tab.find('.T-search-end-date').val(),
+                    businessName:Client.$tab.find('[name=businessName]').val(),
+                    businessGroupId: Client.$tab.find('[name=businessNameId]').val(),
+                    groupName: Client.$tab.find('[name=groupName]').val(),
+                    groupId:  Client.$tab.find('[name=groupId]').val()
+
                 };
 
             if ($that.hasClass('T-checking')) {
@@ -221,17 +236,18 @@ define(function(require, exports) {
         var $that = Client.$searchArea.find('.T-sumUnIncome');
             $trList = Client.$tab.find('.T-list').find('tr'), 
             checkStatus = $that.is(':checked');
+
+        function changeTwoDecimal($val){
+            var newVal = parseFloat($val);
+
+            if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
+                return 0;
+            }
+            var newVal = Math.round($val*100)/100;
+            return newVal;
+        };
         //遍历tr
         $trList.each(function() {
-            function changeTwoDecimal($val){
-                var newVal = parseFloat($val);
-
-                if (isNaN(newVal) || newVal == Number.POSITIVE_INFINITY){
-                    return 0;
-                }
-                var newVal = Math.round($val*100)/100;
-                return newVal;
-            };
             //准备数据
             var settlementMoney = changeTwoDecimal($(this).find('.T-settlementMoney').text()),
                 receiveMoney = changeTwoDecimal($(this).find('.T-receiveMoney').text()),
@@ -239,6 +255,7 @@ define(function(require, exports) {
                 unReceivedMoney = $(this).data('unincome'),
                 $unReceivedMoney = $(this).find('.T-unReceivedMoney'),
                 result = 0;
+
             if(checkStatus){
                 result = changeTwoDecimal((settlementMoney-receiveMoney-balance));
             } else {
@@ -246,6 +263,12 @@ define(function(require, exports) {
             }
             $unReceivedMoney.text(result);
         });
+        var $sumUnReceivedMoney = Client.$tab.find('.T-sumUnReceivedMoney'),
+            sumUnReceivedMoney = $sumUnReceivedMoney.data('sum'),
+            sumBalance = changeTwoDecimal(Client.$tab.find('.T-sumBalance').text()),
+            res = 0;
+        res = checkStatus ? (sumUnReceivedMoney - sumBalance) : sumUnReceivedMoney;
+        $sumUnReceivedMoney.text(res);
     };
 
     Client.getListSumData = function(args,$tab){
@@ -258,6 +281,7 @@ define(function(require, exports) {
             if(showDialog(data)){
                 $tab.data("total",data);
                 Client.loadListSumData($tab);
+                Client.clacReceivedMoney();
             }
         });
     };  
@@ -270,6 +294,7 @@ define(function(require, exports) {
         $tab.find('.T-travelIncome').text(total.sumAgencyMoney);
         $tab.find('.T-guideIncome').text(total.sumGuideMoney);
         $tab.find('.T-sumUnReceivedMoney').text(total.sumUnReceivedMoney);
+        $tab.find('.T-sumUnReceivedMoney').data('sum', total.sumUnReceivedMoney);
         $tab.find('.T-sumBalance').text(total.sumBalance);
     };
 
@@ -293,6 +318,10 @@ define(function(require, exports) {
                 data.fromPartnerAgencyId = args.fromPartnerAgencyId;
                 //data.searchParam.lineProductName = args.lineProductName || '全部';
                 data.searchParam.creatorName = args.creatorName || '全部';
+                data.searchParam.businessName = args.businessName || '';
+                data.searchParam.businessGroupId = args.businessGroupId  || '';
+                data.searchParam.groupName = args.groupName || '';
+                data.searchParam.groupId = args.groupId  || '';
                 var resultList = data.customerAccountList;
 
                 //费用明细处理
@@ -443,7 +472,11 @@ define(function(require, exports) {
                     accountStatus : args.accountStatus,
                     isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                     startCheck : $tab.find('.T-checkStartTime').val(),
-                    endCheck : $tab.find('.T-checkEndTime').val()
+                    endCheck : $tab.find('.T-checkEndTime').val(),
+                    businessName:$tab.find('[name=businessName]').val(),
+                    businessGroupId:$tab.find('[name=businessNameId]').val(),
+                    groupName: $tab.find('[name=groupName]').val(),
+                    groupId: $tab.find('[name=groupId]').val()
                 };
             argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;
             argsData.creatorName = argsData.creatorName === "全部" ? "" : argsData.creatorName;
@@ -452,6 +485,7 @@ define(function(require, exports) {
 
         //给全选按钮绑定事件
         FinancialService.initCheckBoxs($tab.find(".T-checkAll"), $tab.find(".T-checkList").find('.T-checkbox'));
+        Client.viewNote($tab.find('.T-addNote'));
 
         FinancialService.updateMoney_checking($tab,3);
         //绑定表内事件
@@ -466,6 +500,8 @@ define(function(require, exports) {
                 Client.viewDetails(id);
             }else if($that.hasClass('T-open-tourist')){
                 KingServices.viewTouristGroup($that.closest('tr').data('gid'));
+            } else if($that.hasClass('T-addNote')){
+                Client.addNote($that);
             }
         })
         .on('change', 'input', function(event) {
@@ -719,7 +755,7 @@ define(function(require, exports) {
             $tab.data("total","");
             Client.ClientClear(0, false, $tab);
         });
-
+        Client.viewNote($tab.find('.T-addNote'));
         //绑定表内事件
         var $body = $tab.find('.T-clearList').on('click', '.T-action', function(event){
             event.preventDefault();
@@ -732,6 +768,8 @@ define(function(require, exports) {
                 Client.viewDetails(id)
             }else if($that.hasClass('T-open-tourist')){
                 KingServices.viewTouristGroup($that.closest('tr').data('gid'));
+            } else if($that.hasClass('T-addNote')){
+                Client.addNote($that);
             }
         })
         .on('change', 'input', function(event) {
@@ -889,6 +927,7 @@ define(function(require, exports) {
                     showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Client.checkTemp = false;
+                        Client.$tab.data("searchEdit",true);
                         $tab.data("total","");
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_checking");
@@ -934,6 +973,7 @@ define(function(require, exports) {
                     showMessageDialog(data.message,function(){
                         $tab.data('isEdited', false);
                         Client.clearDataArray = false;
+                        Client.$tab.data("searchEdit",true);
                         $tab.data("total","");
                         if (argLen === 1) {
                             Tools.closeTab(menuKey + "_clearing");
@@ -1177,7 +1217,11 @@ define(function(require, exports) {
             contactRealname : $tab.find('.T-search-contact').val(),
             isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
             startCheck : $tab.find('.T-checkStartTime').val(),
-            endCheck : $tab.find('.T-checkEndTime').val()
+            endCheck : $tab.find('.T-checkEndTime').val(),
+            businessName: $tab.find('[name=businessName]').val(),
+            businessGroupId:$tab.find('[name=businessNameId]').val(),  
+            groupName:$tab.find('[name=groupName]').val(),  
+            groupId:$tab.find('[name=groupId]').val()
         }
         if (args.lineProductName === '全部') {
             args.lineProductName = '';
@@ -1271,6 +1315,166 @@ define(function(require, exports) {
         $tab.find(".T-sumUnReceivedMoney").text(total.sumUnReceivedMoney);
         $tab.find(".T-unpayMoney").text(total.checkedUnPayedMoney);
     };
+
+
+
+    /**
+     * 绑定部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    Client.getBusinessList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.nextAll('[name=businessNameId]').val('');
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.nextAll('[name=businessNameId]').val(item.businessGroupId);
+                $target.nextAll('[name=groupId]').val('');
+                $target.nextAll('[name=groupName]').val('');
+                $target.trigger('change');
+
+            }
+        }).off('click').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url("group", "selectBusinessGroup"),
+                type: "POST",
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.businessGroupList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].businessGroupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
+                }
+            })
+        })
+    };
+
+    /**
+     * 绑定子部门的选择
+     * @param  {object} $target jQuery对象
+     * @param  {object} data    部门数据
+     * @return {[type]}         [description]
+     */
+    Client.getGroupMapList = function($target){
+        return $target.autocomplete({
+            minLength:0,
+            change:function(event,ui){
+                if(ui.item == null){
+                    $target.nextAll('[name=groupId]').val('');
+                }
+            },
+            select:function(event,ui){
+                var item = ui.item;
+                $target.nextAll('[name=groupId]').val(item.groupId);
+                $target.trigger('change');
+            }
+        }).off('click').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $.ajax({
+                url: KingServices.build_url("group", "selectGroup"),
+                type: "POST",
+                data: "businessGroupId=" + $target.closest('div').find('[name=businessNameId]').val(),
+            })
+            .done(function(data) {
+                if (showDialog(data)) {
+                    var listObj = data.groupMapList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].groupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $target, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $target.autocomplete('option', 'source', listObj);
+                    $target.autocomplete('search', '');
+                }
+            })
+        })
+    };
+
+    //添加批注
+    Client.addNote = function($obj){
+        layer.open({
+            type: 1,
+            title:"添加批注",
+            skin: 'layui-layer-rim', //加上边框
+            area: '500px', //宽高
+            zIndex:1028,
+            content: addNoteHtml,
+            scrollbar: false,
+            success: function(container,index){
+                var $container = $(container);
+                if($obj.hasClass('cursor')){
+                    $container.find('[name=note]').text($obj.data("pop").remark);
+                }
+                $container.off().on('click', '.T-action', function(event) {
+                    event.preventDefault();
+                    var $this = $(this);
+                    if($this.hasClass('T-saveNote')){
+                        var note = $container.find('[name=note]').val(),
+                            $td = $obj.closest('td');
+                        $.ajax({
+                            url: KingServices.build_url("financial/customerAccount", "saveCustomerAccountNotes"),
+                            type: 'POST',
+                            data: {
+                                id: $obj.closest("tr").data('id'),
+                                notes: note
+                            }
+                        }).done(function(data) {
+                            if(showDialog(data)){
+                                $obj.remove();
+                                $td.html("<span class='cursor T-action T-addNote' data-pop='" + data.notes + "'><i class='fa fa-info blue'></i></span>");
+                                 Client.viewNote($td.find('.T-addNote'));
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+
+                $container.find('.layui-layer-close').on('click', function(event) {
+                    event.preventDefault();
+                    $obj.val("");
+                });
+            }
+        });
+    };
+    //浮动查看批注
+    Client.viewNote = function($obj){
+        $obj.each(function(){
+            var $this = $(this), options = $this.data("pop");
+            if (!!options) {
+                if (typeof options === "string") {
+                    options = JSON.parse(options);
+                }
+
+                var html = "<div>" + options.remark + "</div><div class='info'>" + options.author + "<span class='time'>" + options.dateTime + "</span></div>";
+                Tools.descToolTip($this,2);
+                $this.data('bs.popover').options.content = html;
+            }
+        })
+    }
 
     exports.init = Client.initModule;
     exports.initPayment = Client.initIncome;

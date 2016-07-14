@@ -120,20 +120,27 @@
                     <td rowspan="{{rs.rowLen}}" class="align-left"><a class="T-option T-payedDetail in-block" data-money="{{rs.payedMoney}}">{{"社付："}}<span class="F-float F-money">{{rs.payedMoney}}</span></a></td>
                     {{if rs.outFeeList.length > 0}}
                     <!-- 若有中转结算价 -->
-                    <td>
-                        <input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.outTransferBackMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}>
+                    <td>{{if rs.isConfirmAccount}}<span class="F-float F-money">{{rs.outTransferBackMoney}}</span>
+                        {{else}}
+                        <input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.outTransferBackMoney}}" name="settlementMoney" />
+                        {{/if}}
                     </td>
                     <td class="T-settlementMoney F-float F-money">{{rs.outTransferSettlementMoney}}</td>
                     {{else}}
                     <!-- 若无费用明细 -->
-                    <td>
-                        <input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.punishMoney}}" name="settlementMoney" {{if rs.isConfirmAccount}} disabled="disabled" {{/if}}>
+                    <td>{{if rs.isConfirmAccount}}<span class="F-float F-money">{{rs.punishMoney}}</span>
+                        {{else}}
+                        <input type="text" class="col-sm-12 T-refund money F-float F-money" value="{{rs.punishMoney}}" name="settlementMoney" />
+                        {{/if}}
                     </td>
                     <td class="T-settlementMoney F-float F-money">{{rs.settlementMoney}}</td>
                     {{/if}}
                     <td rowspan="{{rs.rowLen}}"><span class="T-unReceivedMoney F-float F-money">{{rs.unPayedMoney}}</span></td>
                     <td rowspan="{{rs.rowLen}}">
+                        {{if rs.isConfirmAccount}}{{rs.checkRemark}}
+                        {{else}}
                         <textarea class="col-sm-12 hct-textarea T-remark" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
+                        {{/if}}
                     </td>
                     <td rowspan="{{rs.rowLen}}">{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}</td>
                     <td rowspan="{{rs.rowLen}}">{{if rs.checkUserName == null || rs.checkUserName == ""}}-{{else}}{{rs.checkUserName}}{{/if}}</td>

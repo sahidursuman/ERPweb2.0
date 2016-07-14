@@ -85,7 +85,7 @@ define(function(require, exports){
         	var $tr = $(this).closest('tr'),
 				options = {
 				guideId: $tr.data('id'),
-				name: $tr.data('name'),
+				guideName: $tr.data('name'),
 				startDate: args.startDate,
 				endDate: args.endDate,
 				accountStatus : args.accountStatus,

@@ -78,7 +78,7 @@
                 <th style="width:115px">对账</th>
             </tr>   
 		</thead>
-		<tbody class="T-checkList" data-right="1260005">
+		<tbody class="T-checkList" data-right="1260002|1260005">
 		    {{each list as rs index}}
 		    <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{rs.isConfirmAccount}}"
             {{if rs.change}}data-change="true"{{/if}}>
@@ -104,9 +104,17 @@
                     </a>
                 </td> 
                 <td>{{if rs.billImage != null && rs.billImage !=""}}<a class="T-option T-selfPayImg" url="{{rs.billImage}}"><span>查看</span></a>{{else}}<span style="color:#bbb">查看</span>{{/if}}</td>
-				<td><input type="text" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money F-float F-money" style="text-align:center" /></td>
+				<td>{{if rs.isConfirmAccount}}<span class="F-float F-money">{{rs.settlementMoney}}</span>
+                    {{else}}
+                    <input type="text" maxlength="9" name="settlementMoney" value="{{rs.settlementMoney}}" class="money F-float F-money" style="text-align:center" />
+                    {{/if}}
+                </td>
                 <td name="unPayedMoney" class="F-float F-money">{{rs.unPayedMoney}}</td>
-                <td><textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea></td>
+                <td>{{if rs.isConfirmAccount}}{{rs.isConfirmAccount}}
+                    {{else}}
+                    <textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{rs.checkRemark}}</textarea>
+                    {{/if}}
+                </td>
 				<td>{{if rs.checkTime == null || rs.checkTime == ""}}-{{else}}{{rs.checkTime | dateTimeFormat}}{{/if}}</td>
                 <td>{{if rs.checkUser == null || rs.checkUser == ""}}-{{else}}{{rs.checkUser}}{{/if}}</td>
 				<td>
