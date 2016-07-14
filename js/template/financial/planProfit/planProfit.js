@@ -17,6 +17,7 @@ define(function(require, exports) {
 	};
 
     plan.initModule = function() {
+        FinancialService.clearCache(plan.$tab);
         var dateJson = FinancialService.getInitDate(),
             args = {
                 start : dateJson.startDate,

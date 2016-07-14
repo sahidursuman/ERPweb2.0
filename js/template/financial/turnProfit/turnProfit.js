@@ -16,6 +16,7 @@ define(function(require, exports) {
     };
 
     TurnProfit.initModule = function() {
+        TurnProfit.$tab = false;
         var dateJson = FinancialService.getInitDate(),
             args = {
                 startTime : dateJson.startDate,
