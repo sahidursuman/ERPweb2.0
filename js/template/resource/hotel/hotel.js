@@ -366,7 +366,7 @@ define(function(require, exports) {
 
 	//事件初始化
 	hotel.initialization = function($obj,data,isAuth) {
-
+		console.log(hotel.imgCount);
 		//表单验证
 		var auditValidator = rule.checkHotelAudit($obj),provinceId = 0,cityId = 0,districtId = 0;
 
@@ -393,13 +393,12 @@ define(function(require, exports) {
 		}).on("change",function(){
 			var $div = $(this).closest('div');
 			if(!$div.data("needSubmit")){
-				hotel.imgCount += 1;
 				$div.data("needSubmit",true);
 			}
 			if($div.find(".T-original").length) {
 				$div.find(".T-original").addClass('hidden');
 			}
-			console.log(hotel.imgCount);
+			hotel.imgCount += 1;
 		});
 
 		
@@ -421,15 +420,14 @@ define(function(require, exports) {
 			} else {
 				hotel.saveFormData($obj);
 			} 
-		}).on("click",".remove",function(){
-			var $container = $(this).closest('.T-imgContainer'),
-				$originalImg = $container.find(".T-original");
-			$container.data("url","");
-			if($originalImg){
-				$originalImg.removeClass('hidden');
-			}
-			company.imgCount -= 1;
 		});
+		if($obj.find('.ace-file-container').length){
+			$obj.find('.T-imgContainer').find('.remove').click(function() {
+				$obj.find(".T-original").removeClass('hidden');
+				$obj.find(".T-original").data("needSubmit",false);
+				hotel.imgCount -= 1;
+			});
+		}
 	};
 
 	//上传图片
