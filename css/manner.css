@@ -3001,3 +3001,16 @@ ul.billImageDowebok li img{max-height:100%; max-width: 100%;vertical-align: midd
 /* 资源启用checkbox样式 */
 .resource_checkbox{margin-left:5px;margin-top: -6px !important;padding:0px;}
 input.ace[type="checkbox"] + .lbl{white-space: nowrap;}
+
+.illustrations{
+    position:relative;
+    top:0;
+    z-index:99;
+    margin-top:-123px;
+    text-align:center;
+}
+.illustrations img{
+    width: 162px;
+    height: 120px;
+    
+}
