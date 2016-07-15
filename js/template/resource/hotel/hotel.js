@@ -276,7 +276,7 @@ define(function(require, exports) {
 					data.hotelId = id;
 					data.businessLicensePic = businessLicensePic;
 					data.taxesCardPic = taxesCardPic;
-					if(isAuth == 1){
+					if(isAuth == 1 || isAuth == 2){
 						html = auditTemplate(data);
 					} else {
 						html = editAuditTemplate(data);
@@ -293,7 +293,7 @@ define(function(require, exports) {
 						success: function(layObj,index) {
 
 							var $layObj = $(layObj);
-							if(isAuth > 1) {
+							if(isAuth == 3) {
 								hotel.initialization($layObj,data,isAuth);
 							} else {
 
