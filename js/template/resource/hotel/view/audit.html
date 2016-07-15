@@ -3,13 +3,25 @@
         
         
         <div class="pull-left mar-r-10">
-            <img src="../../images/audit.png">
+            {{if hotelAudit.isAuth == 1}}
+                <img src="../../images/audit.png">
+            {{else if hotelAudit.isAuth == 2}}
+                <img src="../../images/yes.png" style="width:40px;height:40px;">
+            {{/if}}
         </div>
         <div>
-            <p class="hct-hotel-font-14" style="margin:0;">审核中</p>
-            <p class="hct-hotel-font-12" style="margin:0;">
-                1-2个工作日处理 并发布商家登录账号<span class="T-timeNum">10</span>秒后，自动关闭该页面。
-            </p>
+            {{if hotelAudit.isAuth == 1}}
+                <p class="hct-hotel-font-14" style="margin:0;">审核中</p>
+                <p class="hct-hotel-font-12" style="margin:0;">
+                    1-2个工作日处理 并发布商家登录账号<span class="T-timeNum">10</span>秒后，自动关闭该页面。
+                </p>
+            {{else if hotelAudit.isAuth == 2}}
+                <p class="hct-hotel-font-14" style="margin:0;">已认证</p>
+                <p class="hct-hotel-font-12" style="margin:0;">
+                    注&nbsp;:&nbsp;认证成功后,&nbsp;可以用借款与商家进行在线支付<span class="T-timeNum">10</span>秒后，自动关闭该页面。
+                </p>
+            {{/if}}
+            
         </div>
         
     </div>

@@ -78,11 +78,11 @@
 							 		<span style="color:#FF9900;">审核中</span>
 							 	{{else if hotel.isAuth == 3}} 
 							 		<img src="../../images/fail.png" title="认证失败">
+						 		{{else if hotel.isAuth == 2}}
+						 			<img src="../../images/certified.png" title="已认证">
 								{{/if}}
 						 	</a>
-						 	{{if hotel.isAuth == 2}}
-						 		<img src="../../images/certified.png" title="已认证">&nbsp;
-						 	{{/if}}
+						 	
 						 	
 					 	</td>
 						<td>
