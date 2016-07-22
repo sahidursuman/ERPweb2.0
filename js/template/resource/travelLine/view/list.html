@@ -22,7 +22,6 @@
 			<li>
 				<a data-value="" href="javascript:void(0)">全部</a>
 			</li>
-
 			<li>
 				<a data-value="1" href="javascript:void(0)">已启用</a>
 			</li>
@@ -54,7 +53,7 @@
 				{{each travelLineList as travelLine}}
 					<tr class="travelLine-{{travelLine.id}}" data-id="{{travelLine.id}}">
 						<td style="display: none"><input name="id" type="hidden" value="{{travelLine.travelAgencyId}}"/>
-						<td>{{travelLine.name}}</td>
+						<td><span class="T-travelLineName">{{travelLine.name}}</span></td>
 						<td>{{travelLine.days}}天</td>
 						<td>{{travelLine.createTime}}</td>
 						<!-- <td>
@@ -70,9 +69,13 @@
 							{{/if}}
 						</td>
 						<td>
-						<a class="T-action cursor T-add-lineproduct" data-right="1100004">
+							<a class="T-action cursor T-add-lineproduct" data-right="1100004">
 								<label class="padding-right20"></label>
 								新建产品
+							</a>
+							<a class="T-action cursor T-view-lineproduct">
+								<label class="padding-right20"></label>
+								查看产品
 							</a>
 							<a class="T-action T-preview cursor">
 							<label class="padding-right20">|</label>
