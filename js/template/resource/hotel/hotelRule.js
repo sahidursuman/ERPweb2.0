@@ -244,7 +244,7 @@ define(function(require, exports) {
 	    	    	        	errMsg: '地址不能为空'
 	    	    	        }
 	    	        ]
-	    	    },{	// 联系人电话
+	    	    },{	// 联系人电话 
 	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
 	    	    	rules: [
 	    	    	        {
@@ -252,7 +252,25 @@ define(function(require, exports) {
 	    	    	        	errMsg: '联系电话格式不正确'
 	    	    	        }
 	    	        ]
-	    	    } ,  
+	    	    } , 
+	    	    {	// 责任联系人
+	    	    	$ele: $obj.find('input[name="managerName"]'),
+	    	    	rules: [
+	    	    	        {
+	    	    	        	type: 'null',
+	    	    	        	errMsg: '责任联系人不能为空'
+	    	    	        }
+	    	        ]
+	    	    } , 
+	    	    {	// 责任联系人电话
+	    	    	$ele: $obj.find('input[name="mobileNumber"]'),
+	    	    	rules: [
+	    	    	        {
+	    	    	        	type: 'mobile-phone',
+	    	    	        	errMsg: '联系电话格式不正确'
+	    	    	        }
+	    	        ]
+	    	    } ,
                 ]);
 			return auditValidator;
 		},
