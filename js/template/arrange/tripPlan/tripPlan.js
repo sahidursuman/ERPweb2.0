@@ -1788,7 +1788,7 @@ define(function(require, exports) {
 
     //取消计划
     tripPlan.cancelTripPlan = function(id, $that){
-        showConfirmMsg("你确定要取消该发团计划信息？",function(){
+        showConfirmMsg("你确定要取消该发团计划信息？<br>取消团计划将不会自动删除资源安排信息，请手动删除。",function(){
             $.ajax({
                 url:KingServices.build_url("tripPlan","cancelTripPlan"),
                 data:{ tripPlanId : id + "" },

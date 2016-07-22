@@ -30,7 +30,7 @@
         <td class="T-settlementMoney F-float F-money">{{checking.settlementMoney}}</td>
         <td class="T-unReceivedMoney F-float F-money" name="unPayedMoney">{{checking.unPayedMoney}}</td>
         <td>{{if checking.isConfirmAccount == 1}}{{checking.checkRemark}}
-            {[else}}<textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{checking.checkRemark}}</textarea>
+            {{else}}<textarea class="col-sm-12 hct-textarea" name="checkRemark" maxlength="1000">{{checking.checkRemark}}</textarea>
             {{/if}}
         </td>
         <td>{{if checking.isConfirmAccount == 0}}<span>-</span>{{else}}{{if checking.checkTime == null || checking.checkTime == ""}}-{{else}}{{checking.checkTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}{{/if}}{{/if}}</td>
