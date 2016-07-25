@@ -1,6 +1,6 @@
 {{each bookinAccountList as rs index}}
-    <tr data-id="{{rs.id}}">
-        <td>{{rs.orderNumber}}</td>
+    <tr data-id="{{rs.id}}" data-arrid="{{rs.arrangeId}}">
+        <td><a href="javascript:void(0)" class="T-action T-viewDetail">{{rs.orderNumber}}</a></td>
         <td>{{rs.startTime}}</td>
         <td>{{rs.partnerAgencyName}}</td>
         <td>{{rs.projectName}}</td>

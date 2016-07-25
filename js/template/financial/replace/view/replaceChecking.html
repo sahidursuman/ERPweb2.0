@@ -104,8 +104,8 @@
         </thead>
         <tbody class="T-list T-checkList" data-right="1290002|1290005">
         {{each bookinAccountList as rs index}}
-            <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
-                <td>{{rs.orderNumber}}</td>
+            <tr class="T-checkTr {{if rs.change}}success{{/if}}" data-arrid="{{rs.arrangeId}}" data-id="{{rs.id}}" data-confirm="{{if !!rs.isConfirmAccount}}1{{else}}0{{/if}}" {{if rs.change}}data-change="true"{{/if}}>
+                <td><a href="javascript:void(0)" class="T-action T-viewDetail">{{rs.orderNumber}}</a></td>
                 <td>{{rs.startTime}}</td>
                 <td>{{rs.partnerAgencyName}}</td>
                 <td>{{rs.projectName}}</td>

@@ -384,12 +384,14 @@ define(function(require, exports) {
         	Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
         };
 		$tab.find('.T-list').on('click', '.T-action', function(event){
-			var $that = $(this), id = $that.closest('tr').data('id');
+			var $that = $(this), $tr = $that.closest('tr'),id = $tr.data('id'),arrId = $tr.data('arrid');
 			if($that.hasClass('T-view-Received')){
 				Replace.viewOperationDetail(id, true);
 			}else if($that.hasClass('T-receive-money')){
 				Replace.viewOperationDetail(id, false);
-			}
+			} else if($that.hasClass('T-viewDetail')) {
+                KingServices.viewBookingInfo(arrId);
+            }
 		});
 		var oMenuKey = checkMenuKey;
 		// 计算
