@@ -526,6 +526,12 @@ define(function(require, exports){
 					
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
+
+					var $objB = $('#tab-financial_count-Reimbursement-content');
+					$objB.find('.T-guideAccount').off('click').on('click',function() {
+					var id = $objB.find('.financial-tripPlanId').val();
+					KingServices.viewFeeDetail(id);
+		});
 				}
 			}
 		});
