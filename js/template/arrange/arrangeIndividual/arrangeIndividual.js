@@ -126,7 +126,6 @@ define(function(require, exports) {
         $tab.find('[name=type]').on('change', function() {
             arrangeIndividual.chosenPartAgenOrBussiness($(this));
         });
-
     };
 
     /**
@@ -267,7 +266,7 @@ define(function(require, exports) {
             content: html,
             scrollbar: false,
             success: function() {
-                arrangeIndividual.chosenTripPlan(0, "");
+                arrangeIndividual.chosenTripPlan(0, "","");
                 arrangeIndividual.mergenTripPlan();
             }
         });
@@ -278,16 +277,17 @@ define(function(require, exports) {
      * chosenTripPlan 选择计划
      * @return {[type]} [description]
      */
-    arrangeIndividual.chosenTripPlan = function(page, searchKey) {
+    arrangeIndividual.chosenTripPlan = function(page, searchKey,order) {
         var $chooseTipPlan = $("#chooseTipPlan");
         $.ajax({
             url: "" + APP_ROOT + "back/tripPlan.do?method=findNoStartTripPlanList&token=" + $.cookie("token") + "&menuKey=" + menuKey + "&operation=view",
             showLoading: false,
-            data: "searchKey=" + searchKey + "&pageNo=" + page,
+            data: "searchKey=" + searchKey + "&pageNo=" + page + "&order=" + order,
             type: "POST",
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
+                    data.order = order;
                     var html = chosenTripPlanTemplate(data);
                     $chooseTipPlan.find('.T-chooseTipPlan-Content').html(html);
                     // 再调整对话框的高度
@@ -300,10 +300,15 @@ define(function(require, exports) {
                         curr: (page + 1),
                         jump: function(obj, first) {
                             if (!first) { // 避免死循环，第一次进入，不调用页面方法
-                                arrangeIndividual.chosenTripPlan(obj.curr - 1, searchKey);
+                                arrangeIndividual.chosenTripPlan(obj.curr - 1, searchKey,order);
                             }
                         }
                     });
+                    // var $objTh = $(".SpellGroupOrder_by");
+                    // $objTh.find('#order_by').off().on('change', function(event) {
+                    //     event.preventDefault();
+                    //     arrangeIndividual.listArrangeTourist(0);
+                    // });
                 }
             }
         })
@@ -371,7 +376,8 @@ define(function(require, exports) {
             event.preventDefault();
             /* Act on the event */
             var searchKey = $chooseTipPlan.find('input[name=searchKey]').val();
-            arrangeIndividual.chosenTripPlan(0, searchKey);
+            var order = $chooseTipPlan.find('select[name=order]').val();
+            arrangeIndividual.chosenTripPlan(0, searchKey,order);
         });
 
         //确认

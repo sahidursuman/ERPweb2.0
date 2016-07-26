@@ -2699,6 +2699,8 @@ define(function(require, exports) {
 				travellineId: getValue($form, "travellineId"),
 				remark : getValue($form, "remark"),
 				type : getValue($form, "type"),
+				adultPrice : getValue($form, "adultPrice"),
+				childPrice : getValue($form, "childPrice"),
 				customerType : getValue($form, "customerType"),
 				includeFee  : getValue($middleForm, "includeFee"),
 				excludeFee  : getValue($middleForm, "excludeFee"),
