@@ -22,15 +22,19 @@ define(function(require, exports) {
     };
     Self.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        Self.listSelf(0,"","",dateJson.startDate,dateJson.endDate,2);
+        Self.listSelf(0,"","",dateJson.startDate,dateJson.endDate,2,'','','','');
     };
-    Self.listSelf = function(page,selfPayName,selfPayId,startDate,endDate,accountStatus) {
+    Self.listSelf = function(page,selfPayName,selfPayId,startDate,endDate,accountStatus,businessName,businessGroupId,groupName,groupId) {
         if (Self.$searchArea && arguments.length === 1) {
             selfPayName = Self.$searchArea.find("input[name=selfPayName]").val();
             selfPayId = Self.$searchArea.find("input[name=selfPayId]").val();
             startDate = Self.$searchArea.find("input[name=startDate]").val();
             endDate = Self.$searchArea.find("input[name=endDate]").val();
             accountStatus = Self.$searchArea.find(".T-finance-status").find("button").data("value");
+            businessName = Self.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = Self.$searchArea.find('[name=departmentId]').val();
+            groupName = Self.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = Self.$searchArea.find('[name=childDepartmentId]').val();
         }
         selfPayName = (selfPayName == "全部") ? "" : selfPayName;
 
@@ -41,7 +45,11 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             accountStatus : accountStatus,
-            sortType: Self.$searchArea ? Self.$searchArea.find("select[name=orderBy]").val() : "desc"
+            sortType: Self.$searchArea ? Self.$searchArea.find("select[name=orderBy]").val() : "desc",
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         };
 
         Self.searchData = FinancialService.getChangeArgs(Self.searchData,Self.$tab);
@@ -57,7 +65,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.$tab = $('#' + tabId);
                     Self.$searchArea = Self.$tab.find('.T-search-area');
-                    Self.initList(startDate,endDate,accountStatus);
+                    Self.initList(Self.searchData);
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
                         unPayedMoneySum:data.unPayedMoneySum,
@@ -87,10 +95,16 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    Self.initList = function(startDate,endDate,accountStatus) {
+    Self.initList = function(args) {
         Self.bindTraderList();
         Tools.setDatePicker(Self.$tab.find(".date-picker"),true);
         FinancialService.searchChange(Self.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(Self.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(Self.$tab.find('input[name=childDepartmentName]'));
 
         //搜索按钮事件
         Self.$tab.find('.T-search').on('click', function(event) {
@@ -110,15 +124,9 @@ define(function(require, exports) {
         // 报表内的操作
         Self.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    selfPayId :$that.closest("tr").data("id"),
-                    selfPayName : $that.closest("tr").data("name"),
-                    startTime : startDate,
-                    endTime : endDate,
-                    accountStatus : accountStatus
-                };
+            var $that = $(this);
+                args.selfPayId = $that.closest("tr").data("id");
+                args.selfPayName = $that.closest("tr").data("name");
             if ($that.hasClass('T-check')) {
                 // 对账
                 Self.Getcheck(args);
@@ -154,8 +162,7 @@ define(function(require, exports) {
                     data.sumData = Self.getSumData(args);
                     var fsList = data.list;
                     data.list = FinancialService.isGuidePay(fsList);
-                    data.selfPayName = args.selfPayName;
-                    data.searchParam.accountStatus = args.accountStatus;
+                    data.searchParam = args;
                     data.list = FinancialService.getCheckTempData(data.list,Self.checkTemp);
                     var html = SelfChecking(data);
 
@@ -231,7 +238,11 @@ define(function(require, exports) {
                     accountStatus : args.accountStatus,
                     isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                     startCheck : $tab.find('.T-checkStartTime').val(),
-                    endCheck : $tab.find('.T-checkEndTime').val()
+                    endCheck : $tab.find('.T-checkEndTime').val(),
+                    businessName: args.businessName,
+                    businessGroupId: args.businessGroupId,
+                    groupName: args.groupName,
+                    groupId: args.groupId
                 };
             console.log(argsData);
             FinancialService.exportReport(argsData,"exportSelfPayFinancial");
@@ -387,7 +398,11 @@ define(function(require, exports) {
                         tripInfo : $tab.find('input[name=tripInfo]').val(),
                         accountStatus : args.accountStatus,
                         startCheck : $tab.find('.T-checkStartTime').val(),
-                        endCheck : $tab.find('.T-checkEndTime').val()
+                        endCheck : $tab.find('.T-checkEndTime').val(),
+                        businessName: args.businessName,
+                        businessGroupId: args.businessGroupId,
+                        groupName: args.groupName,
+                        groupId: args.groupId
                     },
                     success:function(data){
                         if(showDialog(data)){

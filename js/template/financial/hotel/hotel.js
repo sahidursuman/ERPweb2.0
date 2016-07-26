@@ -26,16 +26,20 @@ define(function(require, exports) {
 
   	hotel.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate,2);
+        hotel.listHotel(0,"","",dateJson.startDate,dateJson.endDate,2,'','','','');
     };
 
-    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate,accountStatus){
+    hotel.listHotel = function(page,hotelName,hotelId,startDate,endDate,accountStatus,businessName,businessGroupId,groupName,groupId){
     	if (hotel.$searchArea && arguments.length === 1) {
             hotelName = hotel.$searchArea.find("input[name=hotelName]").val();
             hotelId = hotel.$searchArea.find("input[name=hotelId]").val();
             startDate = hotel.$searchArea.find("input[name=startDate]").val();
             endDate = hotel.$searchArea.find("input[name=endDate]").val();
-            accountStatus = hotel.$searchArea.find(".T-finance-status").find("button").data("value")
+            accountStatus = hotel.$searchArea.find(".T-finance-status").find("button").data("value");
+            businessName = hotel.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = hotel.$searchArea.find('[name=departmentId]').val();
+            groupName = hotel.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = hotel.$searchArea.find('[name=childDepartmentId]').val();
         }
         hotelName = (hotelName == "全部") ? "" : hotelName;
         // 修正页码
@@ -47,7 +51,11 @@ define(function(require, exports) {
             startTime : startDate,
             endTime : endDate,
             accountStatus : accountStatus,
-            sortType: hotel.$searchArea ? hotel.$searchArea.find("select[name=orderBy]").val() : "desc"
+            sortType: hotel.$searchArea ? hotel.$searchArea.find("select[name=orderBy]").val() : "desc",
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         };
 
         hotel.searchData = FinancialService.getChangeArgs(hotel.searchData,hotel.$tab);
@@ -61,12 +69,13 @@ define(function(require, exports) {
                var result = showDialog(data);
                 if(result){
                     hotel.hotelList = data.hotelNameList;
+                    data.searchParam = hotel.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"酒店账务",html);
                     hotel.$tab = $('#tab-' + menuKey + "-content");
                     hotel.$searchArea = hotel.$tab.find('.T-search-area');
                     hotel.listPage = page;
-                    hotel.initList(startDate,endDate,accountStatus);
+                    hotel.initList(hotel.searchData);
                     //获取合计数据
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
@@ -97,10 +106,16 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    hotel.initList = function(startDate,endDate,accountStatus){
+    hotel.initList = function(args){
     	hotel.getQueryList();
         Tools.setDatePicker(hotel.$tab.find(".date-picker"),true,"",true);
         FinancialService.searchChange(hotel.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(hotel.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(hotel.$tab.find('input[name=childDepartmentName]'));
 
         //搜索按钮事件
         hotel.$tab.find('.T-search').on('click', function(event) {
@@ -120,15 +135,10 @@ define(function(require, exports) {
         // 报表内的操作
         hotel.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    hotelId : $that.closest('tr').data('id'),
-                    hotelName : $that.closest('tr').data('name'),
-                    startTime : startDate,
-                    endTime : endDate,
-                    accountStatus : accountStatus
-                };
+            var $that = $(this);
+                args.pageNo = 0;
+                args.hotelId = $that.closest('tr').data('id');
+                args.hotelName = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 hotel.hotelCheck(args);
@@ -239,7 +249,11 @@ define(function(require, exports) {
                 accountStatus : args.accountStatus,
                 isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 startCheck : $tab.find('.T-checkStartTime').val(),
-                endCheck : $tab.find('.T-checkEndTime').val()
+                endCheck : $tab.find('.T-checkEndTime').val(),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
             console.log(argsData);
             FinancialService.exportReport(argsData,"exportArrangeHotelFinancial");

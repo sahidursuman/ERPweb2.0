@@ -26,6 +26,10 @@ define(function(require, exports) {
 		FinPay.$tab = false;
 
 		var data = FinancialService.getInitDate();
+			data.businessName = '';
+	        data.businessGroupId = '';
+	        data.groupName = '';
+	        data.groupId = '';
 			data.accountStatus = FinPay.accountStatus;
 		if (Tools.addTab(menuKey, '财务付款', listTemplate(data))) {
 			FinPay.initEvent();

@@ -38,13 +38,21 @@ define(function(require, exports) {
         args.accountStatus = 2;
         args.sortType = "desc";
         args.pageNo = page || 0;
+        args.businessName = '';
+        args.businessGroupId = '';
+        args.groupName = '';
+        args.groupId = '';
         if (!!$tab) {
             args = {
                 pageNo: (page || 0),
                 startDate: $tab.find('.T-search-start-date').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 accountStatus : $tab.find(".T-finance-status").find("button").data("value"),
-                sortType : $tab.find("select[name=orderBy]").val()
+                sortType : $tab.find("select[name=orderBy]").val(),
+                businessName: $tab.find('[name=departmentName]').val(),
+                businessGroupId: $tab.find('[name=departmentId]').val(),
+                groupName: $tab.find('[name=childDepartmentName]').val(),
+                groupId: $tab.find('[name=childDepartmentId]').val()
             }
             var shopName = $tab.find('.T-search-name').val().trim();
             args.shopName = shopName === '全部' ? '' : shopName;
@@ -56,10 +64,11 @@ define(function(require, exports) {
             data: args //{searchParam : JSON.stringify()},
         }).done(function(data) {
             if (showDialog(data)) {
+                data.searchParam = args;
                 Tools.addTab(menuKey, "购物账务", listTemplate(data));
                 // 绑定事件
                 FinShop.$tab = $tab = $('#tab-' + menuKey + '-content');
-                FinShop.init_event($tab);
+                FinShop.init_event($tab,args);
                 //获取合计金额
                 if(!FinShop.$tab.data("searchEdit") && FinShop.$tab.data("total")){
                     FinShop.loadSumMoney($tab);
@@ -109,12 +118,19 @@ define(function(require, exports) {
     /**
      * 初始化列表页面的事件绑定
      */
-    FinShop.init_event = function($tab) {
+    FinShop.init_event = function($tab,args) {
 
         /**
          * 搜索顶部的事件绑定
          */
         var $searchArea = $tab.find('.T-search-area');
+
+        //部门下拉
+        FinancialService.getDepartment($searchArea.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($searchArea.find('input[name=childDepartmentName]'));
+
         //搜索下拉事件
         $searchArea.find('.T-finance-status').on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
@@ -148,7 +164,11 @@ define(function(require, exports) {
                     source: true,
                     startDate: $tab.find('.T-search-start-date').val(),
                     endDate: $tab.find('.T-search-end-date').val(),
-                    accountStatus : $tab.find(".T-finance-status").find("button").data("value")
+                    accountStatus : $tab.find(".T-finance-status").find("button").data("value"),
+                    businessName: args.businessName,
+                    businessGroupId: args.businessGroupId,
+                    groupName: args.groupName,
+                    groupId: args.groupId
                 };
             if ($that.hasClass('T-checking')) {
                 // 对账
@@ -451,7 +471,11 @@ define(function(require, exports) {
                     accountStatus : args.accountStatus,
                     isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                     startCheck : $tab.find('.T-checkStartTime').val(),
-                    endCheck : $tab.find('.T-checkEndTime').val()
+                    endCheck : $tab.find('.T-checkEndTime').val(),
+                    businessName: args.businessName,
+                    businessGroupId: args.businessGroupId,
+                    groupName: args.groupName,
+                    groupId: args.groupId
                 };
                 FinancialService.exportReport(argsData, "exportArrangeShopFinancial");
             });

@@ -5,6 +5,12 @@
             <input type="text" class="T-chooseInsure" name="insuranceName" value="{{searchParam.insuranceName}}" 
             placeholder='所有保险公司'/>
             <input type="hidden" name="insuranceId" value="{{searchParam.insuranceId}}" />
+            <label class="mar-l-10">部门 </label>
+            <input type="text" class="mar-r-10 T-search-head-office" name="departmentName" value="{{searchParam.businessName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="departmentId" value="{{searchParam.businessGroupId}}"/>
+            <label class="mar-l-10">子部门 </label>
+            <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="childDepartmentName" value="{{searchParam.groupName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="childDepartmentId" value="{{searchParam.groupId}}"/>
             <label>账期 </label>
             <input class="date-picker mar-r-10" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate | dateFormat:'yyyy-MM-dd'}}" style="width:100px;" />
             <label>&nbsp;至&nbsp;</label>

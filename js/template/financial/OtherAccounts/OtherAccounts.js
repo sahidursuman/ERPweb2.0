@@ -18,9 +18,9 @@ define(function(require, exports) {
     };
     OtherAccounts.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        OtherAccounts.listFinancialOtherAccounts(0, "", dateJson.startDate, dateJson.endDate);
+        OtherAccounts.listFinancialOtherAccounts(0, "", dateJson.startDate, dateJson.endDate,0,'','','','');
     };
-    OtherAccounts.listFinancialOtherAccounts = function(pageNo, name, startAccountTime, endAccountTime, accountStatus) {
+    OtherAccounts.listFinancialOtherAccounts = function(pageNo, name, startAccountTime, endAccountTime, accountStatus,businessName,businessGroupId,groupName,groupId) {
         if (OtherAccounts.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             var itemName = OtherAccounts.$searchArea.find("input[name=otherId]").val();
@@ -28,6 +28,10 @@ define(function(require, exports) {
             startAccountTime = OtherAccounts.$searchArea.find("input[name=startTime]").val();
             endAccountTime = OtherAccounts.$searchArea.find("input[name=endTime]").val();
             accountStatus = OtherAccounts.$searchArea.find(".T-finance-status").find('button').data('value');
+            businessName = OtherAccounts.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = OtherAccounts.$searchArea.find('[name=departmentId]').val();
+            groupName = OtherAccounts.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = OtherAccounts.$searchArea.find('[name=childDepartmentId]').val();
         }
         
         //重置搜索条件
@@ -37,7 +41,11 @@ define(function(require, exports) {
             startAccountTime: startAccountTime,
             endAccountTime: endAccountTime,
             accountStatus : accountStatus == undefined ? "2" : accountStatus,
-            sortType: 'auto'
+            sortType: 'auto',
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         }
         OtherAccounts.searchData = FinancialService.getChangeArgs(OtherAccounts.searchData,OtherAccounts.$tab);
         $.ajax({
@@ -47,13 +55,13 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.startAccountTime = startAccountTime
-                    data.endAccountTime = endAccountTime
+                    data.searchParam = OtherAccounts.searchData;
+                    console.log(data);
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "其它账务", html);
                     OtherAccounts.$tab = $('#' + tabId);
                     OtherAccounts.$searchArea = OtherAccounts.$tab.find('.T-search-area');
-                    OtherAccounts.initList(pageNo, name, startAccountTime, endAccountTime, OtherAccounts.searchData.accountStatus);
+                    OtherAccounts.initList(OtherAccounts.searchData);
                     OtherAccounts.getSumMoney(data.totalFinancialOtherData[0],OtherAccounts.$tab);
                     //翻页
                     laypage({
@@ -80,12 +88,19 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.sumPayedMoney);
         tabId.find('.T-sumUnPaiedMoney').text(data.sumUnPayedMoney);
     };
-    OtherAccounts.initList = function(pageNo, name, startAccountTime, endAccountTime, accountStatus) {
+    OtherAccounts.initList = function(args) {
         // 初始化jQuery 对象
         var $container = $(".T-other");
         var $obj = OtherAccounts.$tab.find('.T-search-head-office');
         FinancialService.searchChange(OtherAccounts.$tab);
         OtherAccounts.getTravelAgencyList($obj);
+
+        //部门下拉
+        FinancialService.getDepartment(OtherAccounts.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(OtherAccounts.$tab.find('input[name=childDepartmentName]'));
+
         //搜索按钮事件
         OtherAccounts.$tab.find('.T-search').click(function(event) {
             event.preventDefault();
@@ -104,14 +119,7 @@ define(function(require, exports) {
         // 报表内的操作
         OtherAccounts.$tab.find('.T-other').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0 ,
-                    name : $that.closest('tr').data('name'),
-                    startAccountTime : startAccountTime,
-                    endAccountTime : endAccountTime,
-                    accountStatus : accountStatus
-                };
+            var $that = $(this);args.name = $that.closest('tr').data('name');
             if ($that.hasClass('T-checking')) {
                 //对账
                 OtherAccounts.AccountsChecking(args);
@@ -292,7 +300,11 @@ define(function(require, exports) {
                 startAccountTime: $tab.find('.T-startTime').val(),
                 endAccountTime: $tab.find('.T-endTime').val(),
                 accountStatus : args.accountStatus,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
             FinancialService.exportReport(argsData,"exportArrangeOtherFinancial");
         });
