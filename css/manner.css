@@ -518,8 +518,11 @@ table tr td {
 .mar-1-135{
     margin-left: 135px;
 }
+.mar-r-5 {
+    margin-right: 5px;
+}
 .mar-r-10 {
-    margin-right: 10px;
+    
 }
 .mar-r-15 {
     margin-right: 15px;
@@ -2990,6 +2993,11 @@ a.black span, .black, .black:hover, .black:focus{
 .hct-view table{
     width: 90%;
     margin-left: 5%;
+}
+.hct-line-inp {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #000;
 }
 
 /*billImage style*/
