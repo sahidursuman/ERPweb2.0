@@ -1382,6 +1382,7 @@ define(function(require, exports) {
      * @return {[type]}            [description]
      */
     touristGroup.updateMoneyAndGuest = function($that, optionType){
+        console.log(optionType);
         var html = "",
             data = {},
             title = "编辑信息",
@@ -1391,27 +1392,13 @@ define(function(require, exports) {
             guestData = $tr.find('.T-guest-info').data('json'),
             moneyData = $tr.find('.T-receivable').data('json');
 
-        if(typeof guestData !== "object"){
-            data.guestData = JSON.parse(guestData || "{}");
-        }else{
-            data.guestData = guestData;
-        }
-
-        if(typeof moneyData !== "object"){
-            data.moneyData = JSON.parse(moneyData || "{}");
-        }else{
-            data.moneyData = moneyData;
-        }
-
-        if($that.hasClass('T-guest-info')){
-            data.isShowGuestInfo = true;
-        }
-        if(!!$tr.data('lineProductId')) {
+       
+        if(!!$tr.data('lineproductid')) {
             $.ajax({
                 url: KingServices.build_url('lineProduct','findProductPrice'),
                 type: 'POST',
                 data: {
-                    id: $tr.data('lineProductId'),
+                    id: $tr.data('lineproductid'),
                     startTime: startTime,
                     endTime: endTime
                 }
@@ -1419,6 +1406,21 @@ define(function(require, exports) {
             .done(function(data) {
                 if(showDialog(data)) {
                     console.log(data)
+                    if(typeof guestData !== "object"){
+                        data.guestData = JSON.parse(guestData || "{}");
+                    }else{
+                        data.guestData = guestData;
+                    }
+
+                    if(typeof moneyData !== "object"){
+                        data.moneyData = JSON.parse(moneyData || "{}");
+                    }else{
+                        data.moneyData = moneyData;
+                    }
+
+                    if($that.hasClass('T-guest-info')){
+                        data.isShowGuestInfo = true;
+                    }
                     html = T.updateMoneyAndGuest(data);
                     layer.open({
                         type: 1,
@@ -1552,7 +1554,8 @@ define(function(require, exports) {
                 }
             });  
         } else {
-            
+            showMessageDialog('请选择行程');
+            return false;
         }
         
         
@@ -2555,7 +2558,7 @@ define(function(require, exports) {
                         days : $tr.find('[name="days"]').text(),
                     }
                     $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');
-                    $that.closest('tr').data('lineProductId',lineData.id);
+                    $that.closest('tr').data('lineproductid',lineData.id);
                     layer.close(index);
                     F.autoCalcDate($that);
                 }
