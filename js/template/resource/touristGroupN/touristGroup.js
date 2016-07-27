@@ -2532,7 +2532,8 @@ define(function(require, exports) {
                         lineData = {
                         id : $tr.data('id'),
                         lineProductName : $tr.find('[name="lineProductName"]').text(),
-                        days : $tr.find('[name="days"]').text()
+                        days : $tr.find('[name="days"]').text(),
+
                     }
                     $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');;
                     layer.close(index);
