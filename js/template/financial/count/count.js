@@ -3635,6 +3635,7 @@ define(function(require, exports){
 			'</td>';
 		var	guideHtml = Count.addArrangeGuideHtml(td,'otherIn',$parentObj);
 		var html = '<tr class="oldData">'+
+			'<td><input checked type="checkbox" name="isGuide" value="1"></td>'+
 			'<td class="countWhichDaysContainer"></td>'+
 			'<td><input type="text" name="title" class="w-70"/></td>'+
 			'<td><input type="text" name="price" class="w-70 F-float F-money"/></td>'+
@@ -4105,6 +4106,7 @@ define(function(require, exports){
 		var guideTdHtml = Count.addGuideHtml($parentObj);
 		var divHtml = Count.returnDivHtml($parentObj);
 		var html = '<tr arrangeType="otherArrange" class="oldData">'+
+		'<td><input checked type="checkbox" name="isGuide" value="1"></td>'+
 		'<td class="countWhichDaysContainer"></td>'+
 		'<td>'+divHtml+'<input type="text" name="addOtherOutName" class="w-80"/></td>'+
 		'<td>'+divHtml+'<input type="text" name="price" class="w-70 F-float F-money"/></td>'+
@@ -6099,6 +6101,7 @@ define(function(require, exports){
 		$tr = $otherInObj.find('tr');
 		$tr.each(function(){
 			var title = $(this).find('input[name="title"]').val(),
+				isGuide = 0,
 				guideArrangeId = '',
 				whichDay = $(this).find('[name="whichDay"]').val();
 			if(!!$(this).find('.title').text()){
@@ -6107,10 +6110,14 @@ define(function(require, exports){
 			if(!!$(this).find('input[name="guideArrangeId"]').val()){
 				guideArrangeId = $(this).find('input[name="guideArrangeId"]').val();
 			};
+			if($(this).find('input[name=isGuide]').is(":checked")){
+				isGuide = 1;
+			}
 			if($(this).attr('otherInId')){
                 var otherIn = {
 	                id:$(this).attr('otherInId'),
 	                title:title,
+	                isGuide: isGuide,
 	                price:$(this).find('input[name="price"]').val(),
 	                guideArrangeId:guideArrangeId,
 	                count:$(this).find('input[name="count"]').val(),
@@ -6122,6 +6129,7 @@ define(function(require, exports){
 	                id:'',
 	                whichDay:whichDay,
 	                title:title,
+	                isGuide: isGuide,
 	                price:$(this).find('input[name="price"]').val(),
 	                guideArrangeId:guideArrangeId,
 	                count:$(this).find('input[name="count"]').val(),
@@ -6340,7 +6348,7 @@ define(function(require, exports){
 		$tr = $otherOut.find('tr');
 		$tr.each(function(){
 			var id = '',
-				otherArrangeId = $(this).attr('otherArrangeId'),
+				otherArrangeId = $(this).attr('otherArrangeId'),isGuide = 0,
 				whichDay = $(this).find('[name="whichDay"]').val(),
 				otherOutName = $(this).find('[name=addOtherOutName]').val();
 			if(!!$(this).find('.otherName').text()){
@@ -6349,11 +6357,15 @@ define(function(require, exports){
 			if(!!$(this).attr('whichDay')){
 				whichDay = $(this).attr('whichDay');
 			}
+			if($(this).find('input[name=isGuide]').is(":checked")){
+				isGuide = 1;
+			}
 			if(!!otherArrangeId){
 				var otherArrange = {
 					id:otherArrangeId,
 					whichDay:whichDay,
 	                otherName:otherOutName,
+	                isGuide: isGuide,
 	                realPrice:$(this).find('input[name="price"]').val(),
 	                realCount:$(this).find('.realCount').text(),
 	                realReduceMoney:Count.changeToString($(this).find('input[name=realReduceMoney]').val()),
@@ -6364,6 +6376,7 @@ define(function(require, exports){
 				var addArange = {
 					whichDay:whichDay,
 					otherName:otherOutName,
+					isGuide: isGuide,
 					realPrice:$(this).find('input[name="price"]').val(),
 					realCount:$(this).find('input[name="realCount"]').val(),
 					realReduceMoney:$(this).find('input[name="realReduceMoney"]').val(),

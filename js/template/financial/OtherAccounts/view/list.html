@@ -5,16 +5,28 @@
                 <label class="mar-l-10">项目名称 </label>
                 <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="otherId" value="{{searchParam.name}}" 
                 placeholder="所有项目"/>
+                <label class="mar-l-10">部门 </label>
+                <input type="text" class="mar-r-10 T-search-head-office" name="departmentName" value="{{searchParam.businessName}}"/>
+                <input type="hidden" class="mar-r-10 T-search-head-office" name="departmentId" value="{{searchParam.businessGroupId}}"/>
+                <label class="mar-l-10">子部门 </label>
+                <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="childDepartmentName" value="{{searchParam.groupName}}"/>
+                <input type="hidden" class="mar-r-10 T-search-head-office" name="childDepartmentId" value="{{searchParam.groupId}}"/>
                 <label>账期 </label>
-                <input class="date-picker T-time T-subsectionStartTime" name="startTime" placeholder="开始日期" type="text" value="{{startAccountTime}}" style="width:100px;" />
+                <input class="date-picker T-time T-subsectionStartTime" name="startTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
                 <label>&nbsp;至&nbsp;</label>
-                <input class="date-picker mar-r-10 T-time T-subsectionStartTime" name="endTime" value="{{endAccountTime}}" placeholder="结束日期" type="text" style="width:100px;" />
+                <input class="date-picker mar-r-10 T-time T-subsectionStartTime" name="endTime" value="{{searchParam.endAccountTime}}" placeholder="结束日期" type="text" style="width:100px;" />
                 <div class="btn-group T-finance-status mar-r-10">
                     <button data-value="{{searchParam.accountStatus}}" data-toggle="dropdown" class=" btn-sm  dropdown-toggle block-up block-up" aria-expanded="false">
-                        <span>
-               {{if searchParam.accountStatus == "0"}}全部{{else if searchParam.accountStatus == "1"}}已结清{{else}}未结清{{/if}}
-            </span>
-                        <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                    <span>
+                        {{if searchParam.accountStatus == "0"}}
+                            全部
+                        {{else if searchParam.accountStatus == "1"}}
+                            已结清
+                        {{else}}
+                            未结清
+                        {{/if}}
+                    </span>
+                    <i class="ace-icon fa fa-angle-down icon-on-right"></i>
                     </button>
                     <ul class="dropdown-menu">
                         <li>

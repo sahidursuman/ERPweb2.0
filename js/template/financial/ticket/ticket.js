@@ -27,6 +27,11 @@ define(function(require, exports) {
 		var args = FinancialService.getInitDate();
 		args.pageNo = page || 0;
 		args.accountStatus = 2;
+        args.businessName = '';
+        args.businessGroupId = '';
+        args.groupName = '';
+        args.groupId = '';
+
 		if(!!$tab){
 			var Name = $tab.find('.T-search-name').val().trim();
 
@@ -37,7 +42,11 @@ define(function(require, exports) {
 			args.ticketName = Name;
 			args.startDate = $tab.find('.T-search-start-date').val();
 			args.endDate = $tab.find('.T-search-end-date').val();
-			args.accountStatus = $tab.find(".T-finance-status").find("button").data("value")
+			args.accountStatus = $tab.find(".T-finance-status").find("button").data("value");
+            args.businessName = $tab.find('[name=departmentName]').val();
+            args.businessGroupId = $tab.find('[name=departmentId]').val();
+            args.groupName = $tab.find('[name=childDepartmentName]').val();
+            args.groupId = $tab.find('[name=childDepartmentId]').val();
 		}
 		args = FinancialService.getChangeArgs(args,Ticket.$tab);
 		$.ajax({
@@ -54,7 +63,7 @@ define(function(require, exports) {
 				Ticket.listPageNo = args.pageNo;
 				Ticket.$tab = $tab || $("#tab-"+menuKey+"-content");
 				//绑定事件
-				Ticket.init_event(Ticket.$tab);
+				Ticket.init_event(Ticket.$tab,args);
 				//获取合计数据
 				var sumMoneyData = {
                     settlementMoneySum:data.settlementMoneySum,
@@ -84,7 +93,7 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-	Ticket.init_event = function($tab){
+	Ticket.init_event = function($tab,args){
 		/**
 		 * 搜索顶部的事件绑定
 		 */
@@ -94,6 +103,12 @@ define(function(require, exports) {
 		Ticket.getTicketNameList($searchArea.find('.T-search-name'));
 		Tools.setDatePicker($datepicker, true);
 		FinancialService.searchChange($tab);
+
+        //部门下拉
+        FinancialService.getDepartment($searchArea.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($searchArea.find('input[name=childDepartmentName]'));
 
 		$searchArea.find('.T-btn-search').on('click', function(event) {
 			event.preventDefault();
@@ -112,15 +127,11 @@ define(function(require, exports) {
 		// 报表内的操作
 		$tab.find('.T-list').on('click', '.T-action', function(event) {
 			event.preventDefault();
-			var $that = $(this), 
-				args = {
-					pageNo : 0,
-					ticketId : $that.closest('tr').data('id'),
-					ticketName : $that.closest('tr').data('name'),
-					startDate : $tab.find('.T-search-start-date').val(),
-					endDate : $tab.find('.T-search-end-date').val(),
-					accountStatus : $tab.find(".T-finance-status").find("button").data("value")
-				};
+			var $that = $(this); 
+				args.pageNo = 0;
+				args.ticketId = $that.closest('tr').data('id');
+				args.ticketName = $that.closest('tr').data('name');
+				
 			if ($that.hasClass('T-checking'))  {
 				// 对账
 				Ticket.checkingList(args);
@@ -291,7 +302,11 @@ define(function(require, exports) {
                 accountInfo: $tab.find('.T-search-type').val(),
                 endDate: $tab.find('.T-search-end-date').val(),
                 accountStatus : args.accountStatus,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
             FinancialService.exportReport(argsData,"exportArrangeTicketFinancial");
         });

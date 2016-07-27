@@ -24,16 +24,20 @@ define(function(require, exports) {
 
     restaurant.initModule = function() {
     	var dateJson = FinancialService.getInitDate();
-        restaurant.listRestaurant(0,"","",dateJson.startDate,dateJson.endDate,2);
+        restaurant.listRestaurant(0,"","",dateJson.startDate,dateJson.endDate,2,'','','','');
     };
 
-    restaurant.listRestaurant = function(page,restaurantName,restaurantId,startDate,endDate,accountStatus){
+    restaurant.listRestaurant = function(page,restaurantName,restaurantId,startDate,endDate,accountStatus,businessName,businessGroupId,groupName,groupId){
     	if (restaurant.$searchArea && arguments.length === 1) {
             restaurantName = restaurant.$searchArea.find("input[name=restaurantName]").val();
             restaurantId = restaurant.$searchArea.find("input[name=restaurantId]").val();
             startDate = restaurant.$searchArea.find("input[name=startDate]").val();
             endDate = restaurant.$searchArea.find("input[name=endDate]").val();
             accountStatus = restaurant.$searchArea.find(".T-finance-status").find("button").data("value");
+            businessName = restaurant.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = restaurant.$searchArea.find('[name=departmentId]').val();
+            groupName = restaurant.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = restaurant.$searchArea.find('[name=childDepartmentId]').val();
         }
         restaurantName = (restaurantName == "全部") ? "" : restaurantName;
         // 修正页码
@@ -45,7 +49,11 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: restaurant.$searchArea ? restaurant.$searchArea.find("select[name=orderBy]").val() : "desc"
+            sortType: restaurant.$searchArea ? restaurant.$searchArea.find("select[name=orderBy]").val() : "desc",
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         };
 
         restaurant.searchData = FinancialService.getChangeArgs(restaurant.searchData,restaurant.$tab);
@@ -65,7 +73,7 @@ define(function(require, exports) {
                     restaurant.listPage = page;
                     restaurant.$tab = $('#tab-' + menuKey + "-content");
                     restaurant.$searchArea = restaurant.$tab.find('.T-search-area');
-                    restaurant.initList(startDate,endDate,accountStatus);
+                    restaurant.initList(restaurant.searchData);
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
                         unPayedMoneySum:data.unPayedMoneySum,
@@ -95,10 +103,17 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    restaurant.initList = function(startDate,endDate,accountStatus){
+    restaurant.initList = function(args){
         restaurant.getQueryList();
         Tools.setDatePicker(restaurant.$tab.find(".date-picker"),true);
         FinancialService.searchChange(restaurant.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(restaurant.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(restaurant.$tab.find('input[name=childDepartmentName]'));
+        
         //搜索按钮事件
         restaurant.$tab.find('.T-search').on('click',function(event) {
             event.preventDefault();
@@ -117,16 +132,11 @@ define(function(require, exports) {
         // 报表内的操作
         restaurant.$tab.find('.T-list').on('click','.T-option',function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    restaurantId : $that.closest('tr').data('id'),
-                    restaurantName : $that.closest('tr').data('name'),
-                    startDate : startDate,
-                    endDate : endDate,
-                    accountStatus : accountStatus,
-                    sortType : "accountTime"
-                };
+            var $that = $(this);
+                args.pageNo = 0,
+                args.restaurantId = $that.closest('tr').data('id');
+                args.restaurantName = $that.closest('tr').data('name');
+                args.sortType = "accountTime";
             if ($that.hasClass('T-check')) {
                 // 对账
                 restaurant.restaurantCheck(args);
@@ -240,7 +250,11 @@ define(function(require, exports) {
                 accountStatus : args.accountStatus,
                 isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 startCheck : $tab.find('.T-checkStartTime').val(),
-                endCheck : $tab.find('.T-checkEndTime').val()
+                endCheck : $tab.find('.T-checkEndTime').val(),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
             FinancialService.exportReport(argsDate,"exportArrangeRestaurantFinancial");
         });

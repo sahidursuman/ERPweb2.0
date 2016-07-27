@@ -2574,6 +2574,14 @@ KingServices.getPayment = function(id){
 	});
 };
 
+//获取代订结算单
+KingServices.viewBookingInfo = function(id){
+	seajs.use("" + ASSETS_ROOT + modalScripts.resource_order_center,function(module){
+		module.viewBookingInfo(id);
+	});
+}
+
+
 //添加资源函数
 KingServices.addResourceFunction = function(e){
 	var $this = $(this),
@@ -2734,6 +2742,9 @@ KingServices.getCityList = function(obj,provinceId,cityId){
 		});
 	}
 };
+
+
+
 KingServices.getDistrictList = function(obj,cityId,districtId){
 	if(cityId != ""){
 		$.ajax({
@@ -2765,6 +2776,8 @@ KingServices.hotelDescArray = ['未选择', '三星以下', '三星', '准四星
 KingServices.getHotelDesc = function(level, defaultDesc) {
 	return  KingServices.hotelDescArray[level] || defaultDesc || '三星以下';
 };
+
+
 
 //内部模板
 KingServices.inlineTemplate = function(source, option) {

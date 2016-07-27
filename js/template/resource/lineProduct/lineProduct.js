@@ -302,6 +302,7 @@ define(function(require, exports) {
 								daysList : daysList
 						};
 						data.serviceStandardList = JSON.parse(data.serviceStandardList);
+						data.productPriceList = JSON.parse(data.productPriceList);
 						Tools.addTab(menuKey+"-view","查看线路产品",viewDetailTemplate(data));
 						//要求内容过长的处理
 						var tab_id = menuKey+"-view" ;
@@ -375,7 +376,7 @@ define(function(require, exports) {
 							busCompanyTemplate = JSON.parse(data.busCompanyTemplate),
 							//guideTemplate = JSON.parse(data.guideTemplate),
 							insuranceTemplate = JSON.parse(data.insuranceTemplate),
-
+							productPriceList = JSON.parse(data.productPriceList),
 							daysList = JSON.parse(data.daysList);					
 
 						data.viewLineProduct = {
@@ -383,7 +384,8 @@ define(function(require, exports) {
 								busCompanyTemplate : busCompanyTemplate,
 								//guideTemplate : guideTemplate,
 								insuranceTemplate : insuranceTemplate,
-								daysList : daysList
+								daysList : daysList,
+								productPriceList: productPriceList
 						};
 						
 						data.viewLineProduct.clipboardMode = clipboardMode;				
@@ -394,6 +396,7 @@ define(function(require, exports) {
 							data.serviceStandardList = JSON.parse(data.serviceStandardList);
 							data.viewLineProduct.serviceStandardList = data.serviceStandardList;
 						}
+
 						data.viewLineProduct.editorName = tab_id + '-ueditor';
 						var html = updateLineProductTemplate(data.viewLineProduct);
 						// 初始化页面
@@ -582,6 +585,22 @@ define(function(require, exports) {
 			});
 			//获取服务标准
 			ResLineProduct.getServiceList($tab,$tab.find('.T-service-list'));
+
+			//绑定价格标准事件
+			$tab.find('.T-price-form').find('.datePicker').datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN'
+			});
+			$tab.find('.T-price-form').off('click').on('click','.T-add-price',function() {
+				//添加价格标准
+				ResLineProduct.addPrice($tab);
+			}).on('click','.T-delPrice',function() {
+				//删除事件
+				ResLineProduct.delPrice($(this));
+			});
+
 			// 绑定安排的拖动事件				
 			$tab.find('.T-timeline-detail-container').sortable({
 				containment: 'parent',
@@ -759,6 +778,49 @@ define(function(require, exports) {
 			})
 		});
 	};
+
+	//添加价格标准
+	ResLineProduct.addPrice = function($tab) {
+		var html = '<tr>'
+		+'<td><input class="datePicker col-xs-12" type="text" name="startTime" /></td>'
+		+'<td><input class="datePicker col-xs-12" type="text" name="endTime" /></td>'
+		+'<td><input class="F-float F-money col-xs-12" type="text" name="adultPrice" /></td>'
+		+'<td><input class="F-float F-money col-xs-12" type="text" name="childPrice" /></td>'
+		+'<td><a class="cursor T-action T-delPrice">删除</a></td>'
+		+'</tr>';
+		$tab.find('.T-price-list').append(html);
+		$tab.find('.datePicker').datepicker({
+			autoclose: true,
+			todayHighlight: true,
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN'
+		});
+	};
+
+	//删除价格标准
+	ResLineProduct.delPrice = function($obj) {
+		var $tr = $obj.closest('tr'),priceId = $tr.data('priceid');
+		if(!!priceId){
+			showConfirmDialog("确定要删除？", function() {
+				$.ajax({
+					url:KingServices.build_url('lineProduct','deleteLineProductArrangeTemplate'),
+					data:{
+						templateJsonDel: JSON.stringify({
+							id: priceId,
+							name: 'productPrice'
+						})
+					},
+					type:'POST',
+					success:function(data){
+						showMessageDialog(data.message);
+						$tr.remove();
+					}
+				});
+			});
+		} else {
+			$tr.remove();
+		}
+	}
 	/**
 	 * 线路产品购物多选
 	 * @param  {[type]} $this [当前元素]
@@ -2699,8 +2761,7 @@ define(function(require, exports) {
 				travellineId: getValue($form, "travellineId"),
 				remark : getValue($form, "remark"),
 				type : getValue($form, "type"),
-				adultPrice : getValue($form, "adultPrice"),
-				childPrice : getValue($form, "childPrice"),
+				
 				customerType : getValue($form, "customerType"),
 				includeFee  : getValue($middleForm, "includeFee"),
 				excludeFee  : getValue($middleForm, "excludeFee"),
@@ -2785,6 +2846,30 @@ define(function(require, exports) {
 			}
 		}
 
+		//获取价格标准
+		travelLineData.productPriceList = [];
+		$tab.find('.T-price-list tr').each(function(index,el) {
+			var $that = $(this),id = '';
+			if(!!$that.data('priceid')) {
+				id = $that.data('priceid');
+			};
+			if ($that.find('input[name=startTime]').val() > $that.find('input[name=endTime]').val()) {
+				showMessageDialog('第【'+(index+1)+'】行的'+"开始时间不能大于结束时间");
+				return;
+			}else{
+				var args = {
+					id: id,
+					adultPrice: $that.find('input[name=adultPrice]').val(),
+					childPrice: $that.find('input[name=childPrice]').val(),
+					startTime: $that.find('input[name=startTime]').val(),
+					endTime: $that.find('input[name=endTime]').val()
+				}
+				travelLineData.productPriceList.push(args);
+			};
+			
+		});
+
+		console.log(travelLineData.productPriceList);
 		// 存放每天安排数据的数组
 		travelLineData.lineDayList = [];
 		
