@@ -60,7 +60,6 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.searchParam = Self.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "自费账务", html);
                     Self.$tab = $('#' + tabId);

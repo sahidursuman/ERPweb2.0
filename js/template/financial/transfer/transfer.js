@@ -69,7 +69,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if(result){
                     Transfer.partnerList = data.partnerAgencyNameList;
-                    data.searchParam = Transfer.searchData;
                 	var html = listTemplate(data);
                     Tools.addTab(menuKey,"外转账务",html);
                     Transfer.$tab = $('#tab-' + menuKey + "-content");

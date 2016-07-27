@@ -64,7 +64,8 @@ define(function(require, exports) {
             data: args //{searchParam : JSON.stringify()},
         }).done(function(data) {
             if (showDialog(data)) {
-                data.searchParam = args;
+                data.searchParam.businessName = args.businessName;
+                data.searchParam.groupName = args.groupName;
                 Tools.addTab(menuKey, "购物账务", listTemplate(data));
                 // 绑定事件
                 FinShop.$tab = $tab = $('#tab-' + menuKey + '-content');

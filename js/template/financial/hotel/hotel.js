@@ -69,7 +69,6 @@ define(function(require, exports) {
                var result = showDialog(data);
                 if(result){
                     hotel.hotelList = data.hotelNameList;
-                    data.searchParam = hotel.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"酒店账务",html);
                     hotel.$tab = $('#tab-' + menuKey + "-content");

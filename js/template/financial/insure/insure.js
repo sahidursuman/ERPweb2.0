@@ -63,7 +63,6 @@ define(function(require, exports) {
 	            var result = showDialog(data);
 	            if (result) {
 	            	Insure.insureList = data.insuranceNameList;
-                    data.searchParam = Insure.searchData;
 	                var html = listTemplate(data);
 	                Tools.addTab(menuKey,"保险账务",html);
                     Insure.$tab = $('#' + tabId);

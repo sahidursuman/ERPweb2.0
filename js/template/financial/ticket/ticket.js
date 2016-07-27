@@ -57,7 +57,6 @@ define(function(require, exports) {
 			if(showDialog(data)){
 				//缓存数据
 				Ticket.ticketNameList = data.ticketNameList;
-                data.searchParam = args;
 				//打开TAB
 				Tools.addTab(menuKey, "票务账务", listTemplate(data));
 				// 缓存页面

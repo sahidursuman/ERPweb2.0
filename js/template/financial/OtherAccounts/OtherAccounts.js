@@ -55,8 +55,9 @@ define(function(require, exports) {
             success: function(data) {
                 var result = showDialog(data);
                 if (result) {
-                    data.searchParam = OtherAccounts.searchData;
                     console.log(data);
+                    data.searchParam.groupName = OtherAccounts.searchData.groupName;
+                    data.searchParam.businessName = OtherAccounts.searchData.businessName
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "其它账务", html);
                     OtherAccounts.$tab = $('#' + tabId);

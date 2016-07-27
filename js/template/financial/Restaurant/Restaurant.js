@@ -68,7 +68,6 @@ define(function(require, exports) {
                var result = showDialog(data);
                 if(result){
                     restaurant.restaurantList = data.restaurantNameList;
-                    data.searchParam = restaurant.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"餐厅账务",html);
                     restaurant.listPage = page;

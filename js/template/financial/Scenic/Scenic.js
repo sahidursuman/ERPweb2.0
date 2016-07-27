@@ -63,7 +63,6 @@ define(function(require, exports) {
                var result = showDialog(data);
                 if(result){
                     scenic.scenicList = data.scenicNameList;
-                    data.searchParam = scenic.searchData;
                     data.searchParam.scenicName = scenicName || '全部';
                     var html = listTemplate(data);
                     Tools.addTab(menuKey,"景区账务",html);

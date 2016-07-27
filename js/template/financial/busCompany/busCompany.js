@@ -71,7 +71,6 @@ define(function(require, exports) {
                 var result = showDialog(data);
                 if (result) {
                     busCompany.busCompanyList = data.busCompanyNameList;
-                    data.searchParam = busCompany.searchData;
                     var html = listTemplate(data);
                     Tools.addTab(menuKey, "车队账务", html);
                     busCompany.$tab = $('#tab-' + menuKey + "-content");
