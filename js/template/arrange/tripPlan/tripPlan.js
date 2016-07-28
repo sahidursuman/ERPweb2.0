@@ -43,7 +43,7 @@ define(function(require, exports) {
         tripPlan.getAutocompleteData(1);
     };
 
-    tripPlan.getAutocompleteData = function(type){
+    tripPlan.getAutocompleteData = function(type,$defaultDesc){
         $.ajax({
             url: KingServices.build_url('tripController','findSelectValue'),
             type : "POST",
@@ -52,7 +52,7 @@ define(function(require, exports) {
             if(showDialog(data)){
                 //查询条件 autocomplete
                 var $searchArea = tripPlan.$tab.find('.T-search-tripPlan-group');
-
+                var $defaultDesc = $searchArea.find('select[name="order"]').val('desc');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="lineProductName"]'), data.lineProducts, 'name');
                 tripPlan.autocompleteSearch($searchArea.find('input[name="partnerAgencyName"]'), data.partnerAgencies, 'travelAgencyName');
                 //tripPlan.autocompleteSearch($searchArea.find('input[name="outOPUserName"]'), data.outOPUsers, 'realName');
