@@ -1,0 +1,53 @@
+{{if touristGroupList.length}}
+{{each touristGroupList as group}}
+<tr class="T-sort" data-index="{{group.touristGroupMemberList.length}}" data-id="{{group.id}}" data-content="{{group | stringify}}" data-adultcount="{{group.adultCount}}" data-childCount="{{group.childCount}}">
+    <td rowspan="{{group.touristGroupMemberList.length}}"></td>
+    <td rowspan="{{group.touristGroupMemberList.length}}">{{group.tripNumber}}</td>
+    {{if group.touristGroupMemberList.length}}
+    {{each group.touristGroupMemberList as rs index}}
+    {{if index == 0}}
+    <td>{{rs.name}}</td>
+    <td>{{rs.mobileNumber}}</td>
+    {{/if}}
+    {{/each}}
+    {{else}}
+    <td></td>
+    <td></td>
+    {{/if}}
+    <td rowspan="{{group.touristGroupMemberList.length}}">{{group.adultCount}}大{{group.childCount}}小</td>
+    <td class="has-div" rowspan="{{group.touristGroupMemberList.length}}">
+        <div {{if group.touristGroupMemberList.length > 1}}style="padding-bottom:{{group.touristGroupMemberList.length*35/4-9}}px"{{else}}{{if group.isRoundTrip == '1'}}style="padding:8px;"{{/if}}{{/if}}>
+            {{if group.type == '0'}}{{if group.position == '0'}}机场{{else}}火车站{{/if}}{{else if group.type == '1'}}{{if group.hotelName}}{{group.hotelName}}{{else}}&nbsp;{{/if}}{{/if}}
+        </div>
+        {{if group.isRoundTrip == '1'}}
+        <div class="border-top1" {{if group.touristGroupMemberList.length > 1}}style="padding-top:{{group.touristGroupMemberList.length*35/4-9}}px"{{else}}style="padding:8px;"{{/if}}>
+            {{if group.type == '0'}}{{if group.roundHotelName}}{{group.roundHotelName}}{{else if group.type == '1'}}&nbsp;{{/if}}{{else}}{{if group.roundPosition == '0'}}机场{{else}}火车站{{/if}}{{/if}}
+        </div>
+        {{/if}}
+    </td>
+    <td class="has-div" rowspan="{{group.touristGroupMemberList.length}}">
+        <div {{if group.touristGroupMemberList.length > 1}}style="padding-bottom:{{group.touristGroupMemberList.length*35/4-9}}px"{{else}}{{if group.isRoundTrip == '1'}}style="padding:8px;"{{/if}}{{/if}}>
+            {{if group.type == '0'}}{{if group.hotelName}}{{group.hotelName}}{{else}}&nbsp;{{/if}}{{else if group.type == '1'}}{{if group.position == '0'}}机场{{else}}火车站{{/if}}{{/if}}
+        </div>
+        {{if group.isRoundTrip == '1'}}
+        <div class="border-top1" {{if group.touristGroupMemberList.length > 1}}style="padding-top:{{group.touristGroupMemberList.length*35/4-9}}px"{{else}}style="padding:8px;"{{/if}}>
+            {{if group.type == '0'}}{{if group.roundPosition == '0'}}机场{{else}}火车站{{/if}}{{else if group.type == '1'}}{{if group.roundHotelName}}{{group.roundHotelName}}{{else}}&nbsp;{{/if}}{{/if}}
+        </div>
+        {{/if}}
+    </td>
+    <td rowspan="{{group.touristGroupMemberList.length}}">
+        <button class="T-update T-action btn btn-xs btn-primary">修改</button>
+        <button class="T-delete T-action btn btn-xs btn-danger">删除</button>
+    </td>
+</tr>
+{{each group.touristGroupMemberList as rs index}}
+    {{if index > 0}}
+    <tr>
+        <td>{{rs.name}}</td>
+        <td>{{rs.mobileNumber}}</td>
+    </tr>
+    {{/if}}
+{{/each}}
+{{/each}}
+{{/if}}
+

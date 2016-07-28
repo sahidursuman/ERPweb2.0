@@ -1,0 +1,21 @@
+<div class="col-sm-12 T-chooseCompanyContent globalAdd">
+    <table class="table table-striped table-bordered table-hover table-text-center mar-t-20">
+        <thead>
+            <tr>
+                <th>选择</th>
+                <th>车队名称</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each bindAccountList as rs index}}
+            <tr data-token="{{rs.authToken}}" data-name="{{rs.name}}">
+                <td><label> <input class="ace" name="chooseCompanyRadio" type="radio"><span class="lbl"></span></label></td>
+                <td>{{rs.name}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div class="mar-t20">
+        <button class="btn btn-block btn-primary T-save guideSubmit"><i class="ace-icon fa fa-check"></i>提交 </button>
+    </div>
+</div>

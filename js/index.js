@@ -127,11 +127,19 @@
 				// add active style
 				$that.addClass("active").closest('.open').addClass('active');
 
-				seajs.use("" + ASSETS_ROOT + modalScripts[target],function(module){
-					// module.listGuide(0,"",1);
-					module.init();
-					IndexData.current_model = modalScripts[target];
-				});
+				if (target.split('_')[0] === 'busOrder') {
+					seajs.use("" + BUS_ASSETS_ROOT + modalScripts[target],function(module){
+						// module.listGuide(0,"",1);
+						module.init();
+						IndexData.current_model = modalScripts[target];
+					});
+				} else{
+					seajs.use("" + ASSETS_ROOT + modalScripts[target],function(module){
+						// module.listGuide(0,"",1);
+						module.init();
+						IndexData.current_model = modalScripts[target];
+					});
+				}
 			}
 		});
 

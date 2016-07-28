@@ -1,0 +1,126 @@
+<table class="table table-striped table-bordered table-hover table-text-center T-showHighLight">
+    <thead>
+        <tr>
+            <th>车队</th>
+            <th>订单编号</th>
+            <th>行程类型</th>
+            <th>行程日期</th>
+            <th>航班号/班次</th>
+            <th>车辆要求</th>
+            <th>游客人数</th>
+            <th>游客联系人</th>
+            <th>游客电话</th>
+            <th>上车点</th>
+            <th>目的地</th>
+            <th>费用</th>
+            <th>订单状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each orderList as rs index}}
+        <tr data-id="{{rs.id}}" data-triptype="{{rs.tripType.type}}" data-companyid="{{rs.companyId}}">
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{rs.companyName}}</td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{rs.orderNumber}}</td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{#rs.tripTypeName}}</td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{#rs.tripTime}}</td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{#rs.shiftNumber}}</td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{#rs.priceInfo}}</td>
+            {{if rs.tripType.type != 3}}
+            {{each rs.touristGroupList as group i}}
+            {{if i == 0}}
+            <td>{{group.memberCountInfo}}</td>
+            <td class="has-div">
+                {{each group.memberList as member j}}
+                    <div class="td-div {{if j > 0}}border-top1{{/if}}">{{member.name}}</div>
+                {{/each}}
+            </td>
+            <td class="has-div">
+                {{each group.memberList as member j}}
+                    <div class="td-div {{if j > 0}}border-top1{{/if}}">{{member.moblieNumber}}</div>
+                {{/each}}
+            </td>
+            <td class="has-div">
+                <div class="{{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-bottom:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.startPosition}}
+                </div>
+                {{if rs.isRoundTrip == '1'}}
+                <div class="border-top1  {{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-top:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.roundStartPosition}}
+                </div>
+                {{/if}}
+            </td>
+            <td class="has-div">
+                <div class="{{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-bottom:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.toPosition}}
+                </div>
+                {{if rs.isRoundTrip == '1'}}
+                <div class="border-top1 {{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-top:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.roundToPosition}}
+                </div>
+                {{/if}}
+            </td>
+            {{/if}}
+            {{/each}}
+            {{else}}
+            <td>{{rs.adultCount}}大{{rs.childCount}}小</td>
+            <td>-</td>
+            <td>-</td>
+            <td>{{rs.togetherPosition}}</td>
+            <td>-</td>
+            {{/if}}
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{if rs.orderStatus == '1' || rs.orderStatus == '3'}}{{rs.comfirmNeedPayMoney}}元(回复价)<br/>{{/if}}<span class="{{if rs.orderStatus == '1' || rs.orderStatus == '3'}}textd-line{{/if}}">{{rs.needPayMoney}}元(申请价)</span></td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}" {{if rs.orderStatus == '6'}}class="red"{{/if}}>{{rs.orderStatusText}}</td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">
+                {{#rs.orderStatus | getOrderStatusListBtn}}
+            </td>
+        </tr>
+        {{each rs.touristGroupList as group i}}
+        {{if i > 0}}
+        <tr>
+            <td>{{group.memberCountInfo}}</td>
+            <td class="has-div">
+                {{each group.memberList as member j}}
+                    <div class="td-div {{if j > 0}}border-top1{{/if}}">{{member.name}}</div>
+                {{/each}}
+            </td>
+            <td class="has-div">
+                {{each group.memberList as member j}}
+                    <div class="td-div {{if j > 0}}border-top1{{/if}}">{{member.moblieNumber}}</div>
+                {{/each}}
+            </td>
+            <td class="has-div">
+                <div class="{{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-bottom:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.startPosition}}
+                </div>
+                {{if rs.isRoundTrip == '1'}}
+                <div class="border-top1  {{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-top:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.roundStartPosition}}
+                </div>
+                {{/if}}
+            </td>
+            <td class="has-div">
+                <div class="{{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-bottom:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.toPosition}}
+                </div>
+                {{if rs.isRoundTrip == '1'}}
+                <div class="border-top1 {{if group.memberList.length == 1}}td-div{{/if}}" {{if group.memberList.length > 1}}style="padding-top:{{group.memberList.length*35/4-9}}px"{{/if}}>
+                    {{group.roundToPosition}}
+                </div>
+                {{/if}}
+            </td>
+        </tr>
+        {{/if}}
+        {{/each}}
+        {{/each}}
+    </tbody>
+</table>
+<div class="row pageMode">
+    <div class="col-xs-4">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-8">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>

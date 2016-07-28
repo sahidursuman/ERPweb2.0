@@ -1,0 +1,54 @@
+<div class="T-addCityGroup col-xs-12 layer-content">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">团号：</label>
+            <div class="col-sm-3">
+                <input type="text" name="tripNumber" value="{{tripNumber}}"><input name="id" type="hidden" value="{{id}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">现收：</label>
+            <div class="col-sm-3">
+                <input type="text" name="driverIncomeMoney" value="{{driverIncomeMoney}}">
+            </div>
+            <label class="col-sm-2 control-label"><span class="red">*</span>游客人数：</label>
+            <div class="col-sm-3">
+                <input class="width60" type="text" name="adultCount" value="{{adultCount}}">&nbsp;大&nbsp;
+                <input class="width60" type="text" name="childCount" value="{{childCount}}">&nbsp;小&nbsp;
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="red">*</span>入住酒店：</label>
+            <div class="col-sm-3">
+                <input type="text" name="hotelName" value="{{hotelName}}">
+            </div>
+            <label class="col-sm-2 control-label"><span class="red">*</span>酒店地址：</label>
+            <div class="col-sm-3">
+                <input type="text" name="hotelAddress" value="{{hotelAddress}}">
+            </div>
+        </div>
+        <div class="form-group mar-t20">
+            <label class="col-sm-2 control-label">备注：</label>
+            <div class="col-sm-9"><input class="col-sm-12" name="remark" type="text" value="{{remark}}"></div>
+        </div>
+        <div class="form-group mar-t20">
+            <label class="col-sm-2 control-label"><span class="red">*</span>游客联系人：</label>
+            <button class="T-addContactMember btn btn-xs btn-success"><i class="ace-icon fa fa-plus"></i>新增联系人</button>
+        </div>
+        <table class="T-contactMemberList table table-striped table-bordered table-hover table-text-center table-group">
+            <tr>
+                <th>姓名</th>
+                <th>手机号码</th>
+                <th>操作</th>
+            </tr>
+            {{each touristGroupMemberList as rs}}
+            <tr data-id="{{rs.id}}">
+                <td><input name="name" type="text" value="{{rs.name}}"></td>
+                <td><input name="mobileNumber" type="text" value="{{rs.mobileNumber}}"></td>
+                <td><button class="T-delete btn btn-xs btn-danger"><i class="ace-icon fa fa-close"></i>删除</button></td>
+            </tr>
+            {{/each}}
+        </table>
+    </form>
+    <button class="T-save btn btn-block btn-primary btn-sm">保存</button>
+</div>

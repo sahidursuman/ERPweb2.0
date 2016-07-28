@@ -1,6 +1,8 @@
 // var APP_ROOT = "http://localhost:8080/huochaitou/";
 var APP_ROOT = "/huochaitou/";
 var ASSETS_ROOT = '/';
+var BUS_APP_ROOT = "/bus/back/api/erp/";
+var BUS_ASSETS_ROOT = './';
 var APP_VERSION = "1.0.0";
 var globalLoadingLayer;
 var globelEditorInstants = {};
@@ -430,6 +432,10 @@ function showNndoConfirmDialog(message, fn){
 	});
 }
 
+function showLayerMessage(message) {
+	layer.msg(message, {time: 2000});
+}
+
 function showLogoutDialog(message){
 	$conDiaMes.removeClass('hide').dialog({
 		modal: true,
@@ -770,7 +776,17 @@ var modalScripts = {
     'arrange_inner_Transfer': "js/template/arrange/innerTransfer/innerTransfer.js",
     'arrange_orderManage': "js/template/arrange/orderManage/orderManage.js",
     'arrange_groupTransfer': "js/template/arrange/arrangeGroupTransfer/arrangeGroupTransfer.js", //团散转客
-    'arrange_individual': "js/template/arrange/arrangeIndividual/arrangeIndividual.js" //散客拼团
+    'arrange_individual': "js/template/arrange/arrangeIndividual/arrangeIndividual.js", //散客拼团
+
+    //--------------------------------------------车队订单模块----------------------------------------------------------
+    'busOrder_newOrder': 'js/template/busOrder/newOrder/newOrder.js',
+    'busOrder_cityOrder': 'js/template/busOrder/newOrder/newCity.js',
+    'busOrder_tripOrder': 'js/template/busOrder/newOrder/newTrip.js',
+    'busOrder_binding': 'js/template/busOrder/binding/binding.js',
+    'busOrder_allOrder': 'js/template/busOrder/orderList/orderListAll.js',
+    'busOrder_waitOrder': 'js/template/busOrder/orderList/orderListWait.js',
+    'busOrder_confirmOrder': 'js/template/busOrder/orderList/orderListConfirm.js',
+    'busOrder_invalidOrder': 'js/template/busOrder/orderList/orderListInvalid.js',
 };
 
 
@@ -2222,6 +2238,9 @@ var KingServices = {};
 KingServices.build_url = function(path,method){
     return APP_ROOT+'back/'+path +'.do?method='+method+'&token='+$.cookie('token');
 };
+KingServices.build_url_bus = function(path,method,authToken){
+    return BUS_APP_ROOT + path +'.do?method='+method+'&token='+$.cookie('token')+'&authToken='+authToken;
+};
 
 
 /**
@@ -2573,6 +2592,63 @@ KingServices.getPayment = function(id){
 		module.getPayment(id);
 	});
 };
+
+
+/**
+ *
+ * 车队订单API
+ */
+//车队订单-绑定车队List
+KingServices.bindCompany = function () {
+	seajs.use("" + BUS_ASSETS_ROOT + modalScripts.busOrder_binding,function(module){
+		module.init();
+	});
+}
+//修改订单
+KingServices.updateOrder = function(id, authToken){
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_newOrder, function(module){
+        module.updateOrder(0, id, {}, authToken);
+    });
+};
+//修改中转订单
+KingServices.updateCityOrder = function(id, authToken){
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_cityOrder, function(module){
+        module.updateCityOrder(0, id, {}, authToken);
+    });
+};
+//修改跟团订单
+KingServices.updateTripOrder = function(id, authToken){
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_tripOrder, function(module){
+        module.updateTripOrder(0, id, {}, authToken);
+    });
+};
+
+//订单列表
+KingServices.orderWaitListRefresh = function(){
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_waitOrder, function(module){
+        module.init();
+    });
+};
+
+//查看订单
+ KingServices.viewOrder = function (id, authToken) {
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_newOrder, function (module) {
+        module.viewOrder(id, authToken);
+    });
+ };
+
+//查看中转订单
+ KingServices.viewCityOrder = function (id, authToken) {
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_cityOrder, function (module) {
+        module.viewCityOrder(id, authToken);
+    });
+ };
+//查看跟团订单
+ KingServices.viewTripOrder = function (id, authToken) {
+    seajs.use("" +  BUS_ASSETS_ROOT + modalScripts.busOrder_tripOrder, function (module) {
+        module.viewTripOrder(id, authToken);
+    });
+ };
 
 //添加资源函数
 KingServices.addResourceFunction = function(e){
