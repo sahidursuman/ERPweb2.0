@@ -43,6 +43,28 @@ define(function(require, exports) {
 						errMsg: '线路类型不能为空'
 					}
 				]
+			},
+			{
+				$ele: $mainForm.find('input[name="adultCount"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '大人数不能为空'
+                },
+                {
+                    type: 'nonnegative-int',
+                    errMsg: '大人数为正整数'
+                }]
+			},
+			{
+				$ele: $mainForm.find('input[name="childCount"]'),
+				rules : [{
+                    type: 'null',
+                    errMsg: '小孩数不能为空'
+                },
+                {
+                    type: 'nonnegative-int',
+                    errMsg: '小孩数为正整数'
+                }]
 			}
 		];
 

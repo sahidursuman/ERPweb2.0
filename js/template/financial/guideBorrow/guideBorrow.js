@@ -17,6 +17,10 @@ define(function(require, exports){
 		var args = FinancialService.getInitDate();
 		args.pageNo = 0;
 		args.accountStatus = 2;
+        args.businessName = '';
+        args.businessGroupId = '';
+        args.groupName = '';
+        args.groupId = '';
 		guideBorrow.getList(args);
 	};
 	guideBorrow.getList = function(args,$tab){
@@ -27,6 +31,10 @@ define(function(require, exports){
 			args.startDate = $tab.find('input[name=startDate]').val();
 			args.endDate = $tab.find('input[name=endDate]').val();
 			args.accountStatus = $tab.find(".T-borrow-status").find("button").data("value");
+			args.businessName = $tab.find('[name=departmentName]').val();
+            args.businessGroupId = $tab.find('[name=departmentId]').val();
+            args.groupName = $tab.find('[name=childDepartmentName]').val();
+            args.groupId = $tab.find('[name=childDepartmentId]').val();
 		}
 		args.guideName = (args.guideName == "全部") ? "" : args.guideName;
 		if($tab && $tab.data("searchEdit")){
@@ -73,6 +81,13 @@ define(function(require, exports){
 			event.preventDefault();
 			$tab.data('searchEdit',true);
 		});
+
+		//部门下拉
+        FinancialService.getDepartment($tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($tab.find('input[name=childDepartmentName]'));
+
 		//状态框选择事件
         $tab.find(".T-borrow-status a").off().on('click',function(event){
             event.preventDefault();
@@ -81,16 +96,20 @@ define(function(require, exports){
             guideBorrow.getList({pageNo : 0},$tab);
         });
 
-        $tab.on("click",'.T-borrow',function(){
+        $tab.find(".T-borrow").off().on("click",function(){
         	var $tr = $(this).closest('tr'),
 				options = {
-				guideId: $tr.data('id'),
-				guideName: $tr.data('name'),
-				startDate: args.startDate,
-				endDate: args.endDate,
-				accountStatus : args.accountStatus,
-				borrow : true
-			}
+					guideId: $tr.data('id'),
+					guideName: $tr.data('name'),
+					startDate: args.startDate,
+					endDate: args.endDate,
+					accountStatus : args.accountStatus,
+					borrow : true
+				};
+				options.businessName = $tab.find('[name=departmentName]').val();
+            	options.businessGroupId = $tab.find('[name=departmentId]').val();
+            	options.groupName = $tab.find('[name=childDepartmentName]').val();
+            	options.groupId = $tab.find('[name=childDepartmentId]').val();
 			seajs.use(ASSETS_ROOT + modalScripts.financial_guide, function(module){
 				module.initPayment(options);
 			});

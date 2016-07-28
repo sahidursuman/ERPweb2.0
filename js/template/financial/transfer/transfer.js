@@ -22,16 +22,20 @@ define(function(require, exports) {
 
     Transfer.initModule = function() {
     	var dateJson = FinancialService.getInitDate();
-        Transfer.listTransfer(0,"","",dateJson.startDate,dateJson.endDate,2);
+        Transfer.listTransfer(0,"","",dateJson.startDate,dateJson.endDate,2,'','','','');
     };
 
-    Transfer.listTransfer = function(page,partnerAgencyId,partnerAgencyName,startDate,endDate,accountStatus){
+    Transfer.listTransfer = function(page,partnerAgencyId,partnerAgencyName,startDate,endDate,accountStatus,businessName,businessGroupId,groupName,groupId){
     	if (Transfer.$searchArea && arguments.length === 1) {
             partnerAgencyName = Transfer.$searchArea.find("input[name=partnerAgencyName]").val(),
             partnerAgencyId = Transfer.$searchArea.find("input[name=partnerAgencyId]").val(),
             startDate = Transfer.$searchArea.find("input[name=startDate]").val(),
             endDate = Transfer.$searchArea.find("input[name=endDate]").val();
-            accountStatus = Transfer.$searchArea.find(".T-finance-status").find("button").data("value")
+            accountStatus = Transfer.$searchArea.find(".T-finance-status").find("button").data("value");
+            businessName = Transfer.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = Transfer.$searchArea.find('[name=departmentId]').val();
+            groupName = Transfer.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = Transfer.$searchArea.find('[name=childDepartmentId]').val();
         }
         if(startDate > endDate){
             showMessageDialog("开始时间不能大于结束时间，请重新选择！");
@@ -47,7 +51,11 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: 'auto'
+            sortType: 'auto',
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         };
 
         Transfer.searchData = FinancialService.getChangeArgs(Transfer.searchData,Transfer.$tab);
@@ -66,7 +74,7 @@ define(function(require, exports) {
                     Transfer.$tab = $('#tab-' + menuKey + "-content");
                     Transfer.$searchArea = Transfer.$tab.find('.T-search-area');
                     
-                    Transfer.initList(startDate,endDate,accountStatus);
+                    Transfer.initList(Transfer.searchData);
                     Transfer.getSumMoney(data.totalStatisticsData[0],Transfer.$tab);
                     // 绑定翻页组件
                     laypage({
@@ -92,10 +100,16 @@ define(function(require, exports) {
         tabId.find('.T-sumUnPaiedMoney').text(data.totalUnPayedMoney);
 
     };
-	Transfer.initList = function(startDate,endDate,accountStatus){
+	Transfer.initList = function(args){
         Transfer.getQueryList();
         Tools.setDatePicker(Transfer.$tab.find(".date-picker"),true);
         FinancialService.searchChange(Transfer.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(Transfer.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(Transfer.$tab.find('input[name=childDepartmentName]'));
 
         //搜索按钮事件
         Transfer.$tab.find('.T-search').on('click',function(event) {
@@ -113,15 +127,10 @@ define(function(require, exports) {
         // 报表内的操作
         Transfer.$tab.find('.T-list').on('click','.T-option',function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    partnerAgencyId : $that.closest('tr').data('id'),
-                    partnerAgencyName : $that.closest('tr').data('name'),
-                    startDate : startDate,
-                    endDate : endDate,
-                    accountStatus : accountStatus
-                };
+            var $that = $(this);
+                args.pageNo = 0;
+                args.partnerAgencyId = $that.closest('tr').data('id');
+                args.partnerAgencyName = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 Transfer.transferCheck(args);
@@ -269,7 +278,11 @@ define(function(require, exports) {
                     accountStatus : args.accountStatus,
                     orderNumber : $tab.find("input[name=orderNumber]").val(),
                     contactInfo : $tab.find("input[name=contactInfo]").val(),
-                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                    businessName: args.businessName,
+                    businessGroupId: args.businessGroupId,
+                    groupName: args.groupName,
+                    groupId: args.groupId
                 };
             argsDate.lineProductName = argsDate.lineProductName === "全部" ? "" : argsDate.lineProductName;
             argsDate.operateName = argsDate.operateName === "全部" ? "" : argsDate.operateName;

@@ -4,6 +4,12 @@
             <label class="mar-l-10">同行地接 </label>
             <input type="text" class="T-choosePartnerAgency" name="partnerAgencyName" value="{{if searchParam.partnerAgencyName == " "}}全部{{else}}{{searchParam.partnerAgencyName}}{{/if}}" placeholder="所有同行"/>
             <input type="hidden" name="partnerAgencyId" value="{{searchParam.partnerAgencyId}}" />
+            <label class="mar-l-10">部门 </label>
+            <input type="text" class="mar-r-10 T-search-head-office" name="departmentName" value="{{searchParam.businessName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="departmentId" value="{{searchParam.businessGroupId}}"/>
+            <label class="mar-l-10">子部门 </label>
+            <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="childDepartmentName" value="{{searchParam.groupName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="childDepartmentId" value="{{searchParam.groupId}}"/>
             <label class="control-label mar-r-10">账期 </label>
             <input class="date-picker" name="startDate" placeholder="开始日期" type="text" value="{{searchParam.startDate}}" style="width:100px;" />
             <label>&nbsp;至&nbsp;</label>

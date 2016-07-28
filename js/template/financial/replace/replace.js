@@ -36,7 +36,11 @@ define(function(require, exports) {
 			pageNo : (page || 0),
 			startDate : dateJson.startDate,
 			endDate : dateJson.endDate,
-			accountStatus : 2
+			accountStatus : 2,
+            businessName: '',
+            businessGroupId: '',
+            groupName: '',
+            groupId: ''
 		};
 		if(!!Replace.$tab){
 			var name = Replace.$tab.find('.T-search-customer').val().trim();
@@ -45,7 +49,11 @@ define(function(require, exports) {
 				travelAgencyName : name == '全部' ? '' : name,
 				startDate : Replace.$tab.find('.T-search-start-date').val(),
 				endDate : Replace.$tab.find('.T-search-end-date').val(),
-				accountStatus : Replace.$tab.find(".T-finance-status").find("button").data("value")
+				accountStatus : Replace.$tab.find(".T-finance-status").find("button").data("value"),
+                businessName: Replace.$tab.find('[name=departmentName]').val(),
+                businessGroupId: Replace.$tab.find('[name=departmentId]').val(),
+                groupName: Replace.$tab.find('[name=childDepartmentName]').val(),
+                groupId: Replace.$tab.find('[name=childDepartmentId]').val()
 			};
 		}
 
@@ -56,6 +64,7 @@ define(function(require, exports) {
 			data: args
 		}).done(function(data){
 			if(showDialog(data)){
+                data.searchParam = args;
 				Tools.addTab(menuKey, "代订账务", listTemplate(data));
 				Replace.$tab = $('#tab-' + menuKey + '-content');
 				//绑定事件
@@ -87,7 +96,12 @@ define(function(require, exports) {
 		var $searchArea = Replace.$tab.find('.T-search-area'),
 			$datepicker = $searchArea.find('.datepicker');
 
-		
+        //部门下拉
+        FinancialService.getDepartment($searchArea.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($searchArea.find('input[name=childDepartmentName]'));
+
 		if(Replace.customerList){
             Replace.loadCustomerList($searchArea.find('.T-search-customer'));
         } else {
@@ -119,7 +133,11 @@ define(function(require, exports) {
 					name : $that.closest('tr').data('name'),
 					startDate : args.startDate,
 					endDate : args.endDate,
-					accountStatus : args.accountStatus				
+					accountStatus : args.accountStatus,
+                    businessName: args.businessName,
+                    businessGroupId: args.businessGroupId,
+                    groupName: args.groupName,
+                    groupId: args.groupId				
 				};
 			if ($that.hasClass('T-checking'))  {
 				// 对账
@@ -384,12 +402,14 @@ define(function(require, exports) {
         	Tools.descToolTip($tab.find(".T-ctrl-tip"),1);
         };
 		$tab.find('.T-list').on('click', '.T-action', function(event){
-			var $that = $(this), id = $that.closest('tr').data('id');
+			var $that = $(this), $tr = $that.closest('tr'),id = $tr.data('id'),arrId = $tr.data('arrid');
 			if($that.hasClass('T-view-Received')){
 				Replace.viewOperationDetail(id, true);
 			}else if($that.hasClass('T-receive-money')){
 				Replace.viewOperationDetail(id, false);
-			}
+			} else if($that.hasClass('T-viewDetail')) {
+                KingServices.viewBookingInfo(arrId);
+            }
 		});
 		var oMenuKey = checkMenuKey;
 		// 计算
@@ -413,7 +433,11 @@ define(function(require, exports) {
 	                    accountStatus : args.accountStatus,
 	                    isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
 	                    contactId : $tab.find(".T-search-contact").data("id"),
-						creatorId : $tab.find(".T-search-creator").data("id")
+						creatorId : $tab.find(".T-search-creator").data("id"),
+                        businessName: args.businessName,
+                        businessGroupId: args.businessGroupId,
+                        groupName: args.groupName,
+                        groupId: args.groupId
 	                };
 	            argsData.orderNumber = argsData.orderNumber;
                 var project = Replace.$checkingTab.find(".T-search-project").val().split(', ');

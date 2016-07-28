@@ -305,8 +305,7 @@ define(function(require, exports, module) {
 
         //核算单按钮事件
         $tab.find('.T-bookSinglesBtn').off('click').on('click',function(){
-            var pluginKey = 'plugin_print';
-                Tools.loadPluginScript(pluginKey);
+            
                 bookingOrder.viewSingleList(bookingId);
         });
 
@@ -450,7 +449,9 @@ define(function(require, exports, module) {
      * @param  {[type]} id [description]
      * @return {[type]}    [description]
      */
-     bookingOrder.viewSingleList = function(id){ 
+     bookingOrder.viewSingleList = function(id){
+        var pluginKey = 'plugin_print';
+        Tools.loadPluginScript(pluginKey);
             $.ajax({
                 url: KingServices.build_url("bookingOrderV2", "checkOrder"),
                 data: "id=" + id,
