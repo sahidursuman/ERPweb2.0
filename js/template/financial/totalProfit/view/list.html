@@ -6,6 +6,12 @@
             <label>客户 </label>
             <input type="text" class="T-choosePartner mar-r-10" name="fromPartnerAgencyName" value="{{fromPartnerAgencyName}}" placeholder="客户"  type="text" style="width:100px;" /> 
             <input type="hidden" name="fromPartnerAgencyId" value="{{fromPartnerAgencyId}}" /> 
+            <label>团散标识 </label>
+            <select name="customerType" class="mar-r-10">
+                <option value="" selected="">全部</option>
+                <option value="1">团队</option>
+                <option value="0">散客</option>
+            </select>
             <label>外联销售 </label>
             <input type="text" class="mar-r-10" name="outOPUserName" value="{{outOPUserName}}" placeholder="外联销售"  type="text" style="width:100px;" /> 
             <label>录入人 </label>

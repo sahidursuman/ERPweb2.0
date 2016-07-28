@@ -89,6 +89,7 @@ define(function(require, exports) {
                 fromPartnerAgencyId : TotalProfit.$searchArea.find("input[name=fromPartnerAgencyId]").val(),
                 fromPartnerAgencyName: TotalProfit.$searchArea.find("input[name=fromPartnerAgencyName]").val(),
                 type: TotalProfit.$searchArea.find("select[name=type]").val(),
+                customerType: TotalProfit.$searchArea.find("select[name=customerType]").val(),
                 outOPUserName: TotalProfit.$searchArea.find("input[name=outOPUserName]").val(),
                 groupName: TotalProfit.$searchArea.find("input[name=groupName]").val(),
                 groupId: TotalProfit.$searchArea.find("input[name=groupName]").data("id"),
@@ -117,7 +118,9 @@ define(function(require, exports) {
             TotalProfit.$tab.data("searchEdit",false);
             TotalProfit.$tab.data("total",false);
         }
-
+        if(args.type == "booking") {
+            args.customerType = '';
+        }
         $.ajax({
             url:KingServices.build_url("financialTotal","findPager"),
             data:args,
