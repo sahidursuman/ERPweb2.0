@@ -5,6 +5,14 @@
             <input type="text" class="form-control T-search-name" style="width: 220px;" value="{{guideName}}" maxlength="100"
             placeholder="所有导游">
         </div>
+        <div class="form-group mar-r-10">
+            <label>部门 </label>
+            <input type="text" class="mar-r-10 T-search-head-office" name="departmentName" value="{{searchParam.businessName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="departmentId" value="{{searchParam.businessGroupId}}"/>
+            <label>子部门 </label>
+            <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="childDepartmentName" value="{{searchParam.groupName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="childDepartmentId" value="{{searchParam.groupId}}"/>
+        </div>
         <div class="form-group input-daterange mar-r-10">
             <label>账期</label>
             <input type="text" class="form-control datepicker T-search-start-date" style="width:100px;" value="{{startDate}}">

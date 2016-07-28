@@ -5,6 +5,10 @@
                 <div class="form-group">
                     <label>项目名称：</label>
                     <input type="text" name="itemName" value="{{searchParam.name}}" class="T-item-name mar-r-10">
+                    <input type="hidden" name="businessName" value="{{searchParam.businessName}}" />
+                    <input type="hidden" name="businessNameId" value="{{searchParam.businessGroupId}}" />
+                    <input type="hidden" name="groupName" value="{{searchParam.groupName}}" />
+                    <input type="hidden" name="groupId" value="{{searchParam.groupId}}" />
                     <label>账期：</label>
                     <input class="datepicker T-time T-startTime" name="joinTime" placeholder="开始日期" type="text" value="{{searchParam.startAccountTime}}" style="width:100px;" />
                     <label>&nbsp;至&nbsp;</label>

@@ -26,6 +26,10 @@ define(function(require, exports) {
 		FinPay.$tab = false;
 
 		var data = FinancialService.getInitDate();
+			data.businessName = '';
+	        data.businessGroupId = '';
+	        data.groupName = '';
+	        data.groupId = '';
 			data.accountStatus = FinPay.accountStatus;
 		if (Tools.addTab(menuKey, '财务付款', listTemplate(data))) {
 			FinPay.initEvent();
@@ -43,7 +47,11 @@ define(function(require, exports) {
 			var args = {
 				startDate: FinPay.$tab.find('.T-start').val(),
 				endDate: FinPay.$tab.find('.T-end').val(),
-				accountStatus : FinPay.$tab.find(".T-finance-status").find("button").data("value")
+				accountStatus : FinPay.$tab.find(".T-finance-status").find("button").data("value"),
+				businessName: FinPay.$tab.find('[name=departmentName]').val(),
+            	businessGroupId: FinPay.$tab.find('[name=departmentId]').val(),
+            	groupName: FinPay.$tab.find('[name=childDepartmentName]').val(),
+            	groupId: FinPay.$tab.find('[name=childDepartmentId]').val()
 			},
 			org = FinPay.$tab.find('.T-org-name').val();
 
@@ -93,6 +101,10 @@ define(function(require, exports) {
 		resArgs.pageNo = args.pageNo;
 		resArgs.accountStatus = args.accountStatus;
 		FinPay.accountStatus = args.accountStatus;
+		resArgs.businessName = args.businessName;
+        resArgs.businessGroupId = args.businessGroupId;
+        resArgs.groupName = args.groupName;
+        resArgs.groupId = args.groupId;
 		switch(FinPay.currentType) {
 			case 0:  //内转转出账务
 				options.url = KingServices.build_url('account/innerTransferOutFinancial', 'listSumFinancialInnerTransferOut');
@@ -427,6 +439,12 @@ define(function(require, exports) {
 	FinPay.initEvent = function() {
 		var $tab = $('#tab-'+ menuKey + '-content');
 
+		//部门下拉
+        FinancialService.getDepartment($tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($tab.find('input[name=childDepartmentName]'));
+
 		//监听搜索区修改
 		$tab.find('.T-search-area').on('change', 'input', function(event) {
 			event.preventDefault();
@@ -470,7 +488,11 @@ define(function(require, exports) {
                 startDate: FinPay.$tab.find("input[name=accountTimes]").val(),
                 endDate: FinPay.$tab.find("input[name=accountTimee]").val(),
                 incomeStatus: FinPay.$tab.find(".T-finance-status").find("button").data("value"),
-                accountStatus: FinPay.$tab.find(".T-finance-status").find("button").data("value")
+                accountStatus: FinPay.$tab.find(".T-finance-status").find("button").data("value"),
+                businessName: FinPay.$tab.find('[name=departmentName]').val(),
+                businessGroupId: FinPay.$tab.find('[name=departmentId]').val(),
+                groupName: FinPay.$tab.find('[name=childDepartmentName]').val(),
+                groupId: FinPay.$tab.find('[name=childDepartmentId]').val()
             };
 			FinancialService.exportReport({searchParam: JSON.stringify(args)}, "exportFinancialPayMoney");
 		});
@@ -494,7 +516,11 @@ define(function(require, exports) {
 				startDate: $tab.find('.T-start').val(),
 				endDate: $tab.find('.T-end').val(),
 				accountStatus : FinPay.accountStatus,
-				type: FinPay.allKeys[FinPay.currentType]
+				type: FinPay.allKeys[FinPay.currentType],
+				businessName: FinPay.$tab.find('[name=departmentName]').val(),
+                businessGroupId: FinPay.$tab.find('[name=departmentId]').val(),
+                groupName: FinPay.$tab.find('[name=childDepartmentName]').val(),
+                groupId: FinPay.$tab.find('[name=childDepartmentId]').val()
 			},type = $tr.data('type');
 
 			if($(this).hasClass('T-pay-borrow')){

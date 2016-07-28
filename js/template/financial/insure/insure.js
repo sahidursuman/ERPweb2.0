@@ -24,9 +24,9 @@ define(function(require, exports) {
 
 	Insure.initModule = function() {
 		var dateJson = FinancialService.getInitDate();
-        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate,2);
+        Insure.listInsure(0,"","",dateJson.startDate,dateJson.endDate,2,'','','','');
    	};
-  	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate, accountStatus){
+  	Insure.listInsure = function(page,insuranceName,insuranceId,startDate,endDate, accountStatus,businessName,businessGroupId,groupName,groupId){
   		if (Insure.$searchArea && arguments.length === 1) {
             // 初始化页面后，可以获取页面的参数
             insuranceName = Insure.$searchArea.find("input[name=insuranceName]").val();
@@ -34,16 +34,24 @@ define(function(require, exports) {
             startDate = Insure.$searchArea.find("input[name=startDate]").val();
             endDate = Insure.$searchArea.find("input[name=endDate]").val();
             accountStatus = Insure.$searchArea.find(".T-finance-status").find('button').data('value');
+            businessName = Insure.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = Insure.$searchArea.find('[name=departmentId]').val();
+            groupName = Insure.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = Insure.$searchArea.find('[name=childDepartmentId]').val();
     	}
         insuranceName = (insuranceName == "全部") ? "" : insuranceName;
-  		Insure.searchData={
+  		Insure.searchData = {
   			pageNo : page,
   			insuranceName : insuranceName,
   			insuranceId : insuranceId,
   			startDate : startDate,
   			endDate : endDate,
             accountStatus : accountStatus == undefined ? "2" : accountStatus,
-  			sortType: 'auto'
+  			sortType: 'auto',
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
   		};
         Insure.searchData = FinancialService.getChangeArgs(Insure.searchData,Insure.$tab);
   		var searchParam = JSON.stringify(Insure.searchData);
@@ -59,7 +67,7 @@ define(function(require, exports) {
 	                Tools.addTab(menuKey,"保险账务",html);
                     Insure.$tab = $('#' + tabId);
                     Insure.$searchArea=Insure.$tab.find('.T-search-area');
-	                Insure.initList(startDate,endDate, Insure.searchData.accountStatus);
+	                Insure.initList(Insure.searchData);
                     //获取合计数据
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
@@ -90,10 +98,16 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-  	Insure.initList = function(startDate,endDate, accountStatus){
+  	Insure.initList = function(args){
         Insure.getQueryList();
         Tools.setDatePicker(Insure.$tab.find(".date-picker"),true);
         FinancialService.searchChange(Insure.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(Insure.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(Insure.$tab.find('input[name=childDepartmentName]'));
 
  		//搜索按钮事件
         Insure.$tab.find('.T-search').on('click', function(event) {
@@ -120,15 +134,9 @@ define(function(require, exports) {
         // 报表内的操作
         Insure.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    insuranceId : $that.closest('tr').data('id'),
-                    insuranceName : $that.closest('tr').data('name'),
-                    startDate : startDate,
-                    endDate : endDate,
-                    accountStatus  : accountStatus
-                };
+            var $that = $(this);
+                args.insuranceId = $that.closest('tr').data('id');
+                args.insuranceName = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 Insure.GetChecking(args);
@@ -244,8 +252,13 @@ define(function(require, exports) {
                 startDate: $tab.find('input[name=startDate]').val(),
                 endDate: $tab.find('input[name=endDate]').val(),
                 accountStatus : args.accountStatus,
-                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value")
+                isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
+            console.log(argsData);
             FinancialService.exportReport(argsData,"exportArrangeInsuranceFinancial");
         });
 
@@ -405,7 +418,11 @@ define(function(require, exports) {
                     bankNo : (payType == 0) ? $tab.find('input[name=cash-number]').val() : $tab.find('input[name=card-number]').val(),
                     bankId : (payType == 0) ? $tab.find('input[name=cash-id]').val() : $tab.find('input[name=card-id]').val(),
                     voucher : $tab.find('input[name=credentials-number]').val(),
-                    billTime : $tab.find('input[name=tally-date]').val()
+                    billTime : $tab.find('input[name=tally-date]').val(),
+                    businessName: args.businessName,
+                    businessGroupId: args.businessGroupId,
+                    groupName: args.groupName,
+                    groupId: args.groupId
                 };
                 args.isAutoPay = 1;
                 Insure.getClearing(args,$tab);

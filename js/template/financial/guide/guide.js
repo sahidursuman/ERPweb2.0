@@ -47,6 +47,10 @@ define(function(require, exports) {
         args.pageNo = page || 0;
         args.accountStatus = 2;
         args.sortType = "desc";
+        args.businessName = '';
+        args.businessGroupId = '';
+        args.groupName = '';
+        args.groupId = '';
         if (!!FinGuide.$tab) {
             args = {
                 pageNo: (page || 0),
@@ -55,8 +59,11 @@ define(function(require, exports) {
                 endDate: FinGuide.$tab.find('.T-search-end-date').val(),
                 accountStatus : FinGuide.$tab.find(".T-finance-status").find("button").data("value"),
                 sortType : FinGuide.$tab.find("select[name=orderBy]").val()
-            }
-
+            };
+            args.businessName = FinGuide.$tab.find('[name=departmentName]').val();
+            args.businessGroupId = FinGuide.$tab.find('[name=departmentId]').val();
+            args.groupName = FinGuide.$tab.find('[name=childDepartmentName]').val();
+            args.groupId = FinGuide.$tab.find('[name=childDepartmentId]').val();
             var guideName = FinGuide.$tab.find('.T-search-name').val();
             if (guideName === '全部') {
                 guideName = '';
@@ -75,13 +82,15 @@ define(function(require, exports) {
             data: args,
         }).done(function(data) {
             if (showDialog(data)) {
+                data.searchParam = args;
                 data.guideName = data.guideName || '全部';
                 data.accountStatus = args.accountStatus;
                 data.sortType = args.sortType;
+
                 Tools.addTab(menuKey, "导游账务", listTemplate(data));
                 FinGuide.$tab = $('#tab-' + menuKey + '-content');
                 // 绑定事件
-                FinGuide.init_event();
+                FinGuide.init_event(args);
                 // 缓存页面
                 FinGuide.listPageNo = args.pageNo;
                 //获取合计数据
@@ -116,11 +125,17 @@ define(function(require, exports) {
     /**
      * 初始化列表页面的事件绑定
      */
-    FinGuide.init_event = function() {
+    FinGuide.init_event = function(args) {
         
         //搜索顶部的事件绑定
         var $searchArea = FinGuide.$tab.find('.T-search-area'),
             $datepicker = $searchArea.find('.datepicker');
+
+         //部门下拉
+        FinancialService.getDepartment($searchArea.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($searchArea.find('input[name=childDepartmentName]'));
 
         // 导游绑定
         if(FinGuide.guideList){
@@ -151,16 +166,13 @@ define(function(require, exports) {
         // 报表内的操作
         FinGuide.$tab.find('.T-list').on('click', '.T-action', function(event) {
             event.preventDefault();
-            var $that = $(this), $tr = $that.closest('tr'),
-                args = {
-                    pageNo : 0,
-                    guideId: $tr.data('id'),
-                    guideName: $tr.children('td').first().text(),
-                    startDate: $datepicker.eq(0).val(),
-                    endDate: $datepicker.eq(1).val(),
-                    accountStatus: $tr.data('accountstatus'),
-                };
-
+            var $that = $(this), $tr = $that.closest('tr');
+                args.pageNo = 0;
+                args.guideId = $tr.data('id');
+                args.guideName = $tr.children('td').first().text();
+                args.startDate =$datepicker.eq(0).val();
+                args.endDate = $datepicker.eq(1).val();
+                args.accountStatus = $tr.data('accountstatus');
             if ($that.hasClass('T-check')) {
                 // 对账
                 FinGuide.initOperationModule(args, 0);
@@ -417,7 +429,11 @@ define(function(require, exports) {
                         lineProductId: $searchArea.find('.T-lineProductName').data('id'),
                         isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                         startCheck : $tab.find('.T-checkStartTime').val(),
-                        endCheck : $tab.find('.T-checkEndTime').val()
+                        endCheck : $tab.find('.T-checkEndTime').val(),
+                        businessName: args.businessName,
+                        businessGroupId: args.businessGroupId,
+                        groupName: args.groupName,
+                        groupId: args.groupId
                     };
                 console.log(argsData);
                 argsData.lineProductName = argsData.lineProductName === "全部" ? "" : argsData.lineProductName;

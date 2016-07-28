@@ -27,16 +27,20 @@ define(function(require, exports) {
     busCompany.initModule = function() {
         var dateJson = FinancialService.getInitDate();
         dateJson.accountStatus = 2;
-        busCompany.listBusCompany(0, "", "", dateJson.startDate, dateJson.endDate,dateJson.accountStatus);
+        busCompany.listBusCompany(0, "", "", dateJson.startDate, dateJson.endDate,dateJson.accountStatus,'','','','');
     };
 
-    busCompany.listBusCompany = function(page, busCompanyName, busCompanyId, startDate, endDate,accountStatus) {
+    busCompany.listBusCompany = function(page, busCompanyName, busCompanyId, startDate, endDate,accountStatus,businessName,businessGroupId,groupName,groupId) {
         if (busCompany.$searchArea && arguments.length === 1) {
             busCompanyName = busCompany.$searchArea.find("input[name=busCompanyName]").val();
             busCompanyId = busCompany.$searchArea.find("input[name=busCompanyId]").val();
             startDate = busCompany.$searchArea.find("input[name=startDate]").val();
             endDate = busCompany.$searchArea.find("input[name=endDate]").val();
             accountStatus = busCompany.$searchArea.find(".T-finance-status").find("button").data("value");
+            businessName = busCompany.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = busCompany.$searchArea.find('[name=departmentId]').val();
+            groupName = busCompany.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = busCompany.$searchArea.find('[name=childDepartmentId]').val();
         }
         busCompanyName = (busCompanyName == "全部") ? "" : busCompanyName;
         // 修正页码
@@ -48,7 +52,11 @@ define(function(require, exports) {
             startTime: startDate,
             endTime: endDate,
             accountStatus : accountStatus,
-            sortType: busCompany.$searchArea ? busCompany.$searchArea.find("select[name=orderBy]").val() : "desc"
+            sortType: busCompany.$searchArea ? busCompany.$searchArea.find("select[name=orderBy]").val() : "desc",
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         };
 
         busCompany.searchData = FinancialService.getChangeArgs(busCompany.searchData,busCompany.$tab);
@@ -67,7 +75,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey, "车队账务", html);
                     busCompany.$tab = $('#tab-' + menuKey + "-content");
                     busCompany.$searchArea = busCompany.$tab.find('.T-search-area');
-                    busCompany.initList(startDate, endDate,accountStatus);
+                    busCompany.initList(busCompany.searchData);
                     busCompany.listPage = page;
                     //获取合计数据
                     var sumMoneyData = {
@@ -100,10 +108,17 @@ define(function(require, exports) {
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
         tabId.find('.T-sumSignMoney').text(data.unPayedMoneySum);
     };
-    busCompany.initList = function(startDate, endDate,accountStatus) {
+    busCompany.initList = function(args) {
         busCompany.getQueryList();
         Tools.setDatePicker(busCompany.$tab.find(".date-picker"), true);
         FinancialService.searchChange(busCompany.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(busCompany.$tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(busCompany.$tab.find('input[name=childDepartmentName]'));
+        
         //状态框选择事件
         busCompany.$tab.find(".T-finance-status").on('click', 'a', function(event) {
             event.preventDefault(); //阻止相应控件的默认事件
@@ -123,15 +138,10 @@ define(function(require, exports) {
         busCompany.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
             var accountStatus = busCompany.$tab.find(".T-finance-status").find("button").data("value");
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    busCompanyId : $that.closest('tr').data('id'),
-                    busCompanyName : $that.closest('tr').data('name'),
-                    startTime : startDate,
-                    endTime : endDate,
-                    accountStatus : accountStatus
-                };
+            var $that = $(this);
+                args.pageNo = 0;
+                args.busCompanyId = $that.closest('tr').data('id');
+                args.busCompanyName = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 busCompany.busCompanyCheck(args);
@@ -248,7 +258,11 @@ define(function(require, exports) {
                 licenseNumber : $tab.find("input[name=licenseNumber]").val(),
                 isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 startCheck : $tab.find('.T-checkStartTime').val(),
-                endCheck : $tab.find('.T-checkEndTime').val()
+                endCheck : $tab.find('.T-checkEndTime').val(),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
             console.log(argsData);
             FinancialService.exportReport(argsData, "exportArrangeBusCompanyFinancial");
