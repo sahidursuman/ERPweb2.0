@@ -1,4 +1,4 @@
-/*common*/
+﻿/*common*/
 .w100 {
     width: 100px;
 }
@@ -186,6 +186,19 @@ label {
 
 .font-height {
     color: #428bca;
+}
+
+.hct-hotel-font-20 {
+    font-size: 20px;
+}
+
+.hct-hotel-font-14 {
+    font-size: 14px;
+}
+
+.hct-hotel-font-12 {
+    font-size: 12px;
+    color: #999999;
 }
 
 .middle {
@@ -505,8 +518,11 @@ table tr td {
 .mar-1-135{
     margin-left: 135px;
 }
+.mar-r-5 {
+    margin-right: 5px;
+}
 .mar-r-10 {
-    margin-right: 10px;
+    
 }
 .mar-r-15 {
     margin-right: 15px;
@@ -2978,6 +2994,11 @@ a.black span, .black, .black:hover, .black:focus{
     width: 90%;
     margin-left: 5%;
 }
+.hct-line-inp {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #000;
+}
 
 /*billImage style*/
 ul.billImageDowebok{list-style-type: none;}
@@ -2989,6 +3010,17 @@ ul.billImageDowebok li img{max-height:100%; max-width: 100%;vertical-align: midd
 .resource_checkbox{margin-left:5px;margin-top: -6px !important;padding:0px;}
 input.ace[type="checkbox"] + .lbl{white-space: nowrap;}
 
+.illustrations{
+    position:relative;
+    top:0;
+    z-index:99;
+    margin-top:-123px;
+    text-align:center;
+}
+.illustrations img{
+    width: 162px;
+    height: 120px;
+    
 .info{
     color: #999;
     font-size: 12px;

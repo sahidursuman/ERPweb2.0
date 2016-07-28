@@ -57,83 +57,152 @@
 				</tr>
 			</table>
 
-				<table class="table table-bordered"> 
-					<thead>
-						<tr class="view-TranAccountsPrint" style="border: 1px solid #E2E2E2">
-							<th class="th-border" width="160">费用项</th>
-							<th class="th-border">数量</th>
-							<th class="th-border">单价</th>
-							<th class="th-border">单位</th>
-							<th class="th-border">金额</th>
-							<th class="th-border">说明</th>
-						</tr>
-					</thead>
-					<tbody class="addCostTbody">
-						{{each touristGroup.touristGroupFeeList as touristGroup}}
-							<tr class="view-TranAccountsPrint" data-entity-id="{{touristGroup.id}}">
-								<td>
-									<span>{{touristGroup.name}}</span>
-								</td>
-								<td>
-									<span class="F-float F-count">{{touristGroup.count}}</span>
-								</td>
-								<td>
-									<span class="F-float F-money">{{touristGroup.price}}</span>
-								</td>
-								<td>
-									<span>{{touristGroup.days}}</span>
-								</td>
-								<td>
-									<span class="F-float F-money">{{touristGroup.price*touristGroup.count*(touristGroup.days || 1)}}</span>
-								</td>
-								<td class="textaR-paL">
-									{{touristGroup.remark}}
-								</td>
+			<!-- 日程安排 -->
+			{{if showTravalList}}
+			<table class="table table-bordered" style="margin-bottom:0px;">
+				<thead>
+					<tr class="view-TranAccountsPrint" style="border: 1px solid #E2E2E2">
+						<th class="th-border" width="160">日期</th>
+						<th class="th-border">行程安排</th>
+						<th class="th-border">早餐</th>
+						<th class="th-border">午餐</th>
+						<th class="th-border">晚餐</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{each lineProductDay as rs }}
+						<tr>
+							<td>
+								<span>{{rs.whichDay}}</span>
+							</td>
+							<td>
+								<span>{{rs.title}}</span>
+							</td>
 
-							</tr>
-								{{/each}}
-					</tbody>
+							<td>
+								{{if rs.includeRest.b}}
+									<i class="ace-icon fa fa-check"></i>
+								{{else}}
+									<i class="fa fa-times"></i>
+								{{/if}}
+							</td>
+								
+							<td>
+								{{if rs.includeRest.l}}
+									<i class="ace-icon fa fa-check"></i>
+								{{else}}
+									<i class="fa fa-times"></i>
+								{{/if}}
+							</td>
+
+							<td>
+								{{if rs.includeRest.d}}
+									<i class="ace-icon fa fa-check"></i>
+								{{else}}
+									<i class="fa fa-times"></i>
+								{{/if}}
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
 			</table>
-			<table class="table whereQ" style="width: 100%;margin-top: -20px;">
+			{{/if}}
+			<table class="table table-bordered"> 
+				<thead>
+					<tr class="view-TranAccountsPrint" style="border: 1px solid #E2E2E2">
+						<th class="th-border" width="160">费用项</th>
+						<th class="th-border">数量</th>
+						<th class="th-border">单价</th>
+						<th class="th-border">单位</th>
+						<th class="th-border">金额</th>
+						<th class="th-border">说明</th>
+					</tr>
+				</thead>
+				<tbody class="addCostTbody">
+					{{each touristGroup.touristGroupFeeList as touristGroup}}
+						<tr class="view-TranAccountsPrint" data-entity-id="{{touristGroup.id}}">
+							<td>
+								<span>{{touristGroup.name}}</span>
+							</td>
+							<td>
+								<span class="F-float F-count">{{touristGroup.count}}</span>
+							</td>
+							<td>
+								<span class="F-float F-money">{{touristGroup.price}}</span>
+							</td>
+							<td>
+								<span>{{touristGroup.days}}</span>
+							</td>
+							<td>
+								<span class="F-float F-money">{{touristGroup.price*touristGroup.count*(touristGroup.days || 1)}}</span>
+							</td>
+							<td class="textaR-paL">
+								{{touristGroup.remark}}
+							</td>
+
+						</tr>
+							{{/each}}
+				</tbody>
+			</table>
+			<table class="table whereQ" style="width: 100%;margin-top: -20px;margin-bottom:0px;">
 				<tr class="view-TranAccountsPrint">
-					<td style="text-align: right;padding-right:60px;width: 160px"><span>应收</span></td>
-					<td class="textaR-paL">
-						<span class="F-float F-money">{{touristGroup.needPayAllMoney}}</span>
-					</td>
-				</tr>
-				<tr class="view-TranAccountsPrint">
-					<td style="text-align: right;padding-right:60px;width: 160px"><span>已收</span></td>
-					<td class="textaR-paL">
-						<span class="F-float F-money">{{touristGroup.payedMoney}}</span>
-					</td>
-				</tr>
-				<tr class="view-TranAccountsPrint">
-					<td style="text-align: right;padding-right:60px;width: 160px"><span>现收</span></td>
-					<td class="textaR-paL">
-						<span class="F-float F-money">{{touristGroup.currentNeedPayMoney}}</span>
-					</td>
-				</tr>
-				<tr class="view-TranAccountsPrint">
-					<td style="text-align: right;padding-right:60px;width: 160px"><span>未收</span></td>
-					<td class="textaR-paL">
-						<span class="F-float F-money">{{touristGroup.UnIncomeMoney}}</span>
+					<td style="text-align: center;width: 160px"><span>合计</span></td>
+					<td style="text-align: left;" colspan="5">
+						<span>应收:</span>
+						<span class="F-float F-money mar-r-5">{{touristGroup.needPayAllMoney}}</span>
+						<span>已收:</span>
+						<span class="F-float F-money mar-r-5">{{touristGroup.payedMoney}}</span>
+						<span>现收:</span>
+						<span class="F-float F-money mar-r-5">{{touristGroup.currentNeedPayMoney}}</span>
+						<span>未收:</span>
+						<span class="F-float F-money mar-r-5">{{touristGroup.UnIncomeMoney}}</span>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="text-a-l"><span style="margin-left: 10px;">请仔细阅读并盖章确认之后回传！谢谢！</span></td>
+					<td style="text-align: center;width: 160px"><span>备注</span></td>
+					<td style="text-align: left;" colspan="5">
+						<span>
+							{{touristGroup.remark}}
+						</span>
+					</td>
 				</tr>
 			</table>
-			<p style="text-align: right;margin-top: 10px;">
-				<span class="{{if !!touristGroup.outOPUserName || !!touristGroup.outOPUserName}}{{else}}hidden{{/if}}">
-					<span>外联销售：</span> 
-					<span>{{touristGroup.outOPUserName}}</span> 
-					<span>{{touristGroup.outOPUserMobileNumberr}}</span>
-				</span>
-			</p>
-			<p style="text-align: right;margin-top: -8px;" class="{{if !!touristGroup.faxNumber}}{{else}}hidden{{/if}}">
-				<span>传真：{{touristGroup.faxNumber}}</span>
-			</p>
-			<p style="text-align: right;margin-top: -8px;"><span>{{touristGroup.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span></p>
+			<table class="table table-bordered" >
+				<tbody>
+					<tr class="view-TranAccountsPrint">
+						<td colspan="3" style="text-align:left">
+							<p>请贵社盖章确认!</p>
+							<p>
+								<span>确认人:</span>______
+							</p>
+							<p>
+								<span>确认日期:</span>
+								<span class="mar-l-20">年</span>
+								<span class="mar-l-20">月</span>
+								<span class="mar-l-20">日</span>
+							</p>
+						</td>
+						<td colspan="3" style="text-align:left">
+							<p>
+								<span class="{{if !!touristGroup.outOPUserName || !!touristGroup.outOPUserName}}{{else}}hidden{{/if}}">
+									<span>外联销售：</span> 
+									<span>{{touristGroup.outOPUserName}}</span> 
+									<span>{{touristGroup.outOPUserMobileNumberr}}</span>
+								</span>
+							</p>
+							<p style="margin-top: -8px;" class="{{if !!touristGroup.faxNumber}}{{else}}hidden{{/if}}">
+								<span>传真：{{touristGroup.faxNumber}}</span>
+							</p>
+							<p style="margin-top: -8px;">
+								<span>日期:</span>
+								<span>{{touristGroup.nowTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</span>
+							</p>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
 		</div>
 	</form>
 	<div class="form-inline col-xs-12 hidden" style="text-align: center;margin-top: 30px;"> 
