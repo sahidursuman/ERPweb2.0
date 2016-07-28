@@ -19,16 +19,20 @@ define(function(require, exports) {
 
   	scenic.initModule = function() {
         var dateJson = FinancialService.getInitDate();
-        scenic.listScenic(0,"","",dateJson.startDate,dateJson.endDate,2);
+        scenic.listScenic(0,"","",dateJson.startDate,dateJson.endDate,2,'','','','');
     };
 
-    scenic.listScenic = function(page,scenicName,scenicId,startDate,endDate,accountStatus){
+    scenic.listScenic = function(page,scenicName,scenicId,startDate,endDate,accountStatus,businessName,businessGroupId,groupName,groupId){
     	if (scenic.$searchArea && arguments.length === 1) {
             scenicName = scenic.$searchArea.find("input[name=scenicName]").val();
             scenicId = scenic.$searchArea.find("input[name=scenicId]").val();
             startDate = scenic.$searchArea.find("input[name=startDate]").val();
             endDate = scenic.$searchArea.find("input[name=endDate]").val();
             accountStatus = scenic.$searchArea.find(".T-finance-status").find("button").data("value");
+            businessName = scenic.$searchArea.find('[name=departmentName]').val();
+            businessGroupId = scenic.$searchArea.find('[name=departmentId]').val();
+            groupName = scenic.$searchArea.find('[name=childDepartmentName]').val();
+            groupId = scenic.$searchArea.find('[name=childDepartmentId]').val();
         }
         scenicName = (scenicName == "全部") ? "" : scenicName;
         // 修正页码
@@ -40,7 +44,11 @@ define(function(require, exports) {
             startDate : startDate,
             endDate : endDate,
             accountStatus : accountStatus,
-            sortType: scenic.$searchArea ? scenic.$searchArea.find("select[name=orderBy]").val() : "desc"
+            sortType: scenic.$searchArea ? scenic.$searchArea.find("select[name=orderBy]").val() : "desc",
+            businessName: businessName,
+            businessGroupId: businessGroupId,
+            groupName: groupName,
+            groupId: groupId
         };
 
        scenic.searchData =  FinancialService.getChangeArgs(scenic.searchData,scenic.$tab);
@@ -60,7 +68,7 @@ define(function(require, exports) {
                     Tools.addTab(menuKey,"景区账务",html);
                     scenic.$tab = $('#tab-' + menuKey + "-content");
                     scenic.$searchArea = scenic.$tab.find('.T-search-area');
-                    scenic.initList(startDate,endDate,accountStatus);
+                    scenic.initList(scenic.searchData);
                     var sumMoneyData = {
                         settlementMoneySum:data.settlementMoneySum,
                         unPayedMoneySum:data.unPayedMoneySum,
@@ -90,10 +98,16 @@ define(function(require, exports) {
         tabId.find('.T-sumPaiedMoney').text(data.payedMoneySum);
         tabId.find('.T-sumUnPaiedMoney').text(data.unPayedMoneySum);
     };
-    scenic.initList = function(startDate,endDate,accountStatus){
+    scenic.initList = function(args){
     	scenic.getQueryList();
         Tools.setDatePicker(scenic.$searchArea.find('.datepicker'), true);
         FinancialService.searchChange(scenic.$tab);
+
+        //部门下拉
+        FinancialService.getDepartment(scenic.$searchArea.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment(scenic.$searchArea.find('input[name=childDepartmentName]'));
 
         //搜索按钮事件
         scenic.$tab.find('.T-search').on('click', function(event) {
@@ -113,15 +127,10 @@ define(function(require, exports) {
         // 报表内的操作
         scenic.$tab.find('.T-list').on('click', '.T-option', function(event) {
             event.preventDefault();
-            var $that = $(this),
-                args = {
-                    pageNo : 0,
-                    scenicId : $that.closest('tr').data('id'),
-                    scenicName : $that.closest('tr').data('name'),
-                    startDate : startDate,
-                    endDate : endDate,
-                    accountStatus : accountStatus
-                };
+            var $that = $(this);
+                args.pageNo = 0;
+                args.scenicId = $that.closest('tr').data('id');
+                args.scenicName = $that.closest('tr').data('name');
             if ($that.hasClass('T-check')) {
                 // 对账
                 scenic.scenicCheck(args);
@@ -236,7 +245,11 @@ define(function(require, exports) {
                 accountStatus : args.accountStatus,
                 isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 startCheck : $tab.find('.T-checkStartTime').val(),
-                endCheck : $tab.find('.T-checkEndTime').val()
+                endCheck : $tab.find('.T-checkEndTime').val(),
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };
             console.log(argsData);
             FinancialService.exportReport(argsData,"exportArrangeScenicFinancial");

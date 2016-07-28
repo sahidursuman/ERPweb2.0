@@ -66,6 +66,53 @@
         </div>
     </form>
 </div>
+
+<!-- 价格标准 -->
+<div class="col-xs-12 col-sm-12 widget-container-col">
+    <form class="form-horizontal T-viewPrice-form" role="form" style="margin-top:10px" onsubmit="return false">
+        <div class=" ui-sortable-handle">
+            <h5 class="widget-title">
+                <h5 class="pull-left title-size">
+                    <i class="ace-icon fa fa-calendar-minus-o"></i>
+                    <label class="middle title-size">价格标准</label>
+                </h5>
+                <div class="pull-right line-bluer  line-separatedT"></div>
+                <div style="clear: both"></div>
+            </h5>
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <table class="table table-striped table-bordered table-hover T-showHighLight table-fixed" 
+                    style="border: 1px solid #ddd;">
+                    <colgroup>
+                        <col style="width:15%;"></col>
+                        <col style="width:30%;"></col>
+                        <col style="width:30%;"></col>
+                    </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="th-border">开始时间</th>
+                                <th class="th-border">结束时间</th>
+                                <th class="th-border">成人价</th>
+                                <th class="th-border">儿童价</th>
+                            </tr>
+                        </thead>
+                        <tbody class="T-service-list">
+                        {{each productPriceList as rs}}
+                            <tr serviceId="{{rs.id}}">
+                                <td>{{rs.startTime}}</td>
+                                <td>{{rs.endTime}}</td>
+                                <td><span class="F-float F-money">{{rs.adultPrice}}</span></td>
+                                <td><span class="F-float F-money">{{rs.childPrice}}</span></td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="col-xs-12 col-sm-12 widget-container-col">
     <form class="form-horizontal T-guideService-form" role="form" style="margin-top:10px" onsubmit="return false">
         <div class=" ui-sortable-handle">
@@ -76,7 +123,6 @@
                 </h5>
                 <div class="pull-right line-bluer  line-separatedT"></div>
                 <div style="clear: both"></div>
-                
             </h5>
             <div class="widget-body">
                 <div class="widget-main no-padding">

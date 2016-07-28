@@ -52,7 +52,6 @@
 					<th>酒店名称</th>
 					<th>星级</th>
 					<th>联系人</th>
-					
 					<th>联系电话</th>
 					<th>所在地区</th>
 					<th>启用标志</th>
@@ -60,10 +59,27 @@
 				</tr>
 			</thead>
 
+
 			<tbody>
 				{{each hotelList as hotel}}
-					<tr data-entity-id="{{hotel.id}}">
-					 	<td>{{hotel.name}}</td>
+					<tr data-entity-id="{{hotel.id}}" data-isauth="{{hotel.isAuth}}" data-hotel="{{hotel.name}}" data-street="{{hotel.street}}" data-level="{{hotel.level}}">
+					 	<td>
+					 		{{hotel.name}}--
+						 	<a class="T-action T-authentication">
+							 	{{if hotel.isAuth == 0 }}
+							 		<img src="../../images/not_certified.png" title="认证后,可以享受在线支付权限">
+							 	{{else if hotel.isAuth == 1 }}
+							 		<img src="../../images/certification.png">&nbsp;
+							 		<span style="color:#FF9900;">审核中</span>
+							 	{{else if hotel.isAuth == 3}} 
+							 		<img src="../../images/fail.png" title="认证失败">
+						 		{{else if hotel.isAuth == 2}}
+						 			<img src="../../images/certified.png" title="已认证">
+								{{/if}}
+						 	</a>
+						 	
+						 	
+					 	</td>
 						<td>
 						{{if hotel.level==1 }}
 							三星以下
@@ -87,15 +103,19 @@
 						<td>
 							{{if hotel.province != null}}
 								{{hotel.province.name}}
+								<input name="provinceId" value="{{hotel.province.id}}" type="hidden">
 							{{/if}}
 							{{if hotel.city != null}}
 								-{{hotel.city.name}}
+								<input name="cityId" value="{{hotel.city.id}}" type="hidden">
 							{{/if}}
 							{{if hotel.district != null}}
 								-{{hotel.district.name}}
+								<input name="districtId" value="{{hotel.district.id}}" type="hidden">
 							{{/if}}
 
 						</td>
+
 						<td>
 							{{if hotel.status == 1}}
 							<i class="ace-icon fa fa-check green bigger-130"></i>

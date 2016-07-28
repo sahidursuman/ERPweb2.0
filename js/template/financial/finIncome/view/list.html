@@ -14,6 +14,14 @@
             <label>对方单位 </label>
             <input type="text" class="form-control T-org-name" style="width: 180px;" maxlength="100">
         </div>
+        <div class="form-group mar-r-10">
+            <label>部门 </label>
+            <input type="text" class="mar-r-10 T-search-head-office" name="departmentName" value="{{businessName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="departmentId" value="{{businessGroupId}}"/>
+            <label>子部门 </label>
+            <input type="text" class="T-search-head  mar-r-10 T-search-head-office" name="childDepartmentName" value="{{groupName}}"/>
+            <input type="hidden" class="mar-r-10 T-search-head-office" name="childDepartmentId" value="{{groupId}}"/>
+        </div>
         <div class="form-group input-daterange mar-r-10">
             <label>账期：</label>
             <input type="text" class="form-control T-datepicker T-start" name="accountTimes" value="{{startDate}}">

@@ -16,6 +16,7 @@
     <thead>
 
     <tr class="bg-blur ">
+        <th rowspan="2"><span class="necessary">*</span>是否属于导游</th>
         <th rowspan="2"><span class="necessary">*</span>时间</th>
         <th rowspan="2"><span class="necessary">*</span>项目</th>
         <th rowspan="2"><span class="necessary">*</span>单价</th>
@@ -42,6 +43,16 @@
                     <tr otherArrangeId="{{arrange.id}}" badStatus = "{{arrange.badStatus}}" whichDay="{{arrange.whichDay}}" 
                     isConfirmAccount="{{arrange.isConfirmAccount}}" arrangeType="otherArrange" class="oldData" data-name="{{arrange.otherName}}" data-type="other" data-start="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}" data-end="{{arrange.dateTime | dateFormat:'yyyy-MM-dd'}}">
                         <input name="sumIpt" type="hidden">
+                        <td rowspan="1">
+                            {{if guideCount > 1}}
+                                <div class="div-h-30"></div>
+                            {{/if}}
+                            {{if editStatus == 2}}
+                                <input {{if arrange.isGuide == 1}}checked{{/if}} type="checkbox" disabled>
+                            {{else}}
+                                <input {{if arrange.isGuide == 1}}checked{{/if}} type="checkbox" name="isGuide" value="{{arrange.isGuide}}"> 
+                            {{/if}}
+                        </td><!-- 日期 -->
                         <td rowspan="1">
                             {{if guideCount > 1}}
                                 <div class="div-h-30"></div>

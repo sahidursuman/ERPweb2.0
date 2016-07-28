@@ -85,6 +85,7 @@
                 <label class="control-label">付款方式：</label>
                 <select class="form-control T-sumPayType" name="sumPayType">
                     {{getPayTypeOptions}}
+                    {{if borrow}}<option value="8">借款余额</option>{{/if}}
                 </select>
             </div>
 
@@ -101,6 +102,9 @@
                     <input type="text" name="card-number" class="money" style="width:300px;">
                     <input type="hidden" name="card-id">
                 </label>
+            </div>
+            <div class="form-group mar-r-10 T-loanBalance">
+                <label class="control-label">借款余额：{{loanBalance}}</label>
             </div>
             <div class="form-group mar-r-10">
                 <label class="control-label">凭证编号：</label>

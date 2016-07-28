@@ -691,6 +691,22 @@ define(function(require, exports) {
                             if(num>0){
                                 data.touristGroup.companyLogo =''
                             }
+                            var includeRest = [];
+                            for(var i = 0,len = data.lineProductDay.length;i<len;i++) {
+                                var ret = data.lineProductDay[i].repastDetail.split(','),rest = {
+                                    b:false,
+                                    l:false,
+                                    d:false
+                                };
+                                if(ret[0] == 1){rest.b = true}
+                                if(ret[1] == 1){rest.l = true}
+                                if(ret[2] == 1){rest.d = true}
+                                    console.log(ret);
+                                data.lineProductDay[i].includeRest = rest
+                                console.log(data.lineProductDay[i].includeRest);
+                            };
+                            console.log(data);
+                            data.showTravalList = (IndexData.userInfo.travelAgencyId == 293);
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,
@@ -1382,160 +1398,183 @@ define(function(require, exports) {
      * @return {[type]}            [description]
      */
     touristGroup.updateMoneyAndGuest = function($that, optionType){
+        console.log(optionType);
         var html = "",
             data = {},
             title = "编辑信息",
             $tr = $that.closest('tr'),
+            startTime = $tr.find('input[name=startTime]').val(),
+            endTime = $tr.find('input[name=endTime]').val(),
             guestData = $tr.find('.T-guest-info').data('json'),
             moneyData = $tr.find('.T-receivable').data('json');
 
-        if(typeof guestData !== "object"){
-            data.guestData = JSON.parse(guestData || "{}");
-        }else{
-            data.guestData = guestData;
-        }
-
-        if(typeof moneyData !== "object"){
-            data.moneyData = JSON.parse(moneyData || "{}");
-        }else{
-            data.moneyData = moneyData;
-        }
-
-        if($that.hasClass('T-guest-info')){
-            data.isShowGuestInfo = true;
-        }
-        html = T.updateMoneyAndGuest(data);
-
-
-        layer.open({
-            type: 1,
-            title: title,
-            skin: 'layui-layer-rim', //加上边框
-            area: '1000px', //宽高
-            zIndex:1028,
-            content: html,
-            scrollbar: false,
-            success:function(obj, index){
-                var groupType = $that.closest('.T-container').data('type');
-
-                $(obj).on("change", '#tourists-update-guest-info, #tourists-update-money', function(){
-                    $(this).data('change', true);
-                });
-
-                var $layerMoney = $(obj).find("#tourists-update-money"),
-                    moneyValidate = touristGroup.bindLayerCommonFeeEvents($layerMoney, index, optionType, groupType),
-                    $layerGuest   = $(obj).find("#tourists-update-guest-info"),
-                    $tbody        = $layerGuest.find('.T-addTouristTbody'),
-                    guestValidate = rule.checkGuest($layerGuest);
-
-
-                //绑定应收团款事件
-                //保存
-                $layerMoney.find('.T-btn-save').on('click', function(){
-                    var isMoneySave = false,
-                        isGuestSave = true,
-                        isChange    = $layerGuest.data("change");
-                    isMoneySave = touristGroup.jionGroupMoneySave( $layerMoney, index, moneyValidate, $that );
-                    if(!!isMoneySave && $.type(isMoneySave) !=="object" && isChange){
-                        isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
+       
+        if(!!$tr.data('lineproductid')) {
+            $.ajax({
+                url: KingServices.build_url('lineProduct','findProductPrice'),
+                type: 'POST',
+                data: {
+                    id: $tr.data('lineproductid'),
+                    startTime: startTime,
+                    endTime: endTime
+                }
+            })
+            .done(function(data) {
+                if(showDialog(data)) {
+                    console.log(data)
+                    if(typeof guestData !== "object"){
+                        data.guestData = JSON.parse(guestData || "{}");
+                    }else{
+                        data.guestData = guestData;
                     }
 
-                    if($.type(isMoneySave) === "object"){
-                        var msg = isMoneySave.currentNeedPayMoney == "" ? 
-                                  '未填写现收团款，是否继续？' : 
-                                  '现收团款为0，是否继续？'
-                        showConfirmMsg(msg, function(){
-                            touristGroup.setJionGroupMoneyData($that, isMoneySave);
-                            if(isChange){
-                                isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
-                            }
-                            checkSave();
-                        });
-                        return false;
+                    if(typeof moneyData !== "object"){
+                        data.moneyData = JSON.parse(moneyData || "{}");
+                    }else{
+                        data.moneyData = moneyData;
                     }
-                    checkSave();
-                    return this;
-                    function checkSave(){
-                        if(isMoneySave && !!isGuestSave){
-                            if($.type(isGuestSave) === "object"){
-                                touristGroup.setGuestInfoData($that, $layerGuest, isGuestSave);
-                            }
-                            layer.close(index);
-                        }else if(isMoneySave && !isGuestSave){
-                            $(obj).find('a[href="#tourists-update-guest-info"]').trigger('click');
-                        }
+
+                    if($that.hasClass('T-guest-info')){
+                        data.isShowGuestInfo = true;
                     }
-                });
+                    html = T.updateMoneyAndGuest(data);
+                    layer.open({
+                        type: 1,
+                        title: title,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '1000px', //宽高
+                        zIndex:1028,
+                        content: html,
+                        scrollbar: false,
+                        success:function(obj, index){
+                            var groupType = $that.closest('.T-container').data('type');
 
-                //绑定客人信息事件
-                $layerGuest.find('.T-add-tourist-more').on('click', function(){
-                    touristGroup.batchAddTourists($layerGuest, guestValidate);
-                });
-                $layerGuest.find('.T-add-tourist').on('click', function(){
-                    touristGroup.addVisotor($layerGuest, guestValidate);
-                });
-
-                $tbody.on('click', '.T-action', function(event){
-                    event.preventDefault();
-                    var $this = $(this), 
-                        id    = $this.closest('tr').data('id');
-
-                    if($this.hasClass('T-delete')){
-                        if(!!id){
-                            var delJson = $this.closest('.T-addTouristTbody').data('del-json');
-                            if(typeof delJson !== "object"){
-                                delJson = JSON.parse(delJson || "[]");
-                            };
-                            delJson.push({
-                                id : id
+                            $(obj).on("change", '#tourists-update-guest-info, #tourists-update-money', function(){
+                                $(this).data('change', true);
                             });
-                            $this.closest('.T-addTouristTbody').data('del-json', delJson);
-                            $this.closest('tr').remove();
-                        }else{
-                            $this.closest('tr').remove();
-                        }
-                        touristGroup.memberNumber($tbody);
-                    }
-                });
-                $tbody.on('change', '[name="idCardType"]', function(event){
-                    guestValidate = rule.guestUpdate(guestValidate);
-                });
 
-                $layerGuest.find('.T-btn-save').on('click', function(){
-                    var isGuestSave = false, 
-                        isMoneySave = true,
-                        isChange    = $layerMoney.data("change");;
+                            var $layerMoney = $(obj).find("#tourists-update-money"),
+                                moneyValidate = touristGroup.bindLayerCommonFeeEvents($layerMoney, index, optionType, groupType),
+                                $layerGuest   = $(obj).find("#tourists-update-guest-info"),
+                                $tbody        = $layerGuest.find('.T-addTouristTbody'),
+                                guestValidate = rule.checkGuest($layerGuest);
 
-                    isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
-                    if(!!isGuestSave && isChange){
-                        isMoneySave = touristGroup.jionGroupMoneySave( $layerMoney, index, moneyValidate, $that );
-                        if($.type(isMoneySave) === "object"){
-                            var msg = isMoneySave.currentNeedPayMoney == "" ? 
-                                      '未填写现收团款，是否继续？' : 
-                                      '现收团款为0，是否继续？'
-                            showConfirmMsg(msg, function(){
-                                touristGroup.setJionGroupMoneyData($that, isMoneySave);
-                                isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
+
+                            //绑定应收团款事件
+                            //保存
+                            $layerMoney.find('.T-btn-save').on('click', function(){
+                                var isMoneySave = false,
+                                    isGuestSave = true,
+                                    isChange    = $layerGuest.data("change");
+                                isMoneySave = touristGroup.jionGroupMoneySave( $layerMoney, index, moneyValidate, $that );
+                                if(!!isMoneySave && $.type(isMoneySave) !=="object" && isChange){
+                                    isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
+                                }
+
+                                if($.type(isMoneySave) === "object"){
+                                    var msg = isMoneySave.currentNeedPayMoney == "" ? 
+                                              '未填写现收团款，是否继续？' : 
+                                              '现收团款为0，是否继续？'
+                                    showConfirmMsg(msg, function(){
+                                        touristGroup.setJionGroupMoneyData($that, isMoneySave);
+                                        if(isChange){
+                                            isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
+                                        }
+                                        checkSave();
+                                    });
+                                    return false;
+                                }
                                 checkSave();
+                                return this;
+                                function checkSave(){
+                                    if(isMoneySave && !!isGuestSave){
+                                        if($.type(isGuestSave) === "object"){
+                                            touristGroup.setGuestInfoData($that, $layerGuest, isGuestSave);
+                                        }
+                                        layer.close(index);
+                                    }else if(isMoneySave && !isGuestSave){
+                                        $(obj).find('a[href="#tourists-update-guest-info"]').trigger('click');
+                                    }
+                                }
                             });
-                            return false;
+
+                            //绑定客人信息事件
+                            $layerGuest.find('.T-add-tourist-more').on('click', function(){
+                                touristGroup.batchAddTourists($layerGuest, guestValidate);
+                            });
+                            $layerGuest.find('.T-add-tourist').on('click', function(){
+                                touristGroup.addVisotor($layerGuest, guestValidate);
+                            });
+
+                            $tbody.on('click', '.T-action', function(event){
+                                event.preventDefault();
+                                var $this = $(this), 
+                                    id    = $this.closest('tr').data('id');
+
+                                if($this.hasClass('T-delete')){
+                                    if(!!id){
+                                        var delJson = $this.closest('.T-addTouristTbody').data('del-json');
+                                        if(typeof delJson !== "object"){
+                                            delJson = JSON.parse(delJson || "[]");
+                                        };
+                                        delJson.push({
+                                            id : id
+                                        });
+                                        $this.closest('.T-addTouristTbody').data('del-json', delJson);
+                                        $this.closest('tr').remove();
+                                    }else{
+                                        $this.closest('tr').remove();
+                                    }
+                                    touristGroup.memberNumber($tbody);
+                                }
+                            });
+                            $tbody.on('change', '[name="idCardType"]', function(event){
+                                guestValidate = rule.guestUpdate(guestValidate);
+                            });
+
+                            $layerGuest.find('.T-btn-save').on('click', function(){
+                                var isGuestSave = false, 
+                                    isMoneySave = true,
+                                    isChange    = $layerMoney.data("change");;
+
+                                isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
+                                if(!!isGuestSave && isChange){
+                                    isMoneySave = touristGroup.jionGroupMoneySave( $layerMoney, index, moneyValidate, $that );
+                                    if($.type(isMoneySave) === "object"){
+                                        var msg = isMoneySave.currentNeedPayMoney == "" ? 
+                                                  '未填写现收团款，是否继续？' : 
+                                                  '现收团款为0，是否继续？'
+                                        showConfirmMsg(msg, function(){
+                                            touristGroup.setJionGroupMoneyData($that, isMoneySave);
+                                            isGuestSave = touristGroup.guestInfoSave( $layerGuest, guestValidate, $that );
+                                            checkSave();
+                                        });
+                                        return false;
+                                    }
+                                }
+                                checkSave();
+                                return this;
+                                function checkSave(){
+                                    if(isGuestSave && !!isMoneySave){
+                                        if($.type(isGuestSave) === "object"){
+                                            touristGroup.setGuestInfoData($that, $layerGuest, isGuestSave);
+                                        }
+                                        layer.close(index);
+                                    }else if(isGuestSave && !isMoneySave){
+                                        $(obj).find('a[href="#tourists-update-money"]').trigger('click');
+                                    }
+                                }
+                            });
                         }
-                    }
-                    checkSave();
-                    return this;
-                    function checkSave(){
-                        if(isGuestSave && !!isMoneySave){
-                            if($.type(isGuestSave) === "object"){
-                                touristGroup.setGuestInfoData($that, $layerGuest, isGuestSave);
-                            }
-                            layer.close(index);
-                        }else if(isGuestSave && !isMoneySave){
-                            $(obj).find('a[href="#tourists-update-money"]').trigger('click');
-                        }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });  
+        } else {
+            showMessageDialog('请选择行程');
+            return false;
+        }
+        
+        
     }
 
     /**
@@ -2532,9 +2571,10 @@ define(function(require, exports) {
                         lineData = {
                         id : $tr.data('id'),
                         lineProductName : $tr.find('[name="lineProductName"]').text(),
-                        days : $tr.find('[name="days"]').text()
+                        days : $tr.find('[name="days"]').text(),
                     }
-                    $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');;
+                    $that.closest('td').find('[name="lineProductName"]').val(lineData.lineProductName).data('id', lineData.id).data('json', JSON.stringify(lineData)).trigger('blur');
+                    $that.closest('tr').data('lineproductid',lineData.id);
                     layer.close(index);
                     F.autoCalcDate($that);
                 }

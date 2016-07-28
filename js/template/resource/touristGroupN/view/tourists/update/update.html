@@ -28,7 +28,7 @@
 					</tr>
 				</thead>
 				<tbody class="T-team-info">
-					<tr>
+					<tr data-lineproductid="{{baseInfo.lineProductId}}">
 						<td>
 							<div class="col-xs-12">
 								<input type="text" class="col-xs-12 hct-cursor T-action T-client" readonly name="fromPartnerAgency" value="{{baseInfo.fromPartnerAgency}}{{if baseInfo.fromPartnerAgencyContactName != ""}}（{{baseInfo.fromPartnerAgencyContactName}}）{{/if}}" data-id="{{baseInfo.fromPartnerAgencyId}}" data-contact-id="{{baseInfo.fromPartnerAgencyContactId}}" placeholder="点击选择客户">
@@ -43,8 +43,8 @@
 						</td>
 						<td><input type="text" class="col-xs-12 datepicker" name="startTime" value="{{baseInfo.startTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
 						<td><input type="text" class="col-xs-12 datepicker T-action" name="endTime" value="{{baseInfo.endTime | dateFormat: 'yyyy-MM-dd'}}" {{if baseInfo.disableFlag== 1}}disabled{{/if}}></td>
-						<td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float" readonly name="needPayAllMoney" value="{{baseInfo.needPayAllMoney}}" data-json="{{baseInfo.touristGroupFee}}" placeholder="点击填写应收团款"></td>
-						<td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info" readonly name="guestDetails" value="{{baseInfo.name}}" data-json="{{baseInfo.touristGroupMemberInfo}}" placeholder="点击填写客人信息"></td>
+						<td><input type="text" class="col-xs-12 hct-cursor T-action T-receivable F-float T-updateClick" readonly name="needPayAllMoney" value="{{baseInfo.needPayAllMoney}}" data-json="{{baseInfo.touristGroupFee}}" placeholder="点击填写应收团款"></td>
+						<td><input type="text" class="col-xs-12 hct-cursor T-action T-guest-info T-updateClick" readonly name="guestDetails" value="{{baseInfo.name}}" data-json="{{baseInfo.touristGroupMemberInfo}}" placeholder="点击填写客人信息"></td>
 						<td><input type="text" class="col-xs-12" name="mobileNumber" readonly value="{{baseInfo.mobileNumber}}"></td>
 						<td><input type="text" class="col-xs-12 T-chooseUser" name="outOPUserName" value="{{baseInfo.outOPUserName}}" data-id="{{baseInfo.outOPUserId}}"></td>
 						<td>

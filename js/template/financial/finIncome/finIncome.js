@@ -24,6 +24,10 @@ define(function(require, exports) {
     FinIncome.initModule = function() {
         FinIncome.$tab = false;
         var data = FinancialService.getInitDate();
+        data.businessName = '';
+        data.businessGroupId = '';
+        data.groupName = '';
+        data.groupId = '';
         data.accountStatus = FinIncome.accountStatus;
         if (Tools.addTab(menuKey, '财务收款', listTemplate(data))) {
             FinIncome.initEvent();
@@ -43,7 +47,11 @@ define(function(require, exports) {
                 args = {
                     startTime: FinIncome.$tab.find('.T-start').val(),
                     endTime: FinIncome.$tab.find('.T-end').val(),
-                    accountStatus : FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value")
+                    accountStatus : FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value"),
+                    businessName: FinIncome.$tab.find('[name=departmentName]').val(),
+                    businessGroupId: FinIncome.$tab.find('[name=departmentId]').val(),
+                    groupName: FinIncome.$tab.find('[name=childDepartmentName]').val(),
+                    groupId: FinIncome.$tab.find('[name=childDepartmentId]').val()
                 };
                 
 
@@ -120,7 +128,11 @@ define(function(require, exports) {
                 resourceName: args.name,
                 travelAgencyName: args.name,
                 shopName: args.name,
-                fromPartnerAgencyName: args.name
+                fromPartnerAgencyName: args.name,
+                businessName: args.businessName,
+                businessGroupId: args.businessGroupId,
+                groupName: args.groupName,
+                groupId: args.groupId
             };             
             var src = 'listPagerTotal';
             if (FinIncome.currentType == 4) {
@@ -168,7 +180,10 @@ define(function(require, exports) {
         resArgs.pageNo = args.pageNo;
         resArgs.accountStatus = args.accountStatus;
         FinIncome.accountStatus = args.accountStatus
-
+        resArgs.businessName = args.businessName;
+        resArgs.businessGroupId = args.businessGroupId;
+        resArgs.groupName = args.groupName;
+        resArgs.groupId = args.groupId;
         switch (FinIncome.currentType) {
             case 0: //客户账务
                 options.url = KingServices.build_url('financial/customerAccount', 'listPager');
@@ -314,8 +329,14 @@ define(function(require, exports) {
      * list事件绑定
      * @return {[type]} [description]
      */
-    FinIncome.initEvent = function() {
+    FinIncome.initEvent = function(args) {
         var $tab = $('#tab-' + menuKey + '-content');
+
+        //部门下拉
+        FinancialService.getDepartment($tab.find('input[name=departmentName]'));
+
+        //子部门下拉
+        FinancialService.getChildDeparment($tab.find('input[name=childDepartmentName]'));
 
         //监听搜索区修改
         $tab.find('.T-search-area').on('change', 'input', function(event) {
@@ -360,7 +381,11 @@ define(function(require, exports) {
                 accountTimes: FinIncome.$tab.find("input[name=accountTimes]").val(),
                 accountTimee: FinIncome.$tab.find("input[name=accountTimee]").val(),
                 incomeStatus: FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value"),
-                accountStatus : FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value")
+                accountStatus : FinIncome.$tab.find(".T-finance-status").find("button").attr("data-value"),
+                businessName: FinIncome.$tab.find('[name=departmentName]').val(),
+                businessGroupId: FinIncome.$tab.find('[name=departmentId]').val(),
+                groupName: FinIncome.$tab.find('[name=childDepartmentName]').val(),
+                groupId: FinIncome.$tab.find('[name=childDepartmentId]').val()
             };
             FinancialService.exportReport(args, "exportFinancialIncomeMoney");
         })
@@ -376,12 +401,17 @@ define(function(require, exports) {
                     startDate: $tab.find('.T-start').val(),
                     endDate: $tab.find('.T-end').val(),
                     accountStatus : FinIncome.accountStatus,
-                    type: FinIncome.allKeys[FinIncome.currentType]
+                    type: FinIncome.allKeys[FinIncome.currentType],
+                    businessName: FinIncome.$tab.find('[name=departmentName]').val(),
+                    businessGroupId: FinIncome.$tab.find('[name=departmentId]').val(),
+                    groupName: FinIncome.$tab.find('[name=childDepartmentName]').val(),
+                    groupId: FinIncome.$tab.find('[name=childDepartmentId]').val()
                 },
                 type = $tr.data('type');
             if(!!type){
                 options.type = type;
             }
+            console.log(options);
             FinancialService.accountList(options);
         });
 

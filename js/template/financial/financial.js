@@ -38,6 +38,7 @@ FinancialService.initPayEvent = function($container,rule)  {
         if(val != ''){
             $cash.closest('div').toggleClass('hidden', val != 0);
             $card.closest('div').toggleClass('hidden', val  != 1 && val != 5);
+            $container.find(".T-loanBalance").toggleClass('hidden', val  != 8);
             if(val !=0){
                $container.find('input[name=cash-id]').val('');
             };
@@ -122,6 +123,101 @@ function getBankList($obj,payType){
     });
 }
 
+//绑定部门下拉
+FinancialService.getDepartment = function($obj) {
+    $obj.autocomplete({
+        minLength:0,
+        change: function(event,ui){
+            if(ui.item == null) {
+                $(this).val('');
+                $(this).nextAll('input[name=departmentId]').val('');
+                
+            }
+        },
+        select: function(event,ui) {
+            $(this).nextAll('input[name=departmentId]').val(ui.item.businessGroupId);
+            $(this).nextAll('input[name=childDepartmentName]').val('');
+            $(this).nextAll('input[name=childDepartmentId]').val('');
+            $(this).trigger('change');
+        }
+
+    }).off('click').on('click',function() {
+        var $that = $(this);
+        $.ajax({
+            url: KingServices.build_url("group", "selectBusinessGroup"),
+            type: 'POST'
+        })
+        .done(function(data) {
+            if(showDialog(data)){
+                var listObj = data.businessGroupList;
+                if (listObj != null && listObj.length > 0) {
+                    for (var i = 0; i < listObj.length; i++) {
+                        listObj[i].value = listObj[i].businessGroupName;
+                    }
+                } else {
+                    layer.tips('没有内容', $that, {
+                        tips: [1, '#3595CC'],
+                        time: 2000
+                    });
+                }
+                $that.autocomplete('option', 'source', listObj);
+                $that.autocomplete('search', '');
+            }
+        });
+    });
+};
+
+//获取子部门下拉
+FinancialService.getChildDeparment = function($obj) {
+    $obj.autocomplete({
+        minLength: 0,
+        change: function(event,ui) {
+            if(ui.item == null) {
+                $(this).val('');
+                $(this).next().val('');
+            }
+        },
+        select: function(event,ui) {
+            $(this).nextAll('input[name=childDepartmentId]').val(ui.item.groupId)
+            $(this).trigger('change');
+        }
+    }).off('click').on('click',function() {
+        var $that = $(this),childDepartmentId = $obj.closest('div').find('input[name=departmentId]').val();
+        if(!!childDepartmentId) {
+            $.ajax({
+                url: KingServices.build_url('group','selectGroup'),
+                type: 'POST',
+                data: {
+                    businessGroupId: childDepartmentId
+                }
+            })
+            .done(function(data) {
+                if(showDialog(data)) {
+                    var listObj = data.groupMapList;
+                    if (listObj != null && listObj.length > 0) {
+                        for (var i = 0; i < listObj.length; i++) {
+                            listObj[i].value = listObj[i].groupName;
+                        }
+                    } else {
+                        layer.tips('没有内容', $that, {
+                            tips: [1, '#3595CC'],
+                            time: 2000
+                        });
+                    }
+                    $that.autocomplete('option', 'source', listObj);
+                    $that.autocomplete('search', '');
+                }
+            });                                                                                             
+        }else {
+            var $layerObj = $(this).prevAll('input[name=departmentName]');
+            layer.tips('请选择部门', $layerObj, {
+                tips: [1, '#3595CC'],
+                time: 2000
+            });
+        }
+        
+    });
+};
 //时间控件--保留时分秒
 FinancialService.datetimepicker=function($tab){
     if (!!$tab) {
@@ -1136,7 +1232,11 @@ FinancialService.covertArgs = function(args){
         endDate: args.endDate,
         type: args.type,
         accountStatus: args.accountStatus,
-        isCheck: args.isCheck
+        isCheck: args.isCheck,
+        businessName: args.businessName,
+        businessGroupId: args.businessGroupId,
+        groupName: args.groupName,
+        groupId: args.groupId
     };
     switch(args.type){
         case "customer"://客户账务
