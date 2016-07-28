@@ -29,7 +29,8 @@ define(function(require, exports) {
                 url: KingServices.build_url_bus('bindAccount','findAllBindCompany'),
                 type: 'POST',
                 data: {
-                    travelAgency: IndexData.userInfo.travelAgencyShortName
+                    travelAgency: IndexData.userInfo.travelAgencyShortName,
+                    BUS_API_SECRECT_KEY: IndexData.userInfo.BUS_API_SECRECT_KEY
                 },
                 success: function (data) {
                     if (data.bindAccountList.length) {
