@@ -691,6 +691,22 @@ define(function(require, exports) {
                             if(num>0){
                                 data.touristGroup.companyLogo =''
                             }
+                            var includeRest = [];
+                            for(var i = 0,len = data.lineProductDay.length;i<len;i++) {
+                                var ret = data.lineProductDay[i].repastDetail.split(','),rest = {
+                                    b:false,
+                                    l:false,
+                                    d:false
+                                };
+                                if(ret[0] == 1){rest.b = true}
+                                if(ret[1] == 1){rest.l = true}
+                                if(ret[2] == 1){rest.d = true}
+                                    console.log(ret);
+                                data.lineProductDay[i].includeRest = rest
+                                console.log(data.lineProductDay[i].includeRest);
+                            };
+                            console.log(data);
+                            data.showTravalList = (IndexData.userInfo.travelAgencyId == 293);
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,

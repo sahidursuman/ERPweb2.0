@@ -77,6 +77,7 @@ define(function(require, exports) {
                 pageNo: (page || 0),
                 orderNumber: salesProfit.$tab.find('[name=orderNumber]').val(),
                 partnerAgencyName: salesProfit.$tab.find('[name=partnerAgencyName]').val(),
+                partnerAgencyId: salesProfit.$tab.find('[name=partnerAgencyName]').data('id'),
                 customerType: salesProfit.$tab.find('[name=customerType]').val(),
                 outOPUserName: salesProfit.$tab.find('[name=outOPUserName]').val(),
                 businessName: salesProfit.$tab.find('[name=businessName]').val(),
@@ -161,7 +162,7 @@ define(function(require, exports) {
             minLength:0,
             change:function(event,ui){
                 if(ui.item == null){
-                    $target.data("id", "");
+                    $target.data("id", "").val('');
                 }
             },
             select:function(event,ui){
