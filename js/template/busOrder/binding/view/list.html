@@ -1,0 +1,43 @@
+<table class="table table-striped table-bordered table-hover T-showHighLight">
+    <thead>
+        <tr class="bg-blur">
+            <th>车队名称</th>
+            <th>公司名称</th>
+            <th>下单网址</th>
+            <th>负责人</th>
+            <th>负责人电话</th>
+            <th>公司座机</th>
+            <th>绑定状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each companyList as rs}}
+        <tr data-id="{{rs.id}}" data-name="{{rs.name}}">
+            <td>{{rs.name}}</td>
+            <td>{{rs.fullName}}</td>
+            <td><a href="http://{{rs.domain}}/user" target="_blank">http://{{rs.domain}}/user</a></td>
+            <td>{{rs.managerName}}</td>
+            <td>{{rs.managerMobileNumber}}</td>
+            <td>{{rs.telPhoneNumber}}</td>
+            <td>{{if rs.isBind == '0'}}未绑定{{else}}<span class="green">已绑定</span>{{/if}}</td>
+            <td>
+            {{if rs.isBind == '0'}}
+                <a class="T-action cursor T-binding">绑定</a>
+            {{else}}
+            -
+            {{/if}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div class="pageMode">
+    <div class="col-xs-4">
+        <small>共计 {{recordSize}} 条记录</small>
+    </div>
+    <div class="col-xs-8">
+        <div class="dataTables_paginate paging_simple_numbers T-pagenation">
+        </div>
+    </div>
+</div>

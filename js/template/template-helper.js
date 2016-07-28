@@ -565,3 +565,118 @@ template.helper('canEditCheckedFinancial', function(status) {
 template.helper('isNeedShowDetail', function() {
     return IndexData.userInfo.travelAgencyId == 32 && IndexData.userInfo.financialCountAuth == 4;
 });
+
+
+/*  ---------------------------------车队订单---------------------------------------------------------------------  */
+template.helper('getStatusIcon', function(status) {
+    switch (status * 1) {
+        case 0:
+            return '<i class="ace-icon fa fa-times red"></i>';
+        case 1:
+            return '<i class="ace-icon fa fa-check green"></i>';
+    }
+});
+
+template.helper('getStatusSwitch', function(status, name) {
+    switch (status * 1) {
+        case 0:
+            return '<label><input name="'+name+'" class="ace ace-switch ace-switch-6" type="checkbox" checked><span class="T-statusSwitch T-action lbl"></span></label>';
+        case 1:
+            return '<label><input name="'+name+'" class="ace ace-switch ace-switch-6" type="checkbox"><span class="T-statusSwitch T-action lbl"></span></label>';
+    }
+});
+
+template.helper('getLicenceLevel', function (level) {
+    var arr = ['A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4'];
+    var selected = '';
+    for (var i = 0; i < arr.length; i++) {
+        selected += '<option value="'+arr[i]+'" ' + ((level==arr[i]) ? 'selected' : '') + '>'+arr[i]+'</option>';
+    }
+    var html = ['<select name="licenceLevel">',
+                selected,
+                '</select>'];
+    return html.join('');
+});
+
+template.helper('getOrderStatusListBtn', function (status, isCompany) {
+    var html = '';
+    if (isCompany) {
+        html = ['<button class="T-view T-action btn btn-xs btn-yellow">查看</button> '];
+        if (status == '0') {
+            html.push('<button class="T-confirm T-action btn btn-xs btn-primary">确认</button> ' + '<button class="T-refuse T-action btn btn-xs btn-danger">拒单</button> ');
+        } else if (status == '2') {
+            html.push('<button class="T-agree T-action btn btn-xs btn-primary">同意</button> ' + '<button class="T-disagree T-action btn btn-xs btn-danger">拒绝</button> ');
+        } else if (status == '1') {
+            html.push('<button class="T-update T-action btn btn-xs btn-primary">修改</button> ' + '<button class="T-back T-action btn btn-xs btn-purple">退回</button> ');
+        }
+    } else {
+        if (status == '0' || status == '6') {
+            html = ['<button class="T-view T-action btn btn-xs btn-yellow">查看</button> ',
+            '<button class="T-update T-action btn btn-xs btn-primary">修改</button> ',
+            '<button class="T-cancel T-action btn btn-xs btn-danger">取消</button>'];
+        } else if (status == '1' || status == '2' || status == '3' || status == '5' || status == '4' || status == '7') {
+            html = ['<button class="T-view T-action btn btn-xs btn-yellow">查看</button> '];
+            if (status == '1') {
+                html.push('<button class="T-applyCancel T-action btn btn-xs btn-danger">申请取消</button>');
+            }
+        }
+    }
+    return html.join('');
+});
+
+template.helper('getShiftTime', function (time, type) {
+    var html = ['<option value="">请选择</option>'];
+    if (type == 'hour') {
+        for (var i = 0; i < 24; i++) {
+            var selected = (time == i) ? 'selected' : '',
+                ii = (i < 10) ? ('0' + i) : (i + '');
+
+            html.push('<option value="' + ii + '" ' + selected + '>' + ii + '时</option>');
+        }
+    } else if (type == 'minute') {
+        for (var i = 0; i < 60; i++) {
+            var selected = (time == i) ? 'selected' : '',
+                ii = (i < 10) ? ('0' + i) : (i + '');
+
+            html.push('<option value="' + ii + '" ' + selected + '>' + ii + '分</option>');
+        }
+    }
+    return html.join('');
+});
+
+template.helper("stringify", function(data) {
+    return JSON.stringify(data);
+});
+
+template.helper("getOrderStatusText", function(type) {
+    switch (type) {
+        case 0:
+            return '待接单';
+            break;
+        case 1:
+            return '已接单';
+            break;
+        case 2:
+            return '商家申请取消';
+            break;
+        case 3:
+            return '车队拒绝取消';
+            break;
+        case 4:
+            return '车队同意取消';
+            break;
+        case 5:
+            return '车队拒单';
+            break;
+        case 6:
+            return '车队退回商家';
+            break;
+        case 7:
+            return '商家主动取消';
+            break;
+        default:
+            break;
+    }
+});
+
+/*   ---------------------------------车队订单end -------------------------------------------------------------- */

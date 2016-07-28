@@ -1,0 +1,35 @@
+{{if touristGroupList.length}}
+{{each touristGroupList as group}}
+<tr class="T-sort" data-index="{{group.touristGroupMemberList.length}}" data-id="{{group.id}}" data-content="{{group | stringify}}" data-adultcount="{{group.adultCount}}" data-childCount="{{group.childCount}}">
+    <td rowspan="{{group.touristGroupMemberList.length}}"></td>
+    <td rowspan="{{group.touristGroupMemberList.length}}">{{group.tripNumber}}</td>
+    {{if group.touristGroupMemberList.length}}
+    {{each group.touristGroupMemberList as rs index}}
+    {{if index == 0}}
+    <td>{{rs.name}}</td>
+    <td>{{rs.mobileNumber}}</td>
+    {{/if}}
+    {{/each}}
+    {{else}}
+    <td></td>
+    <td></td>
+    {{/if}}
+    <td rowspan="{{group.touristGroupMemberList.length}}">{{group.adultCount}}大{{group.childCount}}小</td>
+    <td rowspan="{{group.touristGroupMemberList.length}}">{{group.hotelName}}</td>
+    <td rowspan="{{group.touristGroupMemberList.length}}">{{group.hotelAddress}}</td>
+    <td rowspan="{{group.touristGroupMemberList.length}}">
+        <button class="T-update T-action btn btn-xs btn-primary">修改</button>
+        <button class="T-delete T-action btn btn-xs btn-danger">删除</button>
+    </td>
+</tr>
+{{each group.touristGroupMemberList as rs index}}
+    {{if index > 0}}
+    <tr>
+        <td>{{rs.name}}</td>
+        <td>{{rs.mobileNumber}}</td>
+    </tr>
+    {{/if}}
+{{/each}}
+{{/each}}
+{{/if}}
+

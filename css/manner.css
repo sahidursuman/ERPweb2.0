@@ -3004,3 +3004,402 @@ input.ace[type="checkbox"] + .lbl{white-space: nowrap;}
 #desc-tooltip-containter2 .right{
     margin-right:20px;
 }
+
+
+
+
+/*车队订单start*/
+.green {
+    color:green;
+}
+.underline {
+    text-decoration: underline;
+}
+.pointer {
+    cursor: pointer;
+}
+.texta-l {
+    text-align: left;
+}
+.texta-r {
+    text-align: right;
+}
+
+.textd-line {
+    text-decoration: line-through;
+}
+.lineblock {
+    display: inline-block;
+}
+
+.user-info {
+    max-width: 180px;
+}
+
+.font-size20 {
+    font-size: 20px;
+}
+.min-width100 {
+    min-width: 100px;
+}
+.width30 {
+    width: 30px;
+}
+.width40 {
+    width: 40px;
+}
+.width50 {
+    width: 50px;
+}
+.width60 {
+    width: 60px;
+}
+.width80 {
+    width: 80px;
+}
+.width100 {
+    width: 100px;
+}
+.width150 {
+    width: 150px;
+}
+
+.width155 {
+    width: 155px;
+}
+.height5 {
+    height: 5px;
+}
+.mar-lr10 {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.mar-r10 {
+    margin-right: 10px;
+}
+.mar-r20 {
+    margin-right: 20px;
+}
+.mar-r30 {
+    margin-right: 30px;
+}
+.mar-l20 {
+    margin-left: 20px;
+}
+
+.font-r {
+    text-align: right;
+}
+
+.padding0 {
+    padding: 0;
+} 
+.padding-l15 {
+    padding-left: 15px;
+} 
+.padding-l20 {
+    padding-left: 20px;
+} 
+.padding-b10 {
+    padding-bottom: 10px;
+}
+.padding-b20 {
+    padding-bottom: 10px;
+}
+
+.margin0 {
+    margin: 0;
+}
+
+.mar-t10 {
+    margin-top: 10px;
+}
+.mar-t20 {
+    margin-top: 20px;
+}
+
+.mar-b10 {
+    margin-bottom: 10px;
+}
+.mar-b20 {
+    margin-bottom: 20px;
+}
+
+.border-top {
+    border-top: 1px dotted #ccc;
+}
+
+.border-bottom {
+    border-bottom: 1px dotted #ccc;
+}
+.border-bottom-solid {
+    border-bottom: 1px solid #ccc;
+}
+
+.border1 {
+    border: 1px solid #ccc;
+}
+
+.hide {
+    display: none;
+}
+
+.ui-dialog,.ui-jqdialog{
+    z-index:99999999!important
+}
+
+.functionArea{
+    margin-bottom: 15px;
+}
+.clearBoth:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.functionArea input.searchMain {
+    height:28px;
+    line-height: 28px;
+    border:1px solid #ccc;
+    min-width: 100px;
+    max-width: 110px;
+} 
+
+.layer-content{
+    padding: 15px 20px 25px 20px;
+}
+
+.border-top1 {
+    border-top: 1px solid #ddd;
+}
+
+.has-div .td-div {
+    padding: 8px;
+}
+
+.has-div .td-div span {
+    padding-right: 10px;
+}
+
+.remark-div {
+    text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+}
+/*.navbar{
+    height: 70px !important;
+    border-bottom: 4px solid #2b7dbc;
+}
+.pull-left{
+    margin-top: 15px;
+}
+.navbar-fixed-top+.main-container{
+    padding-top: 71px !important;
+}
+.light-blue{
+    margin-top: 10px;
+}*/
+.color-fff {
+    color: #fff;
+}
+.color-ccc {
+    color: #ccc;
+}
+.color-666 {
+    color: #666;
+}
+.color-999 {
+    color: #999;
+}
+.line-separated {
+    height: 20px;
+    width: 90%;
+    border-bottom: 1px solid #428bca;
+}
+.title-size {
+    font-size: 14px;
+    margin-top: 4px;
+    margin-left: 5px;
+    color: #428bca;
+    font-weight: bold;
+}
+
+table.va-middle>tbody>tr>td {
+    vertical-align: middle;
+}
+/*重写ace样式*/
+
+.table-text-center, .table-text-center tr th, .table-text-center tr td {
+    text-align: center;
+}
+input[type=checkbox].ace.ace-switch.ace-switch-6:checked+.lbl::before {
+    background-color: #87b87f;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    vertical-align: middle;
+}
+.table>thead>tr>td.has-div, .table>tbody>tr>td.has-div, .table>tfoot>tr>td.has-div {
+    padding: 0;
+}
+.table>thead>tr>td.schedule-has-div, .table>tbody>tr>td.schedule-has-div, .table>tfoot>tr>td.schedule-has-div {
+    padding: 0;
+}
+.table-text-center tr td.texta-l {
+    text-align: left;
+}
+/*autocomplete样式*/
+
+.ui-autocomplete {
+    z-index: 9999;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.mar-l-10{
+    margin-left: 10px;
+}
+.mar-l-20{
+    margin-left: 20px;
+}
+.mar-t-20{
+    margin-top: 20px;
+}
+.mar-t-30{
+    margin-top: 30px;
+}
+.font-s-12{
+    font-size: 12px;
+}
+.font-s-24{
+    font-size: 24px;
+}
+.font-s-20{
+    font-size: 20px;
+}
+
+.table-fixed {
+    table-layout: fixed;
+}
+
+.table-fixed td {
+    word-wrap: nowrap;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/**
+ * 设置自定义popover的样式
+ */
+
+#desc-tooltip-containter .popover-content {
+    /*min-width: 175px;*/
+    max-width: 260px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#desc-tooltip-containter2 .popover {
+    max-width: 600px;
+}
+/*  司机排期  */
+.schedule-mother-div {
+    height: 34px;
+    width: 100%;
+    position: relative;
+    margin-bottom: -34px;
+}
+
+.schedule-mother-div div.T-schedule-child-div{
+    cursor: pointer;
+    position: absolute;
+    height: 34px;
+    background: #00ccff;
+    opacity: .7;
+    line-height: 34px;
+    text-align: center;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.schedule-has-div .timediv {
+    width: 4.16666667%;
+    height: 34px;
+    border-right: 1px dotted #ccc;
+    float: left;
+}
+
+.T-driverList .table-text-center tr th{
+    padding-right: 0;
+    text-align: right;
+}
+
+/**------rewrite--ace--style--css--------*/
+label { font-size: 13px; }
+textarea, input[type="text"], input[type=password],
+input[type=datetime],input[type=datetime-local], input[type=date], 
+input[type=month], input[type=time], input[type=week], input[type=number],
+ input[type=email], input[type=url], input[type=search], input[type=tel], input[type=color] { font-size: 13px; padding: 6px 4px 6px;  color: #393939; }
+/**input控件的高度*/
+.form-control, input[type="text"], select { height: 28px;}
+/**表格字体行高*/
+.has-div .td-div { padding: 3px; }
+/**input控件、按钮统一高度*/
+.btn-xs, .btn-group-xs>.btn { padding-top:2px; padding-bottom: 2px; }
+.padding-bottom-10 { padding-bottom: 10px; }
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td { padding: 6px; }
+.form-group { margin-bottom: 9px; }
+
+/*
+.global-newOrder table.table { width: 90% !important;}
+.global-newOrder textarea { width: 90%; }
+.global-newOrder label.label-text { width: auto; padding-left: 10px;  }
+.global-newOrder .mar-l-198 { margin-left: -90px; } 
+.global-newOrder label.text-right { text-align: right; }
+.global-newOrder > button { width: 90%; }*/
+
+/**表格头部样式*/
+.table>thead>tr { background: #51b0c2!important; color: white!important; }
+body { font-family: "microsoft yahei"; }
+.tab-text_align { width: 150px;  text-align: center; }
+table.table-group { width: 87.5%; margin-left:38px; }
+
+body {
+    height: 100%;
+    width: 100%;
+}
+html, body, .main-container {
+    height: 100%;
+}
+.main-content-inner, .main-content-inner > .page-content, .main-content-inner > .page-content > .tab-content {
+    height:100%;
+    background-color:#f9fff9;
+}
+.sidebar+.main-content{
+    margin-left: 0;
+    margin-top: 0;
+    padding-left: 190px;
+    height: 100%;
+}
+.main-content-inner > .page-content {
+    padding: 41px 0 0 0;
+}
+#tabContent {
+    padding: 0;
+}
+.main-content-inner > .page-content > .tab-content > .tab-pane{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 20px 20px 15px 25px;
+    background-color: #f9fff9;
+}
+@media only screen and (max-width: 991px){
+    .sidebar.responsive+.main-content {
+        padding-left: 0;
+    }
+}
+.sidebar.menu-min+.main-content{
+    margin-left: 0;
+    padding-left: 43px;
+}
+/*车队订单end*/

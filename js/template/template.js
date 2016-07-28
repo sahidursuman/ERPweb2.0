@@ -527,5 +527,69 @@
         res;
     }), template.helper("isNeedShowDetail", function() {
         return 32 == IndexData.userInfo.travelAgencyId && 4 == IndexData.userInfo.financialCountAuth;
+    }), template.helper("getStatusIcon", function(status) {
+        switch (1 * status) {
+          case 0:
+            return '<i class="ace-icon fa fa-times red"></i>';
+
+          case 1:
+            return '<i class="ace-icon fa fa-check green"></i>';
+        }
+    }), template.helper("getStatusSwitch", function(status, name) {
+        switch (1 * status) {
+          case 0:
+            return '<label><input name="' + name + '" class="ace ace-switch ace-switch-6" type="checkbox" checked><span class="T-statusSwitch T-action lbl"></span></label>';
+
+          case 1:
+            return '<label><input name="' + name + '" class="ace ace-switch ace-switch-6" type="checkbox"><span class="T-statusSwitch T-action lbl"></span></label>';
+        }
+    }), template.helper("getLicenceLevel", function(level) {
+        for (var arr = [ "A1", "A2", "A3", "B1", "B2", "C1", "C2", "C3", "C4" ], selected = "", i = 0; i < arr.length; i++) selected += '<option value="' + arr[i] + '" ' + (level == arr[i] ? "selected" : "") + ">" + arr[i] + "</option>";
+        var html = [ '<select name="licenceLevel">', selected, "</select>" ];
+        return html.join("");
+    }), template.helper("getOrderStatusListBtn", function(status, isCompany) {
+        var html = "";
+        return isCompany ? (html = [ '<button class="T-view T-action btn btn-xs btn-yellow">查看</button> ' ], 
+        "0" == status ? html.push('<button class="T-confirm T-action btn btn-xs btn-primary">确认</button> <button class="T-refuse T-action btn btn-xs btn-danger">拒单</button> ') : "2" == status ? html.push('<button class="T-agree T-action btn btn-xs btn-primary">同意</button> <button class="T-disagree T-action btn btn-xs btn-danger">拒绝</button> ') : "1" == status && html.push('<button class="T-update T-action btn btn-xs btn-primary">修改</button> <button class="T-back T-action btn btn-xs btn-purple">退回</button> ')) : "0" == status || "6" == status ? html = [ '<button class="T-view T-action btn btn-xs btn-yellow">查看</button> ', '<button class="T-update T-action btn btn-xs btn-primary">修改</button> ', '<button class="T-cancel T-action btn btn-xs btn-danger">取消</button>' ] : ("1" == status || "2" == status || "3" == status || "5" == status || "4" == status || "7" == status) && (html = [ '<button class="T-view T-action btn btn-xs btn-yellow">查看</button> ' ], 
+        "1" == status && html.push('<button class="T-applyCancel T-action btn btn-xs btn-danger">申请取消</button>')), 
+        html.join("");
+    }), template.helper("getShiftTime", function(time, type) {
+        var html = [ '<option value="">请选择</option>' ];
+        if ("hour" == type) for (var i = 0; 24 > i; i++) {
+            var selected = time == i ? "selected" : "", ii = 10 > i ? "0" + i : i + "";
+            html.push('<option value="' + ii + '" ' + selected + ">" + ii + "时</option>");
+        } else if ("minute" == type) for (var i = 0; 60 > i; i++) {
+            var selected = time == i ? "selected" : "", ii = 10 > i ? "0" + i : i + "";
+            html.push('<option value="' + ii + '" ' + selected + ">" + ii + "分</option>");
+        }
+        return html.join("");
+    }), template.helper("stringify", function(data) {
+        return JSON.stringify(data);
+    }), template.helper("getOrderStatusText", function(type) {
+        switch (type) {
+          case 0:
+            return "待接单";
+
+          case 1:
+            return "已接单";
+
+          case 2:
+            return "商家申请取消";
+
+          case 3:
+            return "车队拒绝取消";
+
+          case 4:
+            return "车队同意取消";
+
+          case 5:
+            return "车队拒单";
+
+          case 6:
+            return "车队退回商家";
+
+          case 7:
+            return "商家主动取消";
+        }
     });
 }();
