@@ -41,7 +41,7 @@ define(function(require, exports) {
 	};
 
 	//发团安排搜索模块
-	tripPlan.listMainTripPlan = function () {
+	tripPlan.listMainTripPlan = function ($defaultDesc) {
 		$.ajax({
 			url: KingServices.build_url('tripPlan','getQueryTermsForArrange'),
 			type:"POST",
@@ -54,6 +54,7 @@ define(function(require, exports) {
 
 					tripPlan.$tab = $('#tab-arrange_all-content');
 					tripPlan.$searchArea = tripPlan.$tab.find('.T-search-tripPlan');
+					var $defaultDesc = tripPlan.$tab.find('select[name="order"]').val('desc');
 					tripPlan.listTripPlan();
 					tripPlan.init_eventMain();
 				}
@@ -176,7 +177,7 @@ define(function(require, exports) {
 	 * @param  {[type]} status        [状态]
 	 * @return {[type]}               [description]
 	 */
-	tripPlan.listTripPlan = function(page,$defaultDesc) {
+	tripPlan.listTripPlan = function(page) {
         // 修正页码
         page = page || 0;
 		var args = {};
@@ -195,7 +196,7 @@ define(function(require, exports) {
 					tripPlan.pageNo = page;
 					data.tripPlanList = JSON.parse(data.tripPlanList);
 					tripPlan.$tab.find('.T-tripPlanList').html(filterUnAuth(listTemplate(data)));
-					var $defaultDesc = tripPlan.$tab.find('select[name="order"]').val('desc');
+					
 					// 绑定翻页组件
 					laypage({
 					    cont: tripPlan.$tab.find('.T-pagenation'), //容器。值支持id名、原生dom对象，jquery对象,
