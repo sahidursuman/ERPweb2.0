@@ -2083,6 +2083,8 @@ Tools.setDatePicker = function($obj, isInputRange, options) {
              if ($end.val() && ($end.val() < start)) {
                  $end.val(start);
              }
+         }).on('change', function () {
+         	$first.trigger('changeDate');
          });
 
         if (!!$first.val()) {
