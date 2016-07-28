@@ -706,6 +706,7 @@ define(function(require, exports) {
                                 console.log(data.lineProductDay[i].includeRest);
                             };
                             console.log(data);
+                            data.showTravalList = (IndexData.userInfo.travelAgencyId == 293);
                             html = T.viewAccountsTemplate(data);
                             var viewAccountsLayer = layer.open({
                                 type: 1,
