@@ -2853,22 +2853,24 @@ define(function(require, exports) {
 			if(!!$that.data('priceid')) {
 				id = $that.data('priceid');
 			};
-			if ($that.find('input[name=startTime]').val() > $that.find('input[name=endTime]').val()) {
-				showMessageDialog('第【'+(index+1)+'】行的'+"开始时间不能大于结束时间");
-				return;
-			}else{
-				var args = {
-					id: id,
-					adultPrice: $that.find('input[name=adultPrice]').val(),
-					childPrice: $that.find('input[name=childPrice]').val(),
-					startTime: $that.find('input[name=startTime]').val(),
-					endTime: $that.find('input[name=endTime]').val()
-				}
-				travelLineData.productPriceList.push(args);
-			};
+			
+			var args = {
+				id: id,
+				adultPrice: $that.find('input[name=adultPrice]').val(),
+				childPrice: $that.find('input[name=childPrice]').val(),
+				startTime: $that.find('input[name=startTime]').val(),
+				endTime: $that.find('input[name=endTime]').val()
+			}
+			travelLineData.productPriceList.push(args);
 			
 		});
 
+		for(var k = 0;k<travelLineData.productPriceList.length;k++) {
+			if(travelLineData.productPriceList[k].startTime > travelLineData.productPriceList[k].endTime) {
+				showMessageDialog('第【'+(k+1)+'】行的'+"开始时间不能大于结束时间");
+				return;
+			}
+		}
 		console.log(travelLineData.productPriceList);
 		// 存放每天安排数据的数组
 		travelLineData.lineDayList = [];
