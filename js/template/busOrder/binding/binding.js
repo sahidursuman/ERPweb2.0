@@ -40,6 +40,7 @@ define(function(require, exports) {
             type: 'POST',
             data: {
                 travelAgency: IndexData.userInfo.travelAgencyShortName,
+                BUS_API_SECRECT_KEY: IndexData.userInfo.BUS_API_SECRECT_KEY,
                 searchData: JSON.stringify(searchData)
             },
             success: function (data) {
