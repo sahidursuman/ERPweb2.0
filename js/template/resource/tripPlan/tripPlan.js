@@ -54,7 +54,7 @@ define(function(require, exports) {
 
 					tripPlan.$tab = $('#tab-arrange_all-content');
 					tripPlan.$searchArea = tripPlan.$tab.find('.T-search-tripPlan');
-					tripPlan.listTripPlan(0,"");
+					tripPlan.listTripPlan();
 					tripPlan.init_eventMain();
 				}
 			}
