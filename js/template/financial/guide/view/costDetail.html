@@ -233,45 +233,50 @@
                     </div>
                 </div> -->
                 {{if !!guideArranges.otherIncomeList && guideArranges.otherIncomeList.length }}
-                <!-- 其它收入 -->
-                <div class="col-sm-12 widget-container-col print-mar-t-F20">
-                    <div class=" ui-sortable-handle">
-                            <h5 class="">
-                                <label class="middle title-size">其它收入</label>
-                                <span style="color:#443E3E;" class="font-w-bold mar-l-10 font-s-12"> 合计：<span class="T-NowpayOtherMoney F-float F-money" index="{{i}}">0</span></span>
-                            </h5>
-                        <div class="widget-body print-mar-t-F16">
-                            <div class="widget-main">
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                    <tr class="view-accountsPrint">
-                                        <th class="th-border">日期</th>
-                                        <th class="th-border">费用项目</th>
-                                        <th class="th-border">单价</th>
-                                        <th class="th-border">数量</th>
-                                        <th class="th-border">应收</th>
-                                        <th class="th-border">导收</th>
-                                        <th class="th-border">单据</th>
+                {{if guideArranges.otherIncomeList.length == 1 && guideArranges.otherIncomeList[0].isGuide === 0}}
+                {{else}}
+                    <!-- 其它收入 -->
+                    <div class="col-sm-12 widget-container-col print-mar-t-F20">
+                        <div class=" ui-sortable-handle">
+                                <h5 class="">
+                                    <label class="middle title-size">其它收入</label>
+                                    <span style="color:#443E3E;" class="font-w-bold mar-l-10 font-s-12"> 合计：<span class="T-NowpayOtherMoney F-float F-money" index="{{i}}">0</span></span>
+                                </h5>
+                            <div class="widget-body print-mar-t-F16">
+                                <div class="widget-main">
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr class="view-accountsPrint">
+                                            <th class="th-border">日期</th>
+                                            <th class="th-border">费用项目</th>
+                                            <th class="th-border">单价</th>
+                                            <th class="th-border">数量</th>
+                                            <th class="th-border">应收</th>
+                                            <th class="th-border">导收</th>
+                                            <th class="th-border">单据</th>
 
-                                    </tr></thead>
-                                    <tbody class="T-nowOtherMoney" index="{{i}}">
-                                    {{each guideArranges.otherIncomeList as item}}
-                                    <tr class="view-accountsPrint">
-                                        <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                                        <td>{{item.title}}</td>
-                                        <td><span class="F-float F-money">{{item.price}}</span></td>
-                                        <td><span class="F-float F-count">{{item.count}}</span></td>
-                                        <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
-                                        <td><span class="F-float F-money totalPayedMoney">{{item.needGetMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
-                                    </tr>
-                                    {{/each}} 
-                                    </tbody>
-                                </table>
+                                        </tr></thead>
+                                        <tbody class="T-nowOtherMoney" index="{{i}}">
+                                        {{each guideArranges.otherIncomeList as item}}
+                                            {{if item.isGuide}}
+                                                <tr class="view-accountsPrint">
+                                                    <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                                    <td>{{item.title}}</td>
+                                                    <td><span class="F-float F-money">{{item.price}}</span></td>
+                                                    <td><span class="F-float F-count">{{item.count}}</span></td>
+                                                    <td><span class="F-float F-money">{{item.needGetMoney}}</span></td>
+                                                    <td><span class="F-float F-money totalPayedMoney">{{item.needGetMoney}}</span></td>
+                                                    <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                                </tr>
+                                            {{/if}}
+                                        {{/each}} 
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {{/if}}
                 {{/if}}<!-- 结束现收 -->
 
                 <!-- 存在现付 -->
@@ -552,43 +557,48 @@
                 {{/if}}
                 
                 {{if !!guideArranges.otherList && guideArranges.otherList.length }}
-                <!-- 现付其它费用 -->
-                <div class="col-sm-12 widget-container-col print-mar-t-F20">
-                    <div class=" ui-sortable-handle">
-                            <h5 class="">
-                                <label class="middle  title-size">现付其他费用</label>
-                                <span style="color:#443E3E;" class="font-w-bold mar-l-10 font-s-12"> 合计：<span class="T-NowpayOthpayMoney F-float F-money" index="{{i}}">0</span></span>
-                            </h5>
-                        <div class="widget-body print-mar-t-F16">
-                            <div class="widget-main">
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead><tr class="view-accountsPrint">
-                                        <th class="th-border">日期</th>
-                                        <th class="th-border">费用项目</th>
-                                        <th class="th-border">单价</th>
-                                        <th class="th-border">数量</th>
-                                        <th class="th-border">支付类型</th>
-                                        <th class="th-border">导付</th>
-                                        <th class="th-border">单据</th>
-                                    </tr></thead>
-                                    <tbody class="T-nowPayOthMoney" index="{{i}}">
-                                    {{each guideArranges.otherList as item}}
-                                    <tr class="view-accountsPrint">
-                                        <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
-                                        <td>{{item.name}}</td>
-                                        <td><span class="F-float F-money">{{item.realPrice}}</span></td>
-                                        <td><span class="F-float F-count">{{item.realCount}}</span></td>
-                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
-                                        <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
-                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
-                                    </tr>
-                                    {{/each}}
-                                    </tbody>
-                                </table>
+                    {{if guideArranges.otherList.length === 1 && guideArranges.otherList[0].isGuide === 0}}
+                    {{else}}
+                        <!-- 现付其它费用 -->
+                        <div class="col-sm-12 widget-container-col print-mar-t-F20">
+                            <div class=" ui-sortable-handle">
+                                    <h5 class="">
+                                        <label class="middle  title-size">现付其他费用</label>
+                                        <span style="color:#443E3E;" class="font-w-bold mar-l-10 font-s-12"> 合计：<span class="T-NowpayOthpayMoney F-float F-money" index="{{i}}">0</span></span>
+                                    </h5>
+                                <div class="widget-body print-mar-t-F16">
+                                    <div class="widget-main">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead><tr class="view-accountsPrint">
+                                                <th class="th-border">日期</th>
+                                                <th class="th-border">费用项目</th>
+                                                <th class="th-border">单价</th>
+                                                <th class="th-border">数量</th>
+                                                <th class="th-border">支付类型</th>
+                                                <th class="th-border">导付</th>
+                                                <th class="th-border">单据</th>
+                                            </tr></thead>
+                                            <tbody class="T-nowPayOthMoney" index="{{i}}">
+                                            {{each guideArranges.otherList as item}}
+                                                {{if item.isGuide}}
+                                                    <tr class="view-accountsPrint">
+                                                        <td>{{item.dateTime | dateFormat: 'yyyy-MM-dd'}}</td>
+                                                        <td>{{item.name}}</td>
+                                                        <td><span class="F-float F-money">{{item.realPrice}}</span></td>
+                                                        <td><span class="F-float F-count">{{item.realCount}}</span></td>
+                                                         <td><span class="F-float F-money">{{item.realPayType}}</span></td>
+                                                        <td><span class="F-float F-money totalPayedMoney">{{item.realGuidePayMoney}}</span></td>
+                                                        <td><a href="javascript:void(0);" class="T-view-bill" url="{{item.billImage}}">{{if item.billImage }} 查看 {{/if}}</a></td>
+                                                    </tr>
+                                                {{/if}}
+                                            {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    {{/if}}
                 {{/if}}  <!-- 结束现付 -->
 
                 {{if !!guideArranges.selfRebateList && guideArranges.selfRebateList.length }}
