@@ -357,7 +357,7 @@ table tr td {
     background: #0d79b7;
 }
 
-.ace-nav>li> {
+.ace-nav>li {
     width: 85px;
 }
 
@@ -2788,8 +2788,6 @@ a.black span, .black, .black:hover, .black:focus{
 .table-inner-list li:first-child{
     border:none;
 }
-
-}
 .w-150{
     width: 150px
 }
@@ -3020,7 +3018,7 @@ input.ace[type="checkbox"] + .lbl{white-space: nowrap;}
 .illustrations img{
     width: 162px;
     height: 120px;
-    
+}
 .info{
     color: #999;
     font-size: 12px;
@@ -3311,7 +3309,7 @@ input[type=checkbox].ace.ace-switch.ace-switch-6:checked+.lbl::before {
 }
 
 .table-fixed td {
-    word-wrap: nowrap;
+    word-wrap: break-word;
 }
 
 .pointer {
