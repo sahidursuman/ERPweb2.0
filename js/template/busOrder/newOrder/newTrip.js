@@ -15,8 +15,8 @@ define(function(require, exports) {
 
     tripOrder.initModule = function (data) {
         main = require('./main').main;
-        tripOrder.add(1, '', data);
         tripOrder.authToken = data.authToken;
+        tripOrder.add(1, '', data);
     };
 
     tripOrder.add = function (type, id, changeData, authToken) {
