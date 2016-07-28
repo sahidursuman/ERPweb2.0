@@ -18,8 +18,8 @@ define(function(require, exports) {
 
     cityOrder.initModule = function (data) {
         main = require('./main').main;
-        cityOrder.add(1, '', data);
         cityOrder.authToken = data.authToken;
+        cityOrder.add(1, '', data);
     };
 
     cityOrder.add = function (type, id, changeData, authToken) {
