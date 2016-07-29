@@ -246,7 +246,10 @@ define(function(require, exports) {
             args.isConfirmAccount = $tab.find(".T-check-status").find("button").data("value");
             args.startCheck = $tab.find('.T-checkStartTime').val();
             args.endCheck = $tab.find('.T-checkEndTime').val();
-
+            args.businessName = $tab.find('input[name=businessName]').val();
+            args.businessGroupId = $tab.find('input[name=businessGroupId]').val();
+            args.groupName = $tab.find('input[name=groupName]').val();
+            args.groupId = $tab.find('input[name=groupId]').val();
             if (args.lineProductName === '全部') {
                 args.lineProductName = '';
             }
@@ -275,7 +278,10 @@ define(function(require, exports) {
                     data.type = type;
                     data.lineProductName = data.lineProductName || '全部';
                     data.accountStatus = args.accountStatus;
-
+                    data.businessName = args.businessName;
+                    data.businessGroupId = args.businessGroupId;
+                    data.groupName = args.groupName;
+                    data.groupId = args.groupId;
                     // 临时缓存
                     FinGuide.checkingTabLineProduct = data.lineProductList;
 
@@ -688,7 +694,11 @@ define(function(require, exports) {
                 isOuter : FinGuide.isOuter,
                 isConfirmAccount : $tab.find(".T-check-status").find("button").data("value"),
                 startCheck : $tab.find('.T-checkStartTime').val(),
-                endCheck : $tab.find('.T-checkEndTime').val()
+                endCheck : $tab.find('.T-checkEndTime').val(),
+                businessName: $tab.find('input[name=businessName]').val(),
+                businessGroupId: $tab.find('input[name=businessGroupId]').val(),
+                groupName: $tab.find('input[name=groupName]').val(),
+                groupId: $tab.find('input[name=groupId]').val()
             };
 
             if (args.lineProductName === '全部') {

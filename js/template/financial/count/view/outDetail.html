@@ -1734,7 +1734,8 @@
                                                     <th class="th-border">数量</th>
                                                     <th class="th-border">优惠</th>
                                                     <th class="th-border T-noprint">单据</th>
-                                                    <th class="th-border" colspan="3">应付</th>
+                                                    <th class="th-border">应付</th>
+                                                    <th class="th-border">应付合计</th>
                                                     <th class="th-border">结算</th>
                                                 </tr>
                                             </thead>
@@ -1768,10 +1769,7 @@
                                                                                     <span style="color:#bbb;">查看</span>
                                                                                 {{/if}}
                                                                             </td>
-                                                                            <td>
-                                                                                <span>{{payDetail.title}}</span>
-                                                                            </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
+                                                                            <td><span class="mar-r-3">{{payDetail.title}}</span><span class="F-float F-money">{{payDetail.money}}</span></td>
                                                                             <td rowspan="{{item.payTypeDetails.length}}">
                                                                                 <span class="F-float F-money">{{item.needPayAllMoney}}</span>
                                                                             </td>
@@ -1782,9 +1780,11 @@
                                                                     {{else}}
                                                                         <tr>
                                                                             <td>
-                                                                                <span>{{payDetail.title}}</span>
+                                                                                <span class="mar-r-3">{{payDetail.title}}</span>
+                                                                                <span class="F-float F-money">
+                                                                                    {{payDetail.money}}
+                                                                                </span>
                                                                             </td>
-                                                                            <td><span class="F-float F-money">{{payDetail.money}}</span></td>
                                                                         </tr>
                                                                     {{/if}}
                                                                 {{/each}}
@@ -1816,9 +1816,6 @@
                                                                         <span>-</span>
                                                                     </td>
                                                                     <td>
-                                                                        <span>-</span>
-                                                                    </td>
-                                                                    <td>
                                                                         <span class="F-float F-money">{{item.needPayAllMoney}}</span>
                                                                     </td>
                                                                     <td>
@@ -1830,7 +1827,7 @@
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr class="view-accountsPrint">
-                                                    <td colspan="8" style="text-align:left" class="T-sum-td">合计</td>
+                                                    <td colspan="7" style="text-align:left" class="T-sum-td">合计</td>
                                                     <td class="td-border">
                                                         <span class="F-float F-money">
                                                             {{tripPayMap.otherPayMap.sumNeedPayAllMoney}}

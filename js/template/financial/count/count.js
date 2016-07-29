@@ -527,11 +527,6 @@ define(function(require, exports){
 					//加载列表
 					Count.installList($ReimbursementId,tmp);
 
-					var $objB = $('#tab-financial_count-Reimbursement-content');
-					$objB.find('.T-guideAccount').off('click').on('click',function() {
-					var id = $objB.find('.financial-tripPlanId').val();
-					KingServices.viewFeeDetail(id);
-		});
 				}
 			}
 		});
@@ -545,6 +540,15 @@ define(function(require, exports){
 		//显示计算公式
 		$obj.find('.T-formula').on('click',function(){
 			Count.showFormula($obj);
+		});
+
+		//导游报账事件
+		var $guideAccount = $obj.find('.T-guideAccount');
+		$guideAccount.off('click').on('click',function(){
+			var id = $obj.find('.financial-tripPlanId').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			KingServices.viewFeeDetail(id);
 		});
 		// 禁用自动计算的判断条件
 		Count.loading = true;
