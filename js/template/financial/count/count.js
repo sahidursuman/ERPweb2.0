@@ -532,8 +532,6 @@ define(function(require, exports){
 		});
 	};
 	//单团报账页面事件
-	//var id = $obj.find('.financial-tripPlanId').val();
-			var pluginKey = 'plugin_print';
 	Count.reimbursementEvents = function($obj,data){
 		
 		//显示隐藏
