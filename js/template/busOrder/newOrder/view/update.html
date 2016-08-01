@@ -2,62 +2,78 @@
     <form class="form-horizontal clearBoth">
         <div class="">
             <div class="form-group">
-                <label class="col-sm-1 control-label no-padding-right min-width100">车队名称：</label>
-                <label class="col-sm-2 texta-l">{{order.companyName}}</label>
+                <label>车队名称：{{order.companyName}}</label>
             </div>
             <div class="form-group">
-                <label class="col-sm-1 control-label no-padding-right"><span class="red">*</span>请选择行程：</label>
-                <div class="T-tripSelectDiv col-sm-2">
-                    <input class="T-tripSelect ui-autocomplete-input col-sm-10" type="text" autocomplete="off" value="{{order.tripType.name}}" readonly>
+                <div class="T-tripSelectDiv inline mar-r20">
+                    <label><span class="red">*</span>请选择行程：</label>
+                    <input class="T-tripSelect ui-autocomplete-input" type="text" autocomplete="off" value="{{order.tripType.name}}" readonly>
                     <input type="hidden" name="position" value="{{order.tripType.position}}">
                     <input type="hidden" name="type" value="{{order.tripType.type}}">
                     <input type="hidden" name="tripTypeId" value="{{order.tripType.id}}">
                     <input type="hidden" name="id" value="{{order.id}}">
-                    <input type="hidden" name="companyName" value="{{order.companyName}}">
                 </div>
-                <span class="T-tripDate col-sm-6">
-                    <div class="form-group T-pickSendTime">
-                        <label class="col-sm-2 control-label no-padding-right"><span class="red">*</span>{{if order.tripType.type == '0'}}接{{else if order.tripType.type == '1'}}送{{/if}}团日期：</label>
-                        <div class="col-sm-4">
-                            <input class="T-datepicker col-sm-10" name="tripTime" type="text" value="{{order.tripTime}}">
+                <span class="T-tripDate">
+                    <div class="form-group T-pickSendTime inline">
+                        <div class="inline mar-r20">
+                            <label><span class="red">*</span>{{if order.tripType.type == '0'}}接{{else if order.tripType.type == '1'}}送{{/if}}团日期：</label><input class="T-datepicker T-tripDateChange width100" name="tripTime" type="text" value="{{order.tripTime}}">
                         </div>
-                        <label class="col-sm-2 control-label no-padding-right">
-                            <span class="T-tripPositionContent"><span class="red">*</span>{{if order.tripType.position == '0'}}航班号{{else if order.tripType.position == '1'}}班次{{/if}}</span>：
-                        </label>
-                        <div class="col-sm-4">
-                            <input class="col-sm-10" name="shiftNumber" type="text" value="{{order.shiftNumber}}">
+                        <div class="inline mar-r20">
+                            <label>
+                                <span class="red">*</span><span class="T-tripPositionContent lineblock width40">{{if order.tripType.position == '0'}}航班号{{else if order.tripType.position == '1'}}班次{{/if}}</span>：
+                            </label>
+                            <input class="width100" name="shiftNumber" type="text" value="{{order.shiftNumber}}">
+                        </div>
+                        <div class="inline mar-r20">
+                            <label><span class="red">*</span>{{if order.tripType.position == '0'}}{{if order.tripType.type == '0'}}抵达时间{{else}}起飞时间{{/if}}{{else}}{{if order.tripType.type == '0'}}到站时间{{else}}发车时间{{/if}}{{/if}}：</label>
+                            <input class="width100 T-datepicker T-tripDateShiftDate" name="shiftDate" type="text" value="{{order.shiftDate}}"> 
+                            <select name="shiftHour">
+                                {{#order.shiftHour | getShiftTime: 'hour'}}
+                            </select>
+                            <select name="shiftMinute">
+                                {{#order.shiftMinute | getShiftTime: 'minute'}}
+                            </select>
                         </div>
                     </div>
                 </span>
-                <label class="T-isRoundCheck col-sm-1 control-label no-padding-right">
+                <label class="T-isRoundCheck">
                     <input class="ace T-isRoundTrip" name="form-field-checkbox" type="checkbox" {{if order.isRoundTrip == 1}}checked{{/if}}>
                     <span class="lbl"> 需要往返</span>
                 </label>
             </div>
             <div class="form-group T-isRoundContent">
-                <span class="T-roundTrip col-sm-3" style="padding:0;">
+                <span class="T-roundTrip" style="padding:0;">
                 {{if order.isRoundTrip == '1'}}
-                    <label class="col-sm-4 control-label no-padding-right"><span class="red">*</span>请选择返程：</label>
-                    <div class="T-tripSelectDiv col-sm-8">
-                        <input class="T-roundTripSelect ui-autocomplete-input col-sm-10" type="text" autocomplete="off" value="{{order.roundTripType.name}}">
+                    <div class="T-tripSelectDiv inline mar-r20">
+                        <label><span class="red">*</span>请选择返程：</label>
+                        <input class="T-roundTripSelect ui-autocomplete-input" type="text" autocomplete="off" value="{{order.roundTripType.name}}">
                         <input type="hidden" name="roundPosition" value="{{order.roundTripType.position}}">
                         <input type="hidden" name="roundType" value="{{order.roundTripType.type}}">
                         <input type="hidden" name="roundTripTypeId" value="{{order.roundTripType.id}}">
                     </div>
                 {{/if}}
                 </span>
-                <span class="T-roundTripDate col-sm-6">
+                <span class="T-roundTripDate">
                 {{if order.isRoundTrip == '1'}}
-                    <div class="form-group T-pickSendTime">
-                        <label class="col-sm-2 control-label no-padding-right"><span class="red">*</span>{{if order.roundTripType.type == '0'}}接{{else if order.roundTripType.type == '1'}}送{{/if}}团日期：</label>
-                        <div class="col-sm-4">
-                            <input class="T-datepicker col-sm-10" name="roundTripTime" type="text" value="{{order.roundTripTime}}">
+                    <div class="form-group T-pickSendTime inline">
+                        <div class="inline mar-r20">
+                            <label><span class="red">*</span>{{if order.roundTripType.type == '0'}}接{{else if order.roundTripType.type == '1'}}送{{/if}}团日期：</label><input class="T-datepicker width100" name="roundTripTime" type="text" value="{{order.roundTripTime}}">
                         </div>
-                        <label class="col-sm-2 control-label no-padding-right">
-                            <span class="T-tripPositionContent"><span class="red">*</span>{{if order.roundTripType.position == '0'}}航班号{{else if order.roundTripType.position == '1'}}班次{{/if}}</span>：
-                        </label>
-                        <div class="col-sm-4">
-                            <input class="col-sm-10" name="roundShiftNumber" type="text" value="{{order.roundShiftNumber}}">
+                        <div class="inline mar-r20">
+                            <label>
+                                <span class="red">*</span><span class="T-tripPositionContent lineblock width40">{{if order.roundTripType.position == '0'}}航班号{{else if order.roundTripType.position == '1'}}班次{{/if}}</span>：
+                            </label>
+                            <input class="width100" name="roundShiftNumber" type="text" value="{{order.roundShiftNumber}}">
+                        </div>
+                        <div class="inline mar-r20">
+                            <label><span class="red">*</span>{{if order.roundTripType.position == '0'}}{{if order.roundTripType.type == '0'}}抵达时间{{else}}起飞时间{{/if}}{{else}}{{if order.roundTripType.type == '0'}}到站时间{{else}}发车时间{{/if}}{{/if}}：</label>
+                            <input class="width100 T-datepicker T-tripDateShiftDate" name="roundShiftDate" type="text" value="{{order.roundShiftDate}}"> 
+                            <select name="roundShiftHour">
+                                {{#order.roundShiftHour | getShiftTime: 'hour'}}
+                            </select>
+                            <select name="roundShiftMinute">
+                                {{#order.roundShiftMinute | getShiftTime: 'minute'}}
+                            </select>
                         </div>
                     </div>
                 {{/if}}

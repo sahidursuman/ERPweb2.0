@@ -98,6 +98,7 @@ define(function(require, exports) {
                     if (!type) {
                         orderData = data;
                         orderData.authToken = authToken;
+                        newOrder.authToken = authToken;
                         var isRoundTrip = orderData.order.isRoundTrip,
                             position = orderData.order.tripType.position,
                             tripType = orderData.order.tripType.type,
@@ -176,6 +177,12 @@ define(function(require, exports) {
         $tab.find('.T-saveOrder').on('click', function(event) {
             event.preventDefault();
             newOrder.saveOrder($tab, orderData.authToken);
+        });
+        $tab.find('.T-tripDateChange').on('changeDate', function() {
+            var $this = $(this),
+            value = $this.val(),
+            $parent = $this.closest('div.form-group');
+            $parent.find('.T-tripDateShiftDate').val(value);
         });
     };
 
@@ -284,30 +291,58 @@ define(function(require, exports) {
     };
 
     newOrder.setTripDateHtml = function($tab, isRoundTrip, type, position){
-        var html = ['<div class="form-group T-pickSendTime">',
-            '<label class="col-sm-2 control-label no-padding-right"><span class="red">*</span>'+(type == '0' ? "接团":"送团")+'日期：</label>',
-            '<div class="col-sm-4">',
-                '<input class="T-datepicker col-sm-10" name="'+(isRoundTrip == '0' ? "tripTime":"roundTripTime")+'" type="text" value="">',
-            '</div>',
-            '<label class="col-sm-2 control-label no-padding-right"><span class="red">*</span><span class="T-tripPositionContent">'+(position == '0' ? "航班号":"班次")+'</span>：</label>',
-            '<div class="col-sm-4">',
-                '<input class="col-sm-10" name="'+(isRoundTrip == '0' ? "shiftNumber":"roundShiftNumber")+'" type="text" value="">',
+        var hour = ['<option value="">请选择</option>'];
+        var minute = ['<option value="">请选择</option>'];
+        for (var i = 0; i < 24; i++) {
+           var ii = (i < 10) ? ('0' + i) : (i + '');
+            hour.push('<option value="' + ii + '">' + ii + '时</option>');
+        }
+
+        for (var j = 0; j < 60; j++) {
+            var jj = (j < 10) ? ('0' + j) : (j + '');
+            minute.push('<option value="' + jj + '">' + jj + '分</option>');
+        }
+        var html = ['<div class="form-group T-pickSendTime inline"> ',
+            '<div class="inline mar-r20"> ',
+                '<label> <span class="red">*</span>'+(type == '0' ? "接团":"送团")+'日期： </label>',
+                '<input class="T-datepicker T-tripDateChange width100" name="'+(isRoundTrip == '0' ? "tripTime":"roundTripTime")+'" type="text" value=""> ',
+            '</div> ',
+            '<div class="inline mar-r20"> ',
+                '<label> <span class="red">*</span><span class="T-tripPositionContent width40 lineblock">'+(position == '0' ? "航班号":"班次")+'</span>：</label> ',
+                '<input class="width100" name="'+(isRoundTrip == '0' ? "shiftNumber":"roundShiftNumber")+'" type="text" value=""> ',
+            '</div> ',
+            '<div class="inline mar-r20"> ',
+                '<label> <span class="red">*</span>' + ((position == '0') ? ((type == '0') ? '抵达时间' : '起飞时间') : ((type == '0') ? '到站时间' : '发车时间')) + '： </label> ',
+                '<input class="width100 T-datepicker T-tripDateShiftDate" name="'+(isRoundTrip == '0' ? "shiftDate":"roundShiftDate")+'" type="text" value=""> ',
+                '<select name="'+(isRoundTrip == '0' ? "shiftHour":"roundShiftHour")+'">',
+                    hour,
+                '</select> ',
+                '<select name="'+(isRoundTrip == '0' ? "shiftMinute":"roundShiftMinute")+'">',
+                    minute,
+                '</select> ',
             '</div>',
         '</div>'].join('');
 
-       if(isRoundTrip){
+        if(isRoundTrip){
             $tab.find('.T-roundTripDate').html(html);
-       }else{
+        }else{
             $tab.find('.T-tripDate').html(html);
-       }
-       Tools.setDatePicker($tab.find('.T-datepicker'));
-    },
+        }
+        Tools.setDatePicker($tab.find('.T-datepicker'));
+        $tab.find('.T-tripDateChange').on('changeDate', function() {
+            var $this = $(this),
+            value = $this.val(),
+            $parent = $this.closest('div.form-group');
+            $parent.find('.T-tripDateShiftDate').val(value);
+        });
+    };
 
     newOrder.listenTripChange = function ($tab) {
         
-        var roundTrip = ['<label class="col-sm-4 control-label no-padding-right min-width100"><span class="red">*</span>请选择返程：</label>',
-        '<div class="T-tripSelectDiv col-sm-8">',
-            '<input class="T-roundTripSelect col-sm-10" type="text">',
+        var roundTrip = [
+        '<div class="T-tripSelectDiv lineblock mar-r20">',
+            '<label><span class="red">*</span>请选择返程：</label> ',
+            '<input class="T-roundTripSelect" type="text">',
             '<input type="hidden" name="roundPosition">',
             '<input type="hidden" name="roundType">',
             '<input type="hidden" name="roundTripTypeId">',
@@ -515,9 +550,15 @@ define(function(require, exports) {
                 isRoundTrip: $tab.find('.T-isRoundTrip').prop('checked') ? 1 : 0,
                 tripTime: main.getValue($tab, 'tripTime'),
                 shiftNumber: main.getValue($tab, 'shiftNumber'),
+                shiftDate: main.getValue($tab, 'shiftDate'),
+                shiftHour: main.getValue($tab, 'shiftHour'),
+                shiftMinute: main.getValue($tab, 'shiftMinute'),
                 roundTripTime: main.getValue($tab, 'roundTripTime'),
                 roundShiftNumber: main.getValue($tab, 'roundShiftNumber'),
                 roundTripTypeId: main.getValue($tab, 'roundTripTypeId'),
+                roundShiftDate: main.getValue($tab, 'roundShiftDate'),
+                roundShiftHour: main.getValue($tab, 'roundShiftHour'),
+                roundShiftMinute: main.getValue($tab, 'roundShiftMinute'),
                 priceType: $tab.find('.T-carpooling').prop('checked') ? 1 : 0,
                 price: $tab.find('.T-carpooling').prop('checked') ? main.getValue($tab, 'carpoolingPrice') : main.getValue($tab, 'charterPrice'),
                 orderRemark: main.getValue($tab, 'orderRemark')
