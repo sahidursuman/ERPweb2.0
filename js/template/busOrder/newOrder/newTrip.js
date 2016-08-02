@@ -82,6 +82,7 @@ define(function(require, exports) {
                 Tools.descToolTip($tab.find('.T-ctrl-tip'), 1);
                 main = require('./main').main;
                 main.calcFee($tab);
+                main.viewOperationRecord($tab, id, authToken);
             }
         });
     };

@@ -218,6 +218,7 @@ define(function(require, exports) {
                 main = require('./main').main;
                 main.sortGroup($tab);
                 main.calcFee($tab);
+                main.viewOperationRecord($tab, id, authToken);
             }
         });
     };
