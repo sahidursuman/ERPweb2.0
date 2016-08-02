@@ -1,7 +1,8 @@
 define(function(require, exports) {
     var newOrder = require('./newOrder').newOrder,
         cityOrder = require('./newCity').cityOrder,
-        tripOrder = require('./newTrip').tripOrder;
+        tripOrder = require('./newTrip').tripOrder,
+        viewOperationRecordTemplate = require('./view/viewOperationRecord');
 
     var main = {};
 
@@ -100,6 +101,33 @@ define(function(require, exports) {
                     }
                     $this.autocomplete('option','source', tripList);
                     $this.autocomplete('search', '');
+                }
+            });
+        });
+    };
+
+    main.viewOperationRecord = function ($tab, id, authToken) {
+        $tab.find('.T-viewOperationRecord').on('click', function () {
+            $.ajax({
+                url: KingServices.build_url_bus('customer/order','viewBusOrderLog', authToken),
+                type: 'POST',
+                data: {
+                    busOrderId: id
+                },
+                success: function (data) {
+                    layer.open({
+                        type: 1,
+                        title: '操作记录',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '980px', //宽高
+                        zIndex: 1028,
+                        content: viewOperationRecordTemplate(data),
+                        scrollbar: false,
+                        success: function(){
+
+                        }
+                    });
+                    
                 }
             });
         });
