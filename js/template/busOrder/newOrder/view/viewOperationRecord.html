@@ -1,0 +1,16 @@
+<div class="T-viewOperationRecordContent container-fulid col-xs-12 mar-t20">
+    <table class="table table-striped table-bordered table-hover table-text-center">
+        <tr>
+            <th style="width: 145px;max-width: 145px;">处理时间</th>
+            <th style="width: 110px;max-width: 110px;">操作人</th>
+            <th>处理信息</th>
+        </tr>
+        {{each busOrderLogList as rs}}
+        <tr>
+            <td>{{rs.createTime}}</td>
+            <td>{{rs.operateRealName}}</td>
+            <td style="text-align: left;">{{rs.operateInfo}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
