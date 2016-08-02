@@ -96,21 +96,21 @@
                 </td>
                 <td class="has-div" rowspan="{{group.touristGroupMemberList.length}}">
                     <div class="{{if group.touristGroupMemberList.length == 1}}td-div{{/if}}" {{if group.touristGroupMemberList.length > 1}}style="padding-bottom:{{group.touristGroupMemberList.length*35/4-9}}px"{{/if}}>
-                        {{if group.type == '0'}}{{if group.position == '0'}}机场{{else}}火车站{{/if}}{{else}}{{group.hotelName}}{{/if}}
+                        {{if order.tripType.type == '0'}}{{if order.tripType.position == '0'}}机场{{else}}火车站{{/if}}{{else}}{{group.hotelName}}{{/if}}
                     </div>
-                    {{if group.isRoundTrip == '1'}}
+                    {{if order.isRoundTrip == '1'}}
                     <div class="border-top1 {{if group.touristGroupMemberList.length == 1}}td-div{{/if}}" {{if group.touristGroupMemberList.length > 1}}style="padding-top:{{group.touristGroupMemberList.length*35/4-9}}px"{{/if}}>
-                        {{if group.type == '0'}}{{group.roundHotelName}}{{else}}{{if group.position == '0'}}机场{{else}}火车站{{/if}}{{/if}}
+                        {{if order.roundTripType.type == '0'}}{{group.roundHotelName}}{{else}}{{if order.roundTripType.position == '0'}}机场{{else}}火车站{{/if}}{{/if}}
                     </div>
                     {{/if}}
                 </td>
                 <td class="has-div" rowspan="{{group.touristGroupMemberList.length}}">
                     <div class="{{if group.touristGroupMemberList.length == 1}}td-div{{/if}}" {{if group.touristGroupMemberList.length > 1}}style="padding-bottom:{{group.touristGroupMemberList.length*35/4-9}}px"{{/if}}>
-                        {{if group.type == '0'}}{{group.hotelName}}{{else}}{{if group.roundPosition == '0'}}机场{{else}}火车站{{/if}}{{/if}}
+                        {{if order.tripType.type == '0'}}{{group.hotelName}}{{else}}{{if order.tripType.position == '0'}}机场{{else}}火车站{{/if}}{{/if}}
                     </div>
-                    {{if group.isRoundTrip == '1'}}
+                    {{if order.isRoundTrip == '1'}}
                     <div class="border-top1 {{if group.touristGroupMemberList.length == 1}}td-div{{/if}}" {{if group.touristGroupMemberList.length > 1}}style="padding-top:{{group.touristGroupMemberList.length*35/4-9}}px"{{/if}}>
-                        {{if group.type == '0'}}{{if group.roundPosition == '0'}}机场{{else}}火车站{{/if}}{{else}}{{group.roundHotelName}}{{/if}}
+                        {{if order.roundTripType.type == '0'}}{{if order.roundTripType.roundPosition == '0'}}机场{{else}}火车站{{/if}}{{else}}{{group.roundHotelName}}{{/if}}
                     </div>
                     {{/if}}
                 </td>
