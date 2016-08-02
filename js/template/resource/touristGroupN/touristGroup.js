@@ -1398,7 +1398,6 @@ define(function(require, exports) {
      * @return {[type]}            [description]
      */
     touristGroup.updateMoneyAndGuest = function($that, optionType){
-        console.log(optionType);
         var html = "",
             data = {},
             title = "编辑信息",
@@ -1409,7 +1408,6 @@ define(function(require, exports) {
             moneyData = $tr.find('.T-receivable').data('json');
 
        
-        if(!!$tr.data('lineproductid')) {
             $.ajax({
                 url: KingServices.build_url('lineProduct','findProductPrice'),
                 type: 'POST',
@@ -1569,12 +1567,6 @@ define(function(require, exports) {
                     });
                 }
             });  
-        } else {
-            showMessageDialog('请选择行程');
-            return false;
-        }
-        
-        
     }
 
     /**
