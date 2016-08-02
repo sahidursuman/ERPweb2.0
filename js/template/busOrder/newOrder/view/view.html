@@ -15,13 +15,15 @@
         <div>
             <label class="lineblock width150">{{order.tripType.name}}</label>
             <label class="mar-r20">{{if order.tripType.type == '0'}}接{{else if order.tripType.type == '1'}}送{{/if}}团日期：{{order.tripTime}}</label>
-            <label><span class="lineblock width60 texta-r">{{if order.tripType.position == '0'}}航班号{{else if order.tripType.position == '1'}}班次{{/if}}：</span>{{order.shiftNumber}}</label>
+            <label class="mar-r20"><span class="lineblock width60 texta-r">{{if order.tripType.position == '0'}}航班号{{else if order.tripType.position == '1'}}班次{{/if}}：</span><span class="lineblock width80">{{order.shiftNumber}}</span></label>
+            <label>{{if order.tripType.position == '0'}}{{if order.tripType.type == '0'}}抵达时间{{else}}起飞时间{{/if}}{{else}}{{if order.tripType.type == '0'}}到站时间{{else}}发车时间{{/if}}{{/if}}：{{order.shiftDate}} {{order.shiftHour}}:{{order.shiftMinute}}</label>
         </div>
         {{if order.isRoundTrip == '1'}}
         <div>
             <label class="lineblock width150">{{order.roundTripType.name}}</label>
             <label class="mar-r20">{{if order.roundTripType.type == '0'}}接{{else if order.roundTripType.type == '1'}}送{{/if}}团日期：{{order.roundTripTime}}</label>
-            <label><span class="lineblock width60 texta-r">{{if order.roundTripType.position == '0'}}航班号{{else if order.roundTripType.position == '1'}}班次{{/if}}：</span>{{order.roundShiftNumber}}</label>
+            <label class="mar-r20"><span class="lineblock width60 texta-r">{{if order.roundTripType.position == '0'}}航班号{{else if order.roundTripType.position == '1'}}班次{{/if}}：</span><span class="lineblock width80">{{order.roundShiftNumber}}</span></label>
+            <label>{{if order.roundTripType.position == '0'}}{{if order.roundTripType.type == '0'}}抵达时间{{else}}起飞时间{{/if}}{{else}}{{if order.roundTripType.type == '0'}}到站时间{{else}}发车时间{{/if}}{{/if}}：{{order.roundShiftDate}} {{order.roundShiftHour}}:{{order.roundShiftMinute}}</label>
         </div>
         {{/if}}
     </div>
