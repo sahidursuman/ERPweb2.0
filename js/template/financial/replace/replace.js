@@ -64,7 +64,6 @@ define(function(require, exports) {
 			data: args
 		}).done(function(data){
 			if(showDialog(data)){
-                data.searchParam = args;
 				Tools.addTab(menuKey, "代订账务", listTemplate(data));
 				Replace.$tab = $('#tab-' + menuKey + '-content');
 				//绑定事件
