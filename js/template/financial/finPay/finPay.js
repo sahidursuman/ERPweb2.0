@@ -502,7 +502,7 @@ define(function(require, exports) {
             event.preventDefault();//阻止相应控件的默认事件
             var $that = $(this);
             // 设置选择的效果
-            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            $that.closest('ul').prevAll('button').data('value', $that.data('value')).children('span').text($that.text());
             FinPay.getList();
         });
 
