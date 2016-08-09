@@ -77,7 +77,7 @@ define(function(require, exports) {
                     plan.$tab.find('.T-status').off().on('click', 'a', function(event) {
                         event.preventDefault();
                         var $that = $(this);
-                        $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+                        $that.closest('ul').prevAll('button').data('value', $that.data('value')).children('span').text($that.text());
                         plan.$tab.data('searchEdit', true);
                         plan.listPlan(0);
                     });

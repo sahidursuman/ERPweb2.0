@@ -92,7 +92,7 @@ define(function(require, exports){
         $tab.find(".T-borrow-status a").off().on('click',function(event){
             event.preventDefault();
             var $that = $(this);
-            $that.closest('ul').prev().data('value', $that.data('value')).children('span').text($that.text());
+            $that.closest('ul').prevAll('button').data('value', $that.data('value')).children('span').text($that.text());
             guideBorrow.getList({pageNo : 0},$tab);
         });
 

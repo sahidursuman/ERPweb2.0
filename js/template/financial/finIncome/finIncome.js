@@ -349,7 +349,7 @@ define(function(require, exports) {
             var $that = $(this);
             
             // 设置选择的效果
-            $that.closest('ul').prev().attr('data-value', $that.data('value')).children('span').text($that.text());
+            $that.closest('ul').prevAll('button').attr('data-value', $that.data('value')).children('span').text($that.text());
             FinIncome.$tab.data('searchEdit',true);
             FinIncome.getList();
         });

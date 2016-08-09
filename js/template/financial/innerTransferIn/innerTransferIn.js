@@ -145,7 +145,7 @@ define(function(require, exports) {
             event.preventDefault(); 
             var $this = $(this);
             // 设置选择的效果
-            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            $this.closest('ul').prevAll('button').data('value', $this.data('value')).children('span').text($this.text());
             FinTransIn.getList({pageNo : 0},$tab);
         });
         $tab.find('.T-btn-search').on('click', function(event) {
@@ -325,7 +325,7 @@ define(function(require, exports) {
             event.preventDefault(); 
             var $this = $(this);
             // 设置选择的效果
-            $this.closest('ul').prev().data('value', $this.data('value')).children('span').text($this.text());
+            $this.closest('ul').prevAll('button').data('value', $this.data('value')).children('span').text($this.text());
             args.pageNo = 0;
             if(type == 1){
                 FinTransIn.getCheckList(args,$tab,1);
