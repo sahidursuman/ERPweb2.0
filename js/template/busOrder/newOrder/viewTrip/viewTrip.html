@@ -3,7 +3,7 @@
         <label class="mar-r20">订单状态：<span class="orange">{{order.orderStatus | getOrderStatusText}}</span></label>
         <label class="mar-r20">商家申请价：<span class="{{if order.orderStatus == '1' || order.orderStatus == '3'}}textd-line color-999{{else}}orange{{/if}}">￥{{order.needPayMoney}}</span></label>
         {{if order.orderStatus == '1' || order.orderStatus == '3'}}
-        <label class="mar-r20">回复价：<span class="orange">￥{{order.comfirmNeedPayMoney}}</span></label>
+        <label class="mar-r20">回复价：<span class="orange">￥{{order.comfirmNeedPayMoney}}</span>{{if !!order.confirmNeedPayMoneyRemark}}(备注：{{order.confirmNeedPayMoneyRemark}}){{/if}}</label>
         {{/if}}
         <label>总现收：￥{{order.driverIncomeMoney}}</label>
         <div class="inline pull-right">
