@@ -130,9 +130,11 @@
         <div style="margin-top:5px;float:left;width:90px;text-align:center;">
             <a href="javascript:void(0);" class="T-tripAccount">单团核算表</a>
         </div>
-        <div style="margin-top:5px;float:left;width:145px;text-align:center;">
-            <a href="javascript:void(0);" class="T-innerTransAccount">单团核算表(中转,外转)</a>
-        </div>
+        {{if agencyId == 105}}
+            <div style="margin-top:5px;float:left;width:145px;text-align:center;">
+                <a href="javascript:void(0);" class="T-innerTransAccount">单团核算表(中转,外转)</a>
+            </div>
+        {{/if}}
         {{if isFinance && tripPlan.billStatus > 0}}
         <div style="margin-top:5px;float:left;margin-left:30px;">
             <label class="pos-rel">

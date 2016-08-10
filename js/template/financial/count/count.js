@@ -191,7 +191,8 @@ define(function(require, exports){
 			var $that = $(this),
 				id = $that.closest('tr').attr('id'),
 				billStatus = $that.closest('tr').attr('billStatus'),
-				guideFinancialExamine = $that.closest('tr').attr('guideFinancialExamine');
+				guideFinancialExamine = $that.closest('tr').attr('guideFinancialExamine'),
+				agencyId = $that.closest('tr').data('agencyid');
 			if($that.hasClass('T-update')){
 				
 				//未报账
@@ -202,6 +203,7 @@ define(function(require, exports){
 					showMessageDialog('该团导游账务已对账，不能修改！');
 				}else{
 					//审核事件
+					Count.agencyid = agencyId;
 					Count.updateExamine(id);
 				}
 			}else if($that.hasClass('T-account')){
@@ -220,6 +222,7 @@ define(function(require, exports){
 			}else if($that.hasClass('T-detail')){
 				//单团明细
 				var tripId = $(this).attr('data-entity-id');
+				Count.agencyid = agencyId;
 				Count.viewTripDetail(tripId);
 			} else if($that.hasClass('T-showLineInfo')){
 				var $tr = $that.closest('tr');
@@ -309,6 +312,7 @@ define(function(require, exports){
 						WEB_IMG_URL_BIG:data.WEB_IMG_URL_BIG,
 						WEB_IMG_URL_SMALL:data.WEB_IMG_URL_SMALL,
 	                    id: $id,
+	                    agencyId: Count.agencyid,
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                Count.guide = data.guideArranges;
@@ -352,6 +356,13 @@ define(function(require, exports){
 			var pluginKey = 'plugin_print';
 			Tools.loadPluginScript(pluginKey);
 			Count.viewTripAccount(id);
+		});
+		//按钮事件--单团核算表(包含中转、外转)
+		$obj.find('.T-innerTransAccount').off('click').on('click',function(){
+			var id = $obj.find('[name=financialTripPlanId]').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			Count.viewTripAccount(id,'transfer');
 		});
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
@@ -951,8 +962,10 @@ define(function(require, exports){
 						WEB_IMG_URL_BIG:data.WEB_IMG_URL_BIG,
 						WEB_IMG_URL_SMALL:data.WEB_IMG_URL_SMALL,
 	                    id: $id,
+	                    agencyId: Count.agencyid,
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
+	                console.log(tmp);
 					if(isAuth("1190002")){
                         tmp.isOp = true;
                     };

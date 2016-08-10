@@ -16,7 +16,7 @@
     <tbody class="T-count-list"> 
     {{each tripPlanList as financialTripPlan}}
         {{if financialTripPlan != null}}
-        <tr id="{{financialTripPlan.id}}" billStatus="{{financialTripPlan.tripPlan.billStatus}}" guideFinancialExamine = "{{financialTripPlan.guideFinancialExamine}}">
+        <tr id="{{financialTripPlan.id}}" billStatus="{{financialTripPlan.tripPlan.billStatus}}" guideFinancialExamine = "{{financialTripPlan.guideFinancialExamine}}" data-agencyid="{{searchParam.travelAgencyId}}">
         <td class="h-touristGroupInfo" style="min-width:50px">
             <p class="h-orderNumber">{{financialTripPlan.tripPlan.tripNumber}}</p>
             <p class="h-lineName">
