@@ -98,6 +98,18 @@ define(function(require, exports) {
                 main.deleteGroup($tab, $this, $tr, id);
             }
         });
+
+        function positionNameView() {
+            var type = $tab.find('[name=cityType]').val();
+            var positionName = type == 1 ? '下车点' : '上车点';
+            $tab.find('.T-positionName').text(positionName);
+        }
+
+        positionNameView();
+
+        $tab.find('[name=cityType]').on('change', function() {
+            positionNameView();
+        });
     };
 
     /**
@@ -236,7 +248,8 @@ define(function(require, exports) {
                 togetherMinute: main.getValue($tab, 'togetherMinute'),
                 priceType: 1,
                 price: main.getValue($tab, 'carpoolingPrice'),
-                orderRemark: main.getValue($tab, 'orderRemark')
+                orderRemark: main.getValue($tab, 'orderRemark'),
+                cityType: main.getValue($tab, 'cityType')
             },
             touristGroupJson: [],
             touristGroupDelJson: [],
