@@ -32,7 +32,16 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-1 control-label no-padding-right min-width100"><span class="red">*</span>目的地：</label>
+                <label class="col-sm-1 control-label no-padding-right min-width100"><span class="red">*</span>中转类型</label>
+                <div class="col-sm-2">
+                    <select name="cityType">
+                        <option value="1" {{if order.cityType == 1}}selected{{/if}}>出团集合</option>
+                        <option value="2" {{if order.cityType == 2}}selected{{/if}}>散团回送</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label no-padding-right min-width100"><span class="red">*</span><span class="T-positionName">{{if order.cityType == 1}}下车点{{else if order.cityType == 2}上车点}{{/if}}</span>：</label>
                 <div class="col-sm-2">
                     <input name="togetherPosition" type="text" value="{{order.togetherPosition}}">
                 </div>
