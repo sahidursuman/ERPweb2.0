@@ -2877,7 +2877,11 @@ a.black span, .black, .black:hover, .black:focus{
         width: auto !important;
         padding: 40px !important;
     }
-
+    
+    #tab-financial_count-outTransferDetail-content {
+        width: auto !important;
+        padding: 40px !important;
+    }
     .view-TranAccountsPrint th,td{
         font-family: '宋体';
         font-size: 12px !important;

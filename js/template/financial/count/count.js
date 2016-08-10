@@ -6,6 +6,7 @@ define(function(require, exports){
 		Reimbursement = require("./view/Reimbursement"),
 		qualityTempLate = require("./view/quality"),
 		outDetailTempLate = require("./view/outDetail"),
+		outTransferDetailTemplate = require('./view/outInnerTransferDetail'),
 		tripDetailTempLate = require("./view/tripDetail"),
 		viewLogTemplate = require("./view/viewLog"),
 		shopArrangeTemplate = require('./view/shopArrange'),
@@ -190,7 +191,8 @@ define(function(require, exports){
 			var $that = $(this),
 				id = $that.closest('tr').attr('id'),
 				billStatus = $that.closest('tr').attr('billStatus'),
-				guideFinancialExamine = $that.closest('tr').attr('guideFinancialExamine');
+				guideFinancialExamine = $that.closest('tr').attr('guideFinancialExamine'),
+				agencyId = $that.closest('tr').data('agencyid');
 			if($that.hasClass('T-update')){
 				
 				//未报账
@@ -201,6 +203,7 @@ define(function(require, exports){
 					showMessageDialog('该团导游账务已对账，不能修改！');
 				}else{
 					//审核事件
+					Count.agencyid = agencyId;
 					Count.updateExamine(id);
 				}
 			}else if($that.hasClass('T-account')){
@@ -219,6 +222,7 @@ define(function(require, exports){
 			}else if($that.hasClass('T-detail')){
 				//单团明细
 				var tripId = $(this).attr('data-entity-id');
+				Count.agencyid = agencyId;
 				Count.viewTripDetail(tripId);
 			} else if($that.hasClass('T-showLineInfo')){
 				var $tr = $that.closest('tr');
@@ -308,6 +312,7 @@ define(function(require, exports){
 						WEB_IMG_URL_BIG:data.WEB_IMG_URL_BIG,
 						WEB_IMG_URL_SMALL:data.WEB_IMG_URL_SMALL,
 	                    id: $id,
+	                    agencyId: Count.agencyid,
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
 	                Count.guide = data.guideArranges;
@@ -351,6 +356,13 @@ define(function(require, exports){
 			var pluginKey = 'plugin_print';
 			Tools.loadPluginScript(pluginKey);
 			Count.viewTripAccount(id);
+		});
+		//按钮事件--单团核算表(包含中转、外转)
+		$obj.find('.T-innerTransAccount').off('click').on('click',function(){
+			var id = $obj.find('[name=financialTripPlanId]').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			Count.viewTripAccount(id,'transfer');
 		});
 		//导游报账事件
 		var $guideAccount = $obj.find('.T-guideAccount');
@@ -950,8 +962,10 @@ define(function(require, exports){
 						WEB_IMG_URL_BIG:data.WEB_IMG_URL_BIG,
 						WEB_IMG_URL_SMALL:data.WEB_IMG_URL_SMALL,
 	                    id: $id,
+	                    agencyId: Count.agencyid,
 	                    financialTripPlanId:data.financialTripPlanId
 	                };
+	                console.log(tmp);
 					if(isAuth("1190002")){
                         tmp.isOp = true;
                     };
@@ -1381,6 +1395,13 @@ define(function(require, exports){
 			Tools.loadPluginScript(pluginKey);
 			Count.viewTripAccount(id);
 		});
+		//按钮事件--单团核算表(包含中转、外转)
+		$obj.find('.T-innerTransAccount').off('click').on('click',function(){
+			var id = $obj.find('[name=financialTripPlanId]').val();
+			var pluginKey = 'plugin_print';
+			Tools.loadPluginScript(pluginKey);
+			Count.viewTripAccount(id,'transfer');
+		});
 		//查看图片事件
 		$listObj.find('.btn-view').off('click').on('click',function(){
 			FinancialService.viewBillImage(this);
@@ -1570,9 +1591,14 @@ define(function(require, exports){
 	};
 	
 	//单团核算表
-	Count.viewTripAccount = function(id){
+	Count.viewTripAccount = function(id,type){
+		var method = 'getTripPlanAccountingDetail';
+		//type为transfer表示查询包含中转外装的单团核算表
+		if(!!type && type == 'transfer') {
+			method = 'getTripPlanAccounting';
+		}
 		$.ajax({
-			url:KingServices.build_url('financialTripPlan','getTripPlanAccountingDetail'),
+			url:KingServices.build_url('financialTripPlan',method),
 			data:{
 				id:id
 			},
@@ -1581,7 +1607,7 @@ define(function(require, exports){
 			success:function(data){
 				if(showDialog(data)){
 					//校验每个明细tab是否应该显示
-					var showJson = Count.isShowTabByData(data);
+					var showJson = Count.isShowTabByData(data,type);
 					data.showJson = showJson;
 					var guideManageFee = data.tripIncomeMap.guideIncomeMap.guideIncomeMapList;
 					for(var i = 0;i<guideManageFee.length;i++){
@@ -1610,10 +1636,16 @@ define(function(require, exports){
 					data.tripPayMap.selfPayPayMap.selfpPayPayMapList = Count.mergeSourse(data.tripPayMap.selfPayPayMap.selfpPayPayMapList, 'selfPayName');
 
 					var html = outDetailTempLate(data);
-					Tools.addTab(menuKey+'-outDetail','单团核算',html);
+					var tabId = '-outDetail',title = '单团核算';
+					if(!!type && type == 'transfer') {
+						html = outTransferDetailTemplate(data);
+						tabId = '-outTransferDetail';
+						title = '单团核算(含中/外转)';
+					};
+					Tools.addTab(menuKey+tabId,title,html);
 
 					//打印单团核算页面
-					var $outDetailTab = $("#tab-"+menuKey+'-outDetail'+"-content");
+					var $outDetailTab = $("#tab-"+menuKey+tabId+"-content");
 					$outDetailTab.off('click').on('click','.T-export',function(){
 						Count.exportsOutDetail($outDetailTab);
 					});
@@ -1627,7 +1659,6 @@ define(function(require, exports){
 		});
 		
 	};
-
 	//合并相同资源的数据
 	Count.mergeSourse = function(data, key) {
 		// 1. 排序
@@ -1698,15 +1729,19 @@ define(function(require, exports){
 		return ret
 	};
 	//校验每个明细tab是否应该显示
-	Count.isShowTabByData = function(data){
+	Count.isShowTabByData = function(data,type){
 		var showJson = {};
 		showJson.incomeShowFlag = false;
 		showJson.costShowFlag = false;
+		showJson.innerCostShowFlag = false;
 		showJson.tripInMapCount = 0;
 		showJson.costMapCount = 0;
+		showJson.innerCostCount = 0;
 		var tripInMap = data.tripIncomeMap;
 		var tripPayMap = data.tripPayMap;
-		var tripTransitPayMap = data.tripTransitPayMap;
+		var tripTransitPayMap = '';
+		
+		
 		//判断发团收入明细
 		if(tripInMap.groupIncomeMap.groupIncomeMapList.length == 0){
 			showJson.tripInMapCount += 1;
@@ -1753,6 +1788,25 @@ define(function(require, exports){
 			showJson.costMapCount += 1;
 		};
 
+		//判断中转成本明细
+		if(!!type && type == 'transfer') {
+			tripTransitPayMap = data.outArrangeMap.outReArrange;
+			if(tripTransitPayMap.busList.length == 0) {
+				showJson.innerCostCount += 1;
+			}
+			if(tripTransitPayMap.hotelList.length == 0) {
+				showJson.innerCostCount += 1;
+			}
+			if(tripTransitPayMap.otherList.length == 0) {
+				showJson.innerCostCount += 1;
+			}
+			if(tripTransitPayMap.restaurantList.length == 0) {
+				showJson.innerCostCount += 1;
+			}
+			if(tripTransitPayMap.ticketList.length == 0) {
+				showJson.innerCostCount += 1;
+			}
+		}
 		
 		//判断赋值
 		if(showJson.tripInMapCount == 5){
@@ -1761,6 +1815,9 @@ define(function(require, exports){
 		if(showJson.costMapCount == 9){
 			showJson.costShowFlag = true;
 		};
+		if(showJson.innerCostCount == 5) {
+			showJson.innerCostShowFlag = true;
+		}
 		
 		return showJson;
 	};
