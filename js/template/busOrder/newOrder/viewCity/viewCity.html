@@ -18,7 +18,8 @@
         <div>
             <label class="mar-r30">{{order.tripType.name}}</label>
             <label class="mar-r30">任务日期：{{order.tripTime}}</label>
-            <label class="mar-r30">目的地：{{order.togetherPosition}}</label>
+            <label class="mar-r30">中转类型：{{if order.cityType == 1}}出团集合{{else if order.cityType == 2}}散团回送{{/if}}</label>
+            <label class="mar-r30">{{if order.cityType == 1}}下车点{{else if order.cityType == 2}}上车点{{/if}}：{{order.togetherPosition}}</label>
             <label class="mar-r30">导游：{{order.guideName}}</label>
             <label class="mar-r30">导游电话：{{order.guideMobileNumber}}</label>
             <label>集合时间：{{order.togetherHour}}:{{order.togetherMinute}}</label>
