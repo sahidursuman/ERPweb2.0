@@ -1792,19 +1792,19 @@ define(function(require, exports){
 		if(!!type && type == 'transfer') {
 			tripTransitPayMap = data.outArrangeMap.outReArrange;
 			if (!!tripTransitPayMap) {
-				if(tripTransitPayMap.busList.length == 0) {
+				if(!!tripTransitPayMap.busList && tripTransitPayMap.busList.length == 0) {
 					showJson.innerCostCount += 1;
 				}
-				if(tripTransitPayMap.hotelList.length == 0) {
+				if(!!tripTransitPayMap.hotelList && tripTransitPayMap.hotelList.length == 0) {
 					showJson.innerCostCount += 1;
 				}
-				if(tripTransitPayMap.otherList.length == 0) {
+				if(!!tripTransitPayMap.otherList && tripTransitPayMap.otherList.length == 0) {
 					showJson.innerCostCount += 1;
 				}
-				if(tripTransitPayMap.restaurantList.length == 0) {
+				if(!!tripTransitPayMap.restaurantList && tripTransitPayMap.restaurantList.length == 0) {
 					showJson.innerCostCount += 1;
 				}
-				if(tripTransitPayMap.ticketList.length == 0) {
+				if(!!tripTransitPayMap.ticketList && tripTransitPayMap.ticketList.length == 0) {
 					showJson.innerCostCount += 1;
 				}
 			} else {
