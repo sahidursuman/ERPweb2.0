@@ -1791,21 +1791,26 @@ define(function(require, exports){
 		//判断中转成本明细
 		if(!!type && type == 'transfer') {
 			tripTransitPayMap = data.outArrangeMap.outReArrange;
-			if(tripTransitPayMap.busList.length == 0) {
-				showJson.innerCostCount += 1;
+			if (!!tripTransitPayMap) {
+				if(tripTransitPayMap.busList.length == 0) {
+					showJson.innerCostCount += 1;
+				}
+				if(tripTransitPayMap.hotelList.length == 0) {
+					showJson.innerCostCount += 1;
+				}
+				if(tripTransitPayMap.otherList.length == 0) {
+					showJson.innerCostCount += 1;
+				}
+				if(tripTransitPayMap.restaurantList.length == 0) {
+					showJson.innerCostCount += 1;
+				}
+				if(tripTransitPayMap.ticketList.length == 0) {
+					showJson.innerCostCount += 1;
+				}
+			} else {
+				showJson.innerCostCount = 5
 			}
-			if(tripTransitPayMap.hotelList.length == 0) {
-				showJson.innerCostCount += 1;
-			}
-			if(tripTransitPayMap.otherList.length == 0) {
-				showJson.innerCostCount += 1;
-			}
-			if(tripTransitPayMap.restaurantList.length == 0) {
-				showJson.innerCostCount += 1;
-			}
-			if(tripTransitPayMap.ticketList.length == 0) {
-				showJson.innerCostCount += 1;
-			}
+			
 		}
 		
 		//判断赋值
