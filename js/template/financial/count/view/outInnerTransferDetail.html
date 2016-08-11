@@ -353,48 +353,54 @@
                                             <tbody>
                                                 {{if tripIncomeMap != null}}
                                                     {{if tripIncomeMap.outTransferNeed != null && tripIncomeMap.outTransferNeed != ""}}
-                                                        <tr class="view-accountsPrint">
-                                                            <td style="text-align: left;"> 
-                                                                <p>收客单号：{{tripIncomeMap.outTransferNeed.orderNumber}}</p> 
-                                                                <p>{{tripIncomeMap.outTransferNeed.lineProductName}}</p>
-                                                            </td>
-                                                            <td>
-                                                                <span>
-                                                                    {{tripIncomeMap.outTransferNeed.partnerAgencyName}}<br>
-                                                                    {{tripIncomeMap.outTransferNeed.partnerAgencyContactName}}<br>
-                                                                    {{tripIncomeMap.outTransferNeed.partnerAgencyContactMobile}}
-                                                                </span>
-                                                            </td>
-                                                            
-                                                            <td>    
-                                                                <span>
-                                                                    {{tripIncomeMap.outTransferNeed.adultCount}}大{{tripIncomeMap.outTransferNeed.childCount}}小<br>
-                                                                    {{if tripIncomeMap.outTransferNeed.touristContactName != null 
-                                                                        && tripIncomeMap.outTransferNeed.touristContactName != ""}}
-                                                                        {{tripIncomeMap.outTransferNeed.touristContactName}}
-                                                                    {{else}}
-                                                                        -
-                                                                    {{/if}}
-                                                                    <br>
-                                                                    {{if tripIncomeMap.outTransferNeed.touristContactMobile != null 
-                                                                        && tripIncomeMap.outTransferNeed.touristContactMobile != ""}}
-                                                                        {{tripIncomeMap.outTransferNeed.touristContactMobile}}
-                                                                    {{else}}
-                                                                        -
-                                                                    {{/if}}
-                                                                </span>
-                                                            </td>
-                                                            
-                                                            <td>
-                                                                <span class="F-float F-money">{{tripIncomeMap.outTransferNeed.needPayAllMoney}}</span>
-                                                            </td>
-                                                        </tr>
+                                                        {{if tripIncomeMap.outTransferNeed.tripIncomeMaps.length}}
+                                                            {{each tripIncomeMap.outTransferNeed.tripIncomeMaps as item index}}
+                                                                {{if item.needPayAllMoney != 0}}
+                                                                    <tr class="view-accountsPrint">
+                                                                        <td style="text-align: left;"> 
+                                                                            <p>收客单号：{{item.orderNumber}}</p> 
+                                                                            <p>{{item.lineProductName}}</p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span>
+                                                                                {{item.partnerAgencyName}}<br>
+                                                                                {{item.partnerAgencyContactName}}<br>
+                                                                                {{item.partnerAgencyContactMobile}}
+                                                                            </span>
+                                                                        </td>
+                                                                        
+                                                                        <td>    
+                                                                            <span>
+                                                                                {{item.adultCount}}大{{item.childCount}}小<br>
+                                                                                {{if item.touristContactName != null 
+                                                                                    && item.touristContactName != ""}}
+                                                                                    {{item.touristContactName}}
+                                                                                {{else}}
+                                                                                    -
+                                                                                {{/if}}
+                                                                                <br>
+                                                                                {{if item.touristContactMobile != null 
+                                                                                    && item.touristContactMobile != ""}}
+                                                                                    {{item.touristContactMobile}}
+                                                                                {{else}}
+                                                                                    -
+                                                                                {{/if}}
+                                                                            </span>
+                                                                        </td>
+                                                                        
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{item.needPayAllMoney}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{/if}}
+                                                            {{/each}}
+                                                        {{/if}}
                                                     {{/if}}
                                                 {{/if}}
                                                 <tr>
                                                     <td colspan="3" style="text-align:left">合计</td>
                                                     <td class="td-border">
-                                                    <span class="F-float F-money">{{tripIncomeMap.outTransferNeed.needPayAllMoney}}</span></td>
+                                                    <span class="F-float F-money">{{tripIncomeMap.outTransferNeed.sumNeedPayAllMoneys}}</span></td>
                                                 </tr>
                                             </tbody>
                                         </table>

@@ -1640,7 +1640,7 @@ define(function(require, exports){
 					if(!!type && type == 'transfer') {
 						html = outTransferDetailTemplate(data);
 						tabId = '-outTransferDetail';
-						title = '单团核算(含中/外转)';
+						title = '单团核算(中转,外转)';
 					};
 					Tools.addTab(menuKey+tabId,title,html);
 
