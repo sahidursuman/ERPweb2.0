@@ -204,215 +204,227 @@
                 {{/if}}
                 
                 {{if tripIncomeMap.outRemarkFee != null && tripIncomeMap.outRemarkFee != ""}} 
-                    <!-- 中转团款-->
-                    <div class="form-group outRemarkFee outDetailPrint-group print-mar-t-F22">
-                        <div class=" widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="print-h5">
-                                        <label class="middle title-size">中转团款</label>
-                                    </h5>
-                                <div class="widget-body print-mar-t-F16">
-                                    <div class="widget-main">
-                                        <table class="table table-striped table-bordered table-hover" >
-                                            <thead>
-                                                <tr class="T-fontSize view-accountsPrint">
-                                                    <th class="th-border">收客信息</th>
-                                                    <th class="th-border">客户信息</th>
-                                                    <th class="th-border">游客信息</th>
-                                                    <th class="th-border">费用项</th>
-                                                    <th class="th-border">单价</th>
-                                                    <th class="th-border">数量</th>
-                                                    <th class="th-border">金额</th>
-                                                    <th class="th-border">说明</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{if tripIncomeMap != null}}
-                                                    {{if tripIncomeMap.outRemarkFee != null && tripIncomeMap.outRemarkFee != ""}}
-                                                        {{if tripIncomeMap.outRemarkFee.outRemarkFee.length}}
-                                                            {{each tripIncomeMap.outRemarkFee.outRemarkFee as fee }}
-                                                                {{if fee.outRemarkFeeList.length}}
-                                                                    {{each fee.outRemarkFeeList as groupFee index}}
-                                                                        {{if index == 0}}
+                    {{if tripIncomeMap.outRemarkFee.outRemarkFee.length}}
+                        {{if tripIncomeMap.outRemarkFee.outRemarkFee.length == 1 
+                             && tripIncomeMap.outRemarkFee.outRemarkFee[0].outRemarkFeeList.length == 0}}
+                        {{else}}
+                            <!-- 中转团款-->
+                            <div class="form-group outRemarkFee outDetailPrint-group print-mar-t-F22">
+                                <div class=" widget-container-col">
+                                    <div class=" ui-sortable-handle">
+                                            <h5 class="print-h5">
+                                                <label class="middle title-size">中转团款</label>
+                                            </h5>
+                                        <div class="widget-body print-mar-t-F16">
+                                            <div class="widget-main">
+                                                <table class="table table-striped table-bordered table-hover" >
+                                                    <thead>
+                                                        <tr class="T-fontSize view-accountsPrint">
+                                                            <th class="th-border">收客信息</th>
+                                                            <th class="th-border">客户信息</th>
+                                                            <th class="th-border">游客信息</th>
+                                                            <th class="th-border">费用项</th>
+                                                            <th class="th-border">单价</th>
+                                                            <th class="th-border">数量</th>
+                                                            <th class="th-border">金额</th>
+                                                            <th class="th-border">说明</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{if tripIncomeMap != null}}
+                                                            {{if tripIncomeMap.outRemarkFee != null && tripIncomeMap.outRemarkFee != ""}}
+                                                                {{if tripIncomeMap.outRemarkFee.outRemarkFee.length}}
+                                                                    {{each tripIncomeMap.outRemarkFee.outRemarkFee as fee }}
+                                                                        {{if fee.outRemarkFeeList.length}}
+                                                                            {{each fee.outRemarkFeeList as groupFee index}}
+                                                                                {{if index == 0}}
+                                                                                    <tr class="view-accountsPrint">
+                                                                                        <td style="text-align: left;" 
+                                                                                            rowspan="{{fee.outRemarkFeeList.length}}"> 
+                                                                                            <p>收客单号：{{fee.orderNumber}}</p> 
+                                                                                            <p>{{tripIncomeMap.outRemarkFee.outRemarkFee.lineProductName}}</p>
+                                                                                        </td>
+                                                                                        <td rowspan="{{fee.outRemarkFeeList.length}}">
+                                                                                            <span>
+                                                                                                {{fee.partnerAgencyName}}<br>
+                                                                                                {{fee.partnerAgencyContactName}}<br>
+                                                                                                {{fee.partnerAgencyContactMobile}}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                        
+                                                                                        <td rowspan="{{fee.outRemarkFeeList.length}}">    
+                                                                                            <span>
+                                                                                                {{fee.adultCount}}大{{fee.childCount}}小<br>
+                                                                                                {{fee.touristContactName}}<br>
+                                                                                                {{fee.touristContactMobile}}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                        
+                                                                                        <td>
+                                                                                            <span>{{groupFee.name}}</span>
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                           <span class="F-float F-money">{{groupFee.price}}</span> 
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                           <span class="F-float F-count">{{groupFee.count}}</span> 
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                           <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
+                                                                                        </td>
+
+                                                                                        <td style="max-width:150px;">
+                                                                                            <span style="max-width:150px;">
+                                                                                                {{if groupFee.remark != null && groupFee.remark != ""}}
+                                                                                                    {{groupFee.remark}}
+                                                                                                {{else}}
+                                                                                                    -
+                                                                                                {{/if}}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                {{else index>0}}
+                                                                                    <tr class="view-accountsPrint">
+                                                                                        <td>
+                                                                                            <span>{{groupFee.name}}</span>
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                           <span class="F-float F-money">{{groupFee.price}}</span> 
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                           <span class="F-float F-count">{{groupFee.count}}</span> 
+                                                                                        </td>
+
+                                                                                        <td>
+                                                                                           <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
+                                                                                        </td>
+
+                                                                                        <td style="max-width:150px;">
+                                                                                            <span style="max-width:150px;">
+                                                                                                {{if groupFee.remark != null && groupFee.remark != ""}}
+                                                                                                    {{groupFee.remark}}
+                                                                                                {{else}}
+                                                                                                    -
+                                                                                                {{/if}}
+                                                                                            </span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                {{/if}}
+                                                                            {{/each}}
+                                                                        {{/if}}
+                                                                    {{/each}}
+                                                                {{/if}}
+                                                            {{/if}}
+                                                        {{/if}}
+                                                        <tr>
+                                                            <td colspan="6" style="text-align:left">合计</td>
+                                                            <td class="td-border" colspan="2">
+                                                                <span class="F-float F-money">
+                                                                    {{tripIncomeMap.outRemarkFee.sumOutRemarkFee}}
+                                                                </span>
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+
+                {{if tripIncomeMap.outTransferNeed != null && tripIncomeMap.outTransferNeed != ""}}
+                    {{if tripIncomeMap.outTransferNeed.tripIncomeMaps.length}}
+                        {{if tripIncomeMap.outTransferNeed.tripIncomeMaps.length == 1 
+                             && tripIncomeMap.outTransferNeed.tripIncomeMaps[0].needPayAllMoney == 0}}
+                        {{else}}
+                            <!-- 外转团款-->
+                            <div class="form-group outTransferNeed outDetailPrint-group print-mar-t-F22">
+                                <div class=" widget-container-col">
+                                    <div class=" ui-sortable-handle">
+                                            <h5 class="print-h5">
+                                                <label class="middle title-size">外转团款</label>
+                                            </h5>
+                                        <div class="widget-body print-mar-t-F16">
+                                            <div class="widget-main">
+                                                <table class="table table-striped table-bordered table-hover" >
+                                                    <thead>
+                                                        <tr class="T-fontSize view-accountsPrint">
+                                                            <th class="th-border">收客信息</th>
+                                                            <th class="th-border">客户信息</th>
+                                                            <th class="th-border">游客信息</th>
+                                                            <th class="th-border">本段团款</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{if tripIncomeMap != null}}
+                                                            {{if tripIncomeMap.outTransferNeed != null && tripIncomeMap.outTransferNeed != ""}}
+                                                                {{if tripIncomeMap.outTransferNeed.tripIncomeMaps.length}}
+                                                                    {{each tripIncomeMap.outTransferNeed.tripIncomeMaps as item index}}
+                                                                        {{if item.needPayAllMoney != 0}}
                                                                             <tr class="view-accountsPrint">
-                                                                                <td style="text-align: left;" 
-                                                                                    rowspan="{{fee.outRemarkFeeList.length}}"> 
-                                                                                    <p>收客单号：{{fee.orderNumber}}</p> 
-                                                                                    <p>{{tripIncomeMap.outRemarkFee.outRemarkFee.lineProductName}}</p>
+                                                                                <td style="text-align: left;"> 
+                                                                                    <p>收客单号：{{item.orderNumber}}</p> 
+                                                                                    <p>{{item.lineProductName}}</p>
                                                                                 </td>
-                                                                                <td rowspan="{{fee.outRemarkFeeList.length}}">
+                                                                                <td>
                                                                                     <span>
-                                                                                        {{fee.partnerAgencyName}}<br>
-                                                                                        {{fee.partnerAgencyContactName}}<br>
-                                                                                        {{fee.partnerAgencyContactMobile}}
+                                                                                        {{item.partnerAgencyName}}<br>
+                                                                                        {{item.partnerAgencyContactName}}<br>
+                                                                                        {{item.partnerAgencyContactMobile}}
                                                                                     </span>
                                                                                 </td>
                                                                                 
-                                                                                <td rowspan="{{fee.outRemarkFeeList.length}}">    
+                                                                                <td>    
                                                                                     <span>
-                                                                                        {{fee.adultCount}}大{{fee.childCount}}小<br>
-                                                                                        {{fee.touristContactName}}<br>
-                                                                                        {{fee.touristContactMobile}}
-                                                                                    </span>
-                                                                                </td>
-                                                                                
-                                                                                <td>
-                                                                                    <span>{{groupFee.name}}</span>
-                                                                                </td>
-
-                                                                                <td>
-                                                                                   <span class="F-float F-money">{{groupFee.price}}</span> 
-                                                                                </td>
-
-                                                                                <td>
-                                                                                   <span class="F-float F-count">{{groupFee.count}}</span> 
-                                                                                </td>
-
-                                                                                <td>
-                                                                                   <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
-                                                                                </td>
-
-                                                                                <td style="max-width:150px;">
-                                                                                    <span style="max-width:150px;">
-                                                                                        {{if groupFee.remark != null && groupFee.remark != ""}}
-                                                                                            {{groupFee.remark}}
+                                                                                        {{item.adultCount}}大{{item.childCount}}小<br>
+                                                                                        {{if item.touristContactName != null 
+                                                                                            && item.touristContactName != ""}}
+                                                                                            {{item.touristContactName}}
+                                                                                        {{else}}
+                                                                                            -
+                                                                                        {{/if}}
+                                                                                        <br>
+                                                                                        {{if item.touristContactMobile != null 
+                                                                                            && item.touristContactMobile != ""}}
+                                                                                            {{item.touristContactMobile}}
                                                                                         {{else}}
                                                                                             -
                                                                                         {{/if}}
                                                                                     </span>
                                                                                 </td>
-                                                                            </tr>
-                                                                        {{else index>0}}
-                                                                            <tr class="view-accountsPrint">
+                                                                                
                                                                                 <td>
-                                                                                    <span>{{groupFee.name}}</span>
-                                                                                </td>
-
-                                                                                <td>
-                                                                                   <span class="F-float F-money">{{groupFee.price}}</span> 
-                                                                                </td>
-
-                                                                                <td>
-                                                                                   <span class="F-float F-count">{{groupFee.count}}</span> 
-                                                                                </td>
-
-                                                                                <td>
-                                                                                   <span class="F-float F-money">{{groupFee.price*groupFee.count}}</span> 
-                                                                                </td>
-
-                                                                                <td style="max-width:150px;">
-                                                                                    <span style="max-width:150px;">
-                                                                                        {{if groupFee.remark != null && groupFee.remark != ""}}
-                                                                                            {{groupFee.remark}}
-                                                                                        {{else}}
-                                                                                            -
-                                                                                        {{/if}}
-                                                                                    </span>
+                                                                                    <span class="F-float F-money">{{item.needPayAllMoney}}</span>
                                                                                 </td>
                                                                             </tr>
                                                                         {{/if}}
                                                                     {{/each}}
                                                                 {{/if}}
-                                                            {{/each}}
+                                                            {{/if}}
                                                         {{/if}}
-                                                    {{/if}}
-                                                {{/if}}
-                                                <tr>
-                                                    <td colspan="6" style="text-align:left">合计</td>
-                                                    <td class="td-border" colspan="2">
-                                                        <span class="F-float F-money">
-                                                            {{tripIncomeMap.outRemarkFee.sumOutRemarkFee}}
-                                                        </span>
-                                                    </td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                        <tr>
+                                                            <td colspan="3" style="text-align:left">合计</td>
+                                                            <td class="td-border">
+                                                            <span class="F-float F-money">{{tripIncomeMap.outTransferNeed.sumNeedPayAllMoneys}}</span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                {{/if}}
-
-                {{if tripIncomeMap.outTransferNeed != null && tripIncomeMap.outTransferNeed != ""}} 
-                    <!-- 外转团款-->
-                    <div class="form-group outTransferNeed outDetailPrint-group print-mar-t-F22">
-                        <div class=" widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="print-h5">
-                                        <label class="middle title-size">外转团款</label>
-                                    </h5>
-                                <div class="widget-body print-mar-t-F16">
-                                    <div class="widget-main">
-                                        <table class="table table-striped table-bordered table-hover" >
-                                            <thead>
-                                                <tr class="T-fontSize view-accountsPrint">
-                                                    <th class="th-border">收客信息</th>
-                                                    <th class="th-border">客户信息</th>
-                                                    <th class="th-border">游客信息</th>
-                                                    <th class="th-border">本段团款</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{if tripIncomeMap != null}}
-                                                    {{if tripIncomeMap.outTransferNeed != null && tripIncomeMap.outTransferNeed != ""}}
-                                                        {{if tripIncomeMap.outTransferNeed.tripIncomeMaps.length}}
-                                                            {{each tripIncomeMap.outTransferNeed.tripIncomeMaps as item index}}
-                                                                {{if item.needPayAllMoney != 0}}
-                                                                    <tr class="view-accountsPrint">
-                                                                        <td style="text-align: left;"> 
-                                                                            <p>收客单号：{{item.orderNumber}}</p> 
-                                                                            <p>{{item.lineProductName}}</p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span>
-                                                                                {{item.partnerAgencyName}}<br>
-                                                                                {{item.partnerAgencyContactName}}<br>
-                                                                                {{item.partnerAgencyContactMobile}}
-                                                                            </span>
-                                                                        </td>
-                                                                        
-                                                                        <td>    
-                                                                            <span>
-                                                                                {{item.adultCount}}大{{item.childCount}}小<br>
-                                                                                {{if item.touristContactName != null 
-                                                                                    && item.touristContactName != ""}}
-                                                                                    {{item.touristContactName}}
-                                                                                {{else}}
-                                                                                    -
-                                                                                {{/if}}
-                                                                                <br>
-                                                                                {{if item.touristContactMobile != null 
-                                                                                    && item.touristContactMobile != ""}}
-                                                                                    {{item.touristContactMobile}}
-                                                                                {{else}}
-                                                                                    -
-                                                                                {{/if}}
-                                                                            </span>
-                                                                        </td>
-                                                                        
-                                                                        <td>
-                                                                            <span class="F-float F-money">{{item.needPayAllMoney}}</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                {{/if}}
-                                                            {{/each}}
-                                                        {{/if}}
-                                                    {{/if}}
-                                                {{/if}}
-                                                <tr>
-                                                    <td colspan="3" style="text-align:left">合计</td>
-                                                    <td class="td-border">
-                                                    <span class="F-float F-money">{{tripIncomeMap.outTransferNeed.sumNeedPayAllMoneys}}</span></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        {{/if}}
+                    {{/if}}
                 {{/if}}
 
                 {{if tripIncomeMap.shopIncomeMap.shopIncomeMapList.length != 0}}
