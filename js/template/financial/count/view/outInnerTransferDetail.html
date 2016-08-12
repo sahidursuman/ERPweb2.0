@@ -53,7 +53,7 @@
                 </li>
             {{/if}}
 
-            {{if !!outTransferMap.transferOutList && outTransferMap.transferOutList.lineFeeMap.length}}
+            {{if !!outTransferMap && !!outTransferMap.transferOutList && outTransferMap.transferOutList.lineFeeMap.length}}
                 <li class="align-center" style="width:140px;">
                     <a data-toggle="tab" href="#financial-count-trip-outCost" aria-expanded="true">外转成本明细</a>
                 </li>
@@ -2688,81 +2688,56 @@
                     {{/if}}
                 </div>
             {{/if}}
-
-            <!-- 外转成本明细 -->
-            <div id="financial-count-trip-outCost" class="tab-pane fade T-print print-mar-t-F22">
-                <!-- 外转-->
-                    <div class="form-group insurance outDetailPrint-group">
-                        <div class=" widget-container-col">
-                            <div class=" ui-sortable-handle">
-                                    <h5 class="print-h5">
-                                        <label class="middle title-size">外转</label>
-                                    </h5>
-                                <div class="widget-body print-mar-t-F16">
-                                    <div class="widget-main">
-                                        <table class="table table-striped table-bordered table-hover" >
-                                            <thead>
-                                                <tr class="view-accountsPrint">
-                                                    <th class="th-border">收客信息</th>
-                                                    <th class="th-border">地接社</th>
-                                                    <th class="th-border">人数</th>
-                                                    <th class="th-border">抵达日期</th>
-                                                    <th class="th-border">离开日期</th>
-                                                    <th class="th-border">费用项</th>
-                                                    <th class="th-border">单价</th>
-                                                    <th class="th-border">数量</th>
-                                                    <th class="th-border">金额</th>
-                                                    <th class="th-border">说明</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{if outTransferMap.transferOutList != null}}
-                                                    {{if outTransferMap.transferOutList.lineFeeMap.length}}
-                                                        {{each outTransferMap.transferOutList.lineFeeMap as item index}}
-                                                            {{if index == 0}}
-                                                            <tr class="view-accountsPrint">
-                                                                <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                    <span>{{outTransferMap.transferOutList.orderNumber}}</span>
-                                                                </td>
-                                                                <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                    <span>{{outTransferMap.transferOutList.transTravelAgencyName}}</span>
-                                                                </td>
-                                                                <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                    <span class="F-float F-count">{{outTransferMap.transferOutList.adultCount + outTransferMap.transferOutList.childCount}}</span>
-                                                                    (<span class="F-float F-count">{{outTransferMap.transferOutList.adultCount}}</span>大
-                                                                    <span class="F-float F-count">{{outTransferMap.transferOutList.childCount}}</span>小)
-                                                                </td>
-                                                                <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                    <span>{{outTransferMap.transferOutList.tripStartTime}}</span>
-                                                                </td>
-                                                                <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                    <span class="F-float F-money">{{outTransferMap.transferOutList.tripEndTime}}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <span>{{item.name}}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="F-float F-money">{{item.price}}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="F-float F-count">{{item.count}}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="F-float F-money">{{item.money}}</span>
-                                                                </td>
-                                                                <td>
-
-                                                                    <span>
-                                                                        {{if item.remark != null && item.remark != ""}}
-                                                                            {{item.remark}}
-                                                                        {{else}}
-                                                                            -
-                                                                        {{/if}}
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
-                                                            {{else if index > 0}}
-                                                                <tr>
+            {{if !!outTransferMap}}
+                <!-- 外转成本明细 -->
+                <div id="financial-count-trip-outCost" class="tab-pane fade T-print print-mar-t-F22">
+                    <!-- 外转-->
+                        <div class="form-group insurance outDetailPrint-group">
+                            <div class=" widget-container-col">
+                                <div class=" ui-sortable-handle">
+                                        <h5 class="print-h5">
+                                            <label class="middle title-size">外转</label>
+                                        </h5>
+                                    <div class="widget-body print-mar-t-F16">
+                                        <div class="widget-main">
+                                            <table class="table table-striped table-bordered table-hover" >
+                                                <thead>
+                                                    <tr class="view-accountsPrint">
+                                                        <th class="th-border">收客信息</th>
+                                                        <th class="th-border">地接社</th>
+                                                        <th class="th-border">人数</th>
+                                                        <th class="th-border">抵达日期</th>
+                                                        <th class="th-border">离开日期</th>
+                                                        <th class="th-border">费用项</th>
+                                                        <th class="th-border">单价</th>
+                                                        <th class="th-border">数量</th>
+                                                        <th class="th-border">金额</th>
+                                                        <th class="th-border">说明</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{if outTransferMap.transferOutList != null}}
+                                                        {{if outTransferMap.transferOutList.lineFeeMap.length}}
+                                                            {{each outTransferMap.transferOutList.lineFeeMap as item index}}
+                                                                {{if index == 0}}
+                                                                <tr class="view-accountsPrint">
+                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
+                                                                        <span>{{outTransferMap.transferOutList.orderNumber}}</span>
+                                                                    </td>
+                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
+                                                                        <span>{{outTransferMap.transferOutList.transTravelAgencyName}}</span>
+                                                                    </td>
+                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
+                                                                        <span class="F-float F-count">{{outTransferMap.transferOutList.adultCount + outTransferMap.transferOutList.childCount}}</span>
+                                                                        (<span class="F-float F-count">{{outTransferMap.transferOutList.adultCount}}</span>大
+                                                                        <span class="F-float F-count">{{outTransferMap.transferOutList.childCount}}</span>小)
+                                                                    </td>
+                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
+                                                                        <span>{{outTransferMap.transferOutList.tripStartTime}}</span>
+                                                                    </td>
+                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
+                                                                        <span class="F-float F-money">{{outTransferMap.transferOutList.tripEndTime}}</span>
+                                                                    </td>
                                                                     <td>
                                                                         <span>{{item.name}}</span>
                                                                     </td>
@@ -2786,28 +2761,54 @@
                                                                         </span>
                                                                     </td>
                                                                 </tr>
-                                                            {{/if}}
-                                                        {{/each}}
+                                                                {{else if index > 0}}
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span>{{item.name}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{item.price}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-count">{{item.count}}</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="F-float F-money">{{item.money}}</span>
+                                                                        </td>
+                                                                        <td>
+
+                                                                            <span>
+                                                                                {{if item.remark != null && item.remark != ""}}
+                                                                                    {{item.remark}}
+                                                                                {{else}}
+                                                                                    -
+                                                                                {{/if}}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                {{/if}}
+                                                            {{/each}}
+                                                        {{/if}}
                                                     {{/if}}
-                                                {{/if}}
-                                                {{if outTransferMap.transferOutList != null}}
-                                                <tr class="view-accountsPrint">
-                                                    <td colspan="8" style="text-align:left">合计</td>
-                                                    <td class="td-border" colspan="2">
-                                                        <span class="F-float F-money">
-                                                            {{outTransferMap.transferOutList.sumTransferMoney}}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                {{/if}}
-                                            </tbody>
-                                        </table>
+                                                    {{if outTransferMap.transferOutList != null}}
+                                                    <tr class="view-accountsPrint">
+                                                        <td colspan="8" style="text-align:left">合计</td>
+                                                        <td class="td-border" colspan="2">
+                                                            <span class="F-float F-money">
+                                                                {{outTransferMap.transferOutList.sumTransferMoney}}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    {{/if}}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-            </div>
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>
