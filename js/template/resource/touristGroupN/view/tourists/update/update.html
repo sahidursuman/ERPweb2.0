@@ -90,7 +90,7 @@
 				<tbody class="T-join-group-list">
 				{{each receiveTrip as rs}}
 					<tr data-id="{{rs.id}}">
-						<td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime" value="{{rs.arriveTime | dateFormat: 'yyyy-MM-dd h:m'}}"></td>
+						<td><input type="text" class="col-xs-12 datetimepicker" name="arriveTime" value="{{rs.arriveTime | dateFormat: 'yyyy-MM-dd hh:mm'}}"></td>
 	                    <td><input type="text" class="col-xs-12" name="arriveShift" value="{{rs.arriveShift}}"></td>
 	                    <td>
 	                    	<input type="text" class="w-100 hct-cursor T-action T-bus F-float F-money" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.receiveBus}}" data-id="{{rs.receiveBusId}}" placeholder="点击填写车">
@@ -189,7 +189,7 @@
 				<tbody class="T-send-group-list">
 				{{each sendTrip as rs}}
 					<tr data-id="{{rs.id}}">
-						<td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd h:m'}}"></td>
+						<td><input type="text" class="col-xs-12 datetimepicker" name="leaveTime" value="{{rs.leaveTime | dateFormat: 'yyyy-MM-dd hh:mm'}}"></td>
 	                    <td><input type="text" class="col-xs-12" name="leaveShift" value="{{rs.leaveShift}}"></td>
 	                    <td>
 	                    	<input type="text" class="w-100 F-float F-money hct-cursor T-action T-bus" readonly name="receiveBus" value="{{rs.busNeedPayAllMoney}}" data-json="{{rs.sendBus}}" data-id="{{rs.sendBusId}}" placeholder="点击填写车">
