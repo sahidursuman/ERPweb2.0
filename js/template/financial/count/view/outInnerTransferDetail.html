@@ -53,7 +53,7 @@
                 </li>
             {{/if}}
 
-            {{if !!outTransferMap && !!outTransferMap.transferOutList && outTransferMap.transferOutList.lineFeeMap.length}}
+            {{if !!outTransferMap && !!outTransferMap.transferOutList && outTransferMap.transferOutList.transferOutList.length}}
                 <li class="align-center" style="width:140px;">
                     <a data-toggle="tab" href="#financial-count-trip-outCost" aria-expanded="true">外转成本明细</a>
                 </li>
@@ -2729,76 +2729,78 @@
                                                 </thead>
                                                 <tbody>
                                                     {{if outTransferMap.transferOutList != null}}
-                                                        {{if outTransferMap.transferOutList.lineFeeMap.length}}
-                                                            {{each outTransferMap.transferOutList.lineFeeMap as item index}}
-                                                                {{if index == 0}}
-                                                                <tr class="view-accountsPrint">
-                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                        <span>{{outTransferMap.transferOutList.orderNumber}}</span>
-                                                                    </td>
-                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                        <span>{{outTransferMap.transferOutList.transTravelAgencyName}}</span>
-                                                                    </td>
-                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                        <span class="F-float F-count">{{outTransferMap.transferOutList.adultCount + outTransferMap.transferOutList.childCount}}</span>
-                                                                        (<span class="F-float F-count">{{outTransferMap.transferOutList.adultCount}}</span>大
-                                                                        <span class="F-float F-count">{{outTransferMap.transferOutList.childCount}}</span>小)
-                                                                    </td>
-                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                        <span>{{outTransferMap.transferOutList.tripStartTime}}</span>
-                                                                    </td>
-                                                                    <td rowspan="{{outTransferMap.transferOutList.lineFeeMap.length}}">
-                                                                        <span class="F-float F-money">{{outTransferMap.transferOutList.tripEndTime}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span>{{item.name}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.price}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-count">{{item.count}}</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <span class="F-float F-money">{{item.money}}</span>
-                                                                    </td>
-                                                                    <td>
+                                                        {{if outTransferMap.transferOutList.transferOutList.length}}
+                                                            {{each outTransferMap.transferOutList.transferOutList as rs}}
+                                                                {{each rs.lineFeeMap as item index}}
+                                                                    {{if index == 0}}
+                                                                        <tr class="view-accountsPrint">
+                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
+                                                                                <span>{{rs.orderNumber}}</span>
+                                                                            </td>
+                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
+                                                                                <span>{{rs.transTravelAgencyName}}</span>
+                                                                            </td>
+                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
+                                                                                <span class="F-float F-count">{{rs.adultCount + rs.childCount}}</span>
+                                                                                (<span class="F-float F-count">{{rs.adultCount}}</span>大
+                                                                                <span class="F-float F-count">{{rs.childCount}}</span>小)
+                                                                            </td>
+                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
+                                                                                <span>{{rs.tripStartTime}}</span>
+                                                                            </td>
+                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
+                                                                                <span class="F-float F-money">{{rs.tripEndTime}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span>{{item.name}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="F-float F-money">{{item.price}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="F-float F-count">{{item.count}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="F-float F-money">{{item.money}}</span>
+                                                                            </td>
+                                                                            <td>
 
-                                                                        <span>
-                                                                            {{if item.remark != null && item.remark != ""}}
-                                                                                {{item.remark}}
-                                                                            {{else}}
-                                                                                -
-                                                                            {{/if}}
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                                {{else if index > 0}}
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span>{{item.name}}</span>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="F-float F-money">{{item.price}}</span>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="F-float F-count">{{item.count}}</span>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="F-float F-money">{{item.money}}</span>
-                                                                        </td>
-                                                                        <td>
+                                                                                <span>
+                                                                                    {{if item.remark != null && item.remark != ""}}
+                                                                                        {{item.remark}}
+                                                                                    {{else}}
+                                                                                        -
+                                                                                    {{/if}}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    {{else if index > 0}}
+                                                                        <tr>
+                                                                            <td>
+                                                                                <span>{{item.name}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="F-float F-money">{{item.price}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="F-float F-count">{{item.count}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="F-float F-money">{{item.money}}</span>
+                                                                            </td>
+                                                                            <td>
 
-                                                                            <span>
-                                                                                {{if item.remark != null && item.remark != ""}}
-                                                                                    {{item.remark}}
-                                                                                {{else}}
-                                                                                    -
-                                                                                {{/if}}
-                                                                            </span>
-                                                                        </td>
-                                                                    </tr>
-                                                                {{/if}}
+                                                                                <span>
+                                                                                    {{if item.remark != null && item.remark != ""}}
+                                                                                        {{item.remark}}
+                                                                                    {{else}}
+                                                                                        -
+                                                                                    {{/if}}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    {{/if}}
+                                                                {{/each}}
                                                             {{/each}}
                                                         {{/if}}
                                                     {{/if}}
