@@ -2745,11 +2745,11 @@
                                                                                 (<span class="F-float F-count">{{rs.adultCount}}</span>大
                                                                                 <span class="F-float F-count">{{rs.childCount}}</span>小)
                                                                             </td>
-                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
-                                                                                <span>{{rs.tripStartTime}}</span>
+                                                                            <td>
+                                                                                <span>{{item.tripStartTime}}</span>
                                                                             </td>
-                                                                            <td rowspan="{{rs.lineFeeMap.length}}">
-                                                                                <span class="F-float F-money">{{rs.tripEndTime}}</span>
+                                                                            <td>
+                                                                                <span>{{item.tripEndTime}}</span>
                                                                             </td>
                                                                             <td>
                                                                                 <span>{{item.name}}</span>
@@ -2777,8 +2777,15 @@
                                                                     {{else if index > 0}}
                                                                         <tr>
                                                                             <td>
+                                                                                <span>{{item.tripStartTime}}</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span>{{item.tripEndTime}}</span>
+                                                                            </td>
+                                                                            <td>
                                                                                 <span>{{item.name}}</span>
                                                                             </td>
+
                                                                             <td>
                                                                                 <span class="F-float F-money">{{item.price}}</span>
                                                                             </td>
