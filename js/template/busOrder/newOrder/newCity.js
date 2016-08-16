@@ -45,6 +45,7 @@ define(function(require, exports) {
                     if (!type) {
                         orderData = data;
                         orderData.authToken = authToken;
+                        cityOrder.authToken = authToken;
                         template = updateCityTemplate(orderData);
                         Tools.addTab(idName, title, template);
                         var $tab = $('#tab-'+idName+'-content');
@@ -140,6 +141,8 @@ define(function(require, exports) {
                     $layer.find('.T-contactMemberList').append(addContactTr);
                     $(window).trigger('resize');
                 });
+                main.historyHotelComplete($layer, cityOrder.authToken);
+                main.historyHotelAddressComplete($layer, cityOrder.authToken);
                 $layer.find('.T-contactMemberList').on('click', '.T-delete', function(event) {
                     event.preventDefault();
                     /* Act on the event */

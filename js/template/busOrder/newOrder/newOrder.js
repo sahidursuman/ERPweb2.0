@@ -393,9 +393,9 @@ define(function(require, exports) {
                     '<div class="form-group T-hotelInfo">',
                         '<hr>',
                         '<label for="" class="col-sm-2 control-label"><span class="red">*</span>' + ((type == '0') ? '送团接人' : '接团入住') + '酒店：</label>',
-                        '<div class="col-sm-3"><input type="text" name="roundHotelName" value="'+(data.roundHotelName?data.roundHotelName:'')+'"></div>',
+                        '<div class="col-sm-3"><input type="text" class="T-chooseHistoryHotel" name="roundHotelName" value="'+(data.roundHotelName?data.roundHotelName:'')+'"></div>',
                         '<label for="" class="col-sm-2 control-label"><span class="red">*</span>酒店地址：</label>',
-                        '<div class="col-sm-5"><input type="text" name="roundHotelAddress" value="'+(data.roundHotelAddress?data.roundHotelAddress:'')+'"></div></div>',
+                        '<div class="col-sm-5"><input type="text" class="T-chooseHistoryHotelAddress" name="roundHotelAddress" value="'+(data.roundHotelAddress?data.roundHotelAddress:'')+'"></div></div>',
                         '<div class="form-group"><label class="col-sm-2 control-label">'+ ((type == '0') ? '送团' : '接团') +'现收：</label>',
                         '<div class="col-sm-3"><input type="text" name="roundDriverIncomeMoney" value="' + (data.roundDriverIncomeMoney?data.roundDriverIncomeMoney:'') + '"></div>',
                         '<label for="" class="col-sm-2 control-label">'+ ((type == '0') ? '送团' : '接团') +'备注：</label>',
@@ -403,9 +403,9 @@ define(function(require, exports) {
                         '</div>'].join('') : '';
                 var pickHotel = ['<div class="form-group T-hotelInfo">',
                         '<label for="" class="col-sm-2 control-label"><span class="red">*</span>' + ((type == '0') ? '接团入住' : '送团接人') + '酒店：</label>',
-                        '<div class="col-sm-3"><input type="text" name="hotelName" value="'+(data.hotelName?data.hotelName:'')+'"></div>',
+                        '<div class="col-sm-3"><input type="text" class="T-chooseHistoryHotel" name="hotelName" value="'+(data.hotelName?data.hotelName:'')+'"></div>',
                         '<label for="" class="col-sm-2 control-label"><span class="red">*</span>酒店地址：</label>',
-                        '<div class="col-sm-5"><input type="text" name="hotelAddress" value="'+(data.hotelAddress?data.hotelAddress:'')+'"></div></div>',
+                        '<div class="col-sm-5"><input type="text" class="T-chooseHistoryHotelAddress" name="hotelAddress" value="'+(data.hotelAddress?data.hotelAddress:'')+'"></div></div>',
                         '<div class="form-group"><label class="col-sm-2 control-label">'+ ((type == '0') ? '接团' : '送团') +'现收：</label>',
                         '<div class="col-sm-3"><input type="text" name="driverIncomeMoney" value="' + (data.driverIncomeMoney?data.driverIncomeMoney:'') + '"></div>',
                         '<label for="" class="col-sm-2 control-label">'+ ((type == '0') ? '接团' : '送团') +'备注：</label>',
@@ -417,6 +417,8 @@ define(function(require, exports) {
                 if (!isRound) {
                     $layer.find('form .T-hotelInfo').eq(1).addClass('hide');
                 }
+                main.historyHotelComplete($layer, newOrder.authToken);
+                main.historyHotelAddressComplete($layer, newOrder.authToken);
                 $layer.find('.T-addContactMember').on('click', function (event) {
                     event.preventDefault();
                     var addContactTr = ['<tr>',
