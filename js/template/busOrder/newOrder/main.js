@@ -106,6 +106,49 @@ define(function(require, exports) {
         });
     };
 
+
+    main.historyHotelComplete = function ($tab, authToken) {
+        $tab.find('.T-chooseHistoryHotel').autocomplete({
+            minLength: 0
+        }).on('click', function () {
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url_bus('customer/order','getHistoryHotelNameList', authToken),
+                type: 'POST',
+                showLoading: false,
+                success: function (data) {
+                    var tripList = data.hotelNameList;
+                    for (var i = 0; i < tripList.length; i++) {
+                        tripList[i].value = tripList[i].hotelName;
+                    }
+                    $this.autocomplete('option','source', tripList);
+                    $this.autocomplete('search', '');
+                }
+            });
+        });
+    };
+
+    main.historyHotelAddressComplete = function ($tab, authToken) {
+        $tab.find('.T-chooseHistoryHotelAddress').autocomplete({
+            minLength: 0
+        }).on('click', function () {
+            var $this = $(this);
+            $.ajax({
+                url: KingServices.build_url_bus('customer/order','getHistoryHotelAddressList', authToken),
+                type: 'POST',
+                showLoading: false,
+                success: function (data) {
+                    var tripList = data.hotelAddressList;
+                    for (var i = 0; i < tripList.length; i++) {
+                        tripList[i].value = tripList[i].hotelAddress;
+                    }
+                    $this.autocomplete('option','source', tripList);
+                    $this.autocomplete('search', '');
+                }
+            });
+        });
+    };
+
     main.viewOperationRecord = function ($tab, id, authToken) {
         $tab.find('.T-viewOperationRecord').on('click', function () {
             $.ajax({
