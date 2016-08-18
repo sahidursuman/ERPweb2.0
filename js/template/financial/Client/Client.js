@@ -440,7 +440,7 @@ define(function(require, exports) {
         //搜索下拉事件
         Client.$checkSearchArea.find('.T-check-status').on('click', 'a', function(event) {
             event.preventDefault(); 
-            var $this = $(this);
+            var $that = $(this);
             // 设置选择的效果
             $that.closest('ul').prevAll('button').data('value', $that.data('value')).children('span').text($that.text());
             $tab.data("total","");
