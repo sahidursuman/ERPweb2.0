@@ -54,6 +54,20 @@
         </div>
         {{/each}}
     </div>
+    {{if order.isShowArrangeInfoColumn == '1'}}
+    <div class="col-xs-12 padding-b10 mar-b10 border-bottom">
+        <h5 class="color-999">派车信息</h5>
+        <label>
+            {{if !!order.arrangeInfoList.length}}
+                {{each order.arrangeInfoList as arrangeInfo}}
+                {{arrangeInfo.driverName}} {{arrangeInfo.driverMobileNumber}} {{arrangeInfo.licenceNumber}} <br>
+                {{/each}}
+            {{else}}
+                <span class="red">暂未派车</span>
+            {{/if}}
+        </label>
+    </div>
+    {{/if}}
     <div class="T-touristList">
         <div class="col-xs-12">
             <p>人数统计：<span class="T-allPeopleText">0大0小</span></p>

@@ -109,7 +109,14 @@ define(function(require, exports) {
 
     main.historyHotelComplete = function ($tab, authToken) {
         $tab.find('.T-chooseHistoryHotel').autocomplete({
-            minLength: 0
+            minLength: 0,
+            select: function (event, ui) {
+                var $this = $(this);
+                if ($this.val() != ui.item.value) {
+                    $this.val(ui.item.value);
+                    $this.trigger('change');
+                }
+            }
         }).on('click', function () {
             var $this = $(this);
             $.ajax({
@@ -125,6 +132,30 @@ define(function(require, exports) {
                     $this.autocomplete('search', '');
                 }
             });
+        });
+        $tab.find('.T-chooseHistoryHotel').on('change', function () {
+            var $this = $(this),
+                $pDiv = $this.closest('.form-group'),
+                $address = $pDiv.find('[name=hotelAddress]');
+            if (!!$this.val()) {
+                $.ajax({
+                    url: KingServices.build_url_bus('customer/order','findHotelAddressByHotelName', authToken),
+                    type: 'POST',
+                    showLoading: false,
+                    data: {
+                        hotelName: $this.val()
+                    },
+                    success: function (data) {
+                        if (!!$address.val()) {
+                            showConfirmDialog('是否更新酒店地址？', function () {
+                                $address.val(data.hotelAddress);
+                            });
+                        } else {
+                            $address.val(data.hotelAddress);
+                        }
+                    }
+                });
+            }
         });
     };
 
