@@ -67,7 +67,6 @@ define(function(require, exports) {
 	   			shopName: shopStat.getValue(shopStat.$searchArea,'shop'),
 	   			shopId: shopStat.getValue(shopStat.$searchArea,'shopId'),
 	   			tripNumber: shopStat.getValue(shopStat.$searchArea,'tripNumber'),
-	   			shopItem: shopStat.getValue(shopStat.$searchArea,'shopItem'),
 	   			startShopTime: shopStat.getValue(shopStat.$searchArea,'startShopTime'),
 	   			endShopTime: shopStat.getValue(shopStat.$searchArea,'endShopTime'),
 	   			isShopping: shopStat.getValue(shopStat.$searchArea,'isShopping'),
@@ -298,47 +297,7 @@ define(function(require, exports) {
 				}
 			});
 		};
-		shopStat.showItem = function($obj){
-			var shopId = shopStat.$searchArea.find('input[name=shopId]').val();
-			if (!!shopId) {
-				$.ajax({
-					url: KingServices.build_url('shop','findPolicyByShopId'),
-					type: 'POST',
-					data:{id:shopId},
-					showLoading:false,
-					success:function(data){
-						 //商品列表
-						var shopItemList = JSON.parse(data.shopPolicyList);
-						for(var i = 0;i<shopItemList.length;i++){
-							shopItemList[i].value = shopItemList[i].name;
-						};
-						$obj.autocomplete({
-							minLength:0,
-							select:function(event,ui){
-								if(ui.item != null){
-									var divObj = $(this).closest('div');
-									divObj.find('[name='+name+'Id]').val(ui.item.id);
-								}
-							},
-							change:function(event,ui){
-								if(ui.item == null){
-									var divObj = $(this).closest('div');
-									$(this).val('');
-									divObj.find('[name='+name+'Id]').val('');
-								};
-							}
-						})
-						$obj.autocomplete('option','source', shopItemList);
-						$obj.autocomplete('search', '');
-					}
-				});
-			}else{
- 				layer.tips('请选择购物店', $obj, {
- 				    tips: [1, '#3595CC'],
- 				    time: 2000
- 				});
-			}
-		};
+	};
 
 	/**
 	 *展示点击总打单
