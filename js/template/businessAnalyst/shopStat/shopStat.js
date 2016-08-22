@@ -206,12 +206,6 @@ define(function(require, exports) {
 				shopStat.viewConsumeMoney(tripPlanId,shopArrangeId,-1);
 			};
 		});
-
-		//商品事件
-		var $showLIt = shopStat.$tab.find(".T-Choose-goods");
-			$showLIt.off('click').on('click',function(){
-				shopStat.showItem($(this));
-			})
 		};
 		/**
 		 * 选择线路
@@ -297,7 +291,7 @@ define(function(require, exports) {
 				}
 			});
 		};
-	};
+		
 
 	/**
 	 *展示点击总打单
