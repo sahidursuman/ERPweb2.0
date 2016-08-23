@@ -1,17 +1,17 @@
 <div class="T-addNewOrder container-fulid  col-xs-12">
-    <form class="form-horizontal clearBoth">
+    <form class="form-horizontal clearBoth" onsubmit="return false;">
         <div class="">
             <div class="form-group">
                 <label>车队名称：{{changeData.companyName}}</label>
             </div>
-            <div class="form-group">
+            <div class="form-group T-oneTrip">
                 <div class="T-tripSelectDiv inline mar-r20">
                     <label><span class="red">*</span>请选择行程：</label>
                     <input class="T-tripSelect" type="text" value="{{changeData.name}}">
                     <input type="hidden" name="position" value="{{changeData.position}}">
                     <input type="hidden" name="type" value="{{changeData.type}}">
                     <input type="hidden" name="tripTypeName" value="{{changeData.name}}">
-                    <input type="hidden" name="tripTypeId" value="{{changeData.tripTypeId}}">
+                    <input class="T-tripTypeId" type="hidden" name="tripTypeId" value="{{changeData.tripTypeId}}">
                     <input type="hidden" name="authToken" value="{{changeData.authToken}}">
                     <input type="hidden" name="companyName" value="{{changeData.companyName}}">
                 </div>
@@ -21,7 +21,7 @@
                     <span class="lbl"> 需要往返</span>
                 </label>
             </div>
-            <div class="form-group T-isRoundContent hide">
+            <div class="form-group T-isRoundContent hide T-oneTrip">
                 <span class="T-roundTrip" style="padding:0;"></span>
                 <span class="T-roundTripDate"></span>
             </div>
