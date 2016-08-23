@@ -8,7 +8,7 @@
         </thead>
         <tbody>
             {{each bindAccountList as rs index}}
-            <tr data-token="{{rs.authToken}}" data-name="{{rs.name}}">
+            <tr data-token="{{rs.authToken}}" data-name="{{rs.name}}" data-companyid='{{rs.companyId}}'>
                 <td><label> <input class="ace" name="chooseCompanyRadio" type="radio"><span class="lbl"></span></label></td>
                 <td>{{rs.name}}</td>
             </tr>

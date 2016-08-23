@@ -136,6 +136,7 @@ define(function(require, exports) {
                     var json = {
                         id: feeList.eq(i).data('id'),
                         fee: main.getValue(feeList.eq(i), 'fee'),
+                        name: main.getValue(feeList.eq(i), 'name'),
                         remark: main.getValue(feeList.eq(i), 'remark')
                     };
                     if (!!json.fee || !!json.remark || !!json.id) {

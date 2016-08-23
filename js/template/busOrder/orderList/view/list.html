@@ -69,7 +69,7 @@
             <td>{{rs.togetherPosition}}</td>
             <td>-</td>
             {{/if}}
-            <td rowspan="{{rs.touristGroupList.length || 1}}">{{if rs.orderStatus == '1' || rs.orderStatus == '3'}}{{rs.comfirmNeedPayMoney}}元(回复价)<br/>{{/if}}<span class="{{if rs.orderStatus == '1' || rs.orderStatus == '3'}}textd-line{{/if}}">{{rs.needPayMoney}}元(申请价)</span></td>
+            <td rowspan="{{rs.touristGroupList.length || 1}}">{{if rs.orderStatus == '1' || rs.orderStatus == '2' || rs.orderStatus == '3'}}{{rs.comfirmNeedPayMoney}}元(回复价)<br/>{{/if}}<span class="{{if rs.orderStatus == '1' || rs.orderStatus == '2' || rs.orderStatus == '3'}}textd-line{{/if}}">{{rs.needPayMoney}}元(申请价)</span></td>
             <td rowspan="{{rs.touristGroupList.length || 1}}" {{if rs.orderStatus == '6'}}class="red"{{/if}}>{{rs.orderStatusText}}</td>
             <td rowspan="{{rs.touristGroupList.length || 1}}">
                 {{#rs.orderStatus | getOrderStatusListBtn}}

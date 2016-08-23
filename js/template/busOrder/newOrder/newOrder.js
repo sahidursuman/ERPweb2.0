@@ -15,7 +15,8 @@ define(function(require, exports) {
         main = '';
 
     var newOrder = {
-        authToken: ''
+        authToken: '',
+        companyId: ''
     };
 
     newOrder.initModule = function (data) {
@@ -23,6 +24,7 @@ define(function(require, exports) {
         main = require('./main').main;
         if (!!data && !!data.authToken) {
             newOrder.authToken = data.authToken;
+            newOrder.companyId = data.companyId;
             newOrder.add(1, '', data);
         } else {
             $.ajax({
@@ -49,10 +51,13 @@ define(function(require, exports) {
                                     if ($checked.length) {
                                         var $checkedTr = $checked.closest('tr'),
                                             authToken = $checkedTr.data('token'),
-                                            companyName = $checkedTr.data('name');
+                                            companyName = $checkedTr.data('name'),
+                                            companyId = $checkedTr.data('companyid');
                                         data.authToken = authToken;
                                         data.companyName = companyName;
+                                        data.companyId = companyId;
                                         newOrder.authToken = authToken;
+                                        newOrder.companyId = companyId;
                                         layer.close(publicLayer);
                                         newOrder.add(1, '', data);
                                     } else {
@@ -184,6 +189,40 @@ define(function(require, exports) {
             $parent = $this.closest('div.form-group');
             $parent.find('.T-tripDateShiftDate').val(value);
         });
+        $tab.off('click.queryShift').on('click.queryShift', '.T-getShiftTimeByShiftNumber', function () {
+            var $this = $(this),
+                $parent = $this.closest('.T-oneTrip'),
+                shiftNumber = $parent.find('.T-shiftNumber').val(),
+                tripTypeId = $parent.find('.T-tripTypeId').val(),
+                tripTime = $parent.find('.T-tripTime').val();
+            if (!!shiftNumber && !!tripTime && !!tripTypeId) {
+                $.ajax({
+                    url: KingServices.build_url_bus('customer/base','queryShiftTime', newOrder.authToken),
+                    type: 'POST',
+                    data: {
+                        shiftNumber: shiftNumber,
+                        tripTypeId: tripTypeId,
+                        tripTime: tripTime
+                    },
+                    success: function (data) {
+                        if (data.success == '1') {
+                            showLayerMessage('获取成功');
+                            $parent.find('.T-shiftDate').val(data.shiftDate);
+                            $parent.find('.T-shiftHour').val(data.shiftHour);
+                            $parent.find('.T-shiftMinute').val(data.shiftMinute);
+                        } else {
+                            showLayerMessage(data.message);
+                        }
+                    }
+                });
+            } else if (!shiftNumber) {
+                showLayerMessage('请填写航班号/班次！');
+            } else if (!tripTime) {
+                showLayerMessage('请填写行程日期！');
+            } else {
+                showLayerMessage('请填写相关信息！');
+            }
+        });
     };
 
     newOrder.viewOrder = function (id, authToken) {
@@ -306,19 +345,20 @@ define(function(require, exports) {
         var html = ['<div class="form-group T-pickSendTime inline"> ',
             '<div class="inline mar-r20"> ',
                 '<label> <span class="red">*</span>'+(type == '0' ? "接团":"送团")+'日期： </label>',
-                '<input class="T-datepicker T-tripDateChange width100" name="'+(isRoundTrip == '0' ? "tripTime":"roundTripTime")+'" type="text" value=""> ',
+                '<input class="T-datepicker T-tripTime T-tripDateChange width100" name="'+(isRoundTrip == '0' ? "tripTime":"roundTripTime")+'" type="text" value=""> ',
             '</div> ',
             '<div class="inline mar-r20"> ',
                 '<label> <span class="red">*</span><span class="T-tripPositionContent width40 lineblock">'+(position == '0' ? "航班号":"班次")+'</span>：</label> ',
-                '<input class="width100" name="'+(isRoundTrip == '0' ? "shiftNumber":"roundShiftNumber")+'" type="text" value=""> ',
+                '<input class="width100 T-shiftNumber" name="'+(isRoundTrip == '0' ? "shiftNumber":"roundShiftNumber")+'" type="text" value=""> ',
+                '<button class="T-getShiftTimeByShiftNumber btn btn-xs btn-success">获取时间</button>',
             '</div> ',
             '<div class="inline mar-r20"> ',
                 '<label> <span class="red">*</span>' + ((position == '0') ? ((type == '0') ? '抵达时间' : '起飞时间') : ((type == '0') ? '到站时间' : '发车时间')) + '： </label> ',
-                '<input class="width100 T-datepicker T-tripDateShiftDate" name="'+(isRoundTrip == '0' ? "shiftDate":"roundShiftDate")+'" type="text" value=""> ',
-                '<select name="'+(isRoundTrip == '0' ? "shiftHour":"roundShiftHour")+'">',
+                '<input class="width100 T-shiftDate T-datepicker T-tripTime T-tripDateShiftDate" name="'+(isRoundTrip == '0' ? "shiftDate":"roundShiftDate")+'" type="text" value=""> ',
+                '<select class="T-shiftHour" name="'+(isRoundTrip == '0' ? "shiftHour":"roundShiftHour")+'">',
                     hour,
                 '</select> ',
-                '<select name="'+(isRoundTrip == '0' ? "shiftMinute":"roundShiftMinute")+'">',
+                '<select class="T-shiftMinute" name="'+(isRoundTrip == '0' ? "shiftMinute":"roundShiftMinute")+'">',
                     minute,
                 '</select> ',
             '</div>',
@@ -346,7 +386,7 @@ define(function(require, exports) {
             '<input class="T-roundTripSelect" type="text">',
             '<input type="hidden" name="roundPosition">',
             '<input type="hidden" name="roundType">',
-            '<input type="hidden" name="roundTripTypeId">',
+            '<input class="T-tripTypeId" type="hidden" name="roundTripTypeId">',
         '</div>'].join('');
         
         $tab.find('.T-isRoundTrip').off('change.isRoundTrip').on('change.isRoundTrip', function () {
@@ -598,6 +638,7 @@ define(function(require, exports) {
                     var json = {
                         id: feeList.eq(i).data('id'),
                         fee: main.getValue(feeList.eq(i), 'fee'),
+                        name: main.getValue(feeList.eq(i), 'name'),
                         remark: main.getValue(feeList.eq(i), 'remark')
                     };
                     if (!!json.fee || !!json.remark || !!json.id) {
