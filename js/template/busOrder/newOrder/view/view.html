@@ -47,6 +47,7 @@
         <h5 class="color-999">其他费用</h5>
         {{each order.otherFeeList as rs index}}
         <div>
+            <label class="lineblock width150">费用项：{{rs.name}}</label>
             <label class="lineblock width150">金额：{{rs.fee}}<input class="T-clacFee" name="fee" type="hidden" value="{{rs.fee}}"></label>
             <label> 备注：{{rs.remark}}</label>
         </div>

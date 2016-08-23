@@ -110,12 +110,14 @@
                     <h5 class="col-xs-12"><label class="middle">其他费用：<button class="T-addFee T-feeAction btn btn-xs btn-success"><i class="ace-icon fa fa-plus"></i>新增费用</button></label></h5>
                     <table class="table table-striped table-bordered table-hover table-text-center col-xs-6">
                         <tr>
+                            <th>费用项</th>
                             <th>金额</th>
                             <th>备注</th>
                             <th>操作</th>
                         </tr>
                         {{each order.otherFeeList as rs index}}
                         <tr data-id="{{rs.id}}">
+                            <td><input name="name" type="text" value="{{rs.name}}"></td>
                             <td><input class="T-clacFee" name="fee" type="text" value="{{rs.fee}}"></td>
                             <td><input name="remark" type="text" value="{{rs.remark}}"></td>
                             <td><button class="T-delete T-feeAction btn btn-xs btn-danger"><i class="ace-icon fa fa-close"></i>删除</button></td>

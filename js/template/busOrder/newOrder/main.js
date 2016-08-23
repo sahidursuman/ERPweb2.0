@@ -36,6 +36,7 @@ define(function(require, exports) {
 
     main.addFee = function ($tab) {
         var feeHtml = ['<tr>',
+            '<td><input name="name" type="text"></td>',
             '<td><input class="T-clacFee" name="fee" type="text"></td>',
             '<td><input name="remark" type="text"></td>',
             '<td><button class="T-delete T-feeAction btn btn-xs btn-danger"><i class="ace-icon fa fa-close"></i>删除</button></td>',
