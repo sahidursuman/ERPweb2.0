@@ -9,7 +9,7 @@
                     <label><span class="red">*</span>请选择行程：</label>
                     <input class="T-tripSelect ui-autocomplete-input" type="text" autocomplete="off" value="{{order.tripType.name}}" readonly>
                     <input type="hidden" name="position" value="{{order.tripType.position}}">
-                    <input type="hidden" name="type" value="{{order.tripType.type}}">
+                    <input class="T-type" type="hidden" name="type" value="{{order.tripType.type}}">
                     <input class="T-tripTypeId" type="hidden" name="tripTypeId" value="{{order.tripType.id}}">
                     <input type="hidden" name="id" value="{{order.id}}">
                 </div>
@@ -49,7 +49,7 @@
                         <label><span class="red">*</span>请选择返程：</label>
                         <input class="T-roundTripSelect ui-autocomplete-input" type="text" autocomplete="off" value="{{order.roundTripType.name}}">
                         <input type="hidden" name="roundPosition" value="{{order.roundTripType.position}}">
-                        <input type="hidden" name="roundType" value="{{order.roundTripType.type}}">
+                        <input class="T-type" type="hidden" name="roundType" value="{{order.roundTripType.type}}">
                         <input class="T-tripTypeId" type="hidden" name="roundTripTypeId" value="{{order.roundTripType.id}}">
                     </div>
                 {{/if}}

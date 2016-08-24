@@ -12,6 +12,7 @@ define(function(require, exports) {
         addGroupTemplate = require('./view/addGroup'),
         groupListTemplate = require('./view/groupList'),
         chooseCompanyTemplate = require('./view/chooseCompany'),
+        chooseShiftTimeTemplate = require('./view/chooseShiftTime'),
         main = '';
 
     var newOrder = {
@@ -194,7 +195,40 @@ define(function(require, exports) {
                 $parent = $this.closest('.T-oneTrip'),
                 shiftNumber = $parent.find('.T-shiftNumber').val(),
                 tripTypeId = $parent.find('.T-tripTypeId').val(),
-                tripTime = $parent.find('.T-tripTime').val();
+                tripTime = $parent.find('.T-tripTime').val(),
+                type = $parent.find('.T-type').val();
+            function chooseShiftTime(data) {
+                var publicLayer = layer.open({
+                    type: 1,
+                    title: '选择时间',
+                    skin: 'layui-layer-rim', //加上边框
+                    area: '980px', //宽高
+                    zIndex: 1028,
+                    content: chooseShiftTimeTemplate(data),
+                    scrollbar: false,
+                    success: function(){
+                        var $layer = $('.T-chooseShiftTimeContent');
+                        $layer.find('.T-choose').on('click', function () {
+                            var $checked = $layer.find('[type=radio]:checked '),
+                                $tr = $checked.closest('tr');
+                            if ($checked.length) {
+                                var arriveTime = $tr.data('arrive'),
+                                    start = $tr.data('start');
+                                if (type == '0') {
+                                    $parent.find('.T-shiftHour').val(arriveTime.split(':')[0]);
+                                    $parent.find('.T-shiftMinute').val(arriveTime.split(':')[1]);
+                                } else if (type == '1') {
+                                    $parent.find('.T-shiftHour').val(start.split(':')[0]);
+                                    $parent.find('.T-shiftMinute').val(start.split(':')[1]);
+                                }
+                                layer.close(publicLayer);
+                            } else {
+                                showLayerMessage('请选择时间');
+                            }
+                        });
+                    }
+                });
+            }
             if (!!shiftNumber && !!tripTime && !!tripTypeId) {
                 $.ajax({
                     url: KingServices.build_url_bus('customer/base','queryShiftTime', newOrder.authToken),
@@ -206,10 +240,14 @@ define(function(require, exports) {
                     },
                     success: function (data) {
                         if (data.success == '1') {
-                            showLayerMessage('获取成功');
-                            $parent.find('.T-shiftDate').val(data.shiftDate);
-                            $parent.find('.T-shiftHour').val(data.shiftHour);
-                            $parent.find('.T-shiftMinute').val(data.shiftMinute);
+                            if (!data.isNeedChoose) {
+                                showLayerMessage('获取成功');
+                                $parent.find('.T-shiftDate').val(data.shiftDate);
+                                $parent.find('.T-shiftHour').val(data.shiftHour);
+                                $parent.find('.T-shiftMinute').val(data.shiftMinute);
+                            } else {
+                                chooseShiftTime(data);
+                            }
                         } else {
                             showLayerMessage(data.message);
                         }
@@ -385,7 +423,7 @@ define(function(require, exports) {
             '<label><span class="red">*</span>请选择返程：</label> ',
             '<input class="T-roundTripSelect" type="text">',
             '<input type="hidden" name="roundPosition">',
-            '<input type="hidden" name="roundType">',
+            '<input class="T-type" type="hidden" name="roundType">',
             '<input class="T-tripTypeId" type="hidden" name="roundTripTypeId">',
         '</div>'].join('');
         
