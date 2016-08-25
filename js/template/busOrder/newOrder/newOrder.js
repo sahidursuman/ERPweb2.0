@@ -208,6 +208,31 @@ define(function(require, exports) {
                     scrollbar: false,
                     success: function(){
                         var $layer = $('.T-chooseShiftTimeContent');
+                        
+                        $layer.find('.lbl').addClass('lblNoPosition');
+                        $layer.closest('.layui-layer-content').off("scroll").scroll(function(event){
+                            event.preventDefault();
+                            var $that = $(this),
+                                $trFixed = $that.find('.T-tr-fixed');
+                            if($trFixed.length === 0) {
+                                return;
+                            }
+
+                            var $layerTop = $layer.closest('.layui-layer-content').offset().top,
+                                top = $layerTop - $trFixed.closest('table').offset().top - 1;
+
+                            if(top <= 0){
+                                top = 0;
+                            }
+
+                            $trFixed.css({
+                                'transform' : 'translate3d(0,'+top+'px, 100px)',
+                                '-webkit-transform' : 'translate3d(0,'+top+'px, 100px)',
+                                '-moz-transform' : 'translate3d(0,'+top+'px, 100px)',
+                                'msTransform' : 'translate3d(0,'+top+'px, 100px)',
+                                '-o-transform' : 'translate3d(0,'+top+'px, 100px)'
+                            });
+                        });
                         $layer.find('.T-choose').on('click', function () {
                             var $checked = $layer.find('[type=radio]:checked '),
                                 $tr = $checked.closest('tr');
@@ -239,17 +264,23 @@ define(function(require, exports) {
                         tripTime: tripTime
                     },
                     success: function (data) {
-                        if (data.success == '1') {
-                            if (!data.isNeedChoose) {
-                                showLayerMessage('获取成功');
-                                $parent.find('.T-shiftDate').val(data.shiftDate);
-                                $parent.find('.T-shiftHour').val(data.shiftHour);
-                                $parent.find('.T-shiftMinute').val(data.shiftMinute);
+                        if (data.querySuccess == '1') {
+                            if (data.success == '1') {
+                                if (data.isNeedChoose == '0') {
+                                    showLayerMessage('获取成功');
+                                    $parent.find('.T-shiftDate').val(data.shiftDate);
+                                    $parent.find('.T-shiftHour').val(data.shiftHour);
+                                    $parent.find('.T-shiftMinute').val(data.shiftMinute);
+                                } else {
+                                    chooseShiftTime(data);
+                                }
                             } else {
-                                chooseShiftTime(data);
+                                showLayerMessage(data.message);
                             }
                         } else {
-                            showLayerMessage(data.message);
+                            showConfirmDialog('是否前往百度查询？', function () {
+                                window.open("https://www.baidu.com/s?wd=" + shiftNumber);
+                            });
                         }
                     }
                 });

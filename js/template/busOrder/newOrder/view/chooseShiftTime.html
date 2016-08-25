@@ -1,21 +1,25 @@
 <div class="T-chooseShiftTimeContent container-fulid col-xs-12 mar-t20">
     <table class="table table-striped table-bordered table-hover table-text-center">
-        <tr>
-            <th>选择</th>
-            <th>站名</th>
-            <th>到站时间</th>
-            <th>发车时间</th>
-            <th>里程</th>
-        </tr>
-        {{each stationList as rs index}}
-        <tr data-arrive="{{if index == 0}}{{rs.startTime}}{{else}}{{rs.arriveTime}}{{/if}}" data-start="{{if index == (stationList.length-1)}}{{rs.arriveTime}}{{else}}{{rs.startTime}}{{/if}}">
-            <td><label><input class="T-radio ace" name="form-chooseTime-radio" type="radio" checked=""><span class="lbl"></span></label></td>
-            <td>{{rs.stationName}}</td>
-            <td>{{rs.arriveTime}}</td>
-            <td>{{rs.startTime}}</td>
-            <td>{{rs.miles}}</td>
-        </tr>
-        {{/each}}
+        <thead>
+            <tr class="T-tr-fixed">
+                <th>选择</th>
+                <th>站名</th>
+                <th>到站时间</th>
+                <th>发车时间</th>
+                <th>里程</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each stationList as rs index}}
+            <tr data-arrive="{{if index == 0}}{{rs.startTime}}{{else}}{{rs.arriveTime}}{{/if}}" data-start="{{if index == (stationList.length-1)}}{{rs.arriveTime}}{{else}}{{rs.startTime}}{{/if}}">
+                <td><label><input class="T-radio ace" name="form-chooseTime-radio" type="radio" checked=""><span class="lbl"></span></label></td>
+                <td>{{rs.stationName}}</td>
+                <td>{{rs.arriveTime}}</td>
+                <td>{{rs.startTime}}</td>
+                <td>{{rs.miles}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
     </table>
     <div class="mar-t20">
         <button class="T-choose btn btn-sm btn-primary btn-block"><i class="ace-icon fa fa-check"></i> 确定 </button>
