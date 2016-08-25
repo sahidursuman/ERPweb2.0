@@ -901,7 +901,7 @@
                                             <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{if scenic.memberCount || scenic.memberCount == 0}}{{scenic.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="6" value="{{scenic.reduceMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="reduceMoney" class="col-sm-12 price F-float F-money" maxlength="8" value="{{scenic.reduceMoney}}" style="width: 60px;" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="orderNumber" maxlength="20" class="col-sm-12" value="{{scenic.orderNumber}}" {{if scenic.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1218,7 +1218,7 @@
                                             <input type="text" name="seatLevel" maxlength="32" value="{{ticket.seatLevel}}" class="col-sm-12" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
-                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="6" value="{{ticket.price}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" maxlength="8" value="{{ticket.price}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="memberCount" class="col-sm-12 F-float F-count" maxlength="8" value="{{if ticket.memberCount || ticket.memberCount == 0}}{{ticket.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" {{if ticket.isConfirmAccount}}disabled="disabled"{{/if}}/>
@@ -1312,7 +1312,7 @@
                                             <input type="text" name="mobileNumber" class="col-sm-12" value="{{other.mobileNumber}}" maxlength="11"{{if other.isConfirmAccount}}disabled="disabled"{{/if}} />
                                         </td>
                                         <td>
-                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" value="{{other.price}}" maxlength="6" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
+                                            <input type="text" name="price" class="col-sm-12 price F-float F-money" value="{{other.price}}" maxlength="8" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
                                         </td>
                                         <td>
                                             <input type="text" name="memberCount" class="col-sm-12 F-float F-count" value="{{if other.memberCount || other.memberCount == 0}}{{other.memberCount}}{{else}}{{basicInfo.touristAdultCount + basicInfo.touristChildCount}}{{/if}}" maxlength="8" {{if other.isConfirmAccount}}disabled="disabled"{{/if}}/>
