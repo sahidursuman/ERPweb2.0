@@ -76,6 +76,8 @@
                     <tr>
                         <td><label><input class="T-radio T-carpooling ace" name="form-field-radio" type="radio" {{if order.priceType == '1'}}checked{{/if}}><span class="lbl"> 拼车</span></label></td>
                         <td><span class="T-carpoolingPrice">{{if order.priceType == '1'}}{{order.price}}{{else}}0{{/if}}</span>元/座<input type="hidden" name="carpoolingPrice" value="{{if order.priceType == '1'}}{{order.price}}{{/if}}"></td>
+                        <td><label><input class="T-radio T-charter ace" name="form-field-radio" type="radio" {{if order.priceType == '0'}}checked{{/if}}><span class="lbl"> 包车</span></label></td>
+                        <td><input class="T-charterPrice T-clacFee" type="text" name="charterPrice" value="{{if order.priceType == '0'}}{{order.price}}{{/if}}" {{if order.priceType == '1'}}readonly{{/if}}> 元</td>
                     </tr>
                 </table>
                 <div class="T-feeListRemark">

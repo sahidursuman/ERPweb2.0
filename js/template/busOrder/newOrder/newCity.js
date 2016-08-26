@@ -249,8 +249,8 @@ define(function(require, exports) {
                 togetherPosition: main.getValue($tab, 'togetherPosition'),
                 togetherHour: main.getValue($tab, 'togetherHour'),
                 togetherMinute: main.getValue($tab, 'togetherMinute'),
-                priceType: 1,
-                price: main.getValue($tab, 'carpoolingPrice'),
+                priceType: $tab.find('.T-carpooling').prop('checked') ? 1 : 0,
+                price: $tab.find('.T-carpooling').prop('checked') ? main.getValue($tab, 'carpoolingPrice') : main.getValue($tab, 'charterPrice'),
                 orderRemark: main.getValue($tab, 'orderRemark'),
                 cityType: main.getValue($tab, 'cityType')
             },
