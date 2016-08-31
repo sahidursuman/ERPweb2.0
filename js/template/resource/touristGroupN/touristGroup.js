@@ -457,7 +457,7 @@ define(function(require, exports) {
                             receiveTrip[i].receiveHotel.hotel = [];
                             var hotelIds = receiveTrip[i].receiveHotel.hotelIds,
                                 hotelNames = receiveTrip[i].receiveHotel.hotelName;
-                            if(!!hotelIds){
+                            if(!!hotelIds && !!hotelNames){
                                 hotelIds = hotelIds.split(',');
                                 hotelNames = hotelNames.split(',');
                                 for(var j = 0; j < hotelIds.length; j++){
@@ -498,7 +498,7 @@ define(function(require, exports) {
                             joinTrip[i].hotelInfoClearFlag = joinTrip[i].hotelInfo.clearFlag;
                             var hotelIds = joinTrip[i].hotelInfo.hotelIds,
                                 hotelNames = joinTrip[i].hotelInfo.hotelName;
-                            if(!!hotelIds){
+                            if(!!hotelIds && !!hotelNames){
                                 hotelIds = hotelIds.split(',');
                                 hotelNames = hotelNames.split(',');
                                 for(var j = 0; j < hotelIds.length; j++){
@@ -534,7 +534,7 @@ define(function(require, exports) {
                             sendTrip[i].sendHotel.hotel = [];
                             var hotelIds = sendTrip[i].sendHotel.hotelIds,
                                 hotelNames = sendTrip[i].sendHotel.hotelName;
-                            if(!!hotelIds){
+                            if(!!hotelIds && !!hotelNames){
                                 hotelIds = hotelIds.split(',');
                                 hotelNames = hotelNames.split(',');
                                 for(var j = 0; j < hotelIds.length; j++){
@@ -629,7 +629,7 @@ define(function(require, exports) {
                             joinTrip[i].hotelInfo.hotel = [];
                             var hotelIds = joinTrip[i].hotelInfo.hotelIds,
                                 hotelNames = joinTrip[i].hotelInfo.hotelName;
-                            if(!!hotelIds){
+                            if(!!hotelIds && !!hotelNames){
                                 hotelIds = hotelIds.split(',');
                                 hotelNames = hotelNames.split(',');
                                 for(var j = 0; j < hotelIds.length; j++){
